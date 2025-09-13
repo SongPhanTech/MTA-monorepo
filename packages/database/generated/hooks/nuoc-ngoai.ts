@@ -251,13 +251,13 @@ export function useGroupByNuocNgoai<TArgs extends Prisma.NuocNgoaiGroupByArgs, H
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.NuocNgoaiGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.NuocNgoaiGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.NuocNgoaiGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.NuocNgoaiGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.NuocNgoaiGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.NuocNgoaiGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.NuocNgoaiGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.NuocNgoaiGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('NuocNgoai', `${endpoint}/nuocNgoai/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByNuocNgoai<TArgs extends Prisma.NuocNgoaiGroupB
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.NuocNgoaiGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.NuocNgoaiGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.NuocNgoaiGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.NuocNgoaiGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.NuocNgoaiGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.NuocNgoaiGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.NuocNgoaiGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.NuocNgoaiGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('NuocNgoai', `${endpoint}/nuocNgoai/groupBy`, args, options, fetch);

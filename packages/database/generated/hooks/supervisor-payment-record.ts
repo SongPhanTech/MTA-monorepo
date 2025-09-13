@@ -251,13 +251,13 @@ export function useGroupBySupervisorPaymentRecord<TArgs extends Prisma.Superviso
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.SupervisorPaymentRecordGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.SupervisorPaymentRecordGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.SupervisorPaymentRecordGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.SupervisorPaymentRecordGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.SupervisorPaymentRecordGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.SupervisorPaymentRecordGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.SupervisorPaymentRecordGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.SupervisorPaymentRecordGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('SupervisorPaymentRecord', `${endpoint}/supervisorPaymentRecord/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupBySupervisorPaymentRecord<TArgs extends Prisma.S
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.SupervisorPaymentRecordGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.SupervisorPaymentRecordGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.SupervisorPaymentRecordGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.SupervisorPaymentRecordGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.SupervisorPaymentRecordGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.SupervisorPaymentRecordGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.SupervisorPaymentRecordGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.SupervisorPaymentRecordGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('SupervisorPaymentRecord', `${endpoint}/supervisorPaymentRecord/groupBy`, args, options, fetch);

@@ -251,13 +251,13 @@ export function useGroupByChatBotConfig<TArgs extends Prisma.ChatBotConfigGroupB
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.ChatBotConfigGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.ChatBotConfigGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.ChatBotConfigGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.ChatBotConfigGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.ChatBotConfigGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.ChatBotConfigGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.ChatBotConfigGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.ChatBotConfigGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('ChatBotConfig', `${endpoint}/chatBotConfig/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByChatBotConfig<TArgs extends Prisma.ChatBotConf
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.ChatBotConfigGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.ChatBotConfigGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.ChatBotConfigGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.ChatBotConfigGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.ChatBotConfigGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.ChatBotConfigGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.ChatBotConfigGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.ChatBotConfigGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ChatBotConfig', `${endpoint}/chatBotConfig/groupBy`, args, options, fetch);

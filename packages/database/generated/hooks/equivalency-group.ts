@@ -251,13 +251,13 @@ export function useGroupByEquivalencyGroup<TArgs extends Prisma.EquivalencyGroup
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.EquivalencyGroupGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.EquivalencyGroupGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.EquivalencyGroupGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.EquivalencyGroupGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.EquivalencyGroupGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.EquivalencyGroupGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.EquivalencyGroupGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.EquivalencyGroupGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('EquivalencyGroup', `${endpoint}/equivalencyGroup/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByEquivalencyGroup<TArgs extends Prisma.Equivale
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.EquivalencyGroupGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.EquivalencyGroupGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.EquivalencyGroupGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.EquivalencyGroupGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.EquivalencyGroupGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.EquivalencyGroupGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.EquivalencyGroupGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.EquivalencyGroupGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('EquivalencyGroup', `${endpoint}/equivalencyGroup/groupBy`, args, options, fetch);

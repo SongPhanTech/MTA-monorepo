@@ -251,13 +251,13 @@ export function useGroupByDM_CapBac<TArgs extends Prisma.DM_CapBacGroupByArgs, H
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.DM_CapBacGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.DM_CapBacGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.DM_CapBacGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.DM_CapBacGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.DM_CapBacGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.DM_CapBacGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.DM_CapBacGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.DM_CapBacGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('DM_CapBac', `${endpoint}/dM_CapBac/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByDM_CapBac<TArgs extends Prisma.DM_CapBacGroupB
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.DM_CapBacGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.DM_CapBacGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.DM_CapBacGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.DM_CapBacGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.DM_CapBacGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.DM_CapBacGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.DM_CapBacGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.DM_CapBacGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DM_CapBac', `${endpoint}/dM_CapBac/groupBy`, args, options, fetch);

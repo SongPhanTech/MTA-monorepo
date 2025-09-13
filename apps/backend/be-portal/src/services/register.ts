@@ -15,7 +15,7 @@ export const findClassRegisterSession = async (userId: string) => {
                         },
                         where: {
                             trainingCourse: {
-                                endYear: { lte: currentYear },
+                                OR: [{ endYear: { lte: currentYear } }, { endYear: null }],
                             },
                         },
                     },
@@ -54,5 +54,17 @@ export const findClassRegisterSession = async (userId: string) => {
         },
     })
 
-    return classRegisterSession
+    classRegisterSession[0]?.semester.schoolYear.active
+
+    const sessions = classRegisterSession.map((session) => {
+        const curriculumVersions = [...map]
+            .filter(([trainingCourseId, curriculumVersion]) =>
+                session.trainingCourses.some(({ id }) => id === trainingCourseId)
+            )
+            .map(([_, curriculumVersion]) => curriculumVersion)
+
+        return { ...session, curriculumVersions }
+    })
+
+    return sessions
 }

@@ -251,13 +251,13 @@ export function useGroupByDM_TrinhDoNgoaiNgu<TArgs extends Prisma.DM_TrinhDoNgoa
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.DM_TrinhDoNgoaiNguGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.DM_TrinhDoNgoaiNguGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.DM_TrinhDoNgoaiNguGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.DM_TrinhDoNgoaiNguGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.DM_TrinhDoNgoaiNguGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.DM_TrinhDoNgoaiNguGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.DM_TrinhDoNgoaiNguGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.DM_TrinhDoNgoaiNguGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('DM_TrinhDoNgoaiNgu', `${endpoint}/dM_TrinhDoNgoaiNgu/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByDM_TrinhDoNgoaiNgu<TArgs extends Prisma.DM_Tri
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.DM_TrinhDoNgoaiNguGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.DM_TrinhDoNgoaiNguGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.DM_TrinhDoNgoaiNguGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.DM_TrinhDoNgoaiNguGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.DM_TrinhDoNgoaiNguGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.DM_TrinhDoNgoaiNguGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.DM_TrinhDoNgoaiNguGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.DM_TrinhDoNgoaiNguGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DM_TrinhDoNgoaiNgu', `${endpoint}/dM_TrinhDoNgoaiNgu/groupBy`, args, options, fetch);

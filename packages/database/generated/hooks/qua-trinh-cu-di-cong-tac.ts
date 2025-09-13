@@ -251,13 +251,13 @@ export function useGroupByQuaTrinhCuDiCongTac<TArgs extends Prisma.QuaTrinhCuDiC
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.QuaTrinhCuDiCongTacGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.QuaTrinhCuDiCongTacGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.QuaTrinhCuDiCongTacGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.QuaTrinhCuDiCongTacGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.QuaTrinhCuDiCongTacGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.QuaTrinhCuDiCongTacGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.QuaTrinhCuDiCongTacGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.QuaTrinhCuDiCongTacGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('QuaTrinhCuDiCongTac', `${endpoint}/quaTrinhCuDiCongTac/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByQuaTrinhCuDiCongTac<TArgs extends Prisma.QuaTr
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.QuaTrinhCuDiCongTacGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.QuaTrinhCuDiCongTacGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.QuaTrinhCuDiCongTacGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.QuaTrinhCuDiCongTacGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.QuaTrinhCuDiCongTacGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.QuaTrinhCuDiCongTacGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.QuaTrinhCuDiCongTacGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.QuaTrinhCuDiCongTacGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('QuaTrinhCuDiCongTac', `${endpoint}/quaTrinhCuDiCongTac/groupBy`, args, options, fetch);

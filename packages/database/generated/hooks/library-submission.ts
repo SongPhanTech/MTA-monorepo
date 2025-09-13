@@ -251,13 +251,13 @@ export function useGroupByLibrarySubmission<TArgs extends Prisma.LibrarySubmissi
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.LibrarySubmissionGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.LibrarySubmissionGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.LibrarySubmissionGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.LibrarySubmissionGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.LibrarySubmissionGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.LibrarySubmissionGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.LibrarySubmissionGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.LibrarySubmissionGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('LibrarySubmission', `${endpoint}/librarySubmission/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByLibrarySubmission<TArgs extends Prisma.Library
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.LibrarySubmissionGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.LibrarySubmissionGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.LibrarySubmissionGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.LibrarySubmissionGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.LibrarySubmissionGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.LibrarySubmissionGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.LibrarySubmissionGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.LibrarySubmissionGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('LibrarySubmission', `${endpoint}/librarySubmission/groupBy`, args, options, fetch);

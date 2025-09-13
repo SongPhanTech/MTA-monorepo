@@ -194,6 +194,7 @@ const ThongTinTichLuy = async (
                 exempted: true, // Có miễn thi không
                 withdrew: true, // Có rút môn không
             },
+            // TODO: lấy kết quả cao nhất của môn học
             // Chỉ lấy điểm ở lần thi gần nhất
             orderBy: [
                 {
@@ -813,7 +814,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     totalCredits: thongTinTichLuy.tongTinChiMoTrongKy, // Tổng số tín chỉ mở trong kỳ
 
                     registeredCredits: thongTinDiemHocKy.tongTinChiDangKy, // Số tín chỉ đăng ký trong học kỳ
-                    studentTrainingType: StudentTrainingType.AVERAGE, // xếp loại rèn luyện
+                    studentTrainingType: StudentTrainingType.GOOD, // xếp loại rèn luyện
 
                     //TODO: Chưa biết xác định thi lại ntn
                     retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)

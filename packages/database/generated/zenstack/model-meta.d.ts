@@ -12,7 +12,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -30,6 +32,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -53,7 +56,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -61,7 +66,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 key: {
@@ -93,9 +100,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         questionBank: {
@@ -107,7 +118,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -125,6 +138,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -148,7 +162,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -156,7 +172,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -169,7 +187,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -212,12 +233,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         difficulty: {
             name: string;
@@ -228,7 +259,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -246,6 +279,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -269,7 +303,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -277,7 +313,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -325,9 +363,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         knowledgeBlock: {
@@ -339,7 +381,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -357,6 +401,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -380,7 +425,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -388,7 +435,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 subjectVersion: {
@@ -397,7 +446,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -444,12 +496,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         question: {
             name: string;
@@ -460,7 +522,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -478,6 +542,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -501,7 +566,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -509,7 +576,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 content: {
@@ -521,7 +590,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 point: {
@@ -530,6 +601,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -545,6 +617,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -555,7 +628,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -576,7 +652,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -598,7 +677,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -640,9 +722,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         answer: {
@@ -654,7 +740,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -672,6 +760,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -695,7 +784,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -703,7 +794,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sessionId: {
@@ -718,7 +811,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -739,7 +838,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -781,12 +883,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         exam: {
             name: string;
@@ -797,7 +909,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -815,6 +929,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -838,7 +953,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -846,7 +963,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 title: {
@@ -858,7 +977,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 questionBank: {
@@ -867,7 +988,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -899,6 +1023,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -909,6 +1034,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -919,6 +1045,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -929,6 +1056,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -939,6 +1067,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -999,9 +1128,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         testStructureRule: {
@@ -1013,7 +1146,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -1031,6 +1166,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -1054,7 +1190,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -1062,7 +1200,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 exam: {
@@ -1071,7 +1211,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1091,7 +1234,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1132,12 +1278,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         examBank: {
             name: string;
@@ -1148,7 +1304,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -1166,6 +1324,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -1189,7 +1348,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -1197,7 +1358,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 exam: {
@@ -1206,7 +1369,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1253,12 +1419,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         examBankQuestion: {
             name: string;
@@ -1269,7 +1445,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -1287,6 +1465,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -1310,7 +1489,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -1318,7 +1499,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 examBankId: {
@@ -1333,7 +1516,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1354,7 +1543,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1386,12 +1578,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         examFax: {
             name: string;
@@ -1402,7 +1604,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -1420,6 +1624,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -1443,7 +1648,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -1451,7 +1658,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 examId: {
@@ -1466,7 +1675,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1486,6 +1701,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -1512,12 +1728,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         examSession: {
             name: string;
@@ -1528,7 +1754,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -1546,6 +1774,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -1569,7 +1798,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -1577,7 +1808,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 startTime: {
@@ -1597,7 +1830,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1618,7 +1854,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1639,7 +1878,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1661,7 +1903,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1690,7 +1935,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1728,12 +1976,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         studentSubjectScore: {
             name: string;
@@ -1744,7 +2002,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -1762,6 +2022,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -1785,7 +2046,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -1793,7 +2056,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 subjectClass: {
@@ -1803,7 +2068,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1824,7 +2092,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1844,7 +2115,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -1865,8 +2139,10 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: ({
+                            name: string;
                             value: number;
                         } | {
+                            name: string;
                             value: string;
                         })[];
                     }[];
@@ -1878,8 +2154,10 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: ({
+                            name: string;
                             value: number;
                         } | {
+                            name: string;
                             value: string;
                         })[];
                     }[];
@@ -1891,8 +2169,10 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: ({
+                            name: string;
                             value: number;
                         } | {
+                            name: string;
                             value: string;
                         })[];
                     }[];
@@ -1904,8 +2184,10 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: ({
+                            name: string;
                             value: number;
                         } | {
+                            name: string;
                             value: string;
                         })[];
                     }[];
@@ -1917,8 +2199,10 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: ({
+                            name: string;
                             value: number;
                         } | {
+                            name: string;
                             value: string;
                         })[];
                     }[];
@@ -1929,6 +2213,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -1939,6 +2224,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -1949,6 +2235,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -1959,6 +2246,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -1969,6 +2257,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -1995,6 +2284,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -2015,12 +2305,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         archivedCertificateOnStudentSubjectScore: {
             name: string;
@@ -2031,7 +2331,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -2049,6 +2351,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -2072,7 +2375,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -2080,7 +2385,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 studentSubjectScore: {
@@ -2089,7 +2396,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -2109,7 +2419,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -2138,12 +2451,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         archivedCertificate: {
             name: string;
@@ -2154,7 +2477,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -2172,6 +2497,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -2195,7 +2521,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -2203,7 +2531,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -2221,8 +2551,10 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: ({
+                            name: string;
                             value: number;
                         } | {
+                            name: string;
                             value: string;
                         })[];
                     }[];
@@ -2254,9 +2586,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         archivedAwardOnStudentSubjectScore: {
@@ -2268,7 +2604,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -2286,6 +2624,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -2309,7 +2648,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -2317,7 +2658,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 studentSubjectScore: {
@@ -2326,7 +2669,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -2346,7 +2692,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -2375,12 +2724,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         archivedAward: {
             name: string;
@@ -2391,7 +2750,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -2409,6 +2770,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -2432,7 +2794,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -2440,7 +2804,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -2483,9 +2849,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         schoolYear: {
@@ -2497,7 +2867,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -2515,6 +2887,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -2538,7 +2911,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -2546,7 +2921,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -2603,9 +2980,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         semester: {
@@ -2617,7 +2998,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -2635,6 +3018,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -2658,7 +3042,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -2666,7 +3052,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -2689,7 +3077,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -2790,12 +3181,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         milestone: {
             name: string;
@@ -2806,7 +3207,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -2824,6 +3227,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -2847,7 +3251,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -2855,7 +3261,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -2886,7 +3294,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -2913,9 +3324,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         trainingCourse: {
@@ -2927,7 +3342,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -2945,6 +3362,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -2968,7 +3386,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -2976,7 +3396,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -2989,7 +3411,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3038,6 +3463,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -3048,6 +3474,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -3058,6 +3485,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -3068,6 +3496,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -3078,6 +3507,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -3088,6 +3518,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -3098,6 +3529,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -3108,6 +3540,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -3118,7 +3551,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3211,9 +3647,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         fixedClass: {
@@ -3225,7 +3665,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -3243,6 +3685,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -3266,7 +3709,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -3274,7 +3719,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -3298,6 +3745,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -3309,9 +3757,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3337,9 +3789,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3364,7 +3820,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3385,7 +3844,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3411,10 +3873,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3436,10 +3901,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3460,6 +3928,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -3478,7 +3947,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3540,12 +4012,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         curriculum: {
             name: string;
@@ -3556,7 +4038,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -3574,6 +4058,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -3597,7 +4082,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -3605,7 +4092,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -3623,7 +4112,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3647,7 +4139,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3698,9 +4193,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         curriculumVersion: {
@@ -3712,7 +4211,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -3730,6 +4231,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -3753,7 +4255,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -3761,7 +4265,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -3783,7 +4289,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 numberOfSemesters: {
@@ -3807,7 +4315,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3827,7 +4338,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3847,7 +4361,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3867,7 +4384,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -3888,7 +4408,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -4009,9 +4532,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         subject: {
@@ -4023,7 +4550,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -4041,6 +4570,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -4064,7 +4594,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -4072,7 +4604,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -4099,7 +4633,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -4158,9 +4695,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         subjectVersion: {
@@ -4172,7 +4713,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -4190,6 +4733,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -4213,7 +4757,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -4221,7 +4767,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -4237,7 +4785,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 credit: {
@@ -4255,6 +4805,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -4336,7 +4887,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -4361,10 +4915,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -4496,9 +5053,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         equivalencyGroup: {
@@ -4510,7 +5071,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -4528,6 +5091,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -4551,7 +5115,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -4559,7 +5125,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 subjects: {
@@ -4582,9 +5150,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         subjectInGroup: {
@@ -4596,7 +5168,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -4614,6 +5188,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -4637,7 +5212,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -4645,7 +5222,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 subject: {
@@ -4654,7 +5233,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -4675,7 +5260,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -4709,12 +5300,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         trainingBlockSubject: {
             name: string;
@@ -4725,7 +5326,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -4743,6 +5346,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -4766,7 +5370,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -4774,7 +5380,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 subject: {
@@ -4783,7 +5391,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -4803,7 +5414,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -4827,7 +5441,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 useForFinalScore: {
@@ -4859,9 +5475,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         classRegisterSession: {
@@ -4873,7 +5493,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -4891,6 +5513,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -4914,7 +5537,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -4922,7 +5547,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -4943,7 +5570,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -4985,9 +5615,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         classRegisterLogs: {
@@ -4999,7 +5633,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -5017,6 +5653,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -5040,7 +5677,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -5048,7 +5687,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 classRegisterSession: {
@@ -5057,7 +5698,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5077,7 +5721,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5097,7 +5744,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5116,7 +5766,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 reason: {
@@ -5137,9 +5789,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         subjectClass: {
@@ -5151,7 +5807,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -5169,6 +5827,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -5192,7 +5851,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -5200,7 +5861,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -5222,7 +5885,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5250,7 +5916,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5270,6 +5939,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -5306,7 +5976,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5327,6 +6000,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -5337,6 +6011,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -5353,10 +6028,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5378,10 +6056,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5403,10 +6084,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5428,10 +6112,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5491,6 +6178,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -5524,9 +6212,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         classSchedule: {
@@ -5538,7 +6230,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -5556,6 +6250,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -5579,7 +6274,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -5587,7 +6284,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 subjectClass: {
@@ -5596,7 +6295,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5615,7 +6317,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 startPeriod: {
@@ -5641,7 +6345,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5663,10 +6370,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5688,10 +6398,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5717,6 +6430,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -5728,9 +6442,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -5757,6 +6475,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -5782,12 +6501,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         trainingObjectType: {
             name: string;
@@ -5798,7 +6527,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -5816,6 +6547,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -5839,7 +6571,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -5847,7 +6581,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -5921,9 +6657,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         priorityObject: {
@@ -5935,7 +6675,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -5953,6 +6695,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -5976,7 +6719,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -5984,7 +6729,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -6020,9 +6767,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         trainingType: {
@@ -6034,7 +6785,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -6052,6 +6805,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -6075,7 +6829,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -6083,7 +6839,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -6118,9 +6876,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         trainingLevel: {
@@ -6132,7 +6894,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -6150,6 +6914,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -6173,7 +6938,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -6181,7 +6948,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -6223,9 +6992,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         trainingForm: {
@@ -6237,7 +7010,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -6255,6 +7030,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -6278,7 +7054,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -6286,7 +7064,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -6321,9 +7101,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         trainingLocation: {
@@ -6335,7 +7119,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -6353,6 +7139,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -6376,7 +7163,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -6384,7 +7173,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -6426,9 +7217,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         building: {
@@ -6440,7 +7235,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -6458,6 +7255,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -6481,7 +7279,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -6489,7 +7289,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -6508,7 +7310,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -6545,12 +7350,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         room: {
             name: string;
@@ -6561,7 +7376,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -6579,6 +7396,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -6602,7 +7420,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -6610,7 +7430,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -6623,6 +7445,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -6633,6 +7456,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -6643,6 +7467,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -6653,6 +7478,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -6673,7 +7499,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -6704,6 +7533,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -6717,6 +7547,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -6758,12 +7589,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         trainingField: {
             name: string;
@@ -6774,7 +7615,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -6792,6 +7635,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -6815,7 +7659,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -6823,7 +7669,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -6848,7 +7696,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -6905,9 +7756,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         trainingFieldOnTrainingObjectType: {
@@ -6919,7 +7774,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -6937,6 +7794,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -6960,7 +7818,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -6968,7 +7828,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 trainingField: {
@@ -6977,7 +7839,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -6997,7 +7862,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -7026,12 +7894,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         trainingMajor: {
             name: string;
@@ -7042,7 +7920,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -7060,6 +7940,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -7083,7 +7964,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -7091,7 +7974,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -7113,6 +7998,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -7123,6 +8009,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -7133,6 +8020,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -7143,7 +8031,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -7167,7 +8058,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -7233,12 +8127,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         trainingMajorOnTrainingObjectType: {
             name: string;
@@ -7249,7 +8153,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -7267,6 +8173,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -7290,7 +8197,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -7298,7 +8207,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 trainingMajor: {
@@ -7307,7 +8218,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -7327,7 +8241,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -7356,12 +8273,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         trainingBlock: {
             name: string;
@@ -7372,7 +8299,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -7390,6 +8319,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -7413,7 +8343,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -7421,7 +8353,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -7438,6 +8372,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -7466,9 +8401,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         trainingBlockOnCurriculumVersion: {
@@ -7480,7 +8419,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -7498,6 +8439,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -7521,7 +8463,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -7529,7 +8473,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 trainingBlock: {
@@ -7538,7 +8484,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -7558,7 +8507,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -7578,6 +8530,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -7588,6 +8541,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -7614,12 +8568,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         trainingTime: {
             name: string;
@@ -7630,7 +8594,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -7648,6 +8614,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -7671,7 +8638,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -7679,7 +8648,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -7706,9 +8677,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         diplomaType: {
@@ -7720,7 +8695,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -7738,6 +8715,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -7761,7 +8739,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -7769,7 +8749,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -7820,9 +8802,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         scoreConvert: {
@@ -7834,7 +8820,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -7852,6 +8840,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -7875,7 +8864,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -7883,7 +8874,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 classification: {
@@ -7916,6 +8909,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -7926,7 +8920,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -7953,9 +8950,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         trainingKPI: {
@@ -7967,7 +8968,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -7985,6 +8988,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -8008,7 +9012,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -8016,7 +9022,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -8036,9 +9044,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         student: {
@@ -8050,7 +9062,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -8068,6 +9082,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -8091,7 +9106,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -8099,7 +9116,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 entryScore: {
@@ -8129,7 +9148,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -8162,7 +9184,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 classMonitor: {
@@ -8173,6 +9197,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -8186,6 +9211,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -8198,7 +9224,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -8232,7 +9261,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -8247,7 +9279,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -8269,7 +9304,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -8291,7 +9329,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -8313,7 +9354,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -8335,7 +9379,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -8361,7 +9408,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -8382,6 +9432,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -8392,6 +9443,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -8402,6 +9454,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -8412,6 +9465,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -8422,6 +9476,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -8432,6 +9487,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -8442,6 +9498,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -8452,6 +9509,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -8596,9 +9654,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         studentSemesterResult: {
@@ -8610,7 +9672,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -8628,6 +9692,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -8651,7 +9716,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -8659,7 +9726,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 student: {
@@ -8668,7 +9737,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -8688,7 +9760,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -8724,6 +9799,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -8734,6 +9810,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -8744,6 +9821,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -8754,6 +9832,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -8835,6 +9914,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -8845,6 +9925,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -8855,6 +9936,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -8865,6 +9947,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -8875,6 +9958,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -8894,12 +9978,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         studentYearResult: {
             name: string;
@@ -8910,7 +10004,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -8928,6 +10024,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -8951,7 +10048,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -8959,7 +10058,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 student: {
@@ -8968,7 +10069,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -8988,7 +10092,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -9020,6 +10127,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -9030,6 +10138,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -9040,6 +10149,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -9050,6 +10160,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -9085,6 +10196,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -9095,6 +10207,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -9105,6 +10218,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -9115,6 +10229,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -9134,12 +10249,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         notification: {
             name: string;
@@ -9150,7 +10275,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -9168,6 +10295,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -9191,7 +10319,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -9199,7 +10329,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 title: {
@@ -9215,7 +10347,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 priority: {
@@ -9223,7 +10357,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 publishedAt: {
@@ -9231,7 +10367,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 expiresAt: {
@@ -9245,6 +10383,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -9279,7 +10418,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -9317,9 +10459,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         group: {
@@ -9331,7 +10477,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -9349,6 +10497,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -9372,7 +10521,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -9380,7 +10531,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -9422,9 +10575,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         role: {
@@ -9436,7 +10593,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -9454,6 +10613,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -9477,7 +10637,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -9485,7 +10647,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -9521,9 +10685,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         permission: {
@@ -9535,7 +10703,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -9553,6 +10723,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -9576,7 +10747,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -9584,7 +10757,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -9601,6 +10776,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -9628,12 +10804,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         chatBotConfig: {
             name: string;
@@ -9644,7 +10830,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -9662,6 +10850,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -9685,7 +10874,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -9693,7 +10884,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -9729,9 +10922,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         userSession: {
@@ -9743,7 +10940,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -9761,6 +10960,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -9784,7 +10984,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -9792,7 +10994,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -9830,9 +11034,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         document: {
@@ -9844,7 +11052,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -9862,6 +11072,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -9885,7 +11096,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -9893,7 +11106,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 title: {
@@ -9915,7 +11130,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 uri: {
@@ -9948,9 +11165,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -9963,7 +11184,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                     defaultValueProvider: typeof $default$Document$uploadedById;
                     isForeignKey: boolean;
@@ -9976,9 +11199,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -10010,9 +11237,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         fAQ: {
@@ -10024,7 +11255,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -10042,6 +11275,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -10065,7 +11299,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -10073,7 +11309,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 question: {
@@ -10091,7 +11329,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 type: {
@@ -10109,9 +11349,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -10124,7 +11368,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                     defaultValueProvider: typeof $default$FAQ$uploadedById;
                     isForeignKey: boolean;
@@ -10137,9 +11383,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -10171,9 +11421,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         prompt: {
@@ -10185,7 +11439,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -10203,6 +11459,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -10226,7 +11483,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -10234,7 +11493,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 prompt: {
@@ -10247,7 +11508,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 type: {
@@ -10272,9 +11535,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         conversation: {
@@ -10286,7 +11553,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -10304,6 +11573,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -10327,7 +11597,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -10335,7 +11607,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -10350,7 +11624,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -10376,7 +11653,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -10416,9 +11696,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         message: {
@@ -10430,7 +11714,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -10448,6 +11734,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -10471,7 +11758,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -10479,7 +11768,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 conversationId: {
@@ -10505,7 +11796,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -10526,9 +11820,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_CapBac: {
@@ -10540,7 +11838,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -10565,6 +11865,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -10576,6 +11877,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -10587,6 +11889,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -10598,6 +11901,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -10609,6 +11913,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -10666,9 +11971,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_ChucDanh: {
@@ -10680,7 +11989,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -10705,6 +12016,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -10716,6 +12028,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -10727,6 +12040,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -10738,6 +12052,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -10749,6 +12064,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -10790,6 +12106,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -10810,9 +12127,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_ChucVu: {
@@ -10824,7 +12145,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -10849,6 +12172,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -10860,6 +12184,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -10871,6 +12196,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -10882,6 +12208,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -10893,6 +12220,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -10934,6 +12262,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -10968,9 +12297,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_HocHam: {
@@ -10982,7 +12315,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -11007,6 +12342,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -11018,6 +12354,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11029,6 +12366,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11040,6 +12378,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11051,6 +12390,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -11108,9 +12448,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_HocVi: {
@@ -11122,7 +12466,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -11147,6 +12493,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -11158,6 +12505,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11169,6 +12517,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11180,6 +12529,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11191,6 +12541,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -11248,9 +12599,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_ChungChiTinHoc: {
@@ -11262,7 +12617,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -11287,6 +12644,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -11298,6 +12656,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11309,6 +12668,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11320,6 +12680,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11331,6 +12692,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -11394,9 +12756,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_DanToc: {
@@ -11408,7 +12774,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -11433,6 +12801,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -11444,6 +12813,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11455,6 +12825,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11466,6 +12837,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11477,6 +12849,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -11544,9 +12917,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_DonVi: {
@@ -11558,7 +12935,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -11583,6 +12962,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -11594,6 +12974,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11605,6 +12986,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11616,6 +12998,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11627,6 +13010,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -11800,15 +13184,22 @@ declare const metadata: {
             };
             attributes: ({
                 name: string;
-                args: {
-                    value: string;
-                }[];
-            } | {
-                name: string;
-                args: {
+                args: ({
                     name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: ({
+                    name: string;
+                    value: null[];
+                } | {
+                    name: string;
+                    value: string;
+                })[];
             })[];
         };
         dM_DonViHanhChinh: {
@@ -11820,7 +13211,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -11845,6 +13238,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -11856,6 +13250,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11867,6 +13262,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11878,6 +13274,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11889,6 +13286,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -11937,9 +13335,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_KhuVuc_DiaLy: {
@@ -11951,7 +13353,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -11976,6 +13380,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -11987,6 +13392,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -11998,6 +13404,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12009,6 +13416,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12020,6 +13428,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -12075,9 +13484,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_NgoaiNgu: {
@@ -12089,7 +13502,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -12114,6 +13529,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -12125,6 +13541,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12136,6 +13553,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12147,6 +13565,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12158,6 +13577,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -12208,9 +13628,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_TonGiao: {
@@ -12222,7 +13646,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -12247,6 +13673,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -12258,6 +13685,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12269,6 +13697,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12280,6 +13709,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12291,6 +13721,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -12341,9 +13772,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_TrinhDoNgoaiNgu: {
@@ -12355,7 +13790,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -12380,6 +13817,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -12391,6 +13829,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12402,6 +13841,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12413,6 +13853,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12424,6 +13865,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -12479,9 +13921,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_TrinhDoTinHoc: {
@@ -12493,7 +13939,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -12518,6 +13966,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -12529,6 +13978,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12540,6 +13990,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12551,6 +14002,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12562,6 +14014,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -12612,9 +14065,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_GioiTinh: {
@@ -12626,7 +14083,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -12651,6 +14110,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -12662,6 +14122,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12673,6 +14134,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12684,6 +14146,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12695,6 +14158,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -12745,9 +14209,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_NhanVien: {
@@ -12759,7 +14227,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -12784,6 +14254,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -12795,6 +14266,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12806,6 +14278,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12817,6 +14290,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -12828,6 +14302,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -12992,7 +14467,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -13036,6 +14514,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -13049,6 +14528,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -13062,6 +14542,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -13075,6 +14556,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -13089,15 +14571,22 @@ declare const metadata: {
             };
             attributes: ({
                 name: string;
-                args: {
-                    value: string;
-                }[];
-            } | {
-                name: string;
-                args: {
+                args: ({
                     name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: ({
+                    name: string;
+                    value: null[];
+                } | {
+                    name: string;
+                    value: string;
+                })[];
             })[];
         };
         dM_PhanCap_ChatLuong_TrangThietBi: {
@@ -13109,7 +14598,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -13134,6 +14625,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -13145,6 +14637,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13156,6 +14649,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13167,6 +14661,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13178,6 +14673,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -13221,9 +14717,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_PhanLoai_CSKT: {
@@ -13235,7 +14735,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -13260,6 +14762,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -13271,6 +14774,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13282,6 +14786,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13293,6 +14798,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13304,6 +14810,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -13347,9 +14854,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_NhomNguoiDung: {
@@ -13361,7 +14872,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -13386,6 +14899,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -13397,6 +14911,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13408,6 +14923,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13419,6 +14935,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13430,6 +14947,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -13473,9 +14991,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_NhomUngDung: {
@@ -13487,7 +15009,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -13512,6 +15036,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -13523,6 +15048,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13534,6 +15060,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13545,6 +15072,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13556,6 +15084,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -13604,9 +15133,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_QuocGia: {
@@ -13618,7 +15151,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -13643,6 +15178,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -13654,6 +15190,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13665,6 +15202,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13676,6 +15214,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13687,6 +15226,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -13756,9 +15296,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_Tinh: {
@@ -13770,7 +15314,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -13795,6 +15341,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -13806,6 +15353,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13817,6 +15365,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13828,6 +15377,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -13839,6 +15389,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -13900,6 +15451,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -13913,6 +15465,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -13926,6 +15479,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -13939,6 +15493,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -13953,15 +15508,22 @@ declare const metadata: {
             };
             attributes: ({
                 name: string;
-                args: {
-                    value: string;
-                }[];
-            } | {
-                name: string;
-                args: {
+                args: ({
                     name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: ({
+                    name: string;
+                    value: null[];
+                } | {
+                    name: string;
+                    value: string;
+                })[];
             })[];
         };
         dM_Tinh_New: {
@@ -13973,7 +15535,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -13998,6 +15562,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -14009,6 +15574,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14020,6 +15586,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14031,6 +15598,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14042,6 +15610,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -14103,6 +15672,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14116,6 +15686,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14129,6 +15700,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14142,6 +15714,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14156,15 +15729,22 @@ declare const metadata: {
             };
             attributes: ({
                 name: string;
-                args: {
-                    value: string;
-                }[];
-            } | {
-                name: string;
-                args: {
+                args: ({
                     name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: ({
+                    name: string;
+                    value: null[];
+                } | {
+                    name: string;
+                    value: string;
+                })[];
             })[];
         };
         dM_QuanHuyen: {
@@ -14176,7 +15756,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -14201,6 +15783,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -14212,6 +15795,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14223,6 +15807,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14234,6 +15819,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14245,6 +15831,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -14306,6 +15893,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14319,6 +15907,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14332,6 +15921,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14345,6 +15935,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14359,15 +15950,22 @@ declare const metadata: {
             };
             attributes: ({
                 name: string;
-                args: {
-                    value: string;
-                }[];
-            } | {
-                name: string;
-                args: {
+                args: ({
                     name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: ({
+                    name: string;
+                    value: null[];
+                } | {
+                    name: string;
+                    value: string;
+                })[];
             })[];
         };
         dM_XaPhuong: {
@@ -14379,7 +15977,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -14404,6 +16004,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -14415,6 +16016,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14426,6 +16028,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14437,6 +16040,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14448,6 +16052,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -14518,6 +16123,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14531,6 +16137,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14544,6 +16151,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14557,6 +16165,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14571,15 +16180,22 @@ declare const metadata: {
             };
             attributes: ({
                 name: string;
-                args: {
-                    value: string;
-                }[];
-            } | {
-                name: string;
-                args: {
+                args: ({
                     name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: ({
+                    name: string;
+                    value: null[];
+                } | {
+                    name: string;
+                    value: string;
+                })[];
             })[];
         };
         dM_XaPhuong_New: {
@@ -14591,7 +16207,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -14616,6 +16234,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -14627,6 +16246,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14638,6 +16258,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14649,6 +16270,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14660,6 +16282,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -14716,6 +16339,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14729,6 +16353,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14742,6 +16367,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14755,6 +16381,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -14767,12 +16394,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         dM_ViTriCongViec: {
             name: string;
@@ -14783,7 +16420,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sMa: {
@@ -14808,6 +16447,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -14819,6 +16459,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14830,6 +16471,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14841,6 +16483,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14852,6 +16495,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -14913,9 +16557,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         userProfile: {
@@ -14927,7 +16575,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -14945,6 +16595,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -14968,7 +16619,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -14976,7 +16629,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 bLaNguoiDung: {
@@ -15001,7 +16656,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15245,10 +16903,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15274,10 +16935,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15303,10 +16967,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15332,10 +16999,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15361,10 +17031,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15400,10 +17073,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15429,10 +17105,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15458,10 +17137,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15487,10 +17169,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15516,10 +17201,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15560,7 +17248,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15591,10 +17282,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15620,10 +17314,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15649,10 +17346,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15678,10 +17378,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15707,10 +17410,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15756,7 +17462,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15782,7 +17491,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15808,7 +17520,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15834,10 +17549,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15863,10 +17581,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15892,10 +17613,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15921,10 +17645,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15950,10 +17677,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -15984,7 +17714,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16015,7 +17748,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16046,7 +17782,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16077,7 +17816,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16103,7 +17845,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16125,7 +17870,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16147,7 +17895,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16169,7 +17920,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16216,7 +17970,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16465,7 +18222,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16539,9 +18299,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         hocHam: {
@@ -16553,7 +18317,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -16571,6 +18337,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -16594,7 +18361,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -16602,7 +18371,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 academicRankType: {
@@ -16612,7 +18383,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16657,7 +18431,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16684,9 +18461,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         hocVi: {
@@ -16698,7 +18479,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -16716,6 +18499,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -16739,7 +18523,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -16747,7 +18533,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 academicDegreeType: {
@@ -16757,7 +18545,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16783,7 +18574,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16814,7 +18608,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16840,7 +18637,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16867,9 +18667,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         relative: {
@@ -16881,7 +18685,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -16899,6 +18705,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -16922,7 +18729,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -16930,7 +18739,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -16972,7 +18783,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -16999,9 +18813,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         trinhDoLyLuanChinhTri: {
@@ -17013,7 +18831,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -17031,6 +18851,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -17054,7 +18875,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -17062,7 +18885,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 hinhThucDaoTao: {
@@ -17091,7 +18916,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17112,7 +18940,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17140,9 +18971,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         trinhDoQuanLyNhaNuoc: {
@@ -17154,7 +18989,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -17172,6 +19009,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -17195,7 +19033,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -17203,7 +19043,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 hinhThucDaoTao: {
@@ -17232,7 +19074,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17253,7 +19098,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17281,9 +19129,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         ngoaiNgu: {
@@ -17295,7 +19147,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -17313,6 +19167,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -17336,7 +19191,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -17344,7 +19201,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 ngonNgu: {
@@ -17354,7 +19213,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17399,7 +19261,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17423,7 +19288,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17450,9 +19318,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         tinHoc: {
@@ -17464,7 +19336,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -17482,6 +19356,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -17505,7 +19380,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -17513,7 +19390,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 hinhThucDaoTao: {
@@ -17542,7 +19421,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17566,7 +19448,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17593,9 +19478,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         boiDuongQuocPhongAnNinh: {
@@ -17607,7 +19496,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -17625,6 +19516,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -17648,7 +19540,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -17656,7 +19550,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -17680,7 +19576,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17707,9 +19606,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         capBac: {
@@ -17721,7 +19624,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -17739,6 +19644,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -17762,7 +19668,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -17770,7 +19678,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 noiRaQuyetDinh: {
@@ -17794,7 +19704,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17818,7 +19731,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17845,9 +19761,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         quaTrinhCongTac: {
@@ -17859,7 +19779,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -17877,6 +19799,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -17900,7 +19823,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -17908,7 +19833,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 tuThangNam: {
@@ -17952,7 +19879,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17976,7 +19906,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -17996,7 +19929,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -18023,9 +19959,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         quaTrinhCuDiCongTac: {
@@ -18037,7 +19977,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -18055,6 +19997,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -18078,7 +20021,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -18086,7 +20031,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 tuThangNam: {
@@ -18109,7 +20056,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -18133,7 +20083,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -18160,9 +20113,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         quaTrinhCuDiDaoTao: {
@@ -18174,7 +20131,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -18192,6 +20151,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -18215,7 +20175,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -18223,7 +20185,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 ten: {
@@ -18257,7 +20221,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -18277,7 +20244,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -18304,9 +20274,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         khenThuong: {
@@ -18318,7 +20292,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -18336,6 +20312,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -18359,7 +20336,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -18367,7 +20346,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 hinhThucKhenThuong: {
@@ -18406,7 +20387,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -18433,9 +20417,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         kyLuat: {
@@ -18447,7 +20435,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -18465,6 +20455,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -18488,7 +20479,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -18496,7 +20489,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 hinhThucKyLuat: {
@@ -18535,7 +20530,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -18562,9 +20560,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         doiTuongChinhSach: {
@@ -18576,7 +20578,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -18594,6 +20598,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -18617,7 +20622,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -18625,7 +20632,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 tenDoiTuong: {
@@ -18654,7 +20663,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -18681,9 +20693,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         keKhaiTaiSan: {
@@ -18695,7 +20711,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -18713,6 +20731,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -18736,7 +20755,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -18744,7 +20765,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 loai: {
@@ -18768,7 +20791,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -18795,9 +20821,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         tiengDanToc: {
@@ -18809,7 +20839,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -18827,6 +20859,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -18850,7 +20883,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -18858,7 +20893,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 danToc: {
@@ -18868,7 +20905,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -18908,7 +20948,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -18935,9 +20978,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         chienDau: {
@@ -18949,7 +20996,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -18967,6 +21016,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -18990,7 +21040,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -18998,7 +21050,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 cuongVi: {
@@ -19042,7 +21096,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19069,9 +21126,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         nuocNgoai: {
@@ -19083,7 +21144,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -19101,6 +21164,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -19124,7 +21188,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -19132,7 +21198,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 tenNuoc: {
@@ -19141,7 +21209,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19180,7 +21251,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19207,9 +21281,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         thuongTat: {
@@ -19221,7 +21299,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -19239,6 +21319,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -19262,7 +21343,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -19270,7 +21353,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 loai: {
@@ -19279,7 +21364,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19324,7 +21412,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19351,9 +21442,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         danhHieu: {
@@ -19365,7 +21460,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -19383,6 +21480,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -19406,7 +21504,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -19414,7 +21514,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 ten: {
@@ -19433,7 +21535,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19460,9 +21565,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         quaTrinhHocTap: {
@@ -19474,7 +21583,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -19492,6 +21603,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -19515,7 +21627,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -19523,7 +21637,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 tenTruong: {
@@ -19532,7 +21648,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19552,7 +21671,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19573,7 +21695,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19614,7 +21739,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19641,9 +21769,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         toChucXaHoi: {
@@ -19655,7 +21787,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -19673,6 +21807,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -19696,7 +21831,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -19704,7 +21841,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 ten: {
@@ -19713,7 +21852,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19748,7 +21890,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19775,9 +21920,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         quaTrinhLuong: {
@@ -19789,7 +21938,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -19807,6 +21958,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -19830,7 +21982,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -19838,7 +21992,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 tuNgay: {
@@ -19857,7 +22013,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19877,7 +22036,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19916,7 +22078,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -19943,9 +22108,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         lecturerType: {
@@ -19957,7 +22126,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -19975,6 +22146,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -19998,7 +22170,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -20006,7 +22180,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -20048,9 +22224,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         staffType: {
@@ -20062,7 +22242,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -20080,6 +22262,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -20103,7 +22286,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -20111,7 +22296,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -20153,9 +22340,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         staffPosition: {
@@ -20167,7 +22358,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -20185,6 +22378,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -20208,7 +22402,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -20216,7 +22412,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -20250,9 +22448,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         lecturer: {
@@ -20264,7 +22466,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -20282,6 +22486,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -20305,7 +22510,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -20313,7 +22520,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 from: {
@@ -20341,7 +22550,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -20365,7 +22577,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -20389,7 +22604,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -20411,6 +22629,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -20424,6 +22643,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -20437,6 +22657,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -20450,6 +22671,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -20463,6 +22685,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -20476,6 +22699,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -20551,9 +22775,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         lecturerHistory: {
@@ -20565,7 +22793,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -20583,6 +22813,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -20606,7 +22837,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -20614,7 +22847,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 from: {
@@ -20648,7 +22883,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -20673,7 +22911,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -20698,7 +22939,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -20729,9 +22973,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         researchProject: {
@@ -20743,7 +22991,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -20761,6 +23011,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -20784,7 +23035,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -20792,7 +23045,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 title: {
@@ -20849,7 +23104,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -20869,7 +23127,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -20897,6 +23158,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -20924,7 +23186,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 registrations: {
@@ -20947,9 +23211,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         studentResearchRegistration: {
@@ -20961,7 +23229,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -20979,6 +23249,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -21002,7 +23273,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -21010,7 +23283,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 student: {
@@ -21019,7 +23294,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21039,7 +23317,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21058,7 +23339,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 motivation: {
@@ -21084,7 +23367,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 reviewedAt: {
@@ -21099,7 +23384,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21138,12 +23426,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         thesisProject: {
             name: string;
@@ -21154,7 +23452,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -21172,6 +23472,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -21195,7 +23496,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -21203,7 +23506,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 title: {
@@ -21282,7 +23587,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 subjectClass: {
@@ -21291,7 +23598,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21311,9 +23621,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21334,9 +23648,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21357,7 +23675,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21385,6 +23706,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -21396,7 +23718,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21418,7 +23743,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21445,7 +23773,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21528,9 +23859,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         defenseSession: {
@@ -21542,7 +23877,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -21560,6 +23897,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -21583,7 +23921,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -21591,7 +23931,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 startTime: {
@@ -21600,6 +23942,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -21624,9 +23967,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         studentThesisRegistration: {
@@ -21638,7 +23985,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -21656,6 +24005,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -21679,7 +24029,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -21687,7 +24039,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 student: {
@@ -21696,7 +24050,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21716,9 +24073,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21738,7 +24099,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21757,7 +24121,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 motivation: {
@@ -21792,7 +24158,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 reviewedAt: {
@@ -21807,7 +24175,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -21853,12 +24224,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         expertProfile: {
             name: string;
@@ -21869,7 +24250,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -21887,6 +24270,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -21910,7 +24294,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -21918,7 +24304,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 lecturer: {
@@ -21928,7 +24316,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -22020,6 +24411,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -22033,6 +24425,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -22084,9 +24477,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         decision: {
@@ -22098,7 +24495,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -22116,6 +24515,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -22139,7 +24539,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -22147,7 +24549,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 issueDate: {
@@ -22171,7 +24575,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -22198,9 +24605,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         invitation: {
@@ -22212,7 +24623,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -22230,6 +24643,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -22253,7 +24667,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -22261,7 +24677,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 sentDate: {
@@ -22269,7 +24687,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 isConfirmed: {
@@ -22278,6 +24698,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -22288,7 +24709,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -22323,9 +24747,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         council: {
@@ -22337,7 +24765,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -22355,6 +24785,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -22378,7 +24809,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -22386,7 +24819,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 proposedDate: {
@@ -22394,7 +24829,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 status: {
@@ -22402,7 +24839,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 studentThesisRegistration: {
@@ -22412,7 +24851,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -22462,9 +24904,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         councilMember: {
@@ -22476,7 +24922,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -22494,6 +24942,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -22517,7 +24966,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -22525,7 +24976,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 role: {
@@ -22544,7 +24997,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -22564,7 +25020,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -22601,12 +25060,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         defenseRecord: {
             name: string;
@@ -22617,7 +25086,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -22635,6 +25106,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -22658,7 +25130,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -22666,7 +25140,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 finalScore: {
@@ -22676,6 +25152,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -22695,6 +25172,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -22705,7 +25183,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -22747,9 +25228,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         librarySubmission: {
@@ -22761,7 +25246,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -22779,6 +25266,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -22802,7 +25290,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -22810,7 +25300,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 submissionDate: {
@@ -22818,7 +25310,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 isHardcopy: {
@@ -22827,6 +25321,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -22837,6 +25332,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -22852,7 +25348,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -22892,9 +25391,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         defaultCouncilRolePayAmount: {
@@ -22906,7 +25409,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -22924,6 +25429,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -22947,7 +25453,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -22955,7 +25463,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 role: {
@@ -22987,9 +25497,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         paymentRecord: {
@@ -23001,7 +25515,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -23019,6 +25535,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -23042,7 +25559,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -23050,7 +25569,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 amount: {
@@ -23062,7 +25583,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 paymentDate: {
@@ -23081,7 +25604,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23113,7 +25639,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23138,9 +25667,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         supervisorPaymentRecord: {
@@ -23152,7 +25685,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -23170,6 +25705,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -23193,7 +25729,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -23201,7 +25739,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 thesisProject: {
@@ -23210,7 +25750,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23230,7 +25773,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23253,7 +25799,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 paymentDate: {
@@ -23279,9 +25827,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         documentFile: {
@@ -23293,7 +25845,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -23311,6 +25865,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -23334,7 +25889,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -23342,7 +25899,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -23369,7 +25928,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23391,7 +25953,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23413,7 +25978,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23435,7 +26003,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23457,7 +26028,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23479,7 +26053,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23501,7 +26078,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23523,7 +26103,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23545,7 +26128,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23567,10 +26153,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23596,10 +26185,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23625,10 +26217,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23654,10 +26249,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23683,10 +26281,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
                             name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23712,7 +26313,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23760,9 +26364,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         academicActionConfig: {
@@ -23774,7 +26382,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -23792,6 +26402,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -23815,7 +26426,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -23823,7 +26436,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -23840,7 +26455,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23883,12 +26501,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         academicActionRuleSet: {
             name: string;
@@ -23899,7 +26527,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -23917,6 +26547,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -23940,7 +26571,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -23948,7 +26581,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 config: {
@@ -23957,7 +26592,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -23991,9 +26629,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         academicActionCondition: {
@@ -24005,7 +26647,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -24023,6 +26667,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -24046,7 +26691,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -24054,7 +26701,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 ruleSet: {
@@ -24063,7 +26712,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -24091,6 +26743,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -24105,7 +26758,10 @@ declare const metadata: {
                     isArray: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: never[];
+                        }[];
                     }[];
                 };
                 yearCondition: {
@@ -24131,9 +26787,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         studentAcademicDecision: {
@@ -24145,7 +26805,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -24163,6 +26825,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -24186,7 +26849,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -24194,7 +26859,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 student: {
@@ -24203,7 +26870,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -24224,7 +26894,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -24246,7 +26919,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -24268,7 +26944,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -24292,7 +26971,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 validUntil: {
@@ -24317,7 +26998,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
             };
@@ -24335,12 +27018,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         trainingScoreSession: {
             name: string;
@@ -24351,7 +27044,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -24369,6 +27064,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -24392,7 +27088,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -24400,7 +27098,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -24412,7 +27112,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 semester: {
@@ -24421,7 +27123,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -24441,7 +27146,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -24475,9 +27183,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         studentTrainingScore: {
@@ -24489,7 +27201,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -24507,6 +27221,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -24530,7 +27245,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -24538,7 +27255,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 trainingScoreSession: {
@@ -24547,7 +27266,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -24567,7 +27289,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -24587,6 +27312,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -24611,12 +27337,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         scholarship: {
             name: string;
@@ -24627,7 +27363,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -24645,6 +27383,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -24668,7 +27407,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -24676,7 +27417,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -24697,6 +27440,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -24717,7 +27461,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -24760,12 +27507,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         scholarshipCriteria: {
             name: string;
@@ -24776,7 +27533,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -24794,6 +27553,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -24817,7 +27577,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -24825,7 +27587,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 scholarshipId: {
@@ -24840,7 +27604,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -24858,6 +27625,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -24876,7 +27644,10 @@ declare const metadata: {
                     isArray: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: never[];
+                        }[];
                     }[];
                 };
                 bonusValue: {
@@ -24885,6 +27656,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -24902,9 +27674,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         scholarshipAward: {
@@ -24916,7 +27692,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -24934,6 +27712,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -24957,7 +27736,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -24965,7 +27746,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 student: {
@@ -24974,7 +27757,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -24994,7 +27780,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -25014,7 +27803,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -25055,12 +27847,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         graduationSession: {
             name: string;
@@ -25071,7 +27873,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -25089,6 +27893,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -25112,7 +27917,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -25120,7 +27927,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -25144,7 +27953,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 applications: {
@@ -25167,9 +27978,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         studentGraduationApplication: {
@@ -25181,7 +27996,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -25199,6 +28016,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -25222,7 +28040,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -25230,7 +28050,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 student: {
@@ -25239,7 +28061,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -25259,7 +28084,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -25278,7 +28106,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 status: {
@@ -25286,7 +28116,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 applicationCheckResult: {
@@ -25318,12 +28150,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         applicationCheckResult: {
             name: string;
@@ -25334,7 +28176,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -25352,6 +28196,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -25375,7 +28220,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -25383,7 +28230,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 studentGraduationApplication: {
@@ -25392,7 +28241,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -25416,7 +28268,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -25458,12 +28313,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         graduationDecision: {
             name: string;
@@ -25474,7 +28339,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -25492,6 +28359,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -25515,7 +28383,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -25523,7 +28393,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 application: {
@@ -25532,7 +28404,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -25556,7 +28431,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -25579,7 +28457,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 notes: {
@@ -25593,6 +28473,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -25604,7 +28485,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -25625,7 +28509,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -25646,7 +28533,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -25696,6 +28586,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -25709,6 +28600,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -25721,6 +28613,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -25754,9 +28647,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         academicRankingConvert: {
@@ -25768,7 +28665,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -25786,6 +28685,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -25809,7 +28709,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -25817,7 +28719,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 classification: {
@@ -25866,7 +28770,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -25918,14 +28825,18 @@ declare const metadata: {
             };
             attributes: ({
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             } | {
                 name: string;
                 args: {
                     name: string;
-                    value: string;
+                    value: null[];
                 }[];
             })[];
         };
@@ -25938,7 +28849,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -25956,6 +28869,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -25979,7 +28893,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -25987,7 +28903,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 initialRank: {
@@ -25996,7 +28914,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -26030,9 +28951,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         graduationRankDowngradeCondition: {
@@ -26044,7 +28969,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -26062,6 +28989,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -26085,7 +29013,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -26093,7 +29023,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 downgradeRule: {
@@ -26102,7 +29034,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -26130,6 +29065,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -26144,7 +29080,10 @@ declare const metadata: {
                     isArray: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: never[];
+                        }[];
                     }[];
                 };
             };
@@ -26160,9 +29099,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         rankingCondition: {
@@ -26174,7 +29117,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -26192,6 +29137,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -26215,7 +29161,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -26223,7 +29171,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 ranking: {
@@ -26232,7 +29182,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -26260,6 +29213,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -26274,7 +29228,10 @@ declare const metadata: {
                     isArray: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: never[];
+                        }[];
                     }[];
                 };
                 applicationCheckResult: {
@@ -26297,9 +29254,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         diplomaVerificationApplication: {
@@ -26311,7 +29272,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -26329,6 +29292,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -26352,7 +29316,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -26360,7 +29326,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 fullname: {
@@ -26447,6 +29415,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -26460,6 +29429,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -26473,6 +29443,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -26483,7 +29454,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 studentId: {
@@ -26500,7 +29473,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -26521,9 +29497,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         note: {
@@ -26535,7 +29515,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -26553,6 +29535,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -26576,7 +29559,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -26584,7 +29569,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 content: {
@@ -26601,6 +29588,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -26611,7 +29599,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -26632,7 +29623,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -26682,9 +29676,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         noteFolder: {
@@ -26696,7 +29694,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -26714,6 +29714,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -26737,7 +29738,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -26745,7 +29748,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -26763,6 +29768,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -26773,7 +29779,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -26794,9 +29803,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
                             value: string;
-                        }[];
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -26819,6 +29832,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -26844,9 +29858,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         noteTag: {
@@ -26858,7 +29876,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -26876,6 +29896,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -26899,7 +29920,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -26907,7 +29930,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -26948,9 +29973,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         noteReminder: {
@@ -26962,7 +29991,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -26980,6 +30011,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -27003,7 +30035,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -27011,7 +30045,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 title: {
@@ -27028,6 +30064,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -27042,7 +30079,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 isNotified: {
@@ -27051,6 +30090,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -27061,7 +30101,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -27089,9 +30135,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         evaluationPeriod: {
@@ -27103,7 +30153,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -27121,6 +30173,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -27144,7 +30197,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -27152,7 +30207,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -27164,7 +30221,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 endDate: {
@@ -27206,9 +30265,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         standardCatalog: {
@@ -27220,7 +30283,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -27238,6 +30303,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -27261,7 +30327,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -27269,7 +30337,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 order: {
@@ -27300,9 +30370,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         criterionCatalog: {
@@ -27314,7 +30388,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -27332,6 +30408,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -27355,7 +30432,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -27363,7 +30442,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 standard: {
@@ -27372,7 +30453,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -27400,7 +30484,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -27436,12 +30523,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         requirementCriterionCatalog: {
             name: string;
@@ -27452,7 +30549,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -27470,6 +30569,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -27493,7 +30593,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -27501,7 +30603,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 criterionCatalog: {
@@ -27510,7 +30614,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -27552,12 +30659,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         scoreScaleCatalog: {
             name: string;
@@ -27568,7 +30685,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -27586,6 +30705,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -27609,7 +30729,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -27617,7 +30739,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -27664,9 +30788,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         evaluationStandard: {
@@ -27678,7 +30806,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -27696,6 +30826,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -27719,7 +30850,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -27727,7 +30860,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 period: {
@@ -27736,7 +30871,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -27765,6 +30906,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -27775,6 +30917,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -27801,12 +30944,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         evaluationCriterion: {
             name: string;
@@ -27817,7 +30970,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -27835,6 +30990,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -27858,7 +31014,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -27866,7 +31024,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 standard: {
@@ -27875,7 +31035,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -27904,7 +31070,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -27925,7 +31094,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -27953,6 +31125,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -27963,6 +31136,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -27973,6 +31147,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -27983,6 +31158,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -28007,12 +31183,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         evidenceCategory: {
             name: string;
@@ -28023,7 +31209,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -28041,6 +31229,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -28064,7 +31253,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -28072,7 +31263,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -28099,9 +31292,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         evidence: {
@@ -28113,7 +31310,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -28131,6 +31330,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -28154,7 +31354,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -28162,7 +31364,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 category: {
@@ -28171,7 +31375,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -28224,9 +31431,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         requirementCriterion: {
@@ -28238,7 +31449,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -28256,6 +31469,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -28279,7 +31493,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -28287,7 +31503,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 evaluationCriterion: {
@@ -28296,7 +31514,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -28337,6 +31561,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -28347,6 +31572,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -28364,9 +31590,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         analysisFormEvidence: {
@@ -28378,7 +31608,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -28396,6 +31628,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -28419,7 +31652,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -28427,7 +31662,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 requirementCriterion: {
@@ -28436,7 +31673,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -28456,7 +31696,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -28490,12 +31736,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         evaluationCouncil: {
             name: string;
@@ -28506,7 +31762,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -28524,6 +31782,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -28547,7 +31806,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -28555,7 +31816,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 period: {
@@ -28564,7 +31827,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -28610,9 +31879,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         evaluationCouncilMember: {
@@ -28624,7 +31897,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -28642,6 +31917,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -28665,7 +31941,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -28673,7 +31951,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 evaluationCouncil: {
@@ -28682,7 +31962,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -28703,7 +31989,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -28735,9 +32024,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         evaluationSecretarYCouncil: {
@@ -28749,7 +32042,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -28767,6 +32062,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -28790,7 +32086,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -28798,7 +32096,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 period: {
@@ -28807,7 +32107,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -28854,9 +32160,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         evaluationSecretaryMember: {
@@ -28868,7 +32178,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -28886,6 +32198,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -28909,7 +32222,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -28917,7 +32232,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 lecturer: {
@@ -28926,7 +32243,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -28946,7 +32266,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -28977,9 +32300,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         evidenceFile: {
@@ -28991,7 +32318,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -29009,6 +32338,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -29032,7 +32362,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -29040,7 +32372,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -29065,7 +32399,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -29086,7 +32423,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -29114,9 +32454,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         surveyObjectType: {
@@ -29128,7 +32472,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -29146,6 +32492,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -29169,7 +32516,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -29177,7 +32526,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -29258,9 +32609,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         surveyTopic: {
@@ -29272,7 +32627,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -29290,6 +32647,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -29313,7 +32671,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -29321,7 +32681,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -29355,9 +32717,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         surveyQuestionGroup: {
@@ -29369,7 +32735,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -29387,6 +32755,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -29410,7 +32779,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -29418,7 +32789,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -29438,7 +32811,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -29465,9 +32841,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         survey: {
@@ -29479,7 +32859,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -29497,6 +32879,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -29520,7 +32903,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -29528,7 +32913,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -29550,6 +32937,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -29560,6 +32948,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -29586,7 +32975,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -29600,7 +32992,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -29652,9 +33047,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         surveyQuestion: {
@@ -29666,7 +33065,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -29684,6 +33085,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -29707,7 +33109,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -29715,7 +33119,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -29733,7 +33139,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -29755,7 +33164,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -29790,9 +33202,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         surveyChoice: {
@@ -29804,7 +33220,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -29822,6 +33240,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -29845,7 +33264,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -29853,7 +33274,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 answer: {
@@ -29870,7 +33293,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -29904,9 +33330,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         surveySession: {
@@ -29918,7 +33348,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -29936,6 +33368,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -29959,7 +33392,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -29967,7 +33402,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 survey: {
@@ -29976,7 +33413,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -30002,7 +33442,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -30022,7 +33465,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 completedAt: {
@@ -30036,6 +33481,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -30062,12 +33508,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         surveyResponse: {
             name: string;
@@ -30078,7 +33534,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -30096,6 +33554,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -30119,7 +33578,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -30127,7 +33588,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 surveySession: {
@@ -30136,7 +33599,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -30156,7 +33622,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -30187,7 +33656,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -30207,7 +33679,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
             };
@@ -30225,12 +33699,22 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: {
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
                 name: string;
                 args: {
-                    value: string;
+                    name: string;
+                    value: null[];
                 }[];
-            }[];
+            })[];
         };
         staff: {
             name: string;
@@ -30241,7 +33725,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -30259,6 +33745,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -30282,7 +33769,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -30290,7 +33779,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 from: {
@@ -30304,7 +33795,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -30328,7 +33822,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -30352,7 +33849,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -30372,7 +33872,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -30394,6 +33897,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -30416,9 +33920,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         staffHistory: {
@@ -30430,7 +33938,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -30448,6 +33958,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -30471,7 +33982,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -30479,7 +33992,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 from: {
@@ -30498,7 +34013,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -30522,7 +34040,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -30546,7 +34067,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -30566,7 +34090,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -30597,9 +34124,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_TrinhDoHocVan: {
@@ -30611,7 +34142,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -30629,6 +34162,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -30652,7 +34186,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -30660,7 +34196,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -30695,9 +34233,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_TrinhDoLyLuanChinhTri: {
@@ -30709,7 +34251,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -30727,6 +34271,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -30750,7 +34295,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -30758,7 +34305,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -30793,9 +34342,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_TrinhDoQuanLyNhaNuoc: {
@@ -30807,7 +34360,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -30825,6 +34380,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -30848,7 +34404,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -30856,7 +34414,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -30891,9 +34451,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_TinhTrangHonNhan: {
@@ -30905,7 +34469,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -30923,6 +34489,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -30946,7 +34513,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -30954,7 +34523,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -30982,9 +34553,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_TrangThaiLamViec: {
@@ -30996,7 +34571,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -31014,6 +34591,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -31037,7 +34615,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -31045,7 +34625,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -31073,9 +34655,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_HinhThucKhenThuongChinhQuyen: {
@@ -31087,7 +34673,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -31105,6 +34693,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -31128,7 +34717,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -31136,7 +34727,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -31164,9 +34757,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_HinhThucKhenThuongDang: {
@@ -31178,7 +34775,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -31196,6 +34795,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -31219,7 +34819,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -31227,7 +34829,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -31255,9 +34859,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_XepLoaiDanhGiaCanBo: {
@@ -31269,7 +34877,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -31287,6 +34897,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -31310,7 +34921,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -31318,7 +34931,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -31346,9 +34961,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_XepLoaiDanhGiaChatLuongDangVien: {
@@ -31360,7 +34979,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -31378,6 +34999,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -31401,7 +35023,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -31409,7 +35033,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -31437,9 +35063,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_LoaiHinhCongTac: {
@@ -31451,7 +35081,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -31469,6 +35101,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -31492,7 +35125,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -31500,7 +35135,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -31535,9 +35172,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_TinhTrangCongTac: {
@@ -31549,7 +35190,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -31567,6 +35210,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -31590,7 +35234,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -31598,7 +35244,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -31626,9 +35274,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_LoaiHinhDiHocTap: {
@@ -31640,7 +35292,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -31658,6 +35312,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -31681,7 +35336,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -31689,7 +35346,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -31724,9 +35383,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_TinhTrangDiHocTap: {
@@ -31738,7 +35401,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -31756,6 +35421,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -31779,7 +35445,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -31787,7 +35455,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -31815,9 +35485,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_NuocCuDiHocTap: {
@@ -31829,7 +35503,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -31847,6 +35523,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -31870,7 +35547,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -31878,7 +35557,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -31906,9 +35587,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_ChucDanhCMNVGiangVien: {
@@ -31920,7 +35605,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -31938,6 +35625,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -31961,7 +35649,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -31969,7 +35659,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -31997,9 +35689,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_ChucDanhCMNVNghienCuuVien: {
@@ -32011,7 +35707,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -32029,6 +35727,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -32052,7 +35751,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -32060,7 +35761,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -32088,9 +35791,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_ChucDanhCMNVKySu: {
@@ -32102,7 +35809,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -32120,6 +35829,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -32143,7 +35853,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -32151,7 +35863,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -32179,9 +35893,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_TruongDaoTaoBacDH: {
@@ -32193,7 +35911,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -32211,6 +35931,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -32234,7 +35955,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -32242,7 +35965,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -32284,9 +36009,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_ChuyenNganhDaoTaoBacDH: {
@@ -32298,7 +36027,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -32316,6 +36047,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -32339,7 +36071,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -32347,7 +36081,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -32382,9 +36118,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_ChiHuyQuanLy: {
@@ -32396,7 +36136,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -32414,6 +36156,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -32437,7 +36180,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -32445,7 +36190,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -32480,9 +36227,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_ChuyenMonKyThuat: {
@@ -32494,7 +36245,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -32512,6 +36265,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -32535,7 +36289,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -32543,7 +36299,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -32578,9 +36336,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_SucKhoe: {
@@ -32592,7 +36354,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -32610,6 +36374,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -32633,7 +36398,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -32641,7 +36408,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -32676,9 +36445,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_NhomMau: {
@@ -32690,7 +36463,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -32708,6 +36483,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -32731,7 +36507,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -32739,7 +36517,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -32774,9 +36554,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_LoaiThuongTat: {
@@ -32788,7 +36572,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -32806,6 +36592,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -32829,7 +36616,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -32837,7 +36626,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -32872,9 +36663,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_NganhHoc: {
@@ -32886,7 +36681,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -32904,6 +36701,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -32927,7 +36725,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -32935,7 +36735,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -32970,9 +36772,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_ToChucXaHoi: {
@@ -32984,7 +36790,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -33002,6 +36810,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -33025,7 +36834,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -33033,7 +36844,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -33068,9 +36881,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_Ngach: {
@@ -33082,7 +36899,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -33100,6 +36919,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -33123,7 +36943,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -33131,7 +36953,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -33166,9 +36990,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         dM_BacLuong: {
@@ -33180,7 +37008,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -33198,6 +37028,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -33221,7 +37052,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -33229,7 +37062,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -33264,9 +37099,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         feedback: {
@@ -33278,7 +37117,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -33296,6 +37137,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -33319,7 +37161,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -33327,7 +37171,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 content: {
@@ -33348,7 +37194,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -33379,9 +37228,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         academicWarningRule: {
@@ -33393,7 +37246,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -33411,6 +37266,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -33434,7 +37290,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -33442,7 +37300,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 field: {
@@ -33459,6 +37319,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -33473,7 +37334,10 @@ declare const metadata: {
                     isArray: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: never[];
+                        }[];
                     }[];
                 };
                 severity: {
@@ -33496,7 +37360,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -33531,9 +37398,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         academicWarning: {
@@ -33545,7 +37416,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -33563,6 +37436,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -33586,7 +37460,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -33594,7 +37470,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 student: {
@@ -33603,7 +37481,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -33623,7 +37504,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -33672,9 +37556,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         disciplinaryWarning: {
@@ -33686,7 +37574,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -33704,6 +37594,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -33727,7 +37618,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -33735,7 +37628,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 student: {
@@ -33744,7 +37639,10 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -33765,7 +37663,10 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -33810,9 +37711,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         disciplinaryWarningReason: {
@@ -33824,7 +37729,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -33842,6 +37749,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -33865,7 +37773,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -33873,7 +37783,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -33913,9 +37825,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         templateFile: {
@@ -33927,7 +37843,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -33945,6 +37863,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -33968,7 +37887,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -33976,7 +37897,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 name: {
@@ -34008,6 +37931,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: number;
                         }[];
                     }[];
@@ -34029,9 +37953,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
         blockedIp: {
@@ -34043,7 +37971,9 @@ declare const metadata: {
                     isId: boolean;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 code: {
@@ -34061,6 +37991,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: boolean;
                         }[];
                     }[];
@@ -34084,7 +38015,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 updatedAt: {
@@ -34092,7 +38025,9 @@ declare const metadata: {
                     type: string;
                     attributes: {
                         name: string;
-                        args: never[];
+                        args: {
+                            name: string;
+                        }[];
                     }[];
                 };
                 ipAddress: {
@@ -34101,6 +38036,7 @@ declare const metadata: {
                     attributes: {
                         name: string;
                         args: {
+                            name: string;
                             value: string;
                         }[];
                     }[];
@@ -34136,9 +38072,13 @@ declare const metadata: {
             };
             attributes: {
                 name: string;
-                args: {
+                args: ({
+                    name: string;
                     value: string;
-                }[];
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
             }[];
         };
     };

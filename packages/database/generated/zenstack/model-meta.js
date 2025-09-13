@@ -14,7 +14,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -23,7 +23,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -36,11 +36,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, key: {
                     name: "key",
                     type: "ConfigKey",
@@ -61,7 +61,7 @@ const metadata = {
                     fields: ["key"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "he-thong" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "he-thong" }] }],
         },
         questionBank: {
             name: 'QuestionBank', fields: {
@@ -69,7 +69,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -78,7 +78,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -91,11 +91,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -103,7 +103,7 @@ const metadata = {
                     name: "subjectVersion",
                     type: "SubjectVersion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'questionBanks',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "subjectVersionId" },
@@ -137,7 +137,7 @@ const metadata = {
                     fields: ["subjectVersionId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         difficulty: {
             name: 'Difficulty', fields: {
@@ -145,7 +145,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -154,7 +154,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -167,11 +167,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -203,7 +203,7 @@ const metadata = {
                     fields: ["level"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         knowledgeBlock: {
             name: 'KnowledgeBlock', fields: {
@@ -211,7 +211,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -220,7 +220,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -233,16 +233,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, subjectVersion: {
                     name: "subjectVersion",
                     type: "SubjectVersion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'knowledgeBlocks',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "subjectVersionId" },
@@ -279,7 +279,7 @@ const metadata = {
                     fields: ["name", "subjectVersionId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         question: {
             name: 'Question', fields: {
@@ -287,7 +287,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -296,7 +296,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -309,22 +309,22 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, content: {
                     name: "content",
                     type: "String",
                 }, type: {
                     name: "type",
                     type: "QuestionType",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, point: {
                     name: "point",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 1 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
                 }, explanation: {
                     name: "explanation",
                     type: "String",
@@ -332,12 +332,12 @@ const metadata = {
                 }, isAutoGraded: {
                     name: "isAutoGraded",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, questionBank: {
                     name: "questionBank",
                     type: "QuestionBank",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'questions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "questionBankId" },
@@ -351,7 +351,7 @@ const metadata = {
                     type: "KnowledgeBlock",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'questions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "knowledgeBlockId" },
@@ -366,7 +366,7 @@ const metadata = {
                     type: "Difficulty",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'questions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "difficultyId" },
@@ -398,7 +398,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         answer: {
             name: 'Answer', fields: {
@@ -406,7 +406,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -415,7 +415,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -428,11 +428,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, sessionId: {
                     name: "sessionId",
                     type: "String",
@@ -442,7 +442,7 @@ const metadata = {
                     name: "session",
                     type: "ExamSession",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'answers',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
@@ -456,7 +456,7 @@ const metadata = {
                     name: "question",
                     type: "Question",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'answers',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "questionId" },
@@ -488,7 +488,7 @@ const metadata = {
                     fields: ["sessionId", "questionId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         exam: {
             name: 'Exam', fields: {
@@ -496,7 +496,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -505,7 +505,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -518,23 +518,23 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, title: {
                     name: "title",
                     type: "String",
                 }, status: {
                     name: "status",
                     type: "ExamStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, questionBank: {
                     name: "questionBank",
                     type: "QuestionBank",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'exam',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "questionBankId" },
@@ -555,23 +555,23 @@ const metadata = {
                 }, passScore: {
                     name: "passScore",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 5 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
                 }, maxScore: {
                     name: "maxScore",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 10 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 10 }] }],
                 }, shuffleQuestions: {
                     name: "shuffleQuestions",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, shuffleAnswers: {
                     name: "shuffleAnswers",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, showResult: {
                     name: "showResult",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, room: {
                     name: "room",
                     type: "Room",
@@ -619,7 +619,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         testStructureRule: {
             name: 'TestStructureRule', fields: {
@@ -627,7 +627,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -636,7 +636,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -649,16 +649,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, exam: {
                     name: "exam",
                     type: "Exam",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'testStructureRules',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "examId" },
@@ -671,7 +671,7 @@ const metadata = {
                     name: "knowledgeBlock",
                     type: "KnowledgeBlock",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'structureRules',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "knowledgeBlockId" },
@@ -702,7 +702,7 @@ const metadata = {
                     fields: ["examId", "knowledgeBlockId", "questionPoint", "questionType"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         examBank: {
             name: 'ExamBank', fields: {
@@ -710,7 +710,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -719,7 +719,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -732,16 +732,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, exam: {
                     name: "exam",
                     type: "Exam",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'examBank',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "examId" },
@@ -778,7 +778,7 @@ const metadata = {
                     fields: ["examId", "examCode"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         examBankQuestion: {
             name: 'ExamBankQuestion', fields: {
@@ -786,7 +786,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -795,7 +795,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -808,11 +808,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, examBankId: {
                     name: "examBankId",
                     type: "String",
@@ -822,7 +822,7 @@ const metadata = {
                     name: "examBank",
                     type: "ExamBank",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'questions',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
@@ -836,7 +836,7 @@ const metadata = {
                     name: "question",
                     type: "Question",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'sessionQuestions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "questionId" },
@@ -860,7 +860,7 @@ const metadata = {
                     fields: ["examBankId", "order"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         examFax: {
             name: 'ExamFax', fields: {
@@ -868,7 +868,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -877,7 +877,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -890,11 +890,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, examId: {
                     name: "examId",
                     type: "String",
@@ -904,7 +904,7 @@ const metadata = {
                     name: "exam",
                     type: "Exam",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'examFax',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
@@ -916,7 +916,7 @@ const metadata = {
                     name: "score",
                     type: "Decimal",
                     isOptional: true,
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "value": 5 }, { "value": 2 }] }],
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, examSession: {
                     name: "examSession",
                     type: "ExamSession",
@@ -936,7 +936,7 @@ const metadata = {
                     fields: ["examId", "fax"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         examSession: {
             name: 'ExamSession', fields: {
@@ -944,7 +944,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -953,7 +953,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -966,11 +966,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, startTime: {
                     name: "startTime",
                     type: "DateTime",
@@ -984,7 +984,7 @@ const metadata = {
                     type: "Student",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'examSession',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -998,7 +998,7 @@ const metadata = {
                     name: "exam",
                     type: "Exam",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'examSessions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "examId" },
@@ -1012,7 +1012,7 @@ const metadata = {
                     type: "Room",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'examSession',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "roomId" },
@@ -1027,7 +1027,7 @@ const metadata = {
                     type: "ExamBank",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'examSession',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "examBankId" },
@@ -1048,7 +1048,7 @@ const metadata = {
                     type: "ExamFax",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'examSession',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "examFaxId" },
@@ -1075,7 +1075,7 @@ const metadata = {
                     fields: ["studentId", "examId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         studentSubjectScore: {
             name: 'StudentSubjectScore', fields: {
@@ -1083,7 +1083,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1092,7 +1092,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1105,17 +1105,17 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'subjectClassStudent',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "subjectClassId" },
@@ -1129,7 +1129,7 @@ const metadata = {
                     name: "subjectVersion",
                     type: "SubjectVersion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentSubjectScore',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "subjectVersionId" },
@@ -1142,7 +1142,7 @@ const metadata = {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'subjectClassStudent',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -1155,47 +1155,47 @@ const metadata = {
                     name: "attendanceScore",
                     type: "Float",
                     isOptional: true,
-                    attributes: [{ "name": "@gte", "args": [{ "value": 0 }, { "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "value": 10 }, { "value": "Điểm tối đa là 10" }] }],
+                    attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
                 }, midtermScore: {
                     name: "midtermScore",
                     type: "Float",
                     isOptional: true,
-                    attributes: [{ "name": "@gte", "args": [{ "value": 0 }, { "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "value": 10 }, { "value": "Điểm tối đa là 10" }] }],
+                    attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
                 }, examScore: {
                     name: "examScore",
                     type: "Float",
                     isOptional: true,
-                    attributes: [{ "name": "@gte", "args": [{ "value": 0 }, { "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "value": 10 }, { "value": "Điểm tối đa là 10" }] }],
+                    attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
                 }, finalScore: {
                     name: "finalScore",
                     type: "Decimal",
                     isOptional: true,
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "value": 5 }, { "value": 1 }] }, { "name": "@gte", "args": [{ "value": 0 }, { "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "value": 10 }, { "value": "Điểm tối đa là 10" }] }],
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 1 }] }, { "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
                 }, manualFinalScore: {
                     name: "manualFinalScore",
                     type: "Float",
                     isOptional: true,
-                    attributes: [{ "name": "@gte", "args": [{ "value": 0 }, { "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "value": 10 }, { "value": "Điểm tối đa là 10" }] }],
+                    attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
                 }, examPostponed: {
                     name: "examPostponed",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, exempted: {
                     name: "exempted",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, withdrew: {
                     name: "withdrew",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, examBanned: {
                     name: "examBanned",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, suspended: {
                     name: "suspended",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, certificates: {
                     name: "certificates",
                     type: "ArchivedCertificateOnStudentSubjectScore",
@@ -1213,7 +1213,7 @@ const metadata = {
                     type: "StudentThesisRegistration",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ScoreToRegistration" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ScoreToRegistration" }] }],
                     backLink: 'studentSubjectScore',
                 },
             }, uniqueConstraints: {
@@ -1228,7 +1228,7 @@ const metadata = {
                     fields: ["subjectClassId", "studentId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         archivedCertificateOnStudentSubjectScore: {
             name: 'ArchivedCertificateOnStudentSubjectScore', fields: {
@@ -1236,7 +1236,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1245,7 +1245,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1258,16 +1258,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'certificates',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentSubjectScoreId" },
@@ -1280,7 +1280,7 @@ const metadata = {
                     name: "archivedCertificate",
                     type: "ArchivedCertificate",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentSubjectScore',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "archivedCertificateId" },
@@ -1302,7 +1302,7 @@ const metadata = {
                     fields: ["studentSubjectScoreId", "archivedCertificateId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         archivedCertificate: {
             name: 'ArchivedCertificate', fields: {
@@ -1310,7 +1310,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1319,7 +1319,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1332,11 +1332,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1347,7 +1347,7 @@ const metadata = {
                 }, finalScore: {
                     name: "finalScore",
                     type: "Float",
-                    attributes: [{ "name": "@gte", "args": [{ "value": 0 }, { "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "value": 10 }, { "value": "Điểm tối đa là 10" }] }],
+                    attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
                 }, documentFiles: {
                     name: "documentFiles",
                     type: "DocumentFile",
@@ -1370,7 +1370,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         archivedAwardOnStudentSubjectScore: {
             name: 'ArchivedAwardOnStudentSubjectScore', fields: {
@@ -1378,7 +1378,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1387,7 +1387,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1400,16 +1400,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'awards',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentSubjectScoreId" },
@@ -1422,7 +1422,7 @@ const metadata = {
                     name: "archivedAward",
                     type: "ArchivedAward",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentSubjectScore',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "archivedAwardId" },
@@ -1444,7 +1444,7 @@ const metadata = {
                     fields: ["studentSubjectScoreId", "archivedAwardId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         archivedAward: {
             name: 'ArchivedAward', fields: {
@@ -1452,7 +1452,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1461,7 +1461,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1474,11 +1474,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1511,7 +1511,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         schoolYear: {
             name: 'SchoolYear', fields: {
@@ -1519,7 +1519,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1528,7 +1528,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1541,11 +1541,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1590,7 +1590,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         semester: {
             name: 'Semester', fields: {
@@ -1598,7 +1598,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1607,7 +1607,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1620,11 +1620,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1640,7 +1640,7 @@ const metadata = {
                     name: "schoolYear",
                     type: "SchoolYear",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'semesters',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "schoolYearId" },
@@ -1723,7 +1723,7 @@ const metadata = {
                     fields: ["schoolYearId", "semesterType"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         milestone: {
             name: 'Milestone', fields: {
@@ -1731,7 +1731,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1740,7 +1740,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1753,11 +1753,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1779,7 +1779,7 @@ const metadata = {
                     name: "schoolYear",
                     type: "SchoolYear",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'milestone',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "schoolYearId" },
@@ -1798,7 +1798,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingCourse: {
             name: 'TrainingCourse', fields: {
@@ -1806,7 +1806,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -1815,7 +1815,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -1828,11 +1828,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -1840,7 +1840,7 @@ const metadata = {
                     name: "semesterStart",
                     type: "Semester",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingCoursesStart',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "semesterStartId" },
@@ -1875,40 +1875,40 @@ const metadata = {
                 }, coef_1: {
                     name: "coef_1",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, coef_2: {
                     name: "coef_2",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, coef_3: {
                     name: "coef_3",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, scoreToTakeExam: {
                     name: "scoreToTakeExam",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, scoreToPass: {
                     name: "scoreToPass",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 4 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 4 }] }],
                 }, scoreToPassConditional: {
                     name: "scoreToPassConditional",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 5 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
                 }, scoreToTakeGraduation: {
                     name: "scoreToTakeGraduation",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 5 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
                 }, scoreToPassGraduation: {
                     name: "scoreToPassGraduation",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 5 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingCourse',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingObjectTypeId" },
@@ -1984,7 +1984,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         fixedClass: {
             name: 'FixedClass', fields: {
@@ -1992,7 +1992,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2001,7 +2001,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2014,11 +2014,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -2034,13 +2034,13 @@ const metadata = {
                     name: "graduated",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, classMonitor: {
                     name: "classMonitor",
                     type: "Student",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ClassMonitor" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ClassMonitor" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'classMonitor',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "classMonitorId" },
@@ -2056,7 +2056,7 @@ const metadata = {
                     type: "Student",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "UnionLeader" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "UnionLeader" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'unionLeaderOf',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "unionLeaderId" },
@@ -2071,7 +2071,7 @@ const metadata = {
                     name: "trainingCourse",
                     type: "TrainingCourse",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'fixedClass',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingCourseId" },
@@ -2085,7 +2085,7 @@ const metadata = {
                     type: "DM_DonVi",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'fixedClass',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "managementOrganizationId" },
@@ -2101,7 +2101,7 @@ const metadata = {
                     type: "Lecturer",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ManageLecturer" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ManageLecturer" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'manageFixedClass',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "lecturerManagementId" },
@@ -2116,7 +2116,7 @@ const metadata = {
                     type: "Staff",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ManageStaff" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ManageStaff" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'fixedClass',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "staffManagementId" },
@@ -2129,7 +2129,7 @@ const metadata = {
                 }, initSize: {
                     name: "initSize",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, students: {
                     name: "students",
                     type: "Student",
@@ -2141,7 +2141,7 @@ const metadata = {
                     type: "CurriculumVersion",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'fixedClasses',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "curriculumVersionId" },
@@ -2191,7 +2191,7 @@ const metadata = {
                     fields: ["name", "trainingCourseId", "curriculumVersionId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         curriculum: {
             name: 'Curriculum', fields: {
@@ -2199,7 +2199,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2208,7 +2208,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2221,11 +2221,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -2237,7 +2237,7 @@ const metadata = {
                     name: "managementOrganization",
                     type: "DM_DonVi",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'curriculum',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "managementOrganizationId" },
@@ -2251,7 +2251,7 @@ const metadata = {
                     name: "trainingMajor",
                     type: "TrainingMajor",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'curriculum',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingMajorId" },
@@ -2290,7 +2290,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         curriculumVersion: {
             name: 'CurriculumVersion', fields: {
@@ -2298,7 +2298,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2307,7 +2307,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2320,11 +2320,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -2339,7 +2339,7 @@ const metadata = {
                 }, trainingLanguage: {
                     name: "trainingLanguage",
                     type: "TrainingLanguage",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, numberOfSemesters: {
                     name: "numberOfSemesters",
                     type: "Int",
@@ -2356,7 +2356,7 @@ const metadata = {
                     name: "curriculum",
                     type: "Curriculum",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "curriculumId" },
@@ -2369,7 +2369,7 @@ const metadata = {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingObjectTypeId" },
@@ -2382,7 +2382,7 @@ const metadata = {
                     name: "trainingLevel",
                     type: "TrainingLevel",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingLevelId" },
@@ -2395,7 +2395,7 @@ const metadata = {
                     name: "trainingTime",
                     type: "TrainingTime",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingTimeId" },
@@ -2409,7 +2409,7 @@ const metadata = {
                     type: "DiplomaType",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'curriculumVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "diplomaTypeId" },
@@ -2505,7 +2505,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subject: {
             name: 'Subject', fields: {
@@ -2513,7 +2513,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2522,7 +2522,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2535,11 +2535,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -2554,7 +2554,7 @@ const metadata = {
                     type: "DM_DonVi",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'subjects',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "managementOrganizationId" },
@@ -2592,7 +2592,7 @@ const metadata = {
                     fields: ["englishName"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subjectVersion: {
             name: 'SubjectVersion', fields: {
@@ -2600,7 +2600,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2609,7 +2609,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2622,11 +2622,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -2636,7 +2636,7 @@ const metadata = {
                 }, type: {
                     name: "type",
                     type: "SubjectVersionType",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, credit: {
                     name: "credit",
                     type: "Int",
@@ -2647,7 +2647,7 @@ const metadata = {
                 }, period: {
                     name: "period",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, numberOfTheory: {
                     name: "numberOfTheory",
                     type: "Int",
@@ -2709,7 +2709,7 @@ const metadata = {
                     type: "DM_DonVi",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'subjectVersions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "managementOrganizationId" },
@@ -2724,7 +2724,7 @@ const metadata = {
                     name: "subject",
                     type: "Subject",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SubjectVersion" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SubjectVersion" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'subjectVersion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "subjectId" },
@@ -2813,7 +2813,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         equivalencyGroup: {
             name: 'EquivalencyGroup', fields: {
@@ -2821,7 +2821,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2830,7 +2830,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2843,11 +2843,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, subjects: {
                     name: "subjects",
                     type: "SubjectInGroup",
@@ -2864,7 +2864,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subjectInGroup: {
             name: 'SubjectInGroup', fields: {
@@ -2872,7 +2872,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2881,7 +2881,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2894,16 +2894,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, subject: {
                     name: "subject",
                     type: "SubjectVersion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'equivalencyGroups',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
@@ -2917,7 +2917,7 @@ const metadata = {
                     name: "equivalencyGroup",
                     type: "EquivalencyGroup",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'subjects',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
@@ -2943,7 +2943,7 @@ const metadata = {
                     fields: ["subjectId", "equivalencyGroupId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingBlockSubject: {
             name: 'TrainingBlockSubject', fields: {
@@ -2951,7 +2951,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -2960,7 +2960,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -2973,16 +2973,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, subject: {
                     name: "subject",
                     type: "SubjectVersion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingBlocks',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "subjectId" },
@@ -2995,7 +2995,7 @@ const metadata = {
                     name: "trainingBlockOnCurriculumVersion",
                     type: "TrainingBlockOnCurriculumVersion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'subjects',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingBlockOnCurriculumVersionId" },
@@ -3011,7 +3011,7 @@ const metadata = {
                 }, type: {
                     name: "type",
                     type: "SubjectRequirementType",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, useForFinalScore: {
                     name: "useForFinalScore",
                     type: "Boolean",
@@ -3034,7 +3034,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         classRegisterSession: {
             name: 'ClassRegisterSession', fields: {
@@ -3042,7 +3042,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3051,7 +3051,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3064,11 +3064,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3082,7 +3082,7 @@ const metadata = {
                     name: "semester",
                     type: "Semester",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'classRegisterSession',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "semesterId" },
@@ -3114,7 +3114,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         classRegisterLogs: {
             name: 'ClassRegisterLogs', fields: {
@@ -3122,7 +3122,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3131,7 +3131,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3144,16 +3144,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, classRegisterSession: {
                     name: "classRegisterSession",
                     type: "ClassRegisterSession",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'classRegisterLogs',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "classRegisterSessionId" },
@@ -3166,7 +3166,7 @@ const metadata = {
                     name: "subjectClass",
                     type: "SubjectClass",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'classRegisterLogs',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "subjectClassId" },
@@ -3179,7 +3179,7 @@ const metadata = {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'classRegisterLogs',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -3191,7 +3191,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "ClassRegisterStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, reason: {
                     name: "reason",
                     type: "String",
@@ -3206,7 +3206,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subjectClass: {
             name: 'SubjectClass', fields: {
@@ -3214,7 +3214,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3223,7 +3223,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3236,11 +3236,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3255,7 +3255,7 @@ const metadata = {
                     name: "subject",
                     type: "SubjectVersion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'subjectClass',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "subjectId" },
@@ -3274,7 +3274,7 @@ const metadata = {
                     name: "semester",
                     type: "Semester",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'subjectClasses',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "semesterId" },
@@ -3286,7 +3286,7 @@ const metadata = {
                 }, cancelled: {
                     name: "cancelled",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, lecturerAssignmentDeadline: {
                     name: "lecturerAssignmentDeadline",
                     type: "DateTime",
@@ -3312,7 +3312,7 @@ const metadata = {
                     type: "Exam",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'subjectClass',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "examId" },
@@ -3325,11 +3325,11 @@ const metadata = {
                 }, isLockScore: {
                     name: "isLockScore",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, isLockExamScore: {
                     name: "isLockExamScore",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, issuedScoreAt: {
                     name: "issuedScoreAt",
                     type: "DateTime",
@@ -3339,7 +3339,7 @@ const metadata = {
                     type: "Room",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ClassRoom" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ClassRoom" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'subjectClasses',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "roomId" },
@@ -3354,7 +3354,7 @@ const metadata = {
                     type: "Lecturer",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "MainLecturer" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "MainLecturer" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'mainSubjectClasses',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "lecturerId" },
@@ -3369,7 +3369,7 @@ const metadata = {
                     type: "Lecturer",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ExtraLecturer" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ExtraLecturer" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'extraSubjectClasses',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "extraLecturerId" },
@@ -3384,7 +3384,7 @@ const metadata = {
                     type: "Lecturer",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "EnterGradeLecturer" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "EnterGradeLecturer" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'enterGradeClasses',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "enterGradeLecturerId" },
@@ -3431,7 +3431,7 @@ const metadata = {
                     type: "Room",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DefenseRooms" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DefenseRooms" }] }],
                     backLink: 'defenseRooms',
                 }, surveyObjectTypes: {
                     name: "surveyObjectTypes",
@@ -3456,7 +3456,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         classSchedule: {
             name: 'ClassSchedule', fields: {
@@ -3464,7 +3464,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3473,7 +3473,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3486,16 +3486,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'classSchedules',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "subjectClassId" },
@@ -3507,7 +3507,7 @@ const metadata = {
                 }, periodType: {
                     name: "periodType",
                     type: "PeriodType",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, startPeriod: {
                     name: "startPeriod",
                     type: "Int",
@@ -3523,7 +3523,7 @@ const metadata = {
                     type: "Room",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'classSchedules',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "roomId" },
@@ -3538,7 +3538,7 @@ const metadata = {
                     type: "Lecturer",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "MainLecturer" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "MainLecturer" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'classSchedules',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "lecturerId" },
@@ -3553,7 +3553,7 @@ const metadata = {
                     type: "Lecturer",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ExtraLecturer" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ExtraLecturer" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'extraClassSchedules',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "extraLecturerId" },
@@ -3570,13 +3570,13 @@ const metadata = {
                 }, isReplacement: {
                     name: "isReplacement",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, originalSchedule: {
                     name: "originalSchedule",
                     type: "ClassSchedule",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ReplacementSchedule" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ReplacementSchedule" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'replacementSchedule',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "originalScheduleId" },
@@ -3592,7 +3592,7 @@ const metadata = {
                     type: "ClassSchedule",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ReplacementSchedule" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ReplacementSchedule" }] }],
                     backLink: 'originalSchedule',
                 }, cancelReason: {
                     name: "cancelReason",
@@ -3611,7 +3611,7 @@ const metadata = {
                     fields: ["originalScheduleId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@index", "args": [] }, { "name": "@@index", "args": [] }, { "name": "@@index", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingObjectType: {
             name: 'TrainingObjectType', fields: {
@@ -3619,7 +3619,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3628,7 +3628,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3641,11 +3641,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3702,7 +3702,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         priorityObject: {
             name: 'PriorityObject', fields: {
@@ -3710,7 +3710,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3719,7 +3719,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3732,11 +3732,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3761,7 +3761,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingType: {
             name: 'TrainingType', fields: {
@@ -3769,7 +3769,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3778,7 +3778,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3791,11 +3791,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3819,7 +3819,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingLevel: {
             name: 'TrainingLevel', fields: {
@@ -3827,7 +3827,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3836,7 +3836,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3849,11 +3849,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3883,7 +3883,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingForm: {
             name: 'TrainingForm', fields: {
@@ -3891,7 +3891,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3900,7 +3900,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3913,11 +3913,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3941,7 +3941,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingLocation: {
             name: 'TrainingLocation', fields: {
@@ -3949,7 +3949,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -3958,7 +3958,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -3971,11 +3971,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4005,7 +4005,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         building: {
             name: 'Building', fields: {
@@ -4013,7 +4013,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4022,7 +4022,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4035,11 +4035,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4052,7 +4052,7 @@ const metadata = {
                     type: "TrainingLocation",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'buildings',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingLocationId" },
@@ -4081,7 +4081,7 @@ const metadata = {
                     fields: ["trainingLocationId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         room: {
             name: 'Room', fields: {
@@ -4089,7 +4089,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4098,7 +4098,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4111,30 +4111,30 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
                 }, trainingRoom: {
                     name: "trainingRoom",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, computerRoom: {
                     name: "computerRoom",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, laboratoryRoom: {
                     name: "laboratoryRoom",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, examRoom: {
                     name: "examRoom",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, capacity: {
                     name: "capacity",
                     type: "Int",
@@ -4147,7 +4147,7 @@ const metadata = {
                     type: "Building",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'rooms',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "buildingId" },
@@ -4169,14 +4169,14 @@ const metadata = {
                     type: "SubjectClass",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ClassRoom" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ClassRoom" }] }],
                     backLink: 'room',
                 }, defenseRooms: {
                     name: "defenseRooms",
                     type: "SubjectClass",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DefenseRooms" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DefenseRooms" }] }],
                     backLink: 'defenseRooms',
                 }, thesisProject: {
                     name: "thesisProject",
@@ -4209,7 +4209,7 @@ const metadata = {
                     fields: ["buildingId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingField: {
             name: 'TrainingField', fields: {
@@ -4217,7 +4217,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4226,7 +4226,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4239,11 +4239,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4258,7 +4258,7 @@ const metadata = {
                     name: "organization",
                     type: "DM_DonVi",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingFields',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "organizationId" },
@@ -4300,7 +4300,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingFieldOnTrainingObjectType: {
             name: 'TrainingFieldOnTrainingObjectType', fields: {
@@ -4308,7 +4308,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4317,7 +4317,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4330,16 +4330,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, trainingField: {
                     name: "trainingField",
                     type: "TrainingField",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingObjectTypes',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingFieldId" },
@@ -4352,7 +4352,7 @@ const metadata = {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingFields',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingObjectTypeId" },
@@ -4374,7 +4374,7 @@ const metadata = {
                     fields: ["trainingFieldId", "trainingObjectTypeId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingMajor: {
             name: 'TrainingMajor', fields: {
@@ -4382,7 +4382,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4391,7 +4391,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4404,11 +4404,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4422,20 +4422,20 @@ const metadata = {
                 }, numberCreditsMajor: {
                     name: "numberCreditsMajor",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, numberCreditsRequired: {
                     name: "numberCreditsRequired",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, numberCreditsElective: {
                     name: "numberCreditsElective",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, organization: {
                     name: "organization",
                     type: "DM_DonVi",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingMajors',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "organizationId" },
@@ -4449,7 +4449,7 @@ const metadata = {
                     name: "trainingField",
                     type: "TrainingField",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingMajors',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingFieldId" },
@@ -4503,7 +4503,7 @@ const metadata = {
                     fields: ["trainingFieldId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingMajorOnTrainingObjectType: {
             name: 'TrainingMajorOnTrainingObjectType', fields: {
@@ -4511,7 +4511,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4520,7 +4520,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4533,16 +4533,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, trainingMajor: {
                     name: "trainingMajor",
                     type: "TrainingMajor",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingObjectTypes',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingMajorId" },
@@ -4555,7 +4555,7 @@ const metadata = {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingMajors',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingObjectTypeId" },
@@ -4577,7 +4577,7 @@ const metadata = {
                     fields: ["trainingMajorId", "trainingObjectTypeId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingBlock: {
             name: 'TrainingBlock', fields: {
@@ -4585,7 +4585,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4594,7 +4594,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4607,11 +4607,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4619,7 +4619,7 @@ const metadata = {
                 }, priority: {
                     name: "priority",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, curriculumVersions: {
                     name: "curriculumVersions",
                     type: "TrainingBlockOnCurriculumVersion",
@@ -4639,7 +4639,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingBlockOnCurriculumVersion: {
             name: 'TrainingBlockOnCurriculumVersion', fields: {
@@ -4647,7 +4647,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4656,7 +4656,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4669,16 +4669,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, trainingBlock: {
                     name: "trainingBlock",
                     type: "TrainingBlock",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'curriculumVersions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingBlockId" },
@@ -4691,7 +4691,7 @@ const metadata = {
                     name: "curriculumVersion",
                     type: "CurriculumVersion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingBlocks',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "curriculumVersionId" },
@@ -4703,11 +4703,11 @@ const metadata = {
                 }, priority: {
                     name: "priority",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, electiveCreditsRequired: {
                     name: "electiveCreditsRequired",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, subjects: {
                     name: "subjects",
                     type: "TrainingBlockSubject",
@@ -4727,7 +4727,7 @@ const metadata = {
                     fields: ["trainingBlockId", "curriculumVersionId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingTime: {
             name: 'TrainingTime', fields: {
@@ -4735,7 +4735,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4744,7 +4744,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4757,11 +4757,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4781,7 +4781,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         diplomaType: {
             name: 'DiplomaType', fields: {
@@ -4789,7 +4789,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4798,7 +4798,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4811,11 +4811,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4852,7 +4852,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         scoreConvert: {
             name: 'ScoreConvert', fields: {
@@ -4860,7 +4860,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4869,7 +4869,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4882,11 +4882,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, classification: {
                     name: "classification",
                     type: "String",
@@ -4908,12 +4908,12 @@ const metadata = {
                 }, improvementRegister: {
                     name: "improvementRegister",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, trainingCourse: {
                     name: "trainingCourse",
                     type: "TrainingCourse",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'scoreConverts',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingCourseId" },
@@ -4932,7 +4932,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingKPI: {
             name: 'TrainingKPI', fields: {
@@ -4940,7 +4940,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4949,7 +4949,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -4962,11 +4962,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -4980,7 +4980,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         student: {
             name: 'Student', fields: {
@@ -4988,7 +4988,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -4997,7 +4997,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5010,11 +5010,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, entryScore: {
                     name: "entryScore",
                     type: "Float",
@@ -5036,7 +5036,7 @@ const metadata = {
                     type: "TrainingLocation",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'students',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingLocationId" },
@@ -5060,27 +5060,27 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "StudentStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, classMonitor: {
                     name: "classMonitor",
                     type: "FixedClass",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ClassMonitor" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ClassMonitor" }] }],
                     backLink: 'classMonitor',
                 }, unionLeaderOf: {
                     name: "unionLeaderOf",
                     type: "FixedClass",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "UnionLeader" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "UnionLeader" }] }],
                     backLink: 'unionLeader',
                 }, fixedClass: {
                     name: "fixedClass",
                     type: "FixedClass",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'classMonitor',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "fixedClassId" },
@@ -5105,7 +5105,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'educationAndTraining',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -5114,7 +5114,7 @@ const metadata = {
                     type: "TrainingLevel",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'students',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingLevelId" },
@@ -5129,7 +5129,7 @@ const metadata = {
                     type: "TrainingObjectType",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'students',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingObjectTypeId" },
@@ -5144,7 +5144,7 @@ const metadata = {
                     type: "TrainingType",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'students',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingTypeId" },
@@ -5159,7 +5159,7 @@ const metadata = {
                     type: "TrainingForm",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'students',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingFormId" },
@@ -5174,7 +5174,7 @@ const metadata = {
                     type: "DM_KhuVuc_DiaLy",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'student',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "registrationAreaId" },
@@ -5190,7 +5190,7 @@ const metadata = {
                     type: "CurriculumVersion",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'students',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "curriculumVersionId" },
@@ -5203,35 +5203,35 @@ const metadata = {
                 }, academicWarningLevel: {
                     name: "academicWarningLevel",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, disciplinaryWarningLevel: {
                     name: "disciplinaryWarningLevel",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, suspended: {
                     name: "suspended",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, expelled: {
                     name: "expelled",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, foreignLangPass: {
                     name: "foreignLangPass",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, ITCertificationPass: {
                     name: "ITCertificationPass",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, strengthTrainingPass: {
                     name: "strengthTrainingPass",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, militaryTrainingPass: {
                     name: "militaryTrainingPass",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, studentTrainingScore: {
                     name: "studentTrainingScore",
                     type: "StudentTrainingScore",
@@ -5351,7 +5351,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         studentSemesterResult: {
             name: 'StudentSemesterResult', fields: {
@@ -5359,7 +5359,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5368,7 +5368,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5381,16 +5381,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, student: {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentSemesterResult',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -5403,7 +5403,7 @@ const metadata = {
                     name: "semester",
                     type: "Semester",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentSemesterResult',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "semesterId" },
@@ -5427,19 +5427,19 @@ const metadata = {
                 }, gpaBase4: {
                     name: "gpaBase4",
                     type: "Decimal",
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "value": 5 }, { "value": 2 }] }],
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, cumulativeGpaBase4: {
                     name: "cumulativeGpaBase4",
                     type: "Decimal",
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "value": 5 }, { "value": 2 }] }],
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, gpaBase10: {
                     name: "gpaBase10",
                     type: "Decimal",
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "value": 5 }, { "value": 2 }] }],
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, cumulativeGpaBase10: {
                     name: "cumulativeGpaBase10",
                     type: "Decimal",
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "value": 5 }, { "value": 2 }] }],
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, conductScore: {
                     name: "conductScore",
                     type: "Float",
@@ -5497,23 +5497,23 @@ const metadata = {
                 }, postponeWithReason: {
                     name: "postponeWithReason",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, academicWarningLevel: {
                     name: "academicWarningLevel",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, disciplinaryWarningLevel: {
                     name: "disciplinaryWarningLevel",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, suspended: {
                     name: "suspended",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, expelled: {
                     name: "expelled",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -5527,7 +5527,7 @@ const metadata = {
                     fields: ["studentId", "semesterId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         studentYearResult: {
             name: 'StudentYearResult', fields: {
@@ -5535,7 +5535,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5544,7 +5544,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5557,16 +5557,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, student: {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentYearResult',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -5579,7 +5579,7 @@ const metadata = {
                     name: "schoolYear",
                     type: "SchoolYear",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentYearResult',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "schoolYearId" },
@@ -5600,19 +5600,19 @@ const metadata = {
                 }, gpaBase4: {
                     name: "gpaBase4",
                     type: "Decimal",
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "value": 5 }, { "value": 2 }] }],
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, cumulativeGpaBase4: {
                     name: "cumulativeGpaBase4",
                     type: "Decimal",
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "value": 5 }, { "value": 2 }] }],
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, gpaBase10: {
                     name: "gpaBase10",
                     type: "Decimal",
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "value": 5 }, { "value": 2 }] }],
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, cumulativeGpaBase10: {
                     name: "cumulativeGpaBase10",
                     type: "Decimal",
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "value": 5 }, { "value": 2 }] }],
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, conductScore: {
                     name: "conductScore",
                     type: "Float",
@@ -5635,19 +5635,19 @@ const metadata = {
                 }, academicWarningLevel: {
                     name: "academicWarningLevel",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, disciplinaryWarningLevel: {
                     name: "disciplinaryWarningLevel",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, suspended: {
                     name: "suspended",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, expelled: {
                     name: "expelled",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -5661,7 +5661,7 @@ const metadata = {
                     fields: ["studentId", "schoolYearId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         notification: {
             name: 'Notification', fields: {
@@ -5669,7 +5669,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5678,7 +5678,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5691,11 +5691,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, title: {
                     name: "title",
                     type: "String",
@@ -5705,15 +5705,15 @@ const metadata = {
                 }, type: {
                     name: "type",
                     type: "NotificationType",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, priority: {
                     name: "priority",
                     type: "NotificationPriority",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, publishedAt: {
                     name: "publishedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, expiresAt: {
                     name: "expiresAt",
                     type: "DateTime",
@@ -5721,7 +5721,7 @@ const metadata = {
                 }, targetAll: {
                     name: "targetAll",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, targetCourses: {
                     name: "targetCourses",
                     type: "TrainingCourse",
@@ -5747,7 +5747,7 @@ const metadata = {
                     name: "createdBy",
                     type: "DM_NhanVien",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'notification',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "createdById" },
@@ -5773,7 +5773,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-danh-muc" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
         },
         group: {
             name: 'Group', fields: {
@@ -5781,7 +5781,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5790,7 +5790,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5803,11 +5803,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -5840,7 +5840,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-nguoi-dung" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-nguoi-dung" }] }],
         },
         role: {
             name: 'Role', fields: {
@@ -5848,7 +5848,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5857,7 +5857,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5870,11 +5870,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -5902,7 +5902,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-nguoi-dung" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-nguoi-dung" }] }],
         },
         permission: {
             name: 'Permission', fields: {
@@ -5910,7 +5910,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5919,7 +5919,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5932,11 +5932,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -5946,7 +5946,7 @@ const metadata = {
                 }, disabled: {
                     name: "disabled",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, role: {
                     name: "role",
                     type: "Role",
@@ -5967,7 +5967,7 @@ const metadata = {
                     fields: ["name", "permissionType"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-nguoi-dung" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-nguoi-dung" }] }],
         },
         chatBotConfig: {
             name: 'ChatBotConfig', fields: {
@@ -5975,7 +5975,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -5984,7 +5984,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -5997,11 +5997,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -6023,7 +6023,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "tro-ly-ao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "tro-ly-ao" }] }],
         },
         userSession: {
             name: 'UserSession', fields: {
@@ -6031,7 +6031,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -6040,7 +6040,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -6053,11 +6053,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -6086,7 +6086,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "tro-ly-ao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "tro-ly-ao" }] }],
         },
         document: {
             name: 'Document', fields: {
@@ -6094,7 +6094,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -6103,7 +6103,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -6116,11 +6116,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, title: {
                     name: "title",
                     type: "String",
@@ -6133,7 +6133,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "DocumentStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, uri: {
                     name: "uri",
                     type: "String",
@@ -6157,14 +6157,14 @@ const metadata = {
                     name: "uploadedBy",
                     type: "DM_NhanVien",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DocumentUploaded" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DocumentUploaded" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'documentUploaded',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "uploadedById" },
                 }, uploadedById: {
                     name: "uploadedById",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                     defaultValueProvider: $default$Document$uploadedById,
                     isForeignKey: true,
                     relationField: 'uploadedBy',
@@ -6173,7 +6173,7 @@ const metadata = {
                     type: "DM_NhanVien",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DocumentApproved" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DocumentApproved" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'documentApproved',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "approvedById" },
@@ -6194,7 +6194,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "tro-ly-ao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "tro-ly-ao" }] }],
         },
         fAQ: {
             name: 'FAQ', fields: {
@@ -6202,7 +6202,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -6211,7 +6211,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -6224,11 +6224,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, question: {
                     name: "question",
                     type: "String",
@@ -6240,7 +6240,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "DocumentStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, type: {
                     name: "type",
                     type: "DocumentType",
@@ -6252,14 +6252,14 @@ const metadata = {
                     name: "uploadedBy",
                     type: "DM_NhanVien",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "FAQUploaded" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "FAQUploaded" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'fAQUploaded',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "uploadedById" },
                 }, uploadedById: {
                     name: "uploadedById",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                     defaultValueProvider: $default$FAQ$uploadedById,
                     isForeignKey: true,
                     relationField: 'uploadedBy',
@@ -6268,7 +6268,7 @@ const metadata = {
                     type: "DM_NhanVien",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "FAQApproved" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "FAQApproved" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'fAQApproved',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "approvedById" },
@@ -6289,7 +6289,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "tro-ly-ao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "tro-ly-ao" }] }],
         },
         prompt: {
             name: 'Prompt', fields: {
@@ -6297,7 +6297,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -6306,7 +6306,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -6319,11 +6319,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, prompt: {
                     name: "prompt",
                     type: "String",
@@ -6331,7 +6331,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "DocumentStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, type: {
                     name: "type",
                     type: "DocumentType",
@@ -6349,7 +6349,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "tro-ly-ao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "tro-ly-ao" }] }],
         },
         conversation: {
             name: 'Conversation', fields: {
@@ -6357,7 +6357,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -6366,7 +6366,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -6379,11 +6379,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -6393,7 +6393,7 @@ const metadata = {
                     type: "DM_NhanVien",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'conversation',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "userId" },
@@ -6409,7 +6409,7 @@ const metadata = {
                     type: "UserSession",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'conversation',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "sessionId" },
@@ -6439,7 +6439,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "tro-ly-ao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "tro-ly-ao" }] }],
         },
         message: {
             name: 'Message', fields: {
@@ -6447,7 +6447,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -6456,7 +6456,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -6469,11 +6469,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, conversationId: {
                     name: "conversationId",
                     type: "String",
@@ -6492,7 +6492,7 @@ const metadata = {
                     type: "Conversation",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'message',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "conversationId" },
@@ -6506,7 +6506,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "tro-ly-ao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "tro-ly-ao" }] }],
         },
         dM_CapBac: {
             name: 'DM_CapBac', fields: {
@@ -6514,7 +6514,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6531,27 +6531,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6595,7 +6595,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_ChucDanh: {
             name: 'DM_ChucDanh', fields: {
@@ -6603,7 +6603,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6620,27 +6620,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6669,7 +6669,7 @@ const metadata = {
                     name: "iLoaiChucDanh",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -6683,7 +6683,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_ChucVu: {
             name: 'DM_ChucVu', fields: {
@@ -6691,7 +6691,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6708,27 +6708,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6757,7 +6757,7 @@ const metadata = {
                     name: "iNhomChucVu",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, userProfile: {
                     name: "userProfile",
                     type: "UserProfile",
@@ -6783,7 +6783,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_HocHam: {
             name: 'DM_HocHam', fields: {
@@ -6791,7 +6791,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6808,27 +6808,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6872,7 +6872,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_HocVi: {
             name: 'DM_HocVi', fields: {
@@ -6880,7 +6880,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6897,27 +6897,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -6961,7 +6961,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_ChungChiTinHoc: {
             name: 'DM_ChungChiTinHoc', fields: {
@@ -6969,7 +6969,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -6986,27 +6986,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7054,7 +7054,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_DanToc: {
             name: 'DM_DanToc', fields: {
@@ -7062,7 +7062,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7079,27 +7079,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7151,7 +7151,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_DonVi: {
             name: 'DM_DonVi', fields: {
@@ -7159,7 +7159,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7176,27 +7176,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7333,7 +7333,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@index", "args": [{ "name": "map", "value": "IX_DM_DonVi_iParentId" }] }, { "name": "@@index", "args": [{ "name": "map", "value": "IX_DM_DonVi_sMa" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_DonVi_iParentId" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_DonVi_sMa" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_DonViHanhChinh: {
             name: 'DM_DonViHanhChinh', fields: {
@@ -7341,7 +7341,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7358,27 +7358,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7414,7 +7414,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_KhuVuc_DiaLy: {
             name: 'DM_KhuVuc_DiaLy', fields: {
@@ -7422,7 +7422,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7439,27 +7439,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7501,7 +7501,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_NgoaiNgu: {
             name: 'DM_NgoaiNgu', fields: {
@@ -7509,7 +7509,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7526,27 +7526,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7584,7 +7584,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_TonGiao: {
             name: 'DM_TonGiao', fields: {
@@ -7592,7 +7592,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7609,27 +7609,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7667,7 +7667,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_TrinhDoNgoaiNgu: {
             name: 'DM_TrinhDoNgoaiNgu', fields: {
@@ -7675,7 +7675,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7692,27 +7692,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7754,7 +7754,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_TrinhDoTinHoc: {
             name: 'DM_TrinhDoTinHoc', fields: {
@@ -7762,7 +7762,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7779,27 +7779,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7837,7 +7837,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_GioiTinh: {
             name: 'DM_GioiTinh', fields: {
@@ -7845,7 +7845,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7862,27 +7862,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -7920,7 +7920,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_NhanVien: {
             name: 'DM_NhanVien', fields: {
@@ -7928,7 +7928,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -7945,27 +7945,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8078,7 +8078,7 @@ const metadata = {
                     type: "Group",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'users',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "groupId" },
@@ -8111,28 +8111,28 @@ const metadata = {
                     type: "Document",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DocumentUploaded" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DocumentUploaded" }] }],
                     backLink: 'uploadedBy',
                 }, documentApproved: {
                     name: "documentApproved",
                     type: "Document",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DocumentApproved" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DocumentApproved" }] }],
                     backLink: 'approvedBy',
                 }, fAQUploaded: {
                     name: "fAQUploaded",
                     type: "FAQ",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "FAQUploaded" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "FAQUploaded" }] }],
                     backLink: 'uploadedBy',
                 }, fAQApproved: {
                     name: "fAQApproved",
                     type: "FAQ",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "FAQApproved" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "FAQApproved" }] }],
                     backLink: 'approvedBy',
                 },
             }, uniqueConstraints: {
@@ -8141,7 +8141,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@index", "args": [{ "name": "map", "value": "IX_DM_NhanVien_sDM_DonViId" }] }, { "name": "@@index", "args": [{ "name": "map", "value": "IX_DM_NhanVien_sDM_ViTriCongViecId" }] }, { "name": "@@index", "args": [{ "name": "map", "value": "IX_DM_NhanVien_sEmail" }] }, { "name": "@@index", "args": [{ "name": "map", "value": "IX_DM_NhanVien_sSDTDiDong" }] }, { "name": "@@auth", "args": [] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_NhanVien_sDM_DonViId" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_NhanVien_sDM_ViTriCongViecId" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_NhanVien_sEmail" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_NhanVien_sSDTDiDong" }] }, { "name": "@@auth", "args": [] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_PhanCap_ChatLuong_TrangThietBi: {
             name: 'DM_PhanCap_ChatLuong_TrangThietBi', fields: {
@@ -8149,7 +8149,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8166,27 +8166,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8218,7 +8218,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_PhanLoai_CSKT: {
             name: 'DM_PhanLoai_CSKT', fields: {
@@ -8226,7 +8226,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8243,27 +8243,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8295,7 +8295,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_NhomNguoiDung: {
             name: 'DM_NhomNguoiDung', fields: {
@@ -8303,7 +8303,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8320,27 +8320,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8372,7 +8372,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_NhomUngDung: {
             name: 'DM_NhomUngDung', fields: {
@@ -8380,7 +8380,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8397,27 +8397,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8453,7 +8453,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_QuocGia: {
             name: 'DM_QuocGia', fields: {
@@ -8461,7 +8461,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8478,27 +8478,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8552,7 +8552,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_Tinh: {
             name: 'DM_Tinh', fields: {
@@ -8560,7 +8560,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8577,27 +8577,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8640,28 +8640,28 @@ const metadata = {
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ProvinceHometown" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ProvinceHometown" }] }],
                     backLink: 'provinceHometown',
                 }, userProfilePlaceOfBirth: {
                     name: "userProfilePlaceOfBirth",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ProvincePlaceOfBirth" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ProvincePlaceOfBirth" }] }],
                     backLink: 'provinceOfBirth',
                 }, userProfilePermanentAddress: {
                     name: "userProfilePermanentAddress",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ProvincePermanentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ProvincePermanentAddress" }] }],
                     backLink: 'provincePermanentAddress',
                 }, userProfileCurrentAddress: {
                     name: "userProfileCurrentAddress",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ProvinceCurrentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ProvinceCurrentAddress" }] }],
                     backLink: 'provinceCurrentAddress',
                 },
             }, uniqueConstraints: {
@@ -8670,7 +8670,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@index", "args": [{ "name": "map", "value": "IX_DM_Tinh_iDM_QuocGiaId" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_Tinh_iDM_QuocGiaId" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_Tinh_New: {
             name: 'DM_Tinh_New', fields: {
@@ -8678,7 +8678,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8695,27 +8695,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8758,28 +8758,28 @@ const metadata = {
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "NewProvinceHometown" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewProvinceHometown" }] }],
                     backLink: 'newProvinceHometown',
                 }, userProfilePlaceOfBirth: {
                     name: "userProfilePlaceOfBirth",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "NewProvincePlaceOfBirth" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewProvincePlaceOfBirth" }] }],
                     backLink: 'newProvinceOfBirth',
                 }, userProfilePermanentAddress: {
                     name: "userProfilePermanentAddress",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "NewProvincePermanentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewProvincePermanentAddress" }] }],
                     backLink: 'newProvincePermanentAddress',
                 }, userProfileCurrentAddress: {
                     name: "userProfileCurrentAddress",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "NewProvinceCurrentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewProvinceCurrentAddress" }] }],
                     backLink: 'newProvinceCurrentAddress',
                 },
             }, uniqueConstraints: {
@@ -8788,7 +8788,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@index", "args": [{ "name": "map", "value": "IX_DM_Tinh_New_iDM_QuocGiaId" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_Tinh_New_iDM_QuocGiaId" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_QuanHuyen: {
             name: 'DM_QuanHuyen', fields: {
@@ -8796,7 +8796,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8813,27 +8813,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8876,28 +8876,28 @@ const metadata = {
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DistrictHometown" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DistrictHometown" }] }],
                     backLink: 'districtHometown',
                 }, userProfilePlaceOfBirth: {
                     name: "userProfilePlaceOfBirth",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DistrictPlaceOfBirth" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DistrictPlaceOfBirth" }] }],
                     backLink: 'districtOfBirth',
                 }, userProfilePermanentAddress: {
                     name: "userProfilePermanentAddress",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DistrictPermanentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DistrictPermanentAddress" }] }],
                     backLink: 'districtPermanentAddress',
                 }, userProfileCurrentAddress: {
                     name: "userProfileCurrentAddress",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DistrictCurrentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DistrictCurrentAddress" }] }],
                     backLink: 'districtCurrentAddress',
                 },
             }, uniqueConstraints: {
@@ -8906,7 +8906,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@index", "args": [{ "name": "map", "value": "IX_DM_QuanHuyen_iDM_TinhId" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_QuanHuyen_iDM_TinhId" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_XaPhuong: {
             name: 'DM_XaPhuong', fields: {
@@ -8914,7 +8914,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -8931,27 +8931,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -8999,28 +8999,28 @@ const metadata = {
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "CommuneHometown" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CommuneHometown" }] }],
                     backLink: 'communeHometown',
                 }, userProfilePlaceOfBirth: {
                     name: "userProfilePlaceOfBirth",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "CommunePlaceOfBirth" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CommunePlaceOfBirth" }] }],
                     backLink: 'communeOfBirth',
                 }, userProfilePermanentAddress: {
                     name: "userProfilePermanentAddress",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "CommunePermanentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CommunePermanentAddress" }] }],
                     backLink: 'communePermanentAddress',
                 }, userProfileCurrentAddress: {
                     name: "userProfileCurrentAddress",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "CommuneCurrentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CommuneCurrentAddress" }] }],
                     backLink: 'communeCurrentAddress',
                 },
             }, uniqueConstraints: {
@@ -9029,7 +9029,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@index", "args": [{ "name": "map", "value": "IX_DM_XaPhuong_iDM_QuanHuyenId" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_XaPhuong_iDM_QuanHuyenId" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_XaPhuong_New: {
             name: 'DM_XaPhuong_New', fields: {
@@ -9037,7 +9037,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -9054,27 +9054,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -9113,28 +9113,28 @@ const metadata = {
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "NewCommuneHometown" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewCommuneHometown" }] }],
                     backLink: 'newCommuneHometown',
                 }, userProfilePlaceOfBirth: {
                     name: "userProfilePlaceOfBirth",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "NewCommunePlaceOfBirth" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewCommunePlaceOfBirth" }] }],
                     backLink: 'newCommuneOfBirth',
                 }, userProfilePermanentAddress: {
                     name: "userProfilePermanentAddress",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "NewCommunePermanentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewCommunePermanentAddress" }] }],
                     backLink: 'newCommunePermanentAddress',
                 }, userProfileCurrentAddress: {
                     name: "userProfileCurrentAddress",
                     type: "UserProfile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "NewCommuneCurrentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewCommuneCurrentAddress" }] }],
                     backLink: 'newCommuneCurrentAddress',
                 },
             }, uniqueConstraints: {
@@ -9143,7 +9143,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@index", "args": [] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_ViTriCongViec: {
             name: 'DM_ViTriCongViec', fields: {
@@ -9151,7 +9151,7 @@ const metadata = {
                     name: "Id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }, { "name": "@db.Uuid", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Uuid", "args": [] }],
                 }, sMa: {
                     name: "sMa",
                     type: "String",
@@ -9168,27 +9168,27 @@ const metadata = {
                     name: "iSTT",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, bActive: {
                     name: "bActive",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, bDeleted: {
                     name: "bDeleted",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, bSystem: {
                     name: "bSystem",
                     type: "Boolean",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, iDictionaryKey: {
                     name: "iDictionaryKey",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, dNgayTao: {
                     name: "dNgayTao",
                     type: "DateTime",
@@ -9230,7 +9230,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         userProfile: {
             name: 'UserProfile', fields: {
@@ -9238,7 +9238,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -9247,7 +9247,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -9260,11 +9260,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, bLaNguoiDung: {
                     name: "bLaNguoiDung",
                     type: "Boolean",
@@ -9282,7 +9282,7 @@ const metadata = {
                     type: "Group",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "groupId" },
@@ -9463,7 +9463,7 @@ const metadata = {
                     type: "DM_Tinh",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ProvinceCurrentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ProvinceCurrentAddress" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfileCurrentAddress',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "provinceCurrentAddressId" },
@@ -9479,7 +9479,7 @@ const metadata = {
                     type: "DM_QuanHuyen",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DistrictCurrentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DistrictCurrentAddress" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfileCurrentAddress',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "districtCurrentAddressId" },
@@ -9495,7 +9495,7 @@ const metadata = {
                     type: "DM_XaPhuong",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CommuneCurrentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CommuneCurrentAddress" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfileCurrentAddress',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "communeCurrentAddressId" },
@@ -9511,7 +9511,7 @@ const metadata = {
                     type: "DM_Tinh_New",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewProvinceCurrentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewProvinceCurrentAddress" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfileCurrentAddress',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "newProvinceCurrentAddressId" },
@@ -9527,7 +9527,7 @@ const metadata = {
                     type: "DM_XaPhuong_New",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewCommuneCurrentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewCommuneCurrentAddress" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfileCurrentAddress',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "newCommuneCurrentAddressId" },
@@ -9551,7 +9551,7 @@ const metadata = {
                     type: "DM_Tinh",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ProvincePlaceOfBirth" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ProvincePlaceOfBirth" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfilePlaceOfBirth',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "provinceOfBirthId" },
@@ -9567,7 +9567,7 @@ const metadata = {
                     type: "DM_QuanHuyen",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DistrictPlaceOfBirth" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DistrictPlaceOfBirth" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfilePlaceOfBirth',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "districtOfBirthId" },
@@ -9583,7 +9583,7 @@ const metadata = {
                     type: "DM_XaPhuong",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CommunePlaceOfBirth" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CommunePlaceOfBirth" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfilePlaceOfBirth',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "communeOfBirthId" },
@@ -9599,7 +9599,7 @@ const metadata = {
                     type: "DM_Tinh_New",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewProvincePlaceOfBirth" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewProvincePlaceOfBirth" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfilePlaceOfBirth',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "newProvinceOfBirthId" },
@@ -9615,7 +9615,7 @@ const metadata = {
                     type: "DM_XaPhuong_New",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewCommunePlaceOfBirth" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewCommunePlaceOfBirth" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfilePlaceOfBirth',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "newCommuneOfBirthId" },
@@ -9643,7 +9643,7 @@ const metadata = {
                     type: "DM_GioiTinh",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "genderId" },
@@ -9663,7 +9663,7 @@ const metadata = {
                     type: "DM_Tinh",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ProvincePermanentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ProvincePermanentAddress" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfilePermanentAddress',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "provincePermanentAddressId" },
@@ -9679,7 +9679,7 @@ const metadata = {
                     type: "DM_QuanHuyen",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DistrictPermanentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DistrictPermanentAddress" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfilePermanentAddress',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "districtPermanentAddressId" },
@@ -9695,7 +9695,7 @@ const metadata = {
                     type: "DM_XaPhuong",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CommunePermanentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CommunePermanentAddress" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfilePermanentAddress',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "communePermanentAddressId" },
@@ -9711,7 +9711,7 @@ const metadata = {
                     type: "DM_Tinh_New",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewProvincePermanentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewProvincePermanentAddress" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfilePermanentAddress',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "newProvincePermanentAddressId" },
@@ -9727,7 +9727,7 @@ const metadata = {
                     type: "DM_XaPhuong_New",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewCommunePermanentAddress" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewCommunePermanentAddress" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfilePermanentAddress',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "newCommunePermanentAddressId" },
@@ -9759,7 +9759,7 @@ const metadata = {
                     type: "DM_QuocGia",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "nationalityId" },
@@ -9775,7 +9775,7 @@ const metadata = {
                     type: "DM_TonGiao",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "religionId" },
@@ -9791,7 +9791,7 @@ const metadata = {
                     type: "DM_DanToc",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "ethnicityId" },
@@ -9807,7 +9807,7 @@ const metadata = {
                     type: "DM_Tinh",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ProvinceHometown" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ProvinceHometown" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfileHometown',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "provinceHometownId" },
@@ -9823,7 +9823,7 @@ const metadata = {
                     type: "DM_QuanHuyen",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DistrictHometown" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DistrictHometown" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfileHometown',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "districtHometownId" },
@@ -9839,7 +9839,7 @@ const metadata = {
                     type: "DM_XaPhuong",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CommuneHometown" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CommuneHometown" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfileHometown',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "communeHometownId" },
@@ -9855,7 +9855,7 @@ const metadata = {
                     type: "DM_Tinh_New",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewProvinceHometown" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewProvinceHometown" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfileHometown',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "newProvinceHometownId" },
@@ -9871,7 +9871,7 @@ const metadata = {
                     type: "DM_XaPhuong_New",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewCommuneHometown" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewCommuneHometown" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfileHometown',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "newCommuneHometownId" },
@@ -9891,7 +9891,7 @@ const metadata = {
                     type: "DM_CapBac",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'profiles',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "rankId" },
@@ -9911,7 +9911,7 @@ const metadata = {
                     type: "DM_HocVi",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'profiles',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "academicDegreeTypeId" },
@@ -9931,7 +9931,7 @@ const metadata = {
                     type: "DM_HocHam",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'profiles',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "academicRankTypeId" },
@@ -9951,7 +9951,7 @@ const metadata = {
                     type: "DM_ChucDanh",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "levelId" },
@@ -9967,7 +9967,7 @@ const metadata = {
                     type: "DM_ChiHuyQuanLy",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "chiHuyQuanLyId" },
@@ -9982,7 +9982,7 @@ const metadata = {
                     type: "DM_ChuyenMonKyThuat",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "chuyenMonKyThuatId" },
@@ -9997,7 +9997,7 @@ const metadata = {
                     type: "DM_SucKhoe",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "sucKhoeId" },
@@ -10012,7 +10012,7 @@ const metadata = {
                     type: "DM_NhomMau",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "nhomMauId" },
@@ -10047,7 +10047,7 @@ const metadata = {
                     type: "DM_ChucVu",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "positionCPVId" },
@@ -10251,7 +10251,7 @@ const metadata = {
                     type: "DM_TrinhDoHocVan",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'userProfile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trinhDoHocVanId" },
@@ -10310,7 +10310,7 @@ const metadata = {
                     fields: ["idCardNumber"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-nguoi-dung" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-nguoi-dung" }] }],
         },
         hocHam: {
             name: 'HocHam', fields: {
@@ -10318,7 +10318,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10327,7 +10327,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10340,17 +10340,17 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, academicRankType: {
                     name: "academicRankType",
                     type: "DM_HocHam",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'hocHam',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "academicRankTypeId" },
@@ -10381,7 +10381,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'hocHam',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -10400,7 +10400,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         hocVi: {
             name: 'HocVi', fields: {
@@ -10408,7 +10408,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10417,7 +10417,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10430,17 +10430,17 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, academicDegreeType: {
                     name: "academicDegreeType",
                     type: "DM_HocVi",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'hocVi',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "academicDegreeTypeId" },
@@ -10456,7 +10456,7 @@ const metadata = {
                     type: "DM_QuocGia",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'hocVi',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "nationalityId" },
@@ -10476,7 +10476,7 @@ const metadata = {
                     type: "DM_TruongDaoTaoBacDH",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'hocVi',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "truongId" },
@@ -10494,7 +10494,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'hocVi',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -10513,7 +10513,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         relative: {
             name: 'Relative', fields: {
@@ -10521,7 +10521,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10530,7 +10530,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10543,11 +10543,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -10578,7 +10578,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'relatives',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -10597,7 +10597,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         trinhDoLyLuanChinhTri: {
             name: 'TrinhDoLyLuanChinhTri', fields: {
@@ -10605,7 +10605,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10614,7 +10614,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10627,11 +10627,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, hinhThucDaoTao: {
                     name: "hinhThucDaoTao",
                     type: "String",
@@ -10652,7 +10652,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trinhDoLyLuanChinhTri',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -10666,7 +10666,7 @@ const metadata = {
                     type: "DM_TrinhDoLyLuanChinhTri",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trinhDoLyLuanChinhTri',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trinhDoId" },
@@ -10686,7 +10686,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         trinhDoQuanLyNhaNuoc: {
             name: 'TrinhDoQuanLyNhaNuoc', fields: {
@@ -10694,7 +10694,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10703,7 +10703,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10716,11 +10716,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, hinhThucDaoTao: {
                     name: "hinhThucDaoTao",
                     type: "String",
@@ -10741,7 +10741,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trinhDoQuanLyNhaNuoc',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -10755,7 +10755,7 @@ const metadata = {
                     type: "DM_TrinhDoQuanLyNhaNuoc",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trinhDoQuanLyNhaNuoc',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trinhDoId" },
@@ -10775,7 +10775,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         ngoaiNgu: {
             name: 'NgoaiNgu', fields: {
@@ -10783,7 +10783,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10792,7 +10792,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10805,17 +10805,17 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, ngonNgu: {
                     name: "ngonNgu",
                     type: "DM_NgoaiNgu",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'ngoaiNgu',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "ngonNguId" },
@@ -10846,7 +10846,7 @@ const metadata = {
                     name: "trinhDo",
                     type: "DM_TrinhDoNgoaiNgu",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'ngoaiNgu',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "trinhDoId" },
@@ -10860,7 +10860,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'ngoaiNgu',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -10879,7 +10879,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         tinHoc: {
             name: 'TinHoc', fields: {
@@ -10887,7 +10887,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10896,7 +10896,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10909,11 +10909,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, hinhThucDaoTao: {
                     name: "hinhThucDaoTao",
                     type: "String",
@@ -10934,7 +10934,7 @@ const metadata = {
                     name: "dM_TrinhDoTinHoc",
                     type: "DM_TrinhDoTinHoc",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'tinHoc',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "dM_TrinhDoTinHocId" },
@@ -10948,7 +10948,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'tinHoc',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -10967,7 +10967,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         boiDuongQuocPhongAnNinh: {
             name: 'BoiDuongQuocPhongAnNinh', fields: {
@@ -10975,7 +10975,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -10984,7 +10984,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -10997,11 +10997,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -11018,7 +11018,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'boiDuongQuocPhongAnNinh',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -11037,7 +11037,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         capBac: {
             name: 'CapBac', fields: {
@@ -11045,7 +11045,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11054,7 +11054,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11067,11 +11067,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, noiRaQuyetDinh: {
                     name: "noiRaQuyetDinh",
                     type: "String",
@@ -11088,7 +11088,7 @@ const metadata = {
                     name: "capBac",
                     type: "DM_CapBac",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'capBac',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "capBacId" },
@@ -11102,7 +11102,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'capBac',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -11121,7 +11121,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         quaTrinhCongTac: {
             name: 'QuaTrinhCongTac', fields: {
@@ -11129,7 +11129,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11138,7 +11138,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11151,11 +11151,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, tuThangNam: {
                     name: "tuThangNam",
                     type: "DateTime",
@@ -11188,7 +11188,7 @@ const metadata = {
                     name: "chucVu",
                     type: "DM_ChucVu",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhCongTac',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "chucVuId" },
@@ -11202,7 +11202,7 @@ const metadata = {
                     name: "loaiHinhCongTac",
                     type: "DM_LoaiHinhCongTac",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhCongTac',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "loaiHinhCongTacId" },
@@ -11215,7 +11215,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhCongTac',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -11234,7 +11234,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         quaTrinhCuDiCongTac: {
             name: 'QuaTrinhCuDiCongTac', fields: {
@@ -11242,7 +11242,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11251,7 +11251,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11264,11 +11264,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, tuThangNam: {
                     name: "tuThangNam",
                     type: "DateTime",
@@ -11284,7 +11284,7 @@ const metadata = {
                     name: "chucVu",
                     type: "DM_ChucVu",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhCuDiCongTac',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "chucVuId" },
@@ -11298,7 +11298,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhCuDiCongTac',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -11317,7 +11317,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         quaTrinhCuDiDaoTao: {
             name: 'QuaTrinhCuDiDaoTao', fields: {
@@ -11325,7 +11325,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11334,7 +11334,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11347,11 +11347,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, ten: {
                     name: "ten",
                     type: "String",
@@ -11376,7 +11376,7 @@ const metadata = {
                     name: "loai",
                     type: "DM_LoaiHinhDiHocTap",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhCuDiDaoTao',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "loaiId" },
@@ -11389,7 +11389,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhCuDiDaoTao',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -11408,7 +11408,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         khenThuong: {
             name: 'KhenThuong', fields: {
@@ -11416,7 +11416,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11425,7 +11425,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11438,11 +11438,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, hinhThucKhenThuong: {
                     name: "hinhThucKhenThuong",
                     type: "String",
@@ -11471,7 +11471,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'khenThuong',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -11490,7 +11490,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         kyLuat: {
             name: 'KyLuat', fields: {
@@ -11498,7 +11498,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11507,7 +11507,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11520,11 +11520,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, hinhThucKyLuat: {
                     name: "hinhThucKyLuat",
                     type: "String",
@@ -11553,7 +11553,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'kyLuat',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -11572,7 +11572,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         doiTuongChinhSach: {
             name: 'DoiTuongChinhSach', fields: {
@@ -11580,7 +11580,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11589,7 +11589,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11602,11 +11602,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, tenDoiTuong: {
                     name: "tenDoiTuong",
                     type: "String",
@@ -11627,7 +11627,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'doiTuongChinhSach',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -11646,7 +11646,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         keKhaiTaiSan: {
             name: 'KeKhaiTaiSan', fields: {
@@ -11654,7 +11654,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11663,7 +11663,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11676,11 +11676,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, loai: {
                     name: "loai",
                     type: "String",
@@ -11697,7 +11697,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'keKhaiTaiSan',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -11716,7 +11716,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         tiengDanToc: {
             name: 'TiengDanToc', fields: {
@@ -11724,7 +11724,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11733,7 +11733,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11746,17 +11746,17 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, danToc: {
                     name: "danToc",
                     type: "DM_DanToc",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'tiengDanToc',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "danTocId" },
@@ -11783,7 +11783,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'tiengDanToc',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -11802,7 +11802,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         chienDau: {
             name: 'ChienDau', fields: {
@@ -11810,7 +11810,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11819,7 +11819,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11832,11 +11832,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, cuongVi: {
                     name: "cuongVi",
                     type: "String",
@@ -11869,7 +11869,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'chienDau',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -11888,7 +11888,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         nuocNgoai: {
             name: 'NuocNgoai', fields: {
@@ -11896,7 +11896,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11905,7 +11905,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -11918,16 +11918,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, tenNuoc: {
                     name: "tenNuoc",
                     type: "DM_QuocGia",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'nuocNgoai',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "tenNuocId" },
@@ -11953,7 +11953,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'diNuocNgoai',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -11972,7 +11972,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         thuongTat: {
             name: 'ThuongTat', fields: {
@@ -11980,7 +11980,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -11989,7 +11989,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12002,16 +12002,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, loai: {
                     name: "loai",
                     type: "DM_LoaiThuongTat",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'thuongTat',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "loaiId" },
@@ -12044,7 +12044,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'thuongTat',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -12063,7 +12063,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         danhHieu: {
             name: 'DanhHieu', fields: {
@@ -12071,7 +12071,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12080,7 +12080,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12093,11 +12093,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, ten: {
                     name: "ten",
                     type: "String",
@@ -12110,7 +12110,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'danhHieu',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -12129,7 +12129,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         quaTrinhHocTap: {
             name: 'QuaTrinhHocTap', fields: {
@@ -12137,7 +12137,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12146,7 +12146,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12159,16 +12159,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, tenTruong: {
                     name: "tenTruong",
                     type: "DM_TruongDaoTaoBacDH",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhHocTap',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "tenTruongId" },
@@ -12181,7 +12181,7 @@ const metadata = {
                     name: "nganhHoc",
                     type: "DM_NganhHoc",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhHocTap',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "nganhHocId" },
@@ -12195,7 +12195,7 @@ const metadata = {
                     type: "DM_ChuyenNganhDaoTaoBacDH",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhHocTap',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "chuyenNganhId" },
@@ -12225,7 +12225,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhHocTap',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -12244,7 +12244,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         toChucXaHoi: {
             name: 'ToChucXaHoi', fields: {
@@ -12252,7 +12252,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12261,7 +12261,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12274,16 +12274,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, ten: {
                     name: "ten",
                     type: "DM_ToChucXaHoi",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'toChucXaHoi',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "tenId" },
@@ -12308,7 +12308,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'ToChucXaHoi',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -12327,7 +12327,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         quaTrinhLuong: {
             name: 'QuaTrinhLuong', fields: {
@@ -12335,7 +12335,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12344,7 +12344,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12357,11 +12357,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, tuNgay: {
                     name: "tuNgay",
                     type: "DateTime",
@@ -12374,7 +12374,7 @@ const metadata = {
                     name: "ngach",
                     type: "DM_Ngach",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhLuong',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "ngachId" },
@@ -12387,7 +12387,7 @@ const metadata = {
                     name: "bacLuong",
                     type: "DM_BacLuong",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhLuong',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "bacLuongId" },
@@ -12415,7 +12415,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'QuaTrinhLuong',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -12434,7 +12434,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         lecturerType: {
             name: 'LecturerType', fields: {
@@ -12442,7 +12442,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12451,7 +12451,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12464,11 +12464,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -12498,7 +12498,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-danh-muc" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
         },
         staffType: {
             name: 'StaffType', fields: {
@@ -12506,7 +12506,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12515,7 +12515,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12528,11 +12528,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -12562,7 +12562,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-danh-muc" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
         },
         staffPosition: {
             name: 'StaffPosition', fields: {
@@ -12570,7 +12570,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12579,7 +12579,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12592,11 +12592,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -12622,7 +12622,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-danh-muc" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
         },
         lecturer: {
             name: 'Lecturer', fields: {
@@ -12630,7 +12630,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12639,7 +12639,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12652,11 +12652,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -12674,7 +12674,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'lecturer',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -12688,7 +12688,7 @@ const metadata = {
                     name: "organization",
                     type: "DM_DonVi",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'lecturers',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "organizationId" },
@@ -12702,7 +12702,7 @@ const metadata = {
                     name: "lecturerType",
                     type: "LecturerType",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'lecturers',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "lecturerTypeId" },
@@ -12716,42 +12716,42 @@ const metadata = {
                     type: "SubjectClass",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "MainLecturer" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "MainLecturer" }] }],
                     backLink: 'mainLecturer',
                 }, extraSubjectClasses: {
                     name: "extraSubjectClasses",
                     type: "SubjectClass",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ExtraLecturer" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ExtraLecturer" }] }],
                     backLink: 'extraLecturer',
                 }, enterGradeClasses: {
                     name: "enterGradeClasses",
                     type: "SubjectClass",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "EnterGradeLecturer" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "EnterGradeLecturer" }] }],
                     backLink: 'enterGradeLecturer',
                 }, manageFixedClass: {
                     name: "manageFixedClass",
                     type: "FixedClass",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ManageLecturer" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ManageLecturer" }] }],
                     backLink: 'lecturerManagement',
                 }, classSchedules: {
                     name: "classSchedules",
                     type: "ClassSchedule",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "MainLecturer" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "MainLecturer" }] }],
                     backLink: 'lecturer',
                 }, extraClassSchedules: {
                     name: "extraClassSchedules",
                     type: "ClassSchedule",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ExtraLecturer" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ExtraLecturer" }] }],
                     backLink: 'extraLecturer',
                 }, researchProjects: {
                     name: "researchProjects",
@@ -12811,7 +12811,7 @@ const metadata = {
                     fields: ["userProfileId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         lecturerHistory: {
             name: 'LecturerHistory', fields: {
@@ -12819,7 +12819,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12828,7 +12828,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12841,11 +12841,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -12870,7 +12870,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'lecturerHistory',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -12885,7 +12885,7 @@ const metadata = {
                     type: "DM_DonVi",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'lecturerHistory',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "organizationId" },
@@ -12900,7 +12900,7 @@ const metadata = {
                     name: "lecturerType",
                     type: "LecturerType",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'lecturerHistory',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "lecturerTypeId" },
@@ -12922,7 +12922,7 @@ const metadata = {
                     fields: ["userProfileId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         researchProject: {
             name: 'ResearchProject', fields: {
@@ -12930,7 +12930,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -12939,7 +12939,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -12952,11 +12952,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, title: {
                     name: "title",
                     type: "String",
@@ -12988,7 +12988,7 @@ const metadata = {
                     name: "supervisor",
                     type: "Lecturer",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'researchProjects',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "supervisorId" },
@@ -13001,7 +13001,7 @@ const metadata = {
                     name: "organization",
                     type: "DM_DonVi",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'researchProjects',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "organizationId" },
@@ -13017,7 +13017,7 @@ const metadata = {
                 }, currentStudents: {
                     name: "currentStudents",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, registrationStart: {
                     name: "registrationStart",
                     type: "DateTime",
@@ -13035,7 +13035,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "ResearchProjectStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, registrations: {
                     name: "registrations",
                     type: "StudentResearchRegistration",
@@ -13052,7 +13052,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         studentResearchRegistration: {
             name: 'StudentResearchRegistration', fields: {
@@ -13060,7 +13060,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13069,7 +13069,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13082,16 +13082,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, student: {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'researchRegistrations',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -13104,7 +13104,7 @@ const metadata = {
                     name: "researchProject",
                     type: "ResearchProject",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'registrations',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "researchProjectId" },
@@ -13116,7 +13116,7 @@ const metadata = {
                 }, registeredAt: {
                     name: "registeredAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, motivation: {
                     name: "motivation",
                     type: "String",
@@ -13130,7 +13130,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "RegistrationStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, reviewedAt: {
                     name: "reviewedAt",
                     type: "DateTime",
@@ -13140,7 +13140,7 @@ const metadata = {
                     type: "Lecturer",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'reviewedRegistrations',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "reviewedById" },
@@ -13168,7 +13168,7 @@ const metadata = {
                     fields: ["studentId", "researchProjectId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         thesisProject: {
             name: 'ThesisProject', fields: {
@@ -13176,7 +13176,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13185,7 +13185,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13198,11 +13198,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, title: {
                     name: "title",
                     type: "String",
@@ -13247,12 +13247,12 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "ThesisProjectStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'thesisProjects',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "subjectClassId" },
@@ -13265,7 +13265,7 @@ const metadata = {
                     name: "supervisor",
                     type: "ExpertProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "SupervisorToThesis" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SupervisorToThesis" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'supervisedTheses',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "supervisorId" },
@@ -13279,7 +13279,7 @@ const metadata = {
                     type: "ExpertProfile",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "CoSupervisorToThesis" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToThesis" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'coSupervisedTheses',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "coSupervisorId" },
@@ -13293,7 +13293,7 @@ const metadata = {
                     name: "organization",
                     type: "DM_DonVi",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'thesisProjects',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "organizationId" },
@@ -13309,13 +13309,13 @@ const metadata = {
                 }, currentStudents: {
                     name: "currentStudents",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, council: {
                     name: "council",
                     type: "Council",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'thesis',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "councilId" },
@@ -13330,7 +13330,7 @@ const metadata = {
                     type: "Room",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'thesisProject',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "roomId" },
@@ -13349,7 +13349,7 @@ const metadata = {
                     type: "DefenseSession",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'thesisProject',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "defenseSessionId" },
@@ -13415,7 +13415,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         defenseSession: {
             name: 'DefenseSession', fields: {
@@ -13423,7 +13423,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13432,7 +13432,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13445,15 +13445,15 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, startTime: {
                     name: "startTime",
                     type: "DateTime",
-                    attributes: [{ "name": "@db.Time", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@db.Time", "args": [{ "name": "x", "value": 0 }] }],
                 }, thesisProject: {
                     name: "thesisProject",
                     type: "ThesisProject",
@@ -13470,7 +13470,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         studentThesisRegistration: {
             name: 'StudentThesisRegistration', fields: {
@@ -13478,7 +13478,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13487,7 +13487,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13500,16 +13500,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, student: {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'thesisRegistrations',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -13522,7 +13522,7 @@ const metadata = {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ScoreToRegistration" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ScoreToRegistration" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentThesisRegistration',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentSubjectScoreId" },
@@ -13535,7 +13535,7 @@ const metadata = {
                     name: "thesisProject",
                     type: "ThesisProject",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'registrations',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "thesisProjectId" },
@@ -13547,7 +13547,7 @@ const metadata = {
                 }, registeredAt: {
                     name: "registeredAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, motivation: {
                     name: "motivation",
                     type: "String",
@@ -13566,7 +13566,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "StudentThesisRegistrationStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, reviewedAt: {
                     name: "reviewedAt",
                     type: "DateTime",
@@ -13576,7 +13576,7 @@ const metadata = {
                     type: "Lecturer",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'reviewedThesisRegistrations',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "reviewedById" },
@@ -13610,7 +13610,7 @@ const metadata = {
                     fields: ["studentId", "thesisProjectId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         expertProfile: {
             name: 'ExpertProfile', fields: {
@@ -13618,7 +13618,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13627,7 +13627,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13640,17 +13640,17 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, lecturer: {
                     name: "lecturer",
                     type: "Lecturer",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'expertProfile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "lecturerId" },
@@ -13716,14 +13716,14 @@ const metadata = {
                     type: "ThesisProject",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "SupervisorToThesis" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SupervisorToThesis" }] }],
                     backLink: 'supervisor',
                 }, coSupervisedTheses: {
                     name: "coSupervisedTheses",
                     type: "ThesisProject",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "CoSupervisorToThesis" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CoSupervisorToThesis" }] }],
                     backLink: 'coSupervisor',
                 }, subjectClass: {
                     name: "subjectClass",
@@ -13763,7 +13763,7 @@ const metadata = {
                     fields: ["lecturerId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         decision: {
             name: 'Decision', fields: {
@@ -13771,7 +13771,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13780,7 +13780,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13793,11 +13793,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, issueDate: {
                     name: "issueDate",
                     type: "DateTime",
@@ -13814,7 +13814,7 @@ const metadata = {
                     name: "thesisProject",
                     type: "ThesisProject",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'decisions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "thesisProjectId" },
@@ -13833,7 +13833,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         invitation: {
             name: 'Invitation', fields: {
@@ -13841,7 +13841,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13850,7 +13850,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13863,24 +13863,24 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, sentDate: {
                     name: "sentDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, isConfirmed: {
                     name: "isConfirmed",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, councilMember: {
                     name: "councilMember",
                     type: "CouncilMember",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'invitations',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "councilMemberId" },
@@ -13903,7 +13903,7 @@ const metadata = {
                     fields: ["councilMemberId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         council: {
             name: 'Council', fields: {
@@ -13911,7 +13911,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -13920,7 +13920,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -13933,25 +13933,25 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, proposedDate: {
                     name: "proposedDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, status: {
                     name: "status",
                     type: "CouncilProposalStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, studentThesisRegistration: {
                     name: "studentThesisRegistration",
                     type: "StudentThesisRegistration",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'council',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentThesisRegistrationId" },
@@ -13987,7 +13987,7 @@ const metadata = {
                     fields: ["studentThesisRegistrationId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         councilMember: {
             name: 'CouncilMember', fields: {
@@ -13995,7 +13995,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14004,7 +14004,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14017,11 +14017,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, role: {
                     name: "role",
                     type: "CouncilRole",
@@ -14034,7 +14034,7 @@ const metadata = {
                     name: "council",
                     type: "Council",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'members',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "councilId" },
@@ -14047,7 +14047,7 @@ const metadata = {
                     name: "expert",
                     type: "ExpertProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'councilMemberships',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "expertId" },
@@ -14076,7 +14076,7 @@ const metadata = {
                     fields: ["councilId", "expertId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         defenseRecord: {
             name: 'DefenseRecord', fields: {
@@ -14084,7 +14084,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14093,7 +14093,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14106,16 +14106,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, finalScore: {
                     name: "finalScore",
                     type: "Decimal",
                     isOptional: true,
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "value": 5 }, { "value": 2 }] }],
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, comments: {
                     name: "comments",
                     type: "String",
@@ -14124,12 +14124,12 @@ const metadata = {
                 }, isProfileComplete: {
                     name: "isProfileComplete",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, thesis: {
                     name: "thesis",
                     type: "ThesisProject",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'defenseRecord',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "thesisId" },
@@ -14158,7 +14158,7 @@ const metadata = {
                     fields: ["thesisId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         librarySubmission: {
             name: 'LibrarySubmission', fields: {
@@ -14166,7 +14166,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14175,7 +14175,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14188,23 +14188,23 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, submissionDate: {
                     name: "submissionDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, isHardcopy: {
                     name: "isHardcopy",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, isSoftcopy: {
                     name: "isSoftcopy",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, librarianNote: {
                     name: "librarianNote",
                     type: "String",
@@ -14213,7 +14213,7 @@ const metadata = {
                     name: "thesis",
                     type: "ThesisProject",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'librarySubmission',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "thesisId" },
@@ -14240,7 +14240,7 @@ const metadata = {
                     fields: ["thesisId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         defaultCouncilRolePayAmount: {
             name: 'DefaultCouncilRolePayAmount', fields: {
@@ -14248,7 +14248,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14257,7 +14257,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14270,11 +14270,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, role: {
                     name: "role",
                     type: "CouncilRole",
@@ -14295,7 +14295,7 @@ const metadata = {
                     fields: ["role"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         paymentRecord: {
             name: 'PaymentRecord', fields: {
@@ -14303,7 +14303,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14312,7 +14312,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14325,18 +14325,18 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, amount: {
                     name: "amount",
                     type: "Decimal",
                 }, status: {
                     name: "status",
                     type: "PaymentStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, paymentDate: {
                     name: "paymentDate",
                     type: "DateTime",
@@ -14349,7 +14349,7 @@ const metadata = {
                     name: "expert",
                     type: "ExpertProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'payments',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "expertId" },
@@ -14370,7 +14370,7 @@ const metadata = {
                     type: "CouncilMember",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'payment',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "councilMemberId" },
@@ -14387,7 +14387,7 @@ const metadata = {
                     fields: ["councilMemberId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         supervisorPaymentRecord: {
             name: 'SupervisorPaymentRecord', fields: {
@@ -14395,7 +14395,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14404,7 +14404,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14417,16 +14417,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, thesisProject: {
                     name: "thesisProject",
                     type: "ThesisProject",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'supervisorPayments',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "thesisProjectId" },
@@ -14439,7 +14439,7 @@ const metadata = {
                     name: "expert",
                     type: "ExpertProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'supervisorPaymentRecord',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "expertId" },
@@ -14454,7 +14454,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "PaymentStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, paymentDate: {
                     name: "paymentDate",
                     type: "DateTime",
@@ -14473,7 +14473,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         documentFile: {
             name: 'DocumentFile', fields: {
@@ -14481,7 +14481,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14490,7 +14490,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14503,11 +14503,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -14526,7 +14526,7 @@ const metadata = {
                     type: "ArchivedCertificate",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'documentFiles',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "archivedCertificateId" },
@@ -14541,7 +14541,7 @@ const metadata = {
                     type: "ArchivedAward",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'documentFiles',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "archivedAwardId" },
@@ -14556,7 +14556,7 @@ const metadata = {
                     type: "Curriculum",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'documentFiles',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "curriculumId" },
@@ -14571,7 +14571,7 @@ const metadata = {
                     type: "CurriculumVersion",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'documentFiles',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "curriculumVersionId" },
@@ -14586,7 +14586,7 @@ const metadata = {
                     type: "SubjectVersion",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'documentFiles',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "subjectVersionId" },
@@ -14601,7 +14601,7 @@ const metadata = {
                     type: "StudentAcademicDecision",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'documentEvidence',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentAcademicDecisionId" },
@@ -14616,7 +14616,7 @@ const metadata = {
                     type: "Notification",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'attachments',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "notificationId" },
@@ -14631,7 +14631,7 @@ const metadata = {
                     type: "Decision",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'documentFile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "decisionId" },
@@ -14646,7 +14646,7 @@ const metadata = {
                     type: "DefenseRecord",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'documents',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "defenseRecordId" },
@@ -14661,7 +14661,7 @@ const metadata = {
                     type: "GraduationDecision",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaFront" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaFront" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'diplomaFront',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "diplomaFrontId" },
@@ -14677,7 +14677,7 @@ const metadata = {
                     type: "GraduationDecision",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaBack" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaBack" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'diplomaBack',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "diplomaBackId" },
@@ -14693,7 +14693,7 @@ const metadata = {
                     type: "DiplomaVerificationApplication",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationAttachments" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationAttachments" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'attachments',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "diplomaVerificationId" },
@@ -14709,7 +14709,7 @@ const metadata = {
                     type: "DiplomaVerificationApplication",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationFront" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationFront" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'diplomaFront',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "diplomaVerificationFrontId" },
@@ -14725,7 +14725,7 @@ const metadata = {
                     type: "DiplomaVerificationApplication",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationBack" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationBack" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'diplomaBack',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "diplomaVerificationBackId" },
@@ -14741,7 +14741,7 @@ const metadata = {
                     type: "Note",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'attachments',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "noteId" },
@@ -14776,7 +14776,7 @@ const metadata = {
                     fields: ["diplomaVerificationBackId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-danh-muc" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
         },
         academicActionConfig: {
             name: 'AcademicActionConfig', fields: {
@@ -14784,7 +14784,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14793,7 +14793,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14806,11 +14806,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -14821,7 +14821,7 @@ const metadata = {
                     name: "trainingCourse",
                     type: "TrainingCourse",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'academicActionConfig',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingCourseId" },
@@ -14855,7 +14855,7 @@ const metadata = {
                     fields: ["trainingCourseId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         academicActionRuleSet: {
             name: 'AcademicActionRuleSet', fields: {
@@ -14863,7 +14863,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14872,7 +14872,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14885,16 +14885,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, config: {
                     name: "config",
                     type: "AcademicActionConfig",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'ruleSets',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "configId" },
@@ -14919,7 +14919,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         academicActionCondition: {
             name: 'AcademicActionCondition', fields: {
@@ -14927,7 +14927,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -14936,7 +14936,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -14949,16 +14949,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, ruleSet: {
                     name: "ruleSet",
                     type: "AcademicActionRuleSet",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'conditions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "ruleSetId" },
@@ -14976,7 +14976,7 @@ const metadata = {
                 }, invert: {
                     name: "invert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, value: {
                     name: "value",
                     type: "Float",
@@ -14984,7 +14984,7 @@ const metadata = {
                     name: "tuple",
                     type: "String",
                     isArray: true,
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
                 }, yearCondition: {
                     name: "yearCondition",
                     type: "Int",
@@ -15003,7 +15003,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         studentAcademicDecision: {
             name: 'StudentAcademicDecision', fields: {
@@ -15011,7 +15011,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15020,7 +15020,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15033,16 +15033,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, student: {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentAcademicDecision',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -15056,7 +15056,7 @@ const metadata = {
                     type: "Semester",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentAcademicDecision',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "semesterId" },
@@ -15071,7 +15071,7 @@ const metadata = {
                     type: "SchoolYear",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentAcademicDecision',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "schoolYearId" },
@@ -15086,7 +15086,7 @@ const metadata = {
                     type: "AcademicActionConfig",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'decisions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "appliedConfigId" },
@@ -15102,7 +15102,7 @@ const metadata = {
                 }, decisionDate: {
                     name: "decisionDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, validUntil: {
                     name: "validUntil",
                     type: "DateTime",
@@ -15120,7 +15120,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "DecisionStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -15134,7 +15134,7 @@ const metadata = {
                     fields: ["studentId", "semesterId", "schoolYearId", "appliedConfigId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         trainingScoreSession: {
             name: 'TrainingScoreSession', fields: {
@@ -15142,7 +15142,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15151,7 +15151,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15164,23 +15164,23 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
                 }, time: {
                     name: "time",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, semester: {
                     name: "semester",
                     type: "Semester",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingScoreSession',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "semesterId" },
@@ -15193,7 +15193,7 @@ const metadata = {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingScoreSession',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingObjectTypeId" },
@@ -15218,7 +15218,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         studentTrainingScore: {
             name: 'StudentTrainingScore', fields: {
@@ -15226,7 +15226,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15235,7 +15235,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15248,16 +15248,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, trainingScoreSession: {
                     name: "trainingScoreSession",
                     type: "TrainingScoreSession",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentTrainingScore',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingScoreSessionId" },
@@ -15270,7 +15270,7 @@ const metadata = {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentTrainingScore',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -15282,7 +15282,7 @@ const metadata = {
                 }, score: {
                     name: "score",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, studentTrainingType: {
                     name: "studentTrainingType",
                     type: "StudentTrainingType",
@@ -15300,7 +15300,7 @@ const metadata = {
                     fields: ["trainingScoreSessionId", "studentId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         scholarship: {
             name: 'Scholarship', fields: {
@@ -15308,7 +15308,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15317,7 +15317,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15330,11 +15330,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -15347,7 +15347,7 @@ const metadata = {
                 }, multiplier: {
                     name: "multiplier",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 1 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
                 }, effectiveFrom: {
                     name: "effectiveFrom",
                     type: "DateTime",
@@ -15360,7 +15360,7 @@ const metadata = {
                     name: "trainingCourse",
                     type: "TrainingCourse",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'scholarships',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingCourseId" },
@@ -15394,7 +15394,7 @@ const metadata = {
                     fields: ["trainingCourseId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         scholarshipCriteria: {
             name: 'ScholarshipCriteria', fields: {
@@ -15402,7 +15402,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15411,7 +15411,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15424,11 +15424,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, scholarshipId: {
                     name: "scholarshipId",
                     type: "String",
@@ -15438,7 +15438,7 @@ const metadata = {
                     name: "scholarship",
                     type: "Scholarship",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'criteria',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "scholarshipId" },
@@ -15448,7 +15448,7 @@ const metadata = {
                 }, invert: {
                     name: "invert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, operator: {
                     name: "operator",
                     type: "CriteriaOperator",
@@ -15459,11 +15459,11 @@ const metadata = {
                     name: "tuple",
                     type: "String",
                     isArray: true,
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
                 }, bonusValue: {
                     name: "bonusValue",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -15474,7 +15474,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         scholarshipAward: {
             name: 'ScholarshipAward', fields: {
@@ -15482,7 +15482,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15491,7 +15491,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15504,16 +15504,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, student: {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'scholarshipAwards',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -15526,7 +15526,7 @@ const metadata = {
                     name: "semester",
                     type: "Semester",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'scholarshipAward',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "semesterId" },
@@ -15539,7 +15539,7 @@ const metadata = {
                     name: "scholarship",
                     type: "Scholarship",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'awards',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "scholarshipId" },
@@ -15570,7 +15570,7 @@ const metadata = {
                     fields: ["studentId", "scholarshipId", "semesterId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         graduationSession: {
             name: 'GraduationSession', fields: {
@@ -15578,7 +15578,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15587,7 +15587,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15600,11 +15600,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -15620,7 +15620,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "GraduationSessionStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, applications: {
                     name: "applications",
                     type: "StudentGraduationApplication",
@@ -15637,7 +15637,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         studentGraduationApplication: {
             name: 'StudentGraduationApplication', fields: {
@@ -15645,7 +15645,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15654,7 +15654,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15667,16 +15667,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, student: {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'graduationApplications',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -15689,7 +15689,7 @@ const metadata = {
                     name: "session",
                     type: "GraduationSession",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'applications',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "sessionId" },
@@ -15701,11 +15701,11 @@ const metadata = {
                 }, applicationDate: {
                     name: "applicationDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, status: {
                     name: "status",
                     type: "ApplicationStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, applicationCheckResult: {
                     name: "applicationCheckResult",
                     type: "ApplicationCheckResult",
@@ -15731,7 +15731,7 @@ const metadata = {
                     fields: ["studentId", "sessionId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         applicationCheckResult: {
             name: 'ApplicationCheckResult', fields: {
@@ -15739,7 +15739,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15748,7 +15748,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15761,16 +15761,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, studentGraduationApplication: {
                     name: "studentGraduationApplication",
                     type: "StudentGraduationApplication",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'applicationCheckResult',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentGraduationApplicationId" },
@@ -15784,7 +15784,7 @@ const metadata = {
                     name: "rankingCondition",
                     type: "RankingCondition",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'applicationCheckResult',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "rankingConditionId" },
@@ -15816,7 +15816,7 @@ const metadata = {
                     fields: ["studentGraduationApplicationId", "rankingConditionId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         graduationDecision: {
             name: 'GraduationDecision', fields: {
@@ -15824,7 +15824,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -15833,7 +15833,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -15846,16 +15846,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, application: {
                     name: "application",
                     type: "StudentGraduationApplication",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'decision',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "applicationId" },
@@ -15869,7 +15869,7 @@ const metadata = {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'graduationDecision',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -15882,7 +15882,7 @@ const metadata = {
                 }, decisionDate: {
                     name: "decisionDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }, { "name": "@db.Date", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }, { "name": "@db.Date", "args": [] }],
                 }, notes: {
                     name: "notes",
                     type: "String",
@@ -15890,13 +15890,13 @@ const metadata = {
                 }, finalGpa: {
                     name: "finalGpa",
                     type: "Decimal",
-                    attributes: [{ "name": "@db.Decimal", "args": [{ "value": 5 }, { "value": 2 }] }],
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 2 }] }],
                 }, trainingMajor: {
                     name: "trainingMajor",
                     type: "TrainingMajor",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'graduationDecision',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingMajorId" },
@@ -15910,7 +15910,7 @@ const metadata = {
                     name: "finalRanking",
                     type: "AcademicRankingConvert",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'graduationDecision',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "finalRankingId" },
@@ -15924,7 +15924,7 @@ const metadata = {
                     type: "DiplomaType",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'graduationDecision',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "diplomaTypeId" },
@@ -15954,20 +15954,20 @@ const metadata = {
                     type: "DocumentFile",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DiplomaFront" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaFront" }] }],
                     backLink: 'diplomaFront',
                 }, diplomaBack: {
                     name: "diplomaBack",
                     type: "DocumentFile",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DiplomaBack" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaBack" }] }],
                     backLink: 'diplomaBack',
                 }, totalCopy: {
                     name: "totalCopy",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -15990,7 +15990,7 @@ const metadata = {
                     fields: ["diplomaNumber"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         academicRankingConvert: {
             name: 'AcademicRankingConvert', fields: {
@@ -15998,7 +15998,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16007,7 +16007,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16020,11 +16020,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, classification: {
                     name: "classification",
                     type: "String",
@@ -16060,7 +16060,7 @@ const metadata = {
                     name: "trainingCourse",
                     type: "TrainingCourse",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'academicRankingConvert',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingCourseId" },
@@ -16100,7 +16100,7 @@ const metadata = {
                     fields: ["trainingCourseId", "context", "rankOrder"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@validate", "args": [{ "name": "message", "value": "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max" }] }, { "name": "@@validate", "args": [{ "name": "message", "value": "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@validate", "args": [{ "name": "value" }, { "name": "message", "value": "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max" }] }, { "name": "@@validate", "args": [{ "name": "value" }, { "name": "message", "value": "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         graduationRankDowngradeRule: {
             name: 'GraduationRankDowngradeRule', fields: {
@@ -16108,7 +16108,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16117,7 +16117,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16130,16 +16130,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, initialRank: {
                     name: "initialRank",
                     type: "AcademicRankingConvert",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'downgradeRules',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "initialRankId" },
@@ -16164,7 +16164,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         graduationRankDowngradeCondition: {
             name: 'GraduationRankDowngradeCondition', fields: {
@@ -16172,7 +16172,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16181,7 +16181,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16194,16 +16194,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, downgradeRule: {
                     name: "downgradeRule",
                     type: "GraduationRankDowngradeRule",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'conditions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "downgradeRuleId" },
@@ -16221,7 +16221,7 @@ const metadata = {
                 }, invert: {
                     name: "invert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, value: {
                     name: "value",
                     type: "Float",
@@ -16229,7 +16229,7 @@ const metadata = {
                     name: "tuple",
                     type: "String",
                     isArray: true,
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -16240,7 +16240,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         rankingCondition: {
             name: 'RankingCondition', fields: {
@@ -16248,7 +16248,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16257,7 +16257,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16270,16 +16270,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, ranking: {
                     name: "ranking",
                     type: "AcademicRankingConvert",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'rankingCondition',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "rankingId" },
@@ -16297,7 +16297,7 @@ const metadata = {
                 }, invert: {
                     name: "invert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, value: {
                     name: "value",
                     type: "Float",
@@ -16305,7 +16305,7 @@ const metadata = {
                     name: "tuple",
                     type: "String",
                     isArray: true,
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
                 }, applicationCheckResult: {
                     name: "applicationCheckResult",
                     type: "ApplicationCheckResult",
@@ -16322,7 +16322,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         diplomaVerificationApplication: {
             name: 'DiplomaVerificationApplication', fields: {
@@ -16330,7 +16330,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16339,7 +16339,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16352,11 +16352,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, fullname: {
                     name: "fullname",
                     type: "String",
@@ -16417,26 +16417,26 @@ const metadata = {
                     type: "DocumentFile",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DiplomaVerificationAttachments" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationAttachments" }] }],
                     backLink: 'diplomaVerification',
                 }, diplomaFront: {
                     name: "diplomaFront",
                     type: "DocumentFile",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DiplomaVerificationFront" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationFront" }] }],
                     backLink: 'diplomaVerificationFront',
                 }, diplomaBack: {
                     name: "diplomaBack",
                     type: "DocumentFile",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "DiplomaVerificationBack" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "DiplomaVerificationBack" }] }],
                     backLink: 'diplomaVerificationBack',
                 }, status: {
                     name: "status",
                     type: "DiplomaVerificationStatus",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, studentId: {
                     name: "studentId",
                     type: "String",
@@ -16448,7 +16448,7 @@ const metadata = {
                     type: "Student",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'diplomaVerificationApplication',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -16462,7 +16462,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         note: {
             name: 'Note', fields: {
@@ -16470,7 +16470,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16479,7 +16479,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16492,11 +16492,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, content: {
                     name: "content",
                     type: "String",
@@ -16504,12 +16504,12 @@ const metadata = {
                 }, isPinned: {
                     name: "isPinned",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, student: {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'notes',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -16523,7 +16523,7 @@ const metadata = {
                     type: "NoteFolder",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'notes',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "folderId" },
@@ -16562,7 +16562,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         noteFolder: {
             name: 'NoteFolder', fields: {
@@ -16570,7 +16570,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16579,7 +16579,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16592,11 +16592,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -16607,12 +16607,12 @@ const metadata = {
                 }, sortOrder: {
                     name: "sortOrder",
                     type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 }, student: {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'noteFolders',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -16626,7 +16626,7 @@ const metadata = {
                     type: "NoteFolder",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "FolderHierarchy" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "FolderHierarchy" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'children',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "parentId" },
@@ -16641,7 +16641,7 @@ const metadata = {
                     type: "NoteFolder",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "FolderHierarchy" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "FolderHierarchy" }] }],
                     backLink: 'parent',
                 }, notes: {
                     name: "notes",
@@ -16659,7 +16659,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         noteTag: {
             name: 'NoteTag', fields: {
@@ -16667,7 +16667,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16676,7 +16676,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16689,11 +16689,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -16722,7 +16722,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         noteReminder: {
             name: 'NoteReminder', fields: {
@@ -16730,7 +16730,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16739,7 +16739,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16752,11 +16752,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, title: {
                     name: "title",
                     type: "String",
@@ -16766,7 +16766,7 @@ const metadata = {
                 }, isCompleted: {
                     name: "isCompleted",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, completedAt: {
                     name: "completedAt",
                     type: "DateTime",
@@ -16774,16 +16774,16 @@ const metadata = {
                 }, repeatType: {
                     name: "repeatType",
                     type: "ReminderRepeatType",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, isNotified: {
                     name: "isNotified",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, note: {
                     name: "note",
                     type: "Note",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'reminders',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
@@ -16803,7 +16803,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         evaluationPeriod: {
             name: 'EvaluationPeriod', fields: {
@@ -16811,7 +16811,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16820,7 +16820,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16833,18 +16833,18 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
                 }, startDate: {
                     name: "startDate",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, endDate: {
                     name: "endDate",
                     type: "DateTime",
@@ -16877,7 +16877,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         standardCatalog: {
             name: 'StandardCatalog', fields: {
@@ -16885,7 +16885,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16894,7 +16894,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16907,11 +16907,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, order: {
                     name: "order",
                     type: "Int",
@@ -16934,7 +16934,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         criterionCatalog: {
             name: 'CriterionCatalog', fields: {
@@ -16942,7 +16942,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -16951,7 +16951,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -16964,16 +16964,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, standard: {
                     name: "standard",
                     type: "StandardCatalog",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'criteria',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "standardId" },
@@ -16992,7 +16992,7 @@ const metadata = {
                     name: "scoreScale",
                     type: "ScoreScaleCatalog",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'criteria',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "scoreScaleId" },
@@ -17020,7 +17020,7 @@ const metadata = {
                     fields: ["standardId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         requirementCriterionCatalog: {
             name: 'RequirementCriterionCatalog', fields: {
@@ -17028,7 +17028,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17037,7 +17037,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17050,16 +17050,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, criterionCatalog: {
                     name: "criterionCatalog",
                     type: "CriterionCatalog",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'requirementCriterionCatalog',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "criterionCatalogId" },
@@ -17091,7 +17091,7 @@ const metadata = {
                     fields: ["criterionCatalogId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         scoreScaleCatalog: {
             name: 'ScoreScaleCatalog', fields: {
@@ -17099,7 +17099,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17108,7 +17108,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17121,11 +17121,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17161,7 +17161,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         evaluationStandard: {
             name: 'EvaluationStandard', fields: {
@@ -17169,7 +17169,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17178,7 +17178,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17191,16 +17191,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, period: {
                     name: "period",
                     type: "EvaluationPeriod",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'standards',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
@@ -17219,11 +17219,11 @@ const metadata = {
                 }, opening: {
                     name: "opening",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, conclusion: {
                     name: "conclusion",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, criteria: {
                     name: "criteria",
                     type: "EvaluationCriterion",
@@ -17243,7 +17243,7 @@ const metadata = {
                     fields: ["periodId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         evaluationCriterion: {
             name: 'EvaluationCriterion', fields: {
@@ -17251,7 +17251,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17260,7 +17260,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17273,16 +17273,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, standard: {
                     name: "standard",
                     type: "EvaluationStandard",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'criteria',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
@@ -17302,7 +17302,7 @@ const metadata = {
                     name: "scoreScale",
                     type: "ScoreScaleCatalog",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'evaluationCriterion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "scoreScaleId" },
@@ -17316,7 +17316,7 @@ const metadata = {
                     type: "EvaluationCouncil",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'evaluationCriterion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "evaluationCouncilId" },
@@ -17335,19 +17335,19 @@ const metadata = {
                 }, currentSituation: {
                     name: "currentSituation",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, strengths: {
                     name: "strengths",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, weakness: {
                     name: "weakness",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, actionPlan: {
                     name: "actionPlan",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, score: {
                     name: "score",
                     type: "Int",
@@ -17365,7 +17365,7 @@ const metadata = {
                     fields: ["standardId", "name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         evidenceCategory: {
             name: 'EvidenceCategory', fields: {
@@ -17373,7 +17373,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17382,7 +17382,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17395,11 +17395,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -17419,7 +17419,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         evidence: {
             name: 'Evidence', fields: {
@@ -17427,7 +17427,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17436,7 +17436,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17449,16 +17449,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, category: {
                     name: "category",
                     type: "EvidenceCategory",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'evidences',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "categoryId" },
@@ -17498,7 +17498,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         requirementCriterion: {
             name: 'RequirementCriterion', fields: {
@@ -17506,7 +17506,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17515,7 +17515,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17528,16 +17528,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, evaluationCriterion: {
                     name: "evaluationCriterion",
                     type: "EvaluationCriterion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'requirementCriterions',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
@@ -17566,11 +17566,11 @@ const metadata = {
                 }, evidencePlaces: {
                     name: "evidencePlaces",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 }, collectionMethod: {
                     name: "collectionMethod",
                     type: "String",
-                    attributes: [{ "name": "@default", "args": [{ "value": "" }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": "" }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17581,7 +17581,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         analysisFormEvidence: {
             name: 'AnalysisFormEvidence', fields: {
@@ -17589,7 +17589,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17598,7 +17598,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17611,16 +17611,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, requirementCriterion: {
                     name: "requirementCriterion",
                     type: "RequirementCriterion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'evidences',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "requirementCriterionId" },
@@ -17633,7 +17633,7 @@ const metadata = {
                     name: "evidence",
                     type: "Evidence",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'analysisFormEvidence',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
@@ -17659,7 +17659,7 @@ const metadata = {
                     fields: ["requirementCriterionId", "evidenceId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         evaluationCouncil: {
             name: 'EvaluationCouncil', fields: {
@@ -17667,7 +17667,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17676,7 +17676,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17689,16 +17689,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, period: {
                     name: "period",
                     type: "EvaluationPeriod",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'councils',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
@@ -17733,7 +17733,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         evaluationCouncilMember: {
             name: 'EvaluationCouncilMember', fields: {
@@ -17741,7 +17741,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17750,7 +17750,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17763,16 +17763,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, evaluationCouncil: {
                     name: "evaluationCouncil",
                     type: "EvaluationCouncil",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'members',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
@@ -17786,7 +17786,7 @@ const metadata = {
                     name: "lecturer",
                     type: "Lecturer",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'evaluationCouncilMember',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "lecturerId" },
@@ -17809,7 +17809,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         evaluationSecretarYCouncil: {
             name: 'EvaluationSecretarYCouncil', fields: {
@@ -17817,7 +17817,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17826,7 +17826,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17839,16 +17839,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, period: {
                     name: "period",
                     type: "EvaluationPeriod",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
                     backLink: 'evaluationSecretarYCouncil',
                     isRelationOwner: true,
                     onDeleteAction: 'Cascade',
@@ -17881,7 +17881,7 @@ const metadata = {
                     fields: ["periodId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         evaluationSecretaryMember: {
             name: 'EvaluationSecretaryMember', fields: {
@@ -17889,7 +17889,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17898,7 +17898,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17911,16 +17911,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, lecturer: {
                     name: "lecturer",
                     type: "Lecturer",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'evaluationSecretaryMember',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "lecturerId" },
@@ -17933,7 +17933,7 @@ const metadata = {
                     name: "evaluationSecretarYCouncil",
                     type: "EvaluationSecretarYCouncil",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'members',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "evaluationSecretarYCouncilId" },
@@ -17955,7 +17955,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         evidenceFile: {
             name: 'EvidenceFile', fields: {
@@ -17963,7 +17963,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -17972,7 +17972,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -17985,11 +17985,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18006,7 +18006,7 @@ const metadata = {
                     name: "evidence",
                     type: "Evidence",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'evidenceFile',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "evidenceId" },
@@ -18020,7 +18020,7 @@ const metadata = {
                     type: "UserProfile",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'evidenceFiles',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -18040,7 +18040,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         surveyObjectType: {
             name: 'SurveyObjectType', fields: {
@@ -18048,7 +18048,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18057,7 +18057,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18070,11 +18070,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18141,7 +18141,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         surveyTopic: {
             name: 'SurveyTopic', fields: {
@@ -18149,7 +18149,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18158,7 +18158,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18171,11 +18171,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18201,7 +18201,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         surveyQuestionGroup: {
             name: 'SurveyQuestionGroup', fields: {
@@ -18209,7 +18209,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18218,7 +18218,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18231,11 +18231,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18249,7 +18249,7 @@ const metadata = {
                     name: "surveyTopic",
                     type: "SurveyTopic",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'surveyQuestionGroup',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "surveyTopicId" },
@@ -18268,7 +18268,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         survey: {
             name: 'Survey', fields: {
@@ -18276,7 +18276,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18285,7 +18285,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18298,11 +18298,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18316,11 +18316,11 @@ const metadata = {
                 }, isPublic: {
                     name: "isPublic",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, anonymous: {
                     name: "anonymous",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, surveyObjectType: {
                     name: "surveyObjectType",
                     type: "SurveyObjectType",
@@ -18339,7 +18339,7 @@ const metadata = {
                     type: "Lecturer",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'survey',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "lectureId" },
@@ -18347,7 +18347,7 @@ const metadata = {
                     name: "surveyTopic",
                     type: "SurveyTopic",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'survey',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "surveyTopicId" },
@@ -18387,7 +18387,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         surveyQuestion: {
             name: 'SurveyQuestion', fields: {
@@ -18395,7 +18395,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18404,7 +18404,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18417,11 +18417,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -18433,7 +18433,7 @@ const metadata = {
                     type: "SurveyQuestionGroup",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'surveyQuestion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "surveyQuestionGroupId" },
@@ -18448,7 +18448,7 @@ const metadata = {
                     type: "Survey",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'surveyQuestion',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "surveyId" },
@@ -18474,7 +18474,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         surveyChoice: {
             name: 'SurveyChoice', fields: {
@@ -18482,7 +18482,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18491,7 +18491,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18504,11 +18504,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, answer: {
                     name: "answer",
                     type: "String",
@@ -18519,7 +18519,7 @@ const metadata = {
                     name: "survey",
                     type: "Survey",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'surveyChoice',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "surveyId" },
@@ -18544,7 +18544,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         surveySession: {
             name: 'SurveySession', fields: {
@@ -18552,7 +18552,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18561,7 +18561,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18574,16 +18574,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, survey: {
                     name: "survey",
                     type: "Survey",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'surveySessions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "surveyId" },
@@ -18601,7 +18601,7 @@ const metadata = {
                     type: "Student",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'surveySessions',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -18614,7 +18614,7 @@ const metadata = {
                 }, startedAt: {
                     name: "startedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, completedAt: {
                     name: "completedAt",
                     type: "DateTime",
@@ -18622,7 +18622,7 @@ const metadata = {
                 }, isCompleted: {
                     name: "isCompleted",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, responses: {
                     name: "responses",
                     type: "SurveyResponse",
@@ -18642,7 +18642,7 @@ const metadata = {
                     fields: ["surveyId", "studentId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         surveyResponse: {
             name: 'SurveyResponse', fields: {
@@ -18650,7 +18650,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18659,7 +18659,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18672,16 +18672,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, surveySession: {
                     name: "surveySession",
                     type: "SurveySession",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'responses',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "surveySessionId" },
@@ -18694,7 +18694,7 @@ const metadata = {
                     name: "surveyQuestion",
                     type: "SurveyQuestion",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'surveyResponses',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "surveyQuestionId" },
@@ -18716,7 +18716,7 @@ const metadata = {
                     type: "SurveyChoice",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'surveyResponses',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "surveyChoiceId" },
@@ -18729,7 +18729,7 @@ const metadata = {
                 }, answeredAt: {
                     name: "answeredAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18743,7 +18743,7 @@ const metadata = {
                     fields: ["surveySessionId", "surveyQuestionId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@unique", "args": [] }, { "name": "@@schema", "args": [{ "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         staff: {
             name: 'Staff', fields: {
@@ -18751,7 +18751,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18760,7 +18760,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18773,11 +18773,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -18786,7 +18786,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'staffs',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -18800,7 +18800,7 @@ const metadata = {
                     name: "organization",
                     type: "DM_DonVi",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'staffs',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "organizationId" },
@@ -18814,7 +18814,7 @@ const metadata = {
                     name: "staffType",
                     type: "StaffType",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'staffs',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "staffTypeId" },
@@ -18827,7 +18827,7 @@ const metadata = {
                     name: "staffPosition",
                     type: "StaffPosition",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'staffs',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "staffPositionId" },
@@ -18841,7 +18841,7 @@ const metadata = {
                     type: "FixedClass",
                     isDataModel: true,
                     isArray: true,
-                    attributes: [{ "name": "@relation", "args": [{ "value": "ManageStaff" }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ManageStaff" }] }],
                     backLink: 'staffManagement',
                 },
             }, uniqueConstraints: {
@@ -18856,7 +18856,7 @@ const metadata = {
                     fields: ["userProfileId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         staffHistory: {
             name: 'StaffHistory', fields: {
@@ -18864,7 +18864,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18873,7 +18873,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18886,11 +18886,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, from: {
                     name: "from",
                     type: "DateTime",
@@ -18903,7 +18903,7 @@ const metadata = {
                     name: "userProfile",
                     type: "UserProfile",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'staffHistory',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "userProfileId" },
@@ -18917,7 +18917,7 @@ const metadata = {
                     name: "organization",
                     type: "DM_DonVi",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'staffHistory',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "organizationId" },
@@ -18931,7 +18931,7 @@ const metadata = {
                     name: "staffType",
                     type: "StaffType",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'staffHistory',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "staffTypeId" },
@@ -18944,7 +18944,7 @@ const metadata = {
                     name: "staffPosition",
                     type: "StaffPosition",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'staffHistory',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "staffPositionId" },
@@ -18966,7 +18966,7 @@ const metadata = {
                     fields: ["userProfileId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         dM_TrinhDoHocVan: {
             name: 'DM_TrinhDoHocVan', fields: {
@@ -18974,7 +18974,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -18983,7 +18983,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -18996,11 +18996,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19024,7 +19024,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_TrinhDoLyLuanChinhTri: {
             name: 'DM_TrinhDoLyLuanChinhTri', fields: {
@@ -19032,7 +19032,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19041,7 +19041,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19054,11 +19054,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19082,7 +19082,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_TrinhDoQuanLyNhaNuoc: {
             name: 'DM_TrinhDoQuanLyNhaNuoc', fields: {
@@ -19090,7 +19090,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19099,7 +19099,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19112,11 +19112,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19140,7 +19140,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_TinhTrangHonNhan: {
             name: 'DM_TinhTrangHonNhan', fields: {
@@ -19148,7 +19148,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19157,7 +19157,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19170,11 +19170,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19192,7 +19192,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_TrangThaiLamViec: {
             name: 'DM_TrangThaiLamViec', fields: {
@@ -19200,7 +19200,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19209,7 +19209,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19222,11 +19222,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19244,7 +19244,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_HinhThucKhenThuongChinhQuyen: {
             name: 'DM_HinhThucKhenThuongChinhQuyen', fields: {
@@ -19252,7 +19252,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19261,7 +19261,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19274,11 +19274,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19296,7 +19296,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_HinhThucKhenThuongDang: {
             name: 'DM_HinhThucKhenThuongDang', fields: {
@@ -19304,7 +19304,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19313,7 +19313,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19326,11 +19326,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19348,7 +19348,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_XepLoaiDanhGiaCanBo: {
             name: 'DM_XepLoaiDanhGiaCanBo', fields: {
@@ -19356,7 +19356,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19365,7 +19365,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19378,11 +19378,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19400,7 +19400,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_XepLoaiDanhGiaChatLuongDangVien: {
             name: 'DM_XepLoaiDanhGiaChatLuongDangVien', fields: {
@@ -19408,7 +19408,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19417,7 +19417,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19430,11 +19430,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19452,7 +19452,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_LoaiHinhCongTac: {
             name: 'DM_LoaiHinhCongTac', fields: {
@@ -19460,7 +19460,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19469,7 +19469,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19482,11 +19482,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19510,7 +19510,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_TinhTrangCongTac: {
             name: 'DM_TinhTrangCongTac', fields: {
@@ -19518,7 +19518,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19527,7 +19527,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19540,11 +19540,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19562,7 +19562,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_LoaiHinhDiHocTap: {
             name: 'DM_LoaiHinhDiHocTap', fields: {
@@ -19570,7 +19570,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19579,7 +19579,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19592,11 +19592,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19620,7 +19620,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_TinhTrangDiHocTap: {
             name: 'DM_TinhTrangDiHocTap', fields: {
@@ -19628,7 +19628,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19637,7 +19637,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19650,11 +19650,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19672,7 +19672,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_NuocCuDiHocTap: {
             name: 'DM_NuocCuDiHocTap', fields: {
@@ -19680,7 +19680,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19689,7 +19689,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19702,11 +19702,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19724,7 +19724,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_ChucDanhCMNVGiangVien: {
             name: 'DM_ChucDanhCMNVGiangVien', fields: {
@@ -19732,7 +19732,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19741,7 +19741,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19754,11 +19754,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19776,7 +19776,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_ChucDanhCMNVNghienCuuVien: {
             name: 'DM_ChucDanhCMNVNghienCuuVien', fields: {
@@ -19784,7 +19784,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19793,7 +19793,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19806,11 +19806,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19828,7 +19828,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_ChucDanhCMNVKySu: {
             name: 'DM_ChucDanhCMNVKySu', fields: {
@@ -19836,7 +19836,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19845,7 +19845,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19858,11 +19858,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19880,7 +19880,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_TruongDaoTaoBacDH: {
             name: 'DM_TruongDaoTaoBacDH', fields: {
@@ -19888,7 +19888,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19897,7 +19897,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19910,11 +19910,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -19944,7 +19944,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_ChuyenNganhDaoTaoBacDH: {
             name: 'DM_ChuyenNganhDaoTaoBacDH', fields: {
@@ -19952,7 +19952,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -19961,7 +19961,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -19974,11 +19974,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20002,7 +20002,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_ChiHuyQuanLy: {
             name: 'DM_ChiHuyQuanLy', fields: {
@@ -20010,7 +20010,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20019,7 +20019,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20032,11 +20032,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20060,7 +20060,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_ChuyenMonKyThuat: {
             name: 'DM_ChuyenMonKyThuat', fields: {
@@ -20068,7 +20068,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20077,7 +20077,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20090,11 +20090,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20118,7 +20118,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_SucKhoe: {
             name: 'DM_SucKhoe', fields: {
@@ -20126,7 +20126,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20135,7 +20135,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20148,11 +20148,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20176,7 +20176,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_NhomMau: {
             name: 'DM_NhomMau', fields: {
@@ -20184,7 +20184,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20193,7 +20193,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20206,11 +20206,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20234,7 +20234,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_LoaiThuongTat: {
             name: 'DM_LoaiThuongTat', fields: {
@@ -20242,7 +20242,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20251,7 +20251,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20264,11 +20264,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20292,7 +20292,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_NganhHoc: {
             name: 'DM_NganhHoc', fields: {
@@ -20300,7 +20300,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20309,7 +20309,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20322,11 +20322,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20350,7 +20350,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_ToChucXaHoi: {
             name: 'DM_ToChucXaHoi', fields: {
@@ -20358,7 +20358,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20367,7 +20367,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20380,11 +20380,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20408,7 +20408,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_Ngach: {
             name: 'DM_Ngach', fields: {
@@ -20416,7 +20416,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20425,7 +20425,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20438,11 +20438,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20466,7 +20466,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         dM_BacLuong: {
             name: 'DM_BacLuong', fields: {
@@ -20474,7 +20474,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20483,7 +20483,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20496,11 +20496,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20524,7 +20524,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-ho-so" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-ho-so" }] }],
         },
         feedback: {
             name: 'Feedback', fields: {
@@ -20532,7 +20532,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20541,7 +20541,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20554,11 +20554,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, content: {
                     name: "content",
                     type: "String",
@@ -20572,7 +20572,7 @@ const metadata = {
                     name: "user",
                     type: "DM_NhanVien",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'feedback',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "userId" },
@@ -20592,7 +20592,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "create" }] }, { "name": "@@schema", "args": [{ "value": "ql-nguoi-dung" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "create" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-nguoi-dung" }] }],
         },
         academicWarningRule: {
             name: 'AcademicWarningRule', fields: {
@@ -20600,7 +20600,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20609,7 +20609,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20622,11 +20622,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, field: {
                     name: "field",
                     type: "CriteriaField",
@@ -20636,7 +20636,7 @@ const metadata = {
                 }, invert: {
                     name: "invert",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": false }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, threshold: {
                     name: "threshold",
                     type: "Float",
@@ -20644,7 +20644,7 @@ const metadata = {
                     name: "tuple",
                     type: "String",
                     isArray: true,
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": [] }] }],
                 }, severity: {
                     name: "severity",
                     type: "Int",
@@ -20660,7 +20660,7 @@ const metadata = {
                     name: "trainingCourse",
                     type: "TrainingCourse",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'academicWarningRule',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "trainingCourseId" },
@@ -20686,7 +20686,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         academicWarning: {
             name: 'AcademicWarning', fields: {
@@ -20694,7 +20694,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20703,7 +20703,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20716,16 +20716,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, student: {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'academicWarning',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -20738,7 +20738,7 @@ const metadata = {
                     name: "semester",
                     type: "Semester",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'academicWarning',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "semesterId" },
@@ -20775,7 +20775,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         disciplinaryWarning: {
             name: 'DisciplinaryWarning', fields: {
@@ -20783,7 +20783,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20792,7 +20792,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20805,16 +20805,16 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, student: {
                     name: "student",
                     type: "Student",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'disciplinaryWarning',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentId" },
@@ -20828,7 +20828,7 @@ const metadata = {
                     type: "Semester",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'disciplinaryWarning',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "semesterId" },
@@ -20862,7 +20862,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         disciplinaryWarningReason: {
             name: 'DisciplinaryWarningReason', fields: {
@@ -20870,7 +20870,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20879,7 +20879,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20892,11 +20892,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20924,7 +20924,7 @@ const metadata = {
                     fields: ["name"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         templateFile: {
             name: 'TemplateFile', fields: {
@@ -20932,7 +20932,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -20941,7 +20941,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -20954,11 +20954,11 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -20978,7 +20978,7 @@ const metadata = {
                     name: "numberField",
                     type: "Int",
                     isOptional: true,
-                    attributes: [{ "name": "@default", "args": [{ "value": 0 }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -20992,7 +20992,7 @@ const metadata = {
                     fields: ["path"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-danh-muc" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-danh-muc" }] }],
         },
         blockedIp: {
             name: 'BlockedIp', fields: {
@@ -21000,7 +21000,7 @@ const metadata = {
                     name: "id",
                     type: "String",
                     isId: true,
-                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, code: {
                     name: "code",
                     type: "String",
@@ -21009,7 +21009,7 @@ const metadata = {
                 }, active: {
                     name: "active",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "value": true }] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
                 }, description: {
                     name: "description",
                     type: "String",
@@ -21022,15 +21022,15 @@ const metadata = {
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, updatedAt: {
                     name: "updatedAt",
                     type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [] }],
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
                 }, ipAddress: {
                     name: "ipAddress",
                     type: "String",
-                    attributes: [{ "name": "@unique", "args": [] }, { "name": "@regex", "args": [{ "value": "^(?:[0-9]{1,3}.){3}[0-9]{1,3}$" }, { "value": "Invalid IP address" }] }],
+                    attributes: [{ "name": "@unique", "args": [] }, { "name": "@regex", "args": [{ "name": "regex", "value": "^(?:[0-9]{1,3}.){3}[0-9]{1,3}$" }, { "name": "message", "value": "Invalid IP address" }] }],
                 }, reason: {
                     name: "reason",
                     type: "String",
@@ -21053,7 +21053,7 @@ const metadata = {
                     fields: ["ipAddress"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "value": "all" }] }, { "name": "@@deny", "args": [{ "value": "read" }] }, { "name": "@@allow", "args": [{ "value": "read" }] }, { "name": "@@schema", "args": [{ "value": "ql-nguoi-dung" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-nguoi-dung" }] }],
         },
     },
     deleteCascade: {

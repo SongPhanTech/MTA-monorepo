@@ -251,13 +251,13 @@ export function useGroupByGraduationRankDowngradeRule<TArgs extends Prisma.Gradu
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.GraduationRankDowngradeRuleGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.GraduationRankDowngradeRuleGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.GraduationRankDowngradeRuleGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.GraduationRankDowngradeRuleGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.GraduationRankDowngradeRuleGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.GraduationRankDowngradeRuleGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.GraduationRankDowngradeRuleGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.GraduationRankDowngradeRuleGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('GraduationRankDowngradeRule', `${endpoint}/graduationRankDowngradeRule/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByGraduationRankDowngradeRule<TArgs extends Pris
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.GraduationRankDowngradeRuleGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.GraduationRankDowngradeRuleGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.GraduationRankDowngradeRuleGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.GraduationRankDowngradeRuleGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.GraduationRankDowngradeRuleGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.GraduationRankDowngradeRuleGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.GraduationRankDowngradeRuleGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.GraduationRankDowngradeRuleGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('GraduationRankDowngradeRule', `${endpoint}/graduationRankDowngradeRule/groupBy`, args, options, fetch);

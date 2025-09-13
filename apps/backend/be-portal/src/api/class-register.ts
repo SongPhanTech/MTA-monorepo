@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { ClassRegisterStatus } from '@workspace/db'
 import { models } from '@workspace/db/zod'
 import { prisma } from '..'
 import { findClassRegisterSession } from '../services/register'
@@ -18,7 +19,15 @@ const getClassRegisterSession = createRoute({
             content: {
                 'application/json': {
                     schema: z.array(
-                        models.ClassRegisterSessionScalarSchema.openapi('class-register-session')
+                        models.ClassRegisterSessionScalarSchema.extend({
+                            semester: models.SemesterScalarSchema.extend({
+                                schoolYear: models.SchoolYearScalarSchema,
+                            }),
+                            trainingCourses: z.array(z.object({ id: z.string() })),
+                            curriculumVersions: z.array(
+                                models.CurriculumVersionScalarSchema.nullish()
+                            ),
+                        })
                     ),
                 },
             },
@@ -282,7 +291,7 @@ const classRegister = createRoute({
                 'application/json': {
                     schema: z.object({
                         sessionId: z.string().openapi({ description: 'ID đợt đăng ký lớp học' }),
-                        subjectVersionIds: z
+                        subjectClassIds: z
                             .array(z.string())
                             .openapi({ description: 'Danh sách ID lớp học' }),
                     }),
@@ -308,7 +317,81 @@ const classRegister = createRoute({
 
 app.openapi(classRegister, async (c) => {
     const session = c.get('user')
-    const { sessionId, subjectVersionIds } = c.req.valid('json')
+    const { sessionId, subjectClassIds } = c.req.valid('json')
+
+    const registerSession = await prisma.classRegisterSession.findUniqueOrThrow({
+        where: { id: sessionId },
+    })
+
+    if (
+        !registerSession.active ||
+        registerSession.startDate > new Date() ||
+        registerSession.endDate < new Date()
+    ) {
+        return c.json({ message: 'Đợt đăng ký đã đóng' }, 404)
+    }
+
+    const profile = await prisma.userProfile.findUniqueOrThrow({
+        where: { id: session.id },
+        include: {
+            educationAndTraining: {
+                include: {
+                    fixedClass: {
+                        include: {
+                            trainingCourse: true,
+                        },
+                    },
+                },
+                orderBy: { createdAt: 'desc' },
+            },
+        },
+    })
+
+    if (profile.educationAndTraining.length === 0) {
+        return c.json({ message: 'Bạn không có thông tin học vụ' }, 404)
+    }
+
+    // TODO: maybe allow user select student profile
+    const studentId = profile.educationAndTraining[0]?.id as string
+
+    // TODO: check session => student trainingCourse
+
+    // TODO: check subjectVersionIds, prerequisiteSubjectIds, coRequisiteSubjectIds
+
+    // save the register log
+    const registerLogs = await prisma.classRegisterLogs.createManyAndReturn({
+        data: subjectClassIds.map((subjectClassId) => ({
+            classRegisterSessionId: sessionId,
+            studentId,
+            subjectClassId,
+        })),
+        include: { subjectClass: true },
+    })
+
+    // now directly register here, need to implement a job queue
+    for (const registerLog of registerLogs) {
+        try {
+            await prisma.$transaction(async (tx) => {
+                await tx.studentSubjectScore.create({
+                    data: {
+                        subjectClassId: registerLog.subjectClassId,
+                        studentId,
+                        subjectVersionId: registerLog.subjectClass.subjectId,
+                    },
+                })
+
+                await tx.classRegisterLogs.update({
+                    where: { id: registerLog.id },
+                    data: { status: ClassRegisterStatus.SUCCESS },
+                })
+            })
+        } catch (error) {
+            await prisma.classRegisterLogs.update({
+                where: { id: registerLog.id },
+                data: { status: ClassRegisterStatus.FAILED },
+            })
+        }
+    }
 
     return c.json({ message: 'success' }, 200)
 })

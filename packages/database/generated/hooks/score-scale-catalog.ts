@@ -251,13 +251,13 @@ export function useGroupByScoreScaleCatalog<TArgs extends Prisma.ScoreScaleCatal
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.ScoreScaleCatalogGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.ScoreScaleCatalogGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.ScoreScaleCatalogGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.ScoreScaleCatalogGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.ScoreScaleCatalogGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.ScoreScaleCatalogGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.ScoreScaleCatalogGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.ScoreScaleCatalogGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('ScoreScaleCatalog', `${endpoint}/scoreScaleCatalog/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByScoreScaleCatalog<TArgs extends Prisma.ScoreSc
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.ScoreScaleCatalogGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.ScoreScaleCatalogGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.ScoreScaleCatalogGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.ScoreScaleCatalogGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.ScoreScaleCatalogGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.ScoreScaleCatalogGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.ScoreScaleCatalogGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.ScoreScaleCatalogGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ScoreScaleCatalog', `${endpoint}/scoreScaleCatalog/groupBy`, args, options, fetch);

@@ -251,13 +251,13 @@ export function useGroupByClassRegisterLogs<TArgs extends Prisma.ClassRegisterLo
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.ClassRegisterLogsGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.ClassRegisterLogsGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.ClassRegisterLogsGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.ClassRegisterLogsGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.ClassRegisterLogsGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.ClassRegisterLogsGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.ClassRegisterLogsGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.ClassRegisterLogsGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('ClassRegisterLogs', `${endpoint}/classRegisterLogs/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByClassRegisterLogs<TArgs extends Prisma.ClassRe
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.ClassRegisterLogsGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.ClassRegisterLogsGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.ClassRegisterLogsGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.ClassRegisterLogsGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.ClassRegisterLogsGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.ClassRegisterLogsGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.ClassRegisterLogsGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.ClassRegisterLogsGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ClassRegisterLogs', `${endpoint}/classRegisterLogs/groupBy`, args, options, fetch);

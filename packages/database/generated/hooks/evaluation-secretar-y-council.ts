@@ -251,13 +251,13 @@ export function useGroupByEvaluationSecretarYCouncil<TArgs extends Prisma.Evalua
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.EvaluationSecretarYCouncilGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.EvaluationSecretarYCouncilGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.EvaluationSecretarYCouncilGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.EvaluationSecretarYCouncilGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.EvaluationSecretarYCouncilGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.EvaluationSecretarYCouncilGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.EvaluationSecretarYCouncilGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.EvaluationSecretarYCouncilGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('EvaluationSecretarYCouncil', `${endpoint}/evaluationSecretarYCouncil/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByEvaluationSecretarYCouncil<TArgs extends Prism
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.EvaluationSecretarYCouncilGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.EvaluationSecretarYCouncilGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.EvaluationSecretarYCouncilGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.EvaluationSecretarYCouncilGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.EvaluationSecretarYCouncilGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.EvaluationSecretarYCouncilGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.EvaluationSecretarYCouncilGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.EvaluationSecretarYCouncilGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('EvaluationSecretarYCouncil', `${endpoint}/evaluationSecretarYCouncil/groupBy`, args, options, fetch);

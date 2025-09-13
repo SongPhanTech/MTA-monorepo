@@ -251,13 +251,13 @@ export function useGroupByAcademicWarningRule<TArgs extends Prisma.AcademicWarni
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.AcademicWarningRuleGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.AcademicWarningRuleGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.AcademicWarningRuleGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.AcademicWarningRuleGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.AcademicWarningRuleGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.AcademicWarningRuleGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.AcademicWarningRuleGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.AcademicWarningRuleGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('AcademicWarningRule', `${endpoint}/academicWarningRule/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByAcademicWarningRule<TArgs extends Prisma.Acade
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.AcademicWarningRuleGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.AcademicWarningRuleGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.AcademicWarningRuleGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.AcademicWarningRuleGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.AcademicWarningRuleGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.AcademicWarningRuleGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.AcademicWarningRuleGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.AcademicWarningRuleGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('AcademicWarningRule', `${endpoint}/academicWarningRule/groupBy`, args, options, fetch);

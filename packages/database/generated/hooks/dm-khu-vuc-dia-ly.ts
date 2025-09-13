@@ -251,13 +251,13 @@ export function useGroupByDM_KhuVuc_DiaLy<TArgs extends Prisma.DM_KhuVuc_DiaLyGr
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.DM_KhuVuc_DiaLyGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.DM_KhuVuc_DiaLyGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.DM_KhuVuc_DiaLyGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.DM_KhuVuc_DiaLyGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.DM_KhuVuc_DiaLyGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.DM_KhuVuc_DiaLyGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.DM_KhuVuc_DiaLyGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.DM_KhuVuc_DiaLyGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('DM_KhuVuc_DiaLy', `${endpoint}/dM_KhuVuc_DiaLy/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByDM_KhuVuc_DiaLy<TArgs extends Prisma.DM_KhuVuc
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.DM_KhuVuc_DiaLyGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.DM_KhuVuc_DiaLyGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.DM_KhuVuc_DiaLyGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.DM_KhuVuc_DiaLyGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.DM_KhuVuc_DiaLyGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.DM_KhuVuc_DiaLyGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.DM_KhuVuc_DiaLyGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.DM_KhuVuc_DiaLyGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('DM_KhuVuc_DiaLy', `${endpoint}/dM_KhuVuc_DiaLy/groupBy`, args, options, fetch);

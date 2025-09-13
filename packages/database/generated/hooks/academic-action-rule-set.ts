@@ -251,13 +251,13 @@ export function useGroupByAcademicActionRuleSet<TArgs extends Prisma.AcademicAct
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.AcademicActionRuleSetGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.AcademicActionRuleSetGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.AcademicActionRuleSetGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.AcademicActionRuleSetGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.AcademicActionRuleSetGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.AcademicActionRuleSetGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.AcademicActionRuleSetGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.AcademicActionRuleSetGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('AcademicActionRuleSet', `${endpoint}/academicActionRuleSet/groupBy`, args, options, fetch);
@@ -306,13 +306,13 @@ export function useSuspenseGroupByAcademicActionRuleSet<TArgs extends Prisma.Aca
         : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
     }[OrderFields], TQueryFnData = {} extends InputErrors ?
     Array<PickEnumerable<Prisma.AcademicActionRuleSetGroupByOutputType, TArgs['by']> &
-        {
-            [P in ((keyof TArgs) & (keyof Prisma.AcademicActionRuleSetGroupByOutputType))]: P extends '_count'
-            ? TArgs[P] extends boolean
-            ? number
-            : Prisma.GetScalarType<TArgs[P], Prisma.AcademicActionRuleSetGroupByOutputType[P]>
-            : Prisma.GetScalarType<TArgs[P], Prisma.AcademicActionRuleSetGroupByOutputType[P]>
-        }
+    {
+        [P in ((keyof TArgs) & (keyof Prisma.AcademicActionRuleSetGroupByOutputType))]: P extends '_count'
+        ? TArgs[P] extends boolean
+        ? number
+        : Prisma.GetScalarType<TArgs[P], Prisma.AcademicActionRuleSetGroupByOutputType[P]>
+        : Prisma.GetScalarType<TArgs[P], Prisma.AcademicActionRuleSetGroupByOutputType[P]>
+    }
     > : InputErrors, TData = TQueryFnData, TError = DefaultError>(args: Prisma.SelectSubset<TArgs, Prisma.SubsetIntersection<TArgs, Prisma.AcademicActionRuleSetGroupByArgs, OrderByArg> & InputErrors>, options?: (Omit<UseSuspenseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('AcademicActionRuleSet', `${endpoint}/academicActionRuleSet/groupBy`, args, options, fetch);

@@ -4,12 +4,14 @@ import {
     academicRankingGraduationMilitary,
     academicRankingStudying,
 } from './seed/academic-ranking-convert'
+import { scoreConversions } from './seed/score-convert'
 
 const prisma = new PrismaClient()
 
 await prisma.graduationRankDowngradeCondition.deleteMany()
 await prisma.graduationRankDowngradeRule.deleteMany()
 await prisma.academicRankingConvert.deleteMany()
+await prisma.scoreConvert.deleteMany()
 
 const trainingCourses = await prisma.trainingCourse.findMany({
     select: { id: true, baseScore: true },
@@ -69,3 +71,14 @@ for (const rank of ranks) {
         },
     })
 }
+
+await Promise.all(
+    trainingCourses.map((trainingCourse) =>
+        prisma.scoreConvert.createMany({
+            data: scoreConversions.map((scoreConversion) => ({
+                ...scoreConversion,
+                trainingCourseId: trainingCourse.id,
+            })),
+        })
+    )
+)
