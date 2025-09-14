@@ -1,4 +1,4 @@
-import { DeleteFilled, MenuFoldOutlined, MenuUnfoldOutlined, MoreOutlined } from '@ant-design/icons'
+import { DeleteFilled, MoreOutlined } from '@ant-design/icons'
 import type { MenuItem } from '@workspace/router'
 import { Button, Dropdown, Layout, Menu } from 'antd'
 import type { ItemType, MenuItemType } from 'antd/es/menu/interface'
@@ -142,53 +142,51 @@ const SiderChatLayout = ({
 
     return (
         <Sider
+            style={{
+                height: '100%',
+                overflow: 'hidden',
+            }}
+            className="mr-[10px] rounded-xl"
+            collapsible
+            onCollapse={onCollapse}
             collapsed={collapsed}
             theme={theme}
             width={280}
-            className="h-full relative mr-[10px] rounded-xl"
         >
-            <div className="overflow-y-auto h-full pb-[60px]">
-                <div className="px-1">
-                    <Button
-                        color="primary"
-                        variant={isActive ? 'solid' : 'outlined'}
-                        className="w-full h-[40px] flex items-center justify-center gap-2 mt-2 rounded-xl"
-                        icon={firstItem?.icon ? <firstItem.icon /> : undefined}
-                        onClick={() => {
-                            if (firstItem?.path) router.push(firstItem.path)
-                        }}
-                    >
-                        {!collapsed && firstItem?.label}
-                    </Button>
-                </div>
+            <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ flex: 1, overflowY: 'auto' }}>
+                    <div className="px-1">
+                        <Button
+                            color="primary"
+                            variant={isActive ? 'solid' : 'outlined'}
+                            className="w-full h-[40px] flex items-center justify-center gap-2 mt-2 rounded-xl"
+                            icon={firstItem?.icon ? <firstItem.icon /> : undefined}
+                            onClick={() => {
+                                if (firstItem?.path) router.push(firstItem.path)
+                            }}
+                        >
+                            {!collapsed && firstItem?.label}
+                        </Button>
+                    </div>
 
-                <Menu
-                    theme={theme}
-                    mode="inline"
-                    selectedKeys={
-                        pathname ? [items.find((i) => i.path === pathname)?.id ?? ''] : []
-                    }
-                    openKeys={openKeys}
-                    onOpenChange={setOpenKeys}
-                    items={getMenus(filteredItems, onDelete, onEdit)}
-                    className="bg-transparent"
-                    onClick={({ key }) => {
-                        const menuItem = findMenuItemByKey(filteredItems, key)
-                        if (menuItem?.path) {
-                            router.push(menuItem.path)
+                    <Menu
+                        theme={theme}
+                        mode="inline"
+                        selectedKeys={
+                            pathname ? [items.find((i) => i.path === pathname)?.id ?? ''] : []
                         }
-                    }}
-                />
-            </div>
-
-            <div className="absolute bottom-0 w-full flex justify-center ">
-                <Button
-                    type="text"
-                    className="w-full bg-white text-primary text-lg rounded-none z-10 rounded-b-xl"
-                    onClick={() => onCollapse?.(!collapsed)}
-                >
-                    {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                </Button>
+                        openKeys={openKeys}
+                        onOpenChange={setOpenKeys}
+                        items={getMenus(filteredItems, onDelete, onEdit)}
+                        style={{ background: 'transparent' }}
+                        onClick={({ key }) => {
+                            const menuItem = findMenuItemByKey(filteredItems, key)
+                            if (menuItem?.path) {
+                                router.push(menuItem.path)
+                            }
+                        }}
+                    />
+                </div>
             </div>
         </Sider>
     )
