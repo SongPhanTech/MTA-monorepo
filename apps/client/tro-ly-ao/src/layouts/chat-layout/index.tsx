@@ -66,7 +66,8 @@ const ChatLayout = ({
 
     const { data: conversation } = useFindManyConversation({
         where: {
-            userId: userCurrent?.sDM_NhanVienId || '',
+            // userId: userCurrent?.sDM_NhanVienId || '',
+            sessionId: 'cmfjff3dr0000kpv4gahido0t',
         },
         include: {
             message: true,
@@ -78,7 +79,7 @@ const ChatLayout = ({
     }))
 
     return (
-        <Layout className="h-full p-[10px]">
+        <Layout className="h-screen p-[10px]">
             {showSiderChat && (
                 <SiderChatLayout
                     items={generateMenusTroLyAo(conversationMenuList)}
@@ -88,11 +89,11 @@ const ChatLayout = ({
                     onDelete={handleDelete}
                 />
             )}
-            <Layout className="overflow-hidden">
+            <Layout className="overflow-hidden flex flex-col">
                 <HeaderContent />
                 <Content
                     className={cn(
-                        'h-full p-[10px] bg-white rounded-xl relative overflow-hidden',
+                        'flex-1 p-[10px] bg-white rounded-xl relative overflow-hidden',
                         className
                     )}
                 >
