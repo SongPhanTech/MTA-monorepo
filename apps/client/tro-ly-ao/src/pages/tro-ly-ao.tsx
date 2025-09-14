@@ -91,7 +91,8 @@ export default function TroLyAo() {
             if (!currentConversationId) {
                 const res = await createConversation({
                     data: {
-                        userId: 'd8f2e108-b884-4527-ac32-e250f2fa0bfa',
+                        // userId: 'd8f2e108-b884-4527-ac32-e250f2fa0bfa',
+                        sessionId: 'cmfjff3dr0000kpv4gahido0t',
                         message: {
                             create: [
                                 {
