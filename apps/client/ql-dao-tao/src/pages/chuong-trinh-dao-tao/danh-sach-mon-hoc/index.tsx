@@ -16,9 +16,9 @@ import {
     useUpdateSubject,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, message, Row, Tag, Tooltip, TreeSelect } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip, TreeSelect } from 'antd'
 import _ from 'lodash'
-import { BookPlus } from 'lucide-react'
+import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -59,6 +59,9 @@ export default function SubjectList() {
         }
 
         return {
+            ...(filters.searchText
+                ? { name: { contains: filters.searchText, mode: 'insensitive' as const } }
+                : {}),
             ...(filters.managementOrganizationId
                 ? { managementOrganizationId: filters.managementOrganizationId }
                 : {}),
@@ -78,13 +81,7 @@ export default function SubjectList() {
                 subjectVersion: { some: subjectVersionFilter },
             }),
         }
-    }, [
-        filters.active,
-        filters.code,
-        filters.examType,
-        filters.managementOrganizationId,
-        filters.name,
-    ])
+    }, [filters])
 
     const { data: SubjectData, refetch } = useFindManySubject({
         where,
@@ -234,6 +231,30 @@ export default function SubjectList() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
+                                <Col span={8}>
+                                    <Form.Item name="searchText">
+                                        <Input
+                                            id="search"
+                                            onChange={(e) =>
+                                                setFilters({
+                                                    ...filters,
+                                                    searchText: e.target.value,
+                                                })
+                                            }
+                                            className="py-0 h-8"
+                                            placeholder="Tìm kiếm môn học"
+                                            prefix={
+                                                <Search
+                                                    size={15}
+                                                    style={{
+                                                        color: 'rgba(0, 0, 0, 0.25)',
+                                                    }}
+                                                />
+                                            }
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
                                 <Col span={8}>
                                     <Form.Item
                                         className="mb-0"
