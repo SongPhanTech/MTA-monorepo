@@ -8,6 +8,7 @@ import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
+import AuthApp from './api/auth'
 import ClassRegisterApp from './api/class-register'
 import SurveyPublicApp from './api/survey-public'
 import { checkIp } from './middlewares/check-ip'
@@ -53,6 +54,8 @@ app.use(contextStorage())
 app.use(tracingMiddleware)
 app.use('*', checkIp)
 setupOpenApi(app)
+// public route
+app.route('/api/auth', AuthApp)
 
 const issuer = `${config.keycloak.url}/realms/${config.keycloak.realm}`
 const jwksUri = `${issuer}/protocol/openid-connect/certs`

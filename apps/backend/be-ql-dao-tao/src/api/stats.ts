@@ -2772,16 +2772,34 @@ app.openapi(
                 description: 'Phân bổ HV/SV',
                 content: {
                     'application/json': {
-                        schema: z.object({
-                            byGender: z.array(z.object({ name: z.string(), count: z.number() })),
-                            byEthnicity: z.array(
-                                z.object({ id: z.string(), name: z.string(), count: z.number() })
-                            ),
-                            byReligion: z.array(
-                                z.object({ id: z.string(), name: z.string(), count: z.number() })
-                            ),
-                            byProvince: z.array(
-                                z.object({ id: z.string(), name: z.string(), count: z.number() })
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    byGender: z.array(
+                                        z.object({ name: z.string(), count: z.number() })
+                                    ),
+                                    byEthnicity: z.array(
+                                        z.object({
+                                            id: z.string(),
+                                            name: z.string(),
+                                            count: z.number(),
+                                        })
+                                    ),
+                                    byReligion: z.array(
+                                        z.object({
+                                            id: z.string(),
+                                            name: z.string(),
+                                            count: z.number(),
+                                        })
+                                    ),
+                                    byProvince: z.array(
+                                        z.object({
+                                            id: z.string(),
+                                            name: z.string(),
+                                            count: z.number(),
+                                        })
+                                    ),
+                                })
                             ),
                         }),
                     },
@@ -2812,10 +2830,17 @@ app.openapi(
                 count: faker.number.int({ min: 10, max: 200 }),
             }))
             return c.json({
-                byGender,
-                byEthnicity,
-                byReligion,
-                byProvince,
+                data: [
+                    {
+                        byGender,
+                        byEthnicity,
+                        byReligion,
+                        byProvince,
+                    },
+                ],
+                count: 1,
+                summary: {},
+                preview: true,
             })
         }
         const byGender = await prisma.$queryRaw<Array<{ name: string; count: number }>>`
@@ -2857,10 +2882,17 @@ app.openapi(
         `
 
         return c.json({
-            byGender,
-            byEthnicity,
-            byReligion,
-            byProvince,
+            data: [
+                {
+                    byGender,
+                    byEthnicity,
+                    byReligion,
+                    byProvince,
+                },
+            ],
+            count: 1,
+            summary: {},
+            preview: false,
         })
     }
 )

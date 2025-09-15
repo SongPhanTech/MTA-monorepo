@@ -8,9 +8,9 @@ model ChatBotConfig extends Base {
 }
 
 model UserSession extends Base {
-  name        String?
-  email       String?
-  phoneNumber String?
+  name         String?
+  email        String?
+  phoneNumber  String?
   @@schema("tro-ly-ao")
 
   conversation Conversation[]
@@ -25,7 +25,7 @@ model Document extends Base {
   type         DocumentType
   reason       String?
   uploadedBy   DM_NhanVien    @relation("DocumentUploaded", fields: [uploadedById], references: [Id])
-  uploadedById String         @default(auth().Id) @db.Uuid
+  uploadedById String         @default(auth().id) @db.Uuid
   approvedBy   DM_NhanVien?   @relation("DocumentApproved", fields: [approvedById], references: [Id])
   approvedById String?        @db.Uuid
   @@schema("tro-ly-ao")
@@ -38,7 +38,7 @@ model FAQ  extends Base {
   type         DocumentType
   reason       String?
   uploadedBy   DM_NhanVien    @relation("FAQUploaded", fields: [uploadedById], references: [Id])
-  uploadedById String         @default(auth().Id) @db.Uuid
+  uploadedById String         @default(auth().id) @db.Uuid
   approvedBy   DM_NhanVien?   @relation("FAQApproved", fields: [approvedById], references: [Id])
   approvedById String?        @db.Uuid
   @@schema("tro-ly-ao")

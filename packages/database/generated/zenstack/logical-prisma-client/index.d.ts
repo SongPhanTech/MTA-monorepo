@@ -856,8 +856,6 @@ export type DM_GioiTinh = $Result.DefaultSelection<Prisma.$DM_GioiTinhPayload>;
  * @deny ('read', bDeleted == true)
  * @
  * @allow ('read', auth() != null)
- * @
- * @auth
  */
 export type DM_NhanVien = $Result.DefaultSelection<Prisma.$DM_NhanVienPayload>;
 /**
@@ -978,6 +976,8 @@ export type DM_ViTriCongViec = $Result.DefaultSelection<Prisma.$DM_ViTriCongViec
  * @deny ('read', deletedAt != null)
  * @
  * @allow ('read', auth() != null)
+ * @
+ * @auth
  */
 export type UserProfile = $Result.DefaultSelection<Prisma.$UserProfilePayload>;
 /**

@@ -196,7 +196,6 @@ model DM_NhanVien extends CoreBase {
   @@index([sEmail], map: "IX_DM_NhanVien_sEmail")
   @@index([sSDTDiDong], map: "IX_DM_NhanVien_sSDTDiDong")
 
-  @@auth()
   @@schema("mta")
 }
 

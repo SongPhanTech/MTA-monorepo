@@ -70,7 +70,7 @@ setupOpenApi(app)
 app.route('/api/exam', examApp)
 app.route('/api/survey', surveyApp)
 
-const nv = await prisma.dM_NhanVien.findFirstOrThrow()
+const nv = await prisma.userProfile.findFirstOrThrow()
 
 app.use(
     '/api/model/*',
