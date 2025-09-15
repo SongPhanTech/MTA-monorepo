@@ -189,7 +189,7 @@ const PutHocBong = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>

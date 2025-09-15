@@ -114,7 +114,7 @@ const PutSemesterModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={input?.semesterId ? 'Chỉnh sửa học kỳ' : 'Thêm mới học kỳ'}
-            className="w-[60vw]"
+            className="w-[1000px]"
         >
             <Col span={12}>
                 <FormItem form={form} name="code" label="Mã học kỳ" required>
@@ -126,22 +126,21 @@ const PutSemesterModal = () => {
                     <Input placeholder="Nhập tên học kỳ" />
                 </FormItem>
             </Col>
-            {!input?.schoolYearId && (
-                <Col span={12}>
-                    <FormItem form={form} name="schoolYearId" label="Năm học" required>
-                        <Select
-                            placeholder="Chọn năm học"
-                            options={data.map((i: SchoolYear) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
-                            })}
-                        />
-                    </FormItem>
-                </Col>
-            )}
-            <Col span={24}>
+            <Col span={12}>
+                <FormItem form={form} name="schoolYearId" label="Năm học" required>
+                    <Select
+                        placeholder="Chọn năm học"
+                        disabled={!!input?.schoolYearId}
+                        options={data.map((i: SchoolYear) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
                 <FormItem form={form} name="semesterType" label="Loại học kỳ" required>
                     <Select
                         placeholder="Chọn loại học kỳ"
@@ -191,7 +190,7 @@ const PutSemesterModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={input?.semesterId || !input?.schoolYearId ? 12 : 24}>
+            <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>

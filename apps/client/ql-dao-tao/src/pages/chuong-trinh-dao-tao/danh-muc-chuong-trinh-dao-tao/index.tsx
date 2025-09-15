@@ -1,3 +1,4 @@
+import { HighlightOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
 import CopyPlusIcon from '@components/icons/copyPlus'
 import CreateIcon from '@components/icons/create'
@@ -34,7 +35,7 @@ import {
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Input, message, Row, Select, Tag, Tooltip, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
-import { BookPlus, Eye, Search } from 'lucide-react'
+import { BookPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -634,10 +635,9 @@ export default function TrainingProgramCatalog() {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <Tooltip title="Xem chi tiết" placement="top">
-                                                    <Eye
+                                                <Tooltip title="Chỉnh sửa nội dung" placement="top">
+                                                    <HighlightOutlined
                                                         size={16}
-                                                        strokeWidth={1.5}
                                                         className="text-base cursor-pointer"
                                                     />
                                                 </Tooltip>
@@ -653,6 +653,7 @@ export default function TrainingProgramCatalog() {
                                                     }}
                                                 />
                                                 <EditIcon
+                                                    title="Sửa thông tin chung"
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         onOpenCurriculumVersion({
