@@ -106,7 +106,7 @@ const PutUserProfileLectureModal = () => {
                     },
                 })
 
-                message.success('Cập nhật sinh viên, học viên thành công')
+                message.success('Cập nhật giảng viên thành công')
             } else {
                 await createLecturer({
                     data: {
@@ -116,7 +116,7 @@ const PutUserProfileLectureModal = () => {
                         organizationId: output.organizationId,
                     },
                 })
-                message.success('Thêm mới sinh viên, học viên thành công')
+                message.success('Thêm mới giảng viên thành công')
             }
 
             // refetch() lại danh sách level

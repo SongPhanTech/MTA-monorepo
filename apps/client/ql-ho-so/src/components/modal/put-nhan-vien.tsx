@@ -90,7 +90,7 @@ const PutUserProfileStaffModal = () => {
                     },
                 })
 
-                message.success('Cập nhật sinh viên, học viên thành công')
+                message.success('Cập nhật cán bộ, nhân viên thành công')
             } else {
                 await createStaff({
                     data: {
@@ -101,7 +101,7 @@ const PutUserProfileStaffModal = () => {
                         organizationId: output.organizationId,
                     },
                 })
-                message.success('Thêm mới sinh viên, học viên thành công')
+                message.success('Thêm mới cán bộ, nhân viên thành công')
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({

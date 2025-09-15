@@ -241,7 +241,6 @@ function getDynamicBreadcrum(
             }
             return i
         }) || []
-    console.log('menus', menus)
 
     for (const menu of menus) {
         // Không có children

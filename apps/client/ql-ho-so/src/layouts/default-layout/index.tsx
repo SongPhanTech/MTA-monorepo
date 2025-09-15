@@ -40,8 +40,6 @@ const DefaultLayout = ({
     })
 
     const listBreadcrumb = useMemo(() => {
-        console.log('breadcrumb', breadcrumb, currentPath)
-
         return breadcrumb?.length > 0
             ? [
                   {
@@ -94,7 +92,7 @@ const DefaultLayout = ({
                         ),
                     },
                 ]
-    }, [breadcrumb, breadcrumbList, currentPath])
+    }, [breadcrumb, breadcrumbList])
     const menus = useMenuList()
 
     const { data: userSessionTimeout } = useFindUniqueConfig({
