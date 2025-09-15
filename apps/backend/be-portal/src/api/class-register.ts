@@ -115,7 +115,7 @@ const getClassesInfo = createRoute({
         query: z.object({
             sessionId: z.string().openapi({ description: 'ID đợt đăng ký lớp học' }),
             curriculumVersionId: z.string(),
-            byCurriculum: z.boolean().default(true),
+            byCurriculum: z.string().default('true'),
         }),
     },
     responses: {
@@ -195,6 +195,8 @@ app.openapi(getClassesInfo, async (c) => {
 
     const { sessionId, curriculumVersionId, byCurriculum } = c.req.valid('query')
 
+    const byCurriculumBool = `${byCurriculum}`.toLowerCase() === 'true'
+
     const now = new Date()
     const registerSession = await prisma.classRegisterSession.findUniqueOrThrow({
         where: {
@@ -222,7 +224,7 @@ app.openapi(getClassesInfo, async (c) => {
 
     const subjectVersions = await prisma.subjectVersion.findMany({
         where: {
-            ...(byCurriculum
+            ...(byCurriculumBool
                 ? { id: { in: curriculumSubjects.map((item) => item.subjectId) } }
                 : {}),
             subjectClass: { some: { semesterId: registerSession.semesterId } },
@@ -235,9 +237,26 @@ app.openapi(getClassesInfo, async (c) => {
                 },
             },
             subjectClass: {
+                where: {
+                    active: true,
+                    deletedAt: null,
+                    cancelled: false,
+                },
                 include: {
                     classSchedules: { take: 1, orderBy: { classDate: 'asc' } },
                     mainLecturer: {
+                        select: {
+                            userProfile: {
+                                select: {
+                                    fullname: true,
+                                    level: { select: { sMa: true, sTen: true } },
+                                    academicRankType: { select: { sMa: true, sTen: true } },
+                                    academicDegreeType: { select: { sMa: true, sTen: true } },
+                                },
+                            },
+                        },
+                    },
+                    extraLecturer: {
                         select: {
                             userProfile: {
                                 select: {
@@ -264,6 +283,11 @@ app.openapi(getClassesInfo, async (c) => {
                             },
                         },
                     },
+                    _count: {
+                        select: {
+                            classRegisterLogs: true,
+                        },
+                    },
                 },
             },
         },
@@ -272,7 +296,14 @@ app.openapi(getClassesInfo, async (c) => {
     const data = subjectVersions.map((version) => {
         const subjectVersion = curriculumSubjects.find((item) => item.subjectId === version.id)
 
-        return { ...version, type: subjectVersion?.type }
+        return {
+            ...version,
+            type: subjectVersion?.type,
+            subjectClass: version.subjectClass.map((subjectClass) => ({
+                ...subjectClass,
+                credit: version.credit ?? 0,
+            })),
+        }
     })
 
     return c.json(data, 200)
