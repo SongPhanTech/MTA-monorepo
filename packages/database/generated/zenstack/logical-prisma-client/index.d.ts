@@ -238,7 +238,7 @@ export type Milestone = $Result.DefaultSelection<Prisma.$MilestonePayload>;
 export type TrainingCourse = $Result.DefaultSelection<Prisma.$TrainingCoursePayload>;
 /**
  * Model FixedClass
- * lớp niên chế
+ * lớp quản lý
  * @
  * @allow ('all', auth() != null)
  * @

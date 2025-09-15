@@ -473,7 +473,7 @@ Table FixedClass {
     (name, trainingCourseId, curriculumVersionId) [unique]
   }
 
-  Note: 'lớp niên chế'
+  Note: 'lớp quản lý'
 }
 
 Table Curriculum {

@@ -54,7 +54,7 @@ const ModalPrintToDSHV = () => {
     const { getTrainingLanguageLabel } = useTrainingLanguageOptions()
     const basicInfoCol1 = [
         {
-            title: 'Mã lớp niên chế:',
+            title: 'Mã lớp quản lý:',
             value: <span>{input?.dataFixedClass?.code}</span>,
         },
         {
@@ -65,7 +65,7 @@ const ModalPrintToDSHV = () => {
 
     const basicInfoCol2 = [
         {
-            title: 'Tên lớp niên chế:',
+            title: 'Tên lớp quản lý:',
             value: <span className="font-medium">{input?.dataFixedClass?.name}</span>,
         },
         {

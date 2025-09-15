@@ -210,7 +210,7 @@ model TrainingCourse extends Base {
   classRegisterSession   ClassRegisterSession[]
   @@schema("ql-dao-tao")
 }
-/// lớp niên chế
+/// lớp quản lý
 model FixedClass extends Base {
   name                     String
   summary                  String?

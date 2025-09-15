@@ -637,7 +637,7 @@ export const useUploadExcelUpdateUserProfile = <
 }
 
 /**
- * Thêm mới danh sách lớp niên chế 
+ * Thêm mới danh sách lớp quản lý 
 
  [trainingCourseId] là id của khoá học, lấy trong bảng TrainingCourse
  * @summary Upload Excel Create FixedClass
@@ -853,7 +853,7 @@ export const useClassDivision = <TError = void, TContext = unknown>(
 }
 
 /**
- * @summary Xuất file docx danh sách sinh viên trong lớp niên chế
+ * @summary Xuất file docx danh sách sinh viên trong lớp quản lý
  */
 export type docxListStudentFixedClassLabelsResponse200 = {
     data: SerializedFields
@@ -982,7 +982,7 @@ export function useDocxListStudentFixedClassLabels<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Xuất file docx danh sách sinh viên trong lớp niên chế
+ * @summary Xuất file docx danh sách sinh viên trong lớp quản lý
  */
 
 export function useDocxListStudentFixedClassLabels<
@@ -1013,7 +1013,7 @@ export function useDocxListStudentFixedClassLabels<
 }
 
 /**
- * Xuất file docx danh sách sinh viên trong lớp niên chế
+ * Xuất file docx danh sách sinh viên trong lớp quản lý
  * @summary Export list of student FixedClass as .docx
  */
 export type exportStudentFixedClassDocxResponse200 = {

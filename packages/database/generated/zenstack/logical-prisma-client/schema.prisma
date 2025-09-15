@@ -1074,7 +1074,7 @@ model TrainingCourse {
   @@schema("ql-dao-tao")
 }
 
-/// lớp niên chế
+/// lớp quản lý
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)

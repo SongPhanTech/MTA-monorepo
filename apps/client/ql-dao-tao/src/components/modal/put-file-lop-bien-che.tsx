@@ -48,7 +48,7 @@ const PutUploadFixedClassModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable
-            title="Tải file nhập danh sách lớp niên chế"
+            title="Tải file nhập danh sách lớp quản lý"
             className="w-[30vw]"
         >
             <Col span={24}>

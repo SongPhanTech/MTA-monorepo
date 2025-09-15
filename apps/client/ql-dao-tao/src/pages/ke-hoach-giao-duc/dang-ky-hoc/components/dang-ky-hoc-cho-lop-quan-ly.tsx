@@ -198,7 +198,7 @@ export default function RegisterClassManager({
                         title: 'Giảng viên 1',
                         dataIndex: ['mainLecturer', 'userProfile'],
                         width: 250,
-                        render: (record) => record && `${record.code} - ${record.fullname}`,
+                        render: (record) => record && `${record?.code || ''} - ${record.fullname}`,
                     },
                     {
                         title: 'Số tín chỉ',
