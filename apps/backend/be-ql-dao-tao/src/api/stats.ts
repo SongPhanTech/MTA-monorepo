@@ -784,17 +784,15 @@ app.openapi(
         path: '/student-distribution-by-training-object-type-filtered',
         tags: ['Stats'],
         request: {
-            query: z.object({
-                managementOrganizationId: z
-                    .string()
-                    .uuid()
-                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
-            }),
             body: {
                 content: {
                     'application/json': {
                         schema: z.object({
                             preview: z.boolean().default(false),
+                            managementOrganizationId: z
+                                .string()
+                                .uuid()
+                                .describe('DM_DonVi.Id - ID đơn vị quản lý'),
                         }),
                     },
                 },
@@ -820,8 +818,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.valid('query')
-        const { preview } = c.req.valid('json')
+        const { preview, managementOrganizationId } = c.req.valid('json')
 
         if (preview) {
             const data = Array.from({ length: 10 }, (_, i) => ({
@@ -889,17 +886,15 @@ app.openapi(
         path: '/student-distribution-by-training-level-filtered',
         tags: ['Stats'],
         request: {
-            query: z.object({
-                managementOrganizationId: z
-                    .string()
-                    .uuid()
-                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
-            }),
             body: {
                 content: {
                     'application/json': {
                         schema: z.object({
                             preview: z.boolean().default(false),
+                            managementOrganizationId: z
+                                .string()
+                                .uuid()
+                                .describe('DM_DonVi.Id - ID đơn vị quản lý'),
                         }),
                     },
                 },
@@ -925,8 +920,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.valid('query')
-        const { preview } = c.req.valid('json')
+        const { preview, managementOrganizationId } = c.req.valid('json')
         if (preview) {
             const data = [
                 {
@@ -1005,17 +999,15 @@ app.openapi(
         path: '/student-distribution-by-training-course-filtered',
         tags: ['Stats'],
         request: {
-            query: z.object({
-                managementOrganizationId: z
-                    .string()
-                    .uuid()
-                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
-            }),
             body: {
                 content: {
                     'application/json': {
                         schema: z.object({
                             preview: z.boolean().default(false),
+                            managementOrganizationId: z
+                                .string()
+                                .uuid()
+                                .describe('DM_DonVi.Id - ID đơn vị quản lý'),
                         }),
                     },
                 },
@@ -1041,8 +1033,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.valid('query')
-        const { preview } = c.req.valid('json')
+        const { preview, managementOrganizationId } = c.req.valid('json')
         if (preview) {
             const data = Array.from({ length: 10 }, (_, i) => ({
                 trainingCourseId: i.toString(),
@@ -1107,17 +1098,15 @@ app.openapi(
         path: '/average-entry-score-by-course-filtered',
         tags: ['Stats'],
         request: {
-            query: z.object({
-                managementOrganizationId: z
-                    .string()
-                    .uuid()
-                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
-            }),
             body: {
                 content: {
                     'application/json': {
                         schema: z.object({
                             preview: z.boolean().default(false),
+                            managementOrganizationId: z
+                                .string()
+                                .uuid()
+                                .describe('DM_DonVi.Id - ID đơn vị quản lý'),
                         }),
                     },
                 },
@@ -1143,8 +1132,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.valid('query')
-        const { preview } = c.req.valid('json')
+        const { preview, managementOrganizationId } = c.req.valid('json')
         if (preview) {
             const data = Array.from({ length: 10 }, () => ({
                 trainingCourseId: faker.string.uuid(),
@@ -1211,17 +1199,15 @@ app.openapi(
         path: '/average-gpa-by-course-filtered',
         tags: ['Stats'],
         request: {
-            query: z.object({
-                managementOrganizationId: z
-                    .string()
-                    .uuid()
-                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
-            }),
             body: {
                 content: {
                     'application/json': {
                         schema: z.object({
                             preview: z.boolean().default(false),
+                            managementOrganizationId: z
+                                .string()
+                                .uuid()
+                                .describe('DM_DonVi.Id - ID đơn vị quản lý'),
                         }),
                     },
                 },
@@ -1248,8 +1234,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.valid('query')
-        const { preview } = c.req.valid('json')
+        const { preview, managementOrganizationId } = c.req.valid('json')
         if (preview) {
             const data = Array.from({ length: 10 }, () => ({
                 trainingCourseId: faker.string.uuid(),
@@ -1319,17 +1304,15 @@ app.openapi(
         path: '/graduation-rate-by-course-filtered',
         tags: ['Stats'],
         request: {
-            query: z.object({
-                managementOrganizationId: z
-                    .string()
-                    .uuid()
-                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
-            }),
             body: {
                 content: {
                     'application/json': {
                         schema: z.object({
                             preview: z.boolean().default(false),
+                            managementOrganizationId: z
+                                .string()
+                                .uuid()
+                                .describe('DM_DonVi.Id - ID đơn vị quản lý'),
                         }),
                     },
                 },
@@ -1355,8 +1338,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.valid('query')
-        const { preview } = c.req.valid('json')
+        const { preview, managementOrganizationId } = c.req.valid('json')
         if (preview) {
             const data = Array.from({ length: 10 }, () => ({
                 trainingCourseId: faker.string.uuid(),
@@ -1421,17 +1403,15 @@ app.openapi(
         path: '/academic-performance-by-year-filtered',
         tags: ['Stats'],
         request: {
-            query: z.object({
-                managementOrganizationId: z
-                    .string()
-                    .uuid()
-                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
-            }),
             body: {
                 content: {
                     'application/json': {
                         schema: z.object({
                             preview: z.boolean().default(false),
+                            managementOrganizationId: z
+                                .string()
+                                .uuid()
+                                .describe('DM_DonVi.Id - ID đơn vị quản lý'),
                         }),
                     },
                 },
@@ -1461,8 +1441,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.valid('query')
-        const { preview } = c.req.valid('json')
+        const { preview, managementOrganizationId } = c.req.valid('json')
         if (preview) {
             const data = Array.from({ length: 5 }, (_, i) => {
                 const year = new Date().getFullYear() - i
@@ -1548,17 +1527,15 @@ app.openapi(
         path: '/student-distribution-by-province-filtered',
         tags: ['Stats'],
         request: {
-            query: z.object({
-                managementOrganizationId: z
-                    .string()
-                    .uuid()
-                    .describe('DM_DonVi.Id - ID đơn vị quản lý'),
-            }),
             body: {
                 content: {
                     'application/json': {
                         schema: z.object({
                             preview: z.boolean().default(false),
+                            managementOrganizationId: z
+                                .string()
+                                .uuid()
+                                .describe('DM_DonVi.Id - ID đơn vị quản lý'),
                         }),
                     },
                 },
@@ -1584,8 +1561,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { managementOrganizationId } = c.req.valid('query')
-        const { preview } = c.req.valid('json')
+        const { preview, managementOrganizationId } = c.req.valid('json')
         if (preview) {
             const data = Array.from({ length: 63 }, () => ({
                 provinceId: faker.string.uuid(),
@@ -1654,16 +1630,14 @@ app.openapi(
         path: '/students-of-interest',
         tags: ['Stats'],
         request: {
-            query: z.object({
-                warningLevel: z.string().optional(),
-                debtCredits: z.string().optional(),
-                gpaThreshold: z.string().optional(),
-            }),
             body: {
                 content: {
                     'application/json': {
                         schema: z.object({
                             preview: z.boolean().default(false),
+                            warningLevel: z.string().optional(),
+                            debtCredits: z.string().optional(),
+                            gpaThreshold: z.string().optional(),
                         }),
                     },
                 },
@@ -1691,8 +1665,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { warningLevel, debtCredits, gpaThreshold } = c.req.valid('query')
-        const { preview } = c.req.valid('json')
+        const { preview, warningLevel, debtCredits, gpaThreshold } = c.req.valid('json')
         if (preview) {
             const data = Array.from({ length: 20 }, () => ({
                 id: faker.string.uuid(),
@@ -2056,14 +2029,12 @@ app.openapi(
         path: '/subject-class-statistics',
         tags: ['Stats'],
         request: {
-            query: z.object({
-                semesterId: z.string().describe('Semester.id - ID học kỳ'),
-            }),
             body: {
                 content: {
                     'application/json': {
                         schema: z.object({
                             preview: z.boolean().default(false),
+                            semesterId: z.string().describe('Semester.id - ID học kỳ'),
                         }),
                     },
                 },
@@ -2074,14 +2045,18 @@ app.openapi(
                 description: 'Thống kê Lớp học phần',
                 content: {
                     'application/json': {
-                        schema: z.object({
-                            totalClasses: z.number(),
-                            classes: z.array(
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
                                 z.object({
-                                    id: z.string(),
-                                    name: z.string(),
-                                    fillRate: z.number(),
-                                    failureRate: z.number(),
+                                    totalClasses: z.number(),
+                                    classes: z.array(
+                                        z.object({
+                                            id: z.string(),
+                                            name: z.string(),
+                                            fillRate: z.number(),
+                                            failureRate: z.number(),
+                                        })
+                                    ),
                                 })
                             ),
                         }),
@@ -2091,8 +2066,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { semesterId } = c.req.valid('query')
-        const { preview } = c.req.valid('json')
+        const { preview, semesterId } = c.req.valid('json')
         if (preview) {
             const classes = Array.from({ length: 50 }, () => ({
                 id: faker.string.uuid(),
@@ -2101,8 +2075,15 @@ app.openapi(
                 failureRate: faker.number.float({ min: 5, max: 20, fractionDigits: 2 }),
             }))
             return c.json({
-                totalClasses: classes.length,
-                classes,
+                data: [
+                    {
+                        totalClasses: classes.length,
+                        classes,
+                    },
+                ],
+                count: 1,
+                summary: {},
+                preview: false,
             })
         }
 
@@ -2132,8 +2113,15 @@ app.openapi(
         `
 
         return c.json({
-            totalClasses: classes.length,
-            classes,
+            data: [
+                {
+                    totalClasses: classes.length,
+                    classes,
+                },
+            ],
+            count: 1,
+            summary: {},
+            preview: false,
         })
     }
 )
@@ -2366,14 +2354,12 @@ app.openapi(
         path: '/exam-participants-by-semester',
         tags: ['Stats'],
         request: {
-            query: z.object({
-                semesterId: z.string().describe('Semester.id - ID học kỳ'),
-            }),
             body: {
                 content: {
                     'application/json': {
                         schema: z.object({
                             preview: z.boolean().default(false),
+                            semesterId: z.string().describe('Semester.id - ID học kỳ'),
                         }),
                     },
                 },
@@ -2393,8 +2379,7 @@ app.openapi(
         },
     }),
     async (c) => {
-        const { semesterId } = c.req.valid('query')
-        const { preview } = c.req.valid('json')
+        const { preview, semesterId } = c.req.valid('json')
         if (preview) {
             return c.json({
                 totalParticipants: faker.number.int({ min: 5000, max: 10000 }),
