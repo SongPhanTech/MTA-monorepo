@@ -278,7 +278,10 @@ export default function SubjectClassScore() {
                             id="training-category"
                             rowSelection={rowSelection}
                             filters={filters}
-                            setFilters={setFilters}
+                            setFilters={(value) => {
+                                setFilters(value)
+                                setCurrentPage(1)
+                            }}
                             columns={[
                                 {
                                     title: 'STT',

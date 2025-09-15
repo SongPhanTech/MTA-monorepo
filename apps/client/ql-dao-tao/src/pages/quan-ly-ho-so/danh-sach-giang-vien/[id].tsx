@@ -103,14 +103,14 @@ export default function StudentDetailPage() {
                                     render: (_, __, index) => index + 1,
                                 },
                                 {
-                                    title: 'Mã lớp niên chế',
+                                    title: 'Mã lớp quản lý',
                                     align: 'center',
                                     width: 150,
                                     fixed: 'left',
                                     dataIndex: 'code',
                                 },
                                 {
-                                    title: 'Tên lớp niên chế',
+                                    title: 'Tên lớp quản lý',
                                     align: 'center',
                                     width: 200,
                                     fixed: 'left',

@@ -250,7 +250,10 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                         rowKey="id"
                         id="fixed-class"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         onRowClick={(record) => {
                             router.push(
                                 ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_ID.replace(
@@ -269,7 +272,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã lớp niên chế',
+                                title: 'Mã lớp quản lý',
                                 align: 'center',
                                 width: 150,
                                 fixed: 'left',
@@ -277,7 +280,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 type: 'input',
                             },
                             {
-                                title: 'Tên lớp niên chế',
+                                title: 'Tên lớp quản lý',
                                 align: 'center',
                                 width: 200,
                                 fixed: 'left',

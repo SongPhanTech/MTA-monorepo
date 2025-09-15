@@ -157,9 +157,9 @@ const CUSTOM_VI_LOCALE = {
     },
 }
 const TRAINING_OBJECT_TYPE = {
-    MILITARY: 'Học viên quân sự',
-    CIVILIAN: 'Sinh viên dân sự',
-    INTERNATIONAL_MILITARY: 'Học viên quân sự quốc tế',
+    MILITARY: 'Quân sự',
+    CIVILIAN: 'Dân sự',
+    INTERNATIONAL_MILITARY: 'Quốc tế',
 }
 
 export {

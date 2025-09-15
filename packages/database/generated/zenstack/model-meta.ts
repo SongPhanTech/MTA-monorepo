@@ -8140,7 +8140,7 @@ const metadata = {
                     fields: ["Id"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_NhanVien_sDM_DonViId" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_NhanVien_sDM_ViTriCongViecId" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_NhanVien_sEmail" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_NhanVien_sSDTDiDong" }] }, { "name": "@@auth", "args": [] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_NhanVien_sDM_DonViId" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_NhanVien_sDM_ViTriCongViecId" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_NhanVien_sEmail" }] }, { "name": "@@index", "args": [{ "name": "fields", "value": [null] }, { "name": "map", "value": "IX_DM_NhanVien_sSDTDiDong" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "mta" }] }],
         },
         dM_PhanCap_ChatLuong_TrangThietBi: {
             name: 'DM_PhanCap_ChatLuong_TrangThietBi', fields: {
@@ -10309,7 +10309,7 @@ const metadata = {
                     fields: ["idCardNumber"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-nguoi-dung" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@auth", "args": [] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-nguoi-dung" }] }],
         },
         hocHam: {
             name: 'HocHam', fields: {
@@ -21070,15 +21070,15 @@ const metadata = {
         evaluationCouncil: ['EvaluationCouncilMember'],
 
     },
-    authModel: 'DM_NhanVien'
+    authModel: 'UserProfile'
 
 };
 
 function $default$Document$uploadedById(user: any): unknown {
-    return user?.Id;
+    return user?.id;
 }
 
 function $default$FAQ$uploadedById(user: any): unknown {
-    return user?.Id;
+    return user?.id;
 }
 export default metadata;

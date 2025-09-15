@@ -364,7 +364,7 @@ const PutFixedClassModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa lớp niên chế' : 'Thêm mới lớp niên chế'}
+            title={id ? 'Chỉnh sửa lớp quản lý' : 'Thêm mới lớp quản lý'}
             className="w-[45vw]"
             formProps={{
                 onValuesChange(changedValues, values) {
@@ -491,14 +491,14 @@ const PutFixedClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="code" label="Mã lớp niên chế" required>
-                    <Input placeholder="Nhập mã lớp niên chế" />
+                <FormItem form={form} name="code" label="Mã lớp quản lý" required>
+                    <Input placeholder="Nhập mã lớp quản lý" />
                 </FormItem>
             </Col>
 
             <Col span={12}>
-                <FormItem form={form} name="name" label="Tên lớp niên chế" required>
-                    <Input placeholder="Nhập tên lớp niên chế" />
+                <FormItem form={form} name="name" label="Tên lớp quản lý" required>
+                    <Input placeholder="Nhập tên lớp quản lý" />
                 </FormItem>
             </Col>
 

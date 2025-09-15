@@ -344,7 +344,10 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 .join(' - ')}`
                         }
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         childrenFieldName="students"
                         defaultExpandAll
                         data={dataStudents}

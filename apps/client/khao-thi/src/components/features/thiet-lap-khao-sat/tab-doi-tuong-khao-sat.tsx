@@ -223,7 +223,10 @@ function TabDoiTuongKhaoSat() {
                 <Col span={24}>
                     <Table
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'STT',

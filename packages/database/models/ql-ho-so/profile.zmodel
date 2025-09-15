@@ -236,6 +236,7 @@ model UserProfile extends Base {
 
   evidenceFiles                 EvidenceFile[]
 
+  @@auth()
   @@schema("ql-nguoi-dung")
 }
 

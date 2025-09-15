@@ -6,7 +6,7 @@
 //     path: '/FixedClass/upload-excel-create-fixed-class',
 //     method: 'post',
 //     description:
-//         'Thêm mới danh sách lớp niên chế \n\n [trainingCourseId] là mã của khóa học, lấy trong bảng TrainingCourse',
+//         'Thêm mới danh sách lớp quản lý \n\n [trainingCourseId] là mã của khóa học, lấy trong bảng TrainingCourse',
 //     tags: ['FixedClass'],
 //     summary: 'Upload Excel Create FixedClass',
 //     request: {

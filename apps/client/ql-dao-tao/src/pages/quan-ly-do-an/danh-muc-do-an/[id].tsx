@@ -239,7 +239,10 @@ export default function ThesisProjectDetail() {
                     id="student-thesis-registration"
                     dataSource={studentThesisRegistration}
                     filters={filters}
-                    setFilters={setFilters}
+                    setFilters={(value) => {
+                        setFilters(value)
+                        setCurrentPage(1)
+                    }}
                     columns={[
                         {
                             title: 'STT',

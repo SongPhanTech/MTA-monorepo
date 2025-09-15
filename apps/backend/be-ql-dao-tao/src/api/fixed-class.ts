@@ -18,7 +18,7 @@ const uploadExcelCreateFixedClass = createRoute({
     path: '/FixedClass/upload-excel-create-fixed-class',
     method: 'post',
     description:
-        'Thêm mới danh sách lớp niên chế \n\n [trainingCourseId] là id của khoá học, lấy trong bảng TrainingCourse',
+        'Thêm mới danh sách lớp quản lý \n\n [trainingCourseId] là id của khoá học, lấy trong bảng TrainingCourse',
     tags: ['FixedClass'],
     summary: 'Upload Excel Create FixedClass',
     request: {
@@ -86,12 +86,12 @@ const classDivision = createRoute({
 const docxListStudentFixedClassLabels = createRoute({
     operationId: 'docxListStudentFixedClassLabels',
     path: '/docx-list-student-fixed-class-labels',
-    summary: 'Xuất file docx danh sách sinh viên trong lớp niên chế',
+    summary: 'Xuất file docx danh sách sinh viên trong lớp quản lý',
     tags: ['FixedClass'],
     method: 'get',
     responses: {
         200: {
-            description: 'Các trường thông tin của lớp niên chế',
+            description: 'Các trường thông tin của lớp quản lý',
             content: {
                 'application/json': {
                     schema: SerializedFieldsSchema,
@@ -104,14 +104,14 @@ const docxListStudentFixedClassLabels = createRoute({
 const exportDocxListStudentFixedClass = createRoute({
     operationId: 'exportStudentFixedClassDocx',
     path: '/export-docx-list-student-fixed-class',
-    description: 'Xuất file docx danh sách sinh viên trong lớp niên chế',
+    description: 'Xuất file docx danh sách sinh viên trong lớp quản lý',
     tags: ['FixedClass'],
     summary: 'Export list of student FixedClass as .docx',
     method: 'get',
     request: {
         query: z.object({
             fixedClassId: z.string().openapi('fixedClassId', {
-                description: 'ID của lớp niên chế',
+                description: 'ID của lớp quản lý',
             }),
         }),
     },
@@ -201,7 +201,7 @@ app.openapi(uploadExcelCreateFixedClass, async (c) => {
             trainingCourseId: trainingCourse?.id,
             name: row[1] || '', // Tên lớp
             code: row[2], // Mã lớp
-            classSize: Number.parseInt(row[3] || '') || 0, // Sĩ số converted to int
+            classSize: Number.parseInt(row[3] || '', 10) || 0, // Sĩ số converted to int
         })),
     })
 
@@ -238,10 +238,10 @@ app.openapi(classDivision, async (c) => {
         return await Promise.all(
             rowData.slice(11).map(async (row, index) => {
                 const fixedClass = await prisma.fixedClass.findFirst({
-                    where: { code: row[7] }, // Tìm kiếm lớp niên chế
+                    where: { code: row[7] }, // Tìm kiếm lớp quản lý
                 })
                 if (!fixedClass) {
-                    return `Không tìm thấy lớp niên chế ${row[7]}`
+                    return `Không tìm thấy lớp quản lý ${row[7]}`
                 }
                 const userProfile = await prisma.userProfile.findFirst({
                     where: { code: row[1] }, // Tìm kiếm UserType của Sinh viên
@@ -280,10 +280,10 @@ app.openapi(exportDocxListStudentFixedClass, async (c) => {
     const { fixedClassId } = c.req.valid('query')
     const student = await listStudentInfo(fixedClassId)
     const fixedClass = await prisma.fixedClass.findUnique({
-        where: { id: fixedClassId }, // Tìm kiếm lớp niên chế
+        where: { id: fixedClassId }, // Tìm kiếm lớp quản lý
     })
     if (!fixedClass) {
-        return c.json({ message: `Không tìm thấy lớp niên chế ${fixedClassId}` }, 404)
+        return c.json({ message: `Không tìm thấy lớp quản lý ${fixedClassId}` }, 404)
     }
 
     const { date, month, year } = getCurrentDateForReport()

@@ -465,7 +465,10 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                         headerTitleKey="name"
                                         childrenFieldName="awards"
                                         filters={filters}
-                                        setFilters={setFilters}
+                                        setFilters={(value) => {
+                                            setFilters(value)
+                                            setCurrentPage(1)
+                                        }}
                                         defaultExpandAll
                                         columns={[
                                             {

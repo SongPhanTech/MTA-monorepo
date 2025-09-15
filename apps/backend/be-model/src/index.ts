@@ -57,13 +57,14 @@ setupOpenApi(app)
 app.route('/api/auth', AuthApp)
 
 // TODO!: remove `/check`
-app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
+app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
 // setupAuth(app)
+
 // private route
 app.route('/api/minio', MinIOApp)
 app.route('/api/sql', SqlTransactionApp)
 
-const nv = await prisma.dM_NhanVien.findFirstOrThrow({})
+const nv = await prisma.userProfile.findFirstOrThrow({})
 
 const TargetMap = {
     name: 'Tên',

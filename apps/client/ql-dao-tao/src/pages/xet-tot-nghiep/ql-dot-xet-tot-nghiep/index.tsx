@@ -201,7 +201,10 @@ export default function GraduationSession() {
                         id="graduation-session"
                         onRowClick={(record) => handleRowClick(record)}
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'STT',

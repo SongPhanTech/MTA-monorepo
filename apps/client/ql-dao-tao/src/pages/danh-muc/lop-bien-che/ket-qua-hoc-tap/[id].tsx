@@ -1,9 +1,14 @@
 import { SafetyCertificateOutlined } from '@ant-design/icons'
+import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
 import type { ArchivedAward, ArchivedCertificate, StudentSubjectScore } from '@workspace/db'
-import { useFindManySemester, useFindUniqueStudent } from '@workspace/db/hooks'
+import {
+    useFindManySemester,
+    useFindManyStudentSubjectScore,
+    useFindUniqueStudent,
+} from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Divider, Flex, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
@@ -21,7 +26,7 @@ export default function StudentScoreClassPage() {
         searchText: '',
     })
 
-    const { onOpen, onClose } = useDisclosure<{
+    const { onOpen } = useDisclosure<{
         dataTable: any
         dataStudent: any
     }>({
@@ -44,6 +49,13 @@ export default function StudentScoreClassPage() {
         subjectClassStudent: StudentSubjectScore
     }>({
         tag: 'PutAddCertificateScoreModal',
+    })
+
+    const { onOpen: onOpenModalNhapDiem } = useDisclosure<string>({
+        tag: 'NhapDiemThuCong',
+        onClose: () => {
+            refetch()
+        },
     })
 
     const { data: student } = useFindUniqueStudent(
@@ -85,6 +97,22 @@ export default function StudentScoreClassPage() {
         }
     )
 
+    const { data: studentSubjectScoreData = [] } = useFindManyStudentSubjectScore(
+        {
+            where: {
+                studentId: studentId,
+                manualFinalScore: {
+                    gt: 0,
+                },
+            },
+            include: {
+                subjectVersion: true,
+            },
+        },
+        {
+            enabled: !!studentId,
+        }
+    )
     const { data = [], refetch } = useFindManySemester({
         where: {
             subjectClasses: {
@@ -168,6 +196,12 @@ export default function StudentScoreClassPage() {
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
                                 <Button
                                     type="primary"
+                                    onClick={() => onOpenModalNhapDiem(studentId)}
+                                >
+                                    Nhập điểm thủ công
+                                </Button>
+                                <Button
+                                    type="primary"
                                     onClick={() =>
                                         onOpen({
                                             dataTable: data,
@@ -181,6 +215,41 @@ export default function StudentScoreClassPage() {
                         </Col>
                     </Row>
                 </Col>
+                <Col className="text-lg font-bold">Danh sách điểm thủ công</Col>
+                <Col span={24}>
+                    <Table
+                        // filters={filters}
+                        // setFilters={setFilters}
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 50,
+                                align: 'center',
+                                render: (_, __, index) => index + 1,
+                            },
+                            {
+                                title: 'Mã môn học',
+                                width: 150,
+                                align: 'center',
+                                render: (_, record) => record?.subjectVersion?.code,
+                            },
+                            {
+                                title: 'Tên môn học',
+                                align: 'center',
+                                render: (_, record) => record?.subjectVersion?.name,
+                            },
+                            {
+                                title: 'Điểm thủ công',
+                                dataIndex: 'manualFinalScore',
+                                align: 'center',
+                                width: 200,
+                            },
+                        ]}
+                        data={studentSubjectScoreData}
+                        pagination={false}
+                    />
+                </Col>
+                <Col className="text-lg font-bold mt-9">Danh sách điểm theo kỳ</Col>
                 <Col span={24}>
                     <TableCollapse
                         rowKey="key"
@@ -223,7 +292,6 @@ export default function StudentScoreClassPage() {
                                 dataIndex: ['subjectClassStudent', '0', 'examScore'],
                                 width: 100,
                             },
-
                             {
                                 title: 'Điểm cộng',
                                 align: 'center',
@@ -417,10 +485,10 @@ StudentScoreClassPage.getLayout = function getLayout(page: React.ReactElement) {
             breadcrumbList={[
                 { title: 'Quản lý hồ sơ' },
                 {
-                    title: 'Quản lý lớp niên chế',
+                    title: 'Quản lý lớp quản lý',
                     href: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE,
                 },
-                { title: 'Chi tiết lớp niên chế' },
+                { title: 'Chi tiết lớp quản lý' },
                 { title: 'Kết quả học tập' },
             ]}
         >

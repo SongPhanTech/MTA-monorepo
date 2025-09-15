@@ -169,7 +169,10 @@ export default function ExamFax({ id }: ExamFaxProps) {
                     <Table
                         rowKey="key"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'STT',

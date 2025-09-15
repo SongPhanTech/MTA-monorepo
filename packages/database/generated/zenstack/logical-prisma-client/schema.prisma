@@ -1074,7 +1074,7 @@ model TrainingCourse {
   @@schema("ql-dao-tao")
 }
 
-/// lớp niên chế
+/// lớp quản lý
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
@@ -2645,7 +2645,6 @@ model DM_GioiTinh {
 /// @@allow('all', auth() != null)
 /// @@deny('read', bDeleted == true)
 /// @@allow('read', auth() != null)
-/// @@auth
 model DM_NhanVien {
   Id                  String         @id() @default(uuid()) @db.Uuid()
   sMa                 String?
@@ -3001,6 +3000,7 @@ model DM_ViTriCongViec {
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
+/// @@auth
 model UserProfile {
   id                            String                    @id() @default(cuid())
   code                          String?                   @unique()

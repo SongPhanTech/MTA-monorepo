@@ -105,30 +105,15 @@ export default function ThongTinCaNhanTab({
     const fillUserInfo = useCallback(
         (userData: any) => {
             if (!userData) return
+            console.log(userData, 'log', type)
 
             // Fill thông tin cơ bản từ UserProfile
             form.setFieldsValue({
                 firstName: userData.firstName,
                 lastName: userData.lastName,
                 userProfileId: userData.id,
+                organizationId: userData.sDM_DonViId,
             })
-
-            // Fill thông tin Lecturer
-            if (type === 'LECTURER' && userData.lecturer) {
-                const lecturer = userData.lecturer
-                form.setFieldsValue({
-                    organizationId: lecturer.organizationId,
-                })
-            }
-
-            // Fill thông tin Staff
-            if (type === 'STAFF' && userData.staffs) {
-                const staff = userData.staffs
-                form.setFieldsValue({
-                    organizationId: staff.organizationId,
-                })
-            }
-            console.log(form.getFieldsValue())
         },
         [form, type]
     )
@@ -229,7 +214,6 @@ export default function ThongTinCaNhanTab({
                     <Col span={12}>
                         <FormItem form={form} name="organizationId" label="Đơn vị" className="mb-0">
                             <TreeSelect
-                                disabled
                                 allowClear
                                 showSearch
                                 placeholder="Chọn đơn vị quản lý"

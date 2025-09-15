@@ -305,7 +305,10 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                             rowKey="key"
                             data={academicWarningData}
                             filters={filters}
-                            setFilters={setFilters}
+                            setFilters={(value) => {
+                                setFilters(value)
+                                setCurrentPage(1)
+                            }}
                             columns={[
                                 {
                                     title: 'STT',

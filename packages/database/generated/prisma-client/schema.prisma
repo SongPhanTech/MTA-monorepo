@@ -999,7 +999,7 @@ model TrainingCourse {
   @@schema("ql-dao-tao")
 }
 
-/// lớp niên chế
+/// lớp quản lý
 model FixedClass {
   id                       String             @id() @default(cuid())
   code                     String?            @unique()

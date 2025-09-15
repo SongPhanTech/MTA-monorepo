@@ -115,7 +115,10 @@ function TabNhomCauHoi() {
                     <Table
                         rowKey={'id'}
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         onRowClick={({ id }) => {
                             router.push(
                                 `${ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT}/${id}`

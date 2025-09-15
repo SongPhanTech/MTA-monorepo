@@ -1,0 +1,182 @@
+import PutFormModal from '@components/commons/put-modal'
+import useSpinner from '@hooks/spinner'
+import { useFindManySubjectVersion } from '@workspace/db/hooks'
+import { Col, Form, InputNumber, message } from 'antd'
+import dayjs from 'dayjs'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import 'dayjs/locale/vi'
+import type { AnyAaaaRecord } from 'node:dns'
+import FormItem from '@components/commons/form-item'
+import Select from '@components/commons/select'
+import Table from '@components/commons/table'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { useWatch } from 'antd/es/form/Form'
+export type NhapDiemFormType = {
+    subjectClassStudent: any[]
+    listSelected: any[]
+}
+dayjs.locale('vi')
+const NhapDiemThuCong = () => {
+    const [form] = Form.useForm<NhapDiemFormType>()
+    const {
+        isOpen,
+        onClose,
+        input: id,
+    } = useDisclosure<string>({
+        tag: 'NhapDiemThuCong',
+        onClose: form.resetFields,
+    })
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    async function onOk(output?: NhapDiemFormType) {
+        if (!output) return
+        if (output?.subjectClassStudent?.length <= 0) {
+            message.error('Vui lòng thêm môn nhập điểm')
+            return
+        }
+        const validate = output?.subjectClassStudent.find((i) => !i.manualFinalScore)
+        if (validate) {
+            message.error('Vui lòng nhập điểm')
+            return
+        }
+        try {
+            showSpinner()
+            await sqlTransaction(
+                output?.subjectClassStudent.map((i) => {
+                    return {
+                        model: 'StudentSubjectScore',
+                        operation: 'create',
+                        data: {
+                            data: {
+                                studentId: id,
+                                subjectVersionId: i?.id,
+                                manualFinalScore: i?.manualFinalScore,
+                            },
+                        },
+                    }
+                })
+            )
+            message.success('Thêm điểm thủ công thành công')
+            onClose()
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const { data: listSubjectVersion = [] } = useFindManySubjectVersion()
+
+    const onChange = (option: AnyAaaaRecord[]) => {
+        form.setFieldsValue({
+            subjectClassStudent: option,
+        })
+    }
+    const subjectClassStudentData = useWatch('subjectClassStudent', form)
+
+    // const { data: initialValue } = useFindUniqueStudent(
+    //     {
+    //         where: { id },
+    //         include: {
+    //             subjectClassStudent: true,
+    //         },
+    //     },
+    //     { enabled: !!id }
+    // )
+    // // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+    // useEffect(() => {
+    //     if (initialValue) {
+    //         form.setFieldsValue({
+    //             ...initialValue,
+    //         })
+    //     }
+    // }, [initialValue])
+
+    return (
+        <PutFormModal
+            open={isOpen}
+            form={form}
+            onFinish={onOk}
+            onCancel={onClose}
+            maskClosable={true}
+            title={'Nhập điểm thủ công'}
+            className="w-[1000px]"
+        >
+            <Col span={24}>
+                <FormItem form={form} name="listSelected">
+                    <Select
+                        mode="multiple"
+                        allowClear
+                        placeholder="Chọn đối tượng khảo sát"
+                        options={listSubjectVersion.map((item) => {
+                            return {
+                                ...item,
+                                key: item.id,
+                                value: item.id,
+                                label: item.name,
+                            }
+                        })}
+                        onChange={(value, option: any) => {
+                            onChange(option)
+                        }}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="subjectClassStudent">
+                    <Table
+                        // filters={filters}
+                        // setFilters={setFilters}
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 50,
+                                align: 'center',
+                                render: (_, __, index) => index + 1,
+                            },
+                            {
+                                title: 'Mã môn học',
+                                dataIndex: 'code',
+                                type: 'input',
+                                width: 150,
+                            },
+                            {
+                                title: 'Tên môn học',
+                                dataIndex: 'name',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Điểm thủ công',
+                                dataIndex: 'name',
+                                type: 'input',
+                                width: 200,
+                                render: (record, __, index) => (
+                                    <Form.Item
+                                        className="w-full mb-0"
+                                        name={['subjectClassStudent', index, 'manualFinalScore']}
+                                        label=""
+                                    >
+                                        <InputNumber
+                                            min={1}
+                                            max={10}
+                                            className="w-full"
+                                            placeholder="Nhập điểm thủ công"
+                                        />
+                                    </Form.Item>
+                                ),
+                            },
+                        ]}
+                        data={subjectClassStudentData}
+                        pagination={false}
+                    />
+                </FormItem>
+            </Col>
+        </PutFormModal>
+    )
+}
+
+export default NhapDiemThuCong

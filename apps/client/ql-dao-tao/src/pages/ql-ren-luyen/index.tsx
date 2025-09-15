@@ -169,7 +169,10 @@ export default function SubjectClassScore() {
                                 rowKey="id"
                                 id="training-category"
                                 filters={filters}
-                                setFilters={setFilters}
+                                setFilters={(value) => {
+                                    setFilters(value)
+                                    setCurrentPage(1)
+                                }}
                                 onRowClick={({ id }) => {
                                     router.push(`${ROUTER_PATH.QL_DAO_TAO.QL_REN_LUYEN}/${id}`)
                                 }}

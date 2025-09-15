@@ -8,11 +8,11 @@ export declare namespace auth {
     type WithRequired<T, K extends keyof T> = T & {
         [P in K]-?: T[P];
     };
-    export type DM_NhanVien = WithRequired<Partial<_P.DM_NhanVien>, 'Id'> & Record<string, unknown>;
+    export type UserProfile = WithRequired<Partial<_P.UserProfile>, 'id'> & Record<string, unknown>;
     export {};
 }
-export declare function enhance<ExtArgs extends Record<string, any> & InternalArgs>(prisma: _PrismaClient<any, any, ExtArgs>, context?: EnhancementContext<auth.DM_NhanVien>, options?: EnhancementOptions): PrismaClient;
-export declare function enhance<ExtArgs extends Record<string, any> & InternalArgs>(prisma: DynamicClientExtensionThis<_Prisma.TypeMap<ExtArgs>, _Prisma.TypeMapCb, ExtArgs>, context?: EnhancementContext<auth.DM_NhanVien>, options?: EnhancementOptions): DynamicClientExtensionThis<Prisma.TypeMap<ExtArgs>, Prisma.TypeMapCb, ExtArgs>;
+export declare function enhance<ExtArgs extends Record<string, any> & InternalArgs>(prisma: _PrismaClient<any, any, ExtArgs>, context?: EnhancementContext<auth.UserProfile>, options?: EnhancementOptions): PrismaClient;
+export declare function enhance<ExtArgs extends Record<string, any> & InternalArgs>(prisma: DynamicClientExtensionThis<_Prisma.TypeMap<ExtArgs>, _Prisma.TypeMapCb, ExtArgs>, context?: EnhancementContext<auth.UserProfile>, options?: EnhancementOptions): DynamicClientExtensionThis<Prisma.TypeMap<ExtArgs>, Prisma.TypeMapCb, ExtArgs>;
 /**
  * Infers the type of PrismaClient with ZenStack's enhancements.
  * @example

@@ -232,7 +232,7 @@ export default function SubjectOpeningPlan() {
                                 ),
                             },
                             {
-                                title: 'Danh sách lớp niên chế',
+                                title: 'Danh sách lớp quản lý',
                                 dataIndex: 'fixedClass',
                                 width: 200,
                                 align: 'left',

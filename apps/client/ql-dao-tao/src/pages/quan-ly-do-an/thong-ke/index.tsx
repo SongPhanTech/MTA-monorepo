@@ -295,7 +295,10 @@ export default function ThongKe() {
                             <TableCollapse
                                 rowKey="id"
                                 filters={filters}
-                                setFilters={setFilters}
+                                setFilters={(value) => {
+                                    setFilters(value)
+                                    setCurrentPage(1)
+                                }}
                                 headerTitleKey={({ code, name, subject }) =>
                                     `${[code, name, subject?.name].filter(Boolean).join(' - ')}`
                                 }

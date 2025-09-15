@@ -722,7 +722,10 @@ export default function SettingClass() {
                             rowKey="id"
                             id="expert-profile"
                             filters={filters}
-                            setFilters={setFilters}
+                            setFilters={(value) => {
+                                setFilters(value)
+                                setCurrentPage(1)
+                            }}
                             rowSelection={{
                                 selectedRowKeys: selectedLeftKeys,
                                 onChange: setSelectedLeftKeys,

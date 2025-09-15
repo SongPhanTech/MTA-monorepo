@@ -263,7 +263,10 @@ export default function ExamBank({ id }: ExamBankProps) {
                             <Table
                                 rowKey="id"
                                 filters={filters}
-                                setFilters={setFilters}
+                                setFilters={(value) => {
+                                    setFilters(value)
+                                    setCurrentPage(1)
+                                }}
                                 rowSelection={rowSelection}
                                 columns={[
                                     {

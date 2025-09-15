@@ -170,7 +170,10 @@ export default function EvidenceCategory() {
                         childrenFieldName="evidences"
                         defaultExpandAll
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         headerRight={(record) => (
                             <div className="flex gap-2.5 w-[85px] items-center">
                                 <CreateIcon

@@ -541,10 +541,10 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: 'lop-bien-che',
-                        label: 'Quản lý lớp niên chế',
+                        label: 'Quản lý lớp quản lý',
                         icon: TeamOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE,
-                        description: 'Quản lý lớp niên chế',
+                        description: 'Quản lý lớp quản lý',
                     },
                     {
                         id: 'hoc-bong',

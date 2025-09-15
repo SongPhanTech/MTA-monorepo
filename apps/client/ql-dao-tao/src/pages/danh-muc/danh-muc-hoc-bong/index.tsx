@@ -214,7 +214,10 @@ export default function Scholarship() {
                         defaultExpandAll
                         currentPage={currentPage}
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'Trường được đánh giá',

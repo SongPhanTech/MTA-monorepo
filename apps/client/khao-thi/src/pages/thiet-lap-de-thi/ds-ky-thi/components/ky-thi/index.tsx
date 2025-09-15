@@ -169,7 +169,10 @@ function Exam() {
                 <Col span={24}>
                     <Table
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         onRowClick={({ id }) => {
                             router.push(`${ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI}/${id}`)
                         }}

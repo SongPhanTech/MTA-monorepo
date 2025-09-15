@@ -218,7 +218,10 @@ export default function AcademicActionConfig() {
                         }
                         defaultExpandAll
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         currentPage={currentPage}
                         columns={[
                             {

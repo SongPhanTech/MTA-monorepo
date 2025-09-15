@@ -225,7 +225,10 @@ export default function StandardCatalog() {
                         childrenFieldName="criteria"
                         defaultExpandAll
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         headerRight={(record) => (
                             <div className="flex px-3 gap-2.5 w-[100px] items-center justify-end">
                                 <CreateIcon

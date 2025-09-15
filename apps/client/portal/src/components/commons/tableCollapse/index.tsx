@@ -1,6 +1,6 @@
 import { DownOutlined } from '@ant-design/icons'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import type { FilterProps } from '@constants/type'
 import type { TableProps as TableAntdProps } from 'antd'
 import type { ColumnType, TablePaginationConfig } from 'antd/es/table'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
@@ -176,7 +176,7 @@ const TableCollapse = <
                 render: (_: any, record: T) => {
                     if (record.$type !== 'child') return ''
 
-                    // @ts-ignore
+                    // @ts-expect-error
                     const order = allChildren.findIndex((item) => item.key === record.key)
                     return order >= 0
                         ? order +

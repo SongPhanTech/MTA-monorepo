@@ -126,7 +126,10 @@ export default function QuestionBank() {
                     <Table
                         rowKey="id"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         onRowClick={({ id }) => {
                             router.push(
                                 `${ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_NGAN_HANG_CAU_HOI}/${id}`

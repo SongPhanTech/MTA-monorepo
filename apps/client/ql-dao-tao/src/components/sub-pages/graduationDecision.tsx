@@ -320,7 +320,10 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
                         childrenFieldName="graduationDecisions"
                         data={transformedData}
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'Mã sinh viên',

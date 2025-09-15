@@ -19896,15 +19896,15 @@ const metadata = {
         evaluationCouncil: ['EvaluationCouncilMember'],
 
     },
-    authModel: 'DM_NhanVien'
+    authModel: 'UserProfile'
 
 };
 
 function $default$Document$uploadedById(user: any): unknown {
-    return user?.Id;
+    return user?.id;
 }
 
 function $default$FAQ$uploadedById(user: any): unknown {
-    return user?.Id;
+    return user?.id;
 }
 export default metadata;
