@@ -382,7 +382,10 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                             rowKey="key"
                             data={data}
                             filters={filters}
-                            setFilters={setFilters}
+                            setFilters={(value) => {
+                                setFilters(value)
+                                setCurrentPage(1)
+                            }}
                             columns={[
                                 {
                                     title: 'STT',

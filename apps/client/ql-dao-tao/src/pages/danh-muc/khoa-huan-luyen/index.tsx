@@ -211,7 +211,10 @@ export default function TrainingCoursePage() {
                         rowKey="id"
                         id="training-course"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'STT',

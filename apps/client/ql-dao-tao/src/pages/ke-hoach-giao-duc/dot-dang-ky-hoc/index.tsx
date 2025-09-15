@@ -195,7 +195,10 @@ export default function ClassRegisterSession() {
                 <Col span={24}>
                     <Table
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         onRowClick={({ id }) => {
                             router.push(
                                 `${ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC}/${id}`

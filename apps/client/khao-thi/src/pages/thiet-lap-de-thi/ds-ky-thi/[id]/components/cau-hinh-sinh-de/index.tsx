@@ -188,7 +188,10 @@ export default function TestStructureRule({ id }: TestStructureRuleProps) {
                         <Table
                             rowKey="key"
                             filters={filters}
-                            setFilters={setFilters}
+                            setFilters={(value) => {
+                                setFilters(value)
+                                setCurrentPage(1)
+                            }}
                             columns={[
                                 {
                                     title: 'STT',

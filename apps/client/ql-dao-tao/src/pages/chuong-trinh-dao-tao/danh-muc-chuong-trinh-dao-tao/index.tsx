@@ -452,7 +452,10 @@ export default function TrainingProgramCatalog() {
                         defaultExpandAll
                         onRowClick={(record) => handleRowClick(record)}
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'Mã CTĐT',

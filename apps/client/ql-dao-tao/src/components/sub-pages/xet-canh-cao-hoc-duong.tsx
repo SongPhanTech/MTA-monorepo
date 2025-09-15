@@ -223,7 +223,10 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                         rowKey="id"
                         data={data}
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'STT',

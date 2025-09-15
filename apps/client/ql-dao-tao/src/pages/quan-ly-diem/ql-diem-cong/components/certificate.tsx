@@ -140,7 +140,10 @@ export default function ArchivedCertificate() {
                         rowKey="id"
                         id="training-category"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'STT',

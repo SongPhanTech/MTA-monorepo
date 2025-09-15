@@ -250,7 +250,10 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                         rowKey="id"
                         id="fixed-class"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         onRowClick={(record) => {
                             router.push(
                                 ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_ID.replace(

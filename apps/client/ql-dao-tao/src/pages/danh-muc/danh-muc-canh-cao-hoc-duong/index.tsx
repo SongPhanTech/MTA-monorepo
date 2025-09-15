@@ -114,7 +114,10 @@ export default function DisciplinaryWarningReason() {
                     <Table
                         rowKey="id"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'STT',

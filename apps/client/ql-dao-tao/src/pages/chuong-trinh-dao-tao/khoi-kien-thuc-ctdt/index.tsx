@@ -127,7 +127,10 @@ export default function TrainingBlock() {
                         rowKey="id"
                         id="training-block"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         scroll={{ y: '75vh' }}
                         columns={[
                             {

@@ -193,7 +193,10 @@ export default function PaymentRecordPage() {
                         rowKey="id"
                         id="payment-record"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         data={paymentRecordData}
                         rowSelection={{
                             selectedRowKeys,

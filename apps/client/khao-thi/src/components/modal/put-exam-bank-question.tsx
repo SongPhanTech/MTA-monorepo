@@ -211,7 +211,10 @@ const PutExamBankQuestion = () => {
                         rowKey="id"
                         rowSelection={rowSelection}
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         scroll={{ y: '50vh' }}
                         columns={[
                             {

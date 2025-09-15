@@ -510,7 +510,10 @@ export default function StudentGraduationApplication() {
                                                 handleOpenModalLearningResult(record)
                                             }
                                             filters={filters}
-                                            setFilters={setFilters}
+                                            setFilters={(value) => {
+                                                setFilters(value)
+                                                setCurrentPage(1)
+                                            }}
                                             columns={[
                                                 {
                                                     title: 'STT',

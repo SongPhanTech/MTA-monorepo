@@ -178,7 +178,10 @@ export default function SupervisorPaymentRecordPage() {
                         rowKey="id"
                         id="payment-record"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         data={supervisorPaymentData}
                         rowSelection={{
                             selectedRowKeys,

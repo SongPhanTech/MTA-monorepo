@@ -113,7 +113,10 @@ export default function TrainingLevel() {
                         rowKey="id"
                         id="fixed-class"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'STT',

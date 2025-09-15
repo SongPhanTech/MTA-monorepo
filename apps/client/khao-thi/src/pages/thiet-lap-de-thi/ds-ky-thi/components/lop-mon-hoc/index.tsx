@@ -320,7 +320,10 @@ function SubjectVersion() {
                     <TableCollapse
                         rowKey="id"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         headerTitleKey={({ code, name, credit }) =>
                             `${[code, name].filter(Boolean).join(' - ')} (${credit} tín chỉ)`
                         }

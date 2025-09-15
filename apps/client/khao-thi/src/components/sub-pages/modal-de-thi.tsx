@@ -261,7 +261,10 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                     <Table
                         rowKey="key"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'STT',

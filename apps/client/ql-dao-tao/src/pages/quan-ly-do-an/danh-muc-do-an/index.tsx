@@ -526,7 +526,10 @@ export default function ThesisProject() {
                         headerTitleKey={({ code, name, subject }) =>
                             `${[subject.name, name, code].filter(Boolean).join(' - ')}`
                         }
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         data={subjectClass}
                         childrenFieldName="thesisProjects"
                         onRowClick={(record) => handleNavigate(record)}

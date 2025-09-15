@@ -306,7 +306,10 @@ export default function TrainingMajorPage() {
                         defaultExpandAll
                         currentPage={currentPage}
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'Mã chuyên ngành',

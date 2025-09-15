@@ -283,7 +283,10 @@ export default function SubjectList() {
                         currentPage={currentPage}
                         defaultExpandAll
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'Mã môn học',

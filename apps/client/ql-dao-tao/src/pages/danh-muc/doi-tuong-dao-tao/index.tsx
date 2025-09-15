@@ -163,7 +163,10 @@ export default function TrainingObjectTypePage() {
                         id="training-category"
                         data={data}
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'STT',

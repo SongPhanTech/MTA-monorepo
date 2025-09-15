@@ -147,7 +147,10 @@ export default function ExpertProfile() {
                         rowKey="id"
                         id="expert-profile"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         columns={[
                             {
                                 title: 'STT',

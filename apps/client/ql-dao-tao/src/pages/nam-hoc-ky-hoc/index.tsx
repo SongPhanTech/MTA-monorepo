@@ -270,7 +270,10 @@ function YearAndSemester() {
                     childrenFieldName="semesters"
                     currentPage={currentPage}
                     filters={filters}
-                    setFilters={setFilters}
+                    setFilters={(value) => {
+                        setFilters(value)
+                        setCurrentPage(1)
+                    }}
                     onRowClick={({ id }) => {
                         router.push(`${ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC}/${id}`)
                     }}

@@ -203,7 +203,10 @@ const PutSubjectTienQuyetSongHanh = () => {
                 <Table
                     data={data}
                     filters={filters}
-                    setFilters={setFilters}
+                    setFilters={(value) => {
+                        setFilters(value)
+                        setCurrentPage(1)
+                    }}
                     rowSelection={{
                         selectedRowKeys,
                         onChange: (keys, rows) => {

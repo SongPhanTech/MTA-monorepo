@@ -197,7 +197,10 @@ export default function KnowledgeBlock() {
                     <TableCollapse
                         rowKey="id"
                         filters={filters}
-                        setFilters={setFilters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
+                        }}
                         id="knowledge-block"
                         headerTitleKey={({ code, name }) =>
                             `${[code, name].filter(Boolean).join(' - ')}`
