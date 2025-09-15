@@ -1,6 +1,6 @@
 import { DownOutlined } from '@ant-design/icons'
+import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import type { FilterProps } from '@constants/type'
 import type { TableProps as TableAntdProps } from 'antd'
 import type { ColumnType, TablePaginationConfig } from 'antd/es/table'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
@@ -300,10 +300,7 @@ const TableCollapse = <
                 {...rest}
                 columns={restColumns as any[]}
                 filters={filters}
-                setFilters={(value) => {
-                    setFilters(value)
-                    setCurrentPage(1)
-                }}
+                setFilters={setFilters}
             />
             <style>
                 {`

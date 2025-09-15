@@ -300,10 +300,7 @@ const TableCollapse = <
                 {...rest}
                 columns={restColumns as any[]}
                 filters={filters}
-                setFilters={(value) => {
-                    setFilters(value)
-                    setCurrentPage(1)
-                }}
+                setFilters={setFilters}
             />
             <style>
                 {`
