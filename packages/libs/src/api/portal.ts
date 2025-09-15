@@ -26,10 +26,11 @@ import type {
     ClassRegister400,
     ClassRegister404,
     ClassRegisterBody,
-    ClassRegisterSession,
     GetClassesInfo200Item,
     GetClassesInfo400,
     GetClassesInfo404,
+    GetClassesInfoParams,
+    GetClassRegisterSession200Item,
     GetClassRegisterSession400,
     GetClassRegisterSession404,
     GetPublicSurvey400,
@@ -318,7 +319,7 @@ export const useSavePublicSurvey = <
  * @summary Lấy thống tin đợt đăng ký học
  */
 export type getClassRegisterSessionResponse200 = {
-    data: ClassRegisterSession[]
+    data: GetClassRegisterSession200Item[]
     status: 200
 }
 
@@ -496,34 +497,52 @@ export type getClassesInfoResponse = getClassesInfoResponseComposite & {
     headers: Headers
 }
 
-export const getGetClassesInfoUrl = () => {
-    return '/api/class-register/get-classes-info'
+export const getGetClassesInfoUrl = (params: GetClassesInfoParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/class-register/get-classes-info?${stringifiedParams}`
+        : '/api/class-register/get-classes-info'
 }
 
-export const getClassesInfo = async (options?: RequestInit): Promise<getClassesInfoResponse> => {
-    return customPortalFetch<getClassesInfoResponse>(getGetClassesInfoUrl(), {
+export const getClassesInfo = async (
+    params: GetClassesInfoParams,
+    options?: RequestInit
+): Promise<getClassesInfoResponse> => {
+    return customPortalFetch<getClassesInfoResponse>(getGetClassesInfoUrl(params), {
         ...options,
         method: 'GET',
     })
 }
 
-export const getGetClassesInfoQueryKey = () => {
-    return ['/api/class-register/get-classes-info'] as const
+export const getGetClassesInfoQueryKey = (params: GetClassesInfoParams) => {
+    return ['/api/class-register/get-classes-info', ...(params ? [params] : [])] as const
 }
 
 export const getGetClassesInfoQueryOptions = <
     TData = Awaited<ReturnType<typeof getClassesInfo>>,
     TError = GetClassesInfo400 | GetClassesInfo404,
->(options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>>
-    request?: SecondParameter<typeof customPortalFetch>
-}) => {
+>(
+    params: GetClassesInfoParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>>
+        request?: SecondParameter<typeof customPortalFetch>
+    }
+) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetClassesInfoQueryKey()
+    const queryKey = queryOptions?.queryKey ?? getGetClassesInfoQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassesInfo>>> = ({ signal }) =>
-        getClassesInfo({ signal, ...requestOptions })
+        getClassesInfo(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getClassesInfo>>,
@@ -539,6 +558,7 @@ export function useGetClassesInfo<
     TData = Awaited<ReturnType<typeof getClassesInfo>>,
     TError = GetClassesInfo400 | GetClassesInfo404,
 >(
+    params: GetClassesInfoParams,
     options: {
         query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>> &
             Pick<
@@ -557,6 +577,7 @@ export function useGetClassesInfo<
     TData = Awaited<ReturnType<typeof getClassesInfo>>,
     TError = GetClassesInfo400 | GetClassesInfo404,
 >(
+    params: GetClassesInfoParams,
     options?: {
         query?: Partial<
             UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>
@@ -577,6 +598,7 @@ export function useGetClassesInfo<
     TData = Awaited<ReturnType<typeof getClassesInfo>>,
     TError = GetClassesInfo400 | GetClassesInfo404,
 >(
+    params: GetClassesInfoParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>>
         request?: SecondParameter<typeof customPortalFetch>
@@ -591,13 +613,14 @@ export function useGetClassesInfo<
     TData = Awaited<ReturnType<typeof getClassesInfo>>,
     TError = GetClassesInfo400 | GetClassesInfo404,
 >(
+    params: GetClassesInfoParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassesInfo>>, TError, TData>>
         request?: SecondParameter<typeof customPortalFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetClassesInfoQueryOptions(options)
+    const queryOptions = getGetClassesInfoQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>

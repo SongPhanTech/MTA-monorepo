@@ -6,6 +6,6 @@
  */
 
 /**
- * ID của lớp niên chế
+ * ID của lớp quản lý
  */
 export type FixedClassId = string

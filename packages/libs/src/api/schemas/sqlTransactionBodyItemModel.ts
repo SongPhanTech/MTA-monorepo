@@ -69,6 +69,7 @@ export const SqlTransactionBodyItemModel = {
     Role: 'Role',
     Permission: 'Permission',
     ChatBotConfig: 'ChatBotConfig',
+    UserSession: 'UserSession',
     Document: 'Document',
     FAQ: 'FAQ',
     Prompt: 'Prompt',

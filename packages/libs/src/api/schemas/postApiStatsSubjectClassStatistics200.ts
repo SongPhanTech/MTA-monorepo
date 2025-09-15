@@ -4,9 +4,13 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsSubjectClassStatistics200ClassesItem } from './postApiStatsSubjectClassStatistics200ClassesItem'
+
+import type { PostApiStatsSubjectClassStatistics200DataItem } from './postApiStatsSubjectClassStatistics200DataItem'
+import type { PostApiStatsSubjectClassStatistics200Summary } from './postApiStatsSubjectClassStatistics200Summary'
 
 export type PostApiStatsSubjectClassStatistics200 = {
-    totalClasses: number
-    classes: PostApiStatsSubjectClassStatistics200ClassesItem[]
+    summary: PostApiStatsSubjectClassStatistics200Summary
+    count: number
+    preview?: boolean
+    data: PostApiStatsSubjectClassStatistics200DataItem[]
 }

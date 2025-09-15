@@ -13,7 +13,7 @@ const IndexPage: NextPage = () => {
     useEffect(() => {
         console.log(status)
         if (status === 'authenticated') {
-            if (goToLastPage('lms')) return
+            if (goToLastPage('portal')) return
             const firstMenu = menus.flat()
             if (firstMenu.length > 0 && firstMenu[0].path) {
                 router.push(firstMenu[0].path)

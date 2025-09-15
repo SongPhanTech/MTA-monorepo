@@ -7,4 +7,6 @@
 
 export type PostApiStatsExamParticipantsBySemesterBody = {
     preview?: boolean
+    /** Semester.id - ID học kỳ */
+    semesterId: string
 }

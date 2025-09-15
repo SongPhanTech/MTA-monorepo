@@ -57,9 +57,8 @@ setupOpenApi(app)
 app.route('/api/auth', AuthApp)
 
 // TODO!: remove `/check`
-app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
+app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
 // setupAuth(app)
-
 // private route
 app.route('/api/minio', MinIOApp)
 app.route('/api/sql', SqlTransactionApp)
