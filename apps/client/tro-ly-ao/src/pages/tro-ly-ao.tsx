@@ -1,107 +1,56 @@
-import AI_TYPES from '@constants/ai_types'
+import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
 import { type DocumentType, MessageSender } from '@workspace/db'
 import { useCreateConversation } from '@workspace/db/hooks'
-import { message, Typography } from 'antd'
+import { Card, message } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useState } from 'react'
 
-const { Title } = Typography
+const SUGGESTED_QUESTIONS = [
+    'Điều kiện tuyển sinh vào học viện là gì?',
+    'Chương trình đào tạo có những ngành nào?',
+    'Quy chế thi cử như thế nào?',
+    'Chính sách hỗ trợ cho học viên quân sự?',
+    'Thông tin về cơ sở vật chất của học viện?',
+    'Lịch học và thời gian biểu ra sao?',
+]
+
 export default function TroLyAo() {
     const router = useRouter()
 
     const { id: conversationId } = router.query
     const [loading, setLoading] = useState(false)
+    const [input, setInput] = useState('')
     const { mutateAsync: createConversation } = useCreateConversation()
     const [currentConversationId, setCurrentConversationId] = useState<string | undefined>(
         conversationId as string
     )
 
-    // const handleClick = async (key: string) => {
-    //     try {
-    //         setLoading(true)
+    const handleSend = async () => {
+        if (!input.trim() || loading) return
 
-    //         // Tìm loại AI đã chọn từ dữ liệu
-    //         const selectedAI = Object.values(groupedAITypes)
-    //             .flat()
-    //             .find((item) => item.key === key)
-
-    //         if (!selectedAI) {
-    //             throw new Error('Không tìm thấy loại AI')
-    //         }
-
-    //         const { label } = selectedAI // Lấy label của AI đã chọn
-
-    //         // Kiểm tra nếu chưa có currentConversationId thì tạo một cuộc trò chuyện mới
-    //         if (!currentConversationId && userCurrent?.id) {
-    //             const res = await createConversation({
-    //                 data: {
-    //                     userId: userCurrent?.id, // ID người dùng, thay theo đúng
-    //                     message: {
-    //                         create: [
-    //                             {
-    //                                 content: `${label}`, // Sử dụng label của AI
-    //                                 sender: MessageSender.BOT,
-    //                             },
-    //                         ],
-    //                     },
-    //                     type: key as DocumentType,
-    //                 },
-    //             })
-
-    //             const newConversationId = res?.id
-    //             if (newConversationId) {
-    //                 setCurrentConversationId(newConversationId)
-
-    //                 // Chuyển sang trang hội thoại mới với query document_type
-    //                 router.push({
-    //                     pathname: `/hoi-thoai/${newConversationId}`,
-    //                 })
-    //             } else {
-    //                 throw new Error('Không tạo được cuộc trò chuyện mới')
-    //             }
-    //         } else {
-    //             // Nếu đã có currentConversationId, chuyển hướng sang trang hội thoại cũ với document_type
-    //             router.push({
-    //                 pathname: `/hoi-thoai/${currentConversationId}`,
-    //             })
-    //         }
-    //     } catch (error) {
-    //         console.error(error)
-    //         message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // }
-    const handleClick = async (key: string) => {
         if (loading) return // Chặn bấm liên tục
 
         setLoading(true)
 
         try {
-            const selectedAI = Object.values(groupedAITypes)
-                .flat()
-                .find((item) => item.key === key)
-
-            if (!selectedAI) throw new Error('Không tìm thấy loại AI')
-
-            const { label } = selectedAI
+            // Calculate label from first message (user input)
+            const label = input.trim()
 
             if (!currentConversationId) {
                 const res = await createConversation({
                     data: {
-                        // userId: 'd8f2e108-b884-4527-ac32-e250f2fa0bfa',
                         sessionId: 'cmfjff3dr0000kpv4gahido0t',
                         message: {
                             create: [
                                 {
                                     content: label,
-                                    sender: MessageSender.BOT,
+                                    sender: MessageSender.USER,
                                 },
                             ],
                         },
-                        type: key as DocumentType,
+                        type: 'ACADEMY_INFORMATION' as DocumentType,
                     },
                 })
 
@@ -122,43 +71,95 @@ export default function TroLyAo() {
             setLoading(false)
         }
     }
-    const groupedAITypes = AI_TYPES.reduce(
-        (acc, cur) => {
-            if (!acc[cur.group]) acc[cur.group] = []
-            acc[cur.group].push(cur)
-            return acc
-        },
-        {} as Record<string, typeof AI_TYPES>
-    )
 
+    const handleSuggestionClick = async (question: string) => {
+        setInput(question)
+
+        // Auto send after setting the input
+        if (loading) return
+
+        setLoading(true)
+
+        try {
+            // Calculate label from the question
+            const label = question.trim()
+
+            if (!currentConversationId) {
+                const res = await createConversation({
+                    data: {
+                        sessionId: 'cmfjff3dr0000kpv4gahido0t',
+                        message: {
+                            create: [
+                                {
+                                    content: label,
+                                    sender: MessageSender.USER,
+                                },
+                            ],
+                        },
+                        type: 'ACADEMY_INFORMATION' as DocumentType,
+                    },
+                })
+
+                const newId = res?.id
+                if (newId) {
+                    setCurrentConversationId(newId)
+                    router.push({ pathname: `/hoi-thoai/${newId}` })
+                } else {
+                    throw new Error('Không tạo được cuộc trò chuyện mới')
+                }
+            } else {
+                router.push({ pathname: `/hoi-thoai/${currentConversationId}` })
+            }
+        } catch (error) {
+            console.error(error)
+            message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
-        <div className="h-full overflow-auto p-6">
-            {/* <h2 className="text-2xl font-semibold mb-6">Chọn loại Trợ lý AI</h2> */}
-            {Object.entries(groupedAITypes).map(([group, items]) => (
-                <div key={group} className="mb-10">
-                    <h3 className="text-lg font-medium text-gray-700 mb-4">{group}</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {items.map((item) => (
-                            <div
-                                key={item.key}
-                                onClick={() => handleClick(item.key)}
-                                className={`group rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all duration-300 transform hover:bg-[#028850] hover:text-white hover:border-[#028850] hover:shadow-xl ${
-                                    loading ? 'pointer-events-none opacity-50' : ''
-                                }`}
+        <div className="h-full flex flex-col">
+            {/* Main content area */}
+            <div className="flex-1 flex flex-col justify-center items-center px-6">
+                {/* Welcome message */}
+                <div className="text-center mb-8">
+                    <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                        Xin chào! Tôi có thể giúp gì cho bạn?
+                    </h1>
+                    <p className="text-gray-600">
+                        Hỏi tôi bất kỳ điều gì về Học viện Kỹ thuật Quân sự
+                    </p>
+                </div>
+
+                {/* Suggested questions */}
+                <div className="w-full max-w-4xl mb-8">
+                    <h3 className="text-lg font-medium text-gray-700 mb-4 text-center">
+                        Câu hỏi gợi ý
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {SUGGESTED_QUESTIONS.map((question) => (
+                            <Card
+                                key={question}
+                                className="cursor-pointer hover:shadow-md transition-shadow duration-200 hover:border-primary"
+                                onClick={() => handleSuggestionClick(question)}
+                                bodyStyle={{ padding: '12px 16px' }}
                             >
-                                <div className="flex items-center gap-3 cursor-pointer">
-                                    <span className="text-xl text-[#028850] group-hover:text-white transition-all duration-300">
-                                        {<item.icon />}
-                                    </span>
-                                    <span className="font-medium group-hover:text-white transition-all duration-300">
-                                        {item.label}
-                                    </span>
-                                </div>
-                            </div>
+                                <p className="text-sm text-gray-700 m-0">{question}</p>
+                            </Card>
                         ))}
                     </div>
                 </div>
-            ))}
+            </div>
+
+            {/* Chat input at bottom */}
+            <div className="pb-4">
+                <ChatInput
+                    input={input}
+                    loading={loading}
+                    onInputChange={setInput}
+                    onSend={handleSend}
+                />
+            </div>
         </div>
     )
 }
