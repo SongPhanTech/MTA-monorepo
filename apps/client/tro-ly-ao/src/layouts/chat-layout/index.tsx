@@ -1,6 +1,6 @@
 import logo_mta from '@assets/images/logo_mta.png'
+import AppSwitcherFloatButton from '@components/commons/app-switcher-modal'
 import AvatarDropdown from '@components/layouts/avatar-dropdown'
-import HeaderContent from '@components/layouts/header-content'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
 import { cn } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
@@ -108,7 +108,6 @@ const ChatLayout = ({
                     />
                 )}
                 <Layout className="overflow-hidden flex flex-col">
-                    <HeaderContent />
                     <Content
                         className={cn(
                             'flex-1 p-[10px] bg-white rounded-xl relative overflow-hidden',
@@ -124,6 +123,7 @@ const ChatLayout = ({
                     </Content>
                 </Layout>
             </Layout>
+            <AppSwitcherFloatButton />
         </>
     )
 }
