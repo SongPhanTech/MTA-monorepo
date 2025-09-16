@@ -155,14 +155,16 @@ const SiderChatLayout = ({
         >
             <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <div style={{ flex: 1, overflowY: 'auto' }}>
-                    <div className="px-1">
+                    <div className="px-1 pt-2">
                         <Button
                             color="primary"
                             variant={isActive ? 'solid' : 'outlined'}
-                            className="w-full h-[40px] flex items-center justify-center gap-2 mt-2 rounded-xl"
+                            className="w-full h-[40px] flex items-center justify-center gap-2 rounded-xl"
                             icon={firstItem?.icon ? <firstItem.icon /> : undefined}
                             onClick={() => {
-                                if (firstItem?.path) router.push(firstItem.path)
+                                if (firstItem?.path && !isActive) {
+                                    router.push(firstItem.path)
+                                }
                             }}
                         >
                             {!collapsed && firstItem?.label}

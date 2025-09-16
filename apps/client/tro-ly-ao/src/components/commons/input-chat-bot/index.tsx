@@ -68,11 +68,13 @@ export default function ChatInput({
                         {/* Dòng trên: textarea */}
                         <textarea
                             ref={textareaRef}
-                            className="py-1 px-3 outline-none border-none text-base bg-transparent resize-none min-h-[32px] w-full"
+                            className={`py-1 px-3 outline-none border-none text-base bg-transparent resize-none min-h-[32px] w-full ${
+                                loading ? 'cursor-not-allowed opacity-60' : ''
+                            }`}
                             placeholder="Hỏi bất kỳ điều gì ..."
                             value={input}
-                            onChange={handleChange}
-                            onKeyDown={handleKeyDown}
+                            onChange={loading ? undefined : handleChange}
+                            onKeyDown={loading ? undefined : handleKeyDown}
                             style={{
                                 maxHeight: '160px',
                                 overflowY: 'auto',
@@ -104,7 +106,11 @@ export default function ChatInput({
                                 />
                             ) : (
                                 <Button
-                                    onClick={onSend}
+                                    onClick={() => {
+                                        if (!loading && input.trim()) {
+                                            onSend()
+                                        }
+                                    }}
                                     className="bg-primary text-white w-8 h-8 rounded-full hover:opacity-80 flex items-center justify-center"
                                     icon={<ArrowUpOutlined className="text-white text-[16px]" />}
                                 />
