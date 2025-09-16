@@ -162,7 +162,9 @@ const SiderChatLayout = ({
                             className="w-full h-[40px] flex items-center justify-center gap-2 rounded-xl"
                             icon={firstItem?.icon ? <firstItem.icon /> : undefined}
                             onClick={() => {
-                                if (firstItem?.path) router.push(firstItem.path)
+                                if (firstItem?.path && !isActive) {
+                                    router.push(firstItem.path)
+                                }
                             }}
                         >
                             {!collapsed && firstItem?.label}

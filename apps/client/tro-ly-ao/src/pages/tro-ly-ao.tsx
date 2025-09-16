@@ -5,7 +5,7 @@ import { useCreateConversation } from '@workspace/db/hooks'
 import { Card, message } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 const SUGGESTED_QUESTIONS = [
     'Điều kiện tuyển sinh vào học viện là gì?',
@@ -19,102 +19,92 @@ const SUGGESTED_QUESTIONS = [
 export default function TroLyAo() {
     const router = useRouter()
 
-    const { id: conversationId } = router.query
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
     const { mutateAsync: createConversation } = useCreateConversation()
-    const [currentConversationId, setCurrentConversationId] = useState<string | undefined>(
-        conversationId as string
-    )
+    const isProcessingRef = useRef(false)
 
     const handleSend = async () => {
-        if (!input.trim() || loading) return
+        if (!input.trim() || loading || isProcessingRef.current) return
 
-        if (loading) return // Chặn bấm liên tục
-
+        isProcessingRef.current = true
         setLoading(true)
 
         try {
             // Calculate label from first message (user input)
             const label = input.trim()
 
-            if (!currentConversationId) {
-                const res = await createConversation({
-                    data: {
-                        sessionId: 'cmfjff3dr0000kpv4gahido0t',
-                        message: {
-                            create: [
-                                {
-                                    content: label,
-                                    sender: MessageSender.USER,
-                                },
-                            ],
-                        },
-                        type: 'ACADEMY_INFORMATION' as DocumentType,
+            const res = await createConversation({
+                data: {
+                    sessionId: 'cmfjff3dr0000kpv4gahido0t',
+                    message: {
+                        create: [
+                            {
+                                content: label,
+                                sender: MessageSender.USER,
+                            },
+                        ],
                     },
-                })
+                    type: 'ACADEMY_INFORMATION' as DocumentType,
+                },
+            })
 
-                const newId = res?.id
-                if (newId) {
-                    setCurrentConversationId(newId)
-                    router.push({ pathname: `/hoi-thoai/${newId}` })
-                } else {
-                    throw new Error('Không tạo được cuộc trò chuyện mới')
-                }
+            const newId = res?.id
+            if (newId) {
+                setInput('') // Reset input after successful creation
+                router.push({ pathname: `/hoi-thoai/${newId}` })
             } else {
-                router.push({ pathname: `/hoi-thoai/${currentConversationId}` })
+                throw new Error('Không tạo được cuộc trò chuyện mới')
             }
         } catch (error) {
             console.error(error)
             message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
         } finally {
             setLoading(false)
+            isProcessingRef.current = false
         }
     }
 
     const handleSuggestionClick = async (question: string) => {
+        if (loading || isProcessingRef.current) return
+
+        isProcessingRef.current = true
+
         setInput(question)
-
-        // Auto send after setting the input
-        if (loading) return
-
         setLoading(true)
 
         try {
             // Calculate label from the question
             const label = question.trim()
 
-            if (!currentConversationId) {
-                const res = await createConversation({
-                    data: {
-                        sessionId: 'cmfjff3dr0000kpv4gahido0t',
-                        message: {
-                            create: [
-                                {
-                                    content: label,
-                                    sender: MessageSender.USER,
-                                },
-                            ],
-                        },
-                        type: 'ACADEMY_INFORMATION' as DocumentType,
+            const res = await createConversation({
+                data: {
+                    sessionId: 'cmfjff3dr0000kpv4gahido0t',
+                    message: {
+                        create: [
+                            {
+                                content: label,
+                                sender: MessageSender.USER,
+                            },
+                        ],
                     },
-                })
+                    type: 'ACADEMY_INFORMATION' as DocumentType,
+                },
+            })
 
-                const newId = res?.id
-                if (newId) {
-                    setCurrentConversationId(newId)
-                    router.push({ pathname: `/hoi-thoai/${newId}` })
-                } else {
-                    throw new Error('Không tạo được cuộc trò chuyện mới')
-                }
+            const newId = res?.id
+            if (newId) {
+                setInput('') // Reset input after successful creation
+                router.push({ pathname: `/hoi-thoai/${newId}` })
             } else {
-                router.push({ pathname: `/hoi-thoai/${currentConversationId}` })
+                throw new Error('Không tạo được cuộc trò chuyện mới')
             }
         } catch (error) {
             console.error(error)
             message.error('Đã xảy ra lỗi, vui lòng thử lại sau')
         } finally {
             setLoading(false)
+            isProcessingRef.current = false
         }
     }
     return (
@@ -140,9 +130,17 @@ export default function TroLyAo() {
                         {SUGGESTED_QUESTIONS.map((question) => (
                             <Card
                                 key={question}
-                                className="cursor-pointer hover:shadow-md transition-shadow duration-200 hover:border-primary"
-                                onClick={() => handleSuggestionClick(question)}
-                                bodyStyle={{ padding: '12px 16px' }}
+                                className={`transition-all duration-200 ${
+                                    loading || isProcessingRef.current
+                                        ? 'cursor-not-allowed opacity-50 pointer-events-none'
+                                        : 'cursor-pointer hover:shadow-md hover:border-primary'
+                                }`}
+                                onClick={() =>
+                                    !loading &&
+                                    !isProcessingRef.current &&
+                                    handleSuggestionClick(question)
+                                }
+                                styles={{ body: { padding: '12px 16px' } }}
                             >
                                 <p className="text-sm text-gray-700 m-0">{question}</p>
                             </Card>
