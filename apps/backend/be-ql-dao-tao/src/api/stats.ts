@@ -518,7 +518,7 @@ app.openapi(
         },
         responses: {
             200: {
-                description: 'Thống kê kết quả học tập toàn Học viện',
+                description: 'Thống kê kết quả rèn luyện toàn Học viện',
                 content: {
                     'application/json': {
                         schema: StatBaseSchema.extend({
@@ -2370,8 +2370,12 @@ app.openapi(
                 description: 'Tổng số lượt sinh viên dự thi trong học kỳ',
                 content: {
                     'application/json': {
-                        schema: z.object({
-                            totalParticipants: z.number(),
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    totalParticipants: z.number(),
+                                })
+                            ),
                         }),
                     },
                 },
@@ -2382,7 +2386,14 @@ app.openapi(
         const { preview, semesterId } = c.req.valid('json')
         if (preview) {
             return c.json({
-                totalParticipants: faker.number.int({ min: 5000, max: 10000 }),
+                data: [
+                    {
+                        totalParticipants: faker.number.int({ min: 5000, max: 10000 }),
+                    },
+                ],
+                count: 1,
+                summary: {},
+                preview: true,
             })
         }
 
@@ -2394,7 +2405,12 @@ app.openapi(
             WHERE "SC"."semesterId" = ${semesterId}
         `
         const totalParticipants = Number(result[0]?.totalParticipants)
-        return c.json({ totalParticipants })
+        return c.json({
+            data: [{ totalParticipants }],
+            count: 1,
+            summary: {},
+            preview: false,
+        })
     }
 )
 
@@ -2506,19 +2522,39 @@ app.openapi(
                 description: 'Thống kê câu hỏi',
                 content: {
                     'application/json': {
-                        schema: z.object({
-                            totalQuestions: z.number(),
-                            byQuestionBank: z.array(
-                                z.object({ id: z.string(), name: z.string(), count: z.number() })
-                            ),
-                            bySubjectVersion: z.array(
-                                z.object({ id: z.string(), name: z.string(), count: z.number() })
-                            ),
-                            byDifficulty: z.array(
-                                z.object({ id: z.string(), name: z.string(), count: z.number() })
-                            ),
-                            byKnowledgeBlock: z.array(
-                                z.object({ id: z.string(), name: z.string(), count: z.number() })
+                        schema: StatBaseSchema.extend({
+                            data: z.array(
+                                z.object({
+                                    totalQuestions: z.number(),
+                                    byQuestionBank: z.array(
+                                        z.object({
+                                            id: z.string(),
+                                            name: z.string(),
+                                            count: z.number(),
+                                        })
+                                    ),
+                                    bySubjectVersion: z.array(
+                                        z.object({
+                                            id: z.string(),
+                                            name: z.string(),
+                                            count: z.number(),
+                                        })
+                                    ),
+                                    byDifficulty: z.array(
+                                        z.object({
+                                            id: z.string(),
+                                            name: z.string(),
+                                            count: z.number(),
+                                        })
+                                    ),
+                                    byKnowledgeBlock: z.array(
+                                        z.object({
+                                            id: z.string(),
+                                            name: z.string(),
+                                            count: z.number(),
+                                        })
+                                    ),
+                                })
                             ),
                         }),
                     },
@@ -2552,11 +2588,18 @@ app.openapi(
             const totalQuestions = byQuestionBank.reduce((acc, item) => acc + item.count, 0)
 
             return c.json({
-                totalQuestions,
-                byQuestionBank,
-                bySubjectVersion,
-                byDifficulty,
-                byKnowledgeBlock,
+                data: [
+                    {
+                        totalQuestions,
+                        byQuestionBank,
+                        bySubjectVersion,
+                        byDifficulty,
+                        byKnowledgeBlock,
+                    },
+                ],
+                count: 1,
+                summary: {},
+                preview: true,
             })
         }
         const totalQuestions = await prisma.question.count()
@@ -2599,11 +2642,18 @@ app.openapi(
         `
 
         return c.json({
-            totalQuestions,
-            byQuestionBank,
-            bySubjectVersion,
-            byDifficulty,
-            byKnowledgeBlock,
+            data: [
+                {
+                    totalQuestions,
+                    byQuestionBank,
+                    bySubjectVersion,
+                    byDifficulty,
+                    byKnowledgeBlock,
+                },
+            ],
+            count: 1,
+            summary: {},
+            preview: false,
         })
     }
 )

@@ -183,13 +183,8 @@ app.openapi(graduationCheck, async (c) => {
         const subjectScores = await prisma.studentSubjectScore.findMany({
             where: {
                 OR: [
-                    {
-                        studentId: application.studentId,
-                    },
-                    {
-                        studentId: application.studentId,
-                        subjectClass: { cancelled: false },
-                    },
+                    { studentId: application.studentId },
+                    { studentId: application.studentId, subjectClass: { cancelled: false } },
                 ],
             },
             include: { subjectVersion: true },
