@@ -76,7 +76,7 @@ export const parseCurriculumSheet = (file: ArrayBufferLike): ParseCurriculumShee
         structure: 'F',
         period: 'G',
         ...semesters,
-        description: 'Y', // Mô tả: can be 'Điều kiện'
+        description: 'Y',
     } as const
     // end: Các tham chiếu ô cố định trong sheet
 
@@ -192,10 +192,8 @@ export const parseCurriculumSheet = (file: ArrayBufferLike): ParseCurriculumShee
                 })
             }
 
-            // TODO: fix đang dựa vào cột ghi chú: Điều kiện
-            const useForFinalScore = !row[cols.description]
-                ?.toLocaleLowerCase()
-                .includes('điều kiện')
+            // nếu không có "Số TC" => môn điều kiện, không tính điểm tích luỹ
+            const useForFinalScore = !cols.credit
 
             const semester =
                 Object.values(semesters).findIndex((semester) => row[semester]) + 1 || null

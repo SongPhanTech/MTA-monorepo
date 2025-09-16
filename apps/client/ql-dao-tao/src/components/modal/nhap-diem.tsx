@@ -1,6 +1,6 @@
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { useFindManySubjectVersion } from '@workspace/db/hooks'
+import { useCreateManyStudentSubjectScore, useFindManySubjectVersion } from '@workspace/db/hooks'
 import { Col, Form, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -9,7 +9,6 @@ import type { AnyAaaaRecord } from 'node:dns'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
-import { sqlTransaction } from '@workspace/libs/api/model'
 import { useWatch } from 'antd/es/form/Form'
 export type NhapDiemFormType = {
     subjectClassStudent: any[]
@@ -27,6 +26,7 @@ const NhapDiemThuCong = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
+    const { mutateAsync: createManyStudentSubjectScore } = useCreateManyStudentSubjectScore()
 
     async function onOk(output?: NhapDiemFormType) {
         if (!output) return
@@ -41,21 +41,14 @@ const NhapDiemThuCong = () => {
         }
         try {
             showSpinner()
-            await sqlTransaction(
-                output?.subjectClassStudent.map((i) => {
-                    return {
-                        model: 'StudentSubjectScore',
-                        operation: 'create',
-                        data: {
-                            data: {
-                                studentId: id,
-                                subjectVersionId: i?.id,
-                                manualFinalScore: i?.manualFinalScore,
-                            },
-                        },
-                    }
-                })
-            )
+            createManyStudentSubjectScore({
+                data:
+                    output?.subjectClassStudent.map((i) => ({
+                        studentId: id as string,
+                        subjectVersionId: i?.id as string,
+                        manualFinalScore: i?.manualFinalScore as number,
+                    })) || [],
+            })
             message.success('Thêm điểm thủ công thành công')
             onClose()
         } catch (error: any) {
@@ -111,7 +104,7 @@ const NhapDiemThuCong = () => {
                     <Select
                         mode="multiple"
                         allowClear
-                        placeholder="Chọn đối tượng khảo sát"
+                        placeholder="Chọn môn học"
                         options={listSubjectVersion.map((item) => {
                             return {
                                 ...item,

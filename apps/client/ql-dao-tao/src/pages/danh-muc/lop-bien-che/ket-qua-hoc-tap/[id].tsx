@@ -485,7 +485,7 @@ StudentScoreClassPage.getLayout = function getLayout(page: React.ReactElement) {
             breadcrumbList={[
                 { title: 'Quản lý hồ sơ' },
                 {
-                    title: 'Quản lý lớp quản lý',
+                    title: 'Lớp quản lý',
                     href: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE,
                 },
                 { title: 'Chi tiết lớp quản lý' },
