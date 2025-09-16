@@ -1,16 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+import baseConfig from '@workspace/ui/tailwind.config'
+
 module.exports = {
-    content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
-    theme: {
-        extend: {
-            colors: {
-                primary: '#028850',
-            },
-            fontFamily: {
-                'time-news-roman': '"Times New Roman", sans-serif',
-            },
-        },
-    },
-    plugins: [],
+    ...baseConfig,
     important: true,
 }

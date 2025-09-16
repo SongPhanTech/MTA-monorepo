@@ -47,7 +47,6 @@ const relationSchema = z.object({
     expertProfile: z.array(z.unknown()).optional(),
     defenseRooms: z.array(z.unknown()).optional(),
     surveyObjectTypes: z.array(z.unknown()).optional(),
-    classRegisterLogs: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

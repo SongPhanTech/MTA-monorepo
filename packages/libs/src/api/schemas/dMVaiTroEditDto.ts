@@ -33,6 +33,7 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 | 403 Forbidden | Bạn không có quyền truy cập vào tài nguyên này |
 | 404 Not Found | Tài nguyên yêu cầu không tồn tại |
 | 422 Unprocessable Entity | Dữ liệu gửi đi không hợp lệ hoặc không đáp ứng yêu cầu của API |
+| 429 Too Many Request | Hệ thống chặn do quá nhiều request lên hệ thống |
 | 500 Internal Server Error | Lỗi máy chủ, vui lòng thử lại sau hoặc liên hệ QTHT |
                    
 ## Lưu ý quan trọng
@@ -51,6 +52,7 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 import type { DMVaiTro } from './dMVaiTro'
 import type { DMVaiTroEditDtoState } from './dMVaiTroEditDtoState'
+import type { MucTruyCapDuLieuEditDto } from './mucTruyCapDuLieuEditDto'
 import type { RolePermissionEditDto } from './rolePermissionEditDto'
 import type { VaiTroNhanVienEditDto } from './vaiTroNhanVienEditDto'
 
@@ -58,7 +60,13 @@ export type DMVaiTroEditDto = DMVaiTro & {
     /** @nullable */
     State?: DMVaiTroEditDtoState
     /** @nullable */
+    sTenUngDung?: string | null
+    /** @nullable */
     VaiTroNhanVienDetails?: VaiTroNhanVienEditDto[] | null
     /** @nullable */
     RolePermissions?: RolePermissionEditDto[] | null
+    /** @nullable */
+    AccessLevels?: MucTruyCapDuLieuEditDto[] | null
+    /** @nullable */
+    sDM_DonViIdsAccessLevel?: string | null
 }

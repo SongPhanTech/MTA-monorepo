@@ -5,15 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-import type { PostApiStatsQuestionStatistics200ByDifficultyItem } from './postApiStatsQuestionStatistics200ByDifficultyItem'
-import type { PostApiStatsQuestionStatistics200ByKnowledgeBlockItem } from './postApiStatsQuestionStatistics200ByKnowledgeBlockItem'
-import type { PostApiStatsQuestionStatistics200ByQuestionBankItem } from './postApiStatsQuestionStatistics200ByQuestionBankItem'
-import type { PostApiStatsQuestionStatistics200BySubjectVersionItem } from './postApiStatsQuestionStatistics200BySubjectVersionItem'
+import type { PostApiStatsQuestionStatistics200DataItem } from './postApiStatsQuestionStatistics200DataItem'
+import type { PostApiStatsQuestionStatistics200Summary } from './postApiStatsQuestionStatistics200Summary'
 
 export type PostApiStatsQuestionStatistics200 = {
-    totalQuestions: number
-    byQuestionBank: PostApiStatsQuestionStatistics200ByQuestionBankItem[]
-    bySubjectVersion: PostApiStatsQuestionStatistics200BySubjectVersionItem[]
-    byDifficulty: PostApiStatsQuestionStatistics200ByDifficultyItem[]
-    byKnowledgeBlock: PostApiStatsQuestionStatistics200ByKnowledgeBlockItem[]
+    summary: PostApiStatsQuestionStatistics200Summary
+    count: number
+    preview?: boolean
+    data: PostApiStatsQuestionStatistics200DataItem[]
 }

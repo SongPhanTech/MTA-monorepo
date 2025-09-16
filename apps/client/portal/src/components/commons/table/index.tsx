@@ -680,7 +680,7 @@ const Table = <T extends Record<string, unknown>>({
             id={id}
             rowKey={rowKey}
             size="small"
-            className="mt-4 custom-scrollbar"
+            className="mt-4"
             rowSelection={rowSelection}
             columns={
                 columns.map((column) => ({
@@ -689,7 +689,6 @@ const Table = <T extends Record<string, unknown>>({
                     ...genFilter(column as ColumnTypeProps),
                 })) as ColumnsType<T>
             }
-            // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
             scroll={{ x: '100%', y: scrollable ? maxHeight : undefined }}
             bordered
             dataSource={data}
@@ -711,7 +710,9 @@ const Table = <T extends Record<string, unknown>>({
                       }
                     : false
             }
-            expandable={expandable}
+            expandable={{
+                ...expandable,
+            }}
             onRow={(record) => ({
                 onClick: () => {
                     if (onRowClick) {

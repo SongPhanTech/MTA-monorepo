@@ -8,5 +8,6 @@
 export type GetClassesInfoParams = {
     sessionId: string
     curriculumVersionId: string
-    byCurriculum?: boolean
+    byCurriculum?: string
+    isRegistered?: string
 }

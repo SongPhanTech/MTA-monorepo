@@ -5,6 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
+import type { PostApiStatsExamParticipantsBySemester200DataItem } from './postApiStatsExamParticipantsBySemester200DataItem'
+import type { PostApiStatsExamParticipantsBySemester200Summary } from './postApiStatsExamParticipantsBySemester200Summary'
+
 export type PostApiStatsExamParticipantsBySemester200 = {
-    totalParticipants: number
+    summary: PostApiStatsExamParticipantsBySemester200Summary
+    count: number
+    preview?: boolean
+    data: PostApiStatsExamParticipantsBySemester200DataItem[]
 }

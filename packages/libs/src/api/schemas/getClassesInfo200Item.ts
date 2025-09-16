@@ -23,7 +23,7 @@ export type GetClassesInfo200Item = {
     updatedAt?: string | null
     name: string
     examType: GetClassesInfo200ItemExamType
-    type?: GetClassesInfo200ItemType
+    type: GetClassesInfo200ItemType
     credit: number
     /** @nullable */
     week?: number | null

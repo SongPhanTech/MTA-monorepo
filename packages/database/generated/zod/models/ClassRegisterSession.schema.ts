@@ -17,12 +17,12 @@ const baseSchema = z.object({
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date(),
+    maxCredit: z.number().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
     semester: z.record(z.unknown()),
     trainingCourses: z.array(z.unknown()).optional(),
-    classRegisterLogs: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -63,7 +63,8 @@ export const ClassRegisterSessionPrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     startDate: z.coerce.date(),
-    endDate: z.coerce.date()
+    endDate: z.coerce.date(),
+    maxCredit: z.union([z.number().nullish(), z.record(z.unknown())])
 }).partial().passthrough();
 
 
