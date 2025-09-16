@@ -127,7 +127,7 @@ const PromptQuestionAnswer = ({
                     ))}
             </div>
             {isEditing ? (
-                <FormItem name="prompt" required form={form}>
+                <FormItem name="prompt" form={form}>
                     <Input.TextArea
                         autoSize={{ minRows: 4, maxRows: 10 }}
                         onChange={(e) => setCurrentPrompt(e.target.value)}

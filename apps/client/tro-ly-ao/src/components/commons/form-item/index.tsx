@@ -16,7 +16,7 @@ const FormItem = <T extends Record<string, unknown>, K extends keyof T>({
                     ? [
                           {
                               required: true,
-                              message: `Vui lòng nhập ${rest.label?.toString()?.toLowerCase()}`,
+                              message: `Vui lòng nhập ${rest.label ? rest.label.toString().toLowerCase() : 'thông tin'}`,
                           },
                       ]
                     : []
