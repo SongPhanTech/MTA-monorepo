@@ -23,6 +23,7 @@ export default function Page() {
     const [messages, setMessages] = useState<{ id: number; role: string; content: string }[]>([])
     const [loading, setLoading] = useState(false)
     const [abortController, setAbortController] = useState<AbortController | null>(null)
+    const [hasAutoSent, setHasAutoSent] = useState(false)
 
     const { mutateAsync: updateConversation } = useUpdateConversation()
 
@@ -55,25 +56,28 @@ export default function Page() {
         await sendMessage(currentInput, userMessage.id)
     }
 
-    const sendMessage = async (text: string, userMessageId: number) => {
+    const sendMessage = async (text: string, userMessageId: number, skipUserMessage = false) => {
         setLoading(true)
         const controller = new AbortController()
         setAbortController(controller)
 
         try {
-            await updateConversation({
-                where: { id: id as string },
-                data: {
-                    message: {
-                        create: [
-                            {
-                                content: text,
-                                sender: MessageSender.USER,
-                            },
-                        ],
+            // Chỉ tạo USER message nếu chưa có (khi user gửi từ input)
+            if (!skipUserMessage) {
+                await updateConversation({
+                    where: { id: id as string },
+                    data: {
+                        message: {
+                            create: [
+                                {
+                                    content: text,
+                                    sender: MessageSender.USER,
+                                },
+                            ],
+                        },
                     },
-                },
-            })
+                })
+            }
 
             const response = await (isFaqMode ? fetchHoiDapFaq : fetchHoiDap)({
                 prompt: text,
@@ -101,6 +105,7 @@ export default function Page() {
                 botReply = await response.text()
             }
 
+            // Hiển thị response trên UI ngay
             setMessages((prev) => [
                 ...prev,
                 {
@@ -141,6 +146,23 @@ export default function Page() {
             setMessages(mappedMessages)
         }
     }, [messageList])
+
+    // Tự động gọi API khi conversation mới chỉ có 1 message từ user (chỉ 1 lần)
+    useEffect(() => {
+        if (
+            messageList &&
+            messageList.length === 1 &&
+            messageList[0].sender === 'USER' &&
+            id &&
+            !loading &&
+            !hasAutoSent &&
+            conversationCurrent // conversationCurrent đã load
+        ) {
+            const userMessage = messageList[0]
+            setHasAutoSent(true)
+            sendMessage(userMessage.content || '', Date.now(), true) // skipUserMessage = true
+        }
+    }, [messageList, id, hasAutoSent, conversationCurrent, loading, sendMessage])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -236,13 +258,6 @@ export default function Page() {
                     </div>
                 )}
 
-                {/* <ChatInput
-                    input={input}
-                    loading={loading}
-                    onInputChange={setInput}
-                    onSend={handleSend}
-                    onStop={handleStop}
-                /> */}
                 <ChatInput
                     input={input}
                     loading={loading}
