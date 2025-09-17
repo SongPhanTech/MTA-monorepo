@@ -101,19 +101,61 @@ export default function Page() {
                     return
                 }
                 botReply = json?.success_detail || 'Không có phản hồi'
-            } else {
-                botReply = await response.text()
-            }
 
-            // Hiển thị response trên UI ngay
-            setMessages((prev) => [
-                ...prev,
-                {
-                    id: Date.now(),
-                    role: 'BOT',
-                    content: botReply,
-                },
-            ])
+                // Hiển thị response với chức năng FAQ
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        id: Date.now(),
+                        role: 'BOT',
+                        content: botReply,
+                    },
+                ])
+            } else {
+                // Tạo message BOT trống trước
+                const botMessageId = Date.now()
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        id: botMessageId,
+                        role: 'BOT',
+                        content: '',
+                    },
+                ])
+
+                // lấy từ steam và cập nhật
+                const reader = response.body?.getReader()
+                const decoder = new TextDecoder()
+
+                if (reader) {
+                    let accumulatedText = ''
+
+                    while (true) {
+                        const { done, value } = await reader.read()
+                        if (done) break
+
+                        const chunk = decoder.decode(value, { stream: true })
+                        accumulatedText += chunk
+
+                        // Cập nhật toàn bộ message của BOT
+                        setMessages((prev) =>
+                            prev.map((msg) =>
+                                msg.id === botMessageId ? { ...msg, content: accumulatedText } : msg
+                            )
+                        )
+                    }
+
+                    botReply = accumulatedText
+                } else {
+                    // Fallback nếu không có stream
+                    botReply = await response.text()
+                    setMessages((prev) =>
+                        prev.map((msg) =>
+                            msg.id === botMessageId ? { ...msg, content: botReply } : msg
+                        )
+                    )
+                }
+            }
 
             setTimeout(() => setLoading(false), 0)
         } catch (err) {
