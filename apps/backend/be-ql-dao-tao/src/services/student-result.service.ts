@@ -35,6 +35,8 @@ const checkStudentSemesterResult = async (
             where: {
                 semesterId,
                 studentId,
+                deletedAt: null,
+                active: true,
             },
         })
         return result
@@ -94,6 +96,8 @@ const ThongTinTichLuy = async (
         const hocKyBatDau = await prisma.trainingCourse.findFirst({
             where: {
                 id: trainingCourseId,
+                deletedAt: null,
+                active: true,
             },
             select: {
                 semesterStartId: true,
@@ -107,7 +111,11 @@ const ThongTinTichLuy = async (
 
         // Đếm xem giữa học kỳ bắt đầu và học kỳ đầu vào (semesterId) có bao nhiêu học kỳ
         const startSemester = await prisma.semester.findUnique({
-            where: { id: hocKyBatDau?.semesterStartId },
+            where: {
+                id: hocKyBatDau?.semesterStartId,
+                deletedAt: null,
+                active: true,
+            },
             select: { id: true, startDate: true, semesterType: true },
         })
 
@@ -125,6 +133,8 @@ const ThongTinTichLuy = async (
                     lte: semesterStartDate,
                 },
                 semesterType: { in: [SemesterType.FIRST, SemesterType.SECOND] }, // Chỉ lấy học kỳ chính
+                deletedAt: null,
+                active: true,
             },
             select: {
                 id: true,
@@ -148,6 +158,8 @@ const ThongTinTichLuy = async (
                 trainingBlockOnCurriculumVersion: {
                     curriculumVersionId,
                 },
+                deletedAt: null,
+                active: true,
             },
             select: {
                 subjectId: true,
@@ -168,6 +180,8 @@ const ThongTinTichLuy = async (
                     // Chỉ lấy các môn trong chương trình đào tạo
                     in: DsCacMonTrongCTDT.map((item) => item.subjectId),
                 },
+                deletedAt: null,
+                active: true,
             },
             select: {
                 subjectVersionId: true,
@@ -213,6 +227,8 @@ const ThongTinTichLuy = async (
         const DsDiemChuyenDoi = await prisma.scoreConvert.findMany({
             where: {
                 trainingCourseId,
+                deletedAt: null,
+                active: true,
             },
             select: {
                 trainingCourseId: true,
@@ -286,6 +302,8 @@ const ThongTinTichLuy = async (
         const phienBanCTDT = await prisma.student.findFirst({
             where: {
                 id: studentId,
+                deletedAt: null,
+                active: true,
             },
             select: {
                 curriculumVersionId: true, // Lấy phiên bản chương trình đào tạo
@@ -305,6 +323,8 @@ const ThongTinTichLuy = async (
                         useForFinalScore: true, // Chỉ lấy các môn có tính điểm
                     },
                 },
+                deletedAt: null,
+                active: true,
             },
             select: {
                 subjects: {
@@ -472,6 +492,8 @@ const ThongTinDiemHocKy = async (
                 trainingBlockOnCurriculumVersion: {
                     curriculumVersionId,
                 },
+                deletedAt: null,
+                active: true,
             },
             select: {
                 subjectId: true,
@@ -485,6 +507,8 @@ const ThongTinDiemHocKy = async (
                     // Chỉ lấy các môn trong chương trình đào tạo
                     in: DsCacMonTrongCTDT.map((item) => item.subjectId),
                 },
+                deletedAt: null,
+                active: true,
             },
             select: {
                 id: true,
@@ -512,7 +536,11 @@ const ThongTinDiemHocKy = async (
 
         // Danh sách chuyển đổi
         const DsDiemChuyenDoi = await prisma.scoreConvert.findMany({
-            where: { trainingCourseId },
+            where: {
+                trainingCourseId,
+                deletedAt: null,
+                active: true,
+            },
             select: {
                 trainingCourseId: true,
                 letter: true,
@@ -622,7 +650,11 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
     try {
         // Thông tin học kỳ
         const hocKyDauVao = await prisma.semester.findUnique({
-            where: { id: semesterId },
+            where: {
+                id: semesterId,
+                deletedAt: null,
+                active: true,
+            },
             select: {
                 id: true,
                 name: true,
@@ -638,6 +670,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 // fixedClassId: 'K25_CĐT',
                 // id: {endsWith: '4'}
                 // id: "cmcvrfn5k0002okmgkp2k2cwp"
+                deletedAt: null,
+                active: true,
             },
             include: {
                 fixedClass: {
@@ -722,6 +756,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 where: {
                     studentId: student.id,
                     trainingScoreSession: { semesterId },
+                    deletedAt: null,
+                    active: true,
                 },
                 orderBy: { createdAt: 'desc' },
             })
@@ -847,6 +883,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 await prisma.studentSemesterResult.update({
                     where: {
                         id: existingResult.id,
+                        deletedAt: null,
+                        active: true,
                     },
                     data: updatedResult,
                 })
@@ -877,6 +915,8 @@ export const listStudentResultInfo = async (semesterId: string) => {
                         not: null, // Chỉ lấy sinh viên có lớp học cố định
                     },
                 },
+                deletedAt: null,
+                active: true,
             },
             include: {
                 student: {
@@ -914,6 +954,8 @@ export const listStudentResultInfo = async (semesterId: string) => {
                 trainingCourseId: {
                     in: listTrainingCourseId,
                 },
+                deletedAt: null,
+                active: true,
             },
             select: {
                 trainingCourseId: true,
@@ -1349,6 +1391,8 @@ const checkScholarshipRecived = async (
         where: {
             studentId: student.id,
             semesterId: semesterId,
+            deletedAt: null,
+            active: true,
         },
     })
     return semesterScholarship.filter((scholarship) =>
@@ -1673,7 +1717,11 @@ const getStudentResult = async (
             id: studentSemesterResult.studentId,
             studentSemesterResult: filteredResult,
             userProfile: await prisma.userProfile.findUnique({
-                where: { id: studentSemesterResult.student.userProfileId },
+                where: {
+                    id: studentSemesterResult.student.userProfileId,
+                    deletedAt: null,
+                    active: true,
+                },
             }),
             hasScholarship: !!scholarshipInfo.length,
             hasAcademicAction: !!academicActionInfo.length,
@@ -1748,7 +1796,8 @@ export const resultCourseStudentResult = async (
     const semesterScholarship = await prisma.scholarship.findMany({
         where: {
             trainingCourseId: { in: Array.from(courseIds) }, // Lấy học bổng theo khóa học
-            active: true, // Chỉ lấy học bổng đang hoạt động
+            deletedAt: null,
+            active: true,
         },
         orderBy: {
             rankOrder: 'asc', // Sắp xếp theo thứ tự ưu tiên
@@ -1757,6 +1806,7 @@ export const resultCourseStudentResult = async (
     const scholarshipCriteriaList = await prisma.scholarshipCriteria.findMany({
         where: {
             scholarshipId: { in: semesterScholarship.map((s) => s.id) },
+            deletedAt: null,
             active: true,
         },
         orderBy: {
@@ -1770,6 +1820,8 @@ export const resultCourseStudentResult = async (
     const warningCriteriaList = await prisma.academicWarningRule.findMany({
         where: {
             trainingCourseId: { in: Array.from(courseIds) },
+            deletedAt: null,
+            active: true,
         },
     })
 
@@ -1778,17 +1830,22 @@ export const resultCourseStudentResult = async (
         where: {
             trainingCourseId: { in: Array.from(courseIds) },
             actionType: academicActionType || undefined, // Chỉ lấy theo loại hành động học vụ nếu có
+            deletedAt: null,
             active: true,
         },
     })
     const actionRuleSet = await prisma.academicActionRuleSet.findMany({
         where: {
             configId: { in: academicActionConfig.map((c) => c.id) },
+            deletedAt: null,
+            active: true,
         },
     })
     const actionCriteriaList = await prisma.academicActionCondition.findMany({
         where: {
             ruleSetId: { in: actionRuleSet.map((r) => r.id) },
+            deletedAt: null,
+            active: true,
         },
         include: {
             ruleSet: {
@@ -1807,6 +1864,8 @@ export const resultCourseStudentResult = async (
             semesterId: semesterId,
             status: { not: DecisionStatus.APPROVED },
             actionTaken: academicActionType ? academicActionType : undefined,
+            deletedAt: null,
+            active: true,
         },
     })
     // Process students in parallel
