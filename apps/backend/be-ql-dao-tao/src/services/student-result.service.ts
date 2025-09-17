@@ -870,7 +870,7 @@ export const listStudentResultInfo = async (semesterId: string) => {
         const DsHocVien = await prisma.studentSemesterResult.findMany({
             where: {
                 semesterId,
-                // studentId: { endsWith: 'K6_2' },
+                // studentId: 'cmff4ikj90085nx015zo24hue',
                 student: {
                     status: StudentStatus.ENROLLED, // Chỉ lấy sinh viên đang học
                     fixedClassId: {
@@ -1361,7 +1361,10 @@ const checkScholarship = async (
     scholarshipCriteria: ScholarshipCriteria[]
 ): Promise<boolean> => {
     try {
-        const isEligible = scholarshipCriteria.every((criteria) => {
+        const listCriteria = scholarshipCriteria.filter(
+            (criteria) => criteria.scholarshipId === scholarshipId
+        )
+        const isEligible = listCriteria.every((criteria) => {
             switch (criteria.field) {
                 case CriteriaField.SEMESTER_PASSED_CREDITS: // Tổng số tín chỉ học tập trong học kỳ
                     console.log(
@@ -1450,6 +1453,18 @@ const checkScholarship = async (
                         criteria.value,
                         criteria.operator
                     )
+                    console.log(
+                        checkEligible(
+                            student,
+                            CriteriaField.SEMESTER_GPA,
+                            student.heSoDiem === 10
+                                ? student.diemTrungBinh10
+                                : student.diemTrungBinh4,
+                            criteria.value,
+                            criteria.operator,
+                            criteria.invert
+                        )
+                    )
                     return checkEligible(
                         student,
                         CriteriaField.SEMESTER_GPA,
@@ -1519,6 +1534,7 @@ const getScholarship = async (
     // Lấy danh sách học bổng của sinh viên
     const scholarships: Scholarship[] = []
     for (const scholarship of semesterScholarshipFilter) {
+        console.log('Checking scholarship:', scholarship.id, scholarship.name)
         const isEligible = await checkScholarship(
             student,
             scholarship.id,
@@ -1528,6 +1544,7 @@ const getScholarship = async (
             scholarships.push(scholarship)
         }
     }
+    console.log('Eligible scholarships for student', student.id, scholarships)
     return scholarships
 }
 
@@ -1822,6 +1839,10 @@ export const resultCourseStudentResult = async (
                 return
             }
             // Filter based on type
+            console.log(
+                `Student ${student.id} - hasScholarship: ${studentResult.hasScholarship}, hasAcademicWarning: ${studentResult.hasAcademicWarning}, hasAcademicAction: ${studentResult.hasAcademicAction}, decreaseAcademicWarning: ${studentResult.decreaseAcademicWarning}`
+            )
+            // bỏ qua nếu không đủ điều kiện
             const skip =
                 (type === 'scholarship' && !studentResult.hasScholarship) ||
                 (type === 'academicWarning' && !studentResult.hasAcademicWarning) ||
@@ -1845,5 +1866,6 @@ export const resultCourseStudentResult = async (
         }
     }
     const result = sortStudentResultInfo(Object.values(courseMap))
+    console.log(`Found ${result.length} courses with students for semester ${semesterId}`)
     return result.map((course) => CourseStudentResult.parse(course))
 }
