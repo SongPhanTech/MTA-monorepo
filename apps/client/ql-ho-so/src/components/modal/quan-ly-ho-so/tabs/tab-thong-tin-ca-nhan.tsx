@@ -10,8 +10,9 @@ import {
     useFindManyUserProfile,
     useFindUniqueUserProfile,
 } from '@workspace/db/hooks'
-import { Col, Collapse, Form, Input, Row, TreeSelect } from 'antd'
+import { Col, Collapse, Form, Input, Row } from 'antd'
 import { useCallback, useEffect, useMemo } from 'react'
+import TreeSelect from '@/components/commons/tree-select'
 import type { PutModalType } from '../type'
 
 const { Panel } = Collapse
@@ -219,11 +220,6 @@ export default function ThongTinCaNhanTab({
                                 placeholder="Chọn đơn vị quản lý"
                                 treeDefaultExpandAll
                                 treeData={treeData}
-                                filterTreeNode={(input, node) =>
-                                    (node?.label as string)
-                                        ?.toLowerCase()
-                                        ?.includes(input?.toLowerCase())
-                                }
                             />
                         </FormItem>
                     </Col>

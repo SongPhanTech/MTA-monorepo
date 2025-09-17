@@ -11,7 +11,7 @@ import {
     useFindManySubjectVersion,
     useFindManyTrainingLocation,
 } from '@workspace/db/hooks'
-import { Button, Col, DatePicker, Flex, Form, InputNumber, message, TreeSelect } from 'antd'
+import { Button, Col, DatePicker, Flex, Form, InputNumber, message } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import { useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -19,6 +19,7 @@ import 'dayjs/locale/vi'
 import Table from '@components/commons/table'
 import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
+import TreeSelect from '@/components/commons/tree-select'
 
 dayjs.locale('vi')
 
@@ -227,9 +228,6 @@ const PutOpenSubjectClassModal = () => {
                         treeDefaultExpandAll
                         treeData={treeData}
                         className="w-full"
-                        filterTreeNode={(input, node) =>
-                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
-                        }
                     />
                 </FormItem>
             </Col>

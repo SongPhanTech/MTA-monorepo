@@ -11,7 +11,7 @@ import {
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Radio, TreeSelect } from 'antd'
+import { Col, Form, Input, InputNumber, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -19,6 +19,7 @@ import 'dayjs/locale/vi'
 import DocumentPaths from '@components/commons/documentPaths'
 import Tabs from '@components/commons/tabar'
 import { useExamTypeOptions } from '@hooks/examType'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutSubjectVersion = SubjectVersion & {
     documentFiles?: DocumentFile[]
 }
@@ -312,9 +313,6 @@ const PutVersionSubjectModal = () => {
                         placeholder="Chọn môn học tiên quyết"
                         style={{ width: '100%' }}
                         allowClear
-                        filterTreeNode={(input, node) =>
-                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
-                        }
                     />
                 </Form.Item>
             </Col>
@@ -329,9 +327,6 @@ const PutVersionSubjectModal = () => {
                         placeholder="Chọn môn học song hành"
                         style={{ width: '100%' }}
                         allowClear
-                        filterTreeNode={(input, node) =>
-                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
-                        }
                     />
                 </Form.Item>
             </Col>

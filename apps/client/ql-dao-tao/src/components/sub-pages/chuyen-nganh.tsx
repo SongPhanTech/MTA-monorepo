@@ -13,12 +13,12 @@ import {
     useFindManyTrainingCourse,
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, Input, message, Row, Tag, TreeSelect } from 'antd'
+import { Checkbox, Col, Form, Input, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
+import TreeSelect from '@/components/commons/tree-select'
 export default function MajorInforList({ infor }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -158,11 +158,6 @@ export default function MajorInforList({ infor }: any) {
                                         handleFilterChange('managementOrganizationId', val)
                                     }
                                     treeData={treeData}
-                                    filterTreeNode={(input, node) =>
-                                        (node?.label as string)
-                                            ?.toLowerCase()
-                                            ?.includes(input?.toLowerCase())
-                                    }
                                 />
                             </Form.Item>
                         </Col>

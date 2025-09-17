@@ -33,14 +33,14 @@ import {
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Input, message, Row, Select, Tag, Tooltip, TreeSelect } from 'antd'
+import { Button, Col, Flex, Input, message, Row, Select, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
+import TreeSelect from '@/components/commons/tree-select'
 export default function TrainingProgramCatalog() {
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
@@ -361,11 +361,6 @@ export default function TrainingProgramCatalog() {
                                             })
                                         }
                                         treeData={treeData}
-                                        filterTreeNode={(input, node) =>
-                                            (node?.label as string)
-                                                ?.toLowerCase()
-                                                ?.includes(input?.toLowerCase())
-                                        }
                                         maxTagCount={'responsive'}
                                         className="w-full"
                                     />

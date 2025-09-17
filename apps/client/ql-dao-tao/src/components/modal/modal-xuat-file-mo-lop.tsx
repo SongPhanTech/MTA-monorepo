@@ -1,5 +1,5 @@
 import useSpinner from '@hooks/spinner'
-import { Col, Form, message, TreeSelect } from 'antd'
+import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -11,6 +11,7 @@ import { useFindManyDM_DonVi } from '@workspace/db/hooks'
 import { exportPhanCongGiangDay } from '@workspace/libs/api/training'
 import { saveAs } from 'file-saver'
 import { useEffect } from 'react'
+import TreeSelect from '@/components/commons/tree-select'
 
 dayjs.locale('vi')
 
@@ -96,9 +97,6 @@ const ModalExportFileSubjectClass = () => {
                         showSearch
                         treeDefaultExpandAll
                         treeData={treeData}
-                        filterTreeNode={(input, node) =>
-                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
-                        }
                     />
                 </FormItem>
             </Col>

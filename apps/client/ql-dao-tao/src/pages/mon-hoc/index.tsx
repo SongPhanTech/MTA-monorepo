@@ -11,10 +11,11 @@ import {
     useFindManySubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Button, Col, Divider, Flex, Form, Input, message, Row, TreeSelect } from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import TreeSelect from '@/components/commons/tree-select'
 export default function SubjectVersionPage({ subjectInfo }: any) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -154,11 +155,6 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                                     placeholder="Chọn đơn vị quản lý"
                                     treeDefaultExpandAll
                                     treeData={treeData}
-                                    filterTreeNode={(input, node) =>
-                                        (node?.label as string)
-                                            ?.toLowerCase()
-                                            ?.includes(input?.toLowerCase())
-                                    }
                                     onChange={(val) =>
                                         handleFilterChange('managementOrganizationId', val)
                                     }

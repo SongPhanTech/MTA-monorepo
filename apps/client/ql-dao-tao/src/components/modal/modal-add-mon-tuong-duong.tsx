@@ -8,11 +8,12 @@ import {
     useFindManySubject,
     useFindUniqueSubjectVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, message, TreeSelect } from 'antd'
+import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import type { DataNode } from 'antd/es/tree'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutMonHocTuongDuongFormType = SubjectInGroup
 dayjs.locale('vi')
 const PutMonHocTuongDuong = () => {
@@ -101,7 +102,7 @@ const PutMonHocTuongDuong = () => {
                 .map((sv) => ({
                     key: sv.id,
                     value: sv.id,
-                    title: [sv.code, sv.name].filter(Boolean).join(' - '),
+                    label: [sv.code, sv.name].filter(Boolean).join(' - '),
                 }))
 
             if (children.length === 0) return null
@@ -109,7 +110,7 @@ const PutMonHocTuongDuong = () => {
             return {
                 key: subject.id,
                 value: subject.id,
-                title: [subject.code, subject.name].filter(Boolean).join(' - '),
+                label: [subject.code, subject.name].filter(Boolean).join(' - '),
                 selectable: false,
                 children,
             } as DataNode

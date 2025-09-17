@@ -5,9 +5,10 @@ import useQuyenCoBan from '@hooks/quyen-co-ban'
 import { PERMISSION_TYPE } from '@workspace/constant'
 import type { $Enums } from '@workspace/db'
 import { useFindManyGroup, useFindUniqueRole } from '@workspace/db/hooks'
-import { Card, Checkbox, type CheckboxProps, Col, Divider, Form, Input, TreeSelect } from 'antd'
+import { Card, Checkbox, type CheckboxProps, Col, Divider, Form, Input } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutVaiTroFormType = {
     id?: string
     name: string

@@ -9,13 +9,14 @@ import {
     useFindUniqueSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Radio, TreeSelect } from 'antd'
+import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import useTrimText from '@hooks/trimText'
 import { buildOrgTree } from '@lib/utils'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutSubject = Subject
 dayjs.locale('vi')
 const PutSubjectListModal = () => {
@@ -117,15 +118,6 @@ const PutSubjectListModal = () => {
                         style={{ width: '100%' }}
                         allowClear
                         treeDefaultExpandAll
-                        filterTreeNode={(input, node) => {
-                            const isLeaf = !node.children
-                            return (
-                                isLeaf &&
-                                (node?.label as string)
-                                    ?.toLowerCase()
-                                    ?.includes(input?.toLowerCase())
-                            )
-                        }}
                     />
                 </Form.Item>
             </Col>
