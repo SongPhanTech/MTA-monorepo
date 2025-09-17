@@ -1,4 +1,4 @@
-import { CopyOutlined, RobotOutlined, UserOutlined } from '@ant-design/icons'
+import { CopyOutlined } from '@ant-design/icons'
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
 import { MessageSender } from '@workspace/db'
@@ -7,7 +7,7 @@ import {
     useFindUniqueConversation,
     useUpdateConversation,
 } from '@workspace/db/hooks'
-import { Avatar, Button, List, message } from 'antd'
+import { Button, List, message } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
@@ -223,7 +223,12 @@ export default function Page() {
                         </div>
                     ) : (
                         <List
-                            dataSource={messages}
+                            dataSource={
+                                loading &&
+                                !messages.some((m) => m.role === 'BOT' && m.content === '')
+                                    ? [...messages, { id: -1, role: 'BOT', content: 'loading' }]
+                                    : messages
+                            }
                             renderItem={(msg) => (
                                 <List.Item
                                     key={msg.id}
@@ -234,71 +239,66 @@ export default function Page() {
                                         padding: '8px 0',
                                     }}
                                 >
-                                    <div
-                                        className={`flex items-end gap-2 ${msg.role === 'USER' ? 'flex-row-reverse' : ''}`}
-                                    >
-                                        <Avatar
-                                            icon={
-                                                msg.role === 'USER' ? (
-                                                    <UserOutlined />
-                                                ) : (
-                                                    <RobotOutlined />
-                                                )
-                                            }
-                                            style={{
-                                                backgroundColor: '#028850',
-                                            }}
-                                        />
-                                        <div
-                                            className={`px-4 py-2 rounded-xl max-w-[80%] break-words ${
-                                                msg.role === 'USER'
-                                                    ? 'bg-[#BEDACE] text-black rounded-br-none'
-                                                    : 'bg-[#D5DAE7] text-black rounded-bl-none'
-                                            }`}
-                                        >
-                                            <div className="relative group">
-                                                {msg.role === 'USER' ? (
-                                                    <div
-                                                        style={{
-                                                            whiteSpace: 'pre-wrap',
-                                                        }}
-                                                        className="font-normal"
-                                                    >
-                                                        {msg.content}
-                                                    </div>
-                                                ) : (
-                                                    <ReactMarkdown>{msg.content}</ReactMarkdown>
-                                                )}
-                                                <Button
-                                                    size="small"
-                                                    icon={<CopyOutlined />}
-                                                    className={`absolute bottom-0 ${
-                                                        msg.role === 'USER' ? 'right-0' : 'left-0'
-                                                    } opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-primary text-white`}
-                                                    onClick={() => {
-                                                        navigator.clipboard.writeText(msg.content)
-                                                        message.success('Đã sao chép nội dung!')
-                                                    }}
-                                                    type="text"
-                                                />
+                                    {msg.content === 'loading' ? (
+                                        <div className="flex justify-start">
+                                            <div className="flex items-center space-x-1 px-4 py-3 bg-[#D5DAE7] text-black rounded-2xl rounded-bl-md shadow-sm max-w-[95%]">
+                                                <div className="w-2 h-2 bg-primary rounded-full animate-bounce flex-shrink-0 [animation-delay:0s]" />
+                                                <div className="w-2 h-2 bg-primary rounded-full animate-bounce flex-shrink-0 [animation-delay:0.2s]" />
+                                                <div className="w-2 h-2 bg-primary rounded-full animate-bounce flex-shrink-0 [animation-delay:0.4s]" />
                                             </div>
                                         </div>
-                                    </div>
+                                    ) : (
+                                        <div
+                                            className={`flex ${msg.role === 'USER' ? 'justify-end' : 'justify-start'}`}
+                                        >
+                                            <div
+                                                className={`px-4 py-3 rounded-2xl max-w-[75%] break-words shadow-sm ${
+                                                    msg.role === 'USER'
+                                                        ? 'bg-[#BEDACE] text-black rounded-br-md'
+                                                        : 'bg-[#D5DAE7] text-black rounded-bl-md'
+                                                }`}
+                                            >
+                                                <div className="relative group">
+                                                    {msg.role === 'USER' ? (
+                                                        <div
+                                                            style={{
+                                                                whiteSpace: 'pre-wrap',
+                                                            }}
+                                                            className="font-normal"
+                                                        >
+                                                            {msg.content}
+                                                        </div>
+                                                    ) : (
+                                                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                                    )}
+                                                    <Button
+                                                        size="small"
+                                                        icon={<CopyOutlined />}
+                                                        className={`absolute -bottom-1 ${
+                                                            msg.role === 'USER'
+                                                                ? '-left-1'
+                                                                : '-right-1'
+                                                        } opacity-0 group-hover:opacity-100 transition-all duration-200 border-0 shadow-lg rounded-full w-8 h-8 flex items-center justify-center ${
+                                                            msg.role === 'USER'
+                                                                ? 'bg-white hover:bg-gray-50 text-primary'
+                                                                : 'bg-primary hover:bg-primary/90 text-white'
+                                                        }`}
+                                                        onClick={() => {
+                                                            navigator.clipboard.writeText(
+                                                                msg.content
+                                                            )
+                                                            message.success('Đã sao chép nội dung!')
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </List.Item>
                             )}
                         />
                     )}
                 </div>
-
-                {loading && (
-                    <div className="flex justify-center items-center py-4">
-                        <div className="flex items-center space-x-1 px-4 py-3 bg-[#D5DAE7] text-black rounded-2xl">
-                            <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0s]" />
-                            <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0.2s]" />
-                            <span className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0.4s]" />
-                        </div>
-                    </div>
-                )}
 
                 <ChatInput
                     input={input}

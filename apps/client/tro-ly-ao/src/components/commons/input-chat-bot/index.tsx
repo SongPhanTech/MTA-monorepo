@@ -62,13 +62,13 @@ export default function ChatInput({
             {/* Background mờ fade lên trên */}
             <div className="absolute left-0 right-0 bottom-full h-12 bg-gradient-to-t from-white/80 via-white/30 to-transparent pointer-events-none" />
 
-            <div className="w-full flex justify-center pb-6">
+            <div className="w-full flex justify-center pb-4">
                 <div className="w-full max-w-4xl px-4">
-                    <div className="rounded-2xl border border-gray-200/80 px-4 py-3 shadow-lg shadow-black/5 bg-white/90 backdrop-blur-sm flex flex-col gap-3 transition-all duration-200 hover:shadow-xl hover:shadow-black/10">
+                    <div className="rounded-2xl border border-gray-200/80 px-3 py-2 shadow-lg shadow-black/5 bg-white/90 backdrop-blur-sm flex flex-col gap-2 transition-all duration-200 hover:shadow-xl hover:shadow-black/10">
                         {/* Dòng trên: textarea */}
                         <textarea
                             ref={textareaRef}
-                            className={`py-2 px-3 outline-none border-none text-base bg-transparent resize-none min-h-[40px] w-full placeholder:text-gray-400 focus:placeholder:text-gray-300 transition-colors ${
+                            className={`py-1 px-3 outline-none border-none text-base bg-transparent resize-none min-h-[32px] w-full placeholder:text-gray-400 focus:placeholder:text-gray-300 transition-colors ${
                                 loading ? 'cursor-not-allowed opacity-60' : ''
                             }`}
                             placeholder="Hỏi bất kỳ điều gì..."
