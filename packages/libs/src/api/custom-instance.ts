@@ -76,7 +76,8 @@ export const customExamFetch = async <T>(url: string, options: RequestInit): Pro
 }
 
 export const customPortalFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
-    const requestUrl = getUrl('http://localhost:3002', url)
+    const requestUrl = getUrl('https://api.portal.mta.swantech.vn', url)
+    // const requestUrl = getUrl('http://localhost:3002', url)
 
     const response = await fetchInstance(requestUrl, options)
     const data = await getBody<T>(response)
