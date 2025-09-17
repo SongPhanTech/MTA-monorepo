@@ -1,4 +1,9 @@
-import { faker } from '@faker-js/faker'
+import { Faker, vi } from '@faker-js/faker'
+
+const faker = new Faker({
+    locale: [vi],
+})
+
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { $Enums, type AcademicActionType, Prisma } from '@workspace/db'
 import { HTTPException } from 'hono/http-exception'
@@ -10,6 +15,7 @@ const StatBaseSchema = z.object({
     summary: z.record(z.string(), z.any()),
     count: z.number(),
     preview: z.boolean().default(false),
+    labels: z.array(z.string()).optional(),
 })
 
 // Ban Giám đốc (BGĐ)
@@ -60,6 +66,7 @@ app.openapi(
                 count: 10,
                 summary: {},
                 preview: true,
+                labels: ['ID Hệ đào tạo', 'Tên hệ đào tạo', 'Số lượng'],
             })
         }
 
@@ -87,6 +94,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Hệ đào tạo', 'Tên hệ đào tạo', 'Số lượng'],
         })
     }
 )
@@ -150,6 +158,7 @@ app.openapi(
                 count: 3,
                 summary: {},
                 preview: true,
+                labels: ['ID Trình độ đào tạo', 'Tên trình độ đào tạo', 'Số lượng'],
             })
         }
 
@@ -177,6 +186,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Trình độ đào tạo', 'Tên trình độ đào tạo', 'Số lượng'],
         })
     }
 )
@@ -228,6 +238,7 @@ app.openapi(
                 count: 10,
                 summary: {},
                 preview: true,
+                labels: ['ID Khoá học', 'Tên khoá học', 'Số lượng'],
             })
         }
         const data = await prisma.$queryRaw<
@@ -254,6 +265,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Khoá học', 'Tên khoá học', 'Số lượng'],
         })
     }
 )
@@ -307,6 +319,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Khoá học', 'Tên khoá học', 'Điểm đầu vào'],
             })
         }
 
@@ -336,6 +349,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Khoá học', 'Tên khoá học', 'Điểm đầu vào'],
         })
     }
 )
@@ -388,6 +402,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Khoá học', 'Tên khoá học', 'GPA trung bình'],
             })
         }
         const data = await prisma.$queryRaw<
@@ -418,6 +433,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Khoá học', 'Tên khoá học', 'GPA trung bình'],
         })
     }
 )
@@ -470,6 +486,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Khoá học', 'Tên khoá học', 'Tỉ lệ tốt nghiệp'],
             })
         }
         const data = await prisma.$queryRaw<
@@ -496,6 +513,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Khoá học', 'Tên khoá học', 'Tỉ lệ tốt nghiệp'],
         })
     }
 )
@@ -559,6 +577,15 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: [
+                    'ID Năm học',
+                    'Tên năm học',
+                    'Xuất sắc',
+                    'Giỏi',
+                    'Khá',
+                    'Trung bình',
+                    'Yếu',
+                ],
             })
         }
         const data = await prisma.$queryRaw<
@@ -595,6 +622,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Năm học', 'Tên năm học', 'Xuất sắc', 'Giỏi', 'Khá', 'Trung bình', 'Yếu'],
         })
     }
 )
@@ -652,6 +680,7 @@ app.openapi(
                 count: 1,
                 summary: {},
                 preview: true,
+                labels: ['Tổng HV SV', 'Tổng GV', 'Tỉ lệ HV/GV', 'CTĐT hoạt động', 'Tỉ lệ CCHT'],
             })
         }
 
@@ -693,6 +722,7 @@ app.openapi(
             count: 1,
             summary: {},
             preview: false,
+            labels: ['Tổng HV SV', 'Tổng GV', 'Tỉ lệ HV/GV', 'CTĐT hoạt động', 'Tỉ lệ CCHT'],
         })
     }
 )
@@ -745,6 +775,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Tỉnh thành', 'Tên tỉnh thành', 'Số lượng'],
             })
         }
         const data = await prisma.$queryRaw<
@@ -773,6 +804,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Tỉnh thành', 'Tên tỉnh thành', 'Số lượng'],
         })
     }
 )
@@ -831,6 +863,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Hệ đào tạo', 'Tên hệ đào tạo', 'Số lượng'],
             })
         }
 
@@ -876,6 +909,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Hệ đào tạo', 'Tên hệ đào tạo', 'Số lượng'],
         })
     }
 )
@@ -944,6 +978,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Trình độ đào tạo', 'Tên trình độ đào tạo', 'Số lượng'],
             })
         }
 
@@ -989,6 +1024,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Trình độ đào tạo', 'Tên trình độ đào tạo', 'Số lượng'],
         })
     }
 )
@@ -1045,6 +1081,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Khoá học', 'Tên khoá học', 'Số lượng'],
             })
         }
 
@@ -1088,6 +1125,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Khoá học', 'Tên khoá học', 'Số lượng'],
         })
     }
 )
@@ -1144,6 +1182,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Khoá học', 'Tên khoá học', 'Điểm đầu vào'],
             })
         }
 
@@ -1189,6 +1228,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Khoá học', 'Tên khoá học', 'Điểm đầu vào'],
         })
     }
 )
@@ -1246,6 +1286,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Khoá học', 'Tên khoá học', 'GPA trung bình'],
             })
         }
 
@@ -1294,6 +1335,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Khoá học', 'Tên khoá học', 'GPA trung bình'],
         })
     }
 )
@@ -1350,6 +1392,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Khoá học', 'Tên khoá học', 'Tỉ lệ tốt nghiệp'],
             })
         }
 
@@ -1393,6 +1436,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Khoá học', 'Tên khoá học', 'Tỉ lệ tốt nghiệp'],
         })
     }
 )
@@ -1460,6 +1504,15 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: [
+                    'ID Năm học',
+                    'Tên năm học',
+                    'Xuất sắc',
+                    'Giỏi',
+                    'Khá',
+                    'Trung bình',
+                    'Yếu',
+                ],
             })
         }
 
@@ -1517,6 +1570,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Năm học', 'Tên năm học', 'Xuất sắc', 'Giỏi', 'Khá', 'Trung bình', 'Yếu'],
         })
     }
 )
@@ -1573,6 +1627,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Tỉnh thành', 'Tên tỉnh thành', 'Số lượng'],
             })
         }
 
@@ -1620,6 +1675,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Tỉnh thành', 'Tên tỉnh thành', 'Số lượng'],
         })
     }
 )
@@ -1679,6 +1735,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID', 'Tên', 'CCHT', 'TC trượt', 'GPA'],
             })
         }
 
@@ -1700,7 +1757,13 @@ app.openapi(
         }
 
         if (conditions.length === 0) {
-            return c.json({ data: [], count: 0, summary: {}, preview: false })
+            return c.json({
+                data: [],
+                count: 0,
+                summary: {},
+                preview: false,
+                labels: ['ID', 'Tên', 'CCHT', 'TC trượt', 'GPA'],
+            })
         }
 
         const where = Prisma.join(conditions, ' OR ')
@@ -1734,6 +1797,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID', 'Tên', 'CCHT', 'TC trượt', 'GPA'],
         })
     }
 )
@@ -1786,6 +1850,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Lớp', 'Tên lớp', 'GPA trung bình'],
             })
         }
         const data = await prisma.$queryRaw<
@@ -1806,6 +1871,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Lớp', 'Tên lớp', 'GPA trung bình'],
         })
     }
 )
@@ -1858,6 +1924,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Ngành', 'Tên ngành', 'GPA trung bình'],
             })
         }
         const data = await prisma.$queryRaw<
@@ -1879,6 +1946,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Ngành', 'Tên ngành', 'GPA trung bình'],
         })
     }
 )
@@ -1933,6 +2001,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Học phần', 'Tên học phần', 'Qua', 'Trượt'],
             })
         }
         const data = await prisma.$queryRaw<
@@ -1952,6 +2021,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Học phần', 'Tên học phần', 'Qua', 'Trượt'],
         })
     }
 )
@@ -2003,6 +2073,7 @@ app.openapi(
                 count: 1,
                 summary: {},
                 preview: true,
+                labels: ['CTĐT hoạt động', 'Phiên bản CTĐT hoạt động'],
             })
         }
         const result = await prisma.$queryRaw<
@@ -2019,6 +2090,7 @@ app.openapi(
             count: 1,
             summary: {},
             preview: false,
+            labels: ['CTĐT hoạt động', 'Phiên bản CTĐT hoạt động'],
         })
     }
 )
@@ -2057,6 +2129,7 @@ app.openapi(
                                             failureRate: z.number(),
                                         })
                                     ),
+                                    labels: z.array(z.string()),
                                 })
                             ),
                         }),
@@ -2079,6 +2152,7 @@ app.openapi(
                     {
                         totalClasses: classes.length,
                         classes,
+                        labels: ['ID', 'Tên', 'Tỉ lệ lấp', 'Tỉ lệ trượt'],
                     },
                 ],
                 count: 1,
@@ -2117,6 +2191,7 @@ app.openapi(
                 {
                     totalClasses: classes.length,
                     classes,
+                    labels: ['ID', 'Tên', 'Tỉ lệ lấp', 'Tỉ lệ trượt'],
                 },
             ],
             count: 1,
@@ -2176,6 +2251,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Giảng viên', 'Tên giảng viên', 'Số lớp', 'Số tiết'],
             })
         }
         const data = await prisma.$queryRaw<
@@ -2197,6 +2273,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Giảng viên', 'Tên giảng viên', 'Số lớp', 'Số tiết'],
         })
     }
 )
@@ -2249,6 +2326,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['Xếp loại', 'Số lượng'],
             })
         }
         const data = await prisma.$queryRaw<Array<{ ranking: string; count: number }>>`
@@ -2265,6 +2343,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['Xếp loại', 'Số lượng'],
         })
     }
 )
@@ -2319,6 +2398,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Sinh viên', 'Tên sinh viên', 'Hành động', 'Lý do'],
             })
         }
         const data = await prisma.$queryRaw<
@@ -2343,6 +2423,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Sinh viên', 'Tên sinh viên', 'Hành động', 'Lý do'],
         })
     }
 )
@@ -2394,6 +2475,7 @@ app.openapi(
                 count: 1,
                 summary: {},
                 preview: true,
+                labels: ['Số thí sinh'],
             })
         }
 
@@ -2410,6 +2492,7 @@ app.openapi(
             count: 1,
             summary: {},
             preview: false,
+            labels: ['Số thí sinh'],
         })
     }
 )
@@ -2468,6 +2551,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Học kỳ', 'Tên học kỳ', 'ID Học phần', 'Tên học phần', 'Điểm TB'],
             })
         }
         const data = await prisma.$queryRaw<
@@ -2497,6 +2581,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Học kỳ', 'Tên học kỳ', 'ID Học phần', 'Tên học phần', 'Điểm TB'],
         })
     }
 )
@@ -2554,6 +2639,10 @@ app.openapi(
                                             count: z.number(),
                                         })
                                     ),
+                                    byQuestionBankLabels: z.array(z.string()),
+                                    bySubjectVersionLabels: z.array(z.string()),
+                                    byDifficultyLabels: z.array(z.string()),
+                                    byKnowledgeBlockLabels: z.array(z.string()),
                                 })
                             ),
                         }),
@@ -2595,6 +2684,10 @@ app.openapi(
                         bySubjectVersion,
                         byDifficulty,
                         byKnowledgeBlock,
+                        byQuestionBankLabels: ['ID', 'Tên', 'Số lượng'],
+                        bySubjectVersionLabels: ['ID', 'Tên', 'Số lượng'],
+                        byDifficultyLabels: ['ID', 'Tên', 'Số lượng'],
+                        byKnowledgeBlockLabels: ['ID', 'Tên', 'Số lượng'],
                     },
                 ],
                 count: 1,
@@ -2649,6 +2742,10 @@ app.openapi(
                     bySubjectVersion,
                     byDifficulty,
                     byKnowledgeBlock,
+                    byQuestionBankLabels: ['ID', 'Tên', 'Số lượng'],
+                    bySubjectVersionLabels: ['ID', 'Tên', 'Số lượng'],
+                    byDifficultyLabels: ['ID', 'Tên', 'Số lượng'],
+                    byKnowledgeBlockLabels: ['ID', 'Tên', 'Số lượng'],
                 },
             ],
             count: 1,
@@ -2706,6 +2803,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Câu hỏi', 'Nội dung', 'Tỉ lệ sai'],
             })
         }
         const data = await prisma.$queryRaw<
@@ -2725,6 +2823,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Câu hỏi', 'Nội dung', 'Tỉ lệ sai'],
         })
     }
 )
@@ -2777,6 +2876,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['ID Câu hỏi', 'Nội dung', 'Lần sử dụng'],
             })
         }
         const data = await prisma.$queryRaw<
@@ -2796,6 +2896,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['ID Câu hỏi', 'Nội dung', 'Lần sử dụng'],
         })
     }
 )
@@ -2849,6 +2950,10 @@ app.openapi(
                                             count: z.number(),
                                         })
                                     ),
+                                    byGenderLabels: z.array(z.string()),
+                                    byEthnicityLabels: z.array(z.string()),
+                                    byReligionLabels: z.array(z.string()),
+                                    byProvinceLabels: z.array(z.string()),
                                 })
                             ),
                         }),
@@ -2886,6 +2991,10 @@ app.openapi(
                         byEthnicity,
                         byReligion,
                         byProvince,
+                        byGenderLabels: ['Tên', 'Số lượng'],
+                        byEthnicityLabels: ['ID', 'Tên', 'Số lượng'],
+                        byReligionLabels: ['ID', 'Tên', 'Số lượng'],
+                        byProvinceLabels: ['ID', 'Tên', 'Số lượng'],
                     },
                 ],
                 count: 1,
@@ -2938,6 +3047,10 @@ app.openapi(
                     byEthnicity,
                     byReligion,
                     byProvince,
+                    byGenderLabels: ['Tên', 'Số lượng'],
+                    byEthnicityLabels: ['ID', 'Tên', 'Số lượng'],
+                    byReligionLabels: ['ID', 'Tên', 'Số lượng'],
+                    byProvinceLabels: ['ID', 'Tên', 'Số lượng'],
                 },
             ],
             count: 1,
@@ -3001,6 +3114,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
+                labels: ['Năm', 'ID Ngành', 'Tên ngành', 'ID Khoá', 'Tên khoá', 'Số lượng'],
             })
         }
         const data = await prisma.$queryRaw<
@@ -3034,6 +3148,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
+            labels: ['Năm', 'ID Ngành', 'Tên ngành', 'ID Khoá', 'Tên khoá', 'Số lượng'],
         })
     }
 )
