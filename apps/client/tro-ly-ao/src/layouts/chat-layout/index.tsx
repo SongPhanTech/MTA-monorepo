@@ -13,6 +13,7 @@ import { Layout, message, Spin } from 'antd'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useState } from 'react'
+import { useUserSession } from '@/hooks/useUserSession'
 import type { ConversationDataFromAPI } from '@/navigations/sider-tro-ly-ao'
 import { generateMenusTroLyAo } from '@/navigations/sider-tro-ly-ao'
 
@@ -28,6 +29,7 @@ const ChatLayout = ({
     showSiderChat?: boolean
 }) => {
     const router = useRouter()
+    const { sessionId } = useUserSession()
     const [isDeleting, setIsDeleting] = useState(false)
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
@@ -70,7 +72,7 @@ const ChatLayout = ({
     const { data: conversation } = useFindManyConversation({
         where: {
             // userId: userCurrent?.sDM_NhanVienId || '',
-            sessionId: 'cmfjff3dr0000kpv4gahido0t',
+            sessionId: sessionId || '',
         },
         include: {
             message: true,

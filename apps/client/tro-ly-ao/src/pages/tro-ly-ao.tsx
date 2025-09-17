@@ -6,6 +6,7 @@ import { Card, message } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useRef, useState } from 'react'
+import { useUserSession } from '@/hooks/useUserSession'
 
 const SUGGESTED_QUESTIONS = [
     'Điều kiện tuyển sinh vào học viện là gì?',
@@ -18,6 +19,7 @@ const SUGGESTED_QUESTIONS = [
 
 export default function TroLyAo() {
     const router = useRouter()
+    const { ensureSession, isLoading: sessionLoading } = useUserSession()
 
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
@@ -31,12 +33,15 @@ export default function TroLyAo() {
         setLoading(true)
 
         try {
+            // Kiểm tra có sessionId trước khi tạo conversation
+            const currentSessionId = await ensureSession()
+
             // Calculate label from first message (user input)
             const label = input.trim()
 
             const res = await createConversation({
                 data: {
-                    sessionId: 'cmfjff3dr0000kpv4gahido0t',
+                    sessionId: currentSessionId,
                     message: {
                         create: [
                             {
@@ -74,12 +79,15 @@ export default function TroLyAo() {
         setLoading(true)
 
         try {
-            // Calculate label from the question
+            // Kiểm tra có sessionId trước khi tạo conversation
+            const currentSessionId = await ensureSession()
+
+            // Tạo label tự động
             const label = question.trim()
 
             const res = await createConversation({
                 data: {
-                    sessionId: 'cmfjff3dr0000kpv4gahido0t',
+                    sessionId: currentSessionId,
                     message: {
                         create: [
                             {
@@ -153,7 +161,7 @@ export default function TroLyAo() {
             <div className="pb-4">
                 <ChatInput
                     input={input}
-                    loading={loading}
+                    loading={loading || sessionLoading}
                     onInputChange={setInput}
                     onSend={handleSend}
                 />
