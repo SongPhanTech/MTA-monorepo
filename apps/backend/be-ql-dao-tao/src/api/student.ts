@@ -159,7 +159,7 @@ app.openapi(dsKetQuaHocKySinhVienJson, async (c) => {
     const { semesterId, type, academicActionType } = c.req.valid('query')
     const students = await listStudentResultInfo(semesterId)
     console.log(`Found ${students.length} students for semester ${semesterId}`)
-    console.log(`Students: ${JSON.stringify(students, null, 2)}`)
+    // console.log(`Students: ${JSON.stringify(students, null, 2)}`)
     if (!students || students.length === 0) {
         return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
     }
@@ -171,6 +171,7 @@ app.openapi(dsKetQuaHocKySinhVienJson, async (c) => {
     )
     return c.json(filteredStudents, 200)
 })
+
 app.openapi(tongKetHocKyHVSV, async (c) => {
     const { semesterId } = c.req.valid('query')
     // Validate semester existence
