@@ -5,12 +5,15 @@
  * OpenAPI spec version: 1.0.0
  */
 
+import type { _GetClassesInfo200ItemSubjectClassItemCount } from './_getClassesInfo200ItemSubjectClassItemCount'
 import type { GetClassesInfo200ItemSubjectClassItemClassSchedulesItem } from './getClassesInfo200ItemSubjectClassItemClassSchedulesItem'
 import type { GetClassesInfo200ItemSubjectClassItemExamType } from './getClassesInfo200ItemSubjectClassItemExamType'
+import type { GetClassesInfo200ItemSubjectClassItemExtraLecturer } from './getClassesInfo200ItemSubjectClassItemExtraLecturer'
 import type { GetClassesInfo200ItemSubjectClassItemMainLecturer } from './getClassesInfo200ItemSubjectClassItemMainLecturer'
 import type { GetClassesInfo200ItemSubjectClassItemPrerequisiteSubjectItem } from './getClassesInfo200ItemSubjectClassItemPrerequisiteSubjectItem'
 import type { GetClassesInfo200ItemSubjectClassItemRoom } from './getClassesInfo200ItemSubjectClassItemRoom'
 import type { GetClassesInfo200ItemSubjectClassItemSchedule } from './getClassesInfo200ItemSubjectClassItemSchedule'
+import type { GetClassesInfo200ItemSubjectClassItemType } from './getClassesInfo200ItemSubjectClassItemType'
 
 export type GetClassesInfo200ItemSubjectClassItem = {
     id: string
@@ -53,5 +56,10 @@ export type GetClassesInfo200ItemSubjectClassItem = {
     /** @nullable */
     mainLecturer?: GetClassesInfo200ItemSubjectClassItemMainLecturer
     /** @nullable */
+    extraLecturer?: GetClassesInfo200ItemSubjectClassItemExtraLecturer
+    /** @nullable */
     room?: GetClassesInfo200ItemSubjectClassItemRoom
+    credit?: number
+    _count: _GetClassesInfo200ItemSubjectClassItemCount
+    type?: GetClassesInfo200ItemSubjectClassItemType
 }

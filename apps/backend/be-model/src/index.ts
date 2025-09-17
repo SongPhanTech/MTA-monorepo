@@ -58,6 +58,7 @@ app.route('/api/auth', AuthApp)
 
 // TODO!: remove `/check`
 app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
+// setupAuth(app)
 
 // private route
 app.route('/api/minio', MinIOApp)

@@ -33,6 +33,7 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 | 403 Forbidden | Bạn không có quyền truy cập vào tài nguyên này |
 | 404 Not Found | Tài nguyên yêu cầu không tồn tại |
 | 422 Unprocessable Entity | Dữ liệu gửi đi không hợp lệ hoặc không đáp ứng yêu cầu của API |
+| 429 Too Many Request | Hệ thống chặn do quá nhiều request lên hệ thống |
 | 500 Internal Server Error | Lỗi máy chủ, vui lòng thử lại sau hoặc liên hệ QTHT |
                    
 ## Lưu ý quan trọng
@@ -73,4 +74,30 @@ export type Policy = BaseEntity & {
     bGioiHanTenMienEmail?: boolean | null
     /** @nullable */
     sTenMienEmail?: string | null
+    /** @nullable */
+    iChinhSachLogin?: number | null
+    /** @nullable */
+    iMaxLoginFail?: number | null
+    /** @nullable */
+    iQuickLoginCheckMs?: number | null
+    /** @nullable */
+    iMininumQuickLoginWait?: number | null
+    /** @nullable */
+    iMininumQuickLoginUnit?: number | null
+    /** @nullable */
+    iLT_Strategy?: number | null
+    /** @nullable */
+    iLT_WaitIncrement?: number | null
+    /** @nullable */
+    iLT_WaitIncrementUnit?: number | null
+    /** @nullable */
+    iLT_MaxWait?: number | null
+    /** @nullable */
+    iLT_MaxWaitUnit?: number | null
+    /** @nullable */
+    iLT_FailureResetTime?: number | null
+    /** @nullable */
+    iLT_FailureResetTimeUnit?: number | null
+    /** @nullable */
+    iMaximumTemporaryLock?: number | null
 }

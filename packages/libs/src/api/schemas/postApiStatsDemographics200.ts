@@ -5,14 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-import type { PostApiStatsDemographics200ByEthnicityItem } from './postApiStatsDemographics200ByEthnicityItem'
-import type { PostApiStatsDemographics200ByGenderItem } from './postApiStatsDemographics200ByGenderItem'
-import type { PostApiStatsDemographics200ByProvinceItem } from './postApiStatsDemographics200ByProvinceItem'
-import type { PostApiStatsDemographics200ByReligionItem } from './postApiStatsDemographics200ByReligionItem'
+import type { PostApiStatsDemographics200DataItem } from './postApiStatsDemographics200DataItem'
+import type { PostApiStatsDemographics200Summary } from './postApiStatsDemographics200Summary'
 
 export type PostApiStatsDemographics200 = {
-    byGender: PostApiStatsDemographics200ByGenderItem[]
-    byEthnicity: PostApiStatsDemographics200ByEthnicityItem[]
-    byReligion: PostApiStatsDemographics200ByReligionItem[]
-    byProvince: PostApiStatsDemographics200ByProvinceItem[]
+    summary: PostApiStatsDemographics200Summary
+    count: number
+    preview?: boolean
+    data: PostApiStatsDemographics200DataItem[]
 }

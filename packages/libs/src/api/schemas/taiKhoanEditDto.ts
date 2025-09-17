@@ -33,6 +33,7 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 | 403 Forbidden | Bạn không có quyền truy cập vào tài nguyên này |
 | 404 Not Found | Tài nguyên yêu cầu không tồn tại |
 | 422 Unprocessable Entity | Dữ liệu gửi đi không hợp lệ hoặc không đáp ứng yêu cầu của API |
+| 429 Too Many Request | Hệ thống chặn do quá nhiều request lên hệ thống |
 | 500 Internal Server Error | Lỗi máy chủ, vui lòng thử lại sau hoặc liên hệ QTHT |
                    
 ## Lưu ý quan trọng
@@ -82,4 +83,5 @@ export type TaiKhoanEditDto = TaiKhoan & {
     sSDTDiDong?: string | null
     /** @nullable */
     VaiTro_NhanVienEditDtos?: VaiTroNhanVienEditDto[] | null
+    bForceChangePasswordOnNextLogin?: boolean
 }

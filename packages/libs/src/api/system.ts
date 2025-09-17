@@ -33,6 +33,7 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
 | 403 Forbidden | Bạn không có quyền truy cập vào tài nguyên này |
 | 404 Not Found | Tài nguyên yêu cầu không tồn tại |
 | 422 Unprocessable Entity | Dữ liệu gửi đi không hợp lệ hoặc không đáp ứng yêu cầu của API |
+| 429 Too Many Request | Hệ thống chặn do quá nhiều request lên hệ thống |
 | 500 Internal Server Error | Lỗi máy chủ, vui lòng thử lại sau hoặc liên hệ QTHT |
                    
 ## Lưu ý quan trọng
@@ -166,6 +167,15 @@ import type {
     GetDMXaPhuongsId401,
     GetDMXaPhuongsId403,
     GetDMXaPhuongsIdParams,
+    GetUserPermissionDTO,
+    GetUserPermissionsAccessLevelAppCodeUserId400,
+    GetUserPermissionsAccessLevelAppCodeUserId401,
+    GetUserPermissionsAccessLevelAppCodeUserId403,
+    GetUserPermissionsAccessLevelAppCodeUserId500,
+    GetUserPermissionsPermissionAppCodeUserId400,
+    GetUserPermissionsPermissionAppCodeUserId401,
+    GetUserPermissionsPermissionAppCodeUserId403,
+    GetUserPermissionsPermissionAppCodeUserId500,
     NhanVienEditDto,
     PostDMCapBacsList400,
     PostDMCapBacsList401,
@@ -8553,6 +8563,496 @@ export function useGetDMXaPhuongNewsId<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
     const queryOptions = getGetDMXaPhuongNewsIdQueryOptions(id, params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Quyền ứng dụng
+ * @summary Quyền, Quyền theo chức năng ứng dụng
+ */
+export type getUserPermissionsPermissionAppCodeUserIdResponse200 = {
+    data: GetUserPermissionDTO
+    status: 200
+}
+
+export type getUserPermissionsPermissionAppCodeUserIdResponse400 = {
+    data: GetUserPermissionsPermissionAppCodeUserId400
+    status: 400
+}
+
+export type getUserPermissionsPermissionAppCodeUserIdResponse401 = {
+    data: GetUserPermissionsPermissionAppCodeUserId401
+    status: 401
+}
+
+export type getUserPermissionsPermissionAppCodeUserIdResponse403 = {
+    data: GetUserPermissionsPermissionAppCodeUserId403
+    status: 403
+}
+
+export type getUserPermissionsPermissionAppCodeUserIdResponse500 = {
+    data: GetUserPermissionsPermissionAppCodeUserId500
+    status: 500
+}
+
+export type getUserPermissionsPermissionAppCodeUserIdResponseComposite =
+    | getUserPermissionsPermissionAppCodeUserIdResponse200
+    | getUserPermissionsPermissionAppCodeUserIdResponse400
+    | getUserPermissionsPermissionAppCodeUserIdResponse401
+    | getUserPermissionsPermissionAppCodeUserIdResponse403
+    | getUserPermissionsPermissionAppCodeUserIdResponse500
+
+export type getUserPermissionsPermissionAppCodeUserIdResponse =
+    getUserPermissionsPermissionAppCodeUserIdResponseComposite & {
+        headers: Headers
+    }
+
+export const getGetUserPermissionsPermissionAppCodeUserIdUrl = (
+    appCode: string,
+    userId: string
+) => {
+    return `/UserPermissions/permission/${appCode}/${userId}`
+}
+
+export const getUserPermissionsPermissionAppCodeUserId = async (
+    appCode: string,
+    userId: string,
+    options?: RequestInit
+): Promise<getUserPermissionsPermissionAppCodeUserIdResponse> => {
+    return customSystemFetch<getUserPermissionsPermissionAppCodeUserIdResponse>(
+        getGetUserPermissionsPermissionAppCodeUserIdUrl(appCode, userId),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetUserPermissionsPermissionAppCodeUserIdQueryKey = (
+    appCode: string,
+    userId: string
+) => {
+    return [`/UserPermissions/permission/${appCode}/${userId}`] as const
+}
+
+export const getGetUserPermissionsPermissionAppCodeUserIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsPermissionAppCodeUserId400
+        | GetUserPermissionsPermissionAppCodeUserId401
+        | GetUserPermissionsPermissionAppCodeUserId403
+        | GetUserPermissionsPermissionAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetUserPermissionsPermissionAppCodeUserIdQueryKey(appCode, userId)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>
+    > = ({ signal }) =>
+        getUserPermissionsPermissionAppCodeUserId(appCode, userId, { signal, ...requestOptions })
+
+    return {
+        queryKey,
+        queryFn,
+        enabled: !!(appCode && userId),
+        ...queryOptions,
+    } as UseQueryOptions<
+        Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUserPermissionsPermissionAppCodeUserIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>
+>
+export type GetUserPermissionsPermissionAppCodeUserIdQueryError =
+    | GetUserPermissionsPermissionAppCodeUserId400
+    | GetUserPermissionsPermissionAppCodeUserId401
+    | GetUserPermissionsPermissionAppCodeUserId403
+    | GetUserPermissionsPermissionAppCodeUserId500
+
+export function useGetUserPermissionsPermissionAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsPermissionAppCodeUserId400
+        | GetUserPermissionsPermissionAppCodeUserId401
+        | GetUserPermissionsPermissionAppCodeUserId403
+        | GetUserPermissionsPermissionAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsPermissionAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsPermissionAppCodeUserId400
+        | GetUserPermissionsPermissionAppCodeUserId401
+        | GetUserPermissionsPermissionAppCodeUserId403
+        | GetUserPermissionsPermissionAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsPermissionAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsPermissionAppCodeUserId400
+        | GetUserPermissionsPermissionAppCodeUserId401
+        | GetUserPermissionsPermissionAppCodeUserId403
+        | GetUserPermissionsPermissionAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Quyền, Quyền theo chức năng ứng dụng
+ */
+
+export function useGetUserPermissionsPermissionAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsPermissionAppCodeUserId400
+        | GetUserPermissionsPermissionAppCodeUserId401
+        | GetUserPermissionsPermissionAppCodeUserId403
+        | GetUserPermissionsPermissionAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsPermissionAppCodeUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetUserPermissionsPermissionAppCodeUserIdQueryOptions(
+        appCode,
+        userId,
+        options
+    )
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Mức truy cập dữ liệu
+ * @summary Quyền, Mức truy cập dữ liệu của user
+ */
+export type getUserPermissionsAccessLevelAppCodeUserIdResponse200 = {
+    data: GetUserPermissionDTO
+    status: 200
+}
+
+export type getUserPermissionsAccessLevelAppCodeUserIdResponse400 = {
+    data: GetUserPermissionsAccessLevelAppCodeUserId400
+    status: 400
+}
+
+export type getUserPermissionsAccessLevelAppCodeUserIdResponse401 = {
+    data: GetUserPermissionsAccessLevelAppCodeUserId401
+    status: 401
+}
+
+export type getUserPermissionsAccessLevelAppCodeUserIdResponse403 = {
+    data: GetUserPermissionsAccessLevelAppCodeUserId403
+    status: 403
+}
+
+export type getUserPermissionsAccessLevelAppCodeUserIdResponse500 = {
+    data: GetUserPermissionsAccessLevelAppCodeUserId500
+    status: 500
+}
+
+export type getUserPermissionsAccessLevelAppCodeUserIdResponseComposite =
+    | getUserPermissionsAccessLevelAppCodeUserIdResponse200
+    | getUserPermissionsAccessLevelAppCodeUserIdResponse400
+    | getUserPermissionsAccessLevelAppCodeUserIdResponse401
+    | getUserPermissionsAccessLevelAppCodeUserIdResponse403
+    | getUserPermissionsAccessLevelAppCodeUserIdResponse500
+
+export type getUserPermissionsAccessLevelAppCodeUserIdResponse =
+    getUserPermissionsAccessLevelAppCodeUserIdResponseComposite & {
+        headers: Headers
+    }
+
+export const getGetUserPermissionsAccessLevelAppCodeUserIdUrl = (
+    appCode: string,
+    userId: string
+) => {
+    return `/UserPermissions/access-level/${appCode}/${userId}`
+}
+
+export const getUserPermissionsAccessLevelAppCodeUserId = async (
+    appCode: string,
+    userId: string,
+    options?: RequestInit
+): Promise<getUserPermissionsAccessLevelAppCodeUserIdResponse> => {
+    return customSystemFetch<getUserPermissionsAccessLevelAppCodeUserIdResponse>(
+        getGetUserPermissionsAccessLevelAppCodeUserIdUrl(appCode, userId),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetUserPermissionsAccessLevelAppCodeUserIdQueryKey = (
+    appCode: string,
+    userId: string
+) => {
+    return [`/UserPermissions/access-level/${appCode}/${userId}`] as const
+}
+
+export const getGetUserPermissionsAccessLevelAppCodeUserIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsAccessLevelAppCodeUserId400
+        | GetUserPermissionsAccessLevelAppCodeUserId401
+        | GetUserPermissionsAccessLevelAppCodeUserId403
+        | GetUserPermissionsAccessLevelAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetUserPermissionsAccessLevelAppCodeUserIdQueryKey(appCode, userId)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>
+    > = ({ signal }) =>
+        getUserPermissionsAccessLevelAppCodeUserId(appCode, userId, { signal, ...requestOptions })
+
+    return {
+        queryKey,
+        queryFn,
+        enabled: !!(appCode && userId),
+        ...queryOptions,
+    } as UseQueryOptions<
+        Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUserPermissionsAccessLevelAppCodeUserIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>
+>
+export type GetUserPermissionsAccessLevelAppCodeUserIdQueryError =
+    | GetUserPermissionsAccessLevelAppCodeUserId400
+    | GetUserPermissionsAccessLevelAppCodeUserId401
+    | GetUserPermissionsAccessLevelAppCodeUserId403
+    | GetUserPermissionsAccessLevelAppCodeUserId500
+
+export function useGetUserPermissionsAccessLevelAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsAccessLevelAppCodeUserId400
+        | GetUserPermissionsAccessLevelAppCodeUserId401
+        | GetUserPermissionsAccessLevelAppCodeUserId403
+        | GetUserPermissionsAccessLevelAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsAccessLevelAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsAccessLevelAppCodeUserId400
+        | GetUserPermissionsAccessLevelAppCodeUserId401
+        | GetUserPermissionsAccessLevelAppCodeUserId403
+        | GetUserPermissionsAccessLevelAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsAccessLevelAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsAccessLevelAppCodeUserId400
+        | GetUserPermissionsAccessLevelAppCodeUserId401
+        | GetUserPermissionsAccessLevelAppCodeUserId403
+        | GetUserPermissionsAccessLevelAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Quyền, Mức truy cập dữ liệu của user
+ */
+
+export function useGetUserPermissionsAccessLevelAppCodeUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+    TError =
+        | GetUserPermissionsAccessLevelAppCodeUserId400
+        | GetUserPermissionsAccessLevelAppCodeUserId401
+        | GetUserPermissionsAccessLevelAppCodeUserId403
+        | GetUserPermissionsAccessLevelAppCodeUserId500,
+>(
+    appCode: string,
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsAccessLevelAppCodeUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetUserPermissionsAccessLevelAppCodeUserIdQueryOptions(
+        appCode,
+        userId,
+        options
+    )
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>

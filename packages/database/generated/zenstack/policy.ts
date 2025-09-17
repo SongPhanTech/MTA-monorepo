@@ -17,7 +17,6 @@ import { ExamType } from "../prisma-client";
 import { SubjectVersionType } from "../prisma-client";
 import { EquivalencySide } from "../prisma-client";
 import { SubjectRequirementType } from "../prisma-client";
-import { ClassRegisterStatus } from "../prisma-client";
 import { SubjectClassSchedule } from "../prisma-client";
 import { PeriodType } from "../prisma-client";
 import { TrainingObjectTypes } from "../prisma-client";
@@ -646,26 +645,6 @@ const policy: PolicyDef = {
                 update: { guard: ClassRegisterSession_update, },
                 postUpdate: { guard: ClassRegisterSession_postUpdate, },
                 delete: { guard: ClassRegisterSession_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        classRegisterLogs: {
-            modelLevel: {
-                read: { guard: ClassRegisterLogs_read, },
-                create: { guard: ClassRegisterLogs_create, inputChecker: ClassRegisterLogs_create_input, },
-                update: { guard: ClassRegisterLogs_update, },
-                postUpdate: { guard: ClassRegisterLogs_postUpdate, },
-                delete: { guard: ClassRegisterLogs_delete, }
             },
             fieldLevel: {
                 read:
@@ -4511,7 +4490,6 @@ const policy: PolicyDef = {
         subjectInGroup: { hasValidation: false },
         trainingBlockSubject: { hasValidation: false },
         classRegisterSession: { hasValidation: false },
-        classRegisterLogs: { hasValidation: false },
         subjectClass: { hasValidation: false },
         classSchedule: { hasValidation: false },
         trainingObjectType: { hasValidation: false },
@@ -6650,71 +6628,6 @@ function ClassRegisterSession_delete(context: QueryContext, db: CrudContract): a
 }
 
 function $check_ClassRegisterSession_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ClassRegisterLogs_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ClassRegisterLogs_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ClassRegisterLogs_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ClassRegisterLogs_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ClassRegisterLogs_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ClassRegisterLogs_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ClassRegisterLogs_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ClassRegisterLogs_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ClassRegisterLogs_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ClassRegisterLogs_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ClassRegisterLogs_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

@@ -105,15 +105,6 @@ enum SubjectRequirementType {
   @@schema("ql-dao-tao")
 }
 
-enum ClassRegisterStatus {
-  PENDING
-  CANCELLED
-  SUCCESS
-  FAILED
-
-  @@schema("ql-dao-tao")
-}
-
 enum SubjectClassSchedule {
   MORNING
   AFTERNOON
@@ -1337,43 +1328,20 @@ model TrainingBlockSubject {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model ClassRegisterSession {
-  id                String              @id() @default(cuid())
-  code              String?             @unique()
-  active            Boolean             @default(true)
-  description       String?             @db.Text()
-  deletedAt         DateTime?
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @default(now()) @updatedAt()
-  name              String
-  startDate         DateTime
-  endDate           DateTime
-  semester          Semester            @relation(fields: [semesterId], references: [id])
-  semesterId        String
-  trainingCourses   TrainingCourse[]
-  classRegisterLogs ClassRegisterLogs[]
-
-  @@schema("ql-dao-tao")
-}
-
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model ClassRegisterLogs {
-  id                     String               @id() @default(cuid())
-  code                   String?              @unique()
-  active                 Boolean              @default(true)
-  description            String?              @db.Text()
-  deletedAt              DateTime?
-  createdAt              DateTime             @default(now())
-  updatedAt              DateTime             @default(now()) @updatedAt()
-  classRegisterSession   ClassRegisterSession @relation(fields: [classRegisterSessionId], references: [id])
-  classRegisterSessionId String
-  subjectClass           SubjectClass         @relation(fields: [subjectClassId], references: [id])
-  subjectClassId         String
-  student                Student              @relation(fields: [studentId], references: [id])
-  studentId              String
-  status                 ClassRegisterStatus  @default(PENDING)
-  reason                 String?
+  id              String           @id() @default(cuid())
+  code            String?          @unique()
+  active          Boolean          @default(true)
+  description     String?          @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt()
+  name            String
+  startDate       DateTime
+  endDate         DateTime
+  semester        Semester         @relation(fields: [semesterId], references: [id])
+  semesterId      String
+  maxCredit       Int?
+  trainingCourses TrainingCourse[]
 
   @@schema("ql-dao-tao")
 }
@@ -1425,7 +1393,6 @@ model SubjectClass {
   expertProfile              ExpertProfile[]
   defenseRooms               Room[]                @relation("DefenseRooms")
   surveyObjectTypes          SurveyObjectType[]
-  classRegisterLogs          ClassRegisterLogs[]
 
   @@schema("ql-dao-tao")
 }
@@ -1921,7 +1888,6 @@ model Student {
   thesisRegistrations            StudentThesisRegistration[]
   examSession                    ExamSession[]
   diplomaVerificationApplication DiplomaVerificationApplication[]
-  classRegisterLogs              ClassRegisterLogs[]
   notes                          Note[]
   noteFolders                    NoteFolder[]
 

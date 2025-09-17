@@ -7,4 +7,6 @@
 
 export type PostApiStatsAverageEntryScoreByCourseFilteredBody = {
     preview?: boolean
+    /** DM_DonVi.Id - ID đơn vị quản lý */
+    managementOrganizationId: string
 }

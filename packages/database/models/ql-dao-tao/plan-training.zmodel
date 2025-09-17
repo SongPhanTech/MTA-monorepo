@@ -472,38 +472,41 @@ model TrainingBlockSubject extends Base {
 }
 
 model ClassRegisterSession extends Base {
-  name              String
-  startDate         DateTime
-  endDate           DateTime
-  semester          Semester            @relation(fields: [semesterId], references: [id])
-  semesterId        String
+  name            String
+  startDate       DateTime
+  endDate         DateTime
+  semester        Semester         @relation(fields: [semesterId], references: [id])
+  semesterId      String
+  maxCredit       Int?             // tối đa số tín chỉ được đăng ký
 
-  trainingCourses   TrainingCourse[]
-  classRegisterLogs ClassRegisterLogs[]
+  trainingCourses TrainingCourse[]
+  // classRegisterLogs ClassRegisterLogs[]
   @@schema("ql-dao-tao")
 }
 
-enum ClassRegisterStatus {
-  PENDING
-  CANCELLED
-  SUCCESS
-  FAILED
+// enum ClassRegisterStatus {
+//   PENDING_REGISTER
+//   REGISTERED
+//   FAILED_REGISTER
 
-  @@schema("ql-dao-tao")
-}
+//   PENDING_UNREGISTER
+//   UNREGISTERED
+//   FAILED_UNREGISTER
+//   @@schema("ql-dao-tao")
+// }
 
-model ClassRegisterLogs extends Base {
-  classRegisterSession   ClassRegisterSession @relation(fields: [classRegisterSessionId], references: [id])
-  classRegisterSessionId String
-  subjectClass           SubjectClass         @relation(fields: [subjectClassId], references: [id])
-  subjectClassId         String
-  student                Student              @relation(fields: [studentId], references: [id])
-  studentId              String
-  status                 ClassRegisterStatus  @default(PENDING)
-  reason                 String?
+// model ClassRegisterLogs extends Base {
+//   classRegisterSession   ClassRegisterSession @relation(fields: [classRegisterSessionId], references: [id])
+//   classRegisterSessionId String
+//   subjectClass           SubjectClass         @relation(fields: [subjectClassId], references: [id])
+//   subjectClassId         String
+//   student                Student              @relation(fields: [studentId], references: [id])
+//   studentId              String
+//   status                 ClassRegisterStatus
+//   reason                 String?
 
-  @@schema("ql-dao-tao")
-}
+//   @@schema("ql-dao-tao")
+// }
 
 enum SubjectClassSchedule {
   MORNING
@@ -582,7 +585,7 @@ model SubjectClass extends Base {
   defenseRooms               Room[]                @relation("DefenseRooms") // DS phòng -> chọn phòng tự động
 
   surveyObjectTypes          SurveyObjectType[]
-  classRegisterLogs          ClassRegisterLogs[]
+  // classRegisterLogs          ClassRegisterLogs[]
 
   @@schema("ql-dao-tao")
 }

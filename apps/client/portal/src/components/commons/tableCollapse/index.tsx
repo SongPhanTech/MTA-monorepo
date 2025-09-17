@@ -2,7 +2,7 @@ import { DownOutlined } from '@ant-design/icons'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { TableProps as TableAntdProps } from 'antd'
-import type { ColumnType, TablePaginationConfig } from 'antd/es/table'
+import type { ColumnGroupType, ColumnType, TablePaginationConfig } from 'antd/es/table'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import Table, { type ColumnOption } from '../table'
 
@@ -49,6 +49,7 @@ type TableProps<T, ChildKey extends keyof T> = {
     childrenFieldName: ChildKey
     onRowDoubleClick?: (record: T) => void
     defaultExpandAll?: boolean
+    headerColSpan?: number | ((record: T, totalColumns: number) => number)
 } & Omit<
     TableAntdProps,
     'columns' | 'data' | 'pagination' | 'headerTitleKey' | 'onRow' | 'childrenFieldName'
@@ -80,6 +81,7 @@ const TableCollapse = <
     defaultExpandAll,
     filters,
     setFilters,
+    headerColSpan,
     ...rest
 }: TableProps<T, ChildKey>) => {
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
@@ -171,7 +173,7 @@ const TableCollapse = <
             {
                 title: 'STT',
                 align: 'center',
-                width: 60,
+                width: 50,
                 fixed: 'left',
                 render: (_: any, record: T) => {
                     if (record.$type !== 'child') return ''
@@ -190,20 +192,62 @@ const TableCollapse = <
                 },
             },
             ...columns,
-        ]
+        ] as Array<
+            (ColumnGroupType<T> | ColumnType<T>) & {
+                type?: string
+                distinctFilters?: string[]
+                options?: ColumnOption[]
+            }
+        >
 
         // Merge onCell for colSpan handling
         return baseColumns?.map((col, index) => ({
             ...col,
-            onCell: (record: T) => ({
-                colSpan: Array.isArray(record[childrenFieldName])
-                    ? index === 0
-                        ? baseColumns.length
-                        : 0
-                    : 1,
-            }),
+            onCell: (record: T) => {
+                const isParent = Array.isArray(record[childrenFieldName])
+                if (!headerColSpan) {
+                    if (isParent) {
+                        if (index === 0)
+                            return { colspan: baseColumns.length - 1, ...col.onCell?.(record) }
+                        return { colspan: 0, hidden: true, ...col.onCell?.(record) }
+                    }
+                    return {
+                        colspan: 1,
+                        ...col.onCell?.(record),
+                    }
+                }
+                if (isParent) {
+                    if (index === 0) {
+                        return {
+                            colspan: headerColSpan,
+                            ...col.onCell?.(record),
+                        }
+                    }
+                    if (
+                        index > 0 &&
+                        index <
+                            (typeof headerColSpan === 'number'
+                                ? headerColSpan
+                                : (headerColSpan?.(record, baseColumns.length) ?? 2))
+                    ) {
+                        return {
+                            ...col.onCell?.(record),
+                            hidden: true, // Ẩn cột nếu là cha
+                            colspan: 0, // Không hiển thị cột này nếu là cha
+                        }
+                    }
+                    return {
+                        ...col.onCell?.(record),
+                        colspan: 1, // Không hiển thị cột này nếu là cha
+                    }
+                }
+                return {
+                    colspan: 1,
+                    ...col.onCell?.(record),
+                }
+            },
         }))
-    }, [columns, childrenFieldName, allChildren, currentPage, pagination])
+    }, [columns, childrenFieldName, allChildren, currentPage, pagination, headerColSpan])
 
     return (
         <>
@@ -295,6 +339,7 @@ const TableCollapse = <
                         ) : null
                     },
                     childrenColumnName: childrenFieldName as string,
+                    expandIconColumnIndex: 0,
                     ...expandable,
                 }}
                 {...rest}
@@ -306,9 +351,6 @@ const TableCollapse = <
                 {`
                 .indent-level-1 {
                     display: none !important
-                }
-                .ant-table-cell[colspan] {
-                    text-align: left !important;
                 }
                 .ant-table-row > td:first-child:not(:hover) {
                     background-color: white;
