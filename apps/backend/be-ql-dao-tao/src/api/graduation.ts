@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { AcademicActionType, RankingContext } from '@workspace/db'
+import { AcademicActionType, RankingContext, SubjectRequirementType } from '@workspace/db'
 import {
     AcademicRankingConvertScalarSchema,
     DiplomaTypeScalarSchema,
@@ -86,7 +86,7 @@ app.openapi(graduationCheck, async (c) => {
     })
 
     const results: z.infer<typeof GraduationCheckResult>[] = []
-    for (const [idx, application] of session.applications.entries()) {
+    application: for (const [idx, application] of session.applications.entries()) {
         const student = await prisma.student.findFirstOrThrow({
             where: { id: application.studentId },
             select: {
@@ -119,7 +119,10 @@ app.openapi(graduationCheck, async (c) => {
                             include: {
                                 scoreConverts: true,
                                 academicRankingConvert: {
-                                    where: { context: RankingContext.GRADUATION, graduated: true },
+                                    where: {
+                                        context: RankingContext.GRADUATION,
+                                        graduated: true,
+                                    },
                                     include: {
                                         rankingCondition: true,
                                         downgradeRules: {
@@ -180,12 +183,17 @@ app.openapi(graduationCheck, async (c) => {
         const scoreToPassGraduation = student.fixedClass?.trainingCourse.scoreToPassGraduation || 5
         const baseScore = student.fixedClass.trainingCourse.baseScore
 
+        // include failed subjects for count
         const subjectScores = await prisma.studentSubjectScore.findMany({
             where: {
                 OR: [
                     { studentId: application.studentId },
-                    { studentId: application.studentId, subjectClass: { cancelled: false } },
+                    {
+                        studentId: application.studentId,
+                        subjectClass: { cancelled: false },
+                    },
                 ],
+                deletedAt: null,
             },
             include: { subjectVersion: true },
         })
@@ -198,16 +206,64 @@ app.openapi(graduationCheck, async (c) => {
         let courseGradeLowest = Number.POSITIVE_INFINITY
         let graduationCourseGradeLowest = Number.POSITIVE_INFINITY
 
+        console.log(
+            subjectScores.map((s) => ({
+                name: s.subjectVersion.name,
+                score: s.manualFinalScore || s.finalScore,
+            }))
+        )
+
+        const equivalencyGroups = await prisma.equivalencyGroup.findMany({
+            where: {
+                subjects: {
+                    some: {
+                        subjectId: {
+                            in: curriculumSubjects.map(({ subjectId }) => subjectId),
+                        },
+                    },
+                },
+            },
+            include: {
+                subjects: { include: { subject: { select: { credit: true } } } },
+            },
+        })
+
+        console.log(JSON.stringify(equivalencyGroups, null, 2))
+
+        // kết quả những môn đạt với điểm cao nhất
+        const subjectScoresMap = new Map<
+            string,
+            { subjectId: string; credit: number; scoreBase10: number; scoreBase4: number }
+        >()
+
         for (const subjectScore of subjectScores) {
+            const credit = subjectScore.subjectVersion.credit
+            const scoreBase10 =
+                subjectScore.manualFinalScore || subjectScore.finalScore?.toNumber() || 0
+            const scoreBase4 =
+                student.fixedClass?.trainingCourse.scoreConverts.find(
+                    ({ base10Min, base10Max }) => base10Min < scoreBase10 && base10Max > scoreBase10
+                )?.base4 || 0
+
+            const entry = subjectScoresMap.get(subjectScore.subjectVersionId)
+            if (entry) {
+                entry.scoreBase10 = Math.max(entry.scoreBase10, scoreBase10)
+                entry.scoreBase4 = Math.max(entry.scoreBase4, scoreBase4)
+            } else {
+                subjectScoresMap.set(subjectScore.subjectVersionId, {
+                    subjectId: subjectScore.subjectVersionId,
+                    credit,
+                    scoreBase10,
+                    scoreBase4,
+                })
+            }
+
             const subjectInCurriculum = curriculumSubjects.find(
                 (subject) => subject.subjectId === subjectScore.subjectVersionId
             )
 
             if (subjectInCurriculum?.useForFinalScore) {
-                const credit = subjectInCurriculum.subject.credit
                 totalCredit += credit
-                const scoreBase10 = (subjectScore.manualFinalScore ||
-                    subjectScore.finalScore) as number
 
                 // tín chỉ trượt
                 if (
@@ -225,18 +281,63 @@ app.openapi(graduationCheck, async (c) => {
                 if (scoreBase10 < courseGradeLowest) {
                     courseGradeLowest = scoreBase10
                 }
+            }
+        }
 
-                const scoreBase4 =
-                    student.fixedClass?.trainingCourse.scoreConverts.find(
-                        ({ base10Min, base10Max }) =>
-                            base10Min < scoreBase10 && base10Max > scoreBase10
-                    )?.base4 || 0
+        // TODO: Implement logic for check equivalence subject
 
-                // const credit = subjectInCurriculum.subject.credit
+        const uniqueSubjectScores = Array.from(subjectScoresMap.values())
+        for (const trainingBlock of curriculumVersion.trainingBlocks) {
+            const requiredSubjects = trainingBlock.subjects.filter(
+                (subject) =>
+                    subject.type !== SubjectRequirementType.Optional || !subject.useForFinalScore
+            )
+            for (const subject of requiredSubjects) {
+                const subjectScore = uniqueSubjectScores.find(
+                    (s) => s.subjectId === subject.subjectId
+                )
+                if (!subjectScore) {
+                    results.push({
+                        applicationId: application.id,
+                        graduation: false,
+                        reason: `Chưa đạt môn bắt buộc (${subject.subject.name})`,
+                        trainingMajor: curriculumVersion.curriculum.trainingMajor,
+                        diplomaType: curriculumVersion.diplomaType,
+                    })
+                    continue application
+                }
+                const { credit, scoreBase10, scoreBase4 } = subjectScore
                 totalScoreBase10 += scoreBase10 * credit
                 totalScoreBase4 += scoreBase4 * credit
                 totalPassCredit += credit
             }
+
+            const optionalSubjects = trainingBlock.subjects.filter(
+                (subject) => subject.type === SubjectRequirementType.Optional
+            )
+
+            // sort score and take ~ trainingBlock.electiveCreditsRequired
+            const optionalSubjectScores = uniqueSubjectScores.filter((s) =>
+                optionalSubjects.find((subject) => subject.subjectId === s.subjectId)
+            )
+            for (const subject of optionalSubjects) {
+                const subjectScore = optionalSubjectScores.find(
+                    (s) => s.subjectId === subject.subjectId
+                )
+                if (!subjectScore) {
+                    continue
+                }
+                const { credit, scoreBase10, scoreBase4 } = subjectScore
+                totalScoreBase10 += scoreBase10 * credit
+                totalScoreBase4 += scoreBase4 * credit
+                totalPassCredit += credit
+            }
+        }
+
+        for (const [subjectVersionId, { credit, scoreBase10, scoreBase4 }] of subjectScoresMap) {
+            totalScoreBase10 += scoreBase10 * credit
+            totalScoreBase4 += scoreBase4 * credit
+            totalPassCredit += credit
         }
 
         const cumulativeBase10 =
@@ -245,12 +346,12 @@ app.openapi(graduationCheck, async (c) => {
             totalScoreBase4 && totalPassCredit ? totalScoreBase4 / totalPassCredit : 0
 
         const rankLevels = student.fixedClass?.trainingCourse.academicRankingConvert
-        if (!rankLevels || !rankLevels.length) {
+        if (!rankLevels?.length) {
             results.push({
                 applicationId: application.id,
                 graduation: false,
                 reason: 'Không có hạng xếp loại',
-                trainingMajor: null,
+                trainingMajor: curriculumVersion.curriculum.trainingMajor,
                 diplomaType: curriculumVersion.diplomaType,
             })
             continue
