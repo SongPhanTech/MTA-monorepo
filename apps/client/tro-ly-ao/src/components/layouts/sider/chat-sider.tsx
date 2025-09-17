@@ -157,9 +157,11 @@ const SiderChatLayout = ({
                 <div style={{ flex: 1, overflowY: 'auto' }}>
                     <div className="px-1 pt-2">
                         <Button
-                            color="primary"
-                            variant={isActive ? 'solid' : 'outlined'}
-                            className="w-full h-[40px] flex items-center justify-center gap-2 rounded-xl"
+                            className={`w-full h-[40px] flex items-center justify-center gap-2 rounded-lg border transition-colors ${
+                                isActive
+                                    ? 'bg-primary text-white border-primary hover:bg-primary/90'
+                                    : 'bg-transparent text-primary border-primary hover:bg-primary/10'
+                            }`}
                             icon={firstItem?.icon ? <firstItem.icon /> : undefined}
                             onClick={() => {
                                 if (firstItem?.path && !isActive) {
