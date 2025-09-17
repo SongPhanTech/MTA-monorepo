@@ -7,6 +7,6 @@
 import type { PostApiStatsSubjectClassStatistics200DataItemClassesItem } from './postApiStatsSubjectClassStatistics200DataItemClassesItem'
 
 export type PostApiStatsSubjectClassStatistics200DataItem = {
-    totalClasses: number
+    'Tổng số lớp': number
     classes: PostApiStatsSubjectClassStatistics200DataItemClassesItem[]
 }

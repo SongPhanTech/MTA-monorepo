@@ -7,5 +7,5 @@
 
 export type PostApiStatsGraduationRankingStatistics200DataItem = {
     ranking: string
-    count: number
+    'Số lượng': number
 }

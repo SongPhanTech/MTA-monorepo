@@ -8,5 +8,5 @@
 export type PostApiStatsStudentDistributionByTrainingLevelFiltered200DataItem = {
     trainingLevelId: string
     name: string
-    count: number
+    'Số lượng': number
 }

@@ -26,6 +26,10 @@ import type {
     ClassRegister400,
     ClassRegister404,
     ClassRegisterBody,
+    ClassUnregister200,
+    ClassUnregister400,
+    ClassUnregister404,
+    ClassUnregisterBody,
     GetClassesInfo200Item,
     GetClassesInfo400,
     GetClassesInfo404,
@@ -861,6 +865,118 @@ export const useClassRegister = <TError = ClassRegister400 | ClassRegister404, T
     TContext
 > => {
     const mutationOptions = getClassRegisterMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Hủy đăng ký lớp học
+ * @summary Hủy đăng ký lớp học
+ */
+export type classUnregisterResponse200 = {
+    data: ClassUnregister200
+    status: 200
+}
+
+export type classUnregisterResponse400 = {
+    data: ClassUnregister400
+    status: 400
+}
+
+export type classUnregisterResponse404 = {
+    data: ClassUnregister404
+    status: 404
+}
+
+export type classUnregisterResponseComposite =
+    | classUnregisterResponse200
+    | classUnregisterResponse400
+    | classUnregisterResponse404
+
+export type classUnregisterResponse = classUnregisterResponseComposite & {
+    headers: Headers
+}
+
+export const getClassUnregisterUrl = () => {
+    return '/api/class-register/class-unregister'
+}
+
+export const classUnregister = async (
+    classUnregisterBody: ClassUnregisterBody,
+    options?: RequestInit
+): Promise<classUnregisterResponse> => {
+    return customPortalFetch<classUnregisterResponse>(getClassUnregisterUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(classUnregisterBody),
+    })
+}
+
+export const getClassUnregisterMutationOptions = <
+    TError = ClassUnregister400 | ClassUnregister404,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof classUnregister>>,
+        TError,
+        { data: ClassUnregisterBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customPortalFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof classUnregister>>,
+    TError,
+    { data: ClassUnregisterBody },
+    TContext
+> => {
+    const mutationKey = ['classUnregister']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof classUnregister>>,
+        { data: ClassUnregisterBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return classUnregister(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ClassUnregisterMutationResult = NonNullable<Awaited<ReturnType<typeof classUnregister>>>
+export type ClassUnregisterMutationBody = ClassUnregisterBody
+export type ClassUnregisterMutationError = ClassUnregister400 | ClassUnregister404
+
+/**
+ * @summary Hủy đăng ký lớp học
+ */
+export const useClassUnregister = <
+    TError = ClassUnregister400 | ClassUnregister404,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof classUnregister>>,
+            TError,
+            { data: ClassUnregisterBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customPortalFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof classUnregister>>,
+    TError,
+    { data: ClassUnregisterBody },
+    TContext
+> => {
+    const mutationOptions = getClassUnregisterMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

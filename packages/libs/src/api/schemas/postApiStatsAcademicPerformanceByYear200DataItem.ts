@@ -8,9 +8,9 @@
 export type PostApiStatsAcademicPerformanceByYear200DataItem = {
     schoolYearId: string
     name: string
-    excellent: number
-    good: number
-    fair: number
-    average: number
-    weak: number
+    'Xuất sắc': number
+    Giỏi: number
+    Khá: number
+    'Trung bình': number
+    Yếu: number
 }

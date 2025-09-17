@@ -265,7 +265,7 @@ const TableCollapse = <
                 bordered
                 data={dataWithKey}
                 pagination={pagination}
-                onRow={(record) => {
+                onRow={(record, index) => {
                     const children = record[childrenFieldName]
                     const isParent = Array.isArray(children)
 
@@ -289,6 +289,7 @@ const TableCollapse = <
                         },
                         style: { cursor: 'pointer' },
                         className: record.id === selectedRow ? 'bg-blue-100' : '',
+                        ...rest.onRow?.(record, index), // Chuyển tiếp các props onRow khác nếu có
                     }
                 }}
                 expandable={{

@@ -6,9 +6,9 @@
  */
 
 export type PostApiStatsKpiCards200DataItem = {
-    totalStudents: number
-    totalLecturers: number
-    studentLecturerRatio: number
-    activeCurricula: number
-    academicWarningRate: number
+    'Tổng HV SV': number
+    'Tổng GV': number
+    'Tỉ lệ HV/GV': number
+    'CTĐT hoạt động': number
+    'Tỉ lệ CCHT': number
 }

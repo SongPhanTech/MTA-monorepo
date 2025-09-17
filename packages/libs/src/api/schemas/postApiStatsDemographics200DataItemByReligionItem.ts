@@ -8,5 +8,5 @@
 export type PostApiStatsDemographics200DataItemByReligionItem = {
     id: string
     name: string
-    count: number
+    'Số lượng': number
 }

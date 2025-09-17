@@ -8,5 +8,5 @@
 export type PostApiStatsGraduationRateByCourseFiltered200DataItem = {
     trainingCourseId: string
     name: string
-    graduationRate: number
+    'Tỉ lệ tốt nghiệp': number
 }

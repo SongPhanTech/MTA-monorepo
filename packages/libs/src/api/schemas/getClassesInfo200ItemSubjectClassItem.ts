@@ -13,6 +13,7 @@ import type { GetClassesInfo200ItemSubjectClassItemMainLecturer } from './getCla
 import type { GetClassesInfo200ItemSubjectClassItemPrerequisiteSubjectItem } from './getClassesInfo200ItemSubjectClassItemPrerequisiteSubjectItem'
 import type { GetClassesInfo200ItemSubjectClassItemRoom } from './getClassesInfo200ItemSubjectClassItemRoom'
 import type { GetClassesInfo200ItemSubjectClassItemSchedule } from './getClassesInfo200ItemSubjectClassItemSchedule'
+import type { GetClassesInfo200ItemSubjectClassItemSubjectClassStudentItem } from './getClassesInfo200ItemSubjectClassItemSubjectClassStudentItem'
 import type { GetClassesInfo200ItemSubjectClassItemType } from './getClassesInfo200ItemSubjectClassItemType'
 
 export type GetClassesInfo200ItemSubjectClassItem = {
@@ -61,5 +62,6 @@ export type GetClassesInfo200ItemSubjectClassItem = {
     room?: GetClassesInfo200ItemSubjectClassItemRoom
     credit?: number
     _count: _GetClassesInfo200ItemSubjectClassItemCount
+    subjectClassStudent: GetClassesInfo200ItemSubjectClassItemSubjectClassStudentItem[]
     type?: GetClassesInfo200ItemSubjectClassItemType
 }

@@ -119,6 +119,13 @@ const GetClassesInfoResponseSchema = z.array(
                 _count: z.object({
                     subjectClassStudent: z.number().optional(),
                 }),
+                subjectClassStudent: z.array(
+                    z.object({
+                        student: z.object({
+                            userProfileId: z.string().optional(),
+                        }),
+                    })
+                ),
                 type: models.TrainingBlockSubjectScalarSchema.shape.type.optional(),
             })
         ),
@@ -218,6 +225,7 @@ app.openapi(getClassesInfo, async (c) => {
     const { sessionId, curriculumVersionId, byCurriculum, isRegistered } = c.req.valid('query')
 
     const byCurriculumBool = `${byCurriculum}`.toLowerCase() === 'true'
+    const isRegisteredBool = `${isRegistered}`.toLowerCase() === 'true'
 
     const now = new Date()
     const registerSession = await prisma.classRegisterSession.findUniqueOrThrow({
@@ -252,10 +260,10 @@ app.openapi(getClassesInfo, async (c) => {
             subjectClass: {
                 some: {
                     semesterId: registerSession.semesterId,
-                    ...(isRegistered === 'true'
+                    ...(isRegisteredBool
                         ? {
                               subjectClassStudent: {
-                                  every: {
+                                  some: {
                                       student: {
                                           userProfileId: session.id,
                                       },
@@ -464,8 +472,11 @@ app.openapi(classRegister, async (c) => {
             }
             const subjectClass = await tx.subjectClass.findUniqueOrThrow({
                 where: { id: subjectClassId },
-                include: { subject: true },
+                include: { subject: true, _count: { select: { subjectClassStudent: true } } },
             })
+            if ((subjectClass.maxStudent || 0) <= (subjectClass._count?.subjectClassStudent || 0)) {
+                throw new Error('Lớp học đã đủ số lượng sinh viên')
+            }
             await tx.studentSubjectScore.create({
                 data: {
                     subjectClassId,

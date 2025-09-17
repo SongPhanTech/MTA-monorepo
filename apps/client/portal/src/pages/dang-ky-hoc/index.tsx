@@ -2,14 +2,17 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import DefaultLayout from '@layouts/default-layout'
+import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import {
     classRegister,
+    classUnregister,
     useGetClassesInfo,
     useGetClassRegisterSession,
 } from '@workspace/libs/api/portal'
+import type { GetClassesInfo200ItemSubjectClassItem } from '@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem'
 import type { GetClassesInfo200ItemSubjectClassItemClassSchedulesItem } from '@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItemClassSchedulesItem'
-import { Checkbox, Tabs } from 'antd'
+import { Button, Checkbox, message, Tabs } from 'antd'
 import dayjs from 'dayjs'
 import { CircleXIcon, LogOutIcon } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -18,7 +21,6 @@ import { useState } from 'react'
 dayjs.locale('vi')
 export default function DangKyHocPage() {
     const router = useRouter()
-    const studentId = router.query.id as string
     const [_filters, _setFilters] = useState({
         searchText: '',
     })
@@ -74,6 +76,7 @@ const DanhSachMonDangKy = ({
         sessionId,
         curriculumVersionId,
         byCurriculum: byCurriculum === 1 ? 'true' : 'false',
+        isRegistered: 'false',
     })
 
     const { data: classesRegisteredInfo, refetch: refetchClassesRegisteredInfo } =
@@ -193,26 +196,55 @@ const DanhSachMonDangKy = ({
                             align: 'center',
                             width: 120,
                             fixed: 'right',
-                            render: (_, record) => (
-                                <p
-                                    onClick={async () => {
-                                        try {
-                                            await classRegister({
-                                                sessionId,
-                                                subjectClassIds: [record.id],
-                                            })
-                                        } catch (error) {}
-                                        refetchClassesInfo()
-                                        refetchClassesRegisteredInfo()
-                                    }}
-                                    className="text-primary flex justify-center items-center gap-2 cursor-pointer"
-                                >
-                                    <LogOutIcon />
-                                    Đăng ký
-                                </p>
-                            ),
+                            render: (_, record) => {
+                                const isMaxed =
+                                    (record.maxStudent || 0) <=
+                                    (record._count?.subjectClassStudent || 0)
+                                const isRegisteredBool = record.subjectClassStudent?.length > 0
+                                const isDisabled = isMaxed || isRegisteredBool
+                                return (
+                                    <Button
+                                        disabled={isDisabled}
+                                        type="text"
+                                        onClick={async () => {
+                                            try {
+                                                const res = await classRegister({
+                                                    sessionId,
+                                                    subjectClassIds: [record.id],
+                                                })
+                                                if (res.status !== 200) {
+                                                    throw new Error(res.data.message)
+                                                }
+                                            } catch (error) {
+                                                message.error(
+                                                    (error as any)?.message || 'Đăng ký thất bại'
+                                                )
+                                            }
+                                            refetchClassesInfo()
+                                            refetchClassesRegisteredInfo()
+                                        }}
+                                        className={cn(
+                                            'text-primary flex justify-center items-center gap-2 cursor-pointer',
+                                            isDisabled ? 'opacity-50 cursor-not-allowed' : ''
+                                        )}
+                                    >
+                                        <LogOutIcon />
+                                        Đăng ký
+                                    </Button>
+                                )
+                            },
                         },
                     ]}
+                    onRow={(record) => {
+                        const r = record as unknown as GetClassesInfo200ItemSubjectClassItem
+                        return {
+                            className:
+                                r.subjectClassStudent?.map?.((e) => e.student.userProfileId)
+                                    .length > 0
+                                    ? 'bg-green-200'
+                                    : '',
+                        }
+                    }}
                     headerTitleKey={(record) =>
                         [record.code, record.name].filter(Boolean).join(' - ')
                     }
@@ -221,7 +253,25 @@ const DanhSachMonDangKy = ({
                 />
             )}
 
-            <b className="text-lg">Danh sách môn học đã đăng ký</b>
+            <div className="flex gap-2 items-center">
+                <b className="text-lg">Danh sách môn học đã đăng ký</b>
+                {classesRegisteredInfo?.status === 200 && (
+                    <p>
+                        Bạn đã đăng ký{' '}
+                        <b>
+                            {classesRegisteredInfo?.data?.flatMap?.((e) => e?.subjectClass)
+                                ?.length || 0}
+                        </b>{' '}
+                        học phần,{' '}
+                        <b>
+                            {classesRegisteredInfo?.data
+                                ?.flatMap?.((e) => e?.subjectClass)
+                                .reduce((acc, curr) => acc + (curr.credit || 0), 0)}
+                        </b>{' '}
+                        tín chỉ
+                    </p>
+                )}
+            </div>
             {classesRegisteredInfo?.status === 200 && (
                 <Table
                     columns={[
@@ -287,7 +337,6 @@ const DanhSachMonDangKy = ({
                             title: 'Thời khoá biểu',
                             width: 300,
                             align: 'center',
-                            fixed: 'right',
                             render: (_, record) => {
                                 return record.classSchedules?.map?.(
                                     (
@@ -307,9 +356,16 @@ const DanhSachMonDangKy = ({
                             title: 'Thao tác',
                             align: 'center',
                             width: 120,
+                            fixed: 'right',
                             render: (_, record) => (
                                 <p
                                     onClick={async () => {
+                                        try {
+                                            await classUnregister({
+                                                sessionId,
+                                                subjectClassIds: [record.id],
+                                            })
+                                        } catch (error) {}
                                         refetchClassesInfo()
                                         refetchClassesRegisteredInfo()
                                     }}
