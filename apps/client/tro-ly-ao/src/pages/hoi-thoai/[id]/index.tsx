@@ -129,6 +129,7 @@ export default function Page() {
 
                 if (reader) {
                     let accumulatedText = ''
+                    setLoading(false) // Tắt loading khi bắt đầu trả lời
 
                     while (true) {
                         const { done, value } = await reader.read()
