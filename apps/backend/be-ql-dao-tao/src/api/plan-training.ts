@@ -132,11 +132,6 @@ app.openapi(importPhanCongGiangDay, async (c) => {
     console.log('Danh sách sheet:', ListSheetNames)
     const startTime = Date.now()
 
-    const listSemester = await prisma.semester.findMany({
-        include: {
-            schoolYear: true,
-        },
-    })
     const ListOrganization = await prisma.dM_DonVi.findMany()
     const ListLecture = await prisma.lecturer.findMany({
         include: {

@@ -3,10 +3,10 @@ import logo_mta from '@assets/images/khaothi.svg'
 import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderCreateLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
-import { getDynamicBreadcrum } from '@lib/casl/hooks'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
+import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
 import { Breadcrumb, Layout, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -34,7 +34,7 @@ const CreateLayout = ({
 }) => {
     const router = useRouter()
     const currentPath = router.pathname
-    const breadcrumb = getDynamicBreadcrum('KHAO_THI', currentPath)
+    const breadcrumb = getDynamicBreadcrumb('KHAO_THI', currentPath)
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })

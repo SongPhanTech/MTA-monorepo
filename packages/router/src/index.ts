@@ -33,7 +33,11 @@ import {
     UserCog,
     UserRoundPen,
 } from 'lucide-react'
+import { KHAO_THI_PERMISSION } from '../generated/khao-thi'
+import { PORTAL_PERMISSION } from '../generated/portal'
+import { QL_DAO_TAO_PERMISSION } from '../generated/ql-dao-tao'
 import ROUTER_PATH from '../generated/router'
+import { TRO_LY_AO_PERMISSION } from '../generated/tro-ly-ao'
 import './index.css'
 interface MenuItem {
     id: string
@@ -880,7 +884,7 @@ const NAVIGATION: NavigationType = {
 }
 
 const PUBLIC_ROUTER = [ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT_ID.replace('[id]', '')]
-
+export { KHAO_THI_PERMISSION, PORTAL_PERMISSION, QL_DAO_TAO_PERMISSION, TRO_LY_AO_PERMISSION }
 export { ROUTER_PATH, PUBLIC_ROUTER }
 export type { MenuItem, NavigationType }
 export default NAVIGATION
