@@ -1,4 +1,4 @@
-import AppSwitcherFloatButton from '@components/commons/app-switcher-modal'
+import ChatHeader from '@components/layouts/header/chat-header'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
 import { cn } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
@@ -81,18 +81,17 @@ const ChatLayout = ({
     }))
 
     return (
-        <>
-            <Layout className="h-screen p-[10px]">
-                {showSiderChat && (
-                    <SiderChatLayout
-                        items={generateMenusTroLyAo(conversationMenuList)}
-                        onCollapse={handleCollapsed}
-                        collapsed={collapsed}
-                        theme={'light'}
-                        onDelete={handleDelete}
-                    />
-                )}
-                <Layout className="overflow-hidden flex flex-col">
+        <Layout className="h-screen p-[10px]">
+            <Layout className="overflow-hidden flex flex-col">
+                <ChatHeader collapsed={collapsed} onCollapse={handleCollapsed} />
+                <Layout className="flex-1">
+                    {showSiderChat && !collapsed && (
+                        <SiderChatLayout
+                            items={generateMenusTroLyAo(conversationMenuList)}
+                            theme={'light'}
+                            onDelete={handleDelete}
+                        />
+                    )}
                     <Content
                         className={cn(
                             'flex-1 p-[10px] bg-white rounded-xl relative overflow-hidden',
@@ -108,8 +107,7 @@ const ChatLayout = ({
                     </Content>
                 </Layout>
             </Layout>
-            <AppSwitcherFloatButton />
-        </>
+        </Layout>
     )
 }
 
