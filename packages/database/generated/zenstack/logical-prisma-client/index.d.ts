@@ -5495,7 +5495,8 @@ export namespace Prisma {
         exempted: 'exempted',
         withdrew: 'withdrew',
         examBanned: 'examBanned',
-        suspended: 'suspended'
+        suspended: 'suspended',
+        repeated: 'repeated'
     };
     export const ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum: {
         id: 'id',
@@ -5609,6 +5610,7 @@ export namespace Prisma {
         scoreToPassConditional: 'scoreToPassConditional',
         scoreToTakeGraduation: 'scoreToTakeGraduation',
         scoreToPassGraduation: 'scoreToPassGraduation',
+        scoreToRetain: 'scoreToRetain',
         trainingObjectTypeId: 'trainingObjectTypeId'
     };
     export const FixedClassScalarFieldEnum: {
@@ -15726,6 +15728,7 @@ export namespace Prisma {
         readonly withdrew: FieldRef<"StudentSubjectScore", 'Boolean'>;
         readonly examBanned: FieldRef<"StudentSubjectScore", 'Boolean'>;
         readonly suspended: FieldRef<"StudentSubjectScore", 'Boolean'>;
+        readonly repeated: FieldRef<"StudentSubjectScore", 'Boolean'>;
     }
 
     export interface ArchivedCertificateOnStudentSubjectScoreDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -18825,6 +18828,7 @@ export namespace Prisma {
         readonly scoreToPassConditional: FieldRef<"TrainingCourse", 'Float'>;
         readonly scoreToTakeGraduation: FieldRef<"TrainingCourse", 'Float'>;
         readonly scoreToPassGraduation: FieldRef<"TrainingCourse", 'Float'>;
+        readonly scoreToRetain: FieldRef<"TrainingCourse", 'Float'>;
         readonly trainingObjectTypeId: FieldRef<"TrainingCourse", 'String'>;
     }
 
@@ -126826,6 +126830,7 @@ export namespace Prisma {
         withdrew: boolean | null
         examBanned: boolean | null
         suspended: boolean | null
+        repeated: boolean | null
     };
     export type StudentSubjectScoreMaxAggregateOutputType = {
         id: string | null
@@ -126848,6 +126853,7 @@ export namespace Prisma {
         withdrew: boolean | null
         examBanned: boolean | null
         suspended: boolean | null
+        repeated: boolean | null
     };
     export type StudentSubjectScoreCountAggregateOutputType = {
         id: number
@@ -126870,6 +126876,7 @@ export namespace Prisma {
         withdrew: number
         examBanned: number
         suspended: number
+        repeated: number
         _all: number
     };
     export type StudentSubjectScoreAvgAggregateInputType = {
@@ -126907,6 +126914,7 @@ export namespace Prisma {
         withdrew?: true
         examBanned?: true
         suspended?: true
+        repeated?: true
     };
     export type StudentSubjectScoreMaxAggregateInputType = {
         id?: true
@@ -126929,6 +126937,7 @@ export namespace Prisma {
         withdrew?: true
         examBanned?: true
         suspended?: true
+        repeated?: true
     };
     export type StudentSubjectScoreCountAggregateInputType = {
         id?: true
@@ -126951,6 +126960,7 @@ export namespace Prisma {
         withdrew?: true
         examBanned?: true
         suspended?: true
+        repeated?: true
         _all?: true
     };
     export type StudentSubjectScoreAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -127054,6 +127064,7 @@ export namespace Prisma {
         withdrew: boolean
         examBanned: boolean
         suspended: boolean
+        repeated: boolean
         _count: StudentSubjectScoreCountAggregateOutputType | null
         _avg: StudentSubjectScoreAvgAggregateOutputType | null
         _sum: StudentSubjectScoreSumAggregateOutputType | null
@@ -127093,6 +127104,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -127122,6 +127134,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -127147,6 +127160,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -127172,8 +127186,9 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
     };
-    export type StudentSubjectScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "subjectClassId" | "subjectVersionId" | "studentId" | "attendanceScore" | "midtermScore" | "examScore" | "finalScore" | "manualFinalScore" | "examPostponed" | "exempted" | "withdrew" | "examBanned" | "suspended", ExtArgs["result"]["studentSubjectScore"]>;
+    export type StudentSubjectScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "subjectClassId" | "subjectVersionId" | "studentId" | "attendanceScore" | "midtermScore" | "examScore" | "finalScore" | "manualFinalScore" | "examPostponed" | "exempted" | "withdrew" | "examBanned" | "suspended" | "repeated", ExtArgs["result"]["studentSubjectScore"]>;
     export type StudentSubjectScoreInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
@@ -127242,8 +127257,18 @@ export namespace Prisma {
             examPostponed: boolean
             exempted: boolean
             withdrew: boolean
+            /**
+             * cấm thi
+             */
             examBanned: boolean
+            /**
+             * đình chỉ
+             */
             suspended: boolean
+            /**
+             * lưu ban
+             */
+            repeated: boolean
         }, ExtArgs["result"]["studentSubjectScore"]>
         composites: {}
     };
@@ -132881,6 +132906,7 @@ export namespace Prisma {
         scoreToPassConditional: number | null
         scoreToTakeGraduation: number | null
         scoreToPassGraduation: number | null
+        scoreToRetain: number | null
     };
     export type TrainingCourseSumAggregateOutputType = {
         startYear: number | null
@@ -132895,6 +132921,7 @@ export namespace Prisma {
         scoreToPassConditional: number | null
         scoreToTakeGraduation: number | null
         scoreToPassGraduation: number | null
+        scoreToRetain: number | null
     };
     export type TrainingCourseMinAggregateOutputType = {
         id: string | null
@@ -132920,6 +132947,7 @@ export namespace Prisma {
         scoreToPassConditional: number | null
         scoreToTakeGraduation: number | null
         scoreToPassGraduation: number | null
+        scoreToRetain: number | null
         trainingObjectTypeId: string | null
     };
     export type TrainingCourseMaxAggregateOutputType = {
@@ -132946,6 +132974,7 @@ export namespace Prisma {
         scoreToPassConditional: number | null
         scoreToTakeGraduation: number | null
         scoreToPassGraduation: number | null
+        scoreToRetain: number | null
         trainingObjectTypeId: string | null
     };
     export type TrainingCourseCountAggregateOutputType = {
@@ -132972,6 +133001,7 @@ export namespace Prisma {
         scoreToPassConditional: number
         scoreToTakeGraduation: number
         scoreToPassGraduation: number
+        scoreToRetain: number
         trainingObjectTypeId: number
         _all: number
     };
@@ -132988,6 +133018,7 @@ export namespace Prisma {
         scoreToPassConditional?: true
         scoreToTakeGraduation?: true
         scoreToPassGraduation?: true
+        scoreToRetain?: true
     };
     export type TrainingCourseSumAggregateInputType = {
         startYear?: true
@@ -133002,6 +133033,7 @@ export namespace Prisma {
         scoreToPassConditional?: true
         scoreToTakeGraduation?: true
         scoreToPassGraduation?: true
+        scoreToRetain?: true
     };
     export type TrainingCourseMinAggregateInputType = {
         id?: true
@@ -133027,6 +133059,7 @@ export namespace Prisma {
         scoreToPassConditional?: true
         scoreToTakeGraduation?: true
         scoreToPassGraduation?: true
+        scoreToRetain?: true
         trainingObjectTypeId?: true
     };
     export type TrainingCourseMaxAggregateInputType = {
@@ -133053,6 +133086,7 @@ export namespace Prisma {
         scoreToPassConditional?: true
         scoreToTakeGraduation?: true
         scoreToPassGraduation?: true
+        scoreToRetain?: true
         trainingObjectTypeId?: true
     };
     export type TrainingCourseCountAggregateInputType = {
@@ -133079,6 +133113,7 @@ export namespace Prisma {
         scoreToPassConditional?: true
         scoreToTakeGraduation?: true
         scoreToPassGraduation?: true
+        scoreToRetain?: true
         trainingObjectTypeId?: true
         _all?: true
     };
@@ -133186,6 +133221,7 @@ export namespace Prisma {
         scoreToPassConditional: number
         scoreToTakeGraduation: number
         scoreToPassGraduation: number
+        scoreToRetain: number
         trainingObjectTypeId: string
         _count: TrainingCourseCountAggregateOutputType | null
         _avg: TrainingCourseAvgAggregateOutputType | null
@@ -133229,6 +133265,7 @@ export namespace Prisma {
         scoreToPassConditional?: boolean
         scoreToTakeGraduation?: boolean
         scoreToPassGraduation?: boolean
+        scoreToRetain?: boolean
         trainingObjectTypeId?: boolean
         semesterStart?: boolean | SemesterDefaultArgs<ExtArgs>
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -133267,6 +133304,7 @@ export namespace Prisma {
         scoreToPassConditional?: boolean
         scoreToTakeGraduation?: boolean
         scoreToPassGraduation?: boolean
+        scoreToRetain?: boolean
         trainingObjectTypeId?: boolean
         semesterStart?: boolean | SemesterDefaultArgs<ExtArgs>
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -133295,6 +133333,7 @@ export namespace Prisma {
         scoreToPassConditional?: boolean
         scoreToTakeGraduation?: boolean
         scoreToPassGraduation?: boolean
+        scoreToRetain?: boolean
         trainingObjectTypeId?: boolean
         semesterStart?: boolean | SemesterDefaultArgs<ExtArgs>
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -133323,9 +133362,10 @@ export namespace Prisma {
         scoreToPassConditional?: boolean
         scoreToTakeGraduation?: boolean
         scoreToPassGraduation?: boolean
+        scoreToRetain?: boolean
         trainingObjectTypeId?: boolean
     };
-    export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "admissionQuota" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>;
+    export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "admissionQuota" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>;
     export type TrainingCourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         semesterStart?: boolean | SemesterDefaultArgs<ExtArgs>
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -133387,6 +133427,7 @@ export namespace Prisma {
             scoreToPassConditional: number
             scoreToTakeGraduation: number
             scoreToPassGraduation: number
+            scoreToRetain: number
             trainingObjectTypeId: string
         }, ExtArgs["result"]["trainingCourse"]>
         composites: {}
@@ -286553,6 +286594,7 @@ export namespace Prisma {
         withdrew?: BoolFilter<"StudentSubjectScore"> | boolean
         examBanned?: BoolFilter<"StudentSubjectScore"> | boolean
         suspended?: BoolFilter<"StudentSubjectScore"> | boolean
+        repeated?: BoolFilter<"StudentSubjectScore"> | boolean
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -286581,6 +286623,7 @@ export namespace Prisma {
         withdrew?: SortOrder
         examBanned?: SortOrder
         suspended?: SortOrder
+        repeated?: SortOrder
         subjectClass?: SubjectClassOrderByWithRelationInput
         subjectVersion?: SubjectVersionOrderByWithRelationInput
         student?: StudentOrderByWithRelationInput
@@ -286614,6 +286657,7 @@ export namespace Prisma {
         withdrew?: BoolFilter<"StudentSubjectScore"> | boolean
         examBanned?: BoolFilter<"StudentSubjectScore"> | boolean
         suspended?: BoolFilter<"StudentSubjectScore"> | boolean
+        repeated?: BoolFilter<"StudentSubjectScore"> | boolean
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -286642,6 +286686,7 @@ export namespace Prisma {
         withdrew?: SortOrder
         examBanned?: SortOrder
         suspended?: SortOrder
+        repeated?: SortOrder
         _count?: StudentSubjectScoreCountOrderByAggregateInput
         _avg?: StudentSubjectScoreAvgOrderByAggregateInput
         _max?: StudentSubjectScoreMaxOrderByAggregateInput
@@ -286672,6 +286717,7 @@ export namespace Prisma {
         withdrew?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
         examBanned?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
         suspended?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
+        repeated?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
     };
     export type ArchivedCertificateOnStudentSubjectScoreWhereInput = {
         AND?: ArchivedCertificateOnStudentSubjectScoreWhereInput | ArchivedCertificateOnStudentSubjectScoreWhereInput[]
@@ -287309,6 +287355,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFilter<"TrainingCourse"> | number
         scoreToTakeGraduation?: FloatFilter<"TrainingCourse"> | number
         scoreToPassGraduation?: FloatFilter<"TrainingCourse"> | number
+        scoreToRetain?: FloatFilter<"TrainingCourse"> | number
         trainingObjectTypeId?: StringFilter<"TrainingCourse"> | string
         semesterStart?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
@@ -287346,6 +287393,7 @@ export namespace Prisma {
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
         scoreToPassGraduation?: SortOrder
+        scoreToRetain?: SortOrder
         trainingObjectTypeId?: SortOrder
         semesterStart?: SemesterOrderByWithRelationInput
         trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
@@ -287387,6 +287435,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFilter<"TrainingCourse"> | number
         scoreToTakeGraduation?: FloatFilter<"TrainingCourse"> | number
         scoreToPassGraduation?: FloatFilter<"TrainingCourse"> | number
+        scoreToRetain?: FloatFilter<"TrainingCourse"> | number
         trainingObjectTypeId?: StringFilter<"TrainingCourse"> | string
         semesterStart?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
         trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
@@ -287424,6 +287473,7 @@ export namespace Prisma {
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
         scoreToPassGraduation?: SortOrder
+        scoreToRetain?: SortOrder
         trainingObjectTypeId?: SortOrder
         _count?: TrainingCourseCountOrderByAggregateInput
         _avg?: TrainingCourseAvgOrderByAggregateInput
@@ -287458,6 +287508,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatWithAggregatesFilter<"TrainingCourse"> | number
         scoreToTakeGraduation?: FloatWithAggregatesFilter<"TrainingCourse"> | number
         scoreToPassGraduation?: FloatWithAggregatesFilter<"TrainingCourse"> | number
+        scoreToRetain?: FloatWithAggregatesFilter<"TrainingCourse"> | number
         trainingObjectTypeId?: StringWithAggregatesFilter<"TrainingCourse"> | string
     };
     export type FixedClassWhereInput = {
@@ -308562,6 +308613,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
@@ -308590,6 +308642,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -308612,6 +308665,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
@@ -308640,6 +308694,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -308665,6 +308720,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
     };
     export type StudentSubjectScoreUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -308684,6 +308740,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
     };
     export type StudentSubjectScoreUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -308706,6 +308763,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
     };
     export type ArchivedCertificateOnStudentSubjectScoreCreateInput = {
         id?: string
@@ -309408,6 +309466,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
         fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
@@ -309444,6 +309503,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectTypeId: string
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
         scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -309478,6 +309538,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
         fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
@@ -309514,6 +309575,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
         scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -309549,6 +309611,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectTypeId: string
     };
     export type TrainingCourseUpdateManyMutationInput = {
@@ -309574,6 +309637,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
     };
     export type TrainingCourseUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -309599,6 +309663,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     };
     export type FixedClassCreateInput = {
@@ -333176,6 +333241,7 @@ export namespace Prisma {
         withdrew?: SortOrder
         examBanned?: SortOrder
         suspended?: SortOrder
+        repeated?: SortOrder
     };
     export type StudentSubjectScoreAvgOrderByAggregateInput = {
         attendanceScore?: SortOrder
@@ -333205,6 +333271,7 @@ export namespace Prisma {
         withdrew?: SortOrder
         examBanned?: SortOrder
         suspended?: SortOrder
+        repeated?: SortOrder
     };
     export type StudentSubjectScoreMinOrderByAggregateInput = {
         id?: SortOrder
@@ -333227,6 +333294,7 @@ export namespace Prisma {
         withdrew?: SortOrder
         examBanned?: SortOrder
         suspended?: SortOrder
+        repeated?: SortOrder
     };
     export type StudentSubjectScoreSumOrderByAggregateInput = {
         attendanceScore?: SortOrder
@@ -333798,6 +333866,7 @@ export namespace Prisma {
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
         scoreToPassGraduation?: SortOrder
+        scoreToRetain?: SortOrder
         trainingObjectTypeId?: SortOrder
     };
     export type TrainingCourseAvgOrderByAggregateInput = {
@@ -333813,6 +333882,7 @@ export namespace Prisma {
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
         scoreToPassGraduation?: SortOrder
+        scoreToRetain?: SortOrder
     };
     export type TrainingCourseMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -333838,6 +333908,7 @@ export namespace Prisma {
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
         scoreToPassGraduation?: SortOrder
+        scoreToRetain?: SortOrder
         trainingObjectTypeId?: SortOrder
     };
     export type TrainingCourseMinOrderByAggregateInput = {
@@ -333864,6 +333935,7 @@ export namespace Prisma {
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
         scoreToPassGraduation?: SortOrder
+        scoreToRetain?: SortOrder
         trainingObjectTypeId?: SortOrder
     };
     export type TrainingCourseSumOrderByAggregateInput = {
@@ -333879,6 +333951,7 @@ export namespace Prisma {
         scoreToPassConditional?: SortOrder
         scoreToTakeGraduation?: SortOrder
         scoreToPassGraduation?: SortOrder
+        scoreToRetain?: SortOrder
     };
     export type EnumAcademicRankingBaseTypeWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.AcademicRankingBaseType | EnumAcademicRankingBaseTypeFieldRefInput<$PrismaModel>
@@ -369434,6 +369507,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
@@ -369461,6 +369535,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
@@ -369525,6 +369600,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
@@ -369552,6 +369628,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
@@ -369755,6 +369832,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
@@ -369782,6 +369860,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
@@ -369846,6 +369925,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
@@ -369873,6 +369953,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
@@ -370502,6 +370583,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
         fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
         scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
@@ -370536,6 +370618,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectTypeId: string
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
         scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -370957,6 +371040,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFilter<"TrainingCourse"> | number
         scoreToTakeGraduation?: FloatFilter<"TrainingCourse"> | number
         scoreToPassGraduation?: FloatFilter<"TrainingCourse"> | number
+        scoreToRetain?: FloatFilter<"TrainingCourse"> | number
         trainingObjectTypeId?: StringFilter<"TrainingCourse"> | string
     };
     export type TrainingScoreSessionUpsertWithWhereUniqueWithoutSemesterInput = {
@@ -372330,6 +372414,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
         scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
@@ -372365,6 +372450,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectTypeId: string
         scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
         academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -373157,6 +373243,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
         scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -373192,6 +373279,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
         academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -375611,6 +375699,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -375637,6 +375726,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -376047,6 +376137,7 @@ export namespace Prisma {
         withdrew?: BoolFilter<"StudentSubjectScore"> | boolean
         examBanned?: BoolFilter<"StudentSubjectScore"> | boolean
         suspended?: BoolFilter<"StudentSubjectScore"> | boolean
+        repeated?: BoolFilter<"StudentSubjectScore"> | boolean
     };
     export type DocumentFileUpsertWithWhereUniqueWithoutSubjectVersionInput = {
         where: DocumentFileWhereUniqueInput
@@ -376672,6 +376763,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
         fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
@@ -376707,6 +376799,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectTypeId: string
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
         scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -377742,6 +377835,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -377768,6 +377862,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -379498,6 +379593,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
         fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
         scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
@@ -379533,6 +379629,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
         scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
         academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -383173,6 +383270,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
         fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
@@ -383208,6 +383306,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectTypeId: string
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
         academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -383254,6 +383353,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
         fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
@@ -383289,6 +383389,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
         academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -383523,6 +383624,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -383549,6 +383651,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -386749,6 +386852,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
         fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
@@ -386784,6 +386888,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectTypeId: string
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
         scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -426804,6 +426909,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
@@ -426831,6 +426937,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
@@ -427146,6 +427253,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
@@ -427173,6 +427281,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
@@ -431231,6 +431340,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
         fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
@@ -431266,6 +431376,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectTypeId: string
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
         scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -431384,6 +431495,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
         fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
@@ -431419,6 +431531,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
         scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -432742,6 +432855,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
         fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
@@ -432777,6 +432891,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectTypeId: string
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
         scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -432897,6 +433012,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
         fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
@@ -432932,6 +433048,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
         scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -434944,6 +435061,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
         fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
@@ -434979,6 +435097,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectTypeId: string
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
         scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -435143,6 +435262,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
         fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
@@ -435178,6 +435298,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
         scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -440229,6 +440350,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
         fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
@@ -440264,6 +440386,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectTypeId: string
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
         scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -446285,6 +446408,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
         fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
@@ -446320,6 +446444,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectTypeId: string
         fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
         scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -446398,6 +446523,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
         fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
@@ -446433,6 +446559,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
         scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -449082,6 +449209,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
         trainingObjectTypeId: string
     };
     export type TrainingScoreSessionCreateManySemesterInput = {
@@ -449331,6 +449459,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
         fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
         scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -449365,6 +449494,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
         scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -449399,6 +449529,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     };
     export type TrainingScoreSessionUpdateWithoutSemesterInput = {
@@ -451598,6 +451729,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
     };
     export type DocumentFileCreateManySubjectVersionInput = {
         id?: string
@@ -452324,6 +452456,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -452350,6 +452483,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -452374,6 +452508,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
     };
     export type DocumentFileUpdateWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -452570,6 +452705,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
         fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
@@ -452605,6 +452741,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
         scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -452639,6 +452776,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     };
     export type ClassRegisterLogsUpdateWithoutClassRegisterSessionInput = {
@@ -452700,6 +452838,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
     };
     export type ClassScheduleCreateManySubjectClassInput = {
         id?: string
@@ -452784,6 +452923,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -452810,6 +452950,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -452834,6 +452975,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
     };
     export type FixedClassUpdateWithoutSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -453316,6 +453458,7 @@ export namespace Prisma {
         scoreToPassConditional?: number
         scoreToTakeGraduation?: number
         scoreToPassGraduation?: number
+        scoreToRetain?: number
     };
     export type CurriculumVersionCreateManyTrainingObjectTypeInput = {
         id?: string
@@ -453436,6 +453579,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
         fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
         scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -453471,6 +453615,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
         scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
         academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -453505,6 +453650,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
     };
     export type CurriculumVersionUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -456469,6 +456615,7 @@ export namespace Prisma {
         withdrew?: boolean
         examBanned?: boolean
         suspended?: boolean
+        repeated?: boolean
     };
     export type StudentTrainingScoreCreateManyStudentInput = {
         id?: string
@@ -456793,6 +456940,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -456819,6 +456967,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -456843,6 +456992,7 @@ export namespace Prisma {
         withdrew?: BoolFieldUpdateOperationsInput | boolean
         examBanned?: BoolFieldUpdateOperationsInput | boolean
         suspended?: BoolFieldUpdateOperationsInput | boolean
+        repeated?: BoolFieldUpdateOperationsInput | boolean
     };
     export type StudentTrainingScoreUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -457808,6 +457958,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
         fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
@@ -457843,6 +457994,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
         scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -457877,6 +458029,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     };
     export type FixedClassUpdateWithoutNotificationsInput = {
@@ -483598,6 +483751,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
         fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
@@ -483633,6 +483787,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
         scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -483667,6 +483822,7 @@ export namespace Prisma {
         scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
         scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
         scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     };
     export type FixedClassUpdateWithoutSurveyObjectTypesInput = {

@@ -313,7 +313,8 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   exempted: 'exempted',
   withdrew: 'withdrew',
   examBanned: 'examBanned',
-  suspended: 'suspended'
+  suspended: 'suspended',
+  repeated: 'repeated'
 };
 
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum = {
@@ -435,6 +436,7 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   scoreToPassConditional: 'scoreToPassConditional',
   scoreToTakeGraduation: 'scoreToTakeGraduation',
   scoreToPassGraduation: 'scoreToPassGraduation',
+  scoreToRetain: 'scoreToRetain',
   trainingObjectTypeId: 'trainingObjectTypeId'
 };
 

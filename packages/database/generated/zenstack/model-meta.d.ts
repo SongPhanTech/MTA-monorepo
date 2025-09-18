@@ -2262,6 +2262,17 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                repeated: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
                 certificates: {
                     name: string;
                     type: string;
@@ -3535,6 +3546,17 @@ declare const metadata: {
                     }[];
                 };
                 scoreToPassGraduation: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: number;
+                        }[];
+                    }[];
+                };
+                scoreToRetain: {
                     name: string;
                     type: string;
                     attributes: {

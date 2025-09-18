@@ -1195,6 +1195,10 @@ const metadata = {
                     name: "suspended",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, repeated: {
+                    name: "repeated",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, certificates: {
                     name: "certificates",
                     type: "ArchivedCertificateOnStudentSubjectScore",
@@ -1903,6 +1907,10 @@ const metadata = {
                     name: "scoreToPassGraduation",
                     type: "Float",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
+                }, scoreToRetain: {
+                    name: "scoreToRetain",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 6 }] }],
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
