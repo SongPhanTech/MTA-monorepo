@@ -23,6 +23,9 @@ const PERMISSIONS = {
     XOA: 8, // 1000
     IN: 16,
     XUAT_EXCEL: 32,
+    TAI_TEP: 64,
+    NHAP_EXCEL: 128,
+    DUYET: 256,
 }
 
 const useAbility = () => {
