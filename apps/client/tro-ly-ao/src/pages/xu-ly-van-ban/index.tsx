@@ -1,8 +1,8 @@
 import { CopyOutlined, FileSyncOutlined } from '@ant-design/icons'
 import ChatLayout from '@layouts/chat-layout'
-import { Button, Col, Input, message, Row, Select, Space, Typography } from 'antd'
+import { Button, Col, Input, message, Row, Select, Typography } from 'antd'
 import type { ReactElement } from 'react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { fetchXuLyVanBan } from '@/api/xu-ly-van-ban'
 import { readStreamToText } from '@/utils'
 
@@ -67,7 +67,12 @@ function Page() {
         return cleanOutputText(await readStreamToText(response.body))
     }
 
-    const handleProcess = async () => {
+    const handleProcess = useCallback(async () => {
+        if (!inputText.trim()) {
+            message.warning('Vui lòng nhập nội dung cần xử lý')
+            return
+        }
+
         const controller = new AbortController()
         setAbortController(controller)
         try {
@@ -92,7 +97,7 @@ function Page() {
             setLoading(false)
             setAbortController(null)
         }
-    }
+    }, [inputText, mode, handleExtraction, handleFixSpelling, handleSummarize, handleTranslate])
 
     const handleCopy = (text: string) => {
         navigator.clipboard
@@ -106,18 +111,22 @@ function Page() {
             })
     }
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault()
+            handleProcess()
+        }
+    }
+
     return (
-        <div style={{ padding: 20 }}>
+        <div className="h-full flex flex-col overflow-auto" style={{ padding: 20 }}>
             <Row justify="center" style={{ marginBottom: 16 }}>
                 <Col>
-                    <Title level={2} style={{ textAlign: 'center' }}>
-                        Xử lý văn bản
-                    </Title>
-                    <Space>
+                    <div className="flex flex-wrap items-center justify-center gap-4">
                         <Select
                             value={mode}
                             onChange={(value: Mode) => setMode(value)}
-                            style={{ width: 200 }}
+                            style={{ minWidth: 200 }}
                             size="large"
                             disabled={loading}
                         >
@@ -148,19 +157,20 @@ function Page() {
                                 }}
                             />
                         )}
-                    </Space>
+                    </div>
                 </Col>
             </Row>
 
-            <Row gutter={16}>
-                <Col span={12}>
+            <Row gutter={[16, 16]}>
+                <Col xs={24} md={12}>
                     <div className="relative group">
                         <TextArea
                             size="large"
-                            rows={15}
+                            rows={10}
                             value={inputText}
                             onChange={(e) => setInputText(e.target.value)}
-                            placeholder="Nhập văn bản tại đây"
+                            onKeyDown={handleKeyDown}
+                            placeholder="Nhập văn bản tại đây (Ctrl+Enter để xử lý)"
                             disabled={loading}
                         />
                         <Button
@@ -173,14 +183,15 @@ function Page() {
                     </div>
                 </Col>
 
-                <Col span={12}>
+                <Col xs={24} md={12}>
                     <div className="relative group">
                         <TextArea
                             size="large"
-                            rows={15}
+                            rows={10}
                             value={outputText}
                             readOnly
                             placeholder="Kết quả sẽ hiển thị tại đây"
+                            onKeyDown={handleKeyDown}
                         />
                         <Button
                             size="small"

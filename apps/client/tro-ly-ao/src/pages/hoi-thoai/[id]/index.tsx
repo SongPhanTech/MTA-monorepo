@@ -241,10 +241,10 @@ export default function Page() {
 
     return (
         <div className="flex flex-col h-full items-center bg-white overflow-hidden">
-            <div className="w-full flex flex-col h-full px-4 min-w-0 relative">
+            <div className="w-full flex flex-col h-full min-w-0 relative max-w-5xl mx-auto">
                 <div
                     ref={scrollRef}
-                    className="flex-1 overflow-y-auto pb-4 no-scrollbar"
+                    className="flex-1 overflow-y-auto pb-4 no-scrollbar px-4 md:px-6"
                     onScroll={handleScroll}
                 >
                     {messages.length === 0 ? (
@@ -339,16 +339,13 @@ export default function Page() {
                 </div>
 
                 <div className="relative">
-                    {/* Floating scroll to bottom button */}
                     {showScrollButton && (
-                        <Button
-                            type="primary"
-                            shape="circle"
-                            icon={<DownOutlined />}
-                            className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-50 shadow-lg"
+                        <div
                             onClick={scrollToBottom}
-                            size="large"
-                        />
+                            className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-50 w-8 h-8 bg-primary/90 hover:bg-primary text-white rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110"
+                        >
+                            <DownOutlined className="text-xs" />
+                        </div>
                     )}
                     <ChatInput
                         input={input}

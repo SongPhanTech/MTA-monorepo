@@ -29,16 +29,23 @@ const ChatLayout = ({
     const { sessionId } = useUserSession()
     const [isDeleting, setIsDeleting] = useState(false)
     const [collapsed, setCollapsed] = useState(() => {
-        return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
+        if (typeof window !== 'undefined') {
+            const isMobile = window.innerWidth < 768
+            const storedCollapsed = localStorage.getItem('collapsed') === 'true'
+            return isMobile ? true : storedCollapsed
+        }
+        return false
     })
 
     const { data: userCurrent } = useSession()
 
     const handleCollapsed = (value?: boolean) => {
         if (typeof window !== 'undefined') {
-            const newValue = value ?? localStorage.getItem('collapsed') === 'true'
+            const newValue = value ?? !collapsed
             setCollapsed(newValue)
-            localStorage.setItem('collapsed', newValue.toString())
+            if (window.innerWidth >= 768) {
+                localStorage.setItem('collapsed', newValue.toString())
+            }
         }
     }
     const { mutateAsync: deleteConversation } = useDeleteConversation()
@@ -83,7 +90,11 @@ const ChatLayout = ({
     return (
         <Layout className="h-screen p-[10px]">
             <Layout className="overflow-hidden flex flex-col">
-                <ChatHeader collapsed={collapsed} onCollapse={handleCollapsed} />
+                <ChatHeader
+                    collapsed={collapsed}
+                    onCollapse={handleCollapsed}
+                    showCollapseButton={showSiderChat}
+                />
                 <Layout className="flex-1">
                     {showSiderChat && (
                         <div

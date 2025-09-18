@@ -1,4 +1,9 @@
-import { AppstoreOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
+import {
+    AppstoreOutlined,
+    ExportOutlined,
+    MenuFoldOutlined,
+    MenuUnfoldOutlined,
+} from '@ant-design/icons'
 import { Button, Layout, Typography } from 'antd'
 import { usePathname } from 'next/navigation'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -10,9 +15,10 @@ const { Title } = Typography
 interface ChatHeaderProps {
     collapsed: boolean
     onCollapse: (collapsed: boolean) => void
+    showCollapseButton?: boolean
 }
 
-const ChatHeader = ({ collapsed, onCollapse }: ChatHeaderProps) => {
+const ChatHeader = ({ collapsed, onCollapse, showCollapseButton = true }: ChatHeaderProps) => {
     const pathname = usePathname()
     const { onOpen: openAppModal } = useDisclosure({
         tag: 'AppSwitcherModal',
@@ -23,15 +29,25 @@ const ChatHeader = ({ collapsed, onCollapse }: ChatHeaderProps) => {
         return paths.some((path) => pathname?.startsWith(path))
     })
 
+    const isInIframe = typeof window !== 'undefined' && window.self !== window.top
+
+    const handleExpandToNewTab = () => {
+        if (typeof window !== 'undefined' && pathname) {
+            window.open(window.location.href, '_blank')
+        }
+    }
+
     return (
-        <Header className="bg-white rounded-xl px-4 h-14 flex items-center mb-2">
+        <Header className="bg-white rounded-xl px-4 h-14 flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-                <Button
-                    type="text"
-                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                    onClick={() => onCollapse(!collapsed)}
-                    className="flex items-center justify-center hover:bg-gray-100"
-                />
+                {showCollapseButton && (
+                    <Button
+                        type="text"
+                        icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                        onClick={() => onCollapse(!collapsed)}
+                        className="flex items-center justify-center hover:bg-gray-100"
+                    />
+                )}
                 <Button
                     type="text"
                     icon={<AppstoreOutlined />}
@@ -44,6 +60,16 @@ const ChatHeader = ({ collapsed, onCollapse }: ChatHeaderProps) => {
                     </Title>
                 )}
             </div>
+
+            {isInIframe && (
+                <Button
+                    type="text"
+                    icon={<ExportOutlined />}
+                    onClick={handleExpandToNewTab}
+                    className="flex items-center justify-center hover:bg-primary/10 hover:text-primary text-gray-500 transition-all duration-200"
+                    title="Mở trong tab mới"
+                />
+            )}
         </Header>
     )
 }

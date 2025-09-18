@@ -42,24 +42,34 @@ const AppSwitcherModal = () => {
             open={isOpen}
             onCancel={onClose}
             footer={null}
-            width={400}
+            width={320}
             className="app-switcher-modal"
             centered
         >
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-1">
-                {visibleApps.map((app) => (
-                    <Button
-                        key={app.key}
-                        size="large"
-                        className="h-16 flex flex-col items-center justify-center gap-1 text-center hover:bg-primary/10 hover:text-primary transition-all duration-200 border-gray-200 hover:border-primary/25"
-                        icon={React.createElement(APP_ICONS[app.key] || AppstoreOutlined, {
-                            style: { fontSize: '24px' },
-                        })}
-                        onClick={() => handleAppClick(app)}
-                    >
-                        <span className="text-xs font-medium leading-tight">{app.label}</span>
-                    </Button>
-                ))}
+            <div className="grid grid-cols-1 gap-3">
+                {visibleApps.map((app) => {
+                    const paths = app.matchPaths || [app.path]
+                    const isActive = pathname && paths.some((path) => pathname.startsWith(path))
+
+                    return (
+                        <Button
+                            key={app.key}
+                            size="large"
+                            className={`h-14 flex items-center justify-start gap-3 text-left transition-all duration-200 ${
+                                isActive
+                                    ? 'bg-primary/15 text-primary border-primary/30'
+                                    : 'hover:bg-primary/10 hover:text-primary border-gray-200 hover:border-primary/25'
+                            }`}
+                            onClick={() => handleAppClick(app)}
+                            disabled={!!isActive}
+                        >
+                            {React.createElement(APP_ICONS[app.key] || AppstoreOutlined, {
+                                style: { fontSize: '20px' },
+                            })}
+                            <span className="text-sm font-medium">{app.label}</span>
+                        </Button>
+                    )
+                })}
             </div>
         </Modal>
     )
