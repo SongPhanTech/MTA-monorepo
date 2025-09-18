@@ -1,6 +1,4 @@
-import logo_mta from '@assets/images/logo_mta.png'
 import AppSwitcherFloatButton from '@components/commons/app-switcher-modal'
-import AvatarDropdown from '@components/layouts/avatar-dropdown'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
 import { cn } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
@@ -10,7 +8,6 @@ import {
     useFindManyConversation,
 } from '@workspace/db/hooks'
 import { Layout, message, Spin } from 'antd'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { type ReactNode, useEffect, useState } from 'react'
 import { useUserSession } from '@/hooks/useUserSession'
@@ -85,21 +82,7 @@ const ChatLayout = ({
 
     return (
         <>
-            {/* Header */}
-            <Header className="fixed z-50 top-0 left-0 right-0 flex justify-between items-center bg-white shadow rounded-xl px-4 py-2 m-2 h-[64px]">
-                <div className="flex items-center gap-3">
-                    <Image src={logo_mta} alt="logo_mta" className="w-10 h-10" />
-                    <span className="text-lg font-bold text-primary">
-                        HỌC VIỆN KỸ THUẬT QUÂN SỰ
-                    </span>
-                </div>
-                <div className="flex gap-2 items-center">
-                    <AvatarDropdown />
-                </div>
-            </Header>
-
-            {/* Layout bên dưới header */}
-            <Layout className="h-screen pt-[80px] p-[10px]">
+            <Layout className="h-screen p-[10px]">
                 {showSiderChat && (
                     <SiderChatLayout
                         items={generateMenusTroLyAo(conversationMenuList)}
