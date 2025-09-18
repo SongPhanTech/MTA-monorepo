@@ -5674,6 +5674,7 @@ export namespace Prisma {
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
         name: 'name',
+        codeTkb: 'codeTkb',
         examType: 'examType',
         type: 'type',
         credit: 'credit',
@@ -8867,6 +8868,7 @@ export namespace Prisma {
         code: 'code',
         description: 'description',
         name: 'name',
+        codeTkb: 'codeTkb',
         objectives: 'objectives',
         learningOutcome: 'learningOutcome',
         structure: 'structure',
@@ -20751,6 +20753,7 @@ export namespace Prisma {
         readonly createdAt: FieldRef<"SubjectVersion", 'DateTime'>;
         readonly updatedAt: FieldRef<"SubjectVersion", 'DateTime'>;
         readonly name: FieldRef<"SubjectVersion", 'String'>;
+        readonly codeTkb: FieldRef<"SubjectVersion", 'String'>;
         readonly examType: FieldRef<"SubjectVersion", 'ExamType'>;
         readonly type: FieldRef<"SubjectVersion", 'SubjectVersionType'>;
         readonly credit: FieldRef<"SubjectVersion", 'Int'>;
@@ -137126,6 +137129,7 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         name: string | null
+        codeTkb: string | null
         examType: $Enums.ExamType | null
         type: $Enums.SubjectVersionType | null
         credit: number | null
@@ -137157,6 +137161,7 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         name: string | null
+        codeTkb: string | null
         examType: $Enums.ExamType | null
         type: $Enums.SubjectVersionType | null
         credit: number | null
@@ -137188,6 +137193,7 @@ export namespace Prisma {
         createdAt: number
         updatedAt: number
         name: number
+        codeTkb: number
         examType: number
         type: number
         credit: number
@@ -137244,6 +137250,7 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         name?: true
+        codeTkb?: true
         examType?: true
         type?: true
         credit?: true
@@ -137275,6 +137282,7 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         name?: true
+        codeTkb?: true
         examType?: true
         type?: true
         credit?: true
@@ -137306,6 +137314,7 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         name?: true
+        codeTkb?: true
         examType?: true
         type?: true
         credit?: true
@@ -137418,6 +137427,7 @@ export namespace Prisma {
         createdAt: Date
         updatedAt: Date
         name: string
+        codeTkb: string | null
         examType: $Enums.ExamType
         type: $Enums.SubjectVersionType
         credit: number
@@ -137466,6 +137476,7 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         name?: boolean
+        codeTkb?: boolean
         examType?: boolean
         type?: boolean
         credit?: boolean
@@ -137511,6 +137522,7 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         name?: boolean
+        codeTkb?: boolean
         examType?: boolean
         type?: boolean
         credit?: boolean
@@ -137544,6 +137556,7 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         name?: boolean
+        codeTkb?: boolean
         examType?: boolean
         type?: boolean
         credit?: boolean
@@ -137577,6 +137590,7 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         name?: boolean
+        codeTkb?: boolean
         examType?: boolean
         type?: boolean
         credit?: boolean
@@ -137599,7 +137613,7 @@ export namespace Prisma {
         managementOrganizationId?: boolean
         subjectId?: boolean
     };
-    export type SubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "examType" | "type" | "credit" | "week" | "period" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "objectives" | "learningOutcome" | "structure" | "guild" | "academicResults" | "materials" | "rules" | "managementOrganizationId" | "subjectId", ExtArgs["result"]["subjectVersion"]>;
+    export type SubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "codeTkb" | "examType" | "type" | "credit" | "week" | "period" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "objectives" | "learningOutcome" | "structure" | "guild" | "academicResults" | "materials" | "rules" | "managementOrganizationId" | "subjectId", ExtArgs["result"]["subjectVersion"]>;
     export type SubjectVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         managementOrganization?: boolean | SubjectVersion$managementOrganizationArgs<ExtArgs>
         subject?: boolean | SubjectDefaultArgs<ExtArgs>
@@ -137656,6 +137670,7 @@ export namespace Prisma {
             createdAt: Date
             updatedAt: Date
             name: string
+            codeTkb: string | null
             examType: $Enums.ExamType
             type: $Enums.SubjectVersionType
             credit: number
@@ -286703,6 +286718,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"SubjectVersion"> | Date | string
         updatedAt?: DateTimeFilter<"SubjectVersion"> | Date | string
         name?: StringFilter<"SubjectVersion"> | string
+        codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
         examType?: EnumExamTypeFilter<"SubjectVersion"> | $Enums.ExamType
         type?: EnumSubjectVersionTypeFilter<"SubjectVersion"> | $Enums.SubjectVersionType
         credit?: IntFilter<"SubjectVersion"> | number
@@ -286747,6 +286763,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
+        codeTkb?: SortOrderInput | SortOrder
         examType?: SortOrder
         type?: SortOrder
         credit?: SortOrder
@@ -286795,6 +286812,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"SubjectVersion"> | Date | string
         updatedAt?: DateTimeFilter<"SubjectVersion"> | Date | string
         name?: StringFilter<"SubjectVersion"> | string
+        codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
         examType?: EnumExamTypeFilter<"SubjectVersion"> | $Enums.ExamType
         type?: EnumSubjectVersionTypeFilter<"SubjectVersion"> | $Enums.SubjectVersionType
         credit?: IntFilter<"SubjectVersion"> | number
@@ -286839,6 +286857,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
+        codeTkb?: SortOrderInput | SortOrder
         examType?: SortOrder
         type?: SortOrder
         credit?: SortOrder
@@ -286878,6 +286897,7 @@ export namespace Prisma {
         createdAt?: DateTimeWithAggregatesFilter<"SubjectVersion"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"SubjectVersion"> | Date | string
         name?: StringWithAggregatesFilter<"SubjectVersion"> | string
+        codeTkb?: StringNullableWithAggregatesFilter<"SubjectVersion"> | string | null
         examType?: EnumExamTypeWithAggregatesFilter<"SubjectVersion"> | $Enums.ExamType
         type?: EnumSubjectVersionTypeWithAggregatesFilter<"SubjectVersion"> | $Enums.SubjectVersionType
         credit?: IntWithAggregatesFilter<"SubjectVersion"> | number
@@ -308800,6 +308820,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -308842,6 +308863,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -308884,6 +308906,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -308926,6 +308949,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -308968,6 +308992,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -308999,6 +309024,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -309028,6 +309054,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -332873,6 +332900,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
+        codeTkb?: SortOrder
         examType?: SortOrder
         type?: SortOrder
         credit?: SortOrder
@@ -332916,6 +332944,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
+        codeTkb?: SortOrder
         examType?: SortOrder
         type?: SortOrder
         credit?: SortOrder
@@ -332947,6 +332976,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
+        codeTkb?: SortOrder
         examType?: SortOrder
         type?: SortOrder
         credit?: SortOrder
@@ -363893,6 +363923,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -363934,6 +363965,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -364090,6 +364122,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -364131,6 +364164,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -364298,6 +364332,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -364339,6 +364374,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -364471,6 +364507,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -364512,6 +364549,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -366969,6 +367007,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -367010,6 +367049,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -367357,6 +367397,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -367398,6 +367439,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -372951,6 +372993,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -372992,6 +373035,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -373136,6 +373180,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"SubjectVersion"> | Date | string
         updatedAt?: DateTimeFilter<"SubjectVersion"> | Date | string
         name?: StringFilter<"SubjectVersion"> | string
+        codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
         examType?: EnumExamTypeFilter<"SubjectVersion"> | $Enums.ExamType
         type?: EnumSubjectVersionTypeFilter<"SubjectVersion"> | $Enums.SubjectVersionType
         credit?: IntFilter<"SubjectVersion"> | number
@@ -373311,6 +373356,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -373352,6 +373398,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -373397,6 +373444,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -373438,6 +373486,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -373483,6 +373532,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -373524,6 +373574,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -373569,6 +373620,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -373610,6 +373662,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -374335,6 +374388,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -374376,6 +374430,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -374452,6 +374507,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -374493,6 +374549,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -374561,6 +374618,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -374602,6 +374660,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -374686,6 +374745,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -374727,6 +374787,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -374993,6 +375054,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -375034,6 +375096,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -375798,6 +375861,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -375839,6 +375903,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -389337,6 +389402,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -389378,6 +389444,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -427416,6 +427483,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -427457,6 +427525,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -428157,6 +428226,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -428198,6 +428268,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -448843,6 +448914,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -448873,6 +448945,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -448914,6 +448987,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -448955,6 +449029,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -449157,6 +449232,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -449198,6 +449274,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -449239,6 +449316,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -449270,6 +449348,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -449311,6 +449390,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -449352,6 +449432,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -449383,6 +449464,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -449424,6 +449506,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -449465,6 +449548,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -449496,6 +449580,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -449537,6 +449622,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -449578,6 +449664,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -459977,6 +460064,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
         credit: number
@@ -460415,6 +460503,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -460456,6 +460545,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
@@ -460497,6 +460587,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
         credit?: IntFieldUpdateOperationsInput | number
