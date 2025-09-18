@@ -64,7 +64,7 @@ export default function ChatInput({
 
             <div className="w-full flex justify-center pb-4">
                 <div className="w-full max-w-4xl px-4">
-                    <div className="rounded-2xl border border-gray-200/80 px-3 py-2 shadow-lg shadow-black/5 bg-white/90 backdrop-blur-sm flex flex-col gap-2 transition-all duration-200 hover:shadow-xl hover:shadow-black/10">
+                    <div className="rounded-2xl border border-gray-200/80 px-3 py-2 shadow-md shadow-black/8 bg-white/90 backdrop-blur-sm flex flex-col gap-2 transition-all duration-200 hover:border-primary/30 hover:bg-white">
                         {/* Dòng trên: textarea */}
                         <textarea
                             ref={textareaRef}

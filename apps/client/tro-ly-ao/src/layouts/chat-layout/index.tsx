@@ -85,13 +85,21 @@ const ChatLayout = ({
             <Layout className="overflow-hidden flex flex-col">
                 <ChatHeader collapsed={collapsed} onCollapse={handleCollapsed} />
                 <Layout className="flex-1">
-                    {showSiderChat && !collapsed && (
-                        <SiderChatLayout
-                            items={generateMenusTroLyAo(conversationMenuList)}
-                            theme={'light'}
-                            onDelete={handleDelete}
-                        />
-                    )}
+                    <div
+                        className={`transition-all duration-300 ease-in-out overflow-hidden h-full ${!collapsed ? 'w-[290px] opacity-100' : 'w-0 opacity-0'}`}
+                    >
+                        {showSiderChat && (
+                            <div
+                                className={`transition-opacity duration-300 h-full ${!collapsed ? 'opacity-100' : 'opacity-0'}`}
+                            >
+                                <SiderChatLayout
+                                    items={generateMenusTroLyAo(conversationMenuList)}
+                                    theme={'light'}
+                                    onDelete={handleDelete}
+                                />
+                            </div>
+                        )}
+                    </div>
                     <Content
                         className={cn(
                             'flex-1 p-[10px] bg-white rounded-xl relative overflow-hidden',

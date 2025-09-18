@@ -339,6 +339,7 @@ export default function Page() {
                 </div>
 
                 <div className="relative">
+                    {/* Floating scroll to bottom button */}
                     {showScrollButton && (
                         <Button
                             type="primary"
