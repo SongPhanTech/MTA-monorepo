@@ -31,7 +31,7 @@ const ChatLayout = ({
     const [collapsed, setCollapsed] = useState(() => {
         if (typeof window !== 'undefined') {
             const isMobile = window.innerWidth < 768
-            const storedCollapsed = localStorage.getItem('collapsed') === 'true'
+            const storedCollapsed = localStorage.getItem('chat-sider-collapsed') === 'true'
             return isMobile ? true : storedCollapsed
         }
         return false
@@ -44,7 +44,7 @@ const ChatLayout = ({
             const newValue = value ?? !collapsed
             setCollapsed(newValue)
             if (window.innerWidth >= 768) {
-                localStorage.setItem('collapsed', newValue.toString())
+                localStorage.setItem('chat-sider-collapsed', newValue.toString())
             }
         }
     }
@@ -68,9 +68,14 @@ const ChatLayout = ({
         }
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+    // Initialize responsive collapse on mount
     useEffect(() => {
-        handleCollapsed()
+        if (typeof window !== 'undefined') {
+            const isMobile = window.innerWidth < 768
+            if (isMobile) {
+                setCollapsed(true)
+            }
+        }
     }, [])
 
     const { data: conversation } = useFindManyConversation({
