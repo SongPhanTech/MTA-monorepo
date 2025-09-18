@@ -21,6 +21,8 @@ const PERMISSIONS = {
     SUA: 2, // 010
     THEM: 4, // 100
     XOA: 8, // 1000
+    IN: 16,
+    XUAT_EXCEL: 32,
 }
 
 const useAbility = () => {
