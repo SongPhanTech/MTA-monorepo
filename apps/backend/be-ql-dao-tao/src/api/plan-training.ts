@@ -150,96 +150,45 @@ app.openapi(importPhanCongGiangDay, async (c) => {
         if (!sheet) {
             return c.json({ message: 'Không tìm thấy sheet' }, 400)
         }
+
         // Chuyển đổi dữ liệu từ sheet thành JSON
-        const rowData = utils.sheet_to_json<string[]>(sheet, { header: 1 })
-
-        // Kiểm tra mã khóa có trùng với đầu vào không để tránh nhập nhầm
-        const cellAddress = 'C8'
-        const cell = sheet[cellAddress]
-        const cellValue = cell ? cell.v : null
-        console.log(`Giá trị ô ${cellAddress}:`, cellValue)
-
-        // Lấy đơn vị
-        const parentOrganizationCellAddress = 'D3'
-        const parentOrganizationCell = sheet[parentOrganizationCellAddress]
-        const parentOrganizationCellValue = parentOrganizationCell
-            ? parentOrganizationCell.v.replace('Khoa: ', '')
-            : null
-        console.log(
-            `Giá trị ô ${parentOrganizationCellAddress}:${sheetName}`,
-            parentOrganizationCellValue
-        )
-
-        const organizationCellAddress = 'J3'
-        const organizationCell = sheet[organizationCellAddress]
-        const organizationCellValue = organizationCell
-            ? organizationCell.v.replace('Bộ môn: ', '')
-            : null
-        console.log(`Giá trị ô ${organizationCellAddress}:${sheetName}`, organizationCellValue)
-
-        const parentOrgID = ListOrganization.find(
-            (org) => org.sTen === parentOrganizationCellValue
-        )?.Id
-        const orgID = ListOrganization.find(
-            (org) => org.sTen === organizationCellValue && org.sParentId === parentOrgID
-        )?.Id
-
-        console.log(`Mã đơn vị cha: ${parentOrgID}, Mã đơn vị: ${orgID}`)
-        if (!orgID) {
+        const rowData = utils.sheet_to_json<string[]>(sheet, {
+            header: 1,
+        })
+        const indexOffHeader = rowData.findIndex((row, index) => {
+            if (row[0] === 'STT') {
+                return true // dừng lại khi tìm thấy
+            }
+            return false // tiếp tục tìm kiếm
+        })
+        if (indexOffHeader === -1) {
             continue
         }
-
-        rowData.slice(9).forEach((row, index) => {
-            // Dòng thứ 10
-            const subjectClassCode = row[9] || '' // Mã lớp (cột J)
-            if (!subjectClassCode) {
-                console.log(`Bỏ qua dòng ${index + 11} vì không có mã lớp`)
-                return
-            }
-            const subjectClass = ListSubjectClass.find((cls) => cls.code === subjectClassCode)
-            console.log(`Mã lớp: ${subjectClassCode} ${subjectClass ? `- ${subjectClass.id}` : ''}`)
-
-            const mainLecturerName = row[12] || '' // Tên giảng viên chính (cột M)
-            const mainLecturer = ListLecture.find(
-                (lec) =>
-                    lec.userProfile?.fullname === mainLecturerName && lec.organizationId === orgID
-            )
+        // Xóa các dòng trống ở đầu file (nếu có)
+        rowData.splice(0, indexOffHeader + 1)
+        for (const row of rowData) {
+            // Xử lý từng dòng dữ liệu ở đây
+            const [
+                stt,
+                maGV,
+                tenGV,
+                maMon,
+                tenMon,
+                maLop,
+                tenLop,
+                ,
+                maPhong,
+                tenPhong,
+                hinhThucHoc,
+                ngayHoc,
+                caHoc,
+                tietHoc,
+                hocChung,
+            ] = row
             console.log(
-                `Giảng viên chính: ${mainLecturerName} ${mainLecturer ? `- ${mainLecturer.id}` : ''}`
+                `STT: ${stt}, Mã GV: ${maGV}, Tên GV: ${tenGV}, Mã Môn: ${maMon}, Tên Môn: ${tenMon}, Mã Lớp: ${maLop}, Tên Lớp: ${tenLop}, Mã Phòng: ${maPhong}, Tên Phòng: ${tenPhong}, Hình Thức Học: ${hinhThucHoc}, Ngày Học: ${ngayHoc}, Ca Học: ${caHoc}, Tiết Học: ${tietHoc}, Học Chung: ${hocChung}`
             )
-
-            const extraLecturerName = row[13] || '' // Tên giảng viên phụ (cột N)
-            const extraLecturer = ListLecture.find(
-                (lec) =>
-                    lec.userProfile?.fullname === extraLecturerName && lec.organizationId === orgID
-            )
-            console.log(
-                `Giảng viên phụ: ${extraLecturerName} ${extraLecturer ? `- ${extraLecturer.id}` : ''}`
-            )
-
-            if (subjectClass && mainLecturer) {
-                // Cập nhật hoặc tạo mới phân công giảng dạy
-                prisma.subjectClass
-                    .update({
-                        where: { id: subjectClass.id },
-                        data: {
-                            lecturerId: mainLecturer.id,
-                            extraLecturerId: extraLecturer ? extraLecturer.id : null,
-                        },
-                    })
-                    .then(() => {
-                        console.log(`Cập nhật phân công giảng dạy cho lớp ${subjectClassCode}`)
-                    })
-                    .catch((error) => {
-                        console.error(
-                            `Lỗi cập nhật phân công giảng dạy cho lớp ${subjectClassCode}:`,
-                            error
-                        )
-                    })
-            } else {
-                console.warn(`Không tìm thấy lớp hoặc giảng viên cho dòng ${index + 11}`)
-            }
-        })
+        }
     }
     const endTime = Date.now()
 
