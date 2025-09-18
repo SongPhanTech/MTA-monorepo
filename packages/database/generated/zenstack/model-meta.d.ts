@@ -2262,6 +2262,17 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                repeated: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
                 certificates: {
                     name: string;
                     type: string;
@@ -3535,6 +3546,17 @@ declare const metadata: {
                     }[];
                 };
                 scoreToPassGraduation: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: number;
+                        }[];
+                    }[];
+                };
+                scoreToRetain: {
                     name: string;
                     type: string;
                     attributes: {
@@ -5605,6 +5627,187 @@ declare const metadata: {
                     backLink: string;
                     isRelationOwner: boolean;
                 };
+                classRegisterLogs: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
+        };
+        classRegisterLogs: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                classRegisterSession: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                classRegisterSessionId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                subjectClass: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                subjectClassId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                student: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                studentId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                status: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                reason: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
             };
             uniqueConstraints: {
                 id: {
@@ -6020,6 +6223,13 @@ declare const metadata: {
                     isArray: boolean;
                     backLink: string;
                     isRelationOwner: boolean;
+                };
+                classRegisterLogs: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
                 };
             };
             uniqueConstraints: {
@@ -9436,6 +9646,13 @@ declare const metadata: {
                     backLink: string;
                 };
                 diplomaVerificationApplication: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                classRegisterLogs: {
                     name: string;
                     type: string;
                     isDataModel: boolean;

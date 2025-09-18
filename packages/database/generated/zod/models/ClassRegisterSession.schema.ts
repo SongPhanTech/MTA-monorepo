@@ -23,6 +23,7 @@ const baseSchema = z.object({
 const relationSchema = z.object({
     semester: z.record(z.unknown()),
     trainingCourses: z.array(z.unknown()).optional(),
+    classRegisterLogs: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

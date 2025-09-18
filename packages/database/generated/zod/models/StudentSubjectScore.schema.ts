@@ -38,6 +38,7 @@ const baseSchema = z.object({
     withdrew: z.boolean().default(false),
     examBanned: z.boolean().default(false),
     suspended: z.boolean().default(false),
+    repeated: z.boolean().default(false),
 }
 ).strict();
 const relationSchema = z.object({
@@ -108,7 +109,8 @@ export const StudentSubjectScorePrismaUpdateSchema = z.object({
     exempted: z.boolean().default(false),
     withdrew: z.boolean().default(false),
     examBanned: z.boolean().default(false),
-    suspended: z.boolean().default(false)
+    suspended: z.boolean().default(false),
+    repeated: z.boolean().default(false)
 }).partial().passthrough();
 
 
@@ -116,7 +118,7 @@ export const StudentSubjectScorePrismaUpdateSchema = z.object({
  * `StudentSubjectScore` schema for create operations excluding foreign keys and relations.
  */
 export const StudentSubjectScoreCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, examPostponed: true, exempted: true, withdrew: true, examBanned: true, suspended: true
+    id: true, active: true, createdAt: true, updatedAt: true, examPostponed: true, exempted: true, withdrew: true, examBanned: true, suspended: true, repeated: true
 });
 
 

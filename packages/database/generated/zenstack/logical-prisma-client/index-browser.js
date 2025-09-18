@@ -313,7 +313,8 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   exempted: 'exempted',
   withdrew: 'withdrew',
   examBanned: 'examBanned',
-  suspended: 'suspended'
+  suspended: 'suspended',
+  repeated: 'repeated'
 };
 
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum = {
@@ -435,6 +436,7 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   scoreToPassConditional: 'scoreToPassConditional',
   scoreToTakeGraduation: 'scoreToTakeGraduation',
   scoreToPassGraduation: 'scoreToPassGraduation',
+  scoreToRetain: 'scoreToRetain',
   trainingObjectTypeId: 'trainingObjectTypeId'
 };
 
@@ -612,6 +614,21 @@ exports.Prisma.ClassRegisterSessionScalarFieldEnum = {
   endDate: 'endDate',
   semesterId: 'semesterId',
   maxCredit: 'maxCredit'
+};
+
+exports.Prisma.ClassRegisterLogsScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  classRegisterSessionId: 'classRegisterSessionId',
+  subjectClassId: 'subjectClassId',
+  studentId: 'studentId',
+  status: 'status',
+  reason: 'reason'
 };
 
 exports.Prisma.SubjectClassScalarFieldEnum = {
@@ -3993,6 +4010,16 @@ exports.Prisma.ClassRegisterSessionOrderByRelevanceFieldEnum = {
   semesterId: 'semesterId'
 };
 
+exports.Prisma.ClassRegisterLogsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  classRegisterSessionId: 'classRegisterSessionId',
+  subjectClassId: 'subjectClassId',
+  studentId: 'studentId',
+  reason: 'reason'
+};
+
 exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -5940,6 +5967,13 @@ exports.SubjectRequirementType = exports.$Enums.SubjectRequirementType = {
   Optional: 'Optional'
 };
 
+exports.ClassRegisterStatus = exports.$Enums.ClassRegisterStatus = {
+  PENDING: 'PENDING',
+  CANCELLED: 'CANCELLED',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED'
+};
+
 exports.SubjectClassSchedule = exports.$Enums.SubjectClassSchedule = {
   MORNING: 'MORNING',
   AFTERNOON: 'AFTERNOON',
@@ -6283,6 +6317,7 @@ exports.Prisma.ModelName = {
   SubjectInGroup: 'SubjectInGroup',
   TrainingBlockSubject: 'TrainingBlockSubject',
   ClassRegisterSession: 'ClassRegisterSession',
+  ClassRegisterLogs: 'ClassRegisterLogs',
   SubjectClass: 'SubjectClass',
   ClassSchedule: 'ClassSchedule',
   TrainingObjectType: 'TrainingObjectType',
