@@ -319,7 +319,7 @@ export default function SubjectList() {
                             },
                             {
                                 title: 'Mã TKB',
-                                dataIndex: '',
+                                dataIndex: 'codeTkb',
                                 width: 120,
                                 align: 'center',
                             },

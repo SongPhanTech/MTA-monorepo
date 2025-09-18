@@ -106,6 +106,7 @@ const PutVersionSubjectModal = () => {
             const values = (await form.validateFields()) as PutSubjectVersionFormValues
 
             const baseData = {
+                codeTkb: output.codeTkb,
                 code: output.code,
                 name: output.name,
                 description: output.description,
@@ -263,9 +264,14 @@ const PutVersionSubjectModal = () => {
             }
             className="w-[80vw]"
         >
-            <Col span={8}>
+            <Col span={4}>
                 <FormItem form={form} name="code" label="Mã môn học" required>
                     <Input placeholder="Mã môn học" />
+                </FormItem>
+            </Col>
+            <Col span={4}>
+                <FormItem form={form} name="codeTkb" label="Mã TKB" required>
+                    <Input placeholder="Mã TKB" />
                 </FormItem>
             </Col>
             <Col span={8}>

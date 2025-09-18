@@ -4798,6 +4798,11 @@ declare const metadata: {
                     name: string;
                     type: string;
                 };
+                codeTkb: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
                 examType: {
                     name: string;
                     type: string;

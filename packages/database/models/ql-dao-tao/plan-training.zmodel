@@ -368,6 +368,7 @@ enum SubjectVersionType {
 /// Phiên bản môn học
 model SubjectVersion extends Base {
   name                     String
+  codeTkb                  String?
   examType                 ExamType
   type                     SubjectVersionType     @default(Normal) // loại môn học
   credit                   Int // số tín chỉ

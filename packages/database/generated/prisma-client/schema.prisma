@@ -1140,6 +1140,7 @@ model SubjectVersion {
   createdAt                DateTime               @default(now())
   updatedAt                DateTime               @default(now()) @updatedAt()
   name                     String
+  codeTkb                  String?
   examType                 ExamType
   type                     SubjectVersionType     @default(Normal)
   credit                   Int

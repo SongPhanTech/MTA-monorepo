@@ -1,4 +1,4 @@
-import { DeleteFilled, MoreOutlined } from '@ant-design/icons'
+import { DeleteOutlined, MoreOutlined } from '@ant-design/icons'
 import type { MenuItem } from '@workspace/router'
 import { Button, Dropdown, Layout, Menu } from 'antd'
 import type { ItemType, MenuItemType } from 'antd/es/menu/interface'
@@ -9,10 +9,8 @@ import { useState } from 'react'
 const { Sider } = Layout
 
 interface SiderDefaultLayoutProps {
-    collapsed: boolean
     theme: 'light' | 'dark'
     items: MenuItem[]
-    onCollapse?: (collapsed: boolean) => void
     onDelete?: (id: string) => void
     onEdit?: (id: string) => void
 }
@@ -30,7 +28,7 @@ function getMenus(
                     key: 'delete',
                     label: (
                         <span className="text-red-500">
-                            <DeleteFilled className="mr-2" />
+                            <DeleteOutlined className="mr-2" />
                             Xoá
                         </span>
                     ),
@@ -99,14 +97,7 @@ const findOpenKeys = (menus: MenuItem[], currentPath: string | null): string[] =
     return []
 }
 
-const SiderChatLayout = ({
-    collapsed,
-    theme,
-    items,
-    onCollapse,
-    onDelete,
-    onEdit,
-}: SiderDefaultLayoutProps) => {
+const SiderChatLayout = ({ theme, items, onDelete, onEdit }: SiderDefaultLayoutProps) => {
     const pathname = usePathname()
     const router = useRouter()
     const [openKeys, setOpenKeys] = useState<string[]>(findOpenKeys(items, pathname))
@@ -147,9 +138,6 @@ const SiderChatLayout = ({
                 overflow: 'hidden',
             }}
             className="mr-[10px] rounded-xl"
-            collapsible
-            onCollapse={onCollapse}
-            collapsed={collapsed}
             theme={theme}
             width={280}
         >
@@ -169,7 +157,7 @@ const SiderChatLayout = ({
                                 }
                             }}
                         >
-                            {!collapsed && firstItem?.label}
+                            {firstItem?.label}
                         </Button>
                     </div>
 

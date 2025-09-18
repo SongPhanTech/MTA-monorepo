@@ -65,7 +65,6 @@ export default function Page() {
 
     return (
         <div className="flex flex-col items-center pt-5 px-4">
-            <Title level={2}>Tìm kiếm văn bản</Title>
             <Input.Search
                 placeholder="Nhập từ khóa cần tìm..."
                 enterButton={<SearchOutlined />}

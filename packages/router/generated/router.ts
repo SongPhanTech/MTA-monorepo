@@ -149,18 +149,6 @@ export default {
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
-  "QL_NGUOI_DUNG": {
-    "CAU_HINH_THOI_GIAN_CHO": "/cau-hinh/thoi-gian-cho",
-    "DANG_KY_TAI_KHOAN_TRO_LY_AO": "/dang-ky-tai-khoan-tro-ly-ao",
-    "GIOI_HAN_DIA_CHI_MANG": "/gioi-han-dia-chi-mang",
-    "HOME": "/home",
-    "INDEX": "/",
-    "NGUOI_DUNG_ID": "/nguoi-dung/[id]",
-    "NGUOI_DUNG_DANH_SACH": "/nguoi-dung/danh-sach",
-    "NGUOI_DUNG_NHOM_NGUOI_DUNG": "/nguoi-dung/nhom-nguoi-dung",
-    "NGUOI_DUNG_QUYEN_CO_BAN": "/nguoi-dung/quyen-co-ban",
-    "NGUOI_DUNG_VAI_TRO": "/nguoi-dung/vai-tro"
-  },
   "TRO_LY_AO": {
     "HOI_THOAI_ID": "/hoi-thoai/[id]",
     "INDEX": "/",

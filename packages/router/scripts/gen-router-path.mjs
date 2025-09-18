@@ -5,6 +5,20 @@ import { glob } from 'glob'
 
 const routerPath = {}
 const ignorePages = ['_app', '_document', '404']
+const convertRouterPathToPermission = (subSystem, routerPath) => {
+    // Nếu là path trực tiếp, tạo permission name từ path
+    if (routerPath.startsWith('/')) {
+        // Xử lý đặc biệt cho các path của QL_NGUOI_DUNG
+        const cleanPath = routerPath.replace(/^\//, '').replace(/\[.*?\]/g, 'ID')
+        const pathParts = cleanPath.split('/').filter(Boolean)
+
+        if (pathParts.length === 0) return `${subSystem}_INDEX`
+
+        const permissionParts = pathParts.map((part) => part.toUpperCase().replace(/-/g, '_'))
+
+        return `${subSystem}_${permissionParts.join('_')}`
+    }
+}
 
 const cleanPath = (path = '') => {
     return path
@@ -17,11 +31,15 @@ const cleanPath = (path = '') => {
         .replaceAll(']', '')
         .replace('.tsx', '')
         .replace('_index', '')
+        .replaceAll('...', '')
         .toUpperCase()
 }
 
 const cleanRouter = (router = '') => {
-    const r = router.replace('/index.tsx', '').replace('.tsx', '')
+    let r = router.replace('/index.tsx', '').replace('.tsx', '')
+    if (r.includes('...')) {
+        r = r.split('/').slice(0, -1).join('/')
+    }
     return r === '' ? '/' : r
 }
 
@@ -32,21 +50,13 @@ const subsystems = await glob(`${basePath}/*`, {
     dotRelative: true,
     posix: true,
 })
-
-// TODO: add system prefix
-const systemPrefix = {
-    KHAO_THI: '',
-    QL_DAO_TAO: '',
-    QL_NGUOI_DUNG: '',
-    TRO_LY_AO: '',
-    QL_HO_SO: '',
-    PORTAL: '',
-}
+let permission = {}
 
 for (const subsystem of subsystems.sort()) {
     const subsystemKey = subsystem
         .replace(`${basePath}/`, '')
         .replace('../../apps/client/', '')
+        .replaceAll('...', '')
         .toUpperCase()
         .replaceAll('-', '_')
     routerPath[subsystemKey] = {}
@@ -54,20 +64,30 @@ for (const subsystem of subsystems.sort()) {
         dotRelative: true,
         posix: true,
     })
-
     for (const page of pages.sort()) {
         if (ignorePages.some((ignorePage) => page.includes(ignorePage))) continue
         const key = page.replace(`${subsystem}/src/pages`, '')
-
-        const path = systemPrefix[subsystemKey] + cleanRouter(key)
-
-        routerPath[subsystemKey][cleanPath(key)] = path
-
-        console.log('Processing:', subsystemKey, cleanPath(key), '=>', path)
+        routerPath[subsystemKey][cleanPath(key)] = cleanRouter(key)
+        permission = {
+            ...permission,
+            [subsystemKey]: [
+                ...(permission[subsystemKey] || []),
+                convertRouterPathToPermission(subsystemKey, cleanRouter(key)),
+            ],
+        }
+        console.log('Processing:', subsystemKey, cleanPath(key), '=>', cleanRouter(key))
     }
 }
 
 const generatedPath = join(process.cwd(), 'generated')
+
+for (const sub in permission) {
+    console.log('sub:', sub, permission[sub])
+    await writeFile(
+        join(generatedPath, `${sub.split('_').join('-').toLowerCase()}.ts`),
+        `export enum ${sub}_PERMISSION {${permission[sub].map((e) => `${e}='${e}'`).join(',\n')}}`
+    )
+}
 
 if (!existsSync(generatedPath)) {
     await mkdir(generatedPath)

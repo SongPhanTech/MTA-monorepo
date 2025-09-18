@@ -2495,6 +2495,10 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, codeTkb: {
+                    name: "codeTkb",
+                    type: "String",
+                    isOptional: true,
                 }, examType: {
                     name: "examType",
                     type: "ExamType",
