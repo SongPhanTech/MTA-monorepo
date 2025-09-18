@@ -3101,6 +3101,104 @@ const metadata = {
                     isArray: true,
                     backLink: 'classRegisterSession',
                     isRelationOwner: true,
+                }, classRegisterLogs: {
+                    name: "classRegisterLogs",
+                    type: "ClassRegisterLogs",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'classRegisterSession',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        classRegisterLogs: {
+            name: 'ClassRegisterLogs', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, classRegisterSession: {
+                    name: "classRegisterSession",
+                    type: "ClassRegisterSession",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'classRegisterLogs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "classRegisterSessionId" },
+                }, classRegisterSessionId: {
+                    name: "classRegisterSessionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'classRegisterSession',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'classRegisterLogs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'classRegisterLogs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, status: {
+                    name: "status",
+                    type: "ClassRegisterStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -3345,6 +3443,12 @@ const metadata = {
                     isArray: true,
                     backLink: 'subjectClasses',
                     isRelationOwner: true,
+                }, classRegisterLogs: {
+                    name: "classRegisterLogs",
+                    type: "ClassRegisterLogs",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -5219,6 +5323,12 @@ const metadata = {
                 }, diplomaVerificationApplication: {
                     name: "diplomaVerificationApplication",
                     type: "DiplomaVerificationApplication",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
+                }, classRegisterLogs: {
+                    name: "classRegisterLogs",
+                    type: "ClassRegisterLogs",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'student',

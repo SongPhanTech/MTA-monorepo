@@ -25,6 +25,7 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { ReactHookModalProvider } from 'react-hook-disclosure-modal'
 import LoadingBar from 'react-top-loading-bar'
 import '@assets/css/custom.css'
+import { lightThemeCustom } from '@workspace/ui'
 import { env } from '@/env'
 
 dayjs.locale('vi')

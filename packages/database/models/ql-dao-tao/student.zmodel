@@ -92,7 +92,7 @@ model Student extends Base {
   thesisRegistrations            StudentThesisRegistration[] // Đăng ký đồ án tốt nghiệp
   examSession                    ExamSession[]
   diplomaVerificationApplication DiplomaVerificationApplication[]
-  // classRegisterLogs              ClassRegisterLogs[]
+  classRegisterLogs              ClassRegisterLogs[]
   notes                          Note[]
   noteFolders                    NoteFolder[]
 

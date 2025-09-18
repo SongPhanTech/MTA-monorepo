@@ -194,6 +194,10 @@ app.openapi(graduationCheck, async (c) => {
                     },
                 ],
                 deletedAt: null,
+                examPostponed: false,
+                exempted: false,
+                withdrew: false,
+                suspended: false,
             },
             include: { subjectVersion: true },
         })
