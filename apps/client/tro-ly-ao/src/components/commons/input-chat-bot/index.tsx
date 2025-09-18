@@ -59,13 +59,12 @@ export default function ChatInput({
 
     return (
         <div className="sticky bottom-0 z-10 w-full bg-gradient-to-t from-white/95 to-white/60 backdrop-blur-md">
-            {/* Background mờ fade lên trên */}
+            {/* fade lên trên */}
             <div className="absolute left-0 right-0 bottom-full h-12 bg-gradient-to-t from-white/80 via-white/30 to-transparent pointer-events-none" />
 
             <div className="w-full flex justify-center pb-4">
-                <div className="w-full max-w-4xl px-4">
-                    <div className="rounded-2xl border border-gray-200/80 px-3 py-2 shadow-lg shadow-black/5 bg-white/90 backdrop-blur-sm flex flex-col gap-2 transition-all duration-200 hover:shadow-xl hover:shadow-black/10">
-                        {/* Dòng trên: textarea */}
+                <div className="w-full max-w-5xl px-4 md:px-6">
+                    <div className="rounded-2xl border border-gray-300 px-3 py-2 bg-white/90 backdrop-blur-sm flex flex-col gap-2 transition-all duration-200 hover:border-primary/60 focus-within:border-primary hover:bg-white hover:shadow-md">
                         <textarea
                             ref={textareaRef}
                             className={`py-1 px-3 outline-none border-none text-base bg-transparent resize-none min-h-[32px] w-full placeholder:text-gray-400 focus:placeholder:text-gray-300 transition-colors ${
@@ -82,7 +81,6 @@ export default function ChatInput({
                             }}
                         />
 
-                        {/* Dòng dưới: actions */}
                         <div className="flex justify-between items-center px-1">
                             <Tooltip title="Câu hỏi thường gặp">
                                 <Button

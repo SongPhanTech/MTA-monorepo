@@ -1,4 +1,4 @@
-import { CopyOutlined } from '@ant-design/icons'
+import { CopyOutlined, DownOutlined } from '@ant-design/icons'
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
 import { MessageSender } from '@workspace/db'
@@ -24,6 +24,8 @@ export default function Page() {
     const [loading, setLoading] = useState(false)
     const [abortController, setAbortController] = useState<AbortController | null>(null)
     const [hasAutoSent, setHasAutoSent] = useState(false)
+    const [isUserScrolling, setIsUserScrolling] = useState(false)
+    const [showScrollButton, setShowScrollButton] = useState(false)
 
     const { mutateAsync: updateConversation } = useUpdateConversation()
 
@@ -129,6 +131,7 @@ export default function Page() {
 
                 if (reader) {
                     let accumulatedText = ''
+                    setLoading(false) // Tắt loading khi bắt đầu trả lời
 
                     while (true) {
                         const { done, value } = await reader.read()
@@ -174,6 +177,29 @@ export default function Page() {
         setLoading(false)
     }
 
+    const scrollToBottom = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+            setIsUserScrolling(false)
+            setShowScrollButton(false)
+        }
+    }
+
+    const handleScroll = () => {
+        if (!scrollRef.current) return
+
+        const { scrollTop, scrollHeight, clientHeight } = scrollRef.current
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10
+
+        if (isAtBottom) {
+            setIsUserScrolling(false)
+            setShowScrollButton(false)
+        } else {
+            setIsUserScrolling(true)
+            setShowScrollButton(true)
+        }
+    }
+
     useEffect(() => {
         if (messageList) {
             const sortedMessages = [...messageList].sort(
@@ -208,15 +234,19 @@ export default function Page() {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        if (scrollRef.current) {
+        if (scrollRef.current && !isUserScrolling) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight
         }
-    }, [messages])
+    }, [messages, isUserScrolling])
 
     return (
-        <div className="flex flex-col h-full items-center bg-white">
-            <div className="w-full flex flex-col h-full px-4">
-                <div ref={scrollRef} className="flex-1 overflow-y-auto pb-4 no-scrollbar">
+        <div className="flex flex-col h-full items-center bg-white overflow-hidden">
+            <div className="w-full flex flex-col h-full min-w-0 relative max-w-5xl mx-auto">
+                <div
+                    ref={scrollRef}
+                    className="flex-1 overflow-y-auto pb-4 no-scrollbar px-4 md:px-6"
+                    onScroll={handleScroll}
+                >
                     {messages.length === 0 ? (
                         <div className="flex justify-center items-center h-full text-gray-400">
                             Bắt đầu cuộc trò chuyện...
@@ -249,10 +279,14 @@ export default function Page() {
                                         </div>
                                     ) : (
                                         <div
-                                            className={`flex ${msg.role === 'USER' ? 'justify-end' : 'justify-start'}`}
+                                            className={`flex ${msg.role === 'USER' ? 'justify-end' : 'justify-start'} min-w-0`}
                                         >
                                             <div
-                                                className={`px-4 py-3 rounded-2xl max-w-[75%] break-words shadow-sm ${
+                                                className={`px-4 py-3 rounded-2xl break-words overflow-hidden shadow-sm ${
+                                                    msg.content.length <= 50
+                                                        ? 'max-w-max'
+                                                        : 'max-w-[75%]'
+                                                } ${
                                                     msg.role === 'USER'
                                                         ? 'bg-[#BEDACE] text-black rounded-br-md'
                                                         : 'bg-[#D5DAE7] text-black rounded-bl-md'
@@ -269,7 +303,11 @@ export default function Page() {
                                                             {msg.content}
                                                         </div>
                                                     ) : (
-                                                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                                        <div className="overflow-x-auto">
+                                                            <ReactMarkdown>
+                                                                {msg.content}
+                                                            </ReactMarkdown>
+                                                        </div>
                                                     )}
                                                     <Button
                                                         size="small"
@@ -300,15 +338,25 @@ export default function Page() {
                     )}
                 </div>
 
-                <ChatInput
-                    input={input}
-                    loading={loading}
-                    onInputChange={setInput}
-                    onSend={handleSend}
-                    onStop={handleStop}
-                    isFaqMode={isFaqMode}
-                    onToggleFaqMode={() => setIsFaqMode((prev) => !prev)}
-                />
+                <div className="relative">
+                    {showScrollButton && (
+                        <div
+                            onClick={scrollToBottom}
+                            className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-50 w-8 h-8 bg-primary/90 hover:bg-primary text-white rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110"
+                        >
+                            <DownOutlined className="text-xs" />
+                        </div>
+                    )}
+                    <ChatInput
+                        input={input}
+                        loading={loading}
+                        onInputChange={setInput}
+                        onSend={handleSend}
+                        onStop={handleStop}
+                        isFaqMode={isFaqMode}
+                        onToggleFaqMode={() => setIsFaqMode((prev) => !prev)}
+                    />
+                </div>
             </div>
         </div>
     )
