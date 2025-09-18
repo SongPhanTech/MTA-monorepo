@@ -1,0 +1,26 @@
+{
+  "name": "@workspace/permissions",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./ability": "./src/ability.ts",
+    "./hooks": "./src/hooks.ts",
+    "./can": "./src/can.tsx"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@workspace/typescript-config": "workspace:*",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@casl/ability": "catalog:",
+    "@workspace/db": "workspace:*",
+    "@workspace/router": "workspace:*",
+    "@workspace/libs": "workspace:*",
+    "react": "catalog:"
+  }
+} 
