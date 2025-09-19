@@ -4,15 +4,15 @@
     right: 24px;
     width: 600px;
     height: 700px;
-    /* border: 1px solid #d1d5db; */
     border-radius: 1rem;
-    box-shadow: 0 8px 32px 0 rgba(31, 41, 55, 0.24);
     background: #fff;
     z-index: 50;
     transition:
         opacity 0.2s,
         visibility 0.2s;
     overflow: hidden;
+    box-shadow: 0 4px 16px 0 rgba(31, 41, 55, 0.14);
+    border: 1px solid #d1d5db; /* Thêm dòng này để hiện border */
 }
 .fixed-chatbox.hide {
     opacity: 0;
@@ -42,7 +42,7 @@
     background: #108851;
     color: white;
     border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 8px 24px 0 rgba(31, 41, 55, 0.24); /* shadow đậm và rộng hơn */
     cursor: pointer;
     font-size: 28px;
     display: flex;
@@ -53,6 +53,6 @@
         background 0.2s;
 }
 .chatbox-toggle-btn:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 12px 32px 0 rgba(31, 41, 55, 0.28); /* shadow khi hover rõ hơn nữa */
     background: #0e6c43;
 }
