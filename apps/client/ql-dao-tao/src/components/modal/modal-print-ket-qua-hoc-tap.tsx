@@ -160,10 +160,13 @@ const ModalPrintToKQHT = () => {
         {
             title: 'Thời gian đào tạo:',
             value: (
-                <span>
-                    {input?.dataStudent?.curriculumVersion?.time &&
-                        `${input?.dataStudent?.curriculumVersion?.time} năm`}
-                </span>
+                <span
+                    dangerouslySetInnerHTML={{
+                        __html: input?.dataStudent?.curriculumVersion?.time
+                            ? `${input?.dataStudent?.curriculumVersion?.time} năm`
+                            : '',
+                    }}
+                />
             ),
         },
         {
@@ -234,7 +237,7 @@ const ModalPrintToKQHT = () => {
         >
             <div
                 ref={printRef}
-                className="mx-auto p-6 text-sm leading-relaxed !font-time-news-roman"
+                className="mx-auto p-6 text-sm leading-relaxed font-times-new-roman"
             >
                 <div className="text-center font-bold uppercase">
                     <div className="flex items-center justify-between">
@@ -369,7 +372,7 @@ const ModalPrintToKQHT = () => {
                                                     {subject.credit}
                                                 </td>
                                                 <td className="border border-black px-1 py-1 text-center">
-                                                    {score10}
+                                                    {Number(score10).toFixed(1)}
                                                 </td>
                                                 <td className="border border-black px-1 py-1 text-center">
                                                     {Number(score4).toFixed(2)}

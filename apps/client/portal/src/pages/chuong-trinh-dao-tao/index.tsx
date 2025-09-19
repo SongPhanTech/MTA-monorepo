@@ -2,20 +2,19 @@ import TableCollapse from '@components/commons/tableCollapse'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
+import { useSession } from '@workspace/auth/react'
 import { emptyObjectIf } from '@workspace/constant'
 import type { Prisma, SubjectVersion } from '@workspace/db'
 import {
     useFindManyDM_DonVi,
     useFindManyTrainingBlockOnCurriculumVersion,
     useFindUniqueCurriculumVersion,
+    useFindUniqueUserProfile,
 } from '@workspace/db/hooks'
 
 import { Col, Divider, Row } from 'antd'
-import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 export default function TrainingProgramSubjects() {
-    const router = useRouter()
-    const id = router.query.id as string
     const [filters, setFilters] = useState<FilterProps>({
         organization: undefined,
         code: '',
@@ -33,6 +32,23 @@ export default function TrainingProgramSubjects() {
         examType: undefined,
     })
 
+    const { data: me } = useSession()
+    const { data: userProfile } = useFindUniqueUserProfile(
+        {
+            where: { id: me?.sDM_NhanVienId || '' },
+            select: {
+                educationAndTraining: {
+                    select: {
+                        curriculumVersionId: true,
+                    },
+                },
+            },
+        },
+        {
+            enabled: !!me?.sDM_NhanVienId,
+        }
+    )
+    const id = userProfile?.educationAndTraining?.[0]?.curriculumVersionId ?? ''
     const { data: initialValue } = useFindUniqueCurriculumVersion(
         {
             where: { id },

@@ -77,7 +77,7 @@ export const customExamFetch = async <T>(url: string, options: RequestInit): Pro
 
 export const customPortalFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl(
-        process.env.ENVIRONMENT === 'local'
+        process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
             ? 'http://localhost:3002'
             : 'https://api.portal.mta.swantech.vn',
         url

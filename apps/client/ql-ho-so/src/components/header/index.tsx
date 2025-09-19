@@ -11,6 +11,9 @@ declare global {
 const HeaderApp: React.FC = () => {
     useEffect(() => {
         try {
+            if (process.env.ENVIRONMENT === 'local') {
+                return
+            }
             window.MTAMenuComponents.default.createPlugin('pluginContainer', {
                 menuAppId: 'menuContainer',
                 notificationAppId: 'notificationContainer',

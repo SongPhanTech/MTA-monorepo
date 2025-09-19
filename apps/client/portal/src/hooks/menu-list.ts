@@ -18,8 +18,7 @@ const useMenuList = () => {
         )
         setIsUpdateAbility(true)
     }, [permissions])
-
-    const menus = NAVIGATION.QL_DAO_TAO.menus
+    const menus = NAVIGATION.PORTAL.menus
         .map((menu) => {
             if (menu.children) {
                 const filteredChildren = menu.children.filter((child) => {
