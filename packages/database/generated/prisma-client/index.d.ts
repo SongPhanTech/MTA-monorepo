@@ -119,6 +119,11 @@ export type Milestone = $Result.DefaultSelection<Prisma.$MilestonePayload>
  */
 export type TrainingCourse = $Result.DefaultSelection<Prisma.$TrainingCoursePayload>
 /**
+ * Model TrainingCourseRegulation
+ * Quy chế động của khoá
+ */
+export type TrainingCourseRegulation = $Result.DefaultSelection<Prisma.$TrainingCourseRegulationPayload>
+/**
  * Model FixedClass
  * lớp quản lý
  */
@@ -2225,6 +2230,16 @@ export class PrismaClient<
     * ```
     */
   get trainingCourse(): Prisma.TrainingCourseDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.trainingCourseRegulation`: Exposes CRUD operations for the **TrainingCourseRegulation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TrainingCourseRegulations
+    * const trainingCourseRegulations = await prisma.trainingCourseRegulation.findMany()
+    * ```
+    */
+  get trainingCourseRegulation(): Prisma.TrainingCourseRegulationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.fixedClass`: Exposes CRUD operations for the **FixedClass** model.
@@ -4686,6 +4701,7 @@ export namespace Prisma {
     Semester: 'Semester',
     Milestone: 'Milestone',
     TrainingCourse: 'TrainingCourse',
+    TrainingCourseRegulation: 'TrainingCourseRegulation',
     FixedClass: 'FixedClass',
     Curriculum: 'Curriculum',
     CurriculumVersion: 'CurriculumVersion',
@@ -4904,7 +4920,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingCourse" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
+      modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6459,6 +6475,80 @@ export namespace Prisma {
           count: {
             args: Prisma.TrainingCourseCountArgs<ExtArgs>
             result: $Utils.Optional<TrainingCourseCountAggregateOutputType> | number
+          }
+        }
+      }
+      TrainingCourseRegulation: {
+        payload: Prisma.$TrainingCourseRegulationPayload<ExtArgs>
+        fields: Prisma.TrainingCourseRegulationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TrainingCourseRegulationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TrainingCourseRegulationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TrainingCourseRegulationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TrainingCourseRegulationPayload>
+          }
+          findFirst: {
+            args: Prisma.TrainingCourseRegulationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TrainingCourseRegulationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TrainingCourseRegulationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TrainingCourseRegulationPayload>
+          }
+          findMany: {
+            args: Prisma.TrainingCourseRegulationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TrainingCourseRegulationPayload>[]
+          }
+          create: {
+            args: Prisma.TrainingCourseRegulationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TrainingCourseRegulationPayload>
+          }
+          createMany: {
+            args: Prisma.TrainingCourseRegulationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TrainingCourseRegulationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TrainingCourseRegulationPayload>[]
+          }
+          delete: {
+            args: Prisma.TrainingCourseRegulationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TrainingCourseRegulationPayload>
+          }
+          update: {
+            args: Prisma.TrainingCourseRegulationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TrainingCourseRegulationPayload>
+          }
+          deleteMany: {
+            args: Prisma.TrainingCourseRegulationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TrainingCourseRegulationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TrainingCourseRegulationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TrainingCourseRegulationPayload>[]
+          }
+          upsert: {
+            args: Prisma.TrainingCourseRegulationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TrainingCourseRegulationPayload>
+          }
+          aggregate: {
+            args: Prisma.TrainingCourseRegulationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTrainingCourseRegulation>
+          }
+          groupBy: {
+            args: Prisma.TrainingCourseRegulationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TrainingCourseRegulationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TrainingCourseRegulationCountArgs<ExtArgs>
+            result: $Utils.Optional<TrainingCourseRegulationCountAggregateOutputType> | number
           }
         }
       }
@@ -21371,6 +21461,7 @@ export namespace Prisma {
     semester?: SemesterOmit
     milestone?: MilestoneOmit
     trainingCourse?: TrainingCourseOmit
+    trainingCourseRegulation?: TrainingCourseRegulationOmit
     fixedClass?: FixedClassOmit
     curriculum?: CurriculumOmit
     curriculumVersion?: CurriculumVersionOmit
@@ -22253,6 +22344,7 @@ export namespace Prisma {
    */
 
   export type TrainingCourseCountOutputType = {
+    trainingCourseRegulation: number
     fixedClass: number
     scoreConverts: number
     academicRankingConvert: number
@@ -22265,6 +22357,7 @@ export namespace Prisma {
   }
 
   export type TrainingCourseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    trainingCourseRegulation?: boolean | TrainingCourseCountOutputTypeCountTrainingCourseRegulationArgs
     fixedClass?: boolean | TrainingCourseCountOutputTypeCountFixedClassArgs
     scoreConverts?: boolean | TrainingCourseCountOutputTypeCountScoreConvertsArgs
     academicRankingConvert?: boolean | TrainingCourseCountOutputTypeCountAcademicRankingConvertArgs
@@ -22285,6 +22378,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the TrainingCourseCountOutputType
      */
     select?: TrainingCourseCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TrainingCourseCountOutputType without action
+   */
+  export type TrainingCourseCountOutputTypeCountTrainingCourseRegulationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TrainingCourseRegulationWhereInput
   }
 
   /**
@@ -52382,6 +52482,7 @@ export namespace Prisma {
     trainingObjectTypeId?: boolean
     semesterStart?: boolean | SemesterDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+    trainingCourseRegulation?: boolean | TrainingCourse$trainingCourseRegulationArgs<ExtArgs>
     fixedClass?: boolean | TrainingCourse$fixedClassArgs<ExtArgs>
     scoreConverts?: boolean | TrainingCourse$scoreConvertsArgs<ExtArgs>
     academicRankingConvert?: boolean | TrainingCourse$academicRankingConvertArgs<ExtArgs>
@@ -52486,6 +52587,7 @@ export namespace Prisma {
   export type TrainingCourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     semesterStart?: boolean | SemesterDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+    trainingCourseRegulation?: boolean | TrainingCourse$trainingCourseRegulationArgs<ExtArgs>
     fixedClass?: boolean | TrainingCourse$fixedClassArgs<ExtArgs>
     scoreConverts?: boolean | TrainingCourse$scoreConvertsArgs<ExtArgs>
     academicRankingConvert?: boolean | TrainingCourse$academicRankingConvertArgs<ExtArgs>
@@ -52511,6 +52613,7 @@ export namespace Prisma {
     objects: {
       semesterStart: Prisma.$SemesterPayload<ExtArgs>
       trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs>
+      trainingCourseRegulation: Prisma.$TrainingCourseRegulationPayload<ExtArgs>[]
       fixedClass: Prisma.$FixedClassPayload<ExtArgs>[]
       scoreConverts: Prisma.$ScoreConvertPayload<ExtArgs>[]
       academicRankingConvert: Prisma.$AcademicRankingConvertPayload<ExtArgs>[]
@@ -52943,6 +53046,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     semesterStart<T extends SemesterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SemesterDefaultArgs<ExtArgs>>): Prisma__SemesterClient<$Result.GetResult<Prisma.$SemesterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     trainingObjectType<T extends TrainingObjectTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectTypeDefaultArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    trainingCourseRegulation<T extends TrainingCourse$trainingCourseRegulationArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$trainingCourseRegulationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingCourseRegulationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     fixedClass<T extends TrainingCourse$fixedClassArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$fixedClassArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FixedClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     scoreConverts<T extends TrainingCourse$scoreConvertsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$scoreConvertsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScoreConvertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     academicRankingConvert<T extends TrainingCourse$academicRankingConvertArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$academicRankingConvertArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AcademicRankingConvertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -53402,6 +53506,30 @@ export namespace Prisma {
   }
 
   /**
+   * TrainingCourse.trainingCourseRegulation
+   */
+  export type TrainingCourse$trainingCourseRegulationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourseRegulation
+     */
+    select?: TrainingCourseRegulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourseRegulation
+     */
+    omit?: TrainingCourseRegulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseRegulationInclude<ExtArgs> | null
+    where?: TrainingCourseRegulationWhereInput
+    orderBy?: TrainingCourseRegulationOrderByWithRelationInput | TrainingCourseRegulationOrderByWithRelationInput[]
+    cursor?: TrainingCourseRegulationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TrainingCourseRegulationScalarFieldEnum | TrainingCourseRegulationScalarFieldEnum[]
+  }
+
+  /**
    * TrainingCourse.fixedClass
    */
   export type TrainingCourse$fixedClassArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -53633,6 +53761,1163 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: TrainingCourseInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TrainingCourseRegulation
+   */
+
+  export type AggregateTrainingCourseRegulation = {
+    _count: TrainingCourseRegulationCountAggregateOutputType | null
+    _avg: TrainingCourseRegulationAvgAggregateOutputType | null
+    _sum: TrainingCourseRegulationSumAggregateOutputType | null
+    _min: TrainingCourseRegulationMinAggregateOutputType | null
+    _max: TrainingCourseRegulationMaxAggregateOutputType | null
+  }
+
+  export type TrainingCourseRegulationAvgAggregateOutputType = {
+    value: number | null
+  }
+
+  export type TrainingCourseRegulationSumAggregateOutputType = {
+    value: number | null
+  }
+
+  export type TrainingCourseRegulationMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    trainingCourseId: string | null
+    name: string | null
+    value: number | null
+  }
+
+  export type TrainingCourseRegulationMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    trainingCourseId: string | null
+    name: string | null
+    value: number | null
+  }
+
+  export type TrainingCourseRegulationCountAggregateOutputType = {
+    id: number
+    code: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    trainingCourseId: number
+    name: number
+    value: number
+    _all: number
+  }
+
+
+  export type TrainingCourseRegulationAvgAggregateInputType = {
+    value?: true
+  }
+
+  export type TrainingCourseRegulationSumAggregateInputType = {
+    value?: true
+  }
+
+  export type TrainingCourseRegulationMinAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    trainingCourseId?: true
+    name?: true
+    value?: true
+  }
+
+  export type TrainingCourseRegulationMaxAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    trainingCourseId?: true
+    name?: true
+    value?: true
+  }
+
+  export type TrainingCourseRegulationCountAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    trainingCourseId?: true
+    name?: true
+    value?: true
+    _all?: true
+  }
+
+  export type TrainingCourseRegulationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TrainingCourseRegulation to aggregate.
+     */
+    where?: TrainingCourseRegulationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TrainingCourseRegulations to fetch.
+     */
+    orderBy?: TrainingCourseRegulationOrderByWithRelationInput | TrainingCourseRegulationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TrainingCourseRegulationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TrainingCourseRegulations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TrainingCourseRegulations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TrainingCourseRegulations
+    **/
+    _count?: true | TrainingCourseRegulationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TrainingCourseRegulationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TrainingCourseRegulationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TrainingCourseRegulationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TrainingCourseRegulationMaxAggregateInputType
+  }
+
+  export type GetTrainingCourseRegulationAggregateType<T extends TrainingCourseRegulationAggregateArgs> = {
+        [P in keyof T & keyof AggregateTrainingCourseRegulation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTrainingCourseRegulation[P]>
+      : GetScalarType<T[P], AggregateTrainingCourseRegulation[P]>
+  }
+
+
+
+
+  export type TrainingCourseRegulationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TrainingCourseRegulationWhereInput
+    orderBy?: TrainingCourseRegulationOrderByWithAggregationInput | TrainingCourseRegulationOrderByWithAggregationInput[]
+    by: TrainingCourseRegulationScalarFieldEnum[] | TrainingCourseRegulationScalarFieldEnum
+    having?: TrainingCourseRegulationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TrainingCourseRegulationCountAggregateInputType | true
+    _avg?: TrainingCourseRegulationAvgAggregateInputType
+    _sum?: TrainingCourseRegulationSumAggregateInputType
+    _min?: TrainingCourseRegulationMinAggregateInputType
+    _max?: TrainingCourseRegulationMaxAggregateInputType
+  }
+
+  export type TrainingCourseRegulationGroupByOutputType = {
+    id: string
+    code: string | null
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    trainingCourseId: string
+    name: string
+    value: number
+    _count: TrainingCourseRegulationCountAggregateOutputType | null
+    _avg: TrainingCourseRegulationAvgAggregateOutputType | null
+    _sum: TrainingCourseRegulationSumAggregateOutputType | null
+    _min: TrainingCourseRegulationMinAggregateOutputType | null
+    _max: TrainingCourseRegulationMaxAggregateOutputType | null
+  }
+
+  type GetTrainingCourseRegulationGroupByPayload<T extends TrainingCourseRegulationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TrainingCourseRegulationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TrainingCourseRegulationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TrainingCourseRegulationGroupByOutputType[P]>
+            : GetScalarType<T[P], TrainingCourseRegulationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TrainingCourseRegulationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    trainingCourseId?: boolean
+    name?: boolean
+    value?: boolean
+    trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["trainingCourseRegulation"]>
+
+  export type TrainingCourseRegulationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    trainingCourseId?: boolean
+    name?: boolean
+    value?: boolean
+    trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["trainingCourseRegulation"]>
+
+  export type TrainingCourseRegulationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    trainingCourseId?: boolean
+    name?: boolean
+    value?: boolean
+    trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["trainingCourseRegulation"]>
+
+  export type TrainingCourseRegulationSelectScalar = {
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    trainingCourseId?: boolean
+    name?: boolean
+    value?: boolean
+  }
+
+  export type TrainingCourseRegulationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "trainingCourseId" | "name" | "value", ExtArgs["result"]["trainingCourseRegulation"]>
+  export type TrainingCourseRegulationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+  }
+  export type TrainingCourseRegulationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+  }
+  export type TrainingCourseRegulationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+  }
+
+  export type $TrainingCourseRegulationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TrainingCourseRegulation"
+    objects: {
+      trainingCourse: Prisma.$TrainingCoursePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string | null
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      trainingCourseId: string
+      name: string
+      value: number
+    }, ExtArgs["result"]["trainingCourseRegulation"]>
+    composites: {}
+  }
+
+  type TrainingCourseRegulationGetPayload<S extends boolean | null | undefined | TrainingCourseRegulationDefaultArgs> = $Result.GetResult<Prisma.$TrainingCourseRegulationPayload, S>
+
+  type TrainingCourseRegulationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TrainingCourseRegulationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TrainingCourseRegulationCountAggregateInputType | true
+    }
+
+  export interface TrainingCourseRegulationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TrainingCourseRegulation'], meta: { name: 'TrainingCourseRegulation' } }
+    /**
+     * Find zero or one TrainingCourseRegulation that matches the filter.
+     * @param {TrainingCourseRegulationFindUniqueArgs} args - Arguments to find a TrainingCourseRegulation
+     * @example
+     * // Get one TrainingCourseRegulation
+     * const trainingCourseRegulation = await prisma.trainingCourseRegulation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TrainingCourseRegulationFindUniqueArgs>(args: SelectSubset<T, TrainingCourseRegulationFindUniqueArgs<ExtArgs>>): Prisma__TrainingCourseRegulationClient<$Result.GetResult<Prisma.$TrainingCourseRegulationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TrainingCourseRegulation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TrainingCourseRegulationFindUniqueOrThrowArgs} args - Arguments to find a TrainingCourseRegulation
+     * @example
+     * // Get one TrainingCourseRegulation
+     * const trainingCourseRegulation = await prisma.trainingCourseRegulation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TrainingCourseRegulationFindUniqueOrThrowArgs>(args: SelectSubset<T, TrainingCourseRegulationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TrainingCourseRegulationClient<$Result.GetResult<Prisma.$TrainingCourseRegulationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TrainingCourseRegulation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TrainingCourseRegulationFindFirstArgs} args - Arguments to find a TrainingCourseRegulation
+     * @example
+     * // Get one TrainingCourseRegulation
+     * const trainingCourseRegulation = await prisma.trainingCourseRegulation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TrainingCourseRegulationFindFirstArgs>(args?: SelectSubset<T, TrainingCourseRegulationFindFirstArgs<ExtArgs>>): Prisma__TrainingCourseRegulationClient<$Result.GetResult<Prisma.$TrainingCourseRegulationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TrainingCourseRegulation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TrainingCourseRegulationFindFirstOrThrowArgs} args - Arguments to find a TrainingCourseRegulation
+     * @example
+     * // Get one TrainingCourseRegulation
+     * const trainingCourseRegulation = await prisma.trainingCourseRegulation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TrainingCourseRegulationFindFirstOrThrowArgs>(args?: SelectSubset<T, TrainingCourseRegulationFindFirstOrThrowArgs<ExtArgs>>): Prisma__TrainingCourseRegulationClient<$Result.GetResult<Prisma.$TrainingCourseRegulationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TrainingCourseRegulations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TrainingCourseRegulationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TrainingCourseRegulations
+     * const trainingCourseRegulations = await prisma.trainingCourseRegulation.findMany()
+     * 
+     * // Get first 10 TrainingCourseRegulations
+     * const trainingCourseRegulations = await prisma.trainingCourseRegulation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const trainingCourseRegulationWithIdOnly = await prisma.trainingCourseRegulation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TrainingCourseRegulationFindManyArgs>(args?: SelectSubset<T, TrainingCourseRegulationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingCourseRegulationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TrainingCourseRegulation.
+     * @param {TrainingCourseRegulationCreateArgs} args - Arguments to create a TrainingCourseRegulation.
+     * @example
+     * // Create one TrainingCourseRegulation
+     * const TrainingCourseRegulation = await prisma.trainingCourseRegulation.create({
+     *   data: {
+     *     // ... data to create a TrainingCourseRegulation
+     *   }
+     * })
+     * 
+     */
+    create<T extends TrainingCourseRegulationCreateArgs>(args: SelectSubset<T, TrainingCourseRegulationCreateArgs<ExtArgs>>): Prisma__TrainingCourseRegulationClient<$Result.GetResult<Prisma.$TrainingCourseRegulationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TrainingCourseRegulations.
+     * @param {TrainingCourseRegulationCreateManyArgs} args - Arguments to create many TrainingCourseRegulations.
+     * @example
+     * // Create many TrainingCourseRegulations
+     * const trainingCourseRegulation = await prisma.trainingCourseRegulation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TrainingCourseRegulationCreateManyArgs>(args?: SelectSubset<T, TrainingCourseRegulationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TrainingCourseRegulations and returns the data saved in the database.
+     * @param {TrainingCourseRegulationCreateManyAndReturnArgs} args - Arguments to create many TrainingCourseRegulations.
+     * @example
+     * // Create many TrainingCourseRegulations
+     * const trainingCourseRegulation = await prisma.trainingCourseRegulation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TrainingCourseRegulations and only return the `id`
+     * const trainingCourseRegulationWithIdOnly = await prisma.trainingCourseRegulation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TrainingCourseRegulationCreateManyAndReturnArgs>(args?: SelectSubset<T, TrainingCourseRegulationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingCourseRegulationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TrainingCourseRegulation.
+     * @param {TrainingCourseRegulationDeleteArgs} args - Arguments to delete one TrainingCourseRegulation.
+     * @example
+     * // Delete one TrainingCourseRegulation
+     * const TrainingCourseRegulation = await prisma.trainingCourseRegulation.delete({
+     *   where: {
+     *     // ... filter to delete one TrainingCourseRegulation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TrainingCourseRegulationDeleteArgs>(args: SelectSubset<T, TrainingCourseRegulationDeleteArgs<ExtArgs>>): Prisma__TrainingCourseRegulationClient<$Result.GetResult<Prisma.$TrainingCourseRegulationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TrainingCourseRegulation.
+     * @param {TrainingCourseRegulationUpdateArgs} args - Arguments to update one TrainingCourseRegulation.
+     * @example
+     * // Update one TrainingCourseRegulation
+     * const trainingCourseRegulation = await prisma.trainingCourseRegulation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TrainingCourseRegulationUpdateArgs>(args: SelectSubset<T, TrainingCourseRegulationUpdateArgs<ExtArgs>>): Prisma__TrainingCourseRegulationClient<$Result.GetResult<Prisma.$TrainingCourseRegulationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TrainingCourseRegulations.
+     * @param {TrainingCourseRegulationDeleteManyArgs} args - Arguments to filter TrainingCourseRegulations to delete.
+     * @example
+     * // Delete a few TrainingCourseRegulations
+     * const { count } = await prisma.trainingCourseRegulation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TrainingCourseRegulationDeleteManyArgs>(args?: SelectSubset<T, TrainingCourseRegulationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TrainingCourseRegulations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TrainingCourseRegulationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TrainingCourseRegulations
+     * const trainingCourseRegulation = await prisma.trainingCourseRegulation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TrainingCourseRegulationUpdateManyArgs>(args: SelectSubset<T, TrainingCourseRegulationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TrainingCourseRegulations and returns the data updated in the database.
+     * @param {TrainingCourseRegulationUpdateManyAndReturnArgs} args - Arguments to update many TrainingCourseRegulations.
+     * @example
+     * // Update many TrainingCourseRegulations
+     * const trainingCourseRegulation = await prisma.trainingCourseRegulation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TrainingCourseRegulations and only return the `id`
+     * const trainingCourseRegulationWithIdOnly = await prisma.trainingCourseRegulation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TrainingCourseRegulationUpdateManyAndReturnArgs>(args: SelectSubset<T, TrainingCourseRegulationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingCourseRegulationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TrainingCourseRegulation.
+     * @param {TrainingCourseRegulationUpsertArgs} args - Arguments to update or create a TrainingCourseRegulation.
+     * @example
+     * // Update or create a TrainingCourseRegulation
+     * const trainingCourseRegulation = await prisma.trainingCourseRegulation.upsert({
+     *   create: {
+     *     // ... data to create a TrainingCourseRegulation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TrainingCourseRegulation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TrainingCourseRegulationUpsertArgs>(args: SelectSubset<T, TrainingCourseRegulationUpsertArgs<ExtArgs>>): Prisma__TrainingCourseRegulationClient<$Result.GetResult<Prisma.$TrainingCourseRegulationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TrainingCourseRegulations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TrainingCourseRegulationCountArgs} args - Arguments to filter TrainingCourseRegulations to count.
+     * @example
+     * // Count the number of TrainingCourseRegulations
+     * const count = await prisma.trainingCourseRegulation.count({
+     *   where: {
+     *     // ... the filter for the TrainingCourseRegulations we want to count
+     *   }
+     * })
+    **/
+    count<T extends TrainingCourseRegulationCountArgs>(
+      args?: Subset<T, TrainingCourseRegulationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TrainingCourseRegulationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TrainingCourseRegulation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TrainingCourseRegulationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TrainingCourseRegulationAggregateArgs>(args: Subset<T, TrainingCourseRegulationAggregateArgs>): Prisma.PrismaPromise<GetTrainingCourseRegulationAggregateType<T>>
+
+    /**
+     * Group by TrainingCourseRegulation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TrainingCourseRegulationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TrainingCourseRegulationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TrainingCourseRegulationGroupByArgs['orderBy'] }
+        : { orderBy?: TrainingCourseRegulationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TrainingCourseRegulationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTrainingCourseRegulationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TrainingCourseRegulation model
+   */
+  readonly fields: TrainingCourseRegulationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TrainingCourseRegulation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TrainingCourseRegulationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    trainingCourse<T extends TrainingCourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourseDefaultArgs<ExtArgs>>): Prisma__TrainingCourseClient<$Result.GetResult<Prisma.$TrainingCoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TrainingCourseRegulation model
+   */
+  interface TrainingCourseRegulationFieldRefs {
+    readonly id: FieldRef<"TrainingCourseRegulation", 'String'>
+    readonly code: FieldRef<"TrainingCourseRegulation", 'String'>
+    readonly active: FieldRef<"TrainingCourseRegulation", 'Boolean'>
+    readonly description: FieldRef<"TrainingCourseRegulation", 'String'>
+    readonly deletedAt: FieldRef<"TrainingCourseRegulation", 'DateTime'>
+    readonly createdAt: FieldRef<"TrainingCourseRegulation", 'DateTime'>
+    readonly updatedAt: FieldRef<"TrainingCourseRegulation", 'DateTime'>
+    readonly trainingCourseId: FieldRef<"TrainingCourseRegulation", 'String'>
+    readonly name: FieldRef<"TrainingCourseRegulation", 'String'>
+    readonly value: FieldRef<"TrainingCourseRegulation", 'Float'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TrainingCourseRegulation findUnique
+   */
+  export type TrainingCourseRegulationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourseRegulation
+     */
+    select?: TrainingCourseRegulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourseRegulation
+     */
+    omit?: TrainingCourseRegulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseRegulationInclude<ExtArgs> | null
+    /**
+     * Filter, which TrainingCourseRegulation to fetch.
+     */
+    where: TrainingCourseRegulationWhereUniqueInput
+  }
+
+  /**
+   * TrainingCourseRegulation findUniqueOrThrow
+   */
+  export type TrainingCourseRegulationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourseRegulation
+     */
+    select?: TrainingCourseRegulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourseRegulation
+     */
+    omit?: TrainingCourseRegulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseRegulationInclude<ExtArgs> | null
+    /**
+     * Filter, which TrainingCourseRegulation to fetch.
+     */
+    where: TrainingCourseRegulationWhereUniqueInput
+  }
+
+  /**
+   * TrainingCourseRegulation findFirst
+   */
+  export type TrainingCourseRegulationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourseRegulation
+     */
+    select?: TrainingCourseRegulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourseRegulation
+     */
+    omit?: TrainingCourseRegulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseRegulationInclude<ExtArgs> | null
+    /**
+     * Filter, which TrainingCourseRegulation to fetch.
+     */
+    where?: TrainingCourseRegulationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TrainingCourseRegulations to fetch.
+     */
+    orderBy?: TrainingCourseRegulationOrderByWithRelationInput | TrainingCourseRegulationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TrainingCourseRegulations.
+     */
+    cursor?: TrainingCourseRegulationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TrainingCourseRegulations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TrainingCourseRegulations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TrainingCourseRegulations.
+     */
+    distinct?: TrainingCourseRegulationScalarFieldEnum | TrainingCourseRegulationScalarFieldEnum[]
+  }
+
+  /**
+   * TrainingCourseRegulation findFirstOrThrow
+   */
+  export type TrainingCourseRegulationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourseRegulation
+     */
+    select?: TrainingCourseRegulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourseRegulation
+     */
+    omit?: TrainingCourseRegulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseRegulationInclude<ExtArgs> | null
+    /**
+     * Filter, which TrainingCourseRegulation to fetch.
+     */
+    where?: TrainingCourseRegulationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TrainingCourseRegulations to fetch.
+     */
+    orderBy?: TrainingCourseRegulationOrderByWithRelationInput | TrainingCourseRegulationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TrainingCourseRegulations.
+     */
+    cursor?: TrainingCourseRegulationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TrainingCourseRegulations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TrainingCourseRegulations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TrainingCourseRegulations.
+     */
+    distinct?: TrainingCourseRegulationScalarFieldEnum | TrainingCourseRegulationScalarFieldEnum[]
+  }
+
+  /**
+   * TrainingCourseRegulation findMany
+   */
+  export type TrainingCourseRegulationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourseRegulation
+     */
+    select?: TrainingCourseRegulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourseRegulation
+     */
+    omit?: TrainingCourseRegulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseRegulationInclude<ExtArgs> | null
+    /**
+     * Filter, which TrainingCourseRegulations to fetch.
+     */
+    where?: TrainingCourseRegulationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TrainingCourseRegulations to fetch.
+     */
+    orderBy?: TrainingCourseRegulationOrderByWithRelationInput | TrainingCourseRegulationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TrainingCourseRegulations.
+     */
+    cursor?: TrainingCourseRegulationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TrainingCourseRegulations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TrainingCourseRegulations.
+     */
+    skip?: number
+    distinct?: TrainingCourseRegulationScalarFieldEnum | TrainingCourseRegulationScalarFieldEnum[]
+  }
+
+  /**
+   * TrainingCourseRegulation create
+   */
+  export type TrainingCourseRegulationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourseRegulation
+     */
+    select?: TrainingCourseRegulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourseRegulation
+     */
+    omit?: TrainingCourseRegulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseRegulationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TrainingCourseRegulation.
+     */
+    data: XOR<TrainingCourseRegulationCreateInput, TrainingCourseRegulationUncheckedCreateInput>
+  }
+
+  /**
+   * TrainingCourseRegulation createMany
+   */
+  export type TrainingCourseRegulationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TrainingCourseRegulations.
+     */
+    data: TrainingCourseRegulationCreateManyInput | TrainingCourseRegulationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TrainingCourseRegulation createManyAndReturn
+   */
+  export type TrainingCourseRegulationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourseRegulation
+     */
+    select?: TrainingCourseRegulationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourseRegulation
+     */
+    omit?: TrainingCourseRegulationOmit<ExtArgs> | null
+    /**
+     * The data used to create many TrainingCourseRegulations.
+     */
+    data: TrainingCourseRegulationCreateManyInput | TrainingCourseRegulationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseRegulationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TrainingCourseRegulation update
+   */
+  export type TrainingCourseRegulationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourseRegulation
+     */
+    select?: TrainingCourseRegulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourseRegulation
+     */
+    omit?: TrainingCourseRegulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseRegulationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TrainingCourseRegulation.
+     */
+    data: XOR<TrainingCourseRegulationUpdateInput, TrainingCourseRegulationUncheckedUpdateInput>
+    /**
+     * Choose, which TrainingCourseRegulation to update.
+     */
+    where: TrainingCourseRegulationWhereUniqueInput
+  }
+
+  /**
+   * TrainingCourseRegulation updateMany
+   */
+  export type TrainingCourseRegulationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TrainingCourseRegulations.
+     */
+    data: XOR<TrainingCourseRegulationUpdateManyMutationInput, TrainingCourseRegulationUncheckedUpdateManyInput>
+    /**
+     * Filter which TrainingCourseRegulations to update
+     */
+    where?: TrainingCourseRegulationWhereInput
+    /**
+     * Limit how many TrainingCourseRegulations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TrainingCourseRegulation updateManyAndReturn
+   */
+  export type TrainingCourseRegulationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourseRegulation
+     */
+    select?: TrainingCourseRegulationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourseRegulation
+     */
+    omit?: TrainingCourseRegulationOmit<ExtArgs> | null
+    /**
+     * The data used to update TrainingCourseRegulations.
+     */
+    data: XOR<TrainingCourseRegulationUpdateManyMutationInput, TrainingCourseRegulationUncheckedUpdateManyInput>
+    /**
+     * Filter which TrainingCourseRegulations to update
+     */
+    where?: TrainingCourseRegulationWhereInput
+    /**
+     * Limit how many TrainingCourseRegulations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseRegulationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TrainingCourseRegulation upsert
+   */
+  export type TrainingCourseRegulationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourseRegulation
+     */
+    select?: TrainingCourseRegulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourseRegulation
+     */
+    omit?: TrainingCourseRegulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseRegulationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TrainingCourseRegulation to update in case it exists.
+     */
+    where: TrainingCourseRegulationWhereUniqueInput
+    /**
+     * In case the TrainingCourseRegulation found by the `where` argument doesn't exist, create a new TrainingCourseRegulation with this data.
+     */
+    create: XOR<TrainingCourseRegulationCreateInput, TrainingCourseRegulationUncheckedCreateInput>
+    /**
+     * In case the TrainingCourseRegulation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TrainingCourseRegulationUpdateInput, TrainingCourseRegulationUncheckedUpdateInput>
+  }
+
+  /**
+   * TrainingCourseRegulation delete
+   */
+  export type TrainingCourseRegulationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourseRegulation
+     */
+    select?: TrainingCourseRegulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourseRegulation
+     */
+    omit?: TrainingCourseRegulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseRegulationInclude<ExtArgs> | null
+    /**
+     * Filter which TrainingCourseRegulation to delete.
+     */
+    where: TrainingCourseRegulationWhereUniqueInput
+  }
+
+  /**
+   * TrainingCourseRegulation deleteMany
+   */
+  export type TrainingCourseRegulationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TrainingCourseRegulations to delete
+     */
+    where?: TrainingCourseRegulationWhereInput
+    /**
+     * Limit how many TrainingCourseRegulations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TrainingCourseRegulation without action
+   */
+  export type TrainingCourseRegulationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingCourseRegulation
+     */
+    select?: TrainingCourseRegulationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingCourseRegulation
+     */
+    omit?: TrainingCourseRegulationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingCourseRegulationInclude<ExtArgs> | null
   }
 
 
@@ -300410,6 +301695,22 @@ export namespace Prisma {
   export type TrainingCourseScalarFieldEnum = (typeof TrainingCourseScalarFieldEnum)[keyof typeof TrainingCourseScalarFieldEnum]
 
 
+  export const TrainingCourseRegulationScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    trainingCourseId: 'trainingCourseId',
+    name: 'name',
+    value: 'value'
+  };
+
+  export type TrainingCourseRegulationScalarFieldEnum = (typeof TrainingCourseRegulationScalarFieldEnum)[keyof typeof TrainingCourseRegulationScalarFieldEnum]
+
+
   export const FixedClassScalarFieldEnum: {
     id: 'id',
     code: 'code',
@@ -304541,6 +305842,17 @@ export namespace Prisma {
   };
 
   export type TrainingCourseOrderByRelevanceFieldEnum = (typeof TrainingCourseOrderByRelevanceFieldEnum)[keyof typeof TrainingCourseOrderByRelevanceFieldEnum]
+
+
+  export const TrainingCourseRegulationOrderByRelevanceFieldEnum: {
+    id: 'id',
+    code: 'code',
+    description: 'description',
+    trainingCourseId: 'trainingCourseId',
+    name: 'name'
+  };
+
+  export type TrainingCourseRegulationOrderByRelevanceFieldEnum = (typeof TrainingCourseRegulationOrderByRelevanceFieldEnum)[keyof typeof TrainingCourseRegulationOrderByRelevanceFieldEnum]
 
 
   export const FixedClassOrderByRelevanceFieldEnum: {
@@ -309891,6 +311203,7 @@ export namespace Prisma {
     trainingObjectTypeId?: StringFilter<"TrainingCourse"> | string
     semesterStart?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
+    trainingCourseRegulation?: TrainingCourseRegulationListRelationFilter
     fixedClass?: FixedClassListRelationFilter
     scoreConverts?: ScoreConvertListRelationFilter
     academicRankingConvert?: AcademicRankingConvertListRelationFilter
@@ -309930,6 +311243,7 @@ export namespace Prisma {
     trainingObjectTypeId?: SortOrder
     semesterStart?: SemesterOrderByWithRelationInput
     trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
+    trainingCourseRegulation?: TrainingCourseRegulationOrderByRelationAggregateInput
     fixedClass?: FixedClassOrderByRelationAggregateInput
     scoreConverts?: ScoreConvertOrderByRelationAggregateInput
     academicRankingConvert?: AcademicRankingConvertOrderByRelationAggregateInput
@@ -309973,6 +311287,7 @@ export namespace Prisma {
     trainingObjectTypeId?: StringFilter<"TrainingCourse"> | string
     semesterStart?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
+    trainingCourseRegulation?: TrainingCourseRegulationListRelationFilter
     fixedClass?: FixedClassListRelationFilter
     scoreConverts?: ScoreConvertListRelationFilter
     academicRankingConvert?: AcademicRankingConvertListRelationFilter
@@ -310046,6 +311361,89 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatWithAggregatesFilter<"TrainingCourse"> | number
     scoreToRetain?: FloatWithAggregatesFilter<"TrainingCourse"> | number
     trainingObjectTypeId?: StringWithAggregatesFilter<"TrainingCourse"> | string
+  }
+
+  export type TrainingCourseRegulationWhereInput = {
+    AND?: TrainingCourseRegulationWhereInput | TrainingCourseRegulationWhereInput[]
+    OR?: TrainingCourseRegulationWhereInput[]
+    NOT?: TrainingCourseRegulationWhereInput | TrainingCourseRegulationWhereInput[]
+    id?: StringFilter<"TrainingCourseRegulation"> | string
+    code?: StringNullableFilter<"TrainingCourseRegulation"> | string | null
+    active?: BoolFilter<"TrainingCourseRegulation"> | boolean
+    description?: StringNullableFilter<"TrainingCourseRegulation"> | string | null
+    deletedAt?: DateTimeNullableFilter<"TrainingCourseRegulation"> | Date | string | null
+    createdAt?: DateTimeFilter<"TrainingCourseRegulation"> | Date | string
+    updatedAt?: DateTimeFilter<"TrainingCourseRegulation"> | Date | string
+    trainingCourseId?: StringFilter<"TrainingCourseRegulation"> | string
+    name?: StringFilter<"TrainingCourseRegulation"> | string
+    value?: FloatFilter<"TrainingCourseRegulation"> | number
+    trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
+  }
+
+  export type TrainingCourseRegulationOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    trainingCourseId?: SortOrder
+    name?: SortOrder
+    value?: SortOrder
+    trainingCourse?: TrainingCourseOrderByWithRelationInput
+    _relevance?: TrainingCourseRegulationOrderByRelevanceInput
+  }
+
+  export type TrainingCourseRegulationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: TrainingCourseRegulationWhereInput | TrainingCourseRegulationWhereInput[]
+    OR?: TrainingCourseRegulationWhereInput[]
+    NOT?: TrainingCourseRegulationWhereInput | TrainingCourseRegulationWhereInput[]
+    active?: BoolFilter<"TrainingCourseRegulation"> | boolean
+    description?: StringNullableFilter<"TrainingCourseRegulation"> | string | null
+    deletedAt?: DateTimeNullableFilter<"TrainingCourseRegulation"> | Date | string | null
+    createdAt?: DateTimeFilter<"TrainingCourseRegulation"> | Date | string
+    updatedAt?: DateTimeFilter<"TrainingCourseRegulation"> | Date | string
+    trainingCourseId?: StringFilter<"TrainingCourseRegulation"> | string
+    name?: StringFilter<"TrainingCourseRegulation"> | string
+    value?: FloatFilter<"TrainingCourseRegulation"> | number
+    trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
+  }, "id" | "code">
+
+  export type TrainingCourseRegulationOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    trainingCourseId?: SortOrder
+    name?: SortOrder
+    value?: SortOrder
+    _count?: TrainingCourseRegulationCountOrderByAggregateInput
+    _avg?: TrainingCourseRegulationAvgOrderByAggregateInput
+    _max?: TrainingCourseRegulationMaxOrderByAggregateInput
+    _min?: TrainingCourseRegulationMinOrderByAggregateInput
+    _sum?: TrainingCourseRegulationSumOrderByAggregateInput
+  }
+
+  export type TrainingCourseRegulationScalarWhereWithAggregatesInput = {
+    AND?: TrainingCourseRegulationScalarWhereWithAggregatesInput | TrainingCourseRegulationScalarWhereWithAggregatesInput[]
+    OR?: TrainingCourseRegulationScalarWhereWithAggregatesInput[]
+    NOT?: TrainingCourseRegulationScalarWhereWithAggregatesInput | TrainingCourseRegulationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TrainingCourseRegulation"> | string
+    code?: StringNullableWithAggregatesFilter<"TrainingCourseRegulation"> | string | null
+    active?: BoolWithAggregatesFilter<"TrainingCourseRegulation"> | boolean
+    description?: StringNullableWithAggregatesFilter<"TrainingCourseRegulation"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"TrainingCourseRegulation"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"TrainingCourseRegulation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TrainingCourseRegulation"> | Date | string
+    trainingCourseId?: StringWithAggregatesFilter<"TrainingCourseRegulation"> | string
+    name?: StringWithAggregatesFilter<"TrainingCourseRegulation"> | string
+    value?: FloatWithAggregatesFilter<"TrainingCourseRegulation"> | number
   }
 
   export type FixedClassWhereInput = {
@@ -333151,6 +334549,7 @@ export namespace Prisma {
     scoreToRetain?: number
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -333188,6 +334587,7 @@ export namespace Prisma {
     scoreToPassGraduation?: number
     scoreToRetain?: number
     trainingObjectTypeId: string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -333225,6 +334625,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -333262,6 +334663,7 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -333353,6 +334755,96 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TrainingCourseRegulationCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    value: number
+    trainingCourse: TrainingCourseCreateNestedOneWithoutTrainingCourseRegulationInput
+  }
+
+  export type TrainingCourseRegulationUncheckedCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    trainingCourseId: string
+    name: string
+    value: number
+  }
+
+  export type TrainingCourseRegulationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+    trainingCourse?: TrainingCourseUpdateOneRequiredWithoutTrainingCourseRegulationNestedInput
+  }
+
+  export type TrainingCourseRegulationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    trainingCourseId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type TrainingCourseRegulationCreateManyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    trainingCourseId: string
+    name: string
+    value: number
+  }
+
+  export type TrainingCourseRegulationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type TrainingCourseRegulationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    trainingCourseId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
   }
 
   export type FixedClassCreateInput = {
@@ -359088,6 +360580,12 @@ export namespace Prisma {
     isNot?: TrainingObjectTypeWhereInput
   }
 
+  export type TrainingCourseRegulationListRelationFilter = {
+    every?: TrainingCourseRegulationWhereInput
+    some?: TrainingCourseRegulationWhereInput
+    none?: TrainingCourseRegulationWhereInput
+  }
+
   export type FixedClassListRelationFilter = {
     every?: FixedClassWhereInput
     some?: FixedClassWhereInput
@@ -359134,6 +360632,10 @@ export namespace Prisma {
     every?: SurveyObjectTypeWhereInput
     some?: SurveyObjectTypeWhereInput
     none?: SurveyObjectTypeWhereInput
+  }
+
+  export type TrainingCourseRegulationOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type FixedClassOrderByRelationAggregateInput = {
@@ -359300,6 +360802,64 @@ export namespace Prisma {
     _max?: NestedEnumAcademicRankingBaseTypeFilter<$PrismaModel>
   }
 
+  export type TrainingCourseScalarRelationFilter = {
+    is?: TrainingCourseWhereInput
+    isNot?: TrainingCourseWhereInput
+  }
+
+  export type TrainingCourseRegulationOrderByRelevanceInput = {
+    fields: TrainingCourseRegulationOrderByRelevanceFieldEnum | TrainingCourseRegulationOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type TrainingCourseRegulationCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    trainingCourseId?: SortOrder
+    name?: SortOrder
+    value?: SortOrder
+  }
+
+  export type TrainingCourseRegulationAvgOrderByAggregateInput = {
+    value?: SortOrder
+  }
+
+  export type TrainingCourseRegulationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    trainingCourseId?: SortOrder
+    name?: SortOrder
+    value?: SortOrder
+  }
+
+  export type TrainingCourseRegulationMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    trainingCourseId?: SortOrder
+    name?: SortOrder
+    value?: SortOrder
+  }
+
+  export type TrainingCourseRegulationSumOrderByAggregateInput = {
+    value?: SortOrder
+  }
+
   export type UuidNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -359311,11 +360871,6 @@ export namespace Prisma {
     search?: string
     mode?: QueryMode
     not?: NestedUuidNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type TrainingCourseScalarRelationFilter = {
-    is?: TrainingCourseWhereInput
-    isNot?: TrainingCourseWhereInput
   }
 
   export type DM_DonViNullableScalarRelationFilter = {
@@ -375909,6 +377464,13 @@ export namespace Prisma {
     connect?: TrainingObjectTypeWhereUniqueInput
   }
 
+  export type TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput = {
+    create?: XOR<TrainingCourseRegulationCreateWithoutTrainingCourseInput, TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput> | TrainingCourseRegulationCreateWithoutTrainingCourseInput[] | TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput[]
+    connectOrCreate?: TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput | TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput[]
+    createMany?: TrainingCourseRegulationCreateManyTrainingCourseInputEnvelope
+    connect?: TrainingCourseRegulationWhereUniqueInput | TrainingCourseRegulationWhereUniqueInput[]
+  }
+
   export type FixedClassCreateNestedManyWithoutTrainingCourseInput = {
     create?: XOR<FixedClassCreateWithoutTrainingCourseInput, FixedClassUncheckedCreateWithoutTrainingCourseInput> | FixedClassCreateWithoutTrainingCourseInput[] | FixedClassUncheckedCreateWithoutTrainingCourseInput[]
     connectOrCreate?: FixedClassCreateOrConnectWithoutTrainingCourseInput | FixedClassCreateOrConnectWithoutTrainingCourseInput[]
@@ -375967,6 +377529,13 @@ export namespace Prisma {
     create?: XOR<ClassRegisterSessionCreateWithoutTrainingCoursesInput, ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput> | ClassRegisterSessionCreateWithoutTrainingCoursesInput[] | ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput[]
     connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutTrainingCoursesInput | ClassRegisterSessionCreateOrConnectWithoutTrainingCoursesInput[]
     connect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
+  }
+
+  export type TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput = {
+    create?: XOR<TrainingCourseRegulationCreateWithoutTrainingCourseInput, TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput> | TrainingCourseRegulationCreateWithoutTrainingCourseInput[] | TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput[]
+    connectOrCreate?: TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput | TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput[]
+    createMany?: TrainingCourseRegulationCreateManyTrainingCourseInputEnvelope
+    connect?: TrainingCourseRegulationWhereUniqueInput | TrainingCourseRegulationWhereUniqueInput[]
   }
 
   export type FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput = {
@@ -376047,6 +377616,20 @@ export namespace Prisma {
     upsert?: TrainingObjectTypeUpsertWithoutTrainingCourseInput
     connect?: TrainingObjectTypeWhereUniqueInput
     update?: XOR<XOR<TrainingObjectTypeUpdateToOneWithWhereWithoutTrainingCourseInput, TrainingObjectTypeUpdateWithoutTrainingCourseInput>, TrainingObjectTypeUncheckedUpdateWithoutTrainingCourseInput>
+  }
+
+  export type TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput = {
+    create?: XOR<TrainingCourseRegulationCreateWithoutTrainingCourseInput, TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput> | TrainingCourseRegulationCreateWithoutTrainingCourseInput[] | TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput[]
+    connectOrCreate?: TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput | TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput[]
+    upsert?: TrainingCourseRegulationUpsertWithWhereUniqueWithoutTrainingCourseInput | TrainingCourseRegulationUpsertWithWhereUniqueWithoutTrainingCourseInput[]
+    createMany?: TrainingCourseRegulationCreateManyTrainingCourseInputEnvelope
+    set?: TrainingCourseRegulationWhereUniqueInput | TrainingCourseRegulationWhereUniqueInput[]
+    disconnect?: TrainingCourseRegulationWhereUniqueInput | TrainingCourseRegulationWhereUniqueInput[]
+    delete?: TrainingCourseRegulationWhereUniqueInput | TrainingCourseRegulationWhereUniqueInput[]
+    connect?: TrainingCourseRegulationWhereUniqueInput | TrainingCourseRegulationWhereUniqueInput[]
+    update?: TrainingCourseRegulationUpdateWithWhereUniqueWithoutTrainingCourseInput | TrainingCourseRegulationUpdateWithWhereUniqueWithoutTrainingCourseInput[]
+    updateMany?: TrainingCourseRegulationUpdateManyWithWhereWithoutTrainingCourseInput | TrainingCourseRegulationUpdateManyWithWhereWithoutTrainingCourseInput[]
+    deleteMany?: TrainingCourseRegulationScalarWhereInput | TrainingCourseRegulationScalarWhereInput[]
   }
 
   export type FixedClassUpdateManyWithoutTrainingCourseNestedInput = {
@@ -376172,6 +377755,20 @@ export namespace Prisma {
     deleteMany?: ClassRegisterSessionScalarWhereInput | ClassRegisterSessionScalarWhereInput[]
   }
 
+  export type TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput = {
+    create?: XOR<TrainingCourseRegulationCreateWithoutTrainingCourseInput, TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput> | TrainingCourseRegulationCreateWithoutTrainingCourseInput[] | TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput[]
+    connectOrCreate?: TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput | TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput[]
+    upsert?: TrainingCourseRegulationUpsertWithWhereUniqueWithoutTrainingCourseInput | TrainingCourseRegulationUpsertWithWhereUniqueWithoutTrainingCourseInput[]
+    createMany?: TrainingCourseRegulationCreateManyTrainingCourseInputEnvelope
+    set?: TrainingCourseRegulationWhereUniqueInput | TrainingCourseRegulationWhereUniqueInput[]
+    disconnect?: TrainingCourseRegulationWhereUniqueInput | TrainingCourseRegulationWhereUniqueInput[]
+    delete?: TrainingCourseRegulationWhereUniqueInput | TrainingCourseRegulationWhereUniqueInput[]
+    connect?: TrainingCourseRegulationWhereUniqueInput | TrainingCourseRegulationWhereUniqueInput[]
+    update?: TrainingCourseRegulationUpdateWithWhereUniqueWithoutTrainingCourseInput | TrainingCourseRegulationUpdateWithWhereUniqueWithoutTrainingCourseInput[]
+    updateMany?: TrainingCourseRegulationUpdateManyWithWhereWithoutTrainingCourseInput | TrainingCourseRegulationUpdateManyWithWhereWithoutTrainingCourseInput[]
+    deleteMany?: TrainingCourseRegulationScalarWhereInput | TrainingCourseRegulationScalarWhereInput[]
+  }
+
   export type FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput = {
     create?: XOR<FixedClassCreateWithoutTrainingCourseInput, FixedClassUncheckedCreateWithoutTrainingCourseInput> | FixedClassCreateWithoutTrainingCourseInput[] | FixedClassUncheckedCreateWithoutTrainingCourseInput[]
     connectOrCreate?: FixedClassCreateOrConnectWithoutTrainingCourseInput | FixedClassCreateOrConnectWithoutTrainingCourseInput[]
@@ -376293,6 +377890,20 @@ export namespace Prisma {
     update?: ClassRegisterSessionUpdateWithWhereUniqueWithoutTrainingCoursesInput | ClassRegisterSessionUpdateWithWhereUniqueWithoutTrainingCoursesInput[]
     updateMany?: ClassRegisterSessionUpdateManyWithWhereWithoutTrainingCoursesInput | ClassRegisterSessionUpdateManyWithWhereWithoutTrainingCoursesInput[]
     deleteMany?: ClassRegisterSessionScalarWhereInput | ClassRegisterSessionScalarWhereInput[]
+  }
+
+  export type TrainingCourseCreateNestedOneWithoutTrainingCourseRegulationInput = {
+    create?: XOR<TrainingCourseCreateWithoutTrainingCourseRegulationInput, TrainingCourseUncheckedCreateWithoutTrainingCourseRegulationInput>
+    connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingCourseRegulationInput
+    connect?: TrainingCourseWhereUniqueInput
+  }
+
+  export type TrainingCourseUpdateOneRequiredWithoutTrainingCourseRegulationNestedInput = {
+    create?: XOR<TrainingCourseCreateWithoutTrainingCourseRegulationInput, TrainingCourseUncheckedCreateWithoutTrainingCourseRegulationInput>
+    connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingCourseRegulationInput
+    upsert?: TrainingCourseUpsertWithoutTrainingCourseRegulationInput
+    connect?: TrainingCourseWhereUniqueInput
+    update?: XOR<XOR<TrainingCourseUpdateToOneWithWhereWithoutTrainingCourseRegulationInput, TrainingCourseUpdateWithoutTrainingCourseRegulationInput>, TrainingCourseUncheckedUpdateWithoutTrainingCourseRegulationInput>
   }
 
   export type StudentCreateNestedOneWithoutClassMonitorInput = {
@@ -400031,6 +401642,7 @@ export namespace Prisma {
     scoreToPassGraduation?: number
     scoreToRetain?: number
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -400067,6 +401679,7 @@ export namespace Prisma {
     scoreToPassGraduation?: number
     scoreToRetain?: number
     trainingObjectTypeId: string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -400950,6 +402563,40 @@ export namespace Prisma {
     create: XOR<TrainingObjectTypeCreateWithoutTrainingCourseInput, TrainingObjectTypeUncheckedCreateWithoutTrainingCourseInput>
   }
 
+  export type TrainingCourseRegulationCreateWithoutTrainingCourseInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    value: number
+  }
+
+  export type TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    value: number
+  }
+
+  export type TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput = {
+    where: TrainingCourseRegulationWhereUniqueInput
+    create: XOR<TrainingCourseRegulationCreateWithoutTrainingCourseInput, TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput>
+  }
+
+  export type TrainingCourseRegulationCreateManyTrainingCourseInputEnvelope = {
+    data: TrainingCourseRegulationCreateManyTrainingCourseInput | TrainingCourseRegulationCreateManyTrainingCourseInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FixedClassCreateWithoutTrainingCourseInput = {
     id?: string
     code?: string | null
@@ -401469,6 +403116,38 @@ export namespace Prisma {
     trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
+  export type TrainingCourseRegulationUpsertWithWhereUniqueWithoutTrainingCourseInput = {
+    where: TrainingCourseRegulationWhereUniqueInput
+    update: XOR<TrainingCourseRegulationUpdateWithoutTrainingCourseInput, TrainingCourseRegulationUncheckedUpdateWithoutTrainingCourseInput>
+    create: XOR<TrainingCourseRegulationCreateWithoutTrainingCourseInput, TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput>
+  }
+
+  export type TrainingCourseRegulationUpdateWithWhereUniqueWithoutTrainingCourseInput = {
+    where: TrainingCourseRegulationWhereUniqueInput
+    data: XOR<TrainingCourseRegulationUpdateWithoutTrainingCourseInput, TrainingCourseRegulationUncheckedUpdateWithoutTrainingCourseInput>
+  }
+
+  export type TrainingCourseRegulationUpdateManyWithWhereWithoutTrainingCourseInput = {
+    where: TrainingCourseRegulationScalarWhereInput
+    data: XOR<TrainingCourseRegulationUpdateManyMutationInput, TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseInput>
+  }
+
+  export type TrainingCourseRegulationScalarWhereInput = {
+    AND?: TrainingCourseRegulationScalarWhereInput | TrainingCourseRegulationScalarWhereInput[]
+    OR?: TrainingCourseRegulationScalarWhereInput[]
+    NOT?: TrainingCourseRegulationScalarWhereInput | TrainingCourseRegulationScalarWhereInput[]
+    id?: StringFilter<"TrainingCourseRegulation"> | string
+    code?: StringNullableFilter<"TrainingCourseRegulation"> | string | null
+    active?: BoolFilter<"TrainingCourseRegulation"> | boolean
+    description?: StringNullableFilter<"TrainingCourseRegulation"> | string | null
+    deletedAt?: DateTimeNullableFilter<"TrainingCourseRegulation"> | Date | string | null
+    createdAt?: DateTimeFilter<"TrainingCourseRegulation"> | Date | string
+    updatedAt?: DateTimeFilter<"TrainingCourseRegulation"> | Date | string
+    trainingCourseId?: StringFilter<"TrainingCourseRegulation"> | string
+    name?: StringFilter<"TrainingCourseRegulation"> | string
+    value?: FloatFilter<"TrainingCourseRegulation"> | number
+  }
+
   export type FixedClassUpsertWithWhereUniqueWithoutTrainingCourseInput = {
     where: FixedClassWhereUniqueInput
     update: XOR<FixedClassUpdateWithoutTrainingCourseInput, FixedClassUncheckedUpdateWithoutTrainingCourseInput>
@@ -401776,6 +403455,170 @@ export namespace Prisma {
     data: XOR<ClassRegisterSessionUpdateManyMutationInput, ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesInput>
   }
 
+  export type TrainingCourseCreateWithoutTrainingCourseRegulationInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    startYear?: number | null
+    endYear?: number | null
+    academicYear?: string | null
+    maxTrainingTime?: number | null
+    admissionQuota?: number | null
+    baseScore: $Enums.AcademicRankingBaseType
+    coef_1?: number
+    coef_2?: number
+    coef_3?: number
+    scoreToTakeExam?: number
+    scoreToPass?: number
+    scoreToPassConditional?: number
+    scoreToTakeGraduation?: number
+    scoreToPassGraduation?: number
+    scoreToRetain?: number
+    semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
+    trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
+    scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
+    academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
+    scholarships?: ScholarshipCreateNestedManyWithoutTrainingCourseInput
+    academicWarningRule?: AcademicWarningRuleCreateNestedManyWithoutTrainingCourseInput
+    academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
+    notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
+    surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+    classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
+  }
+
+  export type TrainingCourseUncheckedCreateWithoutTrainingCourseRegulationInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    semesterStartId: string
+    startYear?: number | null
+    endYear?: number | null
+    academicYear?: string | null
+    maxTrainingTime?: number | null
+    admissionQuota?: number | null
+    baseScore: $Enums.AcademicRankingBaseType
+    coef_1?: number
+    coef_2?: number
+    coef_3?: number
+    scoreToTakeExam?: number
+    scoreToPass?: number
+    scoreToPassConditional?: number
+    scoreToTakeGraduation?: number
+    scoreToPassGraduation?: number
+    scoreToRetain?: number
+    trainingObjectTypeId: string
+    fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
+    scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
+    academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
+    scholarships?: ScholarshipUncheckedCreateNestedManyWithoutTrainingCourseInput
+    academicWarningRule?: AcademicWarningRuleUncheckedCreateNestedManyWithoutTrainingCourseInput
+    academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+    classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
+  }
+
+  export type TrainingCourseCreateOrConnectWithoutTrainingCourseRegulationInput = {
+    where: TrainingCourseWhereUniqueInput
+    create: XOR<TrainingCourseCreateWithoutTrainingCourseRegulationInput, TrainingCourseUncheckedCreateWithoutTrainingCourseRegulationInput>
+  }
+
+  export type TrainingCourseUpsertWithoutTrainingCourseRegulationInput = {
+    update: XOR<TrainingCourseUpdateWithoutTrainingCourseRegulationInput, TrainingCourseUncheckedUpdateWithoutTrainingCourseRegulationInput>
+    create: XOR<TrainingCourseCreateWithoutTrainingCourseRegulationInput, TrainingCourseUncheckedCreateWithoutTrainingCourseRegulationInput>
+    where?: TrainingCourseWhereInput
+  }
+
+  export type TrainingCourseUpdateToOneWithWhereWithoutTrainingCourseRegulationInput = {
+    where?: TrainingCourseWhereInput
+    data: XOR<TrainingCourseUpdateWithoutTrainingCourseRegulationInput, TrainingCourseUncheckedUpdateWithoutTrainingCourseRegulationInput>
+  }
+
+  export type TrainingCourseUpdateWithoutTrainingCourseRegulationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
+    endYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicYear?: NullableStringFieldUpdateOperationsInput | string | null
+    maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+    coef_1?: FloatFieldUpdateOperationsInput | number
+    coef_2?: FloatFieldUpdateOperationsInput | number
+    coef_3?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    scoreToPass?: FloatFieldUpdateOperationsInput | number
+    scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
+    scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+    scoreToRetain?: FloatFieldUpdateOperationsInput | number
+    semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
+    trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
+    scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
+    academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
+    scholarships?: ScholarshipUpdateManyWithoutTrainingCourseNestedInput
+    academicWarningRule?: AcademicWarningRuleUpdateManyWithoutTrainingCourseNestedInput
+    academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
+    notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+    classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
+  }
+
+  export type TrainingCourseUncheckedUpdateWithoutTrainingCourseRegulationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    semesterStartId?: StringFieldUpdateOperationsInput | string
+    startYear?: NullableIntFieldUpdateOperationsInput | number | null
+    endYear?: NullableIntFieldUpdateOperationsInput | number | null
+    academicYear?: NullableStringFieldUpdateOperationsInput | string | null
+    maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+    admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+    baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+    coef_1?: FloatFieldUpdateOperationsInput | number
+    coef_2?: FloatFieldUpdateOperationsInput | number
+    coef_3?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+    scoreToPass?: FloatFieldUpdateOperationsInput | number
+    scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
+    scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
+    scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+    scoreToRetain?: FloatFieldUpdateOperationsInput | number
+    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    scholarships?: ScholarshipUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    academicWarningRule?: AcademicWarningRuleUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+    classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+  }
+
   export type StudentCreateWithoutClassMonitorInput = {
     id?: string
     code?: string | null
@@ -402028,6 +403871,7 @@ export namespace Prisma {
     scoreToRetain?: number
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
     scholarships?: ScholarshipCreateNestedManyWithoutTrainingCourseInput
@@ -402064,6 +403908,7 @@ export namespace Prisma {
     scoreToPassGraduation?: number
     scoreToRetain?: number
     trainingObjectTypeId: string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     scholarships?: ScholarshipUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -402895,6 +404740,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
     scholarships?: ScholarshipUpdateManyWithoutTrainingCourseNestedInput
@@ -402931,6 +404777,7 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scholarships?: ScholarshipUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -406703,6 +408550,7 @@ export namespace Prisma {
     scoreToRetain?: number
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -406739,6 +408587,7 @@ export namespace Prisma {
     scoreToPassGraduation?: number
     scoreToRetain?: number
     trainingObjectTypeId: string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -409721,6 +411570,7 @@ export namespace Prisma {
     scoreToPassGraduation?: number
     scoreToRetain?: number
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
+    trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -409757,6 +411607,7 @@ export namespace Prisma {
     scoreToTakeGraduation?: number
     scoreToPassGraduation?: number
     scoreToRetain?: number
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -413707,6 +415558,7 @@ export namespace Prisma {
     scoreToRetain?: number
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
     scholarships?: ScholarshipCreateNestedManyWithoutTrainingCourseInput
@@ -413743,6 +415595,7 @@ export namespace Prisma {
     scoreToPassGraduation?: number
     scoreToRetain?: number
     trainingObjectTypeId: string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     scholarships?: ScholarshipUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -413795,6 +415648,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
     scholarships?: ScholarshipUpdateManyWithoutTrainingCourseNestedInput
@@ -413831,6 +415685,7 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scholarships?: ScholarshipUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -417547,6 +419402,7 @@ export namespace Prisma {
     scoreToRetain?: number
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -417583,6 +419439,7 @@ export namespace Prisma {
     scoreToPassGraduation?: number
     scoreToRetain?: number
     trainingObjectTypeId: string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -464061,6 +465918,7 @@ export namespace Prisma {
     scoreToRetain?: number
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -464097,6 +465955,7 @@ export namespace Prisma {
     scoreToPassGraduation?: number
     scoreToRetain?: number
     trainingObjectTypeId: string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -464229,6 +466088,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -464265,6 +466125,7 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -465690,6 +467551,7 @@ export namespace Prisma {
     scoreToRetain?: number
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -465726,6 +467588,7 @@ export namespace Prisma {
     scoreToPassGraduation?: number
     scoreToRetain?: number
     trainingObjectTypeId: string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -465860,6 +467723,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -465896,6 +467760,7 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -468045,6 +469910,7 @@ export namespace Prisma {
     scoreToRetain?: number
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     scholarships?: ScholarshipCreateNestedManyWithoutTrainingCourseInput
@@ -468081,6 +469947,7 @@ export namespace Prisma {
     scoreToPassGraduation?: number
     scoreToRetain?: number
     trainingObjectTypeId: string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     scholarships?: ScholarshipUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -468263,6 +470130,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     scholarships?: ScholarshipUpdateManyWithoutTrainingCourseNestedInput
@@ -468299,6 +470167,7 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scholarships?: ScholarshipUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -473770,6 +475639,7 @@ export namespace Prisma {
     scoreToRetain?: number
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -473806,6 +475676,7 @@ export namespace Prisma {
     scoreToPassGraduation?: number
     scoreToRetain?: number
     trainingObjectTypeId: string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -480198,6 +482069,7 @@ export namespace Prisma {
     scoreToRetain?: number
     semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+    trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
@@ -480234,6 +482106,7 @@ export namespace Prisma {
     scoreToPassGraduation?: number
     scoreToRetain?: number
     trainingObjectTypeId: string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
     fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
     scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
     academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
@@ -480321,6 +482194,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -480357,6 +482231,7 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -483427,6 +485302,7 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -483463,6 +485339,7 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -483897,6 +485774,18 @@ export namespace Prisma {
     maxCredit?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
+  export type TrainingCourseRegulationCreateManyTrainingCourseInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    value: number
+  }
+
   export type FixedClassCreateManyTrainingCourseInput = {
     id?: string
     code?: string | null
@@ -483998,6 +485887,42 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     actionType: $Enums.AcademicActionType
+  }
+
+  export type TrainingCourseRegulationUpdateWithoutTrainingCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type TrainingCourseRegulationUncheckedUpdateWithoutTrainingCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    value?: FloatFieldUpdateOperationsInput | number
   }
 
   export type FixedClassUpdateWithoutTrainingCourseInput = {
@@ -486833,6 +488758,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -486869,6 +488795,7 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -487746,6 +489673,7 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -487782,6 +489710,7 @@ export namespace Prisma {
     scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -492321,6 +494250,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -492357,6 +494287,7 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
@@ -518805,6 +520736,7 @@ export namespace Prisma {
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+    trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
@@ -518841,6 +520773,7 @@ export namespace Prisma {
     scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
     scoreToRetain?: FloatFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+    trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
     fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
     scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
     academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput

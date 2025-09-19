@@ -440,6 +440,19 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   trainingObjectTypeId: 'trainingObjectTypeId'
 };
 
+exports.Prisma.TrainingCourseRegulationScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  trainingCourseId: 'trainingCourseId',
+  name: 'name',
+  value: 'value'
+};
+
 exports.Prisma.FixedClassScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3901,6 +3914,14 @@ exports.Prisma.TrainingCourseOrderByRelevanceFieldEnum = {
   trainingObjectTypeId: 'trainingObjectTypeId'
 };
 
+exports.Prisma.TrainingCourseRegulationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  trainingCourseId: 'trainingCourseId',
+  name: 'name'
+};
+
 exports.Prisma.FixedClassOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6308,6 +6329,7 @@ exports.Prisma.ModelName = {
   Semester: 'Semester',
   Milestone: 'Milestone',
   TrainingCourse: 'TrainingCourse',
+  TrainingCourseRegulation: 'TrainingCourseRegulation',
   FixedClass: 'FixedClass',
   Curriculum: 'Curriculum',
   CurriculumVersion: 'CurriculumVersion',

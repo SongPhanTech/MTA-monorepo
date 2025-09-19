@@ -26,6 +26,7 @@ export * from './SchoolYear.schema';
 export * from './Semester.schema';
 export * from './Milestone.schema';
 export * from './TrainingCourse.schema';
+export * from './TrainingCourseRegulation.schema';
 export * from './FixedClass.schema';
 export * from './Curriculum.schema';
 export * from './CurriculumVersion.schema';

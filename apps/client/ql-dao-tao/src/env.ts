@@ -7,7 +7,7 @@ export const env = createEnv({
      * isn't built with invalid env vars.
      */
     server: {
-        ENVIRONMENT: z.enum(['develop', 'test', 'product']).default('develop'),
+        ENVIRONMENT: z.enum(['develop', 'test', 'product', 'local']).default('develop'),
     },
 
     /**
