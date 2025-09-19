@@ -1039,42 +1039,63 @@ model Milestone {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model TrainingCourse {
-  id                     String                   @id() @default(cuid())
-  code                   String?                  @unique()
-  active                 Boolean                  @default(true)
-  description            String?                  @db.Text()
-  deletedAt              DateTime?
-  createdAt              DateTime                 @default(now())
-  updatedAt              DateTime                 @default(now()) @updatedAt()
-  name                   String
-  semesterStart          Semester                 @relation(fields: [semesterStartId], references: [id])
-  semesterStartId        String
-  startYear              Int?
-  endYear                Int?
-  academicYear           String?
-  maxTrainingTime        Float?
-  admissionQuota         Int?
-  baseScore              AcademicRankingBaseType
-  coef_1                 Float                    @default(0.1)
-  coef_2                 Float                    @default(0.3)
-  coef_3                 Float                    @default(0.6)
-  scoreToTakeExam        Float                    @default(0)
-  scoreToPass            Float                    @default(4)
-  scoreToPassConditional Float                    @default(5)
-  scoreToTakeGraduation  Float                    @default(5)
-  scoreToPassGraduation  Float                    @default(5.5)
-  scoreToRetain          Float                    @default(6.9)
-  trainingObjectType     TrainingObjectType       @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId   String
-  fixedClass             FixedClass[]
-  scoreConverts          ScoreConvert[]
-  academicRankingConvert AcademicRankingConvert[]
-  scholarships           Scholarship[]
-  academicWarningRule    AcademicWarningRule[]
-  academicActionConfig   AcademicActionConfig[]
-  notifications          Notification[]
-  surveyObjectTypes      SurveyObjectType[]
-  classRegisterSession   ClassRegisterSession[]
+  id                       String                     @id() @default(cuid())
+  code                     String?                    @unique()
+  active                   Boolean                    @default(true)
+  description              String?                    @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @default(now()) @updatedAt()
+  name                     String
+  semesterStart            Semester                   @relation(fields: [semesterStartId], references: [id])
+  semesterStartId          String
+  startYear                Int?
+  endYear                  Int?
+  academicYear             String?
+  maxTrainingTime          Float?
+  admissionQuota           Int?
+  baseScore                AcademicRankingBaseType
+  coef_1                   Float                      @default(0.1)
+  coef_2                   Float                      @default(0.3)
+  coef_3                   Float                      @default(0.6)
+  scoreToTakeExam          Float                      @default(0)
+  scoreToPass              Float                      @default(4)
+  scoreToPassConditional   Float                      @default(5)
+  scoreToTakeGraduation    Float                      @default(5)
+  scoreToPassGraduation    Float                      @default(5.5)
+  scoreToRetain            Float                      @default(6.9)
+  trainingObjectType       TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId     String
+  trainingCourseRegulation TrainingCourseRegulation[]
+  fixedClass               FixedClass[]
+  scoreConverts            ScoreConvert[]
+  academicRankingConvert   AcademicRankingConvert[]
+  scholarships             Scholarship[]
+  academicWarningRule      AcademicWarningRule[]
+  academicActionConfig     AcademicActionConfig[]
+  notifications            Notification[]
+  surveyObjectTypes        SurveyObjectType[]
+  classRegisterSession     ClassRegisterSession[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Quy chế động của khoá
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model TrainingCourseRegulation {
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  trainingCourse   TrainingCourse @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
+  name             String
+  value            Float
 
   @@schema("ql-dao-tao")
 }

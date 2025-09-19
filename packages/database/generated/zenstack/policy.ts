@@ -479,6 +479,26 @@ const policy: PolicyDef = {
             },
 
         },
+        trainingCourseRegulation: {
+            modelLevel: {
+                read: { guard: TrainingCourseRegulation_read, },
+                create: { guard: TrainingCourseRegulation_create, inputChecker: TrainingCourseRegulation_create_input, },
+                update: { guard: TrainingCourseRegulation_update, },
+                postUpdate: { guard: TrainingCourseRegulation_postUpdate, },
+                delete: { guard: TrainingCourseRegulation_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         fixedClass: {
             modelLevel: {
                 read: { guard: FixedClass_read, },
@@ -4502,6 +4522,7 @@ const policy: PolicyDef = {
         semester: { hasValidation: false },
         milestone: { hasValidation: false },
         trainingCourse: { hasValidation: false },
+        trainingCourseRegulation: { hasValidation: false },
         fixedClass: { hasValidation: false },
         curriculum: { hasValidation: false },
         curriculumVersion: { hasValidation: false },
@@ -6065,6 +6086,71 @@ function TrainingCourse_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_TrainingCourse_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingCourseRegulation_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingCourseRegulation_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingCourseRegulation_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingCourseRegulation_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingCourseRegulation_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingCourseRegulation_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingCourseRegulation_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingCourseRegulation_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingCourseRegulation_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingCourseRegulation_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingCourseRegulation_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

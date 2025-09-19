@@ -1925,6 +1925,12 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'trainingObjectType',
+                }, trainingCourseRegulation: {
+                    name: "trainingCourseRegulation",
+                    type: "TrainingCourseRegulation",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingCourse',
                 }, fixedClass: {
                     name: "fixedClass",
                     type: "FixedClass",
@@ -1982,6 +1988,70 @@ const metadata = {
                     isArray: true,
                     backLink: 'trainingCourses',
                     isRelationOwner: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        trainingCourseRegulation: {
+            name: 'TrainingCourseRegulation', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingCourseRegulation',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, value: {
+                    name: "value",
+                    type: "Float",
                 },
             }, uniqueConstraints: {
                 id: {

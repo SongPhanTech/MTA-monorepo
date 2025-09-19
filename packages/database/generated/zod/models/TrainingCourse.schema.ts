@@ -36,6 +36,7 @@ const baseSchema = z.object({
 const relationSchema = z.object({
     semesterStart: z.record(z.unknown()),
     trainingObjectType: z.record(z.unknown()),
+    trainingCourseRegulation: z.array(z.unknown()).optional(),
     fixedClass: z.array(z.unknown()).optional(),
     scoreConverts: z.array(z.unknown()).optional(),
     academicRankingConvert: z.array(z.unknown()).optional(),
