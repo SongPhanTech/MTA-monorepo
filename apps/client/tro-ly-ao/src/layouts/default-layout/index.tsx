@@ -87,11 +87,11 @@ const DefaultLayout = ({ children, className }: { children: ReactNode; className
                             background: colorBgContainer,
                         }}
                     >
+                        <WidgetChatbot />
                         {children}
                     </Content>
                 </Layout>
             </Layout>
-            <WidgetChatbot />
         </IdleTimerProvider>
     )
 }

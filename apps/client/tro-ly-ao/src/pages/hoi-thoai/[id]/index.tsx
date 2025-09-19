@@ -10,7 +10,7 @@ import {
 import { Button, List, message } from 'antd'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { fetchHoiDap, fetchHoiDapFaq } from '@/api/hoi-dap'
 
@@ -23,7 +23,6 @@ export default function Page() {
     const [messages, setMessages] = useState<{ id: number; role: string; content: string }[]>([])
     const [loading, setLoading] = useState(false)
     const [abortController, setAbortController] = useState<AbortController | null>(null)
-    const [hasAutoSent, setHasAutoSent] = useState(false)
     const [isUserScrolling, setIsUserScrolling] = useState(false)
     const [showScrollButton, setShowScrollButton] = useState(false)
 
@@ -58,122 +57,136 @@ export default function Page() {
         await sendMessage(currentInput, userMessage.id)
     }
 
-    const sendMessage = async (text: string, userMessageId: number, skipUserMessage = false) => {
-        setLoading(true)
-        const controller = new AbortController()
-        setAbortController(controller)
+    const sendMessage = useCallback(
+        async (text: string, userMessageId: number, skipUserMessage = false) => {
+            setLoading(true)
+            const controller = new AbortController()
+            setAbortController(controller)
 
-        try {
-            // Chỉ tạo USER message nếu chưa có (khi user gửi từ input)
-            if (!skipUserMessage) {
-                await updateConversation({
-                    where: { id: id as string },
-                    data: {
-                        message: {
-                            create: [
-                                {
-                                    content: text,
-                                    sender: MessageSender.USER,
-                                },
-                            ],
+            try {
+                // Chỉ tạo USER message nếu chưa có (khi user gửi từ input)
+                if (!skipUserMessage) {
+                    await updateConversation({
+                        where: { id: id as string },
+                        data: {
+                            message: {
+                                create: [
+                                    {
+                                        content: text,
+                                        sender: MessageSender.USER,
+                                    },
+                                ],
+                            },
                         },
-                    },
+                    })
+                }
+
+                const response = await (isFaqMode ? fetchHoiDapFaq : fetchHoiDap)({
+                    prompt: text,
+                    type_data: conversationCurrent?.type ?? '',
+                    conversation_id: id as string,
+                    signal: controller.signal,
                 })
-            }
 
-            const response = await (isFaqMode ? fetchHoiDapFaq : fetchHoiDap)({
-                prompt: text,
-                type_data: conversationCurrent?.type ?? '',
-                conversation_id: id as string,
-                signal: controller.signal,
-            })
-
-            if (!response.ok) {
-                message.error('Lỗi từ server')
-                setLoading(false)
-                return
-            }
-
-            let botReply = ''
-
-            if (isFaqMode) {
-                const json = await response.json()
-                if (json?.error === 'True') {
-                    message.error('Đã xảy ra lỗi từ máy chủ')
+                if (!response.ok) {
+                    message.error('Lỗi từ server')
+                    setLoading(false)
                     return
                 }
-                botReply = json?.success_detail || 'Không có phản hồi'
 
-                // Hiển thị response với chức năng FAQ
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        id: Date.now(),
-                        role: 'BOT',
-                        content: botReply,
-                    },
-                ])
-            } else {
-                // Tạo message BOT trống trước
-                const botMessageId = Date.now()
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        id: botMessageId,
-                        role: 'BOT',
-                        content: '',
-                    },
-                ])
+                let botReply = ''
 
-                // lấy từ steam và cập nhật
-                const reader = response.body?.getReader()
-                const decoder = new TextDecoder()
+                if (isFaqMode) {
+                    const json = await response.json()
+                    if (json?.error === 'True') {
+                        message.error('Đã xảy ra lỗi từ máy chủ')
+                        return
+                    }
+                    botReply = json?.success_detail || 'Không có phản hồi'
 
-                if (reader) {
-                    let accumulatedText = ''
-                    setLoading(false) // Tắt loading khi bắt đầu trả lời
+                    // Hiển thị response với chức năng FAQ
+                    setMessages((prev) => [
+                        ...prev,
+                        {
+                            id: Date.now(),
+                            role: 'BOT',
+                            content: botReply,
+                        },
+                    ])
+                } else {
+                    // Tạo message BOT trống trước
+                    const botMessageId = Date.now()
+                    setMessages((prev) => [
+                        ...prev,
+                        {
+                            id: botMessageId,
+                            role: 'BOT',
+                            content: '',
+                        },
+                    ])
 
-                    while (true) {
-                        const { done, value } = await reader.read()
-                        if (done) break
+                    // lấy từ steam và cập nhật
+                    const reader = response.body?.getReader()
+                    const decoder = new TextDecoder()
 
-                        const chunk = decoder.decode(value, { stream: true })
-                        accumulatedText += chunk
+                    if (reader) {
+                        let accumulatedText = ''
+                        setLoading(false) // Tắt loading khi bắt đầu trả lời
 
-                        // Cập nhật toàn bộ message của BOT
+                        while (true) {
+                            const { done, value } = await reader.read()
+                            if (done) break
+
+                            const chunk = decoder.decode(value, { stream: true })
+                            accumulatedText += chunk
+
+                            // Cập nhật toàn bộ message của BOT
+                            setMessages((prev) =>
+                                prev.map((msg) =>
+                                    msg.id === botMessageId
+                                        ? { ...msg, content: accumulatedText }
+                                        : msg
+                                )
+                            )
+                        }
+
+                        botReply = accumulatedText
+                    } else {
+                        // Fallback nếu không có stream
+                        botReply = await response.text()
                         setMessages((prev) =>
                             prev.map((msg) =>
-                                msg.id === botMessageId ? { ...msg, content: accumulatedText } : msg
+                                msg.id === botMessageId ? { ...msg, content: botReply } : msg
                             )
                         )
                     }
-
-                    botReply = accumulatedText
-                } else {
-                    // Fallback nếu không có stream
-                    botReply = await response.text()
-                    setMessages((prev) =>
-                        prev.map((msg) =>
-                            msg.id === botMessageId ? { ...msg, content: botReply } : msg
-                        )
-                    )
                 }
-            }
 
-            setTimeout(() => setLoading(false), 0)
-        } catch (err) {
-            if (err instanceof Error && err.name === 'AbortError') {
-                message.warning('Đã hủy yêu cầu')
-            } else {
-                console.error(err)
-                message.error('Đã xảy ra lỗi khi gửi tin nhắn')
+                setTimeout(() => {
+                    setLoading(false)
+                    setAbortController(null)
+                }, 0)
+            } catch (err) {
+                if (err instanceof Error && err.name === 'AbortError') {
+                    // message.warning('Đã hủy yêu cầu')
+                    // hủy yêu cầu khi chuyển sang cuộc hội thoại khác
+                } else {
+                    console.error(err)
+                    message.error('Đã xảy ra lỗi khi gửi tin nhắn')
+                }
+                setLoading(false)
+            } finally {
+                setAbortController(null)
             }
-            setLoading(false)
-        }
-    }
+        },
+        [id, isFaqMode, conversationCurrent?.type, updateConversation]
+    )
 
     const handleStop = () => {
-        abortController?.abort()
+        if (abortController) {
+            abortController.abort()
+            setAbortController(null)
+        }
         setLoading(false)
     }
 
@@ -215,7 +228,23 @@ export default function Page() {
         }
     }, [messageList])
 
-    // Tự động gọi API khi conversation mới chỉ có 1 message từ user (chỉ 1 lần)
+    // Reset states khi chuyển conversation khác
+    // biome-ignore lint/correctness/useExhaustiveDependencies: need to reset when conversation changes
+    useEffect(() => {
+        // Hủy request đang pending nếu có
+        if (abortController) {
+            abortController.abort()
+        }
+
+        // Reset các state
+        setLoading(false)
+        setAbortController(null)
+        setInput('')
+        setIsUserScrolling(false)
+        setShowScrollButton(false)
+    }, [id]) // Chạy khi id thay đổi
+
+    // Tự động gọi API khi conversation mới chỉ có 1 message từ user (trong vòng 1 phút)
     useEffect(() => {
         if (
             messageList &&
@@ -223,14 +252,19 @@ export default function Page() {
             messageList[0].sender === 'USER' &&
             id &&
             !loading &&
-            !hasAutoSent &&
             conversationCurrent // conversationCurrent đã load
         ) {
             const userMessage = messageList[0]
-            setHasAutoSent(true)
-            sendMessage(userMessage.content || '', Date.now(), true) // skipUserMessage = true
+            const messageCreatedTime = new Date(userMessage.createdAt).getTime()
+            const currentTime = Date.now()
+            const oneMinuteInMs = 60 * 1000
+
+            // Chỉ gọi API nếu tin nhắn được tạo trong vòng 1 phút
+            if (currentTime - messageCreatedTime <= oneMinuteInMs) {
+                sendMessage(userMessage.content || '', Date.now(), true) // skipUserMessage = true
+            }
         }
-    }, [messageList, id, hasAutoSent, conversationCurrent, loading, sendMessage])
+    }, [messageList, id, conversationCurrent, loading, sendMessage])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
