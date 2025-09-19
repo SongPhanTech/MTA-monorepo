@@ -96,8 +96,6 @@ const PutAddCertificateScoreModal = () => {
                 ...input.subjectClassStudent,
                 certificates: listCertificates,
             })
-            console.log(finalScore)
-
             await updateStudentSubjectScore({
                 data: {
                     ...rest,
