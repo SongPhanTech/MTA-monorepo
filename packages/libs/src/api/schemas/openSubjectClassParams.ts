@@ -11,6 +11,7 @@ import type { Search } from './search'
 import type { SemesterId } from './semesterId'
 import type { TrainingCourseId } from './trainingCourseId'
 import type { TrainingMajorId } from './trainingMajorId'
+import type { TrainingObjectTypeId } from './trainingObjectTypeId'
 
 export type OpenSubjectClassParams = {
     semesterId: SemesterId
@@ -19,4 +20,5 @@ export type OpenSubjectClassParams = {
     search?: Search
     page: Page
     pageSize: PageSize
+    trainingObjectTypeId: TrainingObjectTypeId
 }

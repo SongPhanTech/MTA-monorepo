@@ -68,6 +68,10 @@ export type DMUngDungEditDto = DMUngDung & {
     /** @nullable */
     DM_UngDung_NhomUngDungDetails?: DMUngDungNhomUngDungEditDto[] | null
     /** @nullable */
+    sBaseUrl?: string | null
+    /** @nullable */
+    sRedirectUrl?: string[] | null
+    /** @nullable */
     readonly sTenNhomUngDungs?: string | null
     /** @nullable */
     readonly sDM_NhomUngDungIds?: string | null

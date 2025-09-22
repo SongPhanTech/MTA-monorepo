@@ -6,6 +6,6 @@
  */
 
 export type PostApiStatsCurriculumStatistics200DataItem = {
-    'CTĐT hoạt động': number
-    'Phiên bản CTĐT hoạt động': number
+    activeCurricula: number
+    activeCurriculumVersions: number
 }

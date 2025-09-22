@@ -12,5 +12,6 @@ export type PostApiStatsKpiCards200 = {
     summary: PostApiStatsKpiCards200Summary
     count: number
     preview?: boolean
+    labels?: string[]
     data: PostApiStatsKpiCards200DataItem[]
 }

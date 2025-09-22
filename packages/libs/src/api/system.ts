@@ -68,6 +68,7 @@ import type {
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { customSystemFetch } from './custom-instance'
 import type {
+    AccessLevelDTO,
     DeleteDMNhanViensId400,
     DeleteDMNhanViensId401,
     DeleteDMNhanViensId403,
@@ -8823,7 +8824,7 @@ export function useGetUserPermissionsPermissionAppCodeUserId<
  * @summary Quyền, Mức truy cập dữ liệu của user
  */
 export type getUserPermissionsAccessLevelAppCodeUserIdResponse200 = {
-    data: GetUserPermissionDTO
+    data: AccessLevelDTO
     status: 200
 }
 

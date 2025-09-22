@@ -54,14 +54,11 @@ import type { BaseEntity } from './baseEntity'
 
 export type ThietLapMailServer = BaseEntity & {
     Id?: string
-    /** @nullable */
-    iNhaCungCapMail?: number | null
+    iNhaCungCapMail?: number
     /** @nullable */
     sMayChuMail?: string | null
-    /** @nullable */
-    iPort?: number | null
-    /** @nullable */
-    iPhuongThucBaoMat?: number | null
+    iPort?: number
+    iPhuongThucBaoMat?: number
     /** @nullable */
     sTenDangNhap?: string | null
     /** @nullable */

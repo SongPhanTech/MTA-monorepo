@@ -31,6 +31,7 @@ export const SqlTransactionBodyItemModel = {
     Semester: 'Semester',
     Milestone: 'Milestone',
     TrainingCourse: 'TrainingCourse',
+    TrainingCourseRegulation: 'TrainingCourseRegulation',
     FixedClass: 'FixedClass',
     Curriculum: 'Curriculum',
     CurriculumVersion: 'CurriculumVersion',

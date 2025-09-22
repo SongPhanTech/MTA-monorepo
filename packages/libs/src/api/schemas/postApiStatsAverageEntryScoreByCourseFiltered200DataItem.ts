@@ -8,5 +8,5 @@
 export type PostApiStatsAverageEntryScoreByCourseFiltered200DataItem = {
     trainingCourseId: string
     name: string
-    'Điểm đầu vào': number
+    avgEntryScore: number
 }

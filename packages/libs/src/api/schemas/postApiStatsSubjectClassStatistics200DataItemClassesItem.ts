@@ -8,6 +8,6 @@
 export type PostApiStatsSubjectClassStatistics200DataItemClassesItem = {
     id: string
     name: string
-    'Tỉ lệ lấp': number
-    'Tỉ lệ trượt': number
+    fillRate: number
+    failureRate: number
 }

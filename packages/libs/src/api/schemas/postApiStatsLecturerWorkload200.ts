@@ -12,5 +12,6 @@ export type PostApiStatsLecturerWorkload200 = {
     summary: PostApiStatsLecturerWorkload200Summary
     count: number
     preview?: boolean
+    labels?: string[]
     data: PostApiStatsLecturerWorkload200DataItem[]
 }

@@ -7,5 +7,5 @@
 
 export type PostApiStatsDemographics200DataItemByGenderItem = {
     name: string
-    'Số lượng': number
+    count: number
 }

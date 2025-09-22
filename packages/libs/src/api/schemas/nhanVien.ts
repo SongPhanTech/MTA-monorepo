@@ -143,8 +143,8 @@ export type NhanVien = BaseEntity & {
      * @nullable
      */
     sAvatarId?: string | null
-    /** Là người dùng? */
-    bLaNguoiDung?: boolean
+    /** Là tài khoản? */
+    bLaTaiKhoan?: boolean
     /** Là cán bộ, nhân viên? */
     bLaCanBoNhanVien?: boolean
     /** Là học viên? */

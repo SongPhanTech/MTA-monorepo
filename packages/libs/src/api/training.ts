@@ -3554,6 +3554,7 @@ export const importPhanCongGiangDay = async (
     const formData = new FormData()
     formData.append('file', importPhanCongGiangDay.file)
     formData.append('semesterId', importPhanCongGiangDay.semesterId)
+    formData.append('trainingObjectTypeId', importPhanCongGiangDay.trainingObjectTypeId)
 
     return customTrainingFetch<importPhanCongGiangDayResponse>(getImportPhanCongGiangDayUrl(), {
         ...options,

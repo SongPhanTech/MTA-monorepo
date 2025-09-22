@@ -15,4 +15,8 @@ export type PostApiStatsDemographics200DataItem = {
     byEthnicity: PostApiStatsDemographics200DataItemByEthnicityItem[]
     byReligion: PostApiStatsDemographics200DataItemByReligionItem[]
     byProvince: PostApiStatsDemographics200DataItemByProvinceItem[]
+    byGenderLabels: string[]
+    byEthnicityLabels: string[]
+    byReligionLabels: string[]
+    byProvinceLabels: string[]
 }

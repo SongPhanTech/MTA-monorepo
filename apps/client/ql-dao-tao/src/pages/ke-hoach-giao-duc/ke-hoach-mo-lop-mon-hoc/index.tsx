@@ -41,7 +41,7 @@ export default function SubjectOpeningPlan() {
             search: searchText,
             trainingCourseId,
             trainingMajorId,
-            trainingObjectTypeId,
+            trainingObjectTypeId: trainingObjectTypeId || '',
         },
         { query: { enabled: !!selectedSemesterId } },
         queryClient

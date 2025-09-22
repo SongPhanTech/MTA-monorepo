@@ -72,6 +72,8 @@ export type DMUngDung = BaseEntity & {
     /** @nullable */
     sClientSecret?: string | null
     /** @nullable */
+    sClientUUID?: string | null
+    /** @nullable */
     sWebhookUrl?: string | null
     /** @nullable */
     sRedirectDefault?: string | null

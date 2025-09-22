@@ -8,5 +8,5 @@
 export type PostApiStatsAverageGpaByTrainingMajor200DataItem = {
     trainingMajorId: string
     name: string
-    'GPA trung bình': number
+    avgGpa: number
 }

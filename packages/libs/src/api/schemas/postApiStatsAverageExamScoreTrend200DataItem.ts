@@ -10,5 +10,5 @@ export type PostApiStatsAverageExamScoreTrend200DataItem = {
     semesterName: string
     subjectVersionId: string
     subjectName: string
-    'Điểm TB': number
+    averageScore: number
 }

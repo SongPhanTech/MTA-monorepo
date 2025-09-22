@@ -12,5 +12,6 @@ export type PostApiStatsAverageGpaByTrainingMajor200 = {
     summary: PostApiStatsAverageGpaByTrainingMajor200Summary
     count: number
     preview?: boolean
+    labels?: string[]
     data: PostApiStatsAverageGpaByTrainingMajor200DataItem[]
 }

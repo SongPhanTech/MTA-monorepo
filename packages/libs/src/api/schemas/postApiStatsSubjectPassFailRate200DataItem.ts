@@ -8,6 +8,6 @@
 export type PostApiStatsSubjectPassFailRate200DataItem = {
     subjectVersionId: string
     name: string
-    Qua: number
-    Trượt: number
+    passed: number
+    failed: number
 }

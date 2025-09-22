@@ -57,7 +57,7 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
             search: filters.searchText || '',
             page: '1',
             pageSize: '10',
-            trainingObjectTypeId,
+            trainingObjectTypeId: trainingObjectTypeId || '',
         },
         {
             query: {

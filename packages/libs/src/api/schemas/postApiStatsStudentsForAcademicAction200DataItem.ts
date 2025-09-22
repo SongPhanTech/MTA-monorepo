@@ -4,11 +4,11 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { PostApiStatsStudentsForAcademicAction200DataItemHànhĐNg } from './postApiStatsStudentsForAcademicAction200DataItemHànhĐNg'
+import type { PostApiStatsStudentsForAcademicAction200DataItemActionType } from './postApiStatsStudentsForAcademicAction200DataItemActionType'
 
 export type PostApiStatsStudentsForAcademicAction200DataItem = {
     studentId: string
-    Tên: string
-    'Hành động': PostApiStatsStudentsForAcademicAction200DataItemHànhĐNg
-    'Lý do': string
+    studentName: string
+    actionType: PostApiStatsStudentsForAcademicAction200DataItemActionType
+    reason: string
 }

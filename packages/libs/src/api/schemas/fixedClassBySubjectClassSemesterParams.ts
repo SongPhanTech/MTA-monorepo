@@ -10,6 +10,7 @@ import type { PageSize } from './pageSize'
 import type { Search } from './search'
 import type { SemesterId } from './semesterId'
 import type { SubjectClassId } from './subjectClassId'
+import type { TrainingObjectTypeId } from './trainingObjectTypeId'
 
 export type FixedClassBySubjectClassSemesterParams = {
     semesterId: SemesterId
@@ -17,4 +18,5 @@ export type FixedClassBySubjectClassSemesterParams = {
     search?: Search
     page: Page
     pageSize: PageSize
+    trainingObjectTypeId: TrainingObjectTypeId
 }

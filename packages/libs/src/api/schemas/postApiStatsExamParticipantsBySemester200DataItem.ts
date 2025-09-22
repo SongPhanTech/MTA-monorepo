@@ -6,5 +6,5 @@
  */
 
 export type PostApiStatsExamParticipantsBySemester200DataItem = {
-    'Số thí sinh': number
+    totalParticipants: number
 }

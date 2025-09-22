@@ -12,5 +12,6 @@ export type PostApiStatsAverageExamScoreTrend200 = {
     summary: PostApiStatsAverageExamScoreTrend200Summary
     count: number
     preview?: boolean
+    labels?: string[]
     data: PostApiStatsAverageExamScoreTrend200DataItem[]
 }
