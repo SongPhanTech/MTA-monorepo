@@ -21,6 +21,7 @@ import {
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -34,7 +35,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
-        trainingObjectTypes: undefined,
         managementOrganization: undefined,
         trainingCourses: undefined,
         curriculumVersion: undefined,
@@ -42,6 +42,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
         trainingLevel: undefined,
         startYear: undefined,
     })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const router = useRouter()
 
@@ -103,18 +104,12 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                       },
                   }
                 : {}),
-            ...(filters.trainingObjectTypes
-                ? {
-                      trainingCourse: {
-                          trainingObjectTypeId: {
-                              in: filters.trainingObjectTypes,
-                          },
-                      },
-                  }
-                : {}),
             ...(Object.keys(curriculumVersionFilter).length > 0 && {
                 curriculumVersion: curriculumVersionFilter,
             }),
+            trainingCourse: {
+                trainingObjectTypeId,
+            },
         }
     }, [
         filters.code,
@@ -122,13 +117,15 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
         filters.trainingCourses,
         filters.managementOrganization,
         filters.curriculumVersion,
-        filters.trainingObjectTypes,
         filters.trainingMajors,
         filters.trainingLevel,
+        trainingObjectTypeId,
     ])
 
-    const { data = [], refetch } = useFindManyFixedClass({
-        where,
+    const { data = [] } = useFindManyFixedClass({
+        where: {
+            ...where,
+        },
         include: {
             students: {
                 include: {

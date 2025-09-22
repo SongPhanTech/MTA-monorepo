@@ -16,11 +16,12 @@ import {
     useUpdateAcademicActionConfig,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function AcademicActionConfig() {
@@ -34,40 +35,54 @@ export default function AcademicActionConfig() {
     })
     const { options: academicActionTypeOption, getAcademicActionTypeLabel } =
         useAcademicActionTypeOption()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+    const isFiltered = useMemo(
+        () => !!(filters.name || filters.trainingCourseId || filters.actionTaken),
+        [filters.name, filters.trainingCourseId, filters.actionTaken]
+    )
+
+    const where = {
+        ...(isFiltered
+            ? {
+                  academicActionConfig: {
+                      some: {
+                          ...(filters.name && filters.name !== ''
+                              ? {
+                                    name: {
+                                        contains: filters.name,
+                                        mode: 'insensitive' as const,
+                                    },
+                                }
+                              : {}),
+                          ...(filters.actionTaken
+                              ? Array.isArray(filters.actionTaken)
+                                  ? {
+                                        actionType: {
+                                            in: filters.actionTaken,
+                                        },
+                                    }
+                                  : {
+                                        actionType: {
+                                            equals: filters.actionTaken,
+                                        },
+                                    }
+                              : {}),
+                      },
+                  },
+                  ...(filters.trainingCourseId && filters.trainingCourseId !== ''
+                      ? {
+                            id: filters.trainingCourseId,
+                        }
+                      : {}),
+              }
+            : {}),
+        trainingObjectTypeId,
+        deletedAt: null,
+    }
 
     const { data = [], refetch } = useFindManyTrainingCourse({
-        where: {
-            academicActionConfig: {
-                some: {
-                    ...(filters.name && filters.name !== ''
-                        ? {
-                              name: {
-                                  contains: filters.name,
-                                  mode: 'insensitive',
-                              },
-                          }
-                        : {}),
-                    ...(filters.actionTaken
-                        ? Array.isArray(filters.actionTaken)
-                            ? {
-                                  actionType: {
-                                      in: filters.actionTaken,
-                                  },
-                              }
-                            : {
-                                  actionType: {
-                                      equals: filters.actionTaken,
-                                  },
-                              }
-                        : {}),
-                },
-            },
-            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                ? {
-                      id: filters.trainingCourseId,
-                  }
-                : {}),
-        },
+        where,
         include: {
             academicActionConfig: {
                 where: {
@@ -108,38 +123,7 @@ export default function AcademicActionConfig() {
     })
 
     const { data: count } = useCountTrainingCourse({
-        where: {
-            academicActionConfig: {
-                some: {
-                    ...(filters.name && filters.name !== ''
-                        ? {
-                              name: {
-                                  contains: filters.name,
-                                  mode: 'insensitive',
-                              },
-                          }
-                        : {}),
-                    ...(filters.actionTaken
-                        ? Array.isArray(filters.actionTaken)
-                            ? {
-                                  actionType: {
-                                      in: filters.actionTaken,
-                                  },
-                              }
-                            : {
-                                  actionType: {
-                                      equals: filters.actionTaken,
-                                  },
-                              }
-                        : {}),
-                },
-            },
-            ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                ? {
-                      id: filters.trainingCourseId,
-                  }
-                : {}),
-        },
+        where,
     })
 
     const debouncedRefetch = useCallback(
@@ -186,6 +170,7 @@ export default function AcademicActionConfig() {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
+        where: { trainingObjectTypeId },
     })
 
     return (

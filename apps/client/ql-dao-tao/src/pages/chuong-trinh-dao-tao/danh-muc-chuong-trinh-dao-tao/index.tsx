@@ -27,12 +27,12 @@ import {
     useFindManyDM_DonVi,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
-    useFindManyTrainingObjectType,
     useFindManyTrainingTime,
     useUpdateCurriculum,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Input, message, Row, Select, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus, Search } from 'lucide-react'
@@ -59,6 +59,8 @@ export default function TrainingProgramCatalog() {
         managementOrganizationId: undefined,
     })
 
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
     const where = useMemo(() => {
         const curriculumVersionFilter = {
             ...(filters.name && {
@@ -67,9 +69,7 @@ export default function TrainingProgramCatalog() {
             ...(filters.code && {
                 code: { contains: filters.code, mode: 'insensitive' as const },
             }),
-            ...(filters.trainingObjectTypes && {
-                trainingObjectTypeId: { in: filters.trainingObjectTypes },
-            }),
+            trainingObjectTypeId,
             ...(filters.trainingCourses && {
                 fixedClasses: {
                     some: { trainingCourseId: { in: filters.trainingCourses } },
@@ -109,16 +109,16 @@ export default function TrainingProgramCatalog() {
         }
     }, [
         filters.searchText,
-        filters.trainingObjectTypes,
         filters.name,
         filters.trainingTime,
         filters.trainingCourses,
         filters.code,
         filters.managementOrganizationId,
         filters.trainingMajorId,
+        trainingObjectTypeId,
     ])
 
-    const { data = [], refetch } = useFindManyCurriculum({
+    const { data = [] } = useFindManyCurriculum({
         where,
         include: {
             curriculumVersion: {
@@ -139,13 +139,7 @@ export default function TrainingProgramCatalog() {
                               },
                           }
                         : {}),
-                    ...(filters.trainingObjectTypes
-                        ? {
-                              trainingObjectTypeId: {
-                                  in: filters.trainingObjectTypes,
-                              },
-                          }
-                        : {}),
+                    trainingObjectTypeId,
                     ...(filters.trainingCourses
                         ? {
                               fixedClasses: {
@@ -226,8 +220,6 @@ export default function TrainingProgramCatalog() {
 
     const { data: count } = useCountCurriculum({ where: { ...where, deletedAt: null } })
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
-
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
     })
@@ -245,11 +237,11 @@ export default function TrainingProgramCatalog() {
         orderBy: { name: 'asc' },
     })
 
-    const { onOpen: onOpenCurriculum, onClose: onCloseCurriculum } = useDisclosure<string>({
+    const { onOpen: onOpenCurriculum } = useDisclosure<string>({
         tag: 'PutCurriculum',
     })
 
-    const { onOpen: onOpenCurriculumVersion, onClose: onCloseCurriculumVersion } = useDisclosure<{
+    const { onOpen: onOpenCurriculumVersion } = useDisclosure<{
         curriculumId: string
         versionId: string
     }>({
@@ -474,11 +466,11 @@ export default function TrainingProgramCatalog() {
                                 dataIndex: 'trainingObjectTypes',
                                 align: 'center',
                                 width: 150,
-                                type: 'select',
-                                options: trainingObjectTypeData.map((i: TrainingObjectType) => ({
-                                    value: i.id,
-                                    label: i.name,
-                                })),
+                                // type: 'select',
+                                // options: trainingObjectTypeData.map((i: TrainingObjectType) => ({
+                                //     value: i.id,
+                                //     label: i.name,
+                                // })),
                                 render: (
                                     __,
                                     record: { trainingObjectType?: TrainingObjectType }

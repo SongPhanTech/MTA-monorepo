@@ -34,6 +34,7 @@ const baseSchema = z.object({
 ).strict();
 const relationSchema = z.object({
     subject: z.record(z.unknown()),
+    trainingObjectType: z.record(z.unknown()),
     semester: z.record(z.unknown()),
     exam: z.record(z.unknown()).optional(),
     room: z.record(z.unknown()).optional(),
@@ -52,6 +53,7 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     subjectId: z.string(),
+    trainingObjectTypeId: z.string(),
     semesterId: z.string(),
     examId: z.string().nullish(),
     roomId: z.string().nullish(),

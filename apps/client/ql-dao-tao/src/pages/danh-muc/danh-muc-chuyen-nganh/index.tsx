@@ -240,14 +240,6 @@ export default function TrainingMajorPage() {
         }
     }
 
-    const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => {
-            const newFilters = { ...prev, [key]: value }
-            debouncedRefetch()
-            return newFilters
-        })
-    }
-
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     return (

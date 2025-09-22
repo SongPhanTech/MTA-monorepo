@@ -1,16 +1,11 @@
 import { CalendarOutlined } from '@ant-design/icons'
-import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingObjectType } from '@workspace/db'
-import {
-    useCountSubjectClass,
-    useFindManySubjectClass,
-    useFindManyTrainingObjectType,
-} from '@workspace/db/hooks'
+import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -37,7 +32,7 @@ export default function SubjectClassScore() {
         endDate: undefined,
     })
 
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<string>({
         tag: 'HanNhapDiem',
     })
 
@@ -49,7 +44,7 @@ export default function SubjectClassScore() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const where = useMemo(
         () => ({
@@ -70,17 +65,7 @@ export default function SubjectClassScore() {
                   }
                 : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
-            ...(filters.trainingObjectId
-                ? {
-                      subjectClassStudent: {
-                          some: {
-                              student: {
-                                  trainingObjectTypeId: filters.trainingObjectId,
-                              },
-                          },
-                      },
-                  }
-                : {}),
+            trainingObjectTypeId,
             ...(filters.subjectName && filters.subjectName !== ''
                 ? {
                       subject: {
@@ -136,7 +121,7 @@ export default function SubjectClassScore() {
             filters.code,
             filters.name,
             filters.semesterId,
-            filters.trainingObjectId,
+            trainingObjectTypeId,
             filters.subjectName,
             filters.scoreDeadline,
             filters.examScoreDeadline,
@@ -219,29 +204,6 @@ export default function SubjectClassScore() {
                                                 onChange={(val) =>
                                                     handleFilterChange('semesterId', val)
                                                 }
-                                            />
-                                        </Form.Item>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Form.Item
-                                            className="mb-0"
-                                            name="trainingObjectTypeId"
-                                            labelCol={{ span: 24 }}
-                                            wrapperCol={{ span: 24 }}
-                                            labelAlign="left"
-                                        >
-                                            <Select
-                                                placeholder="Chọn đối tượng đào tạo"
-                                                options={trainingObjectTypeData.map(
-                                                    (i: TrainingObjectType) => ({
-                                                        value: i.id,
-                                                        label: i.name,
-                                                    })
-                                                )}
-                                                onChange={(val) =>
-                                                    handleFilterChange('trainingObjectTypeId', val)
-                                                }
-                                                allowClear
                                             />
                                         </Form.Item>
                                     </Col>

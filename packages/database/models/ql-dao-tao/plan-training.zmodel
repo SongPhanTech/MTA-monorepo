@@ -556,6 +556,10 @@ model SubjectClass extends Base {
   schedule                   SubjectClassSchedule
   maxStudent                 Int // Số SV tối đa
 
+  // Đối tượng đào tạo
+  trainingObjectType         TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId       String
+
   semester                   Semester              @relation(fields: [semesterId], references: [id])
   semesterId                 String
 

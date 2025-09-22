@@ -5,9 +5,10 @@ import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
-import { useFindUniqueConfig } from '@workspace/db/hooks'
+import { useFindManyTrainingObjectType, useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
-import { Breadcrumb, Layout, theme } from 'antd'
+import { SelectTrainingObjectType } from '@workspace/ui'
+import { Breadcrumb, Divider, Layout, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -116,7 +117,11 @@ const DefaultLayout = ({
     useEffect(() => {
         handleCollapsed()
     }, [])
-
+    const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectType({
+        orderBy: {
+            name: 'asc',
+        },
+    })
     return (
         <IdleTimerProvider
             timeout={Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000}
@@ -150,7 +155,12 @@ const DefaultLayout = ({
                         {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}
                         </span> */}
-                        <div>{<Breadcrumb items={listBreadcrumb} />}</div>
+
+                        <div className="flex items-center">
+                            <SelectTrainingObjectType />
+                            <Divider type="vertical" className="bg-primary h-[30px]" />
+                            <Breadcrumb items={listBreadcrumb} />
+                        </div>
                         <HeaderApp />
 
                         {/* <div className="flex gap-2 items-center">
@@ -158,7 +168,7 @@ const DefaultLayout = ({
                             <AvatarDropdown />
                         </div> */}
                     </Header>
-                    <Content className="mx-2 mt-20">
+                    <Content className="mx-2 mt-[70px]">
                         {unLayout ? (
                             children
                         ) : (

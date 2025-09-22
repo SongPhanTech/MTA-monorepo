@@ -6070,6 +6070,29 @@ declare const metadata: {
                     name: string;
                     type: string;
                 };
+                trainingObjectType: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                trainingObjectTypeId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
                 semester: {
                     name: string;
                     type: string;
@@ -6794,6 +6817,20 @@ declare const metadata: {
                     backLink: string;
                 };
                 trainingScoreSession: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                subjectClass: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                graduationSession: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -28087,6 +28124,29 @@ declare const metadata: {
                 applicationEnd: {
                     name: string;
                     type: string;
+                };
+                trainingObjectType: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                trainingObjectTypeId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
                 };
                 status: {
                     name: string;

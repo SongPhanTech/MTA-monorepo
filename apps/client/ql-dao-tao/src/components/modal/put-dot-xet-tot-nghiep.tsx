@@ -5,14 +5,16 @@ import useSpinner from '@hooks/spinner'
 import { type GraduationSession, GraduationSessionStatus } from '@workspace/db'
 import {
     useCreateGraduationSession,
+    useFindManyTrainingObjectType,
     useFindUniqueGraduationSession,
     useUpdateGraduationSession,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Select } from 'antd'
+import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
+import Select from '@components/commons/select'
 import { useGraduationSessionStatusOptions } from '@hooks/graduationSessionStatus'
 import { useEffect } from 'react'
 export type PutGraduationSession = GraduationSession
@@ -58,6 +60,8 @@ const PutGraduationSession = () => {
         }
     }, [graduationSession, form])
 
+    const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectType()
+
     const { mutateAsync: createGraduationSession } = useCreateGraduationSession()
     const { mutateAsync: updateGraduationSession } = useUpdateGraduationSession()
     async function onOk(output?: PutGraduationSession) {
@@ -71,6 +75,7 @@ const PutGraduationSession = () => {
                 applicationStart: output.applicationStart,
                 applicationEnd: output.applicationEnd,
                 status: output.status,
+                trainingObjectTypeId: output.trainingObjectTypeId,
             }
 
             if (id) {
@@ -114,6 +119,22 @@ const PutGraduationSession = () => {
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên đợt xét tốt nghiệp" required>
                     <Input placeholder="Nhập tên đợt xét tốt nghiệp" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="trainingObjectTypeId"
+                    label="Đối tượng đào tạo"
+                    required
+                >
+                    <Select
+                        placeholder="Chọn đối tượng đào tạo"
+                        options={trainingObjectTypes.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>

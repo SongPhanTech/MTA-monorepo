@@ -8,6 +8,7 @@ import {
     enrollFixedClassOnSubjectClass,
     useFixedClassBySubjectClassSemester,
 } from '@workspace/libs/api/training'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import { Search } from 'lucide-react'
 import type React from 'react'
@@ -29,12 +30,14 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { data: initialValue } = useFindUniqueSubjectClass(
         {
             where: {
                 semesterId: semesterId as string,
                 id: subjectClassId as string,
+                trainingObjectTypeId,
             },
             include: {
                 mainLecturer: {
@@ -54,6 +57,7 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
             search: filters.searchText || '',
             page: '1',
             pageSize: '10',
+            trainingObjectTypeId,
         },
         {
             query: {

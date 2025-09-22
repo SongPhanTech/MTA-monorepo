@@ -658,6 +658,7 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   subjectId: 'subjectId',
   schedule: 'schedule',
   maxStudent: 'maxStudent',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId',
   cancelled: 'cancelled',
   lecturerAssignmentDeadline: 'lecturerAssignmentDeadline',
@@ -2745,6 +2746,7 @@ exports.Prisma.GraduationSessionScalarFieldEnum = {
   sessionDate: 'sessionDate',
   applicationStart: 'applicationStart',
   applicationEnd: 'applicationEnd',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   status: 'status'
 };
 
@@ -4047,6 +4049,7 @@ exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   description: 'description',
   name: 'name',
   subjectId: 'subjectId',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId',
   examId: 'examId',
   roomId: 'roomId',
@@ -5319,7 +5322,8 @@ exports.Prisma.GraduationSessionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  name: 'name'
+  name: 'name',
+  trainingObjectTypeId: 'trainingObjectTypeId'
 };
 
 exports.Prisma.StudentGraduationApplicationOrderByRelevanceFieldEnum = {

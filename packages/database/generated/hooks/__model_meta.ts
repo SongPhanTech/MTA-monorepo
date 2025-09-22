@@ -3175,6 +3175,18 @@ const metadata = {
                 }, maxStudent: {
                     name: "maxStudent",
                     type: "Int",
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    backLink: 'subjectClass',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
                 }, semester: {
                     name: "semester",
                     type: "Semester",
@@ -3569,6 +3581,18 @@ const metadata = {
                 }, trainingScoreSession: {
                     name: "trainingScoreSession",
                     type: "TrainingScoreSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, graduationSession: {
+                    name: "graduationSession",
+                    type: "GraduationSession",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
@@ -14857,6 +14881,18 @@ const metadata = {
                 }, applicationEnd: {
                     name: "applicationEnd",
                     type: "DateTime",
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    backLink: 'graduationSession',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
                 }, status: {
                     name: "status",
                     type: "GraduationSessionStatus",

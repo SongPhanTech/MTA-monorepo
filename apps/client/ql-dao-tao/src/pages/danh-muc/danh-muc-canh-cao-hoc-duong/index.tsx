@@ -24,7 +24,6 @@ export default function DisciplinaryWarningReason() {
         name: '',
         severityLevel: undefined,
     })
-
     const { data = [] } = useFindManyDisciplinaryWarningReason({
         where: {
             ...(filters.name && filters.name !== ''

@@ -5,14 +5,14 @@ import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import DefaultLayout from '@layouts/default-layout'
-import type { ExamType, SubjectClass, TrainingObjectType } from '@workspace/db'
+import type { ExamType, SubjectClass } from '@workspace/db'
 import {
     useCountSubjectClass,
     useFindManySubjectClass,
-    useFindManyTrainingObjectType,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -57,6 +57,7 @@ export default function ClassSubject() {
         examDateRange: undefined, // Khoảng thời gian thi
     })
     const { getExamTypeLabel } = useExamTypeOptions()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const handleNavigate = (id: string) => {
         router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC}?subjectId=${id}`)
@@ -69,8 +70,6 @@ export default function ClassSubject() {
             return newFilters
         })
     }
-
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     //#endregion
 
@@ -100,17 +99,7 @@ export default function ClassSubject() {
                 : {}),
             ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
-            ...(filters.trainingObjectTypeId
-                ? {
-                      subjectClassStudent: {
-                          some: {
-                              student: {
-                                  trainingObjectTypeId: filters.trainingObjectTypeId,
-                              },
-                          },
-                      },
-                  }
-                : {}),
+            trainingObjectTypeId,
             ...(filters.LectureIds.length > 0
                 ? {
                       OR: filters.LectureIds.map((id) => ({
@@ -311,29 +300,6 @@ export default function ClassSubject() {
                                             onChange={(val) =>
                                                 handleFilterChange('semesterId', val)
                                             }
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={8}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingObjectId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            onChange={(val) =>
-                                                handleFilterChange('trainingObjectTypeId', val)
-                                            }
-                                            allowClear
                                         />
                                     </Form.Item>
                                 </Col>

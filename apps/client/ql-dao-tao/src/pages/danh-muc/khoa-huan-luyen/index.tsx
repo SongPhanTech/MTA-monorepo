@@ -13,6 +13,7 @@ import {
     useFindManyTrainingObjectType,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -24,10 +25,11 @@ export default function TrainingCoursePage() {
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
-        trainingObjectTypes: undefined,
         admissionQuota: undefined,
         semesterStart: undefined,
     })
+
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const where = useMemo(
         () => ({
@@ -47,26 +49,21 @@ export default function TrainingCoursePage() {
                       },
                   }
                 : {}),
-            ...(filters.trainingObjectTypes
-                ? {
-                      trainingObjectTypeId: {
-                          in: filters.trainingObjectTypes,
-                      },
-                  }
-                : {}),
             ...(filters.semesterStart
                 ? {
-                      semesterStartId: {
-                          in: filters.trainingObjectTypes,
-                      },
+                      semesterStartId: filters.semesterStart,
                   }
                 : {}),
+            trainingObjectTypeId,
+            deletedAt: null,
         }),
-        [filters.code, filters.name, filters.trainingObjectTypes, filters.semesterStart]
+        [filters.code, filters.name, filters.semesterStart, trainingObjectTypeId]
     )
 
-    const { data = [], refetch } = useFindManyTrainingCourse({
-        where,
+    const { data = [] } = useFindManyTrainingCourse({
+        where: {
+            ...where,
+        },
         include: {
             trainingObjectType: true,
             semesterStart: {
@@ -98,7 +95,7 @@ export default function TrainingCoursePage() {
         },
     })
 
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<string>({
         tag: 'PutTrainingCourseModal',
     })
 

@@ -17,15 +17,15 @@ declare global {
 }
 
 const PERMISSIONS = {
-    XEM: 1, // 001
-    SUA: 2, // 010
-    THEM: 4, // 100
-    XOA: 8, // 1000
-    IN: 16,
-    XUAT_EXCEL: 32,
-    TAI_TEP: 64,
-    NHAP_EXCEL: 128,
-    DUYET: 256,
+    XEM: 2 ** 0, // 001
+    SUA: 2 ** 1, // 010
+    THEM: 2 ** 2, // 100
+    XOA: 2 ** 3, // 1000
+    IN: 2 ** 4,
+    XUAT_EXCEL: 2 ** 5,
+    TAI_TEP: 2 ** 6,
+    NHAP_EXCEL: 2 ** 7,
+    DUYET: 2 ** 8,
 }
 
 const useAbility = () => {
