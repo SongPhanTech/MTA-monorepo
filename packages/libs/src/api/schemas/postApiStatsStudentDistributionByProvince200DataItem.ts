@@ -8,5 +8,5 @@
 export type PostApiStatsStudentDistributionByProvince200DataItem = {
     provinceId: string
     name: string
-    'Số lượng': number
+    count: number
 }

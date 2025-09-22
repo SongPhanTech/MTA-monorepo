@@ -8,6 +8,7 @@ import {
     enrollStudentOnSubjectClass,
     useStudentBySubjectClassSemester,
 } from '@workspace/libs/api/training'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { App, Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -35,12 +36,14 @@ export default function StudentCourseByPlan({
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { data: initialValue } = useFindUniqueSubjectClass(
         {
             where: {
                 semesterId: semesterId as string,
                 id: subjectClassId as string,
+                trainingObjectTypeId,
             },
             include: {
                 mainLecturer: {
@@ -60,6 +63,7 @@ export default function StudentCourseByPlan({
             search: filters.searchText || '',
             page: '1',
             pageSize: '10',
+            trainingObjectTypeId,
         },
         {
             query: {

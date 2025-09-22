@@ -129,7 +129,7 @@ app.onError((err, c) => {
             return c.json({ message: 'Internal Server Error' }, status)
         }
 
-        return c.json({ message: err.meta?.cause }, status)
+        return c.json({ message: err.meta?.cause ?? err.message }, status)
     }
 
     console.log(err)

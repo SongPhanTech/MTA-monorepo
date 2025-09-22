@@ -32,11 +32,9 @@ export type FilterProps = {
     semesterId: string | null //Học kỳ
     KhoaId: string | null //Khoa
     BoMonId: string | null //Bộ môn
-    trainingObjectId: string | null //Đối tượng đào tạo
     examTypeId: string | null //Hình thức thi
     LectureIds: string[]
     searchText: string | null
-    trainingObjectTypeId: string | null
     subjectClassId: string | null
     fixedClassIds: string[]
     examDateRange?: [string, string] | null // Khoảng thời gian thi
@@ -73,7 +71,6 @@ const FilterSubjectClass = (props: Props) => {
             semesterId: null,
             KhoaId: null,
             BoMonId: null,
-            trainingObjectTypeId: null,
             examTypeId: null,
             LectureIds: [],
             fixedClassIds: [],
@@ -105,7 +102,6 @@ const FilterSubjectClass = (props: Props) => {
             semesterId: filters.semesterId || null,
             KhoaId: filters.KhoaId || null,
             BoMonId: filters.BoMonId || null,
-            trainingObjectTypeId: filters.trainingObjectTypeId || null,
             examTypeId: filters.examTypeId || null,
             LectureIds: filters.LectureIds || [],
             fixedClassIds: filters.fixedClassIds || [],

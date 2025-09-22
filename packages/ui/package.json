@@ -38,6 +38,8 @@
   "dependencies": {
     "@ant-design/cssinjs": "catalog:",
     "@ant-design/icons": "catalog:",
+    "@tanstack/react-store": "^0.7.7",
+    "@workspace/db": "workspace:*",
     "@workspace/router": "workspace:*",
     "antd": "catalog:",
     "class-variance-authority": "catalog:",

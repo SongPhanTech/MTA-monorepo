@@ -55,6 +55,8 @@ import type { BaseEntity } from './baseEntity'
 export type DMVaiTro = BaseEntity & {
     Id?: string
     /** @nullable */
+    sMa?: string | null
+    /** @nullable */
     sTen?: string | null
     /** @nullable */
     sGhiChu?: string | null

@@ -27,6 +27,7 @@ import {
     useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
 import { putManySubjectClass } from '@workspace/libs/api/training'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
@@ -56,6 +57,7 @@ export default function TeachingAssignment() {
     const [isEdit, setIsEdit] = useState(false)
     const [dataSubmit, setDataSubmit] = useState<SubjectClass[]>([])
     const { options, getExamTypeLabel } = useExamTypeOptions()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const where = useMemo(
         () => ({
@@ -173,7 +175,10 @@ export default function TeachingAssignment() {
     )
 
     const { data = [], refetch } = useFindManySubjectClass({
-        where,
+        where: {
+            ...where,
+            trainingObjectTypeId,
+        },
         include: {
             semester: true,
             mainLecturer: {

@@ -15,6 +15,7 @@ import {
     useFindManyTrainingObjectType,
     useUpdateAcademicWarningRule,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -30,6 +31,7 @@ export default function AcademicWarningRule() {
         field: undefined,
         operator: undefined,
     })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { options: criteriaFieldOptions, getCriteriaFieldLabel } = useCriteriaFieldOptions()
     const { options: criteriaOperatorOptions, getCriteriaOperatorLabel } =
@@ -85,10 +87,17 @@ export default function AcademicWarningRule() {
                     some: academicWarningRuleFilter,
                 },
             }),
+            trainingObjectTypeId,
         }
-    }, [filters.trainingCourseId, filters.trainingObjectId, filters.field, filters.operator])
+    }, [
+        filters.trainingCourseId,
+        filters.trainingObjectId,
+        filters.field,
+        filters.operator,
+        trainingObjectTypeId,
+    ])
 
-    const { data = [], refetch } = useFindManyTrainingCourse({
+    const { data = [] } = useFindManyTrainingCourse({
         where,
         include: {
             academicWarningRule: true,

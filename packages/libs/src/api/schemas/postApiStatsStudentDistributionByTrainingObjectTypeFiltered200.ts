@@ -12,5 +12,6 @@ export type PostApiStatsStudentDistributionByTrainingObjectTypeFiltered200 = {
     summary: PostApiStatsStudentDistributionByTrainingObjectTypeFiltered200Summary
     count: number
     preview?: boolean
+    labels?: string[]
     data: PostApiStatsStudentDistributionByTrainingObjectTypeFiltered200DataItem[]
 }

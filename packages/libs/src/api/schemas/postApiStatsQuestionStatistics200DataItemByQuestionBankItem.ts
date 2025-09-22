@@ -8,5 +8,5 @@
 export type PostApiStatsQuestionStatistics200DataItemByQuestionBankItem = {
     id: string
     name: string
-    'Số lượng': number
+    count: number
 }

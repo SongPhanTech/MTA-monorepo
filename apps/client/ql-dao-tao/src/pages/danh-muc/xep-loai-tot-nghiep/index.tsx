@@ -11,6 +11,7 @@ import {
     useFindManyTrainingCourse,
     useUpdateManyAcademicRankingConvert,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { Copy, Eye, Search } from 'lucide-react'
@@ -28,6 +29,7 @@ export default function GraduationRankingPage() {
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
@@ -52,6 +54,7 @@ export default function GraduationRankingPage() {
                         : {}),
                 },
             },
+            trainingObjectTypeId,
         },
         include: {
             academicRankingConvert: {

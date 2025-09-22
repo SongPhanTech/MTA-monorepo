@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons'
+import { CaretRightOutlined, PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -25,8 +25,14 @@ export default function QuaTrinhLuongForm({ expland, setExpland }: DomProps) {
         tag: 'PutQuaTrinhLuongModal',
     })
 
-    const { data: ngachList = [] } = useFindManyDM_Ngach()
-    const { data: bacLuongList = [] } = useFindManyDM_BacLuong()
+    const { data: ngachList = [] } = useFindManyDM_Ngach(
+        {},
+        { enabled: expland.includes('QuaTrinhLuong') }
+    )
+    const { data: bacLuongList = [] } = useFindManyDM_BacLuong(
+        {},
+        { enabled: expland.includes('QuaTrinhLuong') }
+    )
 
     const handleSave = (data: QuaTrinhLuong) => {
         const currentList = form.getFieldValue('QuaTrinhLuong') || []
@@ -199,6 +205,9 @@ export default function QuaTrinhLuongForm({ expland, setExpland }: DomProps) {
                         children: renderContent(),
                     },
                 ]}
+                expandIcon={({ isActive }) => (
+                    <CaretRightOutlined style={{ fontSize: 16 }} rotate={isActive ? 90 : 0} />
+                )}
                 bordered={false}
                 expandIconPosition="end"
                 className="bg-transparent"

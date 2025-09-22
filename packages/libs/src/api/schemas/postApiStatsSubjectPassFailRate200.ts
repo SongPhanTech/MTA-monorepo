@@ -12,5 +12,6 @@ export type PostApiStatsSubjectPassFailRate200 = {
     summary: PostApiStatsSubjectPassFailRate200Summary
     count: number
     preview?: boolean
+    labels?: string[]
     data: PostApiStatsSubjectPassFailRate200DataItem[]
 }

@@ -11,5 +11,5 @@ export type PostApiStatsEnrollmentTrend200DataItem = {
     majorName: string
     courseId: string
     courseName: string
-    'Số lượng': number
+    count: number
 }

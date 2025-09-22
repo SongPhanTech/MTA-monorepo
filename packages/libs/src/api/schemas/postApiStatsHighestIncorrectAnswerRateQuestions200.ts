@@ -12,5 +12,6 @@ export type PostApiStatsHighestIncorrectAnswerRateQuestions200 = {
     summary: PostApiStatsHighestIncorrectAnswerRateQuestions200Summary
     count: number
     preview?: boolean
+    labels?: string[]
     data: PostApiStatsHighestIncorrectAnswerRateQuestions200DataItem[]
 }

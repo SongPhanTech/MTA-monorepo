@@ -52,12 +52,18 @@ API này cung cấp các phương thức để các ứng dụng bên ngoài có
  */
 
 export interface RoleInUserDTO {
-    /** Id vai trò */
+    /** ID vai trò */
     sRoleId?: string
+    /**
+     * Mã vai trò
+     * @nullable
+     */
+    sCodeName?: string | null
     /**
      * Tên vai trò
      * @nullable
      */
     sRoleName?: string | null
-    sVersion?: number
+    /** @nullable */
+    sVersion?: string | null
 }

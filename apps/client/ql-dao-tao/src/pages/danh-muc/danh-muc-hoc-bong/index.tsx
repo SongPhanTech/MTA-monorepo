@@ -16,6 +16,7 @@ import {
     useUpdateScholarship,
     useUpdateScholarshipCriteria,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
@@ -39,49 +40,58 @@ export default function Scholarship() {
     const isFiltering = useMemo(() => {
         return Object.values(filters).some((value) => !!value)
     }, [filters])
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const where: Prisma.ScholarshipWhereInput = useMemo(
         () =>
-            isFiltering
-                ? {
-                      ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                          ? {
-                                trainingCourseId: filters.trainingCourseId,
-                            }
-                          : {}),
-                      criteria: {
-                          some: {
-                              ...(filters.field
-                                  ? Array.isArray(filters.field)
-                                      ? {
-                                            field: {
-                                                in: filters.field,
-                                            },
-                                        }
-                                      : {
-                                            field: {
-                                                equals: filters.field,
-                                            },
-                                        }
-                                  : {}),
-                              ...(filters.operator
-                                  ? Array.isArray(filters.operator)
-                                      ? {
-                                            operator: {
-                                                in: filters.operator,
-                                            },
-                                        }
-                                      : {
-                                            operator: {
-                                                equals: filters.operator,
-                                            },
-                                        }
-                                  : {}),
+            Object.assign(
+                {},
+                isFiltering
+                    ? {
+                          ...(filters.trainingCourseId && filters.trainingCourseId !== ''
+                              ? {
+                                    trainingCourseId: filters.trainingCourseId,
+                                }
+                              : {}),
+                          criteria: {
+                              some: {
+                                  ...(filters.field
+                                      ? Array.isArray(filters.field)
+                                          ? {
+                                                field: {
+                                                    in: filters.field,
+                                                },
+                                            }
+                                          : {
+                                                field: {
+                                                    equals: filters.field,
+                                                },
+                                            }
+                                      : {}),
+                                  ...(filters.operator
+                                      ? Array.isArray(filters.operator)
+                                          ? {
+                                                operator: {
+                                                    in: filters.operator,
+                                                },
+                                            }
+                                          : {
+                                                operator: {
+                                                    equals: filters.operator,
+                                                },
+                                            }
+                                      : {}),
+                              },
                           },
-                      },
-                  }
-                : {},
-        [filters, isFiltering]
+                      }
+                    : {},
+                {
+                    trainingCourse: {
+                        trainingObjectTypeId,
+                    },
+                }
+            ),
+        [filters, isFiltering, trainingObjectTypeId]
     )
 
     const { data = [], refetch } = useFindManyScholarship({

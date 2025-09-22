@@ -8,4 +8,5 @@
 export interface ImportPhanCongGiangDay {
     file: Blob
     semesterId: string
+    trainingObjectTypeId: string
 }

@@ -1,9 +1,11 @@
 import { queryClient } from '@api/index'
+import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import type { Curriculum, TrainingMajor } from '@workspace/db'
+import { buildOrgTree } from '@lib/utils'
+import type { Curriculum, DocumentFile, TrainingMajor } from '@workspace/db'
 import {
     useCreateCurriculum,
     useFindManyDM_DonVi,
@@ -13,14 +15,11 @@ import {
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
+import TreeSelect from '@/components/commons/tree-select'
+import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
 import './index.css'
-import DocumentPaths from '@components/commons/documentPaths'
-import { buildOrgTree } from '@lib/utils'
-import type { DocumentFile } from '@workspace/db'
-import TreeSelect from '@/components/commons/tree-select'
 export type PutCurriculum = Curriculum & {
     documentFiles?: DocumentFile[]
 }

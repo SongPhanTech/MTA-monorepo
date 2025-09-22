@@ -16,4 +16,8 @@ export type PostApiStatsQuestionStatistics200DataItem = {
     bySubjectVersion: PostApiStatsQuestionStatistics200DataItemBySubjectVersionItem[]
     byDifficulty: PostApiStatsQuestionStatistics200DataItemByDifficultyItem[]
     byKnowledgeBlock: PostApiStatsQuestionStatistics200DataItemByKnowledgeBlockItem[]
+    byQuestionBankLabels: string[]
+    bySubjectVersionLabels: string[]
+    byDifficultyLabels: string[]
+    byKnowledgeBlockLabels: string[]
 }

@@ -8,7 +8,7 @@
 export type PostApiStatsStudentsOfInterest200DataItem = {
     id: string
     name: string
-    CCHT: number
-    'TC trượt': number
-    GPA: number
+    academicWarningLevel: number
+    cumulativeDebtCredits: number
+    gpa: number
 }

@@ -12,6 +12,7 @@ import {
     useUpdateGraduationSession,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus, Eye } from 'lucide-react'
@@ -35,8 +36,9 @@ export default function GraduationSession() {
         applicationEnd: undefined,
         statusGraduationSession: undefined,
     })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    const { data: graduationSessionData, refetch } = useFindManyGraduationSession({
+    const { data: graduationSessionData } = useFindManyGraduationSession({
         where: {
             ...(filters.name && filters.name !== ''
                 ? {
@@ -83,6 +85,10 @@ export default function GraduationSession() {
                           },
                       }
                 : {}),
+            trainingObjectTypeId,
+        },
+        include: {
+            trainingObjectType: true,
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -135,6 +141,8 @@ export default function GraduationSession() {
                           },
                       }
                 : {}),
+            trainingObjectTypeId,
+            deletedAt: null,
         },
     })
 
@@ -220,6 +228,12 @@ export default function GraduationSession() {
                                 width: 180,
                                 type: 'input',
                                 align: 'center',
+                            },
+                            {
+                                title: 'Đối tượng đào tạo',
+                                width: 180,
+                                align: 'center',
+                                render: (_, record) => record?.trainingObjectType?.name || '',
                             },
                             {
                                 title: 'Ngày họp hội đồng',

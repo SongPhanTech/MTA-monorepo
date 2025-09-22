@@ -3175,6 +3175,18 @@ const metadata = {
                 }, maxStudent: {
                     name: "maxStudent",
                     type: "Int",
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    backLink: 'subjectClass',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
                 }, semester: {
                     name: "semester",
                     type: "Semester",
@@ -3572,6 +3584,18 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, graduationSession: {
+                    name: "graduationSession",
+                    type: "GraduationSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -3935,9 +3959,6 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, trainingLocationId_name: {
-                    name: "trainingLocationId_name",
-                    fields: ["trainingLocationId", "name"]
                 },
             },
         },
@@ -4057,9 +4078,6 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, buildingId_name: {
-                    name: "buildingId_name",
-                    fields: ["buildingId", "name"]
                 },
             },
         },
@@ -14863,6 +14881,18 @@ const metadata = {
                 }, applicationEnd: {
                     name: "applicationEnd",
                     type: "DateTime",
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    backLink: 'graduationSession',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
                 }, status: {
                     name: "status",
                     type: "GraduationSessionStatus",

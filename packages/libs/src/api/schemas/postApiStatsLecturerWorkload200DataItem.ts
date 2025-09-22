@@ -8,6 +8,6 @@
 export type PostApiStatsLecturerWorkload200DataItem = {
     lecturerId: string
     name: string
-    'Số lớp': number
-    'Số tiết': number
+    classCount: number
+    totalPeriods: number
 }

@@ -31,6 +31,10 @@ model TrainingObjectType extends Base {
   trainingScoreSession TrainingScoreSession[]
 
   @@schema("ql-dao-tao")
+
+  subjectClass         SubjectClass[]
+
+  graduationSession    GraduationSession[]
 }
 
 /// đối tượng ưu tiên
@@ -86,7 +90,6 @@ model Building extends Base {
 
   rooms              Room[]
 
-  @@unique([trainingLocationId, name])
   @@schema("ql-dao-tao")
 }
 
@@ -111,7 +114,6 @@ model Room extends Base {
   classSchedules ClassSchedule[]
   examSession    ExamSession[]
 
-  @@unique([buildingId, name])
   @@schema("ql-dao-tao")
 }
 

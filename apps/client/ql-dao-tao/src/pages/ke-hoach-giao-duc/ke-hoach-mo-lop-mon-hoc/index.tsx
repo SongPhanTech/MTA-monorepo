@@ -9,6 +9,7 @@ import DefaultLayout from '@layouts/default-layout'
 import type { TrainingCourse, TrainingMajor } from '@workspace/db'
 import { useFindManyTrainingCourse, useFindManyTrainingMajor } from '@workspace/db/hooks'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { CalendarPlus } from 'lucide-react'
@@ -27,15 +28,20 @@ export default function SubjectOpeningPlan() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
+    const searchText = Form.useWatch('searchText', form)
+    const trainingCourseId = Form.useWatch('trainingCourseId', form)
+    const trainingMajorId = Form.useWatch('trainingMajorId', form)
 
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: res, refetch } = useOpenSubjectClass(
         {
-            page: '1',
-            pageSize: '10',
+            page: `${currentPage}`,
+            pageSize: `${numberOfPages}`,
             semesterId: selectedSemesterId as string,
-            search: form.getFieldValue('searchText'),
-            trainingCourseId: form.getFieldValue('trainingCourseId'),
-            trainingMajorId: form.getFieldValue('trainingMajorId'),
+            search: searchText,
+            trainingCourseId,
+            trainingMajorId,
+            trainingObjectTypeId: trainingObjectTypeId || '',
         },
         { query: { enabled: !!selectedSemesterId } },
         queryClient
@@ -59,7 +65,7 @@ export default function SubjectOpeningPlan() {
         []
     )
 
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<string>({
         tag: 'PutOpenClassModal',
         onClose: refetch,
     })
@@ -357,7 +363,7 @@ export default function SubjectOpeningPlan() {
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
-                            // total: count,
+                            total: res?.data?.count ?? 0,
                             onChange: (page, pageSize) => {
                                 if (numberOfPages === pageSize) {
                                     setCurrentPage(page)

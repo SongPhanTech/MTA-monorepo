@@ -5,6 +5,7 @@ import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
 import type { ExamType, SubjectClassSchedule } from '@workspace/db'
 import { useFindManySubjectClass } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -30,6 +31,7 @@ export default function RegisterResult({ setSemesterId, setSubjectClassId }: Reg
     })
     const { getScheduleLabel } = useScheduleOptions()
     const { getExamTypeLabel } = useExamTypeOptions()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { data: subjectClassData = [], refetch } = useFindManySubjectClass({
         where: {
@@ -46,6 +48,7 @@ export default function RegisterResult({ setSemesterId, setSubjectClassId }: Reg
                       semesterId: filters.semesterId,
                   }
                 : {}),
+            trainingObjectTypeId,
         },
         include: {
             mainLecturer: {

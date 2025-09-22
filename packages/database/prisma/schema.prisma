@@ -1314,6 +1314,8 @@ model SubjectClass {
   subjectId                  String
   schedule                   SubjectClassSchedule
   maxStudent                 Int
+  trainingObjectType         TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId       String
   semester                   Semester              @relation(fields: [semesterId], references: [id])
   semesterId                 String
   cancelled                  Boolean               @default(false)
@@ -1397,6 +1399,8 @@ model TrainingObjectType {
   trainingFields       TrainingFieldOnTrainingObjectType[]
   students             Student[]
   trainingScoreSession TrainingScoreSession[]
+  subjectClass         SubjectClass[]
+  graduationSession    GraduationSession[]
 
   @@schema("ql-dao-tao")
 }
@@ -1492,7 +1496,6 @@ model Building {
   trainingLocationId String?
   rooms              Room[]
 
-  @@unique([trainingLocationId, name])
   @@schema("ql-dao-tao")
 }
 
@@ -1520,7 +1523,6 @@ model Room {
   classSchedules ClassSchedule[]
   examSession    ExamSession[]
 
-  @@unique([buildingId, name])
   @@schema("ql-dao-tao")
 }
 
@@ -4107,19 +4109,21 @@ model ScholarshipAward {
 
 /// Đợt xét tốt nghiệp 
 model GraduationSession {
-  id               String                         @id() @default(cuid())
-  code             String?                        @unique()
-  active           Boolean                        @default(true)
-  description      String?                        @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime                       @default(now())
-  updatedAt        DateTime                       @default(now()) @updatedAt()
-  name             String
-  sessionDate      DateTime
-  applicationStart DateTime
-  applicationEnd   DateTime
-  status           GraduationSessionStatus        @default(PLANNING)
-  applications     StudentGraduationApplication[]
+  id                   String                         @id() @default(cuid())
+  code                 String?                        @unique()
+  active               Boolean                        @default(true)
+  description          String?                        @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime                       @default(now())
+  updatedAt            DateTime                       @default(now()) @updatedAt()
+  name                 String
+  sessionDate          DateTime
+  applicationStart     DateTime
+  applicationEnd       DateTime
+  trainingObjectType   TrainingObjectType             @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+  status               GraduationSessionStatus        @default(PLANNING)
+  applications         StudentGraduationApplication[]
 
   @@schema("ql-dao-tao")
 }

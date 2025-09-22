@@ -12,6 +12,7 @@ import {
     useDeleteManyAcademicRankingConvert,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { Copy, Search } from 'lucide-react'
@@ -37,6 +38,8 @@ export default function AcademicRankingConvertPage() {
         searchText: '',
         active: 'true',
     })
+
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { data = [], refetch } = useFindManyTrainingCourse({
         where: {
@@ -72,6 +75,7 @@ export default function AcademicRankingConvertPage() {
                         : {}),
                 },
             },
+            trainingObjectTypeId,
         },
         include: {
             academicRankingConvert: {

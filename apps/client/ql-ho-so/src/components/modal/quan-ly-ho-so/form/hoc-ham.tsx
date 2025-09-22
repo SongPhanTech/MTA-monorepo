@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons'
+import { CaretRightOutlined, PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -187,6 +187,9 @@ export default function HocHamForm({ expland, setExpland }: DomProps) {
                         children: renderContent(),
                     },
                 ]}
+                expandIcon={({ isActive }) => (
+                    <CaretRightOutlined style={{ fontSize: 16 }} rotate={isActive ? 90 : 0} />
+                )}
                 bordered={false}
                 expandIconPosition="end"
                 className="bg-transparent"

@@ -1,6 +1,5 @@
 import ImportScoreModal from '@components/commons/print/nhap-diem-tu-file'
 import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
-import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
@@ -9,19 +8,14 @@ import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type {
-    ArchivedAward,
-    StudentSubjectScore,
-    SubjectClass,
-    TrainingObjectType,
-} from '@workspace/db'
+import type { ArchivedAward, StudentSubjectScore, SubjectClass } from '@workspace/db'
 import {
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
-    useFindManyTrainingObjectType,
     useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
 import { calcFinalScore, getScoreStatistics } from '@workspace/libs/utils'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, Form, Input, InputNumber, message, Popover, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -30,18 +24,102 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import LopMonHocItem from './lop-mon-hoc'
 
+interface Item {
+    code?: string
+    name: string
+    id: string
+    lecture?: string
+}
+
+interface FlatListProps {
+    data: Item[]
+    renderItem: (item: Item) => JSX.Element
+}
+
+const FlatList: React.FC<FlatListProps> = ({ data, renderItem }) => {
+    return (
+        <div>
+            {data.map((item) => (
+                <div key={item.code}>{renderItem(item)}</div>
+            ))}
+        </div>
+    )
+}
+
+interface LopMonHocItemProps {
+    dataTable: Array<{
+        code?: string
+        id: string
+        name: string
+        mainLecturer: { userProfile: { firstName: string; lastName: string } }
+        lecture?: string
+    }>
+    onChangeSelected?: (selected: string) => void
+    selectedItem?: string
+}
+
+const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
+    dataTable,
+    onChangeSelected,
+    selectedItem,
+}) => {
+    const data: Item[] = dataTable.map(
+        (item: { mainLecturer: any; code?: any; name: any; id: any }) => ({
+            code: item.code === null ? undefined : item.code,
+            name: item.name,
+            lecture: item.mainLecturer?.userProfile
+                ? `${item.mainLecturer.userProfile.lastName} ${item.mainLecturer.userProfile.firstName}`
+                : 'Chưa có giảng viên',
+            id: item.id,
+        })
+    )
+
+    const renderItem = (item: Item) => (
+        <div
+            onClick={() => {
+                onChangeSelected?.(item.id)
+            }}
+            style={{
+                padding: '8px',
+                borderRadius: '8px',
+                marginBottom: '2px',
+                width: '100%',
+                cursor: 'pointer',
+                backgroundColor: selectedItem === item.id ? '#daf2ed' : 'transparent',
+            }}
+        >
+            <h3>
+                <strong>{item.name}</strong>
+            </h3>
+            <p>{item.code}</p>
+            <p>{item.lecture}</p>
+        </div>
+    )
+
+    return (
+        <div
+            style={{
+                width: '100%',
+                padding: '16px',
+                borderRadius: '8px',
+            }}
+        >
+            <h2 className="text-lg font-semibold px-[6]" style={{ marginBottom: '12px' }}>
+                Danh sách lớp
+            </h2>
+            <FlatList data={data} renderItem={renderItem} />
+        </div>
+    )
+}
 interface FilterPropsClassClass {
     schoolYearId: string | null //Năm học
     semesterId: string | null //Học kỳ
     KhoaId: string | null //Khoa
     BoMonId: string | null //Bộ môn
-    trainingObjectId: string | null //Đối tượng đào tạo
     examTypeId: string | null //Hình thức thi
     LectureIds: string[] //Giảng viên
     searchText: string | null
-    trainingObjectTypeId: string | null
     subjectClassId: string | null
     fixedClassIds: string[]
     examDateRange?: [string, string] | null // Khoảng thời gian thi
@@ -67,6 +145,7 @@ export default function SubjectClassScore() {
     const [open, setOpen] = useState(false)
     const [importModalVisible, setImportModalVisible] = useState(false)
     const [selectedSemesterId, setSelectedSemesterId] = useState<string | undefined>()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen)
@@ -88,12 +167,10 @@ export default function SubjectClassScore() {
     const [filters, setFilters] = useState<FilterPropsClassClass>({
         searchText: '',
         semesterId: null,
-        trainingObjectTypeId: null,
         subjectClassId: null,
         schoolYearId: null,
         KhoaId: null,
         BoMonId: null,
-        trainingObjectId: null,
         examTypeId: null,
         LectureIds: [],
         fixedClassIds: [],
@@ -121,8 +198,6 @@ export default function SubjectClassScore() {
         })
     }
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
-
     //#region Mới
     /* Mới */
     const { data: subjectClassData = [] } = useFindManySubjectClass({
@@ -147,17 +222,7 @@ export default function SubjectClassScore() {
                 : {}),
             ...(selectedSemesterId ? { semesterId: selectedSemesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
-            ...(filters.trainingObjectTypeId
-                ? {
-                      subjectClassStudent: {
-                          some: {
-                              student: {
-                                  trainingObjectTypeId: filters.trainingObjectTypeId,
-                              },
-                          },
-                      },
-                  }
-                : {}),
+            trainingObjectTypeId,
             ...(filters.LectureIds.length > 0
                 ? {
                       OR: filters.LectureIds.map((id) => ({
@@ -741,29 +806,6 @@ export default function SubjectClassScore() {
                                         filterTimeNow={true}
                                         onChange={(val) => setSelectedSemesterId(val || '')}
                                     />
-                                </Col>
-                                <Col span={10}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingObjectId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            onChange={(val) =>
-                                                handleFilterChange('trainingObjectTypeId', val)
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
                                 </Col>
                                 <Col span={4} className="flex">
                                     <FilterSubjectClass

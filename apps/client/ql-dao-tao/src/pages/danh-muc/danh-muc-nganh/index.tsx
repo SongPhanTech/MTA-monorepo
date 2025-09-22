@@ -84,7 +84,7 @@ export default function TrainingFieldPage() {
             filters.publishDate,
         ]
     )
-    const { data = [], refetch } = useFindManyTrainingField({
+    const { data = [] } = useFindManyTrainingField({
         where,
         include: {
             organization: true,
@@ -150,62 +150,7 @@ export default function TrainingFieldPage() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <Flex>
-                                <Col span={8}>
-                                    {/* <Form.Item name="name">
-										<Input
-											id="search"
-											onChange={(e) =>
-												handleFilterChange("searchText", e.target.value)
-											}
-											placeholder="Tìm kiếm"
-											style={{
-												maxWidth: 300,
-												marginRight: 8,
-												height: 32,
-											}}
-											prefix={
-												<Search
-													size={16}
-													style={{
-														color: "rgba(0, 0, 0, 0.25)",
-													}}
-												/>
-											}
-											allowClear
-										/>
-									</Form.Item> */}
-                                </Col>
-
-                                {/* <Col span={8}>
-                                    <Form.Item
-                                        name="trainingObjectId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            style={{
-                                                marginRight: 8,
-                                            }}
-                                            onChange={(val) =>
-                                                handleFilterChange('trainingObjectTypes', val)
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col> */}
-                            </Flex>
-                        </Col>
-                        <Col span={6}>
+                        <Col span={24}>
                             <Flex justify="end">
                                 <Button onClick={handleModal} type="primary">
                                     Thêm mới

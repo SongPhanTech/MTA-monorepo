@@ -80,4 +80,6 @@ export type Dashboard = BaseEntity & {
     sChartType?: string | null
     /** @nullable */
     sChartConfig?: string | null
+    /** @nullable */
+    sLabelConfig?: string | null
 }

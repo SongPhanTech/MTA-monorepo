@@ -24,7 +24,12 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    trainingObjectType: z.record(z.unknown()),
     applications: z.array(z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    trainingObjectTypeId: z.string(),
 }
 );
 
@@ -37,7 +42,7 @@ export const GraduationSessionScalarSchema = baseSchema;
 /**
  * `GraduationSession` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const GraduationSessionSchema = GraduationSessionScalarSchema.merge(relationSchema.partial());
+export const GraduationSessionSchema = GraduationSessionScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -78,9 +83,7 @@ export const GraduationSessionCreateScalarSchema = baseSchema.partial({
 /**
  * `GraduationSession` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const GraduationSessionCreateSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, status: true
-});
+export const GraduationSessionCreateSchema = GraduationSessionCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -92,5 +95,5 @@ export const GraduationSessionUpdateScalarSchema = baseSchema.partial();
 /**
  * `GraduationSession` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const GraduationSessionUpdateSchema = GraduationSessionUpdateScalarSchema;
+export const GraduationSessionUpdateSchema = GraduationSessionUpdateScalarSchema.merge(fkSchema.partial());
 

@@ -8,5 +8,5 @@
 export type PostApiStatsMostUsedQuestions200DataItem = {
     questionId: string
     content: string
-    'Lần sử dụng': number
+    usageCount: number
 }

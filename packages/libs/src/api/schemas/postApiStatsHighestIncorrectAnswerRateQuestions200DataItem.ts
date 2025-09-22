@@ -8,5 +8,5 @@
 export type PostApiStatsHighestIncorrectAnswerRateQuestions200DataItem = {
     questionId: string
     content: string
-    'Tỉ lệ sai': number
+    incorrectRate: number
 }

@@ -90,6 +90,7 @@ const importPhanCongGiangDay = createRoute({
                 'multipart/form-data': {
                     schema: UploadExcelModel.extend({
                         semesterId: z.string(), // loại thông tin
+                        trainingObjectTypeId: z.string(), // loại thông tin
                     }).openapi('importPhanCongGiangDay'),
                 },
             },
@@ -118,7 +119,7 @@ const importPhanCongGiangDay = createRoute({
 })
 
 app.openapi(importPhanCongGiangDay, async (c) => {
-    const { file, semesterId } = c.req.valid('form')
+    const { file, semesterId, trainingObjectTypeId } = c.req.valid('form')
 
     const maxFileSize = 50 * 1024 * 1024 // 50MB
     if (file.size > maxFileSize) {
@@ -161,20 +162,37 @@ app.openapi(importPhanCongGiangDay, async (c) => {
         const danhSachMaTKBMonHoc = new Set<string>()
         const danhSachMaLopNienChe = new Set<string>()
         const danhSachMaPhongHoc = new Set<string>()
+
         for (const row of rowData) {
             // Xử lý từng dòng dữ liệu ở đây
-            const [, , tenGV, maMon, , maLopNienChe, , , maPhongHoc, , , , , , hocChung] = row
-            if (tenGV) {
+            const [
+                ,
+                maGV,
+                tenGV,
+                maMon,
+                tenMon,
+                maLopNienChe,
+                tenLopNienChe,
+                ,
+                maPhongHoc,
+                tenPhong,
+                ,
+                ,
+                ,
+                ,
+                hocChung,
+            ] = row
+            if (tenGV && maGV) {
                 tenGV
                     .split(',')
                     .map((e) => e.replace(/\([^)]*\)/g, '').trim())
                     // biome-ignore lint/suspicious/useIterableCallbackReturn: <dung cho set>
                     .forEach((e) => danhSachTenGV.add(e))
             }
-            if (maMon) {
+            if (maMon && tenMon) {
                 danhSachMaTKBMonHoc.add(maMon.trim())
             }
-            if (maLopNienChe) {
+            if (maLopNienChe && tenLopNienChe) {
                 danhSachMaLopNienChe.add(maLopNienChe.trim())
             }
             if (hocChung) {
@@ -184,10 +202,11 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                     // biome-ignore lint/suspicious/useIterableCallbackReturn: <dung cho set>
                     .forEach((e) => danhSachMaLopNienChe.add(e))
             }
-            if (maPhongHoc) {
+            if (maPhongHoc && tenPhong) {
                 danhSachMaPhongHoc.add(maPhongHoc.trim())
             }
         }
+
         const danhSachGV = await prisma.lecturer.findMany({
             where: {
                 userProfile: {
@@ -453,6 +472,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                               },
                                           }
                                         : {},
+                                trainingObjectTypeId,
                             },
                         })
                         danhSachLopMonHoc.push(res)

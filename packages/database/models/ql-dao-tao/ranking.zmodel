@@ -20,15 +20,19 @@ enum GraduationSessionStatus {
 
 /// Đợt xét tốt nghiệp 
 model GraduationSession extends Base {
-  name             String
-  sessionDate      DateTime             // Ngày diễn ra phiên họp của hội đồng
-  applicationStart DateTime             // Ngày bắt đầu nhận đơn
-  applicationEnd   DateTime             // Ngày kết thúc nhận đơn
+  name                 String
+  sessionDate          DateTime             // Ngày diễn ra phiên họp của hội đồng
+  applicationStart     DateTime             // Ngày bắt đầu nhận đơn
+  applicationEnd       DateTime             // Ngày kết thúc nhận đơn
 
-  status           GraduationSessionStatus        @default(PLANNING)
+  // Đối tượng đào tạo
+  trainingObjectType   TrainingObjectType             @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+
+  status               GraduationSessionStatus        @default(PLANNING)
 
   // Danh sách các đơn xét tốt nghiệp trong đợt này
-  applications     StudentGraduationApplication[]
+  applications         StudentGraduationApplication[]
 
   @@schema("ql-dao-tao")
 }

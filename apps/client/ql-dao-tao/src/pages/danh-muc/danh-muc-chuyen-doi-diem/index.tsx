@@ -12,6 +12,7 @@ import {
     useDeleteScoreConvert,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { Copy, Search } from 'lucide-react'
@@ -40,43 +41,51 @@ export default function TrainingFieldPage() {
     const isFiltering = useMemo(() => {
         return Object.values(filters).some((value) => !!value)
     }, [filters])
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const where: Prisma.TrainingCourseWhereInput = useMemo(
         () =>
-            isFiltering
-                ? {
-                      scoreConverts: {
-                          some: {
-                              active:
-                                  filters.active === 'true'
-                                      ? true
-                                      : filters.active === 'false'
-                                        ? false
-                                        : undefined,
-                              ...(filters.searchText && filters.searchText.trim() !== ''
-                                  ? {
-                                        AND: [
-                                            {
-                                                base10Min: {
-                                                    lte: Number(filters.searchText),
+            Object.assign(
+                isFiltering
+                    ? {
+                          scoreConverts: {
+                              some: {
+                                  active:
+                                      filters.active === 'true'
+                                          ? true
+                                          : filters.active === 'false'
+                                            ? false
+                                            : undefined,
+                                  ...(filters.searchText && filters.searchText.trim() !== ''
+                                      ? {
+                                            AND: [
+                                                {
+                                                    base10Min: {
+                                                        lte: Number(filters.searchText),
+                                                    },
                                                 },
-                                            },
-                                            {
-                                                base10Max: {
-                                                    gte: Number(filters.searchText),
+                                                {
+                                                    base10Max: {
+                                                        gte: Number(filters.searchText),
+                                                    },
                                                 },
-                                            },
-                                        ],
-                                    }
-                                  : {}),
+                                            ],
+                                        }
+                                      : {}),
+                              },
                           },
-                      },
-                  }
-                : {},
-        [filters, isFiltering]
+                      }
+                    : {},
+                {
+                    trainingObjectTypeId,
+                }
+            ),
+        [filters, isFiltering, trainingObjectTypeId]
     )
     const { data = [], refetch } = useFindManyTrainingCourse({
-        where,
+        where: {
+            ...where,
+        },
         include: {
             scoreConverts: {
                 orderBy: [{ trainingCourse: { createdAt: 'desc' } }, { base10Max: 'desc' }],

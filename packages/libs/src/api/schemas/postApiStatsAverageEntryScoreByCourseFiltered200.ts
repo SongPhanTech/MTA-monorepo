@@ -12,5 +12,6 @@ export type PostApiStatsAverageEntryScoreByCourseFiltered200 = {
     summary: PostApiStatsAverageEntryScoreByCourseFiltered200Summary
     count: number
     preview?: boolean
+    labels?: string[]
     data: PostApiStatsAverageEntryScoreByCourseFiltered200DataItem[]
 }

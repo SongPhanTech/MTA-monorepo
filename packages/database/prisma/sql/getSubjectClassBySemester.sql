@@ -3,79 +3,146 @@
 -- @param {String} $3:trainingCourseId?
 -- @param {String} $4:search?
 -- @param {String} $5:trainingMajorId?
--- @param {Int} $6:page
--- @param {Int} $7:pageSize
-with FCS as (select "ql-dao-tao"."SubjectVersion".id     as subject_version_id,
-                    "ql-dao-tao"."SubjectVersion".code   as subject_version_code,
-                    "ql-dao-tao"."SubjectVersion".credit as subject_version_credit,
-                    CV.id                                as curriculum_version_id,
-                    CV.name                              as curriculum_version_name,
-                    "ql-dao-tao"."SubjectVersion".name   as subject_version_name,
-                    TBS.semester                         as training_block_subject_semester,
-                    (($1 - FC."startYear") * 2 + $2)    as fixed_class_semester,
-                    SC.id                                as subject_class_id,
-                    SC.code                              as subject_class_code,
-                    SC.name                              as subject_class_name,
-                    FC."startYear"                       as fixed_class_start_year,
-                    FC.id                                as fixed_class_id,
-                    FC.name                              as fixed_class_name,
-                    FC.code                              as fixed_class_code,
-                    FC.active                            as active,
-                    FC.graduated                         as graduated,
-                    FC."trainingCourseId"                as training_course_id,
-                    C."trainingMajorId"                  as training_major_id,
-                    C."managementOrganizationId"         as management_organization_id,
-                    DV."sTen"                            as management_organization_name,
-                    count(FC.id)                         as fixed_class_count
-             from "ql-dao-tao"."SubjectVersion"
-                      join "ql-dao-tao"."TrainingBlockSubject" TBS
-                           on "ql-dao-tao"."SubjectVersion".id = TBS."subjectId"
-                      join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
-                           on TBS."trainingBlockOnCurriculumVersionId" = TBOCV.id
-                      join "ql-dao-tao"."CurriculumVersion" CV on TBOCV."curriculumVersionId" = CV.id
-                      join "ql-dao-tao"."Curriculum" C on CV."curriculumId" = C.id
-                      join "ql-dao-tao"."FixedClass" FC on CV.id = FC."curriculumVersionId"
-                      join "ql-dao-tao"."Student" S on FC.id = S."fixedClassId"
-                      left join "ql-dao-tao"."SubjectClass" SC on "SubjectVersion".id = SC."subjectId" and SC."deletedAt" is null
-                      left join "mta"."DM_DonVi" DV on C."managementOrganizationId" = DV."Id"
-             where FC.active = true
-               and TBS."deletedAt" is null
-               and TBOCV."deletedAt" is null
-               and CV."deletedAt" is null
-               and FC."deletedAt" is null
-             group by CV.id, CV.name, FC.id, FC."startYear",
-                      FC."name", "ql-dao-tao"."SubjectVersion".id, "ql-dao-tao"."SubjectVersion".code,
-                      "ql-dao-tao"."SubjectVersion".credit,
-                      "ql-dao-tao"."SubjectVersion".name, TBS.semester, training_course_id, training_major_id,SC.id, C."managementOrganizationId", management_organization_name)
-select json_build_object('subjectVersionCode', subject_version_code,'trainingMajorId', training_major_id, 'trainingCourseId', training_course_id, 'managementOrganizationId', management_organization_id, 'managementOrganizationName', management_organization_name, 'subjectVersionId', subject_version_id, 'subjectVersionName', subject_version_name,
-                         'subjectVersionCredit', subject_version_credit,
-                           'subjectClass', json_agg(
-                                 json_build_object(
-                                         'subjectClassId', subject_class_id,
-                                         'subjectClassCode', subject_class_code,
-                                         'subjectClassName', subject_class_name
-                                 )
-                                         ),
-                         'curriculumVersion', json_agg(
-                                 json_build_object(
-                                         'curriculumVersionId', curriculum_version_id,
-                                         'curriculumVersionName', curriculum_version_name
-                                 )
-                                              ),
-                         'fixedClass', json_agg(
-                                 json_build_object(
-                                         'fixedClassId', fixed_class_id, 'fixedClassName', fixed_class_name,'fixedClassCount', fixed_class_count,'fixedClassSemester', fixed_class_semester
-                                 )
-                                       )
-       ) as data
-from FCS
-where training_block_subject_semester = fixed_class_semester and active = true and graduated = false and
-(($3::TEXT IS NULL AND 1=1 OR training_course_id = $3) or
-($4::TEXT IS NULL AND 1=1 OR subject_version_name ilike $4) or
-($4::TEXT IS NULL AND 1=1 OR subject_version_code ilike $4) or
-($4::TEXT IS NULL AND 1=1 OR fixed_class_name ilike $4) or
-($4::TEXT IS NULL AND 1=1 OR fixed_class_code ilike $4) or
-($5::TEXT IS NULL AND 1=1 OR training_major_id = $5))
-group by subject_version_id, subject_version_code,
-         subject_version_credit, subject_version_name, training_major_id, training_course_id, management_organization_id, management_organization_name
-         limit $7 offset ($6 - 1) * $7
+-- @param {String} $6:trainingObjectTypeId
+-- @param {Int} $7:page
+-- @param {Int} $8:pageSize
+WITH FCS AS (
+        SELECT sv.id as subject_version_id,
+                sv.code as subject_version_code,
+                sv.credit as subject_version_credit,
+                cv.id as curriculum_version_id,
+                cv.name as curriculum_version_name,
+                sv.name as subject_version_name,
+                tbs.semester as training_block_subject_semester,
+                (($1 - fc."startYear") * 2 + $2) as fixed_class_semester,
+                sc.id as subject_class_id,
+                sc.code as subject_class_code,
+                sc.name as subject_class_name,
+                fc."startYear" as fixed_class_start_year,
+                fc.id as fixed_class_id,
+                fc.name as fixed_class_name,
+                fc.code as fixed_class_code,
+                fc.active as active,
+                fc.graduated as graduated,
+                fc."trainingCourseId" as training_course_id,
+                c."trainingMajorId" as training_major_id,
+                c."managementOrganizationId" as management_organization_id,
+                dv."sTen" as management_organization_name,
+                tc."trainingObjectTypeId" as training_object_type_id,
+                COUNT(fc.id) as fixed_class_count
+                
+        FROM "ql-dao-tao"."SubjectVersion" sv
+                JOIN "ql-dao-tao"."TrainingBlockSubject" tbs ON sv.id = tbs."subjectId"
+                JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" tbocv ON tbs."trainingBlockOnCurriculumVersionId" = tbocv.id
+                JOIN "ql-dao-tao"."CurriculumVersion" cv ON tbocv."curriculumVersionId" = cv.id
+                JOIN "ql-dao-tao"."Curriculum" c ON cv."curriculumId" = c.id
+                JOIN "ql-dao-tao"."FixedClass" fc ON cv.id = fc."curriculumVersionId"
+                JOIN "ql-dao-tao"."Student" s ON fc.id = s."fixedClassId"
+                JOIN "ql-dao-tao"."TrainingCourse" tc ON fc."trainingCourseId" = tc."id"
+                LEFT JOIN "ql-dao-tao"."SubjectClass" sc ON sv.id = sc."subjectId"
+                AND sc."deletedAt" IS NULL
+                LEFT JOIN "mta"."DM_DonVi" dv ON c."managementOrganizationId" = dv."Id"
+        WHERE fc.active = TRUE
+                AND tbs."deletedAt" IS NULL
+                AND tbocv."deletedAt" IS NULL
+                AND cv."deletedAt" IS NULL
+                AND fc."deletedAt" IS NULL
+        GROUP BY cv.id,
+                cv.name,
+                fc.id,
+                fc."startYear",
+                fc.name,
+                sv.id,
+                sv.code,
+                sv.credit,
+                sv.name,
+                tbs.semester,
+                training_course_id,
+                training_major_id,
+                sc.id,
+                c."managementOrganizationId",
+                tc."trainingObjectTypeId",
+                management_organization_name
+)
+SELECT json_build_object(
+                'subjectVersionCode',
+                subject_version_code,
+                'trainingMajorId',
+                training_major_id,
+                'trainingCourseId',
+                training_course_id,
+                'managementOrganizationId',
+                management_organization_id,
+                'managementOrganizationName',
+                management_organization_name,
+                'subjectVersionId',
+                subject_version_id,
+                'subjectVersionName',
+                subject_version_name,
+                'subjectVersionCredit',
+                subject_version_credit,
+                'subjectClass',
+                json_agg(
+                        json_build_object(
+                                'subjectClassId',
+                                subject_class_id,
+                                'subjectClassCode',
+                                subject_class_code,
+                                'subjectClassName',
+                                subject_class_name
+                        )
+                ),
+                'curriculumVersion',
+                json_agg(
+                        json_build_object(
+                                'curriculumVersionId',
+                                curriculum_version_id,
+                                'curriculumVersionName',
+                                curriculum_version_name
+                        )
+                ),
+                'fixedClass',
+                json_agg(
+                        json_build_object(
+                                'fixedClassId',
+                                fixed_class_id,
+                                'fixedClassName',
+                                fixed_class_name,
+                                'fixedClassCount',
+                                fixed_class_count,
+                                'fixedClassSemester',
+                                fixed_class_semester
+                        )
+                )
+        ) as data
+FROM FCS
+WHERE training_block_subject_semester = fixed_class_semester
+        AND active = TRUE
+        AND graduated = FALSE
+        AND training_object_type_id = $6
+        AND (
+                (
+                        $3::TEXT IS NULL
+                        OR training_course_id = $3
+                )
+                AND (
+                        $5::TEXT IS NULL
+                        OR training_major_id = $5
+                )
+                AND (
+                        $4::TEXT IS NULL
+                        OR subject_version_name ILIKE $4
+                        OR subject_version_code ILIKE $4
+                        OR fixed_class_name ILIKE $4
+                        OR fixed_class_code ILIKE $4
+                )
+        )
+GROUP BY subject_version_id,
+        subject_version_code,
+        subject_version_credit,
+        subject_version_name,
+        training_major_id,
+        training_course_id,
+        management_organization_id,
+        management_organization_name
+LIMIT $8 OFFSET ($7 - 1) * $8;
