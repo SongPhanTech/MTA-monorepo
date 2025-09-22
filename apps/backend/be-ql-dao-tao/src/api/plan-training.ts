@@ -90,6 +90,7 @@ const importPhanCongGiangDay = createRoute({
                 'multipart/form-data': {
                     schema: UploadExcelModel.extend({
                         semesterId: z.string(), // loại thông tin
+                        trainingObjectTypeId: z.string(), // loại thông tin
                     }).openapi('importPhanCongGiangDay'),
                 },
             },
@@ -118,7 +119,7 @@ const importPhanCongGiangDay = createRoute({
 })
 
 app.openapi(importPhanCongGiangDay, async (c) => {
-    const { file, semesterId } = c.req.valid('form')
+    const { file, semesterId, trainingObjectTypeId } = c.req.valid('form')
 
     const maxFileSize = 50 * 1024 * 1024 // 50MB
     if (file.size > maxFileSize) {
@@ -471,6 +472,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                               },
                                           }
                                         : {},
+                                trainingObjectTypeId,
                             },
                         })
                         danhSachLopMonHoc.push(res)

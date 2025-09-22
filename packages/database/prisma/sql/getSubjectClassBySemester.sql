@@ -3,8 +3,9 @@
 -- @param {String} $3:trainingCourseId?
 -- @param {String} $4:search?
 -- @param {String} $5:trainingMajorId?
--- @param {Int} $6:page
--- @param {Int} $7:pageSize
+-- @param {String} $6:trainingObjectTypeId
+-- @param {Int} $7:page
+-- @param {Int} $8:pageSize
 WITH FCS AS (
         SELECT sv.id as subject_version_id,
                 sv.code as subject_version_code,
@@ -27,7 +28,9 @@ WITH FCS AS (
                 c."trainingMajorId" as training_major_id,
                 c."managementOrganizationId" as management_organization_id,
                 dv."sTen" as management_organization_name,
+                tc."trainingObjectTypeId" as training_object_type_id,
                 COUNT(fc.id) as fixed_class_count
+                
         FROM "ql-dao-tao"."SubjectVersion" sv
                 JOIN "ql-dao-tao"."TrainingBlockSubject" tbs ON sv.id = tbs."subjectId"
                 JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" tbocv ON tbs."trainingBlockOnCurriculumVersionId" = tbocv.id
@@ -35,6 +38,7 @@ WITH FCS AS (
                 JOIN "ql-dao-tao"."Curriculum" c ON cv."curriculumId" = c.id
                 JOIN "ql-dao-tao"."FixedClass" fc ON cv.id = fc."curriculumVersionId"
                 JOIN "ql-dao-tao"."Student" s ON fc.id = s."fixedClassId"
+                JOIN "ql-dao-tao"."TrainingCourse" tc ON fc."trainingCourseId" = tc."id"
                 LEFT JOIN "ql-dao-tao"."SubjectClass" sc ON sv.id = sc."subjectId"
                 AND sc."deletedAt" IS NULL
                 LEFT JOIN "mta"."DM_DonVi" dv ON c."managementOrganizationId" = dv."Id"
@@ -57,6 +61,7 @@ WITH FCS AS (
                 training_major_id,
                 sc.id,
                 c."managementOrganizationId",
+                tc."trainingObjectTypeId",
                 management_organization_name
 )
 SELECT json_build_object(
@@ -114,6 +119,7 @@ FROM FCS
 WHERE training_block_subject_semester = fixed_class_semester
         AND active = TRUE
         AND graduated = FALSE
+        AND training_object_type_id = $6
         AND (
                 (
                         $3::TEXT IS NULL
@@ -139,4 +145,4 @@ GROUP BY subject_version_id,
         training_course_id,
         management_organization_id,
         management_organization_name
-LIMIT $7 OFFSET ($6 - 1) * $7;
+LIMIT $8 OFFSET ($7 - 1) * $8;

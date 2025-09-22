@@ -65,6 +65,9 @@ const openSubjectClass = createRoute({
                 description: 'Số lượng bản ghi trên mỗi trang',
                 default: '10',
             }),
+            trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
+                description: 'ID loại đối tượng đào tạo',
+            }),
         }),
     },
     responses: {
@@ -111,6 +114,9 @@ const fixedClassBySubjectClassSemester = createRoute({
                 description: 'Số lượng bản ghi trên mỗi trang',
                 default: '10',
             }),
+            trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
+                description: 'ID loại đối tượng đào tạo',
+            }),
         }),
     },
     responses: {
@@ -156,6 +162,9 @@ const studentBySubjectClassSemester = createRoute({
             pageSize: z.string().openapi('pageSize', {
                 description: 'Số lượng bản ghi trên mỗi trang',
                 default: '10',
+            }),
+            trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
+                description: 'ID loại đối tượng đào tạo',
             }),
         }),
     },
@@ -383,8 +392,15 @@ const uploadExcelImportScore = createRoute({
 })
 
 app.openapi(openSubjectClass, async (c) => {
-    const { semesterId, search, page, pageSize, trainingCourseId, trainingMajorId } =
-        c.req.valid('query')
+    const {
+        semesterId,
+        search,
+        page,
+        pageSize,
+        trainingCourseId,
+        trainingMajorId,
+        trainingObjectTypeId,
+    } = c.req.valid('query')
 
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
@@ -412,6 +428,7 @@ app.openapi(openSubjectClass, async (c) => {
             trainingCourseId ?? null,
             search ? `%${search}%` : null,
             trainingMajorId ?? null,
+            trainingObjectTypeId,
             Number(page),
             Number(pageSize)
         )
@@ -470,7 +487,8 @@ app.openapi(openSubjectClass, async (c) => {
 })
 
 app.openapi(fixedClassBySubjectClassSemester, async (c) => {
-    const { semesterId, search, page, pageSize, subjectClassId } = c.req.valid('query')
+    const { semesterId, search, page, pageSize, subjectClassId, trainingObjectTypeId } =
+        c.req.valid('query')
 
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
@@ -514,6 +532,7 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
             semesterYear,
             semesterType,
             subjectClassId,
+            trainingObjectTypeId,
             search ? `%${search}%` : null,
             Number(page),
             Number(pageSize)
@@ -580,7 +599,8 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
 })
 
 app.openapi(studentBySubjectClassSemester, async (c) => {
-    const { semesterId, search, page, pageSize, subjectClassId } = c.req.valid('query')
+    const { semesterId, search, page, pageSize, subjectClassId, trainingObjectTypeId } =
+        c.req.valid('query')
 
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
@@ -624,6 +644,7 @@ app.openapi(studentBySubjectClassSemester, async (c) => {
             semesterYear,
             semesterType,
             subjectClassId,
+            trainingObjectTypeId,
             search ? `%${search}%` : null,
             Number(page),
             Number(pageSize)
@@ -865,6 +886,7 @@ app.openapi(exportExcelListStudentSubjectClass, async (c) => {
 
     // Set response headers
     const sanitizedClassName = sanitizeFilename(subjectClass.name ?? 'Class')
+    // @ts-expect-error
     return c.body(excelBuffer, 200, {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
