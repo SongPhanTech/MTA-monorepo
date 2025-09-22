@@ -25,8 +25,14 @@ export default function QuaTrinhLuongForm({ expland, setExpland }: DomProps) {
         tag: 'PutQuaTrinhLuongModal',
     })
 
-    const { data: ngachList = [] } = useFindManyDM_Ngach()
-    const { data: bacLuongList = [] } = useFindManyDM_BacLuong()
+    const { data: ngachList = [] } = useFindManyDM_Ngach(
+        {},
+        { enabled: expland.includes('QuaTrinhLuong') }
+    )
+    const { data: bacLuongList = [] } = useFindManyDM_BacLuong(
+        {},
+        { enabled: expland.includes('QuaTrinhLuong') }
+    )
 
     const handleSave = (data: QuaTrinhLuong) => {
         const currentList = form.getFieldValue('QuaTrinhLuong') || []

@@ -47,7 +47,7 @@ import TrinhDoQuanLyNhaNuocForm from '@components/modal/quan-ly-ho-so/form/trinh
 import useSpinner from '@hooks/spinner'
 import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
 import type { Prisma } from '@workspace/db'
-import { useCreateUserProfile } from '@workspace/db/hooks'
+import { useCreateLecturer, useCreateStaff, useCreateUserProfile } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import ImgCrop from 'antd-img-crop'
 import axios from 'axios'
@@ -93,6 +93,10 @@ export type SubmitForm = Prisma.UserProfileGetPayload<{
     }
 }> & {
     file?: FileType
+    bLaGiangVien?: boolean
+    lecturerTypeId?: string
+    staffTypeId?: string
+    staffPositionId?: string
 }
 
 export default function CreateUserPage() {
@@ -100,7 +104,8 @@ export default function CreateUserPage() {
     const [search, setSearch] = useState<string>('')
     const [activeKey, setActiveKey] = useState('thongTinCoBan')
     const [expland, setExpland] = useState<string[]>(['thongTinCoBan', 'thongTinLienHe'])
-
+    const { mutateAsync: createLecturer } = useCreateLecturer()
+    const { mutateAsync: createStaff } = useCreateStaff()
     const [fileList, setFileList] = useState<UploadFile[]>([])
     const router = useRouter()
     const listTabs: itemType[] = [
@@ -375,8 +380,15 @@ export default function CreateUserPage() {
 
     const { mutateAsync: createUserProfile } = useCreateUserProfile()
 
-    const handleSubmit = async (values: SubmitForm) => {
+    const handleSubmit = async ({
+        bLaGiangVien,
+        lecturerTypeId,
+        staffTypeId,
+        staffPositionId,
+        ...values
+    }: SubmitForm) => {
         if (!values) return
+
         const fileName = values.avatar
         if (fileList.length > 0) {
             const file = fileList[0]
@@ -411,10 +423,13 @@ export default function CreateUserPage() {
             })
 
             if (res.status === 200) {
-                await createUserProfile({
+                const resProfile = await createUserProfile({
                     data: {
                         ...values,
                         id: res?.data?.Id,
+                        bLaCanBoNhanVien: !!(
+                            bLaGiangVien === true || values?.bLaCanBoNhanVien === true
+                        ),
                         dateOfBirth: values.dateOfBirth
                             ? dayjs(values.dateOfBirth).toISOString()
                             : null,
@@ -744,6 +759,27 @@ export default function CreateUserPage() {
                         ),
                     },
                 })
+                if (bLaGiangVien && resProfile && lecturerTypeId) {
+                    await createLecturer({
+                        data: {
+                            userProfileId: resProfile?.id,
+                            lecturerTypeId: lecturerTypeId,
+                            code: values.code,
+                            organizationId: values.sDM_DonViId || '',
+                        },
+                    })
+                }
+                if (values.bLaCanBoNhanVien && resProfile && staffTypeId && staffPositionId) {
+                    await createStaff({
+                        data: {
+                            userProfileId: resProfile?.id,
+                            staffPositionId: staffPositionId,
+                            staffTypeId: staffTypeId,
+                            code: values.code,
+                            organizationId: values.sDM_DonViId || '',
+                        },
+                    })
+                }
             }
 
             queryClient.invalidateQueries({

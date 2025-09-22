@@ -29,9 +29,18 @@ export default function QuaTrinhHocTapForm({ expland, setExpland }: DomProps) {
         tag: 'PutQuaTrinhHocTapModal',
     })
 
-    const { data: truongList = [] } = useFindManyDM_TruongDaoTaoBacDH()
-    const { data: nganhList = [] } = useFindManyDM_NganhHoc()
-    const { data: chuyenNganhList = [] } = useFindManyDM_ChuyenNganhDaoTaoBacDH()
+    const { data: truongList = [] } = useFindManyDM_TruongDaoTaoBacDH(
+        {},
+        { enabled: expland.includes('quaTrinhHocTap') }
+    )
+    const { data: nganhList = [] } = useFindManyDM_NganhHoc(
+        {},
+        { enabled: expland.includes('quaTrinhHocTap') }
+    )
+    const { data: chuyenNganhList = [] } = useFindManyDM_ChuyenNganhDaoTaoBacDH(
+        {},
+        { enabled: expland.includes('quaTrinhHocTap') }
+    )
 
     const handleSave = (data: QuaTrinhHocTap) => {
         const currentList = form.getFieldValue('quaTrinhHocTap') || []

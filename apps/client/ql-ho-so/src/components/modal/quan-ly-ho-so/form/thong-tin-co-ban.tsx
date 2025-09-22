@@ -12,8 +12,11 @@ import {
     useFindManyDM_QuocGia,
     useFindManyDM_TonGiao,
     useFindManyDM_TrinhDoHocVan,
+    useFindManyLecturerType,
+    useFindManyStaffPosition,
+    useFindManyStaffType,
 } from '@workspace/db/hooks'
-import { Checkbox, Col, Collapse, Form, Input, InputNumber, Row, Typography } from 'antd'
+import { Checkbox, Col, Collapse, Flex, Form, Input, InputNumber, Row, Typography } from 'antd'
 import dayjs from 'dayjs'
 import TreeSelect from '@/components/commons/tree-select'
 
@@ -32,7 +35,14 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const { data: trinhDoHocVan = [] } = useFindManyDM_TrinhDoHocVan()
     const { data: organizations = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(organizations)
-
+    const bLaGiangVien = Form.useWatch('bLaGiangVien', form) || false
+    const bLaCanBoNhanVien = Form.useWatch('bLaCanBoNhanVien', form)
+    const { data: lecturerTypeData = [] } = useFindManyLecturerType({}, { enabled: bLaGiangVien })
+    const { data: staffTypeData = [] } = useFindManyStaffType({}, { enabled: bLaCanBoNhanVien })
+    const { data: staffPositionData = [] } = useFindManyStaffPosition(
+        {},
+        { enabled: bLaCanBoNhanVien }
+    )
     const renderContent = () => {
         return (
             <div className="px-6">
@@ -287,29 +297,94 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                             />
                         </FormItem>
                     </Col>
-
-                    <Col lg={8} sm={12}>
-                        <FormItem
-                            form={form}
-                            name="bLaHocVien"
-                            label="Đối tượng"
-                            valuePropName="checked"
-                            className="mb-0"
-                        >
-                            <Checkbox>Bạn là học viên</Checkbox>
-                        </FormItem>
+                    <Col span={24}>
+                        <Flex>
+                            <FormItem
+                                form={form}
+                                name="bLaHocVien"
+                                label="Đối tượng"
+                                valuePropName="checked"
+                                className="mb-0 mr-4"
+                            >
+                                <Checkbox>Bạn là học viên</Checkbox>
+                            </FormItem>
+                            <FormItem
+                                form={form}
+                                name="bLaGiangVien"
+                                label=""
+                                valuePropName="checked"
+                                className="mb-0 mr-4"
+                            >
+                                <Checkbox>Bạn là giảng viên</Checkbox>
+                            </FormItem>
+                            <FormItem
+                                form={form}
+                                name="bLaCanBoNhanVien"
+                                label=""
+                                valuePropName="checked"
+                                className="mb-0"
+                            >
+                                <Checkbox>Bạn là cán bộ, nhân viên</Checkbox>
+                            </FormItem>
+                        </Flex>
                     </Col>
-                    <Col span={8}>
-                        <FormItem
-                            form={form}
-                            name="bLaCanBoNhanVien"
-                            label=""
-                            valuePropName="checked"
-                            className="mb-0"
-                        >
-                            <Checkbox>Bạn là giảng viên</Checkbox>
-                        </FormItem>
-                    </Col>
+                    {bLaGiangVien && (
+                        <Col span={12}>
+                            <FormItem
+                                form={form}
+                                name="lecturerTypeId"
+                                label="Loại giảng viên"
+                                className="mb-0"
+                                required={bLaGiangVien}
+                            >
+                                <Select
+                                    placeholder="Chọn loại giảng viên"
+                                    options={lecturerTypeData.map((i) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                />
+                            </FormItem>
+                        </Col>
+                    )}
+                    {bLaCanBoNhanVien && (
+                        <>
+                            <Col span={12}>
+                                <FormItem
+                                    form={form}
+                                    name="staffTypeId"
+                                    label="Loại cán bộ"
+                                    className="mb-0"
+                                    required={bLaCanBoNhanVien}
+                                >
+                                    <Select
+                                        placeholder="Chọn loại cán bộ"
+                                        options={staffTypeData.map((i) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        }))}
+                                    />
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    form={form}
+                                    name="staffPositionId"
+                                    label="Chức vụ cán bộ"
+                                    className="mb-0"
+                                    required={bLaCanBoNhanVien}
+                                >
+                                    <Select
+                                        placeholder="Chọn loại cán bộ"
+                                        options={staffPositionData.map((i) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        }))}
+                                    />
+                                </FormItem>
+                            </Col>
+                        </>
+                    )}
                 </Row>
                 <div className="mb-6 font-semibold text-base">CCCD/CMND</div>
                 <Row className="mb-6" gutter={[16, 16]}>

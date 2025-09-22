@@ -352,6 +352,10 @@ export default function UpdateUserPage() {
         trinhDoHocVanId,
         nhomMauId,
         ethnicityId,
+        bLaGiangVien,
+        lecturerTypeId,
+        staffTypeId,
+        staffPositionId,
         ...values
     }: SubmitForm) => {
         if (!values) return
@@ -387,7 +391,7 @@ export default function UpdateUserPage() {
                 sEmail: values.email,
             })
             if (res.status === 200) {
-                await sqlTransaction([
+                let listTransaction: any = [
                     {
                         model: 'UserProfile',
                         operation: 'update',
@@ -451,7 +455,9 @@ export default function UpdateUserPage() {
                             data: {
                                 ...values,
                                 bLaHocVien: values.bLaHocVien,
-                                bLaCanBoNhanVien: values.bLaCanBoNhanVien,
+                                bLaCanBoNhanVien: !!(
+                                    bLaGiangVien === true || values?.bLaCanBoNhanVien === true
+                                ),
                                 fullname:
                                     `${values.lastName || ''} ${values.firstName || ''}`.trim(),
                                 dateOfBirth: values.dateOfBirth
@@ -890,7 +896,124 @@ export default function UpdateUserPage() {
                             },
                         },
                     },
-                ])
+                ]
+                if (cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
+                    listTransaction = [
+                        ...listTransaction,
+                        {
+                            model: 'Lecturer',
+                            operation: 'update',
+                            data: {
+                                where: {
+                                    id: cccdUserProfileData?.lecturer?.id,
+                                },
+                                data: {
+                                    code: values?.code,
+                                    lecturerTypeId,
+                                    organizationId: values?.sDM_DonViId,
+                                },
+                            },
+                        },
+                    ]
+                }
+                if (!cccdUserProfileData?.lecturer && bLaGiangVien && lecturerTypeId) {
+                    listTransaction = [
+                        ...listTransaction,
+                        {
+                            model: 'Lecturer',
+                            operation: 'create',
+                            data: {
+                                data: {
+                                    userProfileId: id,
+                                    code: values?.code,
+                                    lecturerTypeId,
+                                    organizationId: values?.sDM_DonViId,
+                                },
+                            },
+                        },
+                    ]
+                }
+
+                if (cccdUserProfileData?.lecturer && !bLaGiangVien) {
+                    listTransaction = [
+                        ...listTransaction,
+                        {
+                            model: 'Lecturer',
+                            operation: 'delete',
+                            data: {
+                                where: {
+                                    id: cccdUserProfileData?.lecturer?.id,
+                                },
+                            },
+                        },
+                    ]
+                }
+
+                if (
+                    cccdUserProfileData?.staffs &&
+                    values.bLaCanBoNhanVien &&
+                    staffTypeId &&
+                    staffPositionId
+                ) {
+                    listTransaction = [
+                        ...listTransaction,
+                        {
+                            model: 'Staff',
+                            operation: 'update',
+                            data: {
+                                where: {
+                                    id: cccdUserProfileData?.staffs?.id,
+                                },
+                                data: {
+                                    code: values?.code,
+                                    staffPositionId,
+                                    staffTypeId,
+                                    organizationId: values?.sDM_DonViId,
+                                },
+                            },
+                        },
+                    ]
+                }
+                if (
+                    !cccdUserProfileData?.staffs &&
+                    values.bLaCanBoNhanVien &&
+                    staffTypeId &&
+                    staffPositionId
+                ) {
+                    listTransaction = [
+                        ...listTransaction,
+                        {
+                            model: 'Staff',
+                            operation: 'create',
+                            data: {
+                                data: {
+                                    userProfileId: id,
+                                    code: values?.code,
+                                    staffPositionId,
+                                    staffTypeId,
+                                    organizationId: values?.sDM_DonViId,
+                                },
+                            },
+                        },
+                    ]
+                }
+
+                if (cccdUserProfileData?.staffs && !values.bLaCanBoNhanVien) {
+                    listTransaction = [
+                        ...listTransaction,
+                        {
+                            model: 'Staff',
+                            operation: 'delete',
+                            data: {
+                                where: {
+                                    id: cccdUserProfileData?.staffs?.id,
+                                },
+                            },
+                        },
+                    ]
+                }
+
+                await sqlTransaction(listTransaction)
                 queryClient.invalidateQueries({
                     queryKey: ['UserProfile'],
                 })
@@ -943,6 +1066,8 @@ export default function UpdateUserPage() {
                 quaTrinhHocTap: true,
                 nhomMau: true,
                 trinhDoHocVan: true,
+                lecturer: true,
+                staffs: true,
             },
         },
         {
@@ -967,6 +1092,11 @@ export default function UpdateUserPage() {
                 CPVJoinDate: userData.CPVJoinDate ? dayjs(userData.CPVJoinDate) : null,
                 officialCPVDate: userData.officialCPVDate ? dayjs(userData.officialCPVDate) : null,
                 tenureDate: userData.tenureDate ? dayjs(userData.tenureDate) : null,
+                bLaCanBoNhanVien: !!userData.staffs,
+                bLaGiangVien: !!userData.lecturer,
+                staffPositionId: userData.staffs?.staffPositionId,
+                staffTypeId: userData.staffs?.staffTypeId,
+                lecturerTypeId: userData.lecturer?.lecturerTypeId,
             })
         },
         [form]

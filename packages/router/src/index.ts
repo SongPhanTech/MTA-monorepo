@@ -27,8 +27,6 @@ import {
     type LucideProps,
     ScrollText,
     Settings,
-    UserCog,
-    UserRoundPen,
 } from 'lucide-react'
 import { KHAO_THI_PERMISSION } from '../generated/khao-thi'
 import { PORTAL_PERMISSION } from '../generated/portal'
@@ -605,20 +603,20 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO,
                 description: 'Quản lý hồ sơ',
             },
-            {
-                id: QL_HO_SO_PERMISSION.QL_HO_SO_QL_GIANG_VIEN,
-                label: 'Quản lý giảng viên',
-                icon: UserRoundPen,
-                path: ROUTER_PATH.QL_HO_SO.QL_GIANG_VIEN,
-                description: 'Quản lý giảng viên',
-            },
-            {
-                id: QL_HO_SO_PERMISSION.QL_HO_SO_QL_CAN_BO,
-                label: 'Quản lý cán bộ nhân viên',
-                icon: UserCog,
-                path: ROUTER_PATH.QL_HO_SO.QL_CAN_BO,
-                description: 'Quản lý cán bộ nhân viên',
-            },
+            // {
+            //     id: QL_HO_SO_PERMISSION.QL_HO_SO_QL_GIANG_VIEN,
+            //     label: 'Quản lý giảng viên',
+            //     icon: UserRoundPen,
+            //     path: ROUTER_PATH.QL_HO_SO.QL_GIANG_VIEN,
+            //     description: 'Quản lý giảng viên',
+            // },
+            // {
+            //     id: QL_HO_SO_PERMISSION.QL_HO_SO_QL_CAN_BO,
+            //     label: 'Quản lý cán bộ nhân viên',
+            //     icon: UserCog,
+            //     path: ROUTER_PATH.QL_HO_SO.QL_CAN_BO,
+            //     description: 'Quản lý cán bộ nhân viên',
+            // },
             {
                 id: QL_HO_SO_PERMISSION.QL_HO_SO_DANH_MUC_HO_SO,
                 label: 'Danh mục hồ sơ',
