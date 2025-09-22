@@ -1,3 +1,4 @@
+import { CaretRightOutlined } from '@ant-design/icons'
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import type { DomProps } from '@constants/type'
@@ -119,6 +120,9 @@ export default function DoanDang({ expland, setExpland }: DomProps) {
                         children: renderContent(),
                     },
                 ]}
+                expandIcon={({ isActive }) => (
+                    <CaretRightOutlined style={{ fontSize: 16 }} rotate={isActive ? 90 : 0} />
+                )}
                 bordered={false}
                 expandIconPosition="end"
                 activeKey={expland}

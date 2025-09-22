@@ -7,6 +7,7 @@ import TrinhDoLyLuanChinhTriForm from '@components/modal/quan-ly-ho-so/form/trin
 import { ROUTER_PATH } from '@workspace/router'
 import {
     Button,
+    Divider,
     Flex,
     Form,
     type GetProp,
@@ -1220,7 +1221,8 @@ export default function UpdateUserPage() {
                             {listTabs.map((i) => {
                                 return (
                                     <div key={i.id} id={i.id}>
-                                        {i?.render}
+                                        <div>{i?.render}</div>
+                                        <Divider className="my-3" />
                                     </div>
                                 )
                             })}
