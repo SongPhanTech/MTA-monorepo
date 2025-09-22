@@ -30,8 +30,8 @@ export default function SubjectOpeningPlan() {
 
     const { data: res, refetch } = useOpenSubjectClass(
         {
-            page: '1',
-            pageSize: '10',
+            page: `${currentPage}`,
+            pageSize: `${numberOfPages}`,
             semesterId: selectedSemesterId as string,
             search: form.getFieldValue('searchText'),
             trainingCourseId: form.getFieldValue('trainingCourseId'),
@@ -357,7 +357,7 @@ export default function SubjectOpeningPlan() {
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,
-                            // total: count,
+                            total: res?.data?.count,
                             onChange: (page, pageSize) => {
                                 if (numberOfPages === pageSize) {
                                     setCurrentPage(page)

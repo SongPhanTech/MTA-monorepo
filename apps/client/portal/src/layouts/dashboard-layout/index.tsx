@@ -52,7 +52,7 @@ const DashboardLayout = ({ children, className }: { children: ReactNode; classNa
                         <div className="flex items-center justify-center text-center">
                             <Image src={logo_mta} alt="logo k01" className="w-10 h-10 mr-3" />
                             <span className="text-xl font-bold color text-primary">
-                                Quản lý dào tạo
+                                Quản lý đào tạo
                             </span>
                         </div>
                     }
