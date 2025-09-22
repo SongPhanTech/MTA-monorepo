@@ -1492,7 +1492,6 @@ model Building {
   trainingLocationId String?
   rooms              Room[]
 
-  @@unique([trainingLocationId, name])
   @@schema("ql-dao-tao")
 }
 
@@ -1520,7 +1519,6 @@ model Room {
   classSchedules ClassSchedule[]
   examSession    ExamSession[]
 
-  @@unique([buildingId, name])
   @@schema("ql-dao-tao")
 }
 

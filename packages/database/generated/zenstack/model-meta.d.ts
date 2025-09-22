@@ -7505,12 +7505,8 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
-                trainingLocationId_name: {
-                    name: string;
-                    fields: string[];
-                };
             };
-            attributes: ({
+            attributes: {
                 name: string;
                 args: ({
                     name: string;
@@ -7519,13 +7515,7 @@ declare const metadata: {
                     name: string;
                     value?: undefined;
                 })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
+            }[];
         };
         room: {
             name: string;
@@ -7744,12 +7734,8 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
-                buildingId_name: {
-                    name: string;
-                    fields: string[];
-                };
             };
-            attributes: ({
+            attributes: {
                 name: string;
                 args: ({
                     name: string;
@@ -7758,13 +7744,7 @@ declare const metadata: {
                     name: string;
                     value?: undefined;
                 })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
+            }[];
         };
         trainingField: {
             name: string;

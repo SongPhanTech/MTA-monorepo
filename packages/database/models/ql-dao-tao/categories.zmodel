@@ -86,7 +86,6 @@ model Building extends Base {
 
   rooms              Room[]
 
-  @@unique([trainingLocationId, name])
   @@schema("ql-dao-tao")
 }
 
@@ -111,7 +110,6 @@ model Room extends Base {
   classSchedules ClassSchedule[]
   examSession    ExamSession[]
 
-  @@unique([buildingId, name])
   @@schema("ql-dao-tao")
 }
 

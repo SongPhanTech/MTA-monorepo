@@ -313540,7 +313540,6 @@ export namespace Prisma {
   export type BuildingWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    trainingLocationId_name?: BuildingTrainingLocationIdNameCompoundUniqueInput
     AND?: BuildingWhereInput | BuildingWhereInput[]
     OR?: BuildingWhereInput[]
     NOT?: BuildingWhereInput | BuildingWhereInput[]
@@ -313554,7 +313553,7 @@ export namespace Prisma {
     trainingLocationId?: StringNullableFilter<"Building"> | string | null
     trainingLocation?: XOR<TrainingLocationNullableScalarRelationFilter, TrainingLocationWhereInput> | null
     rooms?: RoomListRelationFilter
-  }, "id" | "code" | "trainingLocationId_name">
+  }, "id" | "code">
 
   export type BuildingOrderByWithAggregationInput = {
     id?: SortOrder
@@ -313647,7 +313646,6 @@ export namespace Prisma {
   export type RoomWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
-    buildingId_name?: RoomBuildingIdNameCompoundUniqueInput
     AND?: RoomWhereInput | RoomWhereInput[]
     OR?: RoomWhereInput[]
     NOT?: RoomWhereInput | RoomWhereInput[]
@@ -313671,7 +313669,7 @@ export namespace Prisma {
     thesisProject?: ThesisProjectListRelationFilter
     classSchedules?: ClassScheduleListRelationFilter
     examSession?: ExamSessionListRelationFilter
-  }, "id" | "code" | "buildingId_name">
+  }, "id" | "code">
 
   export type RoomOrderByWithAggregationInput = {
     id?: SortOrder
@@ -362482,11 +362480,6 @@ export namespace Prisma {
     search: string
   }
 
-  export type BuildingTrainingLocationIdNameCompoundUniqueInput = {
-    trainingLocationId: string
-    name: string
-  }
-
   export type BuildingCountOrderByAggregateInput = {
     id?: SortOrder
     code?: SortOrder
@@ -362543,11 +362536,6 @@ export namespace Prisma {
     fields: RoomOrderByRelevanceFieldEnum | RoomOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
-  }
-
-  export type RoomBuildingIdNameCompoundUniqueInput = {
-    buildingId: string
-    name: string
   }
 
   export type RoomCountOrderByAggregateInput = {

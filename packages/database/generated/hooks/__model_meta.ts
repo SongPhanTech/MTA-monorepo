@@ -3935,9 +3935,6 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, trainingLocationId_name: {
-                    name: "trainingLocationId_name",
-                    fields: ["trainingLocationId", "name"]
                 },
             },
         },
@@ -4057,9 +4054,6 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, buildingId_name: {
-                    name: "buildingId_name",
-                    fields: ["buildingId", "name"]
                 },
             },
         },
