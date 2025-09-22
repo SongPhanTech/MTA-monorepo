@@ -1,6 +1,10 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { $Enums } from '@workspace/db'
-import { getFixedClassBySubjectClassSemester, getSubjectClassBySemester } from '@workspace/db/sql'
+import {
+    countSubjectClassBySemester,
+    getFixedClassBySubjectClassSemester,
+    getSubjectClassBySemester,
+} from '@workspace/db/sql'
 import { SubjectClassUpdateScalarSchema } from '@workspace/db/zod/models'
 import { read, utils } from 'xlsx'
 import { prisma } from '..'
@@ -415,6 +419,16 @@ app.openapi(openSubjectClass, async (c) => {
         data: OpenSubjectClass
     }[]
 
+    const count = await prisma.$queryRawTyped(
+        countSubjectClassBySemester(
+            semesterYear,
+            semesterType,
+            trainingCourseId ?? null,
+            search ? `%${search}%` : null,
+            trainingMajorId ?? null
+        )
+    )
+
     return c.json(
         {
             data: res
@@ -449,7 +463,7 @@ app.openapi(openSubjectClass, async (c) => {
                         )
                         .reduce((acc, curr) => acc + curr.fixedClassCount, 0),
                 })),
-            success: true,
+            count: Number(count[0]?.total),
         },
         200
     )
@@ -812,21 +826,12 @@ app.openapi(putManySubjectClass, async (c) => {
     const classes = c.req.valid('json')
 
     const updates = classes.map(async (cls) => {
-        try {
-            await prisma.subjectClass.update({
-                where: { id: cls.id },
-                data: cls,
-                select: { id: true },
-            })
-            return { success: true, id: cls.id }
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            // TODO: send to sentry
-            return { success: false, id: cls.id }
-        }
+        await prisma.subjectClass.update({
+            where: { id: cls.id },
+            data: cls,
+            select: { id: true },
+        })
+        return { success: true, id: cls.id }
     })
 
     const results = await Promise.all(updates)

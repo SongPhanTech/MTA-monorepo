@@ -208,17 +208,10 @@ app.openapi(graduationCheck, async (c) => {
                 suspended: false,
             },
             include: { subjectVersion: true },
-            orderBy: { createdAt: 'desc' },
+            orderBy: { createdAt: 'asc' },
         })
 
         let totalDebtCredit = 0
-
-        console.log(
-            rawSubjectScores.map((s) => ({
-                name: s.subjectVersion.name,
-                score: s.manualFinalScore || s.finalScore,
-            }))
-        )
 
         // kết quả những môn đạt với điểm cao nhất
         const subjectScoresMap = new Map<
@@ -250,9 +243,10 @@ app.openapi(graduationCheck, async (c) => {
             ) {
                 const entry = subjectScoresMap.get(subjectScore.subjectVersionId)
                 // skip if can't improve or score is already higher
-                if (!entry?.canImprove || entry.scoreBase10 > scoreBase10) {
+                if (entry && (!entry.canImprove || entry.scoreBase10 > scoreBase10)) {
                     continue
                 }
+
                 subjectScoresMap.set(subjectScore.subjectVersionId, {
                     ...subjectScore,
                     scoreBase10,
