@@ -24,3 +24,7 @@
 .ant-table-expanded-row:hover {
     background-color: aliceblue !important;
 }
+
+.ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+    background-color: #ffffff;
+}

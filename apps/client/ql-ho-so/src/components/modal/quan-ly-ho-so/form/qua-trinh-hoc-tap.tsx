@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons'
+import { CaretRightOutlined, PlusOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -29,9 +29,18 @@ export default function QuaTrinhHocTapForm({ expland, setExpland }: DomProps) {
         tag: 'PutQuaTrinhHocTapModal',
     })
 
-    const { data: truongList = [] } = useFindManyDM_TruongDaoTaoBacDH()
-    const { data: nganhList = [] } = useFindManyDM_NganhHoc()
-    const { data: chuyenNganhList = [] } = useFindManyDM_ChuyenNganhDaoTaoBacDH()
+    const { data: truongList = [] } = useFindManyDM_TruongDaoTaoBacDH(
+        {},
+        { enabled: expland.includes('quaTrinhHocTap') }
+    )
+    const { data: nganhList = [] } = useFindManyDM_NganhHoc(
+        {},
+        { enabled: expland.includes('quaTrinhHocTap') }
+    )
+    const { data: chuyenNganhList = [] } = useFindManyDM_ChuyenNganhDaoTaoBacDH(
+        {},
+        { enabled: expland.includes('quaTrinhHocTap') }
+    )
 
     const handleSave = (data: QuaTrinhHocTap) => {
         const currentList = form.getFieldValue('quaTrinhHocTap') || []
@@ -211,6 +220,9 @@ export default function QuaTrinhHocTapForm({ expland, setExpland }: DomProps) {
                         children: renderContent(),
                     },
                 ]}
+                expandIcon={({ isActive }) => (
+                    <CaretRightOutlined style={{ fontSize: 16 }} rotate={isActive ? 90 : 0} />
+                )}
                 bordered={false}
                 expandIconPosition="end"
                 className="bg-transparent"

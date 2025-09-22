@@ -1,3 +1,4 @@
+import { CaretRightOutlined } from '@ant-design/icons'
 import FormItem from '@components/commons/form-item'
 import type { DomProps } from '@constants/type'
 import type { SubmitForm } from '@pages/quan-ly-ho-so/tao-moi'
@@ -101,6 +102,9 @@ export default function ThongTinLienHe({ expland, setExpland }: DomProps) {
                         children: renderContent(),
                     },
                 ]}
+                expandIcon={({ isActive }) => (
+                    <CaretRightOutlined style={{ fontSize: 16 }} rotate={isActive ? 90 : 0} />
+                )}
                 bordered={false}
                 expandIconPosition="end"
                 activeKey={expland}
