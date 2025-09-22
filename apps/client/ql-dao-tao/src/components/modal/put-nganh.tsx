@@ -13,11 +13,12 @@ import {
     useFindUniqueTrainingField,
     useUpdateTrainingField,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Radio, TreeSelect } from 'antd'
+import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutTrainingField = TrainingField & {
     trainingObjectTypeIds: string[]
 }
@@ -190,9 +191,6 @@ const PutTrainingFieldModal = () => {
                         placeholder="Chọn đơn vị quản lý"
                         treeDefaultExpandAll
                         treeData={treeData}
-                        filterTreeNode={(input, node) =>
-                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
-                        }
                     />
                 </FormItem>
             </Col>

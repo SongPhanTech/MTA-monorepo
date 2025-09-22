@@ -1,24 +1,28 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
+import { useSession } from '@workspace/auth/react'
 import type { ArchivedAward, ArchivedCertificate } from '@workspace/db'
-import { useFindManySemester, useFindUniqueStudent } from '@workspace/db/hooks'
+import {
+    useFindManySemester,
+    useFindUniqueStudent,
+    useFindUniqueUserProfile,
+} from '@workspace/db/hooks'
 import { Button, Col, Divider, Flex, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Check, X } from 'lucide-react'
-import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 export default function StudentScoreClassPage() {
-    const router = useRouter()
-    const studentId = router.query.id as string
+    const { data: me } = useSession()
     const [_filters, _setFilters] = useState({
         searchText: '',
     })
 
+    const userId = me?.sDM_NhanVienId || ''
     const { onOpen } = useDisclosure<{
         dataTable: any
         dataStudent: any
@@ -26,6 +30,27 @@ export default function StudentScoreClassPage() {
         tag: 'ModalPrintToKQHT',
     })
 
+    const { data: userProfile } = useFindUniqueUserProfile(
+        {
+            where: {
+                id: userId,
+            },
+            select: {
+                educationAndTraining: {
+                    select: {
+                        id: true,
+                    },
+                    orderBy: {
+                        createdAt: 'desc',
+                    },
+                },
+            },
+        },
+        {
+            enabled: !!userId,
+        }
+    )
+    const studentId = userProfile?.educationAndTraining?.[0]?.id
     const { data: student } = useFindUniqueStudent(
         {
             where: {
@@ -65,7 +90,7 @@ export default function StudentScoreClassPage() {
         }
     )
 
-    const { data = [], refetch } = useFindManySemester({
+    const { data = [] } = useFindManySemester({
         where: {
             subjectClasses: {
                 some: {

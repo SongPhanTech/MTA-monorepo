@@ -1125,6 +1125,10 @@ const metadata = {
                     name: "suspended",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, repeated: {
+                    name: "repeated",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, certificates: {
                     name: "certificates",
                     type: "ArchivedCertificateOnStudentSubjectScore",
@@ -1800,6 +1804,10 @@ const metadata = {
                     name: "scoreToPassGraduation",
                     type: "Float",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
+                }, scoreToRetain: {
+                    name: "scoreToRetain",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 6 }] }],
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -1812,6 +1820,12 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'trainingObjectType',
+                }, trainingCourseRegulation: {
+                    name: "trainingCourseRegulation",
+                    type: "TrainingCourseRegulation",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingCourse',
                 }, fixedClass: {
                     name: "fixedClass",
                     type: "FixedClass",
@@ -1869,6 +1883,66 @@ const metadata = {
                     isArray: true,
                     backLink: 'trainingCourses',
                     isRelationOwner: true,
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        trainingCourseRegulation: {
+            name: 'TrainingCourseRegulation', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    backLink: 'trainingCourseRegulation',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, value: {
+                    name: "value",
+                    type: "Float",
                 },
             }, uniqueConstraints: {
                 id: {
@@ -2487,6 +2561,10 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, codeTkb: {
+                    name: "codeTkb",
+                    type: "String",
+                    isOptional: true,
                 }, examType: {
                     name: "examType",
                     type: "ExamType",
@@ -2935,6 +3013,98 @@ const metadata = {
                     isArray: true,
                     backLink: 'classRegisterSession',
                     isRelationOwner: true,
+                }, classRegisterLogs: {
+                    name: "classRegisterLogs",
+                    type: "ClassRegisterLogs",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'classRegisterSession',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        classRegisterLogs: {
+            name: 'ClassRegisterLogs', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, classRegisterSession: {
+                    name: "classRegisterSession",
+                    type: "ClassRegisterSession",
+                    isDataModel: true,
+                    backLink: 'classRegisterLogs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "classRegisterSessionId" },
+                }, classRegisterSessionId: {
+                    name: "classRegisterSessionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'classRegisterSession',
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    backLink: 'classRegisterLogs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    backLink: 'classRegisterLogs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, status: {
+                    name: "status",
+                    type: "ClassRegisterStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                    isOptional: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -3168,6 +3338,12 @@ const metadata = {
                     isArray: true,
                     backLink: 'subjectClasses',
                     isRelationOwner: true,
+                }, classRegisterLogs: {
+                    name: "classRegisterLogs",
+                    type: "ClassRegisterLogs",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -4937,6 +5113,12 @@ const metadata = {
                 }, diplomaVerificationApplication: {
                     name: "diplomaVerificationApplication",
                     type: "DiplomaVerificationApplication",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
+                }, classRegisterLogs: {
+                    name: "classRegisterLogs",
+                    type: "ClassRegisterLogs",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'student',

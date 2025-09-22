@@ -62,8 +62,12 @@ model StudentSubjectScore extends Base {
   // mà Phòng Đào tạo chưa nhận được kết quả học tập của học viên.
   // ~ if finalScore === null
 
-  examBanned                Boolean                                    @default(false) // cấm thi
-  suspended                 Boolean                                    @default(false) // đình chỉ
+  /// cấm thi
+  examBanned                Boolean                                    @default(false)
+  /// đình chỉ
+  suspended                 Boolean                                    @default(false)
+  /// lưu ban
+  repeated                  Boolean                                    @default(false)
 
   certificates              ArchivedCertificateOnStudentSubjectScore[]
   awards                    ArchivedAwardOnStudentSubjectScore[]
@@ -174,42 +178,56 @@ model Milestone extends Base {
 
 /// Khoá học
 model TrainingCourse extends Base {
-  name                   String
-  semesterStart          Semester                 @relation(fields: [semesterStartId], references: [id]) // Kỳ học bắt đầu
-  semesterStartId        String
-  startYear              Int?
-  endYear                Int?
-  academicYear           String?
-  maxTrainingTime        Float?
-  admissionQuota         Int?
+  name                     String
+  semesterStart            Semester                   @relation(fields: [semesterStartId], references: [id]) // Kỳ học bắt đầu
+  semesterStartId          String
+  startYear                Int?
+  endYear                  Int?
+  academicYear             String?
+  maxTrainingTime          Float?
+  admissionQuota           Int?
 
-  baseScore              AcademicRankingBaseType
+  baseScore                AcademicRankingBaseType
 
-  coef_1                 Float                    @default(0.1) // Hệ số 1
-  coef_2                 Float                    @default(0.3) // Hệ số 2
-  coef_3                 Float                    @default(0.6) // Hệ số 3
+  coef_1                   Float                      @default(0.1) // Hệ số 1
+  coef_2                   Float                      @default(0.3) // Hệ số 2
+  coef_3                   Float                      @default(0.6) // Hệ số 3
 
-  scoreToTakeExam        Float                    @default(0) // Điểm tối thiểu để được thi (điểm liệt)
-  scoreToPass            Float                    @default(4) // Điểm tối thiểu để qua môn
-  scoreToPassConditional Float                    @default(5) // Điểm tối thiểu để qua môn điều kiện (5 đối với QS, =scoreToPass đối với DS)
+  scoreToTakeExam          Float                      @default(0) // Điểm tối thiểu để được thi (điểm liệt)
+  scoreToPass              Float                      @default(4) // Điểm tối thiểu để qua môn
+  scoreToPassConditional   Float                      @default(5) // Điểm tối thiểu để qua môn điều kiện (5 đối với QS, =scoreToPass đối với DS)
 
-  scoreToTakeGraduation  Float                    @default(5) // Điểm liệt môn tốt nghiệp
-  scoreToPassGraduation  Float                    @default(5.5) // Điểm tối để qua môn tốt nghiệp
+  scoreToTakeGraduation    Float                      @default(5) // Điểm liệt môn tốt nghiệp
+  scoreToPassGraduation    Float                      @default(5.5) // Điểm tối để qua môn tốt nghiệp
 
-  trainingObjectType     TrainingObjectType       @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
-  trainingObjectTypeId   String
+  scoreToRetain            Float                      @default(6.9)
 
-  fixedClass             FixedClass[]
-  scoreConverts          ScoreConvert[]
-  academicRankingConvert AcademicRankingConvert[]
-  scholarships           Scholarship[]
-  academicWarningRule    AcademicWarningRule[]
-  academicActionConfig   AcademicActionConfig[]
-  notifications          Notification[]  // Thông báo cho khoá
-  surveyObjectTypes      SurveyObjectType[]
-  classRegisterSession   ClassRegisterSession[]
+  trainingObjectType       TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
+  trainingObjectTypeId     String
+
+  trainingCourseRegulation TrainingCourseRegulation[]
+  fixedClass               FixedClass[]
+  scoreConverts            ScoreConvert[]
+  academicRankingConvert   AcademicRankingConvert[]
+  scholarships             Scholarship[]
+  academicWarningRule      AcademicWarningRule[]
+  academicActionConfig     AcademicActionConfig[]
+  notifications            Notification[]  // Thông báo cho khoá
+  surveyObjectTypes        SurveyObjectType[]
+  classRegisterSession     ClassRegisterSession[]
+
   @@schema("ql-dao-tao")
 }
+
+/// Quy chế động của khoá
+model TrainingCourseRegulation extends Base {
+  trainingCourse   TrainingCourse @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
+  name             String
+  value            Float
+  @@schema("ql-dao-tao")
+}
+
 /// lớp quản lý
 model FixedClass extends Base {
   name                     String
@@ -362,6 +380,7 @@ enum SubjectVersionType {
 /// Phiên bản môn học
 model SubjectVersion extends Base {
   name                     String
+  codeTkb                  String?
   examType                 ExamType
   type                     SubjectVersionType     @default(Normal) // loại môn học
   credit                   Int // số tín chỉ
@@ -472,41 +491,39 @@ model TrainingBlockSubject extends Base {
 }
 
 model ClassRegisterSession extends Base {
-  name            String
-  startDate       DateTime
-  endDate         DateTime
-  semester        Semester         @relation(fields: [semesterId], references: [id])
-  semesterId      String
-  maxCredit       Int?             // tối đa số tín chỉ được đăng ký
+  name              String
+  startDate         DateTime
+  endDate           DateTime
+  semester          Semester            @relation(fields: [semesterId], references: [id])
+  semesterId        String
+  maxCredit         Int?             // tối đa số tín chỉ được đăng ký
 
-  trainingCourses TrainingCourse[]
-  // classRegisterLogs ClassRegisterLogs[]
+  trainingCourses   TrainingCourse[]
+  classRegisterLogs ClassRegisterLogs[]
   @@schema("ql-dao-tao")
 }
 
-// enum ClassRegisterStatus {
-//   PENDING_REGISTER
-//   REGISTERED
-//   FAILED_REGISTER
+enum ClassRegisterStatus {
+  PENDING
+  CANCELLED
+  SUCCESS
+  FAILED
 
-//   PENDING_UNREGISTER
-//   UNREGISTERED
-//   FAILED_UNREGISTER
-//   @@schema("ql-dao-tao")
-// }
+  @@schema("ql-dao-tao")
+}
 
-// model ClassRegisterLogs extends Base {
-//   classRegisterSession   ClassRegisterSession @relation(fields: [classRegisterSessionId], references: [id])
-//   classRegisterSessionId String
-//   subjectClass           SubjectClass         @relation(fields: [subjectClassId], references: [id])
-//   subjectClassId         String
-//   student                Student              @relation(fields: [studentId], references: [id])
-//   studentId              String
-//   status                 ClassRegisterStatus
-//   reason                 String?
+model ClassRegisterLogs extends Base {
+  classRegisterSession   ClassRegisterSession @relation(fields: [classRegisterSessionId], references: [id])
+  classRegisterSessionId String
+  subjectClass           SubjectClass         @relation(fields: [subjectClassId], references: [id])
+  subjectClassId         String
+  student                Student              @relation(fields: [studentId], references: [id])
+  studentId              String
+  status                 ClassRegisterStatus  @default(PENDING)
+  reason                 String?
 
-//   @@schema("ql-dao-tao")
-// }
+  @@schema("ql-dao-tao")
+}
 
 enum SubjectClassSchedule {
   MORNING
@@ -585,7 +602,7 @@ model SubjectClass extends Base {
   defenseRooms               Room[]                @relation("DefenseRooms") // DS phòng -> chọn phòng tự động
 
   surveyObjectTypes          SurveyObjectType[]
-  // classRegisterLogs          ClassRegisterLogs[]
+  classRegisterLogs          ClassRegisterLogs[]
 
   @@schema("ql-dao-tao")
 }

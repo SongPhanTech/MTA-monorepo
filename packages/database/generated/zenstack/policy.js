@@ -279,6 +279,19 @@ const policy = {
                 update: {},
             },
         },
+        trainingCourseRegulation: {
+            modelLevel: {
+                read: { guard: TrainingCourseRegulation_read, },
+                create: { guard: TrainingCourseRegulation_create, inputChecker: TrainingCourseRegulation_create_input, },
+                update: { guard: TrainingCourseRegulation_update, },
+                postUpdate: { guard: TrainingCourseRegulation_postUpdate, },
+                delete: { guard: TrainingCourseRegulation_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         fixedClass: {
             modelLevel: {
                 read: { guard: FixedClass_read, },
@@ -390,6 +403,19 @@ const policy = {
                 update: { guard: ClassRegisterSession_update, },
                 postUpdate: { guard: ClassRegisterSession_postUpdate, },
                 delete: { guard: ClassRegisterSession_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        classRegisterLogs: {
+            modelLevel: {
+                read: { guard: ClassRegisterLogs_read, },
+                create: { guard: ClassRegisterLogs_create, inputChecker: ClassRegisterLogs_create_input, },
+                update: { guard: ClassRegisterLogs_update, },
+                postUpdate: { guard: ClassRegisterLogs_postUpdate, },
+                delete: { guard: ClassRegisterLogs_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -2889,6 +2915,7 @@ const policy = {
         semester: { hasValidation: false },
         milestone: { hasValidation: false },
         trainingCourse: { hasValidation: false },
+        trainingCourseRegulation: { hasValidation: false },
         fixedClass: { hasValidation: false },
         curriculum: { hasValidation: false },
         curriculumVersion: { hasValidation: false },
@@ -2898,6 +2925,7 @@ const policy = {
         subjectInGroup: { hasValidation: false },
         trainingBlockSubject: { hasValidation: false },
         classRegisterSession: { hasValidation: false },
+        classRegisterLogs: { hasValidation: false },
         subjectClass: { hasValidation: false },
         classSchedule: { hasValidation: false },
         trainingObjectType: { hasValidation: false },
@@ -4728,6 +4756,84 @@ function $check_TrainingCourse_delete(input, context) {
     }
     return false;
 }
+function TrainingCourseRegulation_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_TrainingCourseRegulation_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TrainingCourseRegulation_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TrainingCourseRegulation_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TrainingCourseRegulation_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function TrainingCourseRegulation_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TrainingCourseRegulation_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TrainingCourseRegulation_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_TrainingCourseRegulation_postUpdate(input, context) {
+    return true;
+}
+function TrainingCourseRegulation_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TrainingCourseRegulation_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
 function FixedClass_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
@@ -5423,6 +5529,84 @@ function ClassRegisterSession_delete(context, db) {
     return { OR: [] };
 }
 function $check_ClassRegisterSession_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterLogs_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ClassRegisterLogs_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterLogs_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterLogs_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterLogs_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ClassRegisterLogs_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterLogs_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterLogs_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ClassRegisterLogs_postUpdate(input, context) {
+    return true;
+}
+function ClassRegisterLogs_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterLogs_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

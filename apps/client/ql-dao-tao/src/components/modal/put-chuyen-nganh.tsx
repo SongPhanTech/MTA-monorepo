@@ -13,11 +13,12 @@ import {
     useFindUniqueTrainingMajor,
     useUpdateTrainingMajor,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Radio, TreeSelect } from 'antd'
+import { Col, Form, Input, InputNumber, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutTrainingMajor = TrainingMajor & {
     trainingObjectTypeIds: string[]
 }
@@ -213,9 +214,6 @@ const PutTrainingMajorModal = () => {
                         placeholder="Chọn đơn vị quản lý"
                         treeDefaultExpandAll
                         treeData={treeData}
-                        filterTreeNode={(input, node) =>
-                            (node.label as string).toLowerCase().includes(input?.toLowerCase())
-                        }
                     />
                 </FormItem>
             </Col>

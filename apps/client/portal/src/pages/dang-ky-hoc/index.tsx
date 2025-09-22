@@ -12,7 +12,7 @@ import {
 } from '@workspace/libs/api/portal'
 import type { GetClassesInfo200ItemSubjectClassItem } from '@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem'
 import type { GetClassesInfo200ItemSubjectClassItemClassSchedulesItem } from '@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItemClassSchedulesItem'
-import { Button, Checkbox, message, Tabs } from 'antd'
+import { Button, Checkbox, message, Popconfirm, Tabs } from 'antd'
 import dayjs from 'dayjs'
 import { CircleXIcon, LogOutIcon } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -358,8 +358,11 @@ const DanhSachMonDangKy = ({
                             width: 120,
                             fixed: 'right',
                             render: (_, record) => (
-                                <p
-                                    onClick={async () => {
+                                <Popconfirm
+                                    title="Bạn có chắc chắn muốn huỷ đăng ký học phần này?"
+                                    okText="Huỷ"
+                                    cancelText="Đóng"
+                                    onConfirm={async () => {
                                         try {
                                             await classUnregister({
                                                 sessionId,
@@ -373,7 +376,7 @@ const DanhSachMonDangKy = ({
                                 >
                                     <CircleXIcon />
                                     Huỷ
-                                </p>
+                                </Popconfirm>
                             ),
                         },
                     ]}

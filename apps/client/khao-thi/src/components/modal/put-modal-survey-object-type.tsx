@@ -24,9 +24,10 @@ import {
     useFindUniqueSurveyObjectType,
     useUpdateSurveyObjectType,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Row, Tabs, TreeSelect } from 'antd'
+import { Col, Form, Input, message, Row, Tabs } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutSurveyObjectType = SurveyObjectType & {
     Organizations: string[]
     TrainingFields: string[]
@@ -299,11 +300,6 @@ const PutSurveyObjectTypeModal = () => {
                                     maxTagCount={'responsive'}
                                     treeDefaultExpandAll
                                     treeData={treeData}
-                                    filterTreeNode={(input, node) =>
-                                        (node?.label as string)
-                                            ?.toLowerCase()
-                                            ?.includes(input?.toLowerCase())
-                                    }
                                 />
                             </FormItem>
                         </Col>

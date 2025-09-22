@@ -11,7 +11,7 @@ import {
     useFindUniqueCurriculum,
     useUpdateCurriculum,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Radio, TreeSelect } from 'antd'
+import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -20,6 +20,7 @@ import './index.css'
 import DocumentPaths from '@components/commons/documentPaths'
 import { buildOrgTree } from '@lib/utils'
 import type { DocumentFile } from '@workspace/db'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutCurriculum = Curriculum & {
     documentFiles?: DocumentFile[]
 }

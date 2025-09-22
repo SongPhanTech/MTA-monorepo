@@ -90,8 +90,8 @@ export default defineConfig({
         },
     },
     portal_api: {
-        input: 'http://localhost:3002/openapi',
-        // input: 'https://api.portal.mta.swantech.vn/openapi',
+        // input: 'http://localhost:3002/openapi',
+        input: 'https://api.portal.mta.swantech.vn/openapi',
         output: {
             client: 'react-query',
             httpClient: 'fetch',

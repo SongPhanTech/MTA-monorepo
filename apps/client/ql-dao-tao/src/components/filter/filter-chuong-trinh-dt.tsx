@@ -28,11 +28,11 @@ import {
     Row,
     //   Select,
     Space,
-    TreeSelect,
     Typography,
 } from 'antd'
 import { Search, X } from 'lucide-react'
 import { useState } from 'react'
+import TreeSelect from '@/components/commons/tree-select'
 
 const { Text } = Typography
 
@@ -171,11 +171,6 @@ const FilterChuongTrinhDT = (props: Props) => {
                                     showSearch
                                     treeDefaultExpandAll
                                     treeData={treeData}
-                                    filterTreeNode={(input, node) =>
-                                        (node?.label as string)
-                                            ?.toLowerCase()
-                                            ?.includes(input?.toLowerCase())
-                                    }
                                 />
                             </Form.Item>
                         </Col>

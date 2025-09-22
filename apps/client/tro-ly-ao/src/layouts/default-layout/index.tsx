@@ -6,7 +6,7 @@ import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
-import { SearchSystem } from '@workspace/ui'
+import { SearchSystem, WidgetChatbot } from '@workspace/ui'
 import { Layout, theme } from 'antd'
 import Image from 'next/image'
 import { type ReactNode, useEffect, useState } from 'react'
@@ -15,9 +15,7 @@ import { IdleTimerProvider } from 'react-idle-timer'
 const { Header, Content } = Layout
 
 const DefaultLayout = ({ children, className }: { children: ReactNode; className?: string }) => {
-    const [collapsed, setCollapsed] = useState(() => {
-        return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
-    })
+    const [collapsed, setCollapsed] = useState(false)
 
     const menus = useMenuList()
 
@@ -31,17 +29,21 @@ const DefaultLayout = ({ children, className }: { children: ReactNode; className
         token: { colorBgContainer },
     } = theme.useToken()
 
-    const handleCollapsed = (value?: boolean) => {
+    const handleCollapsed = (newCollapsed: boolean) => {
+        setCollapsed(newCollapsed)
         if (typeof window !== 'undefined') {
-            const newValue = value ?? localStorage.getItem('collapsed') === 'true'
-            setCollapsed(newValue)
-            localStorage.setItem('collapsed', newValue.toString())
+            localStorage.setItem('collapsed', newCollapsed.toString())
         }
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+    // Initialize from localStorage on mount
     useEffect(() => {
-        handleCollapsed()
+        if (typeof window !== 'undefined') {
+            const savedState = localStorage.getItem('collapsed')
+            if (savedState !== null) {
+                setCollapsed(savedState === 'true')
+            }
+        }
     }, [])
 
     return (
@@ -85,6 +87,7 @@ const DefaultLayout = ({ children, className }: { children: ReactNode; className
                             background: colorBgContainer,
                         }}
                     >
+                        <WidgetChatbot />
                         {children}
                     </Content>
                 </Layout>

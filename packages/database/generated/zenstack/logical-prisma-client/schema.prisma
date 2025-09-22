@@ -105,6 +105,15 @@ enum SubjectRequirementType {
   @@schema("ql-dao-tao")
 }
 
+enum ClassRegisterStatus {
+  PENDING
+  CANCELLED
+  SUCCESS
+  FAILED
+
+  @@schema("ql-dao-tao")
+}
+
 enum SubjectClassSchedule {
   MORNING
   AFTERNOON
@@ -850,8 +859,12 @@ model StudentSubjectScore {
   examPostponed             Boolean                                    @default(false)
   exempted                  Boolean                                    @default(false)
   withdrew                  Boolean                                    @default(false)
+  /// cấm thi
   examBanned                Boolean                                    @default(false)
+  /// đình chỉ
   suspended                 Boolean                                    @default(false)
+  /// lưu ban
+  repeated                  Boolean                                    @default(false)
   certificates              ArchivedCertificateOnStudentSubjectScore[]
   awards                    ArchivedAwardOnStudentSubjectScore[]
   studentThesisRegistration StudentThesisRegistration[]                @relation("ScoreToRegistration")
@@ -1026,41 +1039,63 @@ model Milestone {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model TrainingCourse {
-  id                     String                   @id() @default(cuid())
-  code                   String?                  @unique()
-  active                 Boolean                  @default(true)
-  description            String?                  @db.Text()
-  deletedAt              DateTime?
-  createdAt              DateTime                 @default(now())
-  updatedAt              DateTime                 @default(now()) @updatedAt()
-  name                   String
-  semesterStart          Semester                 @relation(fields: [semesterStartId], references: [id])
-  semesterStartId        String
-  startYear              Int?
-  endYear                Int?
-  academicYear           String?
-  maxTrainingTime        Float?
-  admissionQuota         Int?
-  baseScore              AcademicRankingBaseType
-  coef_1                 Float                    @default(0.1)
-  coef_2                 Float                    @default(0.3)
-  coef_3                 Float                    @default(0.6)
-  scoreToTakeExam        Float                    @default(0)
-  scoreToPass            Float                    @default(4)
-  scoreToPassConditional Float                    @default(5)
-  scoreToTakeGraduation  Float                    @default(5)
-  scoreToPassGraduation  Float                    @default(5.5)
-  trainingObjectType     TrainingObjectType       @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId   String
-  fixedClass             FixedClass[]
-  scoreConverts          ScoreConvert[]
-  academicRankingConvert AcademicRankingConvert[]
-  scholarships           Scholarship[]
-  academicWarningRule    AcademicWarningRule[]
-  academicActionConfig   AcademicActionConfig[]
-  notifications          Notification[]
-  surveyObjectTypes      SurveyObjectType[]
-  classRegisterSession   ClassRegisterSession[]
+  id                       String                     @id() @default(cuid())
+  code                     String?                    @unique()
+  active                   Boolean                    @default(true)
+  description              String?                    @db.Text()
+  deletedAt                DateTime?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @default(now()) @updatedAt()
+  name                     String
+  semesterStart            Semester                   @relation(fields: [semesterStartId], references: [id])
+  semesterStartId          String
+  startYear                Int?
+  endYear                  Int?
+  academicYear             String?
+  maxTrainingTime          Float?
+  admissionQuota           Int?
+  baseScore                AcademicRankingBaseType
+  coef_1                   Float                      @default(0.1)
+  coef_2                   Float                      @default(0.3)
+  coef_3                   Float                      @default(0.6)
+  scoreToTakeExam          Float                      @default(0)
+  scoreToPass              Float                      @default(4)
+  scoreToPassConditional   Float                      @default(5)
+  scoreToTakeGraduation    Float                      @default(5)
+  scoreToPassGraduation    Float                      @default(5.5)
+  scoreToRetain            Float                      @default(6.9)
+  trainingObjectType       TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId     String
+  trainingCourseRegulation TrainingCourseRegulation[]
+  fixedClass               FixedClass[]
+  scoreConverts            ScoreConvert[]
+  academicRankingConvert   AcademicRankingConvert[]
+  scholarships             Scholarship[]
+  academicWarningRule      AcademicWarningRule[]
+  academicActionConfig     AcademicActionConfig[]
+  notifications            Notification[]
+  surveyObjectTypes        SurveyObjectType[]
+  classRegisterSession     ClassRegisterSession[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// Quy chế động của khoá
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model TrainingCourseRegulation {
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  trainingCourse   TrainingCourse @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId String
+  name             String
+  value            Float
 
   @@schema("ql-dao-tao")
 }
@@ -1216,6 +1251,7 @@ model SubjectVersion {
   createdAt                DateTime               @default(now())
   updatedAt                DateTime               @default(now()) @updatedAt()
   name                     String
+  codeTkb                  String?
   examType                 ExamType
   type                     SubjectVersionType     @default(Normal)
   credit                   Int
@@ -1328,20 +1364,44 @@ model TrainingBlockSubject {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model ClassRegisterSession {
-  id              String           @id() @default(cuid())
-  code            String?          @unique()
-  active          Boolean          @default(true)
-  description     String?          @db.Text()
-  deletedAt       DateTime?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @default(now()) @updatedAt()
-  name            String
-  startDate       DateTime
-  endDate         DateTime
-  semester        Semester         @relation(fields: [semesterId], references: [id])
-  semesterId      String
-  maxCredit       Int?
-  trainingCourses TrainingCourse[]
+  id                String              @id() @default(cuid())
+  code              String?             @unique()
+  active            Boolean             @default(true)
+  description       String?             @db.Text()
+  deletedAt         DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @default(now()) @updatedAt()
+  name              String
+  startDate         DateTime
+  endDate           DateTime
+  semester          Semester            @relation(fields: [semesterId], references: [id])
+  semesterId        String
+  maxCredit         Int?
+  trainingCourses   TrainingCourse[]
+  classRegisterLogs ClassRegisterLogs[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ClassRegisterLogs {
+  id                     String               @id() @default(cuid())
+  code                   String?              @unique()
+  active                 Boolean              @default(true)
+  description            String?              @db.Text()
+  deletedAt              DateTime?
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @default(now()) @updatedAt()
+  classRegisterSession   ClassRegisterSession @relation(fields: [classRegisterSessionId], references: [id])
+  classRegisterSessionId String
+  subjectClass           SubjectClass         @relation(fields: [subjectClassId], references: [id])
+  subjectClassId         String
+  student                Student              @relation(fields: [studentId], references: [id])
+  studentId              String
+  status                 ClassRegisterStatus  @default(PENDING)
+  reason                 String?
 
   @@schema("ql-dao-tao")
 }
@@ -1393,6 +1453,7 @@ model SubjectClass {
   expertProfile              ExpertProfile[]
   defenseRooms               Room[]                @relation("DefenseRooms")
   surveyObjectTypes          SurveyObjectType[]
+  classRegisterLogs          ClassRegisterLogs[]
 
   @@schema("ql-dao-tao")
 }
@@ -1888,6 +1949,7 @@ model Student {
   thesisRegistrations            StudentThesisRegistration[]
   examSession                    ExamSession[]
   diplomaVerificationApplication DiplomaVerificationApplication[]
+  classRegisterLogs              ClassRegisterLogs[]
   notes                          Note[]
   noteFolders                    NoteFolder[]
 

@@ -59,7 +59,6 @@ function Notification() {
         <div
             style={{
                 height: '100%',
-                maxHeight: '550px',
                 overflowY: 'auto',
                 paddingRight: '8px',
             }}

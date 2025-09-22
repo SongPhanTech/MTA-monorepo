@@ -22,13 +22,14 @@ import {
     useFindUniqueFixedClass,
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Radio, TreeSelect } from 'antd'
+import { Col, Form, Input, InputNumber, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
 import { buildOrgTree } from '@lib/utils'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null
     trainingMajorId: string | null
@@ -389,9 +390,6 @@ const PutFixedClassModal = () => {
                         placeholder="Chọn chương trình đào tạo"
                         treeDefaultExpandAll
                         treeData={curriculumTreeData}
-                        filterTreeNode={(input, node) =>
-                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
-                        }
                     />
                 </FormItem>
             </Col>
@@ -435,9 +433,6 @@ const PutFixedClassModal = () => {
                         placeholder="Chọn đơn vị quản lý"
                         treeDefaultExpandAll
                         treeData={treeData}
-                        filterTreeNode={(input, node) =>
-                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
-                        }
                         onChange={(val) =>
                             handleChangeFieldOrganization(
                                 ['trainingMajorId', 'curriculumVersionId'],

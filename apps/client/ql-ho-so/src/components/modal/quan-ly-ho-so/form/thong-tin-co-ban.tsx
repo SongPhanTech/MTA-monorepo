@@ -13,18 +13,9 @@ import {
     useFindManyDM_TonGiao,
     useFindManyDM_TrinhDoHocVan,
 } from '@workspace/db/hooks'
-import {
-    Checkbox,
-    Col,
-    Collapse,
-    Form,
-    Input,
-    InputNumber,
-    Row,
-    TreeSelect,
-    Typography,
-} from 'antd'
+import { Checkbox, Col, Collapse, Form, Input, InputNumber, Row, Typography } from 'antd'
 import dayjs from 'dayjs'
+import TreeSelect from '@/components/commons/tree-select'
 
 dayjs.locale('vi')
 const { Title, Text } = Typography
@@ -293,11 +284,6 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                                 placeholder="Chọn đơn vị quản lý"
                                 treeDefaultExpandAll
                                 treeData={treeData}
-                                filterTreeNode={(input, node) =>
-                                    (node.label as string)
-                                        .toLowerCase()
-                                        .includes(input?.toLowerCase())
-                                }
                             />
                         </FormItem>
                     </Col>

@@ -15,7 +15,7 @@ import {
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Dropdown, Flex, Form, Input, Menu, message, Row, Tag, TreeSelect } from 'antd'
+import { Button, Col, Dropdown, Flex, Form, Input, Menu, message, Row, Tag } from 'antd'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -24,6 +24,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import TreeSelect from '@/components/commons/tree-select'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -319,11 +320,6 @@ export default function UserProfilePageDs() {
                                         placeholder="Chọn đơn vị quản lý"
                                         treeDefaultExpandAll
                                         treeData={treeData}
-                                        filterTreeNode={(input, node) =>
-                                            (node?.label as string)
-                                                ?.toLowerCase()
-                                                ?.includes(input?.toLowerCase())
-                                        }
                                         onChange={(val) => handleFilterChange('sDM_DonViId', val)}
                                         allowClear
                                         className="h-8"

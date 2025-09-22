@@ -9,7 +9,7 @@ import {
     useFindUniqueThesisProject,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Select, TreeSelect } from 'antd'
+import { Col, Form, Input, InputNumber, message, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -19,7 +19,7 @@ import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import { buildOrgTree } from '@lib/utils'
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
-
+import TreeSelect from '@/components/commons/tree-select'
 export type PutThesisProject = ThesisProject
 dayjs.locale('vi')
 
@@ -251,9 +251,6 @@ const PutThesisProject = () => {
                         showSearch
                         treeDefaultExpandAll
                         treeData={treeData}
-                        filterTreeNode={(input, node) =>
-                            (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
-                        }
                     />
                 </FormItem>
             </Col>

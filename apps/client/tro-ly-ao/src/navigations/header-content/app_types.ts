@@ -20,11 +20,11 @@ const APPS_TYPES = [
         path: ROUTER_PATH.TRO_LY_AO.XU_LY_VAN_BAN,
         isShow: true,
     },
-    {
-        key: 'QUAN_TRI_DU_LIEU',
-        label: 'Quản trị dữ liệu',
-        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU,
-        isShow: true,
-    },
+    // {
+    //     key: 'QUAN_TRI_DU_LIEU',
+    //     label: 'Quản trị dữ liệu',
+    //     path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU,
+    //     isShow: true,
+    // },
 ]
 export default APPS_TYPES

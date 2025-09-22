@@ -26,13 +26,13 @@ import {
     useFindManyTrainingMajor,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
-import { Col, Flex, Form, Row, Tooltip, TreeSelect } from 'antd'
+import { Col, Flex, Form, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookCheckIcon } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
+import TreeSelect from '@/components/commons/tree-select'
 export default function GraduationDecisionDiploma() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -383,11 +383,6 @@ export default function GraduationDecisionDiploma() {
                                                 handleFilterChange('managementOrganizationId', val)
                                             }
                                             treeData={treeData}
-                                            filterTreeNode={(input, node) =>
-                                                (node.label as string)
-                                                    .toLowerCase()
-                                                    .includes(input.toLowerCase())
-                                            }
                                         />
                                     </Form.Item>
                                 </Col>

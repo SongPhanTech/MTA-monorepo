@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Flex, Form, message, Row, Select, Tag, TreeSelect } from 'antd'
+import { Button, Checkbox, Col, Flex, Form, message, Row, Select, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import TableCollapse from '@components/commons/tableCollapse'
@@ -20,6 +20,7 @@ import {
 import { useCalculateStudentSemesterResultJson } from '@workspace/libs/api/training'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
+import TreeSelect from '@/components/commons/tree-select'
 
 dayjs.locale('vi')
 
@@ -310,11 +311,6 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                                 handleFilterChange('managementOrganizationId', val)
                                             }
                                             treeData={treeData}
-                                            filterTreeNode={(input, node) =>
-                                                (node?.label as string)
-                                                    ?.toLowerCase()
-                                                    ?.includes(input?.toLowerCase())
-                                            }
                                         />
                                     </Form.Item>
                                 </Col>

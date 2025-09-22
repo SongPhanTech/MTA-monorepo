@@ -30,11 +30,13 @@ const baseSchema = z.object({
     scoreToPassConditional: z.number().default(5),
     scoreToTakeGraduation: z.number().default(5),
     scoreToPassGraduation: z.number().default(5.5),
+    scoreToRetain: z.number().default(6.9),
 }
 ).strict();
 const relationSchema = z.object({
     semesterStart: z.record(z.unknown()),
     trainingObjectType: z.record(z.unknown()),
+    trainingCourseRegulation: z.array(z.unknown()).optional(),
     fixedClass: z.array(z.unknown()).optional(),
     scoreConverts: z.array(z.unknown()).optional(),
     academicRankingConvert: z.array(z.unknown()).optional(),
@@ -97,7 +99,8 @@ export const TrainingCoursePrismaUpdateSchema = z.object({
     scoreToPass: z.union([z.number().default(4), z.record(z.unknown())]),
     scoreToPassConditional: z.union([z.number().default(5), z.record(z.unknown())]),
     scoreToTakeGraduation: z.union([z.number().default(5), z.record(z.unknown())]),
-    scoreToPassGraduation: z.union([z.number().default(5.5), z.record(z.unknown())])
+    scoreToPassGraduation: z.union([z.number().default(5.5), z.record(z.unknown())]),
+    scoreToRetain: z.union([z.number().default(6.9), z.record(z.unknown())])
 }).partial().passthrough();
 
 
@@ -105,7 +108,7 @@ export const TrainingCoursePrismaUpdateSchema = z.object({
  * `TrainingCourse` schema for create operations excluding foreign keys and relations.
  */
 export const TrainingCourseCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, coef_1: true, coef_2: true, coef_3: true, scoreToTakeExam: true, scoreToPass: true, scoreToPassConditional: true, scoreToTakeGraduation: true, scoreToPassGraduation: true
+    id: true, active: true, createdAt: true, updatedAt: true, coef_1: true, coef_2: true, coef_3: true, scoreToTakeExam: true, scoreToPass: true, scoreToPassConditional: true, scoreToTakeGraduation: true, scoreToPassGraduation: true, scoreToRetain: true
 });
 
 

@@ -9,12 +9,13 @@ import {
     useFindUniqueSubject,
     useUpdateSubject,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, TreeSelect } from 'antd'
+import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { buildOrgTree } from '@lib/utils'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutSubjectFormType = Subject
 dayjs.locale('vi')
 const PutSubjectModal = () => {

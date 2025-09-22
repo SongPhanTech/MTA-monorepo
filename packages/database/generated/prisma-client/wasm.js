@@ -313,7 +313,8 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   exempted: 'exempted',
   withdrew: 'withdrew',
   examBanned: 'examBanned',
-  suspended: 'suspended'
+  suspended: 'suspended',
+  repeated: 'repeated'
 };
 
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum = {
@@ -435,7 +436,21 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   scoreToPassConditional: 'scoreToPassConditional',
   scoreToTakeGraduation: 'scoreToTakeGraduation',
   scoreToPassGraduation: 'scoreToPassGraduation',
+  scoreToRetain: 'scoreToRetain',
   trainingObjectTypeId: 'trainingObjectTypeId'
+};
+
+exports.Prisma.TrainingCourseRegulationScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  trainingCourseId: 'trainingCourseId',
+  name: 'name',
+  value: 'value'
 };
 
 exports.Prisma.FixedClassScalarFieldEnum = {
@@ -534,6 +549,7 @@ exports.Prisma.SubjectVersionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   name: 'name',
+  codeTkb: 'codeTkb',
   examType: 'examType',
   type: 'type',
   credit: 'credit',
@@ -611,6 +627,21 @@ exports.Prisma.ClassRegisterSessionScalarFieldEnum = {
   endDate: 'endDate',
   semesterId: 'semesterId',
   maxCredit: 'maxCredit'
+};
+
+exports.Prisma.ClassRegisterLogsScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  classRegisterSessionId: 'classRegisterSessionId',
+  subjectClassId: 'subjectClassId',
+  studentId: 'studentId',
+  status: 'status',
+  reason: 'reason'
 };
 
 exports.Prisma.SubjectClassScalarFieldEnum = {
@@ -3883,6 +3914,14 @@ exports.Prisma.TrainingCourseOrderByRelevanceFieldEnum = {
   trainingObjectTypeId: 'trainingObjectTypeId'
 };
 
+exports.Prisma.TrainingCourseRegulationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  trainingCourseId: 'trainingCourseId',
+  name: 'name'
+};
+
 exports.Prisma.FixedClassOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3950,6 +3989,7 @@ exports.Prisma.SubjectVersionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   name: 'name',
+  codeTkb: 'codeTkb',
   objectives: 'objectives',
   learningOutcome: 'learningOutcome',
   structure: 'structure',
@@ -3989,6 +4029,16 @@ exports.Prisma.ClassRegisterSessionOrderByRelevanceFieldEnum = {
   description: 'description',
   name: 'name',
   semesterId: 'semesterId'
+};
+
+exports.Prisma.ClassRegisterLogsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  classRegisterSessionId: 'classRegisterSessionId',
+  subjectClassId: 'subjectClassId',
+  studentId: 'studentId',
+  reason: 'reason'
 };
 
 exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
@@ -5938,6 +5988,13 @@ exports.SubjectRequirementType = exports.$Enums.SubjectRequirementType = {
   Optional: 'Optional'
 };
 
+exports.ClassRegisterStatus = exports.$Enums.ClassRegisterStatus = {
+  PENDING: 'PENDING',
+  CANCELLED: 'CANCELLED',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED'
+};
+
 exports.SubjectClassSchedule = exports.$Enums.SubjectClassSchedule = {
   MORNING: 'MORNING',
   AFTERNOON: 'AFTERNOON',
@@ -6272,6 +6329,7 @@ exports.Prisma.ModelName = {
   Semester: 'Semester',
   Milestone: 'Milestone',
   TrainingCourse: 'TrainingCourse',
+  TrainingCourseRegulation: 'TrainingCourseRegulation',
   FixedClass: 'FixedClass',
   Curriculum: 'Curriculum',
   CurriculumVersion: 'CurriculumVersion',
@@ -6281,6 +6339,7 @@ exports.Prisma.ModelName = {
   SubjectInGroup: 'SubjectInGroup',
   TrainingBlockSubject: 'TrainingBlockSubject',
   ClassRegisterSession: 'ClassRegisterSession',
+  ClassRegisterLogs: 'ClassRegisterLogs',
   SubjectClass: 'SubjectClass',
   ClassSchedule: 'ClassSchedule',
   TrainingObjectType: 'TrainingObjectType',

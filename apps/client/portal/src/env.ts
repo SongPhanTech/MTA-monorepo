@@ -6,16 +6,13 @@ export const env = createEnv({
      * Specify your server-side environment variables schema here. This way you can ensure the app
      * isn't built with invalid env vars.
      */
-    server: {
-        ENVIRONMENT: z.enum(['develop', 'test', 'product']).default('develop'),
-    },
-
     /**
      * Specify your client-side environment variables schema here. This way you can ensure the app
      * isn't built with invalid env vars. To expose them to the client, prefix them with
      * `NEXT_PUBLIC_`.
      */
     client: {
+        NEXT_PUBLIC_ENVIRONMENT: z.enum(['develop', 'test', 'product', 'local']),
         NEXT_PUBLIC_APP_CODE: z.string(),
         NEXT_PUBLIC_API_BASE_URL: z.string().url(),
         NEXT_PUBLIC_API_MODEL_BASE_URL: z.string().url(),
@@ -31,7 +28,7 @@ export const env = createEnv({
      */
     runtimeEnv: {
         NEXT_PUBLIC_APP_CODE: process.env.NEXT_PUBLIC_APP_CODE,
-        ENVIRONMENT: process.env.ENVIRONMENT,
+        NEXT_PUBLIC_ENVIRONMENT: process.env.NEXT_PUBLIC_ENVIRONMENT,
         NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
         NEXT_PUBLIC_API_MODEL_BASE_URL: process.env.NEXT_PUBLIC_API_MODEL_BASE_URL,
         NEXT_PUBLIC_MY_ACCOUNT: process.env.NEXT_PUBLIC_MY_ACCOUNT,

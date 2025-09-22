@@ -16,13 +16,13 @@ import {
     useUpdateSubject,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip, TreeSelect } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
+import TreeSelect from '@/components/commons/tree-select'
 export default function SubjectList() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -270,11 +270,6 @@ export default function SubjectList() {
                                             maxTagCount={'responsive'}
                                             treeDefaultExpandAll
                                             treeData={treeData}
-                                            filterTreeNode={(input, node) =>
-                                                (node?.label as string)
-                                                    ?.toLowerCase()
-                                                    ?.includes(input?.toLowerCase())
-                                            }
                                             onChange={(val) =>
                                                 handleFilterChange('managementOrganizationId', val)
                                             }
@@ -324,7 +319,7 @@ export default function SubjectList() {
                             },
                             {
                                 title: 'Mã TKB',
-                                dataIndex: '',
+                                dataIndex: 'codeTkb',
                                 width: 120,
                                 align: 'center',
                             },

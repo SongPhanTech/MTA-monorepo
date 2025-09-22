@@ -42,24 +42,29 @@ export default function AcademicRankingConvertPage() {
         where: {
             active: true,
             academicRankingConvert: {
-                every: {
-                    active:
-                        filters.active === 'true'
-                            ? true
-                            : filters.active === 'false'
-                              ? false
-                              : undefined,
+                some: {
+                    ...(filters.active === 'true' ? { active: true } : {}),
+                    ...(filters.active === 'false' ? { active: false } : {}),
                     ...(filters.searchText && filters.searchText.trim() !== ''
                         ? {
-                              AND: [
+                              OR: [
                                   {
-                                      base10Min: {
-                                          lte: Number(filters.searchText),
-                                      },
+                                      AND: [
+                                          {
+                                              base10Min: {
+                                                  lte: Number(filters.searchText) || 0,
+                                              },
+                                          },
+                                          {
+                                              base10Max: {
+                                                  gte: Number(filters.searchText) || 9999,
+                                              },
+                                          },
+                                      ],
                                   },
                                   {
-                                      base10Max: {
-                                          gte: Number(filters.searchText),
+                                      classification: {
+                                          contains: filters.searchText,
                                       },
                                   },
                               ],
@@ -72,6 +77,33 @@ export default function AcademicRankingConvertPage() {
             academicRankingConvert: {
                 where: {
                     context: RankingContext.STUDYING,
+                    ...(filters.active === 'true' ? { active: true } : {}),
+                    ...(filters.active === 'false' ? { active: false } : {}),
+                    ...(filters.searchText && filters.searchText.trim() !== ''
+                        ? {
+                              OR: [
+                                  {
+                                      AND: [
+                                          {
+                                              base10Min: {
+                                                  lte: Number(filters.searchText) || 0,
+                                              },
+                                          },
+                                          {
+                                              base10Max: {
+                                                  gte: Number(filters.searchText) || 9999,
+                                              },
+                                          },
+                                      ],
+                                  },
+                                  {
+                                      classification: {
+                                          contains: filters.searchText,
+                                      },
+                                  },
+                              ],
+                          }
+                        : {}),
                 },
                 orderBy: [{ trainingCourse: { createdAt: 'desc' } }, { base10Max: 'desc' }],
             },
@@ -162,10 +194,6 @@ export default function AcademicRankingConvertPage() {
                             <Flex>
                                 <Input
                                     id="search"
-                                    type="number"
-                                    min={0}
-                                    max={10}
-                                    step={0.1}
                                     onChange={(e) =>
                                         handleFilterChange('searchText', e.target.value)
                                     }

@@ -14,7 +14,7 @@ import {
     useFindUniqueTrainingBlockSubject,
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, InputNumber, message, Radio, Select, TreeSelect } from 'antd'
+import { Checkbox, Col, Form, InputNumber, message, Radio, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -22,6 +22,7 @@ import { useSubjectRequirementTypeOptions } from '@hooks/subjectRequirementType'
 import { buildOrgTree } from '@lib/utils'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
+import TreeSelect from '@/components/commons/tree-select'
 export type PutTrainingBlockSubject = TrainingBlockSubject
 dayjs.locale('vi')
 
@@ -182,11 +183,6 @@ const PutTrainingBlockSubject = () => {
                             treeDefaultExpandAll
                             onChange={(val) => handleFilterChange('managementOrganizationId', val)}
                             treeData={treeData}
-                            filterTreeNode={(input, node) =>
-                                (node?.label as string)
-                                    ?.toLowerCase()
-                                    ?.includes(input?.toLowerCase())
-                            }
                         />
                     </Form.Item>
                 </Col>

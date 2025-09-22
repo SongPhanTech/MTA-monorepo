@@ -1,8 +1,8 @@
-import { CopyOutlined, FileSyncOutlined } from '@ant-design/icons'
+import { CopyOutlined, FileSyncOutlined, StopOutlined } from '@ant-design/icons'
 import ChatLayout from '@layouts/chat-layout'
-import { Button, Col, Input, message, Row, Select, Space, Typography } from 'antd'
+import { Button, Col, Input, message, Row, Select, Typography } from 'antd'
 import type { ReactElement } from 'react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { fetchXuLyVanBan } from '@/api/xu-ly-van-ban'
 import { readStreamToText } from '@/utils'
 
@@ -67,7 +67,12 @@ function Page() {
         return cleanOutputText(await readStreamToText(response.body))
     }
 
-    const handleProcess = async () => {
+    const handleProcess = useCallback(async () => {
+        if (!inputText.trim()) {
+            message.warning('Vui lòng nhập nội dung cần xử lý')
+            return
+        }
+
         const controller = new AbortController()
         setAbortController(controller)
         try {
@@ -92,7 +97,7 @@ function Page() {
             setLoading(false)
             setAbortController(null)
         }
-    }
+    }, [inputText, mode, handleExtraction, handleFixSpelling, handleSummarize, handleTranslate])
 
     const handleCopy = (text: string) => {
         navigator.clipboard
@@ -106,18 +111,22 @@ function Page() {
             })
     }
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault()
+            handleProcess()
+        }
+    }
+
     return (
-        <div style={{ padding: 20 }}>
-            <Row justify="center" style={{ marginBottom: 16 }}>
-                <Col>
-                    <Title level={2} style={{ textAlign: 'center' }}>
-                        Xử lý văn bản
-                    </Title>
-                    <Space>
+        <div className="h-full flex flex-col overflow-auto p-4 sm:p-6 lg:p-8 max-h-screen">
+            <Row justify="center" className="mb-4 sm:mb-6">
+                <Col xs={24} sm={20} md={16} lg={12} xl={10}>
+                    <div className="flex flex-row items-center justify-center gap-3 sm:gap-4">
                         <Select
                             value={mode}
                             onChange={(value: Mode) => setMode(value)}
-                            style={{ width: 200 }}
+                            className="flex-1 sm:w-auto sm:min-w-48 max-w-xs"
                             size="large"
                             disabled={loading}
                         >
@@ -127,65 +136,60 @@ function Page() {
                             <Option value="extraction">Trích lược</Option>
                         </Select>
                         <Button
-                            icon={<FileSyncOutlined />}
+                            icon={loading ? <StopOutlined /> : <FileSyncOutlined />}
                             type="primary"
-                            onClick={handleProcess}
-                            loading={loading}
+                            onClick={loading ? () => abortController?.abort() : handleProcess}
+                            loading={false}
                             size="large"
-                            disabled={loading}
+                            danger={loading}
+                            className="flex-shrink-0"
                         >
-                            {loading ? 'Đang xử lý...' : 'Xử lý'}
+                            {loading ? '' : 'Xử lý'}
                         </Button>
-                        {loading && (
-                            <Button
-                                icon={<div className="w-3 h-3 bg-white" />}
-                                type="primary"
-                                shape="circle"
-                                danger
-                                size="large"
-                                onClick={() => {
-                                    abortController?.abort()
-                                }}
-                            />
-                        )}
-                    </Space>
+                    </div>
                 </Col>
             </Row>
 
-            <Row gutter={16}>
-                <Col span={12}>
-                    <div className="relative group">
+            <Row gutter={[16, 12]} className="flex-1 lg:h-full">
+                <Col xs={24} lg={12}>
+                    <div className="relative group h-full">
+                        <div className="text-sm font-medium text-gray-600 mb-2">Văn bản gốc</div>
                         <TextArea
                             size="large"
-                            rows={15}
+                            rows={6}
                             value={inputText}
                             onChange={(e) => setInputText(e.target.value)}
-                            placeholder="Nhập văn bản tại đây"
+                            onKeyDown={handleKeyDown}
+                            placeholder="Nhập văn bản tại đây (Ctrl+Enter để xử lý)"
                             disabled={loading}
+                            className="resize-none lg:!h-80 pr-12"
                         />
                         <Button
                             size="small"
                             icon={<CopyOutlined />}
-                            className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-primary text-white"
+                            className="absolute top-8 right-2 opacity-0 group-hover:opacity-100 sm:opacity-100 transition-opacity duration-200 bg-primary text-white shadow-md z-10"
                             onClick={() => handleCopy(inputText)}
                             type="text"
                         />
                     </div>
                 </Col>
 
-                <Col span={12}>
-                    <div className="relative group">
+                <Col xs={24} lg={12}>
+                    <div className="relative group h-full">
+                        <div className="text-sm font-medium text-gray-600 mb-2">Kết quả xử lý</div>
                         <TextArea
                             size="large"
-                            rows={15}
+                            rows={6}
                             value={outputText}
                             readOnly
                             placeholder="Kết quả sẽ hiển thị tại đây"
+                            onKeyDown={handleKeyDown}
+                            className="resize-none lg:!h-80 pr-12"
                         />
                         <Button
                             size="small"
                             icon={<CopyOutlined />}
-                            className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-primary text-white"
+                            className="absolute top-8 right-2 opacity-0 group-hover:opacity-100 sm:opacity-100 transition-opacity duration-200 bg-primary text-white shadow-md z-10"
                             onClick={() => handleCopy(outputText)}
                             type="text"
                         />
