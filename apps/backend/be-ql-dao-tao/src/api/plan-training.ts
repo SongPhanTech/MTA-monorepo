@@ -6,7 +6,6 @@ import { UploadExcelModel } from '../dto/upload-excel.dto'
 import { exportPCGDdata } from '../services/lecturer'
 import { fillExcelTemplate, getBufferFromUrl } from '../services/template.service'
 import { getCurrentDateForReport } from '../utils'
-import { writeFileSync } from 'node:fs'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -163,11 +162,6 @@ app.openapi(importPhanCongGiangDay, async (c) => {
         const danhSachMaLopNienChe = new Set<string>()
         const danhSachMaPhongHoc = new Set<string>()
 
-        const mapGV = new Map<string, string>()
-        const mapMonHoc = new Map<string, string>()
-        const mapLopNienChe = new Map<string, string>()
-        const mapPhongHoc = new Map<string, string>()
-        const mapKhoaHoc = new Map<string, string>()
         for (const row of rowData) {
             // Xử lý từng dòng dữ liệu ở đây
             const [
@@ -193,26 +187,12 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                     .map((e) => e.replace(/\([^)]*\)/g, '').trim())
                     // biome-ignore lint/suspicious/useIterableCallbackReturn: <dung cho set>
                     .forEach((e) => danhSachTenGV.add(e))
-                mapGV.set(
-                    maGV.trim(),
-                    tenGV.split(',').map((e) => e.replace(/\([^)]*\)/g, '').trim())?.[0] || ''
-                )
             }
             if (maMon && tenMon) {
                 danhSachMaTKBMonHoc.add(maMon.trim())
-
-                mapMonHoc.set(maMon.trim(), tenMon.trim())
             }
             if (maLopNienChe && tenLopNienChe) {
                 danhSachMaLopNienChe.add(maLopNienChe.trim())
-                mapLopNienChe.set(maLopNienChe, tenLopNienChe.trim())
-                const khoaHoc = maLopNienChe.trim().match(/\d+\s*\d+/g)
-                if (khoaHoc && khoaHoc.length > 0) {
-                    const lastMatch = khoaHoc[khoaHoc.length - 1]
-                    if (lastMatch) {
-                        mapKhoaHoc.set(lastMatch, `Khóa ${lastMatch}`)
-                    }
-                }
             }
             if (hocChung) {
                 hocChung
@@ -223,89 +203,9 @@ app.openapi(importPhanCongGiangDay, async (c) => {
             }
             if (maPhongHoc && tenPhong) {
                 danhSachMaPhongHoc.add(maPhongHoc.trim())
-                mapPhongHoc.set(maPhongHoc.trim(), tenPhong.trim())
             }
         }
 
-        await prisma.$transaction(
-            async (tx) => {
-                const idToaNhaKhac = 'cmful4b8m003omo01xa9nh0du'
-                const idKhuVucA = 'cmff25klr001fp4017vofxfjd'
-                for (const [code, name] of mapPhongHoc) {
-                    if (code.split('-').length > 1) {
-                        const codeToaNha = code.split('-')[0]?.trim()
-                        let building = await tx.building.findFirst({
-                            where: {
-                                code: codeToaNha,
-                            },
-                        })
-                        if (!building) {
-                            building = await tx.building.create({
-                                data: {
-                                    code: codeToaNha,
-                                    trainingLocationId: idKhuVucA,
-                                    name: `Tòa nhà ${codeToaNha}`,
-                                },
-                            })
-                        }
-                        await tx.room.upsert({
-                            create: {
-                                name: name,
-                                code: code,
-                                buildingId: building.id,
-                                capacity: 100,
-                            },
-                            where: {
-                                code: code,
-                            },
-                            update: {
-                                name: name,
-                                buildingId: building.id,
-                                capacity: 100,
-                            },
-                        })
-                    } else {
-                        await tx.room.create({
-                            data: {
-                                name: name,
-                                code: code,
-                                buildingId: idToaNhaKhac,
-                                capacity: 100,
-                            },
-                        })
-                    }
-                }
-            },
-            {
-                maxWait: 200000,
-                timeout: 1500000,
-            }
-        )
-
-        writeFileSync(
-            './danhSachPhongHoc.json',
-            JSON.stringify(Object.fromEntries(mapPhongHoc), null, 2)
-        )
-        writeFileSync(
-            './danhSachLopNienChe.json',
-            JSON.stringify(Object.fromEntries(mapLopNienChe), null, 2)
-        )
-        writeFileSync(
-            './danhSachMonHoc.json',
-            JSON.stringify(Object.fromEntries(mapMonHoc), null, 2)
-        )
-        writeFileSync('./danhSachGV.json', JSON.stringify(Object.fromEntries(mapGV), null, 2))
-        writeFileSync(
-            './danhSachKhoaHoc.json',
-            JSON.stringify(Object.fromEntries(mapKhoaHoc), null, 2)
-        )
-
-        return c.json(
-            {
-                message: 'Saved',
-            },
-            200
-        )
         const danhSachGV = await prisma.lecturer.findMany({
             where: {
                 userProfile: {
