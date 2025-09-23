@@ -22,7 +22,7 @@ function Page() {
                     </div>
                 </Col>
                 <Col xs={24} lg={6}>
-                    <div className="bg-white rounded shadow h-96 flex flex-col">
+                    <div className="bg-white rounded shadow h-full flex flex-col">
                         <div className="p-4">
                             <Title level={4}>Thông báo</Title>
                         </div>
