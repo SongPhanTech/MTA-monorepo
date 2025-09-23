@@ -30,6 +30,8 @@ export default function StudentCourseByPlan({
     subjectClassId,
 }: StudentCourseByPlanProps) {
     const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+
     const { getScheduleLabel } = useScheduleOptions()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [initialSelectedKeys, setInitialSelectedKeys] = useState<React.Key[]>([])
@@ -61,9 +63,9 @@ export default function StudentCourseByPlan({
             semesterId: semesterId || '',
             subjectClassId: subjectClassId || '',
             search: filters.searchText || '',
-            page: '1',
-            pageSize: '10',
-            trainingObjectTypeId,
+            page: `${currentPage}`,
+            pageSize: `${numberOfPages}`,
+            trainingObjectTypeId: trainingObjectTypeId || '',
         },
         {
             query: {
@@ -264,7 +266,16 @@ export default function StudentCourseByPlan({
                     scroll={{ x: 'max-content' }}
                     pagination={{
                         current: currentPage,
-                        onChange: setCurrentPage,
+                        pageSize: numberOfPages,
+                        total: studentData?.data?.count ?? 0,
+                        onChange: (page, pageSize) => {
+                            if (numberOfPages === pageSize) {
+                                setCurrentPage(page)
+                            } else {
+                                setCurrentPage(1)
+                                setNumberOfPages(pageSize)
+                            }
+                        },
                     }}
                     rowSelection={{
                         selectedRowKeys,

@@ -25,6 +25,8 @@ interface FixedClassProps {
 
 export default function FixedClass({ semesterId, subjectClassId }: FixedClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+
     const { getScheduleLabel } = useScheduleOptions()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
@@ -55,7 +57,7 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
             semesterId: semesterId || '',
             subjectClassId: subjectClassId || '',
             search: filters.searchText || '',
-            page: '1',
+            page: `${currentPage}`,
             pageSize: '10',
             trainingObjectTypeId: trainingObjectTypeId || '',
         },
@@ -186,7 +188,16 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
                 ]}
                 pagination={{
                     current: currentPage,
-                    onChange: setCurrentPage,
+                    pageSize: numberOfPages,
+                    total: fixedClass?.data?.count ?? 0,
+                    onChange: (page, pageSize) => {
+                        if (numberOfPages === pageSize) {
+                            setCurrentPage(page)
+                        } else {
+                            setCurrentPage(1)
+                            setNumberOfPages(pageSize)
+                        }
+                    },
                 }}
             />
             <Flex justify="end" style={{ marginTop: 16 }}>
