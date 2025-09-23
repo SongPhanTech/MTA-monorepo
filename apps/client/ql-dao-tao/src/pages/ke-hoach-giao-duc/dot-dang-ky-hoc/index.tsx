@@ -227,7 +227,7 @@ export default function ClassRegisterSession() {
                                 align: 'center',
                                 dataIndex: 'name',
                                 type: 'input',
-                                width: 120,
+                                width: 150,
                                 fixed: 'left',
                             },
                             {

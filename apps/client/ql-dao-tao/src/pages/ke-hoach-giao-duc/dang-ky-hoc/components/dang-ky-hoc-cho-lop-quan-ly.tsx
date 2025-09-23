@@ -1,5 +1,6 @@
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
+import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
@@ -33,6 +34,7 @@ export default function RegisterClassManager({
         searchText: '',
     })
     const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
+
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { data: subjectClassData = [], refetch } = useFindManySubjectClass({
@@ -248,10 +250,19 @@ export default function RegisterClassManager({
                         title: 'Lớp QL đã ĐK',
                         align: 'center',
                         width: 150,
-                        render: (record: SubjectClassData) =>
-                            record.fixedClasses.map((e) => {
-                                return <div className="text-left">- {e.name}</div>
-                            }),
+                        render: (__, record: any) => {
+                            return record?.fixedClasses.length ? (
+                                <TextTruncate
+                                    arr={record?.fixedClasses.map((i: any) => {
+                                        return { key: i?.id, label: i.name }
+                                    })}
+                                    key="fixedClasses"
+                                    record={record}
+                                />
+                            ) : (
+                                ''
+                            )
+                        },
                     },
                 ]}
             />

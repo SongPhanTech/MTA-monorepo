@@ -322,7 +322,7 @@ export default function UserProfilePageDs() {
                                         treeData={treeData}
                                         onChange={(val) => handleFilterChange('sDM_DonViId', val)}
                                         allowClear
-                                        className="h-8"
+                                        className="h-8 w-[250px]"
                                     />
                                 </Form.Item>
                             </Flex>

@@ -172,8 +172,8 @@ const genExamFax = createRoute({
     operationId: 'gen-exam-fax',
     path: '/gex-exam-fax',
     tags: ['Exam'],
-    summary: 'Sinh fax cho kỳ thi',
-    description: 'Sinh fax cho kỳ thi',
+    summary: 'Sinh phách cho kỳ thi',
+    description: 'Sinh phách cho kỳ thi',
     method: 'post',
     request: {
         body: {
@@ -194,14 +194,14 @@ const genExamFax = createRoute({
                                 description: 'Bước nhảy',
                             }),
                         })
-                        .openapi('gen-exam-fax'),
+                        .openapi('gen-exam-code'),
                 },
             },
         },
     },
     responses: {
         200: {
-            description: 'Generate Exam fax result',
+            description: 'Generate Exam code result',
             content: {
                 'application/json': {
                     schema: z
@@ -209,7 +209,7 @@ const genExamFax = createRoute({
                             success: z.boolean(),
                             message: z.string(),
                         })
-                        .openapi('gen-exam-fax-result'),
+                        .openapi('gen-exam-code-result'),
                 },
             },
         },
@@ -280,7 +280,7 @@ app.openapi(genExamFax, async (c) => {
     )
 
     if (count < totalCandidate) {
-        return c.json({ message: 'Số lượng fax không đủ cho thí sinh' }, 400)
+        return c.json({ message: 'Số lượng phách không đủ cho thí sinh' }, 400)
     }
 
     const faxes = Array.from({ length: count }, (_, i) => start + i * step)
@@ -300,8 +300,8 @@ const saveExamFaxes = createRoute({
     operationId: 'save-exam-faxes',
     path: '/save-exam-faxes',
     tags: ['Exam'],
-    summary: 'Lưu điểm theo fax',
-    description: 'Lưu điểm theo fax',
+    summary: 'Lưu điểm theo phách',
+    description: 'Lưu điểm theo phách',
     method: 'post',
     request: {
         body: {
@@ -393,7 +393,7 @@ const saveExamSessions = createRoute({
     path: '/save-exam-sessions',
     tags: ['Exam'],
     summary: 'Lưu kết quả thi',
-    description: 'Lưu fax và điểm thi',
+    description: 'Lưu phách và điểm thi',
     method: 'post',
     request: {
         body: {
@@ -451,7 +451,7 @@ app.openapi(saveExamSessions, async (c) => {
             select: { fax: true },
         })
         return c.json(
-            { success: false, message: `Fax trùng nhau: ${faxes.map((f) => f.fax)}` },
+            { success: false, message: `Phách trùng nhau: ${faxes.map((f) => f.fax)}` },
             400
         )
     }

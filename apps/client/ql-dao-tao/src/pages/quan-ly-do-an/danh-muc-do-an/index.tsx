@@ -620,7 +620,7 @@ export default function ThesisProject() {
                                 type: 'order',
                             },
                             {
-                                title: 'Thời gian mở đăng ký',
+                                title: 'Thời gian mở ĐK',
                                 dataIndex: 'startDate',
                                 align: 'center',
                                 width: 180,
@@ -631,7 +631,7 @@ export default function ThesisProject() {
                                         : '',
                             },
                             {
-                                title: 'Thời gian đóng đăng ký',
+                                title: 'Thời gian đóng ĐK',
                                 dataIndex: 'endDate',
                                 align: 'center',
                                 width: 190,

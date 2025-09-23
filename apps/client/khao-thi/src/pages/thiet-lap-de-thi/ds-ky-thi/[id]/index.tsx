@@ -47,7 +47,7 @@ export default function PageId() {
         },
         {
             key: 'fax',
-            label: 'Quản lý fax',
+            label: 'Quản lý phách',
             children: <ExamFax id={id} />,
         },
         {
@@ -66,7 +66,7 @@ export default function PageId() {
                     { label: 'Thông tin kỳ thi', value: 'infor' },
                     { label: 'Cấu hình sinh đề tự động', value: 'sinhDeTuDong' },
                     { label: 'Danh sách đề thi', value: 'examBank' },
-                    { label: 'Quản lý fax', value: 'fax' },
+                    { label: 'Quản lý phách', value: 'fax' },
                     { label: 'Quản lý bài thi', value: 'examSession' },
                 ]}
                 style={{ marginBottom: 14 }}

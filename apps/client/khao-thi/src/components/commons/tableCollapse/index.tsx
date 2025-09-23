@@ -4,7 +4,7 @@ import type { TableProps as TableAntdProps } from 'antd'
 import type { ColumnType, TablePaginationConfig } from 'antd/es/table'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import Table, { type ColumnOption } from '../table'
-import type { FilterProps } from '../typeFilte'
+import type { FilterProps } from '../typeFilter'
 
 interface BaseNode {
     id: string
@@ -176,7 +176,7 @@ const TableCollapse = <
                 render: (_: any, record: T) => {
                     if (record.$type !== 'child') return ''
 
-                    // @ts-ignore
+                    // @ts-expect-error
                     const order = allChildren.findIndex((item) => item.key === record.key)
                     return order >= 0
                         ? order +

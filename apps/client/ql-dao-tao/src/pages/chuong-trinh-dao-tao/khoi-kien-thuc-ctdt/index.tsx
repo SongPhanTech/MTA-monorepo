@@ -153,13 +153,13 @@ export default function TrainingBlock() {
                                 title: 'Mã khối kiến thức',
                                 dataIndex: 'code',
                                 align: 'center',
-                                width: 150,
+                                width: 250,
                                 type: 'input',
                             },
                             {
                                 title: 'Tên khối kiến thức',
                                 dataIndex: 'name',
-                                width: 150,
+                                align: 'center',
                                 type: 'input',
                             },
                             // {

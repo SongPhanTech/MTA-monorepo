@@ -1,5 +1,5 @@
 import Table from '@components/commons/table'
-import type { FilterProps } from '@components/commons/typeFilte'
+import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { EVALUATION_SECRETARY_MEMBER_ROLE } from '@constants/constants'

@@ -1,9 +1,13 @@
+import { UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
+import TextTruncate from '@components/commons/text-truncate'
+import ExportTemplateLecturer from '@components/modal/export-template-lecturer'
+import ImportLecturerModal from '@components/modal/import-excel-lecturer'
 import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import type { FixedClass, SubjectClass } from '@workspace/db'
+import type { UserProfile } from '@workspace/db'
 import {
     useCountLecturer,
     useFindManyDM_DonVi,
@@ -11,16 +15,18 @@ import {
     useFindManyLecturerType,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Col, Row } from 'antd'
+import { Button, Col, Flex, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 
 export default function UserProfilePageLecture() {
     const [currentPage, setCurrentPage] = useState(1)
+    const [importModalVisible, setImportModalVisible] = useState(false)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const router = useRouter()
     const [filters, setFilters] = useState<FilterProps>({
@@ -39,6 +45,14 @@ export default function UserProfilePageLecture() {
 
     const where = useMemo(
         () => ({
+            ...(filters.code && filters.code !== ''
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
             ...(filters.name && filters.name !== ''
                 ? {
                       userProfile: {
@@ -131,14 +145,6 @@ export default function UserProfilePageLecture() {
                       },
                   }
                 : {}),
-            ...(filters.code
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
             ...(filters.organization
                 ? {
                       organizationId: {
@@ -154,19 +160,7 @@ export default function UserProfilePageLecture() {
                   }
                 : {}),
         }),
-        [
-            filters.code,
-            filters.name,
-            filters.dateOfBirth,
-            filters.academicRankType,
-            filters.academicDegreeType,
-            filters.organization,
-            filters.gender,
-            filters.rankId,
-            filters.officerNumber,
-            filters.lecturerType,
-            filters.idCardNumber,
-        ]
+        [filters]
     )
 
     const { data = [] } = useFindManyLecturer({
@@ -204,6 +198,13 @@ export default function UserProfilePageLecture() {
     const { data: lecturerTypeData = [] } = useFindManyLecturerType()
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(manageOrgData)
+    const { onOpen: onOpenModalAdd } = useDisclosure({
+        tag: 'PutUserProfileLectureModal',
+    })
+
+    const handleModal = () => {
+        onOpenModalAdd()
+    }
 
     const handleRowClick = (record: { id?: string }) => {
         if (record?.id) {
@@ -214,6 +215,30 @@ export default function UserProfilePageLecture() {
     return (
         <div>
             <Row gutter={[16, 16]}>
+                <Col span={24}>
+                    {/* Row nút thêm */}
+                    <Row gutter={[16, 16]} align="top" justify="end">
+                        <Col span={24}>
+                            <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
+                                <Button
+                                    type="primary"
+                                    onClick={() => setImportModalVisible(true)}
+                                    icon={<UploadOutlined />}
+                                >
+                                    Nhập dữ liêu Excel
+                                </Button>
+                                <ImportLecturerModal
+                                    visible={importModalVisible}
+                                    onCancel={() => setImportModalVisible(false)}
+                                />
+                                <ExportTemplateLecturer />
+                                {/* <Button onClick={handleModal} type="primary">
+                                    Thêm mới
+                                </Button> */}
+                            </Flex>
+                        </Col>
+                    </Row>
+                </Col>
                 <Col span={24}>
                     <Table
                         filters={filters}
@@ -239,14 +264,15 @@ export default function UserProfilePageLecture() {
                             },
                             {
                                 title: 'Họ và tên',
-                                render: (__, record) =>
+                                align: 'center',
+                                width: 180,
+                                fixed: 'left',
+                                dataIndex: 'name',
+                                type: 'input',
+                                render: (__, record: { userProfile?: UserProfile }) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
                                         : '',
-                                align: 'center',
-                                width: 150,
-                                dataIndex: 'name',
-                                type: 'input',
                             },
                             {
                                 title: 'CCCD/CMND',
@@ -262,7 +288,7 @@ export default function UserProfilePageLecture() {
                                 title: 'Đơn vị',
                                 dataIndex: 'organization',
                                 align: 'center',
-                                width: 150,
+                                width: 200,
                                 render: (value) => value?.sTen,
                                 type: 'tree_select',
                                 options: treeData,
@@ -285,21 +311,16 @@ export default function UserProfilePageLecture() {
                                 title: 'Lớp giảng dạy',
                                 dataIndex: 'mainSubjectClasses',
                                 align: 'center',
-                                width: 150,
-                                render: (__, record) => {
+                                width: 250,
+                                render: (__, record: any) => {
                                     return record?.mainSubjectClasses.length ? (
-                                        <ul
-                                            style={{
-                                                paddingLeft: 16,
-                                                margin: 0,
-                                            }}
-                                        >
-                                            {record?.mainSubjectClasses?.map(
-                                                (val: SubjectClass) => (
-                                                    <li key={val.id}>{val.name}</li>
-                                                )
-                                            )}
-                                        </ul>
+                                        <TextTruncate
+                                            arr={record?.mainSubjectClasses.map((i: any) => {
+                                                return { key: i?.id, label: i?.name }
+                                            })}
+                                            key="mainSubjectClasses"
+                                            record={record}
+                                        />
                                     ) : (
                                         ''
                                     )
@@ -309,22 +330,16 @@ export default function UserProfilePageLecture() {
                                 title: 'Lớp trợ giảng',
                                 dataIndex: 'extraSubjectClasses',
                                 align: 'center',
-                                width: 150,
+                                width: 200,
                                 render: (__, record) => {
                                     return record?.extraSubjectClasses.length ? (
-                                        <ul
-                                            style={{
-                                                paddingLeft: 16,
-                                                margin: 0,
-                                            }}
-                                            className="text-left"
-                                        >
-                                            {record?.extraSubjectClasses?.map(
-                                                (val: SubjectClass) => (
-                                                    <li key={val.id}>- {val.name}</li>
-                                                )
-                                            )}
-                                        </ul>
+                                        <TextTruncate
+                                            arr={record?.extraSubjectClasses.map((i: any) => {
+                                                return { key: i?.id, label: i?.name }
+                                            })}
+                                            key="extraSubjectClasses"
+                                            record={record}
+                                        />
                                     ) : (
                                         ''
                                     )
@@ -334,19 +349,16 @@ export default function UserProfilePageLecture() {
                                 title: 'Lớp được quản lý',
                                 dataIndex: 'manageFixedClass',
                                 align: 'center',
-                                width: 150,
+                                width: 200,
                                 render: (__, record) => {
                                     return record?.manageFixedClass.length ? (
-                                        <ul
-                                            style={{
-                                                paddingLeft: 16,
-                                                margin: 0,
-                                            }}
-                                        >
-                                            {record?.manageFixedClass?.map((val: FixedClass) => (
-                                                <li key={val.id}>{val.name}</li>
-                                            ))}
-                                        </ul>
+                                        <TextTruncate
+                                            arr={record?.manageFixedClass.map((i: any) => {
+                                                return { key: i?.id, label: i?.name }
+                                            })}
+                                            key="manageFixedClass"
+                                            record={record}
+                                        />
                                     ) : (
                                         ''
                                     )
@@ -355,7 +367,6 @@ export default function UserProfilePageLecture() {
                         ]}
                         data={data}
                         rowKey="id"
-                        onRowClick={(record) => handleRowClick(record)}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

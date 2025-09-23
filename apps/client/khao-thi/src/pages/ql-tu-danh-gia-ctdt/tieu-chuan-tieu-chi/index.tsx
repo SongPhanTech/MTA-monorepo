@@ -1,6 +1,6 @@
 import { EyeOutlined } from '@ant-design/icons'
 import TableCollapse from '@components/commons/tableCollapse'
-import type { FilterProps } from '@components/commons/typeFilte'
+import type { FilterProps } from '@components/commons/typeFilter'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
