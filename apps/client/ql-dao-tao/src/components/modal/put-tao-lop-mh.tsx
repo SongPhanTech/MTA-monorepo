@@ -1,4 +1,3 @@
-import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
@@ -19,6 +18,7 @@ import 'dayjs/locale/vi'
 import Table from '@components/commons/table'
 import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import TreeSelect from '@/components/commons/tree-select'
 
 dayjs.locale('vi')
@@ -35,6 +35,7 @@ export type PutSubjectClass = {
 }
 
 const PutOpenSubjectClassModal = () => {
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [form] = Form.useForm<PutSubjectClass>()
     const {
         isOpen,
@@ -84,11 +85,8 @@ const PutOpenSubjectClassModal = () => {
                     lecturerAssignmentDeadline: i.lecturerAssignmentDeadline,
                     scoreDeadline: i.scoreDeadline,
                     examType: i.examType,
+                    trainingObjectTypeId,
                 })),
-            })
-            // refetch() lại danh sách level
-            queryClient.invalidateQueries({
-                queryKey: ['SubjectClass'],
             })
             onClose()
         } catch (error: any) {
@@ -105,7 +103,7 @@ const PutOpenSubjectClassModal = () => {
     const handleCreateTableForClass = () => {
         const numberOfClass = Number(form.getFieldValue('numberOfClass'))
         if (numberOfClass > 0) {
-            const cout = Math.ceil(
+            const count = Math.ceil(
                 Number(form.getFieldValue('totalStudent')) / Number(numberOfClass)
             )
             const result = []
@@ -117,7 +115,7 @@ const PutOpenSubjectClassModal = () => {
                     key: i + 1,
                     code: `${subjectVersion?.code} 0${i + 1}`,
                     name: subjectVersion?.name,
-                    maxStudent: Number(cout),
+                    maxStudent: Number(count),
                     startDate: new Date(),
                     semesterId: form.getFieldValue('semesterId'),
                     subjectId: form.getFieldValue('subjectVersionId'),
@@ -132,12 +130,12 @@ const PutOpenSubjectClassModal = () => {
     const handleCreateTableForMaxStudent = () => {
         const maxStudent = Number(form.getFieldValue('maxStudent'))
         if (Number(maxStudent) > 0) {
-            const cout = Math.ceil(Number(form.getFieldValue('totalStudent')) / Number(maxStudent))
+            const count = Math.ceil(Number(form.getFieldValue('totalStudent')) / Number(maxStudent))
             const result = []
             const subjectVersion = subjectVersionData.find(
                 (i) => i.id === form.getFieldValue('subjectVersionId')
             )
-            for (let i = 0; i < cout; i++) {
+            for (let i = 0; i < count; i++) {
                 result.push({
                     key: i + 1,
                     code: `${subjectVersion?.code} 0${i + 1}`,

@@ -25,13 +25,8 @@ a {
 }
 
 ::-webkit-scrollbar {
-    width: 2px;
-    height: 2px;
-    border-radius: 15px;
-}
-::-webkit-scrollbar {
     -webkit-appearance: none;
-    width: 0px;
+    width: 6px;
     height: 6px;
     border-radius: 15px;
 }

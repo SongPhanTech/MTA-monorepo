@@ -3,7 +3,7 @@ import { Col, Row, Tabs } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
 import ArchivedCertificate from './components/certificate'
-import OplympicAwards from './components/olympic-award'
+import OlympicAwards from './components/olympic-award'
 
 interface TabItem {
     key: string
@@ -16,7 +16,7 @@ export default function ClassSubject() {
         {
             key: '1',
             label: 'Điểm olympic',
-            content: <OplympicAwards />,
+            content: <OlympicAwards />,
         },
         {
             key: '2',

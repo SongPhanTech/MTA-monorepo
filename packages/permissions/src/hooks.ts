@@ -19,14 +19,19 @@ declare global {
 
 const PERMISSIONS = {
     XEM: 1 << 0,
-    SUA: 1 << 1,
-    THEM: 1 << 2,
-    XOA: 1 << 3,
-    IN: 1 << 4,
-    XUAT_EXCEL: 1 << 5,
-    TAI_TEP: 1 << 6,
+    XEM_TAT_CA: 1 << 1,
+    XEM_CHI_TIET: 1 << 2,
+    THEM: 1 << 3,
+    SUA: 1 << 4,
+    XOA: 1 << 5,
+    IN: 1 << 6,
     NHAP_EXCEL: 1 << 7,
-    DUYET: 1 << 8,
+    XUAT_EXCEL: 1 << 8,
+    TAI_TEP: 1 << 9,
+    NHAP_DIEM: 1 << 10,
+    DUYET: 1 << 11,
+    IN_DS_THI: 1 << 12,
+    IN_PHIEU_DIEM: 1 << 13,
 } as const
 
 function combine(perms: (keyof typeof PERMISSIONS)[]): number {

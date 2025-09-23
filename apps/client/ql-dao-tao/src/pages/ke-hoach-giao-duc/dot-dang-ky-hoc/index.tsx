@@ -14,7 +14,8 @@ import {
     useFindManyClassRegisterSession,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Select, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
@@ -23,6 +24,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function ClassRegisterSession() {
+    const { can } = useAbility()
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
     const [currentPage, setCurrentPage] = useState(1)
@@ -38,6 +40,7 @@ export default function ClassRegisterSession() {
 
     const where = useMemo(
         () => ({
+            deletedAt: null,
             ...(filters.name && filters.name !== ''
                 ? {
                       name: {
@@ -88,14 +91,7 @@ export default function ClassRegisterSession() {
                           : undefined,
             }),
         }),
-        [
-            filters.name,
-            filters.semesterId,
-            filters.startDate,
-            filters.endDate,
-            filters.trainingCourseId,
-            filters.active,
-        ]
+        [filters]
     )
 
     const { data } = useFindManyClassRegisterSession({
@@ -107,16 +103,22 @@ export default function ClassRegisterSession() {
     })
 
     const { data: count } = useCountClassRegisterSession({
-        where: {
-            ...where,
-            deletedAt: null,
-        },
+        where,
     })
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         where: { active: true, trainingObjectType: { type: TrainingObjectTypes.CIVILIAN } },
         orderBy: { createdAt: 'desc' },
     })
+
+    const trainingCourseOptions = useMemo(
+        () =>
+            trainingCourseData.map((i: TrainingCourse) => ({
+                value: i.id,
+                label: i.name,
+            })),
+        [trainingCourseData]
+    )
 
     const { onOpen: onOpenPutClassRegisterSession } = useDisclosure<string>({
         tag: 'PutClassRegisterSession',
@@ -160,12 +162,7 @@ export default function ClassRegisterSession() {
                                 <Col span={8}>
                                     <Select
                                         placeholder="Chọn khóa"
-                                        options={trainingCourseData.map((i: TrainingCourse) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                            }
-                                        })}
+                                        options={trainingCourseOptions}
                                         style={{ width: '100%' }}
                                         onChange={(val) =>
                                             setFilters((prev) => ({
@@ -180,13 +177,18 @@ export default function ClassRegisterSession() {
                         </Col>
                         <Col span={8}>
                             <Flex justify="end" gap={4}>
-                                <Button
-                                    type="primary"
-                                    onClick={() => onOpenPutClassRegisterSession()}
-                                >
-                                    <BookPlus />
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => onOpenPutClassRegisterSession()}
+                                    >
+                                        <BookPlus />
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -200,9 +202,16 @@ export default function ClassRegisterSession() {
                             setCurrentPage(1)
                         }}
                         onRowClick={({ id }) => {
-                            router.push(
-                                `${ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC}/${id}`
-                            )
+                            if (
+                                can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                                    'XEM_CHI_TIET'
+                                )
+                            ) {
+                                router.push(
+                                    `${ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC}/${id}`
+                                )
+                            }
                         }}
                         columns={[
                             {
@@ -211,7 +220,7 @@ export default function ClassRegisterSession() {
                                 align: 'center',
                                 fixed: 'left',
                                 render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                    index + 1 + (currentPage - 1) * numberOfPages,
                             },
                             {
                                 title: 'Tên đợt đăng ký',
@@ -309,30 +318,51 @@ export default function ClassRegisterSession() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                                    'XEM_CHI_TIET',
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip title="Xem các đơn đăng ký" placement="top">
-                                            <EyeOutlined className="text-sm cursor-pointer" />
-                                        </Tooltip>
-                                        <EditIcon
-                                            onClick={(e) => {
-                                                onOpenPutClassRegisterSession(id)
-                                                e?.stopPropagation()
-                                            }}
-                                            className="text-sm text-blue-700 cursor-pointer"
-                                        />
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: (e) => {
-                                                    handleDeleteClassRegisterSession(id)
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                                            'XEM_CHI_TIET'
+                                        ) && (
+                                            <Tooltip title="Xem các đơn đăng ký" placement="top">
+                                                <EyeOutlined className="text-sm cursor-pointer" />
+                                            </Tooltip>
+                                        )}
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                                            'SUA'
+                                        ) && (
+                                            <EditIcon
+                                                onClick={(e) => {
+                                                    onOpenPutClassRegisterSession(id)
                                                     e?.stopPropagation()
-                                                },
-                                                onCancel: (e) => {
-                                                    e?.stopPropagation()
-                                                },
-                                            }}
-                                            onClick={(e) => e.stopPropagation()}
-                                        />
+                                                }}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                        )}
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: (e) => {
+                                                        handleDeleteClassRegisterSession(id)
+                                                        e?.stopPropagation()
+                                                    },
+                                                    onCancel: (e) => {
+                                                        e?.stopPropagation()
+                                                    },
+                                                }}
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
+                                        )}
                                     </Row>
                                 ),
                             },

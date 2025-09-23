@@ -10,6 +10,8 @@ import {
     useFindManyArchivedCertificate,
     useUpdateArchivedCertificate,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
@@ -17,6 +19,7 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function ArchivedCertificate() {
+    const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [_selectedRowKeys, _setSelectedRowKeys] = useState<React.Key[]>([])
@@ -115,9 +118,14 @@ export default function ArchivedCertificate() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24} className="mt-3">
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
 
@@ -182,19 +190,34 @@ export default function ArchivedCertificate() {
                                 width: 60,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id, _count }) => {
                                     if (!_count?.studentSubjectScore) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={onOpen.bind(null, id)}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () => handleDelete(id),
-                                                    }}
-                                                />
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={onOpen.bind(null, id)}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: () => handleDelete(id),
+                                                        }}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

@@ -9,6 +9,8 @@ import DefaultLayout from '@layouts/default-layout'
 import type { TrainingCourse, TrainingMajor } from '@workspace/db'
 import { useFindManyTrainingCourse, useFindManyTrainingMajor } from '@workspace/db/hooks'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
@@ -24,6 +26,7 @@ interface FilterProps {
 }
 
 export default function SubjectOpeningPlan() {
+    const { can } = useAbility()
     const [form] = Form.useForm<FilterProps>()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -163,20 +166,30 @@ export default function SubjectOpeningPlan() {
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 {/* <Button type="primary">Thêm mới</Button> */}
-                                <Button
-                                    type="primary"
-                                    onClick={() => onOpenXuatFileMoLop(selectedSemesterId)}
-                                >
-                                    <FileDoneOutlined />
-                                    Xuất file mẫu
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    onClick={() => onOpenModalNhapTKB(selectedSemesterId)}
-                                >
-                                    <EditIcon stroke="white" />
-                                    Nhập từ file TKB
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                    'XUAT_EXCEL'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => onOpenXuatFileMoLop(selectedSemesterId)}
+                                    >
+                                        <FileDoneOutlined />
+                                        Xuất file mẫu
+                                    </Button>
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                    'NHAP_EXCEL'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => onOpenModalNhapTKB(selectedSemesterId)}
+                                    >
+                                        <EditIcon stroke="white" />
+                                        Nhập từ file TKB
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -341,6 +354,10 @@ export default function SubjectOpeningPlan() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                    'THEM'
+                                ),
                                 render: (record) => {
                                     if (record?.id) {
                                         return (

@@ -8,6 +8,8 @@ import {
     enrollStudentOnSubjectClass,
     useStudentBySubjectClassSemester,
 } from '@workspace/libs/api/training'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { App, Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
@@ -29,6 +31,7 @@ export default function StudentCourseByPlan({
     semesterId,
     subjectClassId,
 }: StudentCourseByPlanProps) {
+    const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
@@ -285,14 +288,16 @@ export default function StudentCourseByPlan({
                     }}
                 />
                 <Flex justify="end" style={{ marginTop: 16 }}>
-                    <Button
-                        type="primary"
-                        className="h-[32px] px-4"
-                        onClick={handleSaveStudentClass}
-                        disabled={!subjectClassId || !semesterId || selectedRowKeys.length <= 0}
-                    >
-                        Lưu
-                    </Button>
+                    {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DANG_KY_HOC, 'SUA') && (
+                        <Button
+                            type="primary"
+                            className="h-[32px] px-4"
+                            onClick={handleSaveStudentClass}
+                            disabled={!subjectClassId || !semesterId || selectedRowKeys.length <= 0}
+                        >
+                            Lưu
+                        </Button>
+                    )}
                 </Flex>
             </Col>
         </App>
