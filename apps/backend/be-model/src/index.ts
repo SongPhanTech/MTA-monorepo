@@ -7,10 +7,10 @@ import { contextStorage } from 'hono/context-storage'
 import { cors } from 'hono/cors'
 import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
+import { proxy } from 'hono/proxy'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import AuthApp from './api/auth'
 import MinIOApp from './api/minio'
-import SystemApp from './api/system'
 import SqlTransactionApp from './api/transaction'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
@@ -60,9 +60,49 @@ app.route('/api/auth', AuthApp)
 // TODO!: remove `/check`
 app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
 // setupAuth(app)
-
-// private route
-app.route('/api/system', SystemApp)
+app.all('/api/system/:appcode/*', async (c) => {
+    const appCode = c.req.param('appcode')
+    const pathProxy = c.req.path.replace(`/api/system/${appCode}/`, '')
+    const clientId = (() => {
+        switch (appCode) {
+            case 'lms':
+                return process.env.KEYCLOAK_CLIENT_ID_LMS || ''
+            case 'ems':
+                return process.env.KEYCLOAK_CLIENT_ID_EMS || ''
+            case 'hrm':
+                return process.env.KEYCLOAK_CLIENT_ID_HRM || ''
+            case 'portal':
+                return process.env.KEYCLOAK_CLIENT_ID_PORTAL || ''
+            case 'chatbot':
+                return process.env.KEYCLOAK_CLIENT_ID_CHATBOT || ''
+            default:
+                return process.env.KEYCLOAK_CLIENT_ID || ''
+        }
+    })()
+    const clientSecret = (() => {
+        switch (appCode) {
+            case 'lms':
+                return process.env.KEYCLOAK_CLIENT_SECRET_LMS || ''
+            case 'ems':
+                return process.env.KEYCLOAK_CLIENT_SECRET_EMS || ''
+            case 'hrm':
+                return process.env.KEYCLOAK_CLIENT_SECRET_HRM || ''
+            case 'portal':
+                return process.env.KEYCLOAK_CLIENT_SECRET_PORTAL || ''
+            case 'chatbot':
+                return process.env.KEYCLOAK_CLIENT_SECRET_CHATBOT || ''
+            default:
+                return process.env.KEYCLOAK_CLIENT_SECRET || ''
+        }
+    })()
+    return proxy(new URL(`${pathProxy}`, 'https://mta.swantech.vn/api/system/public/'), {
+        headers: {
+            // ...c.req.header(), // optional, specify only when forwarding all the request data (including credentials) is necessary.
+            'x-clientid': clientId,
+            'x-clientsecret': clientSecret,
+        },
+    })
+})
 app.route('/api/minio', MinIOApp)
 app.route('/api/sql', SqlTransactionApp)
 
@@ -130,6 +170,7 @@ app.use(
 )
 
 app.onError((err, c) => {
+    console.log('[BE-MODEL] Error: ', err)
     if (err instanceof HTTPException) {
         return err.getResponse()
     }
