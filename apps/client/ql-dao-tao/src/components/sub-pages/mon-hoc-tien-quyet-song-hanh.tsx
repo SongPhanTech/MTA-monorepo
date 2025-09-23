@@ -2,6 +2,8 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { SubjectType } from '@pages/chuong-trinh-dao-tao/ql-mon-hoc'
 import { useFindUniqueSubjectVersion, useUpdateSubjectVersion } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useMemo } from 'react'
@@ -13,6 +15,7 @@ type Props = {
 }
 
 export default function MonHocTienQuyetSongHanhPage({ subjectVersionId, keyEnum }: Props) {
+    const { can } = useAbility()
     const { onOpen } = useDisclosure<{
         id: string
         title: string
@@ -110,20 +113,25 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId, keyEnum 
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={8}>
-                                <Button
-                                    type="primary"
-                                    onClick={() =>
-                                        onOpen({
-                                            id: subjectVersionId,
-                                            title: `Thêm ${keyEnum === SubjectType.prerequisite ? 'môn học tiên quyết' : 'môn học song hành'}`,
-                                            keyEnum,
-                                            type: 'above',
-                                        })
-                                    }
-                                >
-                                    <BookPlus />
-                                    Thêm
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() =>
+                                            onOpen({
+                                                id: subjectVersionId,
+                                                title: `Thêm ${keyEnum === SubjectType.prerequisite ? 'môn học tiên quyết' : 'môn học song hành'}`,
+                                                keyEnum,
+                                                type: 'above',
+                                            })
+                                        }
+                                    >
+                                        <BookPlus />
+                                        Thêm
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -158,11 +166,17 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId, keyEnum 
                                 fixed: 'right',
                                 render: (_, record) => (
                                     <Row className="justify-center gap-2">
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () => handleDelete(record?.id, 'above'),
-                                            }}
-                                        />
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDelete(record?.id, 'above'),
+                                                }}
+                                            />
+                                        )}
                                     </Row>
                                 ),
                             },
@@ -178,20 +192,25 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId, keyEnum 
                         </Col>
                         <Col span={24}>
                             <Flex justify="end" gap={8}>
-                                <Button
-                                    type="primary"
-                                    onClick={() =>
-                                        onOpen({
-                                            id: subjectVersionId,
-                                            title: 'Thêm môn học phụ thuộc',
-                                            keyEnum,
-                                            type: 'below',
-                                        })
-                                    }
-                                >
-                                    <BookPlus />
-                                    Thêm
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() =>
+                                            onOpen({
+                                                id: subjectVersionId,
+                                                title: 'Thêm môn học phụ thuộc',
+                                                keyEnum,
+                                                type: 'below',
+                                            })
+                                        }
+                                    >
+                                        <BookPlus />
+                                        Thêm
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -226,11 +245,17 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId, keyEnum 
                                 fixed: 'right',
                                 render: (_, record) => (
                                     <Row className="justify-center gap-2">
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () => handleDelete(record?.id, 'below'),
-                                            }}
-                                        />
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () =>
+                                                        handleDelete(record?.id, 'below'),
+                                                }}
+                                            />
+                                        )}
                                     </Row>
                                 ),
                             },

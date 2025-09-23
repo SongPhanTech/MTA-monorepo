@@ -11,7 +11,8 @@ import {
     useFindManySubjectClass,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
@@ -38,6 +39,7 @@ interface FilterProps {
 }
 
 export default function ClassSubject() {
+    const { can } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -530,6 +532,10 @@ export default function ClassSubject() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
+                                    'NHAP_DIEM'
+                                ),
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (

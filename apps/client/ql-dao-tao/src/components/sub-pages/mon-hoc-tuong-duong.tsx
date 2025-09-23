@@ -7,6 +7,8 @@ import {
     useDeleteSubjectInGroup,
     useFindUniqueSubjectVersion,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Divider, Flex, message, Popconfirm, Row } from 'antd'
 import { ArrowRightLeft, BookPlus, Plus, X } from 'lucide-react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -30,6 +32,7 @@ function SubjectList({
     onRemove: (id: string) => void
     disableRemoveForId?: string
 }) {
+    const { can } = useAbility()
     return (
         <div className="flex flex-col items-center gap-2 w-full">
             {subjects.map((subject, i) => (
@@ -38,24 +41,29 @@ function SubjectList({
                     className="p-2 border border-primary border-solid rounded w-full flex items-center justify-between min-h-[58px]"
                 >
                     <span className="whitespace-normal break-words">{subject.fullDisplay}</span>
-                    {disableRemoveForId !== subject.subjectId && (
-                        <Popconfirm
-                            placement="topRight"
-                            title="Bạn có chắc muốn xóa môn học này không?"
-                            okText="Xóa"
-                            cancelText="Hủy"
-                            onConfirm={() => onRemove(subject.subjectInGroupId)}
-                        >
-                            <X className="text-red-500 hover:text-red-700 cursor-pointer w-6 flex-shrink-0" />
-                        </Popconfirm>
-                    )}
+                    {disableRemoveForId !== subject.subjectId &&
+                        can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
+                            'SUA'
+                        ) && (
+                            <Popconfirm
+                                placement="topRight"
+                                title="Bạn có chắc muốn xóa môn học này không?"
+                                okText="Xóa"
+                                cancelText="Hủy"
+                                onConfirm={() => onRemove(subject.subjectInGroupId)}
+                            >
+                                <X className="text-red-500 hover:text-red-700 cursor-pointer w-6 flex-shrink-0" />
+                            </Popconfirm>
+                        )}
                 </div>
             ))}
         </div>
     )
 }
 
-export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props) {
+export default function MonHocTuongDuongPage({ subjectVersionId }: Props) {
+    const { can } = useAbility()
     const { showSpinner, hideSpinner } = useSpinner()
     const { data } = useFindUniqueSubjectVersion(
         {
@@ -150,10 +158,12 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
     return (
         <div className="bg-white rounded-lg shadow-sm p-4">
             <Flex justify="end" gap={8}>
-                <Button type="primary" onClick={handleAdd}>
-                    <BookPlus />
-                    Thêm
-                </Button>
+                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC, 'THEM') && (
+                    <Button type="primary" onClick={handleAdd}>
+                        <BookPlus />
+                        Thêm
+                    </Button>
+                )}
             </Flex>
 
             {data?.equivalencyGroups?.map((group, idx) => (
@@ -161,17 +171,22 @@ export default function MonHocTienQuyetSongHanhPage({ subjectVersionId }: Props)
                     {idx > 0 && <Divider className="my-0" />}
                     <Row gutter={[16, 0]} align="top" justify="space-between">
                         <div className="border border-primary border-solid p-4 m-4 rounded-lg relative w-full">
-                            <Popconfirm
-                                placement="topRight"
-                                title="Bạn có chắc muốn xóa nhóm này không?"
-                                okText="Xóa"
-                                cancelText="Hủy"
-                                onConfirm={() => handleDelete(group?.equivalencyGroupId)}
-                            >
-                                <Button className="absolute top-2 right-2 h-8 w-8 p-0">
-                                    <X />
-                                </Button>
-                            </Popconfirm>
+                            {can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
+                                'XOA'
+                            ) && (
+                                <Popconfirm
+                                    placement="topRight"
+                                    title="Bạn có chắc muốn xóa nhóm này không?"
+                                    okText="Xóa"
+                                    cancelText="Hủy"
+                                    onConfirm={() => handleDelete(group?.equivalencyGroupId)}
+                                >
+                                    <Button className="absolute top-2 right-2 h-8 w-8 p-0">
+                                        <X />
+                                    </Button>
+                                </Popconfirm>
+                            )}
 
                             <Col span={24} className="mt-8">
                                 <Row gutter={[16, 16]} justify="center" align="middle">

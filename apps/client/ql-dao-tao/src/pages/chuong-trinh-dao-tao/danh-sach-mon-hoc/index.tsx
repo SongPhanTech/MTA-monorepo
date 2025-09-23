@@ -16,6 +16,8 @@ import {
     useUpdateSubject,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { BookPlus, Search } from 'lucide-react'
@@ -24,6 +26,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 export default function SubjectList() {
+    const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -280,10 +283,15 @@ export default function SubjectList() {
                         </Col>
                         <Col span={12}>
                             <Flex justify="end" gap={8}>
-                                <Button onClick={handleModal} type="primary">
-                                    <BookPlus />
-                                    Thêm
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        <BookPlus />
+                                        Thêm
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -501,24 +509,41 @@ export default function SubjectList() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                    'THEM',
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, record: { id?: string; subjectId?: string }) => {
                                     const { id: subjectVersionId, subjectId } = record
                                     return subjectVersionId && subjectId ? (
                                         <Row className="justify-center gap-2">
-                                            <EditIcon
-                                                onClick={() =>
-                                                    onOpenSubjectVersion({
-                                                        subjectId,
-                                                        subjectVersionId,
-                                                    })
-                                                }
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                            <DeleteIcon
-                                                popConfirm={{
-                                                    onConfirm: () => handleDelete(subjectVersionId),
-                                                }}
-                                            />
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                                'SUA'
+                                            ) && (
+                                                <EditIcon
+                                                    onClick={() =>
+                                                        onOpenSubjectVersion({
+                                                            subjectId,
+                                                            subjectVersionId,
+                                                        })
+                                                    }
+                                                    className="text-sm text-blue-700 cursor-pointer"
+                                                />
+                                            )}
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                                'XOA'
+                                            ) && (
+                                                <DeleteIcon
+                                                    popConfirm={{
+                                                        onConfirm: () =>
+                                                            handleDelete(subjectVersionId),
+                                                    }}
+                                                />
+                                            )}
                                         </Row>
                                     ) : null
                                 },
@@ -539,21 +564,39 @@ export default function SubjectList() {
                         }}
                         headerRight={({ id: subjectId }) => (
                             <Flex gap={8} align="center">
-                                <Tooltip title="Thêm mới phiên bản môn học" placement="bottomLeft">
-                                    <BookPlus
-                                        onClick={() => handleModalSubjectVersion(subjectId, '')}
-                                        className="cursor-pointer"
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                    'THEM'
+                                ) && (
+                                    <Tooltip
+                                        title="Thêm mới phiên bản môn học"
+                                        placement="bottomLeft"
+                                    >
+                                        <BookPlus
+                                            onClick={() => handleModalSubjectVersion(subjectId, '')}
+                                            className="cursor-pointer"
+                                        />
+                                    </Tooltip>
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                    'SUA'
+                                ) && (
+                                    <EditIcon
+                                        onClick={onOpen.bind(null, subjectId)}
+                                        className="text-sm text-blue-700 cursor-pointer"
                                     />
-                                </Tooltip>
-                                <EditIcon
-                                    onClick={onOpen.bind(null, subjectId)}
-                                    className="text-sm text-blue-700 cursor-pointer"
-                                />
-                                <DeleteIcon
-                                    popConfirm={{
-                                        onConfirm: () => handleDeleteSubject(subjectId),
-                                    }}
-                                />
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                    'XOA'
+                                ) && (
+                                    <DeleteIcon
+                                        popConfirm={{
+                                            onConfirm: () => handleDeleteSubject(subjectId),
+                                        }}
+                                    />
+                                )}
                             </Flex>
                         )}
                         data={SubjectData}

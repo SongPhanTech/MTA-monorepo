@@ -8,6 +8,8 @@ import {
     enrollFixedClassOnSubjectClass,
     useFixedClassBySubjectClassSemester,
 } from '@workspace/libs/api/training'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import { Search } from 'lucide-react'
@@ -24,6 +26,7 @@ interface FixedClassProps {
 }
 
 export default function FixedClass({ semesterId, subjectClassId }: FixedClassProps) {
+    const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 
@@ -201,9 +204,14 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
                 }}
             />
             <Flex justify="end" style={{ marginTop: 16 }}>
-                <Button type="primary" className="h-[32px] px-4" onClick={handleSave}>
-                    Lưu
-                </Button>
+                {can(
+                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                    'THEM'
+                ) && (
+                    <Button type="primary" className="h-[32px] px-4" onClick={handleSave}>
+                        Lưu
+                    </Button>
+                )}
             </Flex>
         </div>
     )

@@ -15,6 +15,8 @@ import {
     useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
 import { calcFinalScore, getScoreStatistics } from '@workspace/libs/utils'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, Form, Input, InputNumber, message, Popover, Row } from 'antd'
 import dayjs from 'dayjs'
@@ -134,6 +136,7 @@ type FilterTable = FilterProps & {
 }
 
 export default function SubjectClassScore() {
+    const { can } = useAbility()
     const router = useRouter()
     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
     const [subjectClassFullData, setSubjectClassFullData] = useState<SubjectClass[]>([])
@@ -820,73 +823,114 @@ export default function SubjectClassScore() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24} className="flex justify-end">
                             <Flex gap={4}>
-                                <Popover
-                                    content={
-                                        <Flex vertical align="flex-start" gap={4}>
-                                            <Button
-                                                onClick={() => setImportModalVisible(true)}
-                                                disabled={!selectedFixedClass}
-                                                className="w-full flex justify-start"
-                                            >
-                                                <FileUp />
-                                                Nhập điểm từ file
-                                            </Button>
-                                            <ImportScoreModal
-                                                visible={importModalVisible}
-                                                onCancel={() => setImportModalVisible(false)}
-                                                onConfirm={handleImportConfirm}
-                                                existingStudents={dataTable}
-                                            />
-                                            <ExportScoreTemplate
-                                                selectedFixedClass={selectedFixedClass}
-                                                dataTable={dataTable}
-                                            />
-                                        </Flex>
-                                    }
-                                    trigger="click"
-                                    open={open}
-                                    onOpenChange={handleOpenChange}
-                                    placement="bottomLeft"
-                                    arrow={false}
-                                >
-                                    <Button disabled={!selectedFixedClass}>
-                                        <Ellipsis />
-                                    </Button>
-                                </Popover>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                    'NHAP_EXCEL',
+                                    'XUAT_EXCEL'
+                                ) && (
+                                    <Popover
+                                        content={
+                                            <Flex vertical align="flex-start" gap={4}>
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                    'NHAP_EXCEL'
+                                                ) && (
+                                                    <>
+                                                        <Button
+                                                            onClick={() =>
+                                                                setImportModalVisible(true)
+                                                            }
+                                                            disabled={!selectedFixedClass}
+                                                            className="w-full flex justify-start"
+                                                        >
+                                                            <FileUp />
+                                                            Nhập điểm từ file
+                                                        </Button>
+                                                        <ImportScoreModal
+                                                            visible={importModalVisible}
+                                                            onCancel={() =>
+                                                                setImportModalVisible(false)
+                                                            }
+                                                            onConfirm={handleImportConfirm}
+                                                            existingStudents={dataTable}
+                                                        />
+                                                    </>
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                    'XUAT_EXCEL'
+                                                ) && (
+                                                    <ExportScoreTemplate
+                                                        selectedFixedClass={selectedFixedClass}
+                                                        dataTable={dataTable}
+                                                    />
+                                                )}
+                                            </Flex>
+                                        }
+                                        trigger="click"
+                                        open={open}
+                                        onOpenChange={handleOpenChange}
+                                        placement="bottomLeft"
+                                        arrow={false}
+                                    >
+                                        <Button disabled={!selectedFixedClass}>
+                                            <Ellipsis />
+                                        </Button>
+                                    </Popover>
+                                )}
 
-                                <ExportTemplateExam
-                                    selectedFixedClass={selectedFixedClass}
-                                    dataClass={selectedClassInfo}
-                                    dataTable={dataTable}
-                                />
-                                <Button
-                                    disabled={!selectedFixedClass}
-                                    onClick={() =>
-                                        onOpen({
-                                            dataTable,
-                                            type: EnumInPhieuDiem.PHIEU_DIEM_KHOA,
-                                        })
-                                    }
-                                >
-                                    <Printer />
-                                    In phiếu điểm và khóa
-                                </Button>
-                                <Button
-                                    disabled={!selectedFixedClass}
-                                    onClick={() =>
-                                        onOpen({
-                                            dataTable,
-                                            type: EnumInPhieuDiem.PHIEU_DIEM_NHAP,
-                                        })
-                                    }
-                                >
-                                    <Printer />
-                                    In phiếu điểm nháp
-                                </Button>
-                                <Button type="primary" onClick={handleSaveScores}>
-                                    <Save stroke="white" />
-                                    Lưu
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                    'IN_DS_THI'
+                                ) && (
+                                    <ExportTemplateExam
+                                        selectedFixedClass={selectedFixedClass}
+                                        dataClass={selectedClassInfo}
+                                        dataTable={dataTable}
+                                    />
+                                )}
+
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                    'IN_PHIEU_DIEM'
+                                ) && (
+                                    <>
+                                        <Button
+                                            disabled={!selectedFixedClass}
+                                            onClick={() =>
+                                                onOpen({
+                                                    dataTable,
+                                                    type: EnumInPhieuDiem.PHIEU_DIEM_KHOA,
+                                                })
+                                            }
+                                        >
+                                            <Printer />
+                                            In phiếu điểm và khoá
+                                        </Button>
+                                        <Button
+                                            disabled={!selectedFixedClass}
+                                            onClick={() =>
+                                                onOpen({
+                                                    dataTable,
+                                                    type: EnumInPhieuDiem.PHIEU_DIEM_NHAP,
+                                                })
+                                            }
+                                        >
+                                            <Printer />
+                                            In phiếu điểm nháp
+                                        </Button>
+                                    </>
+                                )}
+
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                    'NHAP_DIEM'
+                                ) && (
+                                    <Button type="primary" onClick={handleSaveScores}>
+                                        <Save stroke="white" />
+                                        Lưu
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -951,9 +995,13 @@ export default function SubjectClassScore() {
                                 align: 'center',
                                 type: 'order',
                                 render: (_, record) => {
-                                    const isEditable = record.subjectClass?.scoreDeadline
-                                        ? dayjs().isBefore(record.subjectClass.scoreDeadline)
-                                        : false
+                                    const isEditable =
+                                        can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                            'NHAP_DIEM'
+                                        ) && record.subjectClass?.scoreDeadline
+                                            ? dayjs().isBefore(record.subjectClass.scoreDeadline)
+                                            : false
                                     const openClock = record.subjectClass?.isLockScore
                                     const Score =
                                         scoreCC.find((item) => item.id === record.id)?.value ??
@@ -1026,9 +1074,13 @@ export default function SubjectClassScore() {
                                 align: 'center',
                                 type: 'order',
                                 render: (_, record) => {
-                                    const isEditable = record.subjectClass?.scoreDeadline
-                                        ? dayjs().isBefore(record.subjectClass.scoreDeadline)
-                                        : false
+                                    const isEditable =
+                                        can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                            'NHAP_DIEM'
+                                        ) && record.subjectClass?.scoreDeadline
+                                            ? dayjs().isBefore(record.subjectClass.scoreDeadline)
+                                            : false
                                     const openClock = record.subjectClass?.isLockScore
                                     const Score =
                                         scoreTX.find((item) => item.id === record.id)?.value ??
@@ -1101,9 +1153,15 @@ export default function SubjectClassScore() {
                                 type: 'order',
                                 align: 'center',
                                 render: (_, record) => {
-                                    const isEditable = record.subjectClass?.examScoreDeadline
-                                        ? dayjs().isBefore(record.subjectClass.examScoreDeadline)
-                                        : false
+                                    const isEditable =
+                                        can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                            'NHAP_DIEM'
+                                        ) && record.subjectClass?.examScoreDeadline
+                                            ? dayjs().isBefore(
+                                                  record.subjectClass.examScoreDeadline
+                                              )
+                                            : false
                                     const Score =
                                         scoreThi.find((item) => item.id === record.id)?.value ??
                                         (record.examScore !== undefined
