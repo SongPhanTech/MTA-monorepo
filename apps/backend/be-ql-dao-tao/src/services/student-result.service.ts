@@ -1928,3 +1928,178 @@ export const resultCourseStudentResult = async (
     console.log(`Found ${result.length} courses with students for semester ${semesterId}`)
     return result.map((course) => CourseStudentResult.parse(course))
 }
+
+const checkStudentResultForRepeatGrade = async (
+    studentIds: string[],
+    semesterId: string
+): Promise<string[]> => {
+    try {
+        const studentSemesterResult = await prisma.studentSemesterResult.findMany({
+            where: {
+                studentId: { in: studentIds },
+                semesterId,
+                deletedAt: null,
+                active: true,
+            },
+            include: {
+                student: {
+                    include: {
+                        userProfile: true,
+                        fixedClass: {
+                            include: {
+                                curriculumVersion: {
+                                    include: {
+                                        curriculum: {
+                                            include: {
+                                                trainingMajor: {
+                                                    include: {
+                                                        trainingField: true, // Bao gồm thông tin ngành
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        trainingObjectType: true,
+                    },
+                },
+            },
+            orderBy: {
+                student: {
+                    userProfile: {
+                        firstName: 'asc',
+                    },
+                },
+            },
+        })
+
+        if (!studentSemesterResult) {
+            throw new Error(
+                `Không tìm thấy kết quả học kỳ cho sinh viên trong học kỳ ${semesterId}`
+            )
+        }
+
+        const scoreToRetainList = await prisma.trainingCourse.findMany({
+            where: {
+                id: {
+                    in: studentSemesterResult.map(
+                        (s) => s.student.fixedClass?.trainingCourseId || ''
+                    ),
+                },
+                deletedAt: null,
+                active: true,
+            },
+        })
+
+        if (!scoreToRetainList) {
+            throw new Error(
+                `Không tìm thấy khóa học nào để xét điểm lưu ban cho sinh viên trong học kỳ ${semesterId}`
+            )
+        }
+
+        const listStudentRepeatGrade: string[] = studentSemesterResult
+            .map((result) => {
+                const scoreToRetain = scoreToRetainList.find(
+                    (course) => course.id === result.student.fixedClass?.trainingCourseId
+                )
+
+                if (
+                    scoreToRetain &&
+                    result.baseScore === 'Base10' &&
+                    result.gpaBase10.toNumber() <= scoreToRetain.scoreToRetain
+                ) {
+                    return result.studentId
+                }
+                if (
+                    scoreToRetain &&
+                    result.baseScore === 'Base4' &&
+                    result.gpaBase4.toNumber() <= scoreToRetain.scoreToRetain
+                ) {
+                    return result.studentId
+                }
+                return null // Ensure a value is always returned
+            })
+            .filter((id): id is string => id !== null)
+
+        console.log('listStudentRepeatGrade', listStudentRepeatGrade)
+
+        return listStudentRepeatGrade
+    } catch (error) {
+        console.error('Error fetching student result for repeat grade:', error)
+        throw new Error(`${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+const SaveStudentRepeatGrade = async (studentIds: string[], semesterId: string): Promise<void> => {
+    try {
+        const listStudentRepeatGrade = await checkStudentResultForRepeatGrade(
+            studentIds,
+            semesterId
+        )
+
+        if (listStudentRepeatGrade.length === 0) {
+            console.log('No students to mark for repeat grade.')
+            return
+        }
+
+        const existingDecisions = await prisma.studentAcademicDecision.findMany({
+            where: {
+                studentId: { in: listStudentRepeatGrade },
+                semesterId,
+                actionTaken: 'REPEAT_YEAR',
+                status: { not: DecisionStatus.PENDING },
+                deletedAt: null,
+                active: true,
+            },
+        })
+
+        const existingStudentIds = new Set(existingDecisions.map((decision) => decision.studentId))
+        const newDecisions = listStudentRepeatGrade
+            .filter((studentId) => !existingStudentIds.has(studentId))
+            .map((studentId) => ({
+                studentId,
+                semesterId,
+                actionTaken: 'REPEAT_YEAR' as const,
+                status: DecisionStatus.PENDING,
+                reason: 'Tạo quyết định lưu ban theo yêu cầu',
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                active: true,
+            }))
+        if (newDecisions.length > 0) {
+            await prisma.studentAcademicDecision.createMany({
+                data: newDecisions,
+            })
+            console.log(`Created ${newDecisions.length} new repeat grade decisions.`)
+        } else {
+            console.log('All students already have repeat grade decisions.')
+        }
+    } catch (error) {
+        console.error('Error in SaveStudentRepeatGrade function:', error)
+        throw new Error(`${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
+export const StudentRepeatGrade = async (
+    studentIds: string[],
+    semesterId: string
+): Promise<any[]> => {
+    try {
+        const listStudentRepeatGrade = await checkStudentResultForRepeatGrade(
+            studentIds,
+            semesterId
+        )
+        await SaveStudentRepeatGrade(listStudentRepeatGrade, semesterId)
+        return listStudentRepeatGrade
+    } catch (error) {
+        console.error('Error in RepeatGrade function:', error)
+        throw new Error(`${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+        await prisma.$disconnect()
+    }
+}

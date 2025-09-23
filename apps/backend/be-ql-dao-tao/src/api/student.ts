@@ -8,6 +8,7 @@ import {
     calculateStudentSemesterResult,
     listStudentResultInfo,
     resultCourseStudentResult,
+    StudentRepeatGrade,
 } from '../services/student-result.service'
 import {
     buildCurriculumMapOrThrow,
@@ -154,6 +155,80 @@ const dsKetQuaHocKySinhVienJson = createRoute({
             },
         },
     },
+})
+
+const PheDuyetLuuBan = createRoute({
+    operationId: 'exportApproveStudentRepeatGradeJson',
+    path: '/approve-list-student-to-repeat-grade',
+    tags: ['Student'],
+    summary: 'Danh sách học viên lưu ban',
+    description: 'Xuất tất cả học viên, sinh viên đủ điều kiện JSON',
+    method: 'post',
+    request: {
+        query: z.object({
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID của kì học',
+            }),
+            listStudents: z
+                .string()
+                .openapi('listStudents', {
+                    description: 'Danh sách mã số sinh viên, cách nhau bởi dấu phẩy',
+                })
+                .transform((val) =>
+                    val
+                        .split(',')
+                        .map((s) => s.trim())
+                        .filter((s) => s.length > 0)
+                ),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export list of student repeat grade as JSON',
+            content: {
+                'application/json': {
+                    schema: z.array(z.any()), // You can replace z.any() with a more specific schema if available
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(PheDuyetLuuBan, async (c) => {
+    const { semesterId, listStudents } = c.req.valid('query')
+    const students = await prisma.student.findMany({
+        where: { code: { in: listStudents } },
+        select: { id: true, code: true, userProfile: { select: { fullname: true } } },
+    })
+    if (!students || students.length === 0) {
+        return c.json({ message: 'Không có sinh viên nào trong danh sách' }, 404)
+    }
+    const studentIds = students.map((s) => s.id)
+    try {
+        const listStudentRepeatGrade = await StudentRepeatGrade(studentIds, semesterId)
+
+        const result = students
+            .filter((s) => listStudentRepeatGrade.includes(s.id))
+            .map((s) => ({ code: s.code, fullname: s.userProfile.fullname }))
+
+        return c.json(result, 200)
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Lỗi không xác định'
+        console.error(
+            `Error fetching student repeat grade for semester ${semesterId}: ${errorMessage}`
+        )
+        return c.json({ message: `Lỗi khi lấy danh sách lưu ban: ${errorMessage}` }, 404)
+    }
 })
 app.openapi(dsKetQuaHocKySinhVienJson, async (c) => {
     const { semesterId, type, academicActionType } = c.req.valid('query')
