@@ -5,6 +5,7 @@
   "private": true,
   "exports": {
     "./api/*": "./src/api/*.ts",
+    "./hook/*": "./src/hook/*.ts",
     "./constants": "./src/constants.ts",
     "./parseExcel": "./src/parseExcel.ts",
     "./utils": "./src/utils.ts",
@@ -15,6 +16,7 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "@types/react": "catalog:",
     "@workspace/typescript-config": "workspace:*",
     "orval": "catalog:",
     "typescript": "catalog:"
@@ -26,6 +28,7 @@
     "decimal.js": "catalog:",
     "docxtemplater": "catalog:",
     "pizzip": "catalog:",
+    "react": "catalog:",
     "xlsx": "catalog:"
   }
 }

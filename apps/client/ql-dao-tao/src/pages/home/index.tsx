@@ -1,8 +1,8 @@
 import News from '@components/dashboard/news'
 import Notifications from '@components/dashboard/notifications'
-import PieChart from '@components/dashboard/org-structure'
 import StaffByOrg from '@components/dashboard/staff-by-org'
 import DashboardLayout from '@layouts/dashboard-layout'
+import { LichCongTac } from '@workspace/ui'
 import { Col, Row, Typography } from 'antd'
 
 const { Title } = Typography
@@ -12,12 +12,12 @@ function Page() {
         <div>
             <Row gutter={[8, 8]}>
                 <Col xs={24} lg={18}>
-                    <div className="bg-white rounded shadow h-96 flex flex-col">
+                    <div className="bg-white rounded shadow h-full flex flex-col">
                         <div className="p-4">
-                            <Title level={4}>Thống kê đối tượng đào tạo</Title>
+                            <Title level={4}>Thời khoá biểu</Title>
                         </div>
-                        <div className="flex-1">
-                            <PieChart className="h-full" />
+                        <div className="flex-1 p-2">
+                            <LichCongTac />
                         </div>
                     </div>
                 </Col>

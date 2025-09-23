@@ -1,9 +1,9 @@
 import { PrinterOutlined } from '@ant-design/icons'
-import { useAcademicRankingConverter } from '@hooks/academicRankingConvert'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
 import { SubjectRequirementType } from '@workspace/db'
 import { useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
+import { useAcademicRankingConverter } from '@workspace/libs/hook/academicRankingConvert'
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useRef, useState } from 'react'
@@ -72,7 +72,8 @@ const ModalPrintToKQHT = () => {
     )
 
     const { convertAcademicRanking } = useAcademicRankingConverter(
-        subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.academicRankingConvert
+        subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.academicRankingConvert,
+        subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.baseScore
     )
 
     const handlePrint = useReactToPrint({
@@ -361,10 +362,10 @@ const ModalPrintToKQHT = () => {
                                                     {subject.credit}
                                                 </td>
                                                 <td className="border border-black px-1 py-1 text-center">
-                                                    {Number(score10).toFixed(1)}
+                                                    {Number(score10).toFixedSmart(1)}
                                                 </td>
                                                 <td className="border border-black px-1 py-1 text-center">
-                                                    {Number(score4).toFixed(2)}
+                                                    {Number(score4).toFixedSmart(2)}
                                                 </td>
                                                 <td className="border border-black px-1 py-1 text-center">
                                                     {String(letterGrade)}
@@ -403,13 +404,13 @@ const ModalPrintToKQHT = () => {
                                                     {subject.credit}
                                                 </td>
                                                 <td className="border border-black px-1 py-1 text-center">
-                                                    {score10}
+                                                    {Number(score10).toFixedSmart(1)}
                                                 </td>
                                                 <td className="border border-black px-1 py-1 text-center">
-                                                    {score4}
+                                                    {Number(score4).toFixedSmart(2)}
                                                 </td>
                                                 <td className="border border-black px-1 py-1 text-center">
-                                                    {letterGrade}
+                                                    {String(letterGrade)}
                                                 </td>
                                             </tr>,
                                         ]

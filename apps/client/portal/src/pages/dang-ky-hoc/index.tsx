@@ -15,18 +15,14 @@ import type { GetClassesInfo200ItemSubjectClassItemClassSchedulesItem } from '@w
 import { Button, Checkbox, message, Popconfirm, Tabs } from 'antd'
 import dayjs from 'dayjs'
 import { CircleXIcon, LogOutIcon } from 'lucide-react'
-import { useRouter } from 'next/router'
 import { useState } from 'react'
 
 dayjs.locale('vi')
 export default function DangKyHocPage() {
-    const router = useRouter()
     const [_filters, _setFilters] = useState({
         searchText: '',
     })
-
     const { data: classRegisterSession } = useGetClassRegisterSession()
-
     return (
         <div>
             {classRegisterSession?.status !== 200 ? (
@@ -49,6 +45,7 @@ export default function DangKyHocPage() {
                                         name: cv?.name ?? '',
                                         code: cv?.code ?? '',
                                     }))}
+                                    endDate={session.endDate}
                                 />
                             ),
                         })) || []
@@ -62,9 +59,11 @@ export default function DangKyHocPage() {
 const DanhSachMonDangKy = ({
     sessionId,
     curriculumVersions = [],
+    endDate,
 }: {
     sessionId: string
     curriculumVersions: { id: string; name: string; code: string }[]
+    endDate: string | null
 }) => {
     const [curriculumVersionId, setCurriculumVersionId] = useState(
         curriculumVersions.length > 0 ? curriculumVersions[0].id : ''
@@ -89,6 +88,13 @@ const DanhSachMonDangKy = ({
 
     return (
         <div>
+            {endDate && (
+                <p className="mb-2">
+                    Hạn đăng ký học:{' '}
+                    <b className="text-red-500">{dayjs(endDate).format('DD/MM/YYYY')}</b>, vui lòng
+                    đăng ký trước thời gian này!
+                </p>
+            )}
             <div className="flex gap-2">
                 <Select
                     options={curriculumVersions.map((cv) => ({

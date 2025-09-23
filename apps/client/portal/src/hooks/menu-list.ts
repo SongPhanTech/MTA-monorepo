@@ -1,6 +1,6 @@
 import { useStoreActions } from '@redux/hook'
 import ability from '@workspace/permissions/ability'
-import { PERMISSIONS, usePermissions } from '@workspace/permissions/hooks'
+import { usePermissions } from '@workspace/permissions/hooks'
 import NAVIGATION from '@workspace/router'
 import { useEffect } from 'react'
 
@@ -19,26 +19,26 @@ const useMenuList = () => {
         setIsUpdateAbility(true)
     }, [permissions])
     const menus = NAVIGATION.PORTAL.menus
-        .map((menu) => {
-            if (menu.children) {
-                const filteredChildren = menu.children.filter((child) => {
-                    return (
-                        (Number(ability.actionsFor(child.id).pop()) & PERMISSIONS.XEM) ===
-                        PERMISSIONS.XEM
-                    )
-                })
-                return filteredChildren.length > 0
-                    ? {
-                          ...menu,
-                          children: filteredChildren,
-                      }
-                    : null
-            }
-            return (Number(ability.actionsFor(menu.id).pop()) & PERMISSIONS.XEM) === PERMISSIONS.XEM
-                ? menu
-                : null
-        })
-        .filter((menu) => menu !== null)
+    // .map((menu) => {
+    //     if (menu.children) {
+    //         const filteredChildren = menu.children.filter((child) => {
+    //             return (
+    //                 (Number(ability.actionsFor(child.id).pop()) & PERMISSIONS.XEM) ===
+    //                 PERMISSIONS.XEM
+    //             )
+    //         })
+    //         return filteredChildren.length > 0
+    //             ? {
+    //                   ...menu,
+    //                   children: filteredChildren,
+    //               }
+    //             : null
+    //     }
+    //     return (Number(ability.actionsFor(menu.id).pop()) & PERMISSIONS.XEM) === PERMISSIONS.XEM
+    //         ? menu
+    //         : null
+    // })
+    // .filter((menu) => menu !== null)
     return menus
 }
 
