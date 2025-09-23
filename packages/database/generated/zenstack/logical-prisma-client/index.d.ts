@@ -5829,12 +5829,12 @@ export namespace Prisma {
     };
     export const SubjectClassScalarFieldEnum: {
         id: 'id',
-        code: 'code',
         active: 'active',
         description: 'description',
         deletedAt: 'deletedAt',
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
+        code: 'code',
         name: 'name',
         startDate: 'startDate',
         endDate: 'endDate',
@@ -9003,8 +9003,8 @@ export namespace Prisma {
     };
     export const SubjectClassOrderByRelevanceFieldEnum: {
         id: 'id',
-        code: 'code',
         description: 'description',
+        code: 'code',
         name: 'name',
         subjectId: 'subjectId',
         trainingObjectTypeId: 'trainingObjectTypeId',
@@ -23568,12 +23568,12 @@ export namespace Prisma {
      */
     interface SubjectClassFieldRefs {
         readonly id: FieldRef<"SubjectClass", 'String'>;
-        readonly code: FieldRef<"SubjectClass", 'String'>;
         readonly active: FieldRef<"SubjectClass", 'Boolean'>;
         readonly description: FieldRef<"SubjectClass", 'String'>;
         readonly deletedAt: FieldRef<"SubjectClass", 'DateTime'>;
         readonly createdAt: FieldRef<"SubjectClass", 'DateTime'>;
         readonly updatedAt: FieldRef<"SubjectClass", 'DateTime'>;
+        readonly code: FieldRef<"SubjectClass", 'String'>;
         readonly name: FieldRef<"SubjectClass", 'String'>;
         readonly startDate: FieldRef<"SubjectClass", 'DateTime'>;
         readonly endDate: FieldRef<"SubjectClass", 'DateTime'>;
@@ -143699,12 +143699,12 @@ export namespace Prisma {
     };
     export type SubjectClassMinAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
+        code: string | null
         name: string | null
         startDate: Date | null
         endDate: Date | null
@@ -143730,12 +143730,12 @@ export namespace Prisma {
     };
     export type SubjectClassMaxAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
+        code: string | null
         name: string | null
         startDate: Date | null
         endDate: Date | null
@@ -143761,12 +143761,12 @@ export namespace Prisma {
     };
     export type SubjectClassCountAggregateOutputType = {
         id: number
-        code: number
         active: number
         description: number
         deletedAt: number
         createdAt: number
         updatedAt: number
+        code: number
         name: number
         startDate: number
         endDate: number
@@ -143799,12 +143799,12 @@ export namespace Prisma {
     };
     export type SubjectClassMinAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
+        code?: true
         name?: true
         startDate?: true
         endDate?: true
@@ -143830,12 +143830,12 @@ export namespace Prisma {
     };
     export type SubjectClassMaxAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
+        code?: true
         name?: true
         startDate?: true
         endDate?: true
@@ -143861,12 +143861,12 @@ export namespace Prisma {
     };
     export type SubjectClassCountAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
+        code?: true
         name?: true
         startDate?: true
         endDate?: true
@@ -143973,12 +143973,12 @@ export namespace Prisma {
     };
     export type SubjectClassGroupByOutputType = {
         id: string
-        code: string | null
         active: boolean
         description: string | null
         deletedAt: Date | null
         createdAt: Date
         updatedAt: Date
+        code: string
         name: string
         startDate: Date
         endDate: Date | null
@@ -144021,12 +144021,12 @@ export namespace Prisma {
     >;
     export type SubjectClassSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
+        code?: boolean
         name?: boolean
         startDate?: boolean
         endDate?: boolean
@@ -144069,12 +144069,12 @@ export namespace Prisma {
     }, ExtArgs["result"]["subjectClass"]>;
     export type SubjectClassSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
+        code?: boolean
         name?: boolean
         startDate?: boolean
         endDate?: boolean
@@ -144108,12 +144108,12 @@ export namespace Prisma {
     }, ExtArgs["result"]["subjectClass"]>;
     export type SubjectClassSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
+        code?: boolean
         name?: boolean
         startDate?: boolean
         endDate?: boolean
@@ -144147,12 +144147,12 @@ export namespace Prisma {
     }, ExtArgs["result"]["subjectClass"]>;
     export type SubjectClassSelectScalar = {
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
+        code?: boolean
         name?: boolean
         startDate?: boolean
         endDate?: boolean
@@ -144176,7 +144176,7 @@ export namespace Prisma {
         extraLecturerId?: boolean
         enterGradeLecturerId?: boolean
     };
-    export type SubjectClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "startDate" | "endDate" | "subjectId" | "schedule" | "maxStudent" | "trainingObjectTypeId" | "semesterId" | "cancelled" | "lecturerAssignmentDeadline" | "examDate" | "scoreDeadline" | "examScoreDeadline" | "examType" | "examId" | "isLockScore" | "isLockExamScore" | "issuedScoreAt" | "roomId" | "lecturerId" | "extraLecturerId" | "enterGradeLecturerId", ExtArgs["result"]["subjectClass"]>;
+    export type SubjectClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "code" | "name" | "startDate" | "endDate" | "subjectId" | "schedule" | "maxStudent" | "trainingObjectTypeId" | "semesterId" | "cancelled" | "lecturerAssignmentDeadline" | "examDate" | "scoreDeadline" | "examScoreDeadline" | "examType" | "examId" | "isLockScore" | "isLockExamScore" | "issuedScoreAt" | "roomId" | "lecturerId" | "extraLecturerId" | "enterGradeLecturerId", ExtArgs["result"]["subjectClass"]>;
     export type SubjectClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subject?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -144238,12 +144238,12 @@ export namespace Prisma {
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
-            code: string | null
             active: boolean
             description: string | null
             deletedAt: Date | null
             createdAt: Date
             updatedAt: Date
+            code: string
             name: string
             startDate: Date
             endDate: Date | null
@@ -290152,12 +290152,12 @@ export namespace Prisma {
         OR?: SubjectClassWhereInput[]
         NOT?: SubjectClassWhereInput | SubjectClassWhereInput[]
         id?: StringFilter<"SubjectClass"> | string
-        code?: StringNullableFilter<"SubjectClass"> | string | null
         active?: BoolFilter<"SubjectClass"> | boolean
         description?: StringNullableFilter<"SubjectClass"> | string | null
         deletedAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         createdAt?: DateTimeFilter<"SubjectClass"> | Date | string
         updatedAt?: DateTimeFilter<"SubjectClass"> | Date | string
+        code?: StringFilter<"SubjectClass"> | string
         name?: StringFilter<"SubjectClass"> | string
         startDate?: DateTimeFilter<"SubjectClass"> | Date | string
         endDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
@@ -290199,12 +290199,12 @@ export namespace Prisma {
     };
     export type SubjectClassOrderByWithRelationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrderInput | SortOrder
@@ -290247,7 +290247,6 @@ export namespace Prisma {
     };
     export type SubjectClassWhereUniqueInput = Prisma.AtLeast<{
         id?: string
-        code?: string
         AND?: SubjectClassWhereInput | SubjectClassWhereInput[]
         OR?: SubjectClassWhereInput[]
         NOT?: SubjectClassWhereInput | SubjectClassWhereInput[]
@@ -290256,6 +290255,7 @@ export namespace Prisma {
         deletedAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         createdAt?: DateTimeFilter<"SubjectClass"> | Date | string
         updatedAt?: DateTimeFilter<"SubjectClass"> | Date | string
+        code?: StringFilter<"SubjectClass"> | string
         name?: StringFilter<"SubjectClass"> | string
         startDate?: DateTimeFilter<"SubjectClass"> | Date | string
         endDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
@@ -290294,15 +290294,15 @@ export namespace Prisma {
         defenseRooms?: RoomListRelationFilter
         surveyObjectTypes?: SurveyObjectTypeListRelationFilter
         classRegisterLogs?: ClassRegisterLogsListRelationFilter
-    }, "id" | "code">;
+    }, "id">;
     export type SubjectClassOrderByWithAggregationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrderInput | SortOrder
@@ -290336,12 +290336,12 @@ export namespace Prisma {
         OR?: SubjectClassScalarWhereWithAggregatesInput[]
         NOT?: SubjectClassScalarWhereWithAggregatesInput | SubjectClassScalarWhereWithAggregatesInput[]
         id?: StringWithAggregatesFilter<"SubjectClass"> | string
-        code?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
         active?: BoolWithAggregatesFilter<"SubjectClass"> | boolean
         description?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
         deletedAt?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
         createdAt?: DateTimeWithAggregatesFilter<"SubjectClass"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"SubjectClass"> | Date | string
+        code?: StringWithAggregatesFilter<"SubjectClass"> | string
         name?: StringWithAggregatesFilter<"SubjectClass"> | string
         startDate?: DateTimeWithAggregatesFilter<"SubjectClass"> | Date | string
         endDate?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
@@ -312561,12 +312561,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -312600,12 +312600,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -312639,12 +312639,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -312678,12 +312678,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -312717,12 +312717,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateManyInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -312748,12 +312748,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -312771,12 +312771,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -336590,12 +336590,12 @@ export namespace Prisma {
     };
     export type SubjectClassCountOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrder
@@ -336624,12 +336624,12 @@ export namespace Prisma {
     };
     export type SubjectClassMaxOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrder
@@ -336655,12 +336655,12 @@ export namespace Prisma {
     };
     export type SubjectClassMinOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrder
@@ -368773,12 +368773,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutExamInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -368811,12 +368811,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutExamInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -369077,12 +369077,12 @@ export namespace Prisma {
         OR?: SubjectClassScalarWhereInput[]
         NOT?: SubjectClassScalarWhereInput | SubjectClassScalarWhereInput[]
         id?: StringFilter<"SubjectClass"> | string
-        code?: StringNullableFilter<"SubjectClass"> | string | null
         active?: BoolFilter<"SubjectClass"> | boolean
         description?: StringNullableFilter<"SubjectClass"> | string | null
         deletedAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         createdAt?: DateTimeFilter<"SubjectClass"> | Date | string
         updatedAt?: DateTimeFilter<"SubjectClass"> | Date | string
+        code?: StringFilter<"SubjectClass"> | string
         name?: StringFilter<"SubjectClass"> | string
         startDate?: DateTimeFilter<"SubjectClass"> | Date | string
         endDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
@@ -370537,12 +370537,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutSubjectClassStudentInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -370575,12 +370575,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutSubjectClassStudentInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -370928,12 +370928,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutSubjectClassStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -370966,12 +370966,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutSubjectClassStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -372291,12 +372291,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutSemesterInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -372329,12 +372329,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutSemesterInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -374863,12 +374863,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutFixedClassesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -374901,12 +374901,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutFixedClassesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -377664,12 +377664,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutSubjectInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -377702,12 +377702,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutSubjectInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -379057,12 +379057,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutClassRegisterLogsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -379095,12 +379095,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutClassRegisterLogsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -379295,12 +379295,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutClassRegisterLogsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -379333,12 +379333,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutClassRegisterLogsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -381042,12 +381042,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutClassSchedulesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -381080,12 +381080,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutClassSchedulesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -381387,12 +381387,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -381425,12 +381425,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -382110,12 +382110,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutTrainingObjectTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -382148,12 +382148,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutTrainingObjectTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -383372,12 +383372,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutRoomInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -383410,12 +383410,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutRoomInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -383456,12 +383456,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutDefenseRoomsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -383494,12 +383494,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutDefenseRoomsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -425022,12 +425022,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutMainLecturerInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -425060,12 +425060,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutMainLecturerInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -425106,12 +425106,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutExtraLecturerInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -425144,12 +425144,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutExtraLecturerInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -425190,12 +425190,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutEnterGradeLecturerInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -425228,12 +425228,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutEnterGradeLecturerInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -427973,12 +427973,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutThesisProjectsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -428011,12 +428011,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutThesisProjectsInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -428532,12 +428532,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutThesisProjectsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -428570,12 +428570,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutThesisProjectsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -430122,12 +430122,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutExpertProfileInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -430160,12 +430160,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutExpertProfileInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -442958,12 +442958,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateWithoutSurveyObjectTypesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -442996,12 +442996,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedCreateWithoutSurveyObjectTypesInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -450347,12 +450347,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateManyExamInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -450487,12 +450487,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -450525,12 +450525,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -450563,12 +450563,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateManyWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -451672,12 +451672,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateManySemesterInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -451849,12 +451849,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -451887,12 +451887,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -451925,12 +451925,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateManyWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -453198,12 +453198,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutFixedClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -453236,12 +453236,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutFixedClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -453274,12 +453274,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateManyWithoutFixedClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -454252,12 +454252,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateManySubjectInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -454920,12 +454920,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -454958,12 +454958,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -454996,12 +454996,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateManyWithoutSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -456146,12 +456146,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateManyTrainingObjectTypeInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -456630,12 +456630,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -456668,12 +456668,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -456706,12 +456706,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -457852,12 +457852,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateManyRoomInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -458019,12 +458019,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -458057,12 +458057,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -458095,12 +458095,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateManyWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -458125,12 +458125,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutDefenseRoomsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -458163,12 +458163,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutDefenseRoomsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -458201,12 +458201,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateManyWithoutDefenseRoomsInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -481646,12 +481646,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateManyMainLecturerInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -481676,12 +481676,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateManyExtraLecturerInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -481706,12 +481706,12 @@ export namespace Prisma {
     };
     export type SubjectClassCreateManyEnterGradeLecturerInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         startDate: Date | string
         endDate?: Date | string | null
@@ -481913,12 +481913,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutMainLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -481951,12 +481951,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutMainLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -481989,12 +481989,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateManyWithoutMainLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -482019,12 +482019,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutExtraLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -482057,12 +482057,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutExtraLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -482095,12 +482095,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateManyWithoutExtraLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -482125,12 +482125,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutEnterGradeLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -482163,12 +482163,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutEnterGradeLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -482201,12 +482201,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -483560,12 +483560,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutExpertProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -483598,12 +483598,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutExpertProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -483636,12 +483636,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateManyWithoutExpertProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -486710,12 +486710,12 @@ export namespace Prisma {
     };
     export type SubjectClassUpdateWithoutSurveyObjectTypesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -486748,12 +486748,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateWithoutSurveyObjectTypesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -486786,12 +486786,12 @@ export namespace Prisma {
     };
     export type SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

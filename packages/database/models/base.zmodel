@@ -14,3 +14,19 @@ abstract model Base {
   // @@allow('all', auth().role == 'ADMIN')
   @@allow('read', auth() != null)
 }
+
+abstract model BaseNoCode {
+  id          String    @id @default(cuid())
+  active      Boolean   @default(true)
+  description String?   @db.Text
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt @default(now())
+  // TODO: change this
+  @@allow('all', auth() != null)
+
+  @@deny('read', deletedAt != null)
+  /// TODO: allow all for now, will be restricted later
+  // @@allow('all', auth().role == 'ADMIN')
+  @@allow('read', auth() != null)
+}

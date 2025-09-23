@@ -18,29 +18,46 @@ declare global {
 }
 
 const PERMISSIONS = {
-    XEM: 2 ** 0, // 001
-    SUA: 2 ** 1, // 010
-    THEM: 2 ** 2, // 100
-    XOA: 2 ** 3, // 1000
-    IN: 2 ** 4,
-    XUAT_EXCEL: 2 ** 5,
-    TAI_TEP: 2 ** 6,
-    NHAP_EXCEL: 2 ** 7,
-    DUYET: 2 ** 8,
+    XEM: 1 << 0,
+    SUA: 1 << 1,
+    THEM: 1 << 2,
+    XOA: 1 << 3,
+    IN: 1 << 4,
+    XUAT_EXCEL: 1 << 5,
+    TAI_TEP: 1 << 6,
+    NHAP_EXCEL: 1 << 7,
+    DUYET: 1 << 8,
+} as const
+
+function combine(perms: (keyof typeof PERMISSIONS)[]): number {
+    return perms.map((p) => PERMISSIONS[p]).reduce((mask, p) => mask | p, 0)
 }
 
 const useAbility = () => {
     return {
         can: (
-            action: number,
             subject:
                 | KHAO_THI_PERMISSION
                 | PORTAL_PERMISSION
                 | QL_DAO_TAO_PERMISSION
-                | TRO_LY_AO_PERMISSION
-        ) => (Number(ability.actionsFor(subject).pop()) & action) === action,
-        cannot: (action: number, subject = '') =>
-            (Number(ability.actionsFor(subject).pop()) & action) !== action,
+                | TRO_LY_AO_PERMISSION,
+            ...action: (keyof typeof PERMISSIONS)[]
+        ) => {
+            const perm = ability.actionsFor(subject)
+            if (perm.length === 0) return false
+
+            const actions = combine(action)
+            return (Number(perm[perm.length - 1]) & actions) === actions
+        },
+        // cannot: (action: keyof typeof PERMISSIONS, subject = '') => {
+        //     const perm = ability.actionsFor(subject)
+        //     if (perm.length === 0) return false
+
+        //     return (
+        //         (Number(ability.actionsFor(subject).pop()) & PERMISSIONS[action]) !==
+        //         PERMISSIONS[action]
+        //     )
+        // },
     }
 }
 

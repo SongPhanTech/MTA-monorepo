@@ -1412,12 +1412,12 @@ model ClassRegisterLogs {
 /// @@allow('read', auth() != null)
 model SubjectClass {
   id                         String                @id() @default(cuid())
-  code                       String?               @unique()
   active                     Boolean               @default(true)
   description                String?               @db.Text()
   deletedAt                  DateTime?
   createdAt                  DateTime              @default(now())
   updatedAt                  DateTime              @default(now()) @updatedAt()
+  code                       String
   name                       String
   startDate                  DateTime
   endDate                    DateTime?

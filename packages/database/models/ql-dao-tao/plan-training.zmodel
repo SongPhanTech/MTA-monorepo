@@ -547,7 +547,8 @@ enum PeriodType {
 }
 
 /// Lớp môn học
-model SubjectClass extends Base {
+model SubjectClass extends BaseNoCode {
+  code                       String
   name                       String
   startDate                  DateTime
   endDate                    DateTime?

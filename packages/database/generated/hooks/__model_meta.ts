@@ -3123,10 +3123,6 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -3147,6 +3143,9 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
                 }, name: {
                     name: "name",
                     type: "String",
@@ -3361,9 +3360,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 },
             },
         },

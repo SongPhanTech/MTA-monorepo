@@ -646,12 +646,12 @@ exports.Prisma.ClassRegisterLogsScalarFieldEnum = {
 
 exports.Prisma.SubjectClassScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  code: 'code',
   name: 'name',
   startDate: 'startDate',
   endDate: 'endDate',
@@ -4045,8 +4045,8 @@ exports.Prisma.ClassRegisterLogsOrderByRelevanceFieldEnum = {
 
 exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
+  code: 'code',
   name: 'name',
   subjectId: 'subjectId',
   trainingObjectTypeId: 'trainingObjectTypeId',
