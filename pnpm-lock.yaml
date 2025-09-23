@@ -1772,6 +1772,9 @@ importers:
       '@workspace/db':
         specifier: workspace:*
         version: link:../../../packages/database
+      '@workspace/libs':
+        specifier: workspace:*
+        version: link:../../../packages/libs
       '@workspace/permissions':
         specifier: workspace:*
         version: link:../../../packages/permissions

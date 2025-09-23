@@ -1,5 +1,4 @@
 import { CloseCircleOutlined } from '@ant-design/icons'
-// import { fetchGeneratePresignedUrl } from '@api/common/commonComponents'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import UploadDragAndDrop, { FileUploadIcon } from '@components/commons/upload'
@@ -7,7 +6,9 @@ import { DOCUMENT_TYPE } from '@constants/constants'
 import { cn, formatNiceBytes } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import { useCreateManyDocument } from '@workspace/db/hooks'
+import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { Col, Form, Input, Modal, message, Progress } from 'antd'
+import axios from 'axios'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -65,32 +66,30 @@ const AddTaiLieu = () => {
                     ),
                 },
             })
-            // await Promise.all(
-            //     valuesWithId.map(async (file) => {
-            //         const resPresignedUrl = await fetchGeneratePresignedUrl({
-            //             body: {
-            //                 path: 'tai-lieu',
-            //                 extension: file.file.name.split('.').pop() || '',
-            //             },
-            //         })
-            //         await axios.put(resPresignedUrl.url, file.file, {
-            //             onUploadProgress: (progressEvent) => {
-            //                 const { loaded, total = 1 } = progressEvent
-            //                 const percent = Math.floor((loaded * 100) / total)
-            //                 form.setFieldsValue({
-            //                     files: {
-            //                         ...form.getFieldValue('files'),
-            //                         [file.id]: {
-            //                             ...file,
-            //                             url: resPresignedUrl.fileName,
-            //                             progress: percent,
-            //                         },
-            //                     },
-            //                 })
-            //             },
-            //         })
-            //     })
-            // )
+            await Promise.all(
+                valuesWithId.map(async (file) => {
+                    const { data: resPresignedUrl } = await generatePresignedUrl({
+                        path: 'tai-lieu',
+                        extension: file.file.name.split('.').pop() || '',
+                    })
+                    await axios.put(resPresignedUrl.url, file.file, {
+                        onUploadProgress: (progressEvent) => {
+                            const { loaded, total = 1 } = progressEvent
+                            const percent = Math.floor((loaded * 100) / total)
+                            form.setFieldsValue({
+                                files: {
+                                    ...form.getFieldValue('files'),
+                                    [file.id]: {
+                                        ...file,
+                                        url: resPresignedUrl.fileName,
+                                        progress: percent,
+                                    },
+                                },
+                            })
+                        },
+                    })
+                })
+            )
         } catch (error) {
             console.log('error', error)
         }

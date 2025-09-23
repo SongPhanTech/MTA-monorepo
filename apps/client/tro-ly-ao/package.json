@@ -27,6 +27,7 @@
 		"@workspace/router": "workspace:*",
 		"@workspace/ui": "workspace:*",
 		"@workspace/permissions": "workspace:*",
+		"@workspace/libs": "workspace:*",
 		"antd": "catalog:",
 		"axios": "catalog:",
 		"chart.js": "catalog:",

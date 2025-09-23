@@ -1,5 +1,4 @@
 import { CloseCircleOutlined } from '@ant-design/icons'
-import { fetchGeneratePresignedUrl } from '@api/common/commonComponents'
 import { fetchReadDocumentContentDocumentDocumentReaderGet } from '@api/qa/qaComponents'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
@@ -8,6 +7,7 @@ import { DOCUMENT_TYPE } from '@constants/constants'
 import { cn, formatNiceBytes } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import { useCreateManyDocument } from '@workspace/db/hooks'
+import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { Col, Form, Input, Modal, message, Progress } from 'antd'
 import axios from 'axios'
 import { useState } from 'react'
@@ -75,11 +75,9 @@ const ThemTaiLieu = () => {
             })
             await Promise.all(
                 valuesWithId.map(async (file) => {
-                    const resPresignedUrl = await fetchGeneratePresignedUrl({
-                        body: {
-                            path: 'tai-lieu',
-                            extension: file.file.name.split('.').pop() || '',
-                        },
+                    const { data: resPresignedUrl } = await generatePresignedUrl({
+                        path: 'tai-lieu',
+                        extension: file.file.name.split('.').pop() || '',
                     })
                     await axios.put(resPresignedUrl.url, file.file, {
                         onUploadProgress: (progressEvent) => {
