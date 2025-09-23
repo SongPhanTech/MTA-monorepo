@@ -607,55 +607,6 @@ importers:
         specifier: 'catalog:'
         version: 7.9.0(openapi-types@12.1.3)
 
-  apps/backend/be-ql-danh-muc:
-    dependencies:
-      '@hono/oidc-auth':
-        specifier: 'catalog:'
-        version: 1.7.0(hono@4.9.4)
-      '@hono/zod-openapi':
-        specifier: 'catalog:'
-        version: 0.18.4(hono@4.9.4)(zod@3.25.76)
-      '@opentelemetry/api':
-        specifier: 'catalog:'
-        version: 1.9.0
-      '@opentelemetry/exporter-trace-otlp-http':
-        specifier: 'catalog:'
-        version: 0.57.2(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resources':
-        specifier: 'catalog:'
-        version: 1.30.1(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-trace-base':
-        specifier: 'catalog:'
-        version: 1.30.1(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-trace-web':
-        specifier: 'catalog:'
-        version: 1.30.1(@opentelemetry/api@1.9.0)
-      '@scalar/hono-api-reference':
-        specifier: 'catalog:'
-        version: 0.5.184(hono@4.9.4)
-      hono:
-        specifier: 'catalog:'
-        version: 4.9.4
-      prom-client:
-        specifier: 'catalog:'
-        version: 15.1.3
-      zod:
-        specifier: 'catalog:'
-        version: 3.25.76
-    devDependencies:
-      '@types/bun':
-        specifier: 'catalog:'
-        version: 1.2.21(@types/react@18.3.24)
-      '@workspace/db':
-        specifier: workspace:*
-        version: link:../../../packages/database
-      '@workspace/typescript-config':
-        specifier: workspace:*
-        version: link:../../../packages/typescript-config
-      orval:
-        specifier: 'catalog:'
-        version: 7.9.0(openapi-types@12.1.3)
-
   apps/backend/be-ql-dao-tao:
     dependencies:
       '@faker-js/faker':
@@ -734,55 +685,6 @@ importers:
       '@workspace/auth':
         specifier: workspace:*
         version: link:../../../packages/auth
-      '@workspace/typescript-config':
-        specifier: workspace:*
-        version: link:../../../packages/typescript-config
-      orval:
-        specifier: 'catalog:'
-        version: 7.9.0(openapi-types@12.1.3)
-
-  apps/backend/be-ql-nguoi-dung:
-    dependencies:
-      '@hono/oidc-auth':
-        specifier: 'catalog:'
-        version: 1.7.0(hono@4.9.4)
-      '@hono/zod-openapi':
-        specifier: 'catalog:'
-        version: 0.18.4(hono@4.9.4)(zod@3.25.76)
-      '@opentelemetry/api':
-        specifier: 'catalog:'
-        version: 1.9.0
-      '@opentelemetry/exporter-trace-otlp-http':
-        specifier: 'catalog:'
-        version: 0.57.2(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resources':
-        specifier: 'catalog:'
-        version: 1.30.1(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-trace-base':
-        specifier: 'catalog:'
-        version: 1.30.1(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-trace-web':
-        specifier: 'catalog:'
-        version: 1.30.1(@opentelemetry/api@1.9.0)
-      '@scalar/hono-api-reference':
-        specifier: 'catalog:'
-        version: 0.5.184(hono@4.9.4)
-      hono:
-        specifier: 'catalog:'
-        version: 4.9.4
-      prom-client:
-        specifier: 'catalog:'
-        version: 15.1.3
-      zod:
-        specifier: 'catalog:'
-        version: 3.25.76
-    devDependencies:
-      '@types/bun':
-        specifier: 'catalog:'
-        version: 1.2.21(@types/react@18.3.24)
-      '@workspace/db':
-        specifier: workspace:*
-        version: link:../../../packages/database
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../../../packages/typescript-config

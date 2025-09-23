@@ -16,7 +16,7 @@ declare module 'hono' {
 }
 
 export const tracingMiddleware = createMiddleware(async (c, next) => {
-    const tracer = trace.getTracer('ql-nguoi-dung-backend')
+    const tracer = trace.getTracer('ql-dao-tao-backend')
     const traceParent = c.req.header('traceparent')
     const carrier = traceParent ? { traceparent: traceParent } : {}
     const extractedContext = propagation.extract(context.active(), carrier)
