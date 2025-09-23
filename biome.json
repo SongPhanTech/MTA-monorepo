@@ -5,7 +5,6 @@
         "includes": [
             "**",
             "!**/apps/backup/**/*",
-            "!**/apps/ql-danh-muc/**/*",
             "!**/.vscode",
             "!**/package.json",
             "!**/.next/**/*",
@@ -37,7 +36,13 @@
         "attributePosition": "auto",
         "bracketSpacing": true
     },
-    "assist": { "actions": { "source": { "organizeImports": "on" } } },
+    "assist": {
+        "actions": {
+            "source": {
+                "organizeImports": "on"
+            }
+        }
+    },
     "javascript": {
         "formatter": {
             "jsxQuoteStyle": "double",
@@ -65,9 +70,16 @@
                 "noUnusedFunctionParameters": "off",
                 "useExhaustiveDependencies": "warn"
             },
-            "complexity": { "noBannedTypes": "off", "noForEach": "off" },
-            "security": { "noDangerouslySetInnerHtml": "off" },
-            "suspicious": { "noExplicitAny": "off" },
+            "complexity": {
+                "noBannedTypes": "off",
+                "noForEach": "off"
+            },
+            "security": {
+                "noDangerouslySetInnerHtml": "off"
+            },
+            "suspicious": {
+                "noExplicitAny": "off"
+            },
             "style": {
                 "noParameterAssign": "error",
                 "useAsConstAssertion": "error",

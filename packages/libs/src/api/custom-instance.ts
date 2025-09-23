@@ -26,30 +26,19 @@ const getBody = <T>(c: Response | Request): Promise<T> => {
     return c.blob() as Promise<T>
 }
 
-// TODO: Update just base url
 const getUrl = (baseUrl: string, contextUrl: string): string => {
-    // const url = new URL(contextUrl)
-    // const pathname = url.pathname
-    // const search = url.search
-    // const baseUrl = 'http://127.0.0.1:3001'
-    // const baseUrl = 'https://api.ttn.x52.swantech.vn'
-
     const requestUrl = new URL(`${baseUrl}${contextUrl}`)
 
     return requestUrl.toString()
 }
 
 export const customModelFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
-    const requestUrl = getUrl('https://api.model.mta.swantech.vn', url)
-
-    const response = await fetchInstance(requestUrl, options)
-    const data = await getBody<T>(response)
-
-    return { status: response.status, data, headers: response.headers } as T
-}
-
-export const customUserFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
-    const requestUrl = getUrl('https://api.user.mta.swantech.vn', url)
+    const requestUrl = getUrl(
+        process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
+            ? 'http://localhost:3001'
+            : 'https://api.model.mta.swantech.vn',
+        url
+    )
 
     const response = await fetchInstance(requestUrl, options)
     const data = await getBody<T>(response)
@@ -58,7 +47,12 @@ export const customUserFetch = async <T>(url: string, options: RequestInit): Pro
 }
 
 export const customTrainingFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
-    const requestUrl = getUrl('https://api.daotao.mta.swantech.vn', url)
+    const requestUrl = getUrl(
+        process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
+            ? 'http://localhost:3003'
+            : 'https://api.daotao.mta.swantech.vn',
+        url
+    )
 
     const response = await fetchInstance(requestUrl, options)
     const data = await getBody<T>(response)
@@ -67,7 +61,12 @@ export const customTrainingFetch = async <T>(url: string, options: RequestInit):
 }
 
 export const customExamFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
-    const requestUrl = getUrl('https://api.khaothi.mta.swantech.vn', url)
+    const requestUrl = getUrl(
+        process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
+            ? 'http://localhost:3004'
+            : 'https://api.khaothi.mta.swantech.vn',
+        url
+    )
 
     const response = await fetchInstance(requestUrl, options)
     const data = await getBody<T>(response)
@@ -78,7 +77,7 @@ export const customExamFetch = async <T>(url: string, options: RequestInit): Pro
 export const customPortalFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl(
         process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
-            ? 'http://localhost:3002'
+            ? 'http://localhost:3005'
             : 'https://api.portal.mta.swantech.vn',
         url
     )

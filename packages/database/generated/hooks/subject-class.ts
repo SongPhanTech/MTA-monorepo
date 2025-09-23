@@ -329,7 +329,7 @@ export function useSuspenseCountSubjectClass<TArgs extends Prisma.SubjectClassCo
 }
 import type { SubjectClassSchedule, ExamType } from '../zenstack/models';
 
-export function useCheckSubjectClass<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; name?: string; subjectId?: string; schedule?: SubjectClassSchedule; maxStudent?: number; trainingObjectTypeId?: string; semesterId?: string; cancelled?: boolean; examType?: ExamType; examId?: string; isLockScore?: boolean; isLockExamScore?: boolean; roomId?: string; lecturerId?: string; extraLecturerId?: string; enterGradeLecturerId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSubjectClass<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; code?: string; name?: string; subjectId?: string; schedule?: SubjectClassSchedule; maxStudent?: number; trainingObjectTypeId?: string; semesterId?: string; cancelled?: boolean; examType?: ExamType; examId?: string; isLockScore?: boolean; isLockExamScore?: boolean; roomId?: string; lecturerId?: string; extraLecturerId?: string; enterGradeLecturerId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SubjectClass', `${endpoint}/subjectClass/check`, args, options, fetch);
 }

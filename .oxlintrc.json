@@ -3,7 +3,6 @@
   "files": {
     "ignorePatterns": [
       "**/apps/backup/**/*",
-      "**/apps/ql-danh-muc/**/*",
       "**/.vscode",
       "**/package.json",
       "**/.next/**/*",

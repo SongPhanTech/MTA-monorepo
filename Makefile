@@ -8,22 +8,18 @@ IMG_PREFIX := mta-
 
 # Package Names
 PKG_BE_MODEL := be-model
-PKG_BE_USER := be-ql-nguoi-dung
-PKG_BE_CATEGORIES := be-ql-danh-muc
 PKG_BE_DAO_TAO := be-ql-dao-tao
 PKG_BE_KHAO_THI := be-khao-thi
 PKG_BE_PORTAL := be-portal
 
-PKG_CATEGORIES := ql-danh-muc
 PKG_KHAO_THI := khao-thi
 PKG_DAO_TAO := ql-dao-tao
 PKG_HO_SO := ql-ho-so
-PKG_USER := ql-nguoi-dung
 PKG_AI := tro-ly-ao
 
 # Maps for build types (backend/frontend)
-BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_USER) $(PKG_BE_CATEGORIES) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL)
-FE_PKGS := $(PKG_CATEGORIES) $(PKG_DAO_TAO) $(PKG_USER) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO)
+BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL)
+FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO)
 
 # Targets
 .PHONY: all clean push deploy release \
@@ -32,16 +28,12 @@ FE_PKGS := $(PKG_CATEGORIES) $(PKG_DAO_TAO) $(PKG_USER) $(PKG_AI) $(PKG_KHAO_THI
 help:
 	@echo "Available targets:"
 	@echo "  all-$(PKG_BE_MODEL)"
-	@echo "  all-$(PKG_BE_USER)"
-	@echo "  all-$(PKG_BE_CATEGORIES)"
 	@echo "  all-$(PKG_BE_DAO_TAO)"
 	@echo "  all-$(PKG_BE_KHAO_THI)"
 	@echo "  all-$(PKG_BE_PORTAL)"
-	@echo "  all-$(PKG_CATEGORIES)"
 	@echo "  all-$(PKG_DAO_TAO)"
 	@echo "  all-$(PKG_HO_SO)"
 	@echo "  all-$(PKG_KHAO_THI)"
-	@echo "  all-$(PKG_USER)"
 	@echo "  all-$(PKG_AI)"
 	@echo "  all-clients"
 

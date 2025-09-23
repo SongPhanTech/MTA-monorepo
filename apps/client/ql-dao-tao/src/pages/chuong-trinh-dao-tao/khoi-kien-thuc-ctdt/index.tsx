@@ -10,6 +10,8 @@ import {
     useFindManyTrainingBlock,
     useUpdateTrainingBlock,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import _ from 'lodash'
 import { BookPlus } from 'lucide-react'
@@ -18,6 +20,7 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function TrainingBlock() {
+    const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -113,10 +116,15 @@ export default function TrainingBlock() {
                     <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    <BookPlus />
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        <BookPlus />
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -193,19 +201,34 @@ export default function TrainingBlock() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={onOpen.bind(null, id)}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () => handleDelete(id),
-                                                    }}
-                                                />
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={onOpen.bind(null, id)}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: () => handleDelete(id),
+                                                        }}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }
