@@ -54,7 +54,7 @@ portal:
 	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down && rm -rf portal-cdn && unzip out.zip && mv out portal-cdn && docker compose -f app-docker-compose.yml up -d"
 
 tro-ly-ao:
-	cd apps/client/chatbot && \
+	cd apps/client/tro-ly-ao && \
 	pnpm build && \
 	zip -r out.zip out && \
 	scp out.zip swan1:app && \
