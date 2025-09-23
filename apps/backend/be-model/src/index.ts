@@ -78,7 +78,7 @@ const TargetMap = {
     rankOrder: 'Thứ tự',
     correctOrder: 'Thứ tự đúng',
     examCode: 'Mã đề thi',
-    fax: 'Fax',
+    fax: 'Phách',
     examFaxId: 'Fax',
     questionType: 'Loại',
     trainingBlockId: 'Khối kiến thức',

@@ -1,5 +1,5 @@
 import Table from '@components/commons/table'
-import type { FilterProps } from '@components/commons/typeFilte'
+import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamStatusOptions } from '@hooks/exam-status'

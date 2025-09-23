@@ -1,6 +1,6 @@
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import TableCollapse from '@components/commons/tableCollapse'
-import type { FilterProps } from '@components/commons/typeFilte'
+import type { FilterProps } from '@components/commons/typeFilter'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useCountSubjectVersion, useFindManySubjectVersion } from '@workspace/db/hooks'

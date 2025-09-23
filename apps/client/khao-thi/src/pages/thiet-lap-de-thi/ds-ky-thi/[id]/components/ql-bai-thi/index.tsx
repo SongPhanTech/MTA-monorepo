@@ -1,5 +1,5 @@
 import Table from '@components/commons/table'
-import type { FilterProps } from '@components/commons/typeFilte'
+import type { FilterProps } from '@components/commons/typeFilter'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { emptyObjectIf } from '@workspace/constant'
@@ -260,7 +260,7 @@ export default function ExamSession({ id }: ExamSessionProps) {
                                 render: (_, record) => record?.student?.userProfile?.fullname || '',
                             },
                             {
-                                title: 'Fax',
+                                title: 'Phách',
                                 dataIndex: 'fax',
                                 width: 120,
                                 align: 'center',

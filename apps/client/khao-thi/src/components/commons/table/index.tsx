@@ -17,7 +17,7 @@ import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import type { FilterDropdownProps, TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
 import { useCallback, useState } from 'react'
-import type { ColumnTypeProps, FilterProps } from '../typeFilte'
+import type { ColumnTypeProps, FilterProps } from '../typeFilter'
 
 dayjs.locale('vi')
 

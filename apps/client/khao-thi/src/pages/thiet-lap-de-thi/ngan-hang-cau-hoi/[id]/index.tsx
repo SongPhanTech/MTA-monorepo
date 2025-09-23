@@ -1,7 +1,7 @@
 import { EllipsisOutlined } from '@ant-design/icons'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Table from '@components/commons/table'
-import type { FilterProps } from '@components/commons/typeFilte'
+import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { WordImportModal } from '@components/sub-pages'
