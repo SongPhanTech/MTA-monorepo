@@ -236,17 +236,17 @@ export default function PaymentRecordPage() {
                                 type: 'input',
                             },
                             {
-                                title: 'Số tiền thanh toán',
+                                title: 'Số tiền TT',
                                 dataIndex: 'amount',
                                 width: 150,
                                 align: 'center',
                                 render: (record) => record && `${record?.toString()} VND`,
                             },
                             {
-                                title: 'Thời gian thanh toán',
+                                title: 'Thời gian TT',
                                 dataIndex: 'paymentDate',
                                 align: 'center',
-                                width: 160,
+                                width: 150,
                                 type: 'date',
                                 render: (_, record) =>
                                     record?.paymentDate

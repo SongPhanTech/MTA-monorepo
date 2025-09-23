@@ -3,6 +3,7 @@ import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
+import TextTruncate from '@components/commons/text-truncate'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
@@ -209,11 +210,11 @@ export default function SubjectOpeningPlan() {
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã môn học',
+                                title: 'Mã MH',
                                 // TODO: dataIndex: 'code'
                                 dataIndex: 'subjectVersionCode',
                                 align: 'center',
-                                width: 150,
+                                width: 100,
                                 fixed: 'left',
                             },
                             {
@@ -222,58 +223,56 @@ export default function SubjectOpeningPlan() {
                                 width: 150,
                                 align: 'center',
                                 fixed: 'left',
+                                render: (__, record) => {
+                                    return (
+                                        `${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
+                                        ''
+                                    )
+                                },
                             },
                             {
                                 title: 'Danh sách lớp MH',
                                 dataIndex: 'subjectClass',
-                                width: 200,
+                                width: 250,
                                 align: 'left',
-                                render: (
-                                    values: {
-                                        subjectClassName: string
-                                        subjectClassCode: string
-                                    }[]
-                                ) => (
-                                    <ul
-                                        style={{
-                                            paddingLeft: 16,
-                                            margin: 0,
-                                        }}
-                                    >
-                                        {values?.map((val, index) => (
-                                            // biome-ignore lint/suspicious/noArrayIndexKey: <>
-                                            <li key={index}>
-                                                -{' '}
-                                                {`${val.subjectClassName} ${val.subjectClassCode}`}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ),
+                                render: (__, record) => {
+                                    return record?.subjectClass.length ? (
+                                        <TextTruncate
+                                            arr={record?.subjectClass.map((i: any) => {
+                                                return {
+                                                    key: i?.subjectClassId,
+                                                    label: `${i.subjectClassName} ${i?.subjectClassCode}`,
+                                                }
+                                            })}
+                                            key="subjectClass"
+                                            record={record}
+                                        />
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
                             {
                                 title: 'Danh sách lớp quản lý',
                                 dataIndex: 'fixedClass',
-                                width: 200,
+                                width: 250,
                                 align: 'left',
-                                render: (
-                                    values: {
-                                        fixedClassId: string
-                                        fixedClassName: string
-                                        fixedClassCount: number
-                                    }[]
-                                ) => (
-                                    <ul
-                                        style={{
-                                            paddingLeft: 16,
-                                            margin: 0,
-                                        }}
-                                    >
-                                        {values?.map((val, index) => (
-                                            // biome-ignore lint/suspicious/noArrayIndexKey: <>
-                                            <li key={index}>- {`${val.fixedClassName}`}</li>
-                                        ))}
-                                    </ul>
-                                ),
+                                render: (__, record) => {
+                                    return record?.fixedClass.length ? (
+                                        <TextTruncate
+                                            arr={record?.fixedClass.map((i: any) => {
+                                                return {
+                                                    key: i?.fixedClassId,
+                                                    label: i.fixedClassName,
+                                                }
+                                            })}
+                                            key="fixedClass"
+                                            record={record}
+                                        />
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
 
                             {
@@ -281,50 +280,24 @@ export default function SubjectOpeningPlan() {
                                 dataIndex: 'curriculumVersion',
                                 width: 200,
                                 align: 'center',
-                                render: (
-                                    values: {
-                                        curriculumVersionName: string
-                                    }[]
-                                ) => (
-                                    <ul
-                                        style={{
-                                            paddingLeft: 16,
-                                            margin: 0,
-                                            listStyleType: 'disc',
-                                        }}
-                                    >
-                                        {values?.map((val, index) => (
-                                            // biome-ignore lint/suspicious/noArrayIndexKey: <>
-                                            <li key={index}>{val.curriculumVersionName}</li>
-                                        ))}
-                                    </ul>
-                                ),
-                            },
-                            {
-                                title: 'Số tín chỉ',
-                                dataIndex: 'subjectVersionCredit',
-                                width: 150,
-                                align: 'center',
+                                render: (__, record) => {
+                                    return record?.curriculumVersion.length ? (
+                                        <TextTruncate
+                                            arr={record?.curriculumVersion.map((i: any) => {
+                                                return {
+                                                    key: i?.curriculumVersionId,
+                                                    label: i.curriculumVersionName,
+                                                }
+                                            })}
+                                            key="curriculumVersion"
+                                            record={record}
+                                        />
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
 
-                            // {
-                            //     title: 'Các lớp có môn',
-                            //     dataIndex: 'cacLopCoMon',
-                            //     width: 200,
-                            //     render: (classes: { name: string }[]) => (
-                            //         <ul
-                            //             style={{
-                            //                 paddingLeft: 16,
-                            //                 margin: 0,
-                            //                 listStyleType: 'disc',
-                            //             }}
-                            //         >
-                            //             {classes.map((cls) => (
-                            //                 <li key={cls.name}>{cls.name}</li>
-                            //             ))}
-                            //         </ul>
-                            //     ),
-                            // },
                             {
                                 title: 'SV nợ',
                                 dataIndex: 'svNo',

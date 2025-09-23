@@ -2,7 +2,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import type { Room, SubjectClass, SubjectClassSchedule } from '@workspace/db'
+import type { Room, SubjectClass } from '@workspace/db'
 import {
     useCreateManySubjectClass,
     useFindManyRoom,
@@ -119,7 +119,6 @@ const PutOpenSubjectClassModal = () => {
                     startDate: new Date(),
                     semesterId: form.getFieldValue('semesterId'),
                     subjectId: form.getFieldValue('subjectVersionId'),
-                    schedule: form.getFieldValue('schedule'),
                     subject: subjectVersion,
                     examType: subjectVersion?.examType,
                 })
@@ -144,7 +143,6 @@ const PutOpenSubjectClassModal = () => {
                     startDate: new Date(),
                     semesterId: form.getFieldValue('semesterId'),
                     subjectId: form.getFieldValue('subjectVersionId'),
-                    schedule: form.getFieldValue('schedule'),
                     subject: subjectVersion,
                     examType: subjectVersion?.examType,
                 })
@@ -246,7 +244,7 @@ const PutOpenSubjectClassModal = () => {
                 </FormItem>
             </Col>
 
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem form={form} name="schedule" label="Kíp học" required>
                     <Select
                         placeholder="Chọn kíp học"
@@ -275,7 +273,7 @@ const PutOpenSubjectClassModal = () => {
                         allowClear
                     />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={24}>
                 <FormItem form={form} name="totalStudent" label="Tổng SV" required>
                     <InputNumber
@@ -395,10 +393,26 @@ const PutOpenSubjectClassModal = () => {
                                 dataIndex: 'schedule',
                                 width: 200,
                                 align: 'center',
-                                render: (value: SubjectClassSchedule) =>
-                                    SUBJECT_CLASS_SCHEDULE_TYPE[
-                                        value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
-                                    ],
+                                render: (_, __, index) => (
+                                    <Form.Item
+                                        className="w-full mb-0"
+                                        name={['list', index, 'schedule']}
+                                        label=""
+                                    >
+                                        <Select
+                                            placeholder="Chọn kíp học"
+                                            options={Object.entries(
+                                                SUBJECT_CLASS_SCHEDULE_TYPE
+                                            ).map(([key, value_]) => {
+                                                return {
+                                                    label: value_,
+                                                    value: key,
+                                                }
+                                            })}
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                ),
                             },
                             {
                                 title: 'Hạn PCGD',
@@ -540,16 +554,16 @@ const PutOpenSubjectClassModal = () => {
                                     </Form.Item>
                                 ),
                             },
-                            {
-                                title: 'Địa điểm',
-                                width: 200,
-                                align: 'center',
-                                render: (value) =>
-                                    trainingLocationData.find(
-                                        (item) =>
-                                            item.id === form.getFieldValue('trainingLocationId')
-                                    )?.name || '',
-                            },
+                            // {
+                            //     title: 'Địa điểm',
+                            //     width: 200,
+                            //     align: 'center',
+                            //     render: (value) =>
+                            //         trainingLocationData.find(
+                            //             (item) =>
+                            //                 item.id === form.getFieldValue('trainingLocationId')
+                            //         )?.name || '',
+                            // },
                         ]}
                         data={listForm}
                         pagination={false}

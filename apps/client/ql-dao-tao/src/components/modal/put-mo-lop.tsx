@@ -165,7 +165,6 @@ const PutOpenClassModal = () => {
                     startDate: new Date(),
                     semesterId: dataClass?.semester?.id,
                     subjectId: subjectVersionData?.id,
-                    schedule: form.getFieldValue('schedule'),
                     subject: subjectVersionData,
                     examType: subjectVersionData?.examType,
                 })
@@ -176,8 +175,10 @@ const PutOpenClassModal = () => {
     const handleCreateTableForMaxStudent = () => {
         setIsEdit(false)
         const maxStudent = Number(form.getFieldValue('maxStudent'))
+        console.log('maxStudent', maxStudent, form.getFieldValue('totalStudent'))
+
         if (Number(maxStudent) > 0) {
-            const cout = Math.ceil(Number(form.getFieldValue('totalStudent')) / Number(maxStudent))
+            const cout = Math.ceil(Number(dataClass?.countStudent) / Number(maxStudent))
             const result = []
             for (let i = 0; i < cout; i++) {
                 result.push({
@@ -188,7 +189,6 @@ const PutOpenClassModal = () => {
                     startDate: new Date(),
                     semesterId: dataClass?.semester?.id,
                     subjectId: subjectVersionData?.id,
-                    schedule: form.getFieldValue('schedule'),
                     subject: subjectVersionData,
                     examType: subjectVersionData?.examType,
                 })
@@ -260,7 +260,6 @@ const PutOpenClassModal = () => {
             )
             form.setFieldsValue({
                 totalStudent: totalStudent,
-                schedule: subjectClassData[0]?.schedule,
                 trainingLocationId: subjectClassData[0]?.room?.building?.trainingLocationId,
                 list: subjectClassData.map((i, index: number) => ({
                     ...i,
@@ -310,7 +309,7 @@ const PutOpenClassModal = () => {
             <Col className="mb-3" span={6}>
                 Tổng SV nợ môn: 0
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem form={form} name="schedule" label="Kíp học" required>
                     <Select
                         placeholder="Chọn kíp học"
@@ -339,7 +338,7 @@ const PutOpenClassModal = () => {
                         allowClear
                     />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={12}>
                 <Flex gap={12} align="center">
                     <span className="min-w-[100px]">Số LMH</span>
@@ -432,10 +431,26 @@ const PutOpenClassModal = () => {
                                 dataIndex: 'schedule',
                                 width: 200,
                                 align: 'center',
-                                render: (value: SubjectClassSchedule) =>
-                                    SUBJECT_CLASS_SCHEDULE_TYPE[
-                                        value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
-                                    ],
+                                render: (_, __, index) => (
+                                    <Form.Item
+                                        className="w-full mb-0"
+                                        name={['list', index, 'schedule']}
+                                        label=""
+                                    >
+                                        <Select
+                                            placeholder="Chọn kíp học"
+                                            options={Object.entries(
+                                                SUBJECT_CLASS_SCHEDULE_TYPE
+                                            ).map(([key, value_]) => {
+                                                return {
+                                                    label: value_,
+                                                    value: key,
+                                                }
+                                            })}
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                ),
                             },
                             {
                                 title: 'Hạn PCGD',
@@ -573,17 +588,17 @@ const PutOpenClassModal = () => {
                                     </Form.Item>
                                 ),
                             },
-                            {
-                                title: 'Địa điểm',
-                                dataIndex: 'trainingLocationId',
-                                width: 200,
-                                align: 'center',
-                                render: (value) =>
-                                    trainingLocationData.find(
-                                        (item) =>
-                                            item.id === form.getFieldValue('trainingLocationId')
-                                    )?.name || '',
-                            },
+                            // {
+                            //     title: 'Địa điểm',
+                            //     dataIndex: 'trainingLocationId',
+                            //     width: 200,
+                            //     align: 'center',
+                            //     render: (value) =>
+                            //         trainingLocationData.find(
+                            //             (item) =>
+                            //                 item.id === form.getFieldValue('trainingLocationId')
+                            //         )?.name || '',
+                            // },
                             {
                                 title: 'Thao tác',
                                 width: 100,

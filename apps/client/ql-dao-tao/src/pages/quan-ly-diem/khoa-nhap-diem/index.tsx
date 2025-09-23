@@ -279,7 +279,7 @@ export default function SubjectClassScore() {
                                     type: 'input',
                                 },
                                 {
-                                    title: 'Số tín chỉ',
+                                    title: 'Số TC',
                                     width: 80,
                                     align: 'center',
                                     render: (text, record) => record?.subject?.credit || text,

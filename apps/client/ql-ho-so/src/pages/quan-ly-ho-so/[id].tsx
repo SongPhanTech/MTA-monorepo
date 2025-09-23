@@ -382,9 +382,10 @@ export default function UpdateUserPage() {
             const res = await axios.put('https://mta.swantech.vn/DM_NhanViens', {
                 sDM_DonViId: values.sDM_DonViId,
                 sMa: values.code,
-                sHoVaDem: values.lastName,
-                sTen: values.firstName,
-                sTenDayDu: `${values.lastName || ''} ${values.firstName || ''}`.trim(),
+                sHoVaDem: values.lastName.trim(),
+                sTen: values.firstName.trim(),
+                sTenDayDu:
+                    `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
                 sDM_GioiTinhId: genderId,
                 dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
                 sCCCD: values.idCardNumber,
@@ -455,12 +456,14 @@ export default function UpdateUserPage() {
                             },
                             data: {
                                 ...values,
+                                lastName: values.lastName.trim(),
+                                firstName: values.firstName.trim(),
                                 bLaHocVien: values.bLaHocVien,
                                 bLaCanBoNhanVien: !!(
                                     bLaGiangVien === true || values?.bLaCanBoNhanVien === true
                                 ),
                                 fullname:
-                                    `${values.lastName || ''} ${values.firstName || ''}`.trim(),
+                                    `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
                                 dateOfBirth: values.dateOfBirth
                                     ? dayjs(values.dateOfBirth).toISOString()
                                     : null,

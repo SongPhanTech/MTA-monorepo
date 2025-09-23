@@ -413,9 +413,10 @@ export default function CreateUserPage() {
             const res = await axios.post('https://mta.swantech.vn/DM_NhanViens', {
                 sDM_DonViId: values.sDM_DonViId,
                 sMa: values.code,
-                sHoVaDem: values.lastName,
-                sTen: values.firstName,
-                sTenDayDu: `${values.lastName || ''} ${values.firstName || ''}`.trim(),
+                sHoVaDem: values.lastName.trim(),
+                sTen: values.firstName.trim(),
+                sTenDayDu:
+                    `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
                 sDM_GioiTinhId: values.genderId,
                 dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
                 sCCCD: values.idCardNumber,
@@ -427,6 +428,8 @@ export default function CreateUserPage() {
                 const resProfile = await createUserProfile({
                     data: {
                         ...values,
+                        lastName: values.lastName.trim(),
+                        firstName: values.firstName.trim(),
                         id: res?.data?.Id,
                         bLaCanBoNhanVien: !!(
                             bLaGiangVien === true || values?.bLaCanBoNhanVien === true
@@ -448,7 +451,8 @@ export default function CreateUserPage() {
                             ? dayjs(values.tenureDate).toISOString()
                             : null,
                         avatar: form.getFieldValue('avatar'),
-                        fullname: `${values.lastName || ''} ${values.firstName || ''}`.trim(),
+                        fullname:
+                            `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
                         ...emptyObjectIf(
                             {
                                 hocVi: {
