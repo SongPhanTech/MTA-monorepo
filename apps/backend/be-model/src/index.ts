@@ -10,6 +10,7 @@ import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import AuthApp from './api/auth'
 import MinIOApp from './api/minio'
+import SystemApp from './api/system'
 import SqlTransactionApp from './api/transaction'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
@@ -61,6 +62,7 @@ app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
 // setupAuth(app)
 
 // private route
+app.route('/api/system', SystemApp)
 app.route('/api/minio', MinIOApp)
 app.route('/api/sql', SqlTransactionApp)
 
