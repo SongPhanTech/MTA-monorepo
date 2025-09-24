@@ -1,5 +1,4 @@
 import type { NextConfig } from 'next'
-import TerserPlugin from 'terser-webpack-plugin'
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const assetPrefix = process.env.NEXT_PUBLIC_ASSET_PREFIX || ''
@@ -20,19 +19,6 @@ const nextConfig: NextConfig = {
     },
     output: 'export',
     crossOrigin: 'anonymous',
-    webpack: (config) => {
-        config.optimization.minimize = true
-        config.optimization.minimizer = [
-            new TerserPlugin({
-                parallel: true,
-                terserOptions: {
-                    keep_fnames: true,
-                },
-                extractComments: false,
-            }),
-        ]
-        return config
-    },
 }
 
 export default nextConfig

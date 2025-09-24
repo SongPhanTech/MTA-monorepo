@@ -11,6 +11,8 @@ import {
     useFindManyDiplomaVerificationApplication,
     useUpdateDiplomaVerificationApplication,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Col, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { FileSearch } from 'lucide-react'
@@ -20,6 +22,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function QLDONDANGKY() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const {
@@ -324,6 +327,10 @@ export default function QLDONDANGKY() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_VAN_BANG_QL_DON_DANG_KY_XAC_MINH,
+                                    'SUA'
+                                ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         const rec = record as Exclude<typeof record, AnyObject>

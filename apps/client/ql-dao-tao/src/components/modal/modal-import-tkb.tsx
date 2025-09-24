@@ -4,6 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import useSpinner from '@hooks/spinner'
 import { useImportPhanCongGiangDay } from '@workspace/libs/api/training'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Form, message, Space, Tag } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -14,6 +15,7 @@ interface FilterProps {
 }
 
 const ModalNhapTKB = () => {
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [form] = Form.useForm<Record<string, unknown>>()
     const {
         isOpen,
@@ -57,6 +59,10 @@ const ModalNhapTKB = () => {
     const { mutateAsync: ImportPhanCongGiangDay } = useImportPhanCongGiangDay()
 
     const handleSubmit = async (output?: FilterProps) => {
+        if (!trainingObjectTypeId) {
+            message.warning('Vui lòng chọn đối tượng đào tạo')
+            return
+        }
         if (!file || !output?.semesterId) {
             message.warning('Vui lòng chọn đầy đủ file và học kỳ')
             return
@@ -67,13 +73,14 @@ const ModalNhapTKB = () => {
                 data: {
                     file: file,
                     semesterId: output.semesterId || '',
+                    trainingObjectTypeId,
                 },
             })
             if (res?.status === 200) {
-                message.success(res?.data?.message || 'Nhâp dữ liệu từ file thành công')
+                message.success(res?.data?.message || 'Nhập dữ liệu từ file thành công')
                 onClose()
             } else {
-                message.error(res?.data?.message || 'Nhâp dữ liệu từ file thất bại')
+                message.error(res?.data?.message || 'Nhập dữ liệu từ file thất bại')
             }
         } catch (error) {
             message.error('Có lỗi xảy ra khi nhập dữ liệu từ file')

@@ -13,6 +13,8 @@ import {
     useDeletePaymentRecord,
     useFindManyPaymentRecord,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import type React from 'react'
@@ -20,6 +22,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function PaymentRecordPage() {
+    const { can, canSome } = useAbility()
     const { getPaymentStatusColor, getPaymentStatusLabel, paymentStatusOptions } =
         usePaymentStatusOptions()
     const [currentPage, setCurrentPage] = useState(1)
@@ -173,17 +176,22 @@ export default function PaymentRecordPage() {
                         </Col>
                         <Col>
                             <Flex justify="end" gap={4}>
-                                <Button
-                                    onClick={() =>
-                                        openUpdatePaymentStatus({
-                                            paymentRecordIds: selectedRowKeys as string[],
-                                        })
-                                    }
-                                    disabled={selectedRowKeys.length === 0}
-                                    type="primary"
-                                >
-                                    Cập nhật trạng thái
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        onClick={() =>
+                                            openUpdatePaymentStatus({
+                                                paymentRecordIds: selectedRowKeys as string[],
+                                            })
+                                        }
+                                        disabled={selectedRowKeys.length === 0}
+                                        type="primary"
+                                    >
+                                        Cập nhật trạng thái
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -236,17 +244,17 @@ export default function PaymentRecordPage() {
                                 type: 'input',
                             },
                             {
-                                title: 'Số tiền thanh toán',
+                                title: 'Số tiền TT',
                                 dataIndex: 'amount',
                                 width: 150,
                                 align: 'center',
                                 render: (record) => record && `${record?.toString()} VND`,
                             },
                             {
-                                title: 'Thời gian thanh toán',
+                                title: 'Thời gian TT',
                                 dataIndex: 'paymentDate',
                                 align: 'center',
-                                width: 160,
+                                width: 150,
                                 type: 'date',
                                 render: (_, record) =>
                                     record?.paymentDate
@@ -272,23 +280,38 @@ export default function PaymentRecordPage() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={() => {
-                                                        openPaymentRecord({
-                                                            paymentRecordId: id,
-                                                        })
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () => handleDelete(id),
-                                                    }}
-                                                />
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={() => {
+                                                            openPaymentRecord({
+                                                                paymentRecordId: id,
+                                                            })
+                                                        }}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: () => handleDelete(id),
+                                                        }}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

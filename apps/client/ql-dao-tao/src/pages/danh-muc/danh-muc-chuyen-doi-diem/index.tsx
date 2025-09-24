@@ -12,6 +12,8 @@ import {
     useDeleteScoreConvert,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
@@ -32,6 +34,7 @@ const DataActive = [
 ]
 
 export default function TrainingFieldPage() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -251,9 +254,14 @@ export default function TrainingFieldPage() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -265,21 +273,30 @@ export default function TrainingFieldPage() {
                         headerRight={(record) => (
                             <Row className="justify-center gap-2 mr-2">
                                 <Tooltip title="Nhân bản">
-                                    <Copy
-                                        onClick={onOpenCopy.bind(null, {
-                                            record,
-                                        })}
-                                        size={16}
-                                        strokeWidth={1.5}
-                                        className="text-sm cursor-pointer"
-                                    />
+                                    {can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
+                                        'THEM'
+                                    ) && (
+                                        <Copy
+                                            onClick={onOpenCopy.bind(null, {
+                                                record,
+                                            })}
+                                            size={16}
+                                            strokeWidth={1.5}
+                                            className="text-sm cursor-pointer"
+                                        />
+                                    )}
                                 </Tooltip>
-
-                                <DeleteIcon
-                                    popConfirm={{
-                                        onConfirm: () => handleDeleteMultil(record),
-                                    }}
-                                />
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
+                                    'XOA'
+                                ) && (
+                                    <DeleteIcon
+                                        popConfirm={{
+                                            onConfirm: () => handleDeleteMultil(record),
+                                        }}
+                                    />
+                                )}
                             </Row>
                         )}
                         columns={[
@@ -319,19 +336,34 @@ export default function TrainingFieldPage() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={onOpen.bind(null, id)}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () => handleDelete(id),
-                                                    }}
-                                                />
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
+                                                    'THEM'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={onOpen.bind(null, id)}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
+                                                    'THEM'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: () => handleDelete(id),
+                                                        }}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

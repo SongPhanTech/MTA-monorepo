@@ -995,6 +995,7 @@ exports.Prisma.StudentSemesterResultScalarFieldEnum = {
   totalCreditsByCurriculum: 'totalCreditsByCurriculum',
   totalFailedCredits: 'totalFailedCredits',
   foreignLangPass: 'foreignLangPass',
+  computerSkillPass: 'computerSkillPass',
   isClassMonitor: 'isClassMonitor',
   isUnionLeader: 'isUnionLeader',
   entryScore: 'entryScore',

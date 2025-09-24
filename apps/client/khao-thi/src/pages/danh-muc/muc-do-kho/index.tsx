@@ -1,5 +1,5 @@
 import Table from '@components/commons/table'
-import type { FilterProps } from '@components/commons/typeFilte'
+import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -7,12 +7,15 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { emptyObjectIf } from '@workspace/constant'
 import { useCountDifficulty, useFindManyDifficulty, useUpdateDifficulty } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function Difficulty() {
+    const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -104,15 +107,17 @@ export default function Difficulty() {
                         {/* Thêm mới */}
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button
-                                    type="primary"
-                                    onClick={() => {
-                                        onOpenPutDifficulty()
-                                    }}
-                                >
-                                    <BookPlus />
-                                    Thêm mới
-                                </Button>
+                                {can(KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_MUC_DO_KHO, 'THEM') && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => {
+                                            onOpenPutDifficulty()
+                                        }}
+                                    >
+                                        <BookPlus />
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -175,26 +180,41 @@ export default function Difficulty() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_MUC_DO_KHO,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpenPutDifficulty(record?.id)
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeleteDifficulty(record?.id)
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_MUC_DO_KHO,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            onOpenPutDifficulty(record?.id)
+                                                        }}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_MUC_DO_KHO,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleDeleteDifficulty(record?.id)
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

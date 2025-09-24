@@ -3,12 +3,15 @@ import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
+import TextTruncate from '@components/commons/text-truncate'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import type { TrainingCourse, TrainingMajor } from '@workspace/db'
 import { useFindManyTrainingCourse, useFindManyTrainingMajor } from '@workspace/db/hooks'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
@@ -24,6 +27,7 @@ interface FilterProps {
 }
 
 export default function SubjectOpeningPlan() {
+    const { can, canSome } = useAbility()
     const [form] = Form.useForm<FilterProps>()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -163,20 +167,30 @@ export default function SubjectOpeningPlan() {
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 {/* <Button type="primary">Thêm mới</Button> */}
-                                <Button
-                                    type="primary"
-                                    onClick={() => onOpenXuatFileMoLop(selectedSemesterId)}
-                                >
-                                    <FileDoneOutlined />
-                                    Xuất file mẫu
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    onClick={() => onOpenModalNhapTKB(selectedSemesterId)}
-                                >
-                                    <EditIcon stroke="white" />
-                                    Nhập từ file TKB
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                    'XUAT_EXCEL'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => onOpenXuatFileMoLop(selectedSemesterId)}
+                                    >
+                                        <FileDoneOutlined />
+                                        Xuất file mẫu
+                                    </Button>
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                    'NHAP_EXCEL'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => onOpenModalNhapTKB(selectedSemesterId)}
+                                    >
+                                        <EditIcon stroke="white" />
+                                        Nhập từ file TKB
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -196,11 +210,11 @@ export default function SubjectOpeningPlan() {
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã môn học',
+                                title: 'Mã MH',
                                 // TODO: dataIndex: 'code'
                                 dataIndex: 'subjectVersionCode',
                                 align: 'center',
-                                width: 150,
+                                width: 100,
                                 fixed: 'left',
                             },
                             {
@@ -209,58 +223,54 @@ export default function SubjectOpeningPlan() {
                                 width: 150,
                                 align: 'center',
                                 fixed: 'left',
+                                render: (__, record) => {
+                                    return (
+                                        `${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
+                                        ''
+                                    )
+                                },
                             },
                             {
                                 title: 'Danh sách lớp MH',
                                 dataIndex: 'subjectClass',
-                                width: 200,
+                                width: 250,
                                 align: 'left',
-                                render: (
-                                    values: {
-                                        subjectClassName: string
-                                        subjectClassCode: string
-                                    }[]
-                                ) => (
-                                    <ul
-                                        style={{
-                                            paddingLeft: 16,
-                                            margin: 0,
-                                        }}
-                                    >
-                                        {values?.map((val, index) => (
-                                            // biome-ignore lint/suspicious/noArrayIndexKey: <>
-                                            <li key={index}>
-                                                -{' '}
-                                                {`${val.subjectClassName} ${val.subjectClassCode}`}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ),
+                                render: (__, record) => {
+                                    return record?.subjectClass.length ? (
+                                        <TextTruncate
+                                            arr={record?.subjectClass.map((i: any) => {
+                                                return {
+                                                    key: i?.subjectClassId,
+                                                    label: `${i.subjectClassName} ${i?.subjectClassCode}`,
+                                                }
+                                            })}
+                                            key="subjectClass"
+                                        />
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
                             {
                                 title: 'Danh sách lớp quản lý',
                                 dataIndex: 'fixedClass',
-                                width: 200,
+                                width: 250,
                                 align: 'left',
-                                render: (
-                                    values: {
-                                        fixedClassId: string
-                                        fixedClassName: string
-                                        fixedClassCount: number
-                                    }[]
-                                ) => (
-                                    <ul
-                                        style={{
-                                            paddingLeft: 16,
-                                            margin: 0,
-                                        }}
-                                    >
-                                        {values?.map((val, index) => (
-                                            // biome-ignore lint/suspicious/noArrayIndexKey: <>
-                                            <li key={index}>- {`${val.fixedClassName}`}</li>
-                                        ))}
-                                    </ul>
-                                ),
+                                render: (__, record) => {
+                                    return record?.fixedClass.length ? (
+                                        <TextTruncate
+                                            arr={record?.fixedClass.map((i: any) => {
+                                                return {
+                                                    key: i?.fixedClassId,
+                                                    label: i.fixedClassName,
+                                                }
+                                            })}
+                                            key="fixedClass"
+                                        />
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
 
                             {
@@ -268,50 +278,23 @@ export default function SubjectOpeningPlan() {
                                 dataIndex: 'curriculumVersion',
                                 width: 200,
                                 align: 'center',
-                                render: (
-                                    values: {
-                                        curriculumVersionName: string
-                                    }[]
-                                ) => (
-                                    <ul
-                                        style={{
-                                            paddingLeft: 16,
-                                            margin: 0,
-                                            listStyleType: 'disc',
-                                        }}
-                                    >
-                                        {values?.map((val, index) => (
-                                            // biome-ignore lint/suspicious/noArrayIndexKey: <>
-                                            <li key={index}>{val.curriculumVersionName}</li>
-                                        ))}
-                                    </ul>
-                                ),
-                            },
-                            {
-                                title: 'Số tín chỉ',
-                                dataIndex: 'subjectVersionCredit',
-                                width: 150,
-                                align: 'center',
+                                render: (__, record) => {
+                                    return record?.curriculumVersion.length ? (
+                                        <TextTruncate
+                                            arr={record?.curriculumVersion.map((i: any) => {
+                                                return {
+                                                    key: i?.curriculumVersionId,
+                                                    label: i.curriculumVersionName,
+                                                }
+                                            })}
+                                            key="curriculumVersion"
+                                        />
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
 
-                            // {
-                            //     title: 'Các lớp có môn',
-                            //     dataIndex: 'cacLopCoMon',
-                            //     width: 200,
-                            //     render: (classes: { name: string }[]) => (
-                            //         <ul
-                            //             style={{
-                            //                 paddingLeft: 16,
-                            //                 margin: 0,
-                            //                 listStyleType: 'disc',
-                            //             }}
-                            //         >
-                            //             {classes.map((cls) => (
-                            //                 <li key={cls.name}>{cls.name}</li>
-                            //             ))}
-                            //         </ul>
-                            //     ),
-                            // },
                             {
                                 title: 'SV nợ',
                                 dataIndex: 'svNo',
@@ -341,6 +324,10 @@ export default function SubjectOpeningPlan() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                    'THEM'
+                                ),
                                 render: (record) => {
                                     if (record?.id) {
                                         return (

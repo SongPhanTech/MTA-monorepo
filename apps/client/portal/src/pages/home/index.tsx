@@ -1,9 +1,10 @@
 import Notifications from '@components/dashboard/notifications'
-import { useAcademicRankingConverter } from '@hooks/academicRankingConvert'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DashboardLayout from '@layouts/dashboard-layout'
 import { useSession } from '@workspace/auth/react'
 import { useFindUniqueCurriculumVersion, useFindUniqueUserProfile } from '@workspace/db/hooks'
+import { useAcademicRankingConverter } from '@workspace/libs/hook/academicRankingConvert'
+import { LichCongTac } from '@workspace/ui'
 import { Col, Progress, Row, Typography } from 'antd'
 import { useMemo } from 'react'
 
@@ -49,6 +50,9 @@ function Page() {
                             },
                         },
                     },
+                    orderBy: {
+                        createdAt: 'desc',
+                    },
                 },
                 trainingBlocks: {
                     include: {
@@ -77,8 +81,10 @@ function Page() {
     )
 
     const { convertAcademicRanking } = useAcademicRankingConverter(
-        subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.academicRankingConvert
+        subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.academicRankingConvert,
+        subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.baseScore
     )
+    console.log('subjectScoreData', subjectScoreData?.fixedClasses?.[0]?.trainingCourse)
 
     const totalCredits = subjectScoreData?.trainingBlocks[0]?.subjects
         ?.filter(
@@ -123,7 +129,9 @@ function Page() {
                         <div className="p-4">
                             <Title level={4}>Thời khoá biểu</Title>
                         </div>
-                        <div className="flex-1">Thoi khoa bieu</div>
+                        <div className="flex-1 p-2">
+                            <LichCongTac />
+                        </div>
                     </div>
                 </Col>
                 <Col xs={24} md={6}>
@@ -161,7 +169,7 @@ function Page() {
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white rounded shadow h-96 flex flex-col mt-2">
+                    <div className="bg-white rounded shadow h-[550px] flex flex-col mt-2">
                         <div className="p-4">
                             <Title level={4}>Thông báo</Title>
                         </div>

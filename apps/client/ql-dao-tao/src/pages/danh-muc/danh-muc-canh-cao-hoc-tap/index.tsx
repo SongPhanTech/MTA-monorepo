@@ -15,6 +15,8 @@ import {
     useFindManyTrainingObjectType,
     useUpdateAcademicWarningRule,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import type React from 'react'
@@ -23,6 +25,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useCriteriaFieldOptions } from '../../../hooks/criteriaField'
 
 export default function AcademicWarningRule() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -277,40 +280,42 @@ export default function AcademicWarningRule() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CANH_CAO_HOC_TAP,
+                                    'SUA'
+                                ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                {/* <Tooltip
-                                                    title="Xem chi tiết"
-                                                    placement="leftTop"
-                                                >
-                                                    <EyeOutlined
-                                                        onClick={onOpen.bind(
-                                                            null,
-                                                            id
-                                                        )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CANH_CAO_HOC_TAP,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={() =>
+                                                            onOpenAcademicWarningRule({
+                                                                trainingCourseId:
+                                                                    record?.trainingCourseId,
+                                                                academicWarningRuleId: record?.id,
+                                                            })
+                                                        }
                                                         className="text-sm text-blue-700 cursor-pointer"
                                                     />
-                                                </Tooltip> */}
-                                                <EditIcon
-                                                    onClick={() =>
-                                                        onOpenAcademicWarningRule({
-                                                            trainingCourseId:
-                                                                record?.trainingCourseId,
-                                                            academicWarningRuleId: record?.id,
-                                                        })
-                                                    }
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDeleteAcademicWarningRule(
-                                                                record?.id
-                                                            ),
-                                                    }}
-                                                />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CANH_CAO_HOC_TAP,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: () =>
+                                                                handleDeleteAcademicWarningRule(
+                                                                    record?.id
+                                                                ),
+                                                        }}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }
@@ -321,16 +326,21 @@ export default function AcademicWarningRule() {
                         childrenFieldName="academicWarningRule"
                         headerRight={({ id }) => (
                             <div className="flex gap-2.5 w-[50px] items-center">
-                                <CreateIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onOpenAcademicWarningRule({
-                                            trainingCourseId: id,
-                                            academicWarningRuleId: '',
-                                        })
-                                    }}
-                                    title="Thêm mới cảnh cáo học tập"
-                                />
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CANH_CAO_HOC_TAP,
+                                    'THEM'
+                                ) && (
+                                    <CreateIcon
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            onOpenAcademicWarningRule({
+                                                trainingCourseId: id,
+                                                academicWarningRuleId: '',
+                                            })
+                                        }}
+                                        title="Thêm mới cảnh cáo học tập"
+                                    />
+                                )}
                             </div>
                         )}
                         data={data}

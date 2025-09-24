@@ -1,5 +1,5 @@
 import Table from '@components/commons/table'
-import type { FilterProps } from '@components/commons/typeFilte'
+import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -11,13 +11,15 @@ import {
     useFindManySurveyQuestion,
     useUpdateSurveyQuestion,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function Page() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -125,9 +127,14 @@ function Page() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     <Flex justify="end">
-                        <Button onClick={handleModal} type="primary">
-                            Thêm mới
-                        </Button>
+                        {can(
+                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT,
+                            'THEM'
+                        ) && (
+                            <Button onClick={handleModal} type="primary">
+                                Thêm mới
+                            </Button>
+                        )}
                     </Flex>
                 </Col>
                 <Col span={24}>
@@ -162,20 +169,35 @@ function Page() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                hidden: !canSome(
+                                    KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id, surveyQuestionGroupId }) => (
                                     <Row className="justify-center gap-2">
-                                        <EditIcon
-                                            onClick={onOpen.bind(null, {
-                                                id,
-                                                surveyQuestionGroupId,
-                                            })}
-                                            className="text-sm text-blue-700 cursor-pointer"
-                                        />
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () => handleDelete(id),
-                                            }}
-                                        />
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT,
+                                            'SUA'
+                                        ) && (
+                                            <EditIcon
+                                                onClick={onOpen.bind(null, {
+                                                    id,
+                                                    surveyQuestionGroupId,
+                                                })}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                        )}
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () => handleDelete(id),
+                                                }}
+                                            />
+                                        )}
                                     </Row>
                                 ),
                             },

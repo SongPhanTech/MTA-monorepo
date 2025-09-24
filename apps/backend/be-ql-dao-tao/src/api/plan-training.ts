@@ -234,6 +234,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
             select: {
                 id: true,
                 codeTkb: true,
+                code: true,
             },
         })
         const danhSachLopNienChe = await prisma.fixedClass.findMany({
@@ -283,6 +284,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                         gvChinh: null as string | null,
                         gvPhu: null as string | null,
                         monHoc: null as string | null,
+                        maLopMonHoc: null as string | null,
                         lopNienChe: [] as string[],
                         phongHoc: null as string | null,
                         ngayBatDau: ngayHoc ? new Date(ngayHoc) : null,
@@ -351,6 +353,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                         )
                         if (monHoc) {
                             subjectClass.monHoc = monHoc.id
+                            subjectClass.maLopMonHoc = `${monHoc.code}-${Math.random().toString(10).substr(2, 2)}`
                         } else {
                             console.log(`Không tìm thấy môn học với mã: ${maMon}`)
                         }
@@ -418,6 +421,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                     scheduleInfo.ngayHoc && scheduleInfo.tietHoc
                                         ? {
                                               create: {
+                                                  roomId: existSubjectClass.roomId,
                                                   classDate: scheduleInfo.ngayHoc,
                                                   startPeriod: Number(scheduleInfo.tietHoc[0]) ?? 1,
                                                   endPeriod:
@@ -441,6 +445,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                     ) {
                         const res = await tx.subjectClass.create({
                             data: {
+                                code: subjectClass.maLopMonHoc ?? '',
                                 name: tenMon ? tenMon.trim() : '',
                                 schedule: subjectClass.caHoc,
                                 maxStudent: subjectClass.quanSo,
@@ -460,6 +465,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                     scheduleInfo.ngayHoc && scheduleInfo.tietHoc
                                         ? {
                                               create: {
+                                                  roomId: subjectClass.phongHoc,
                                                   classDate: scheduleInfo.ngayHoc,
                                                   startPeriod: Number(scheduleInfo.tietHoc[0]) ?? 1,
                                                   endPeriod:

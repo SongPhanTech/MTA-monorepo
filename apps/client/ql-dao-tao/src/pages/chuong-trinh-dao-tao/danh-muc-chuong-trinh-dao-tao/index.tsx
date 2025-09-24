@@ -31,7 +31,8 @@ import {
     useUpdateCurriculum,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Input, message, Row, Select, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
@@ -42,6 +43,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 export default function TrainingProgramCatalog() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -300,7 +302,13 @@ export default function TrainingProgramCatalog() {
     }
 
     const handleRowClick = (record: { id?: string }) => {
-        if (record?.id) {
+        if (
+            record?.id &&
+            can(
+                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                'XEM_CHI_TIET'
+            )
+        ) {
             router.push(
                 `${
                     ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO
@@ -377,10 +385,15 @@ export default function TrainingProgramCatalog() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    <BookPlus />
-                                    Thêm chương trình
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        <BookPlus />
+                                        Thêm chương trình
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -618,54 +631,84 @@ export default function TrainingProgramCatalog() {
                                 width: 120,
                                 fixed: 'right',
                                 align: 'center',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                    'XEM_CHI_TIET',
+                                    'THEM',
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <Tooltip title="Chỉnh sửa nội dung" placement="top">
-                                                    <HighlightOutlined
-                                                        size={16}
-                                                        className="text-base cursor-pointer"
-                                                    />
-                                                </Tooltip>
-                                                <CopyPlusIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        handleCloneCurriculumVersion(
-                                                            record as CurriculumVersion & {
-                                                                trainingBlocks: TrainingBlockOnCurriculumVersion[]
-                                                                documentFiles: DocumentFile[]
-                                                            }
-                                                        )
-                                                    }}
-                                                />
-                                                <EditIcon
-                                                    title="Sửa thông tin chung"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpenCurriculumVersion({
-                                                            curriculumId: (
-                                                                record as CurriculumVersion
-                                                            ).curriculumId,
-                                                            versionId: record?.id,
-                                                        })
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeleteCurriculumVersion(
-                                                                record?.id
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                                    'XEM_CHI_TIET'
+                                                ) && (
+                                                    <Tooltip
+                                                        title="Chỉnh sửa nội dung"
+                                                        placement="top"
+                                                    >
+                                                        <HighlightOutlined
+                                                            size={16}
+                                                            className="text-base cursor-pointer"
+                                                        />
+                                                    </Tooltip>
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                                    'THEM'
+                                                ) && (
+                                                    <CopyPlusIcon
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            handleCloneCurriculumVersion(
+                                                                record as CurriculumVersion & {
+                                                                    trainingBlocks: TrainingBlockOnCurriculumVersion[]
+                                                                    documentFiles: DocumentFile[]
+                                                                }
                                                             )
-                                                            e?.stopPropagation()
-                                                        },
-                                                        onCancel: (e) => {
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                        }}
+                                                    />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        title="Sửa thông tin chung"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            onOpenCurriculumVersion({
+                                                                curriculumId: (
+                                                                    record as CurriculumVersion
+                                                                ).curriculumId,
+                                                                versionId: record?.id,
+                                                            })
+                                                        }}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleDeleteCurriculumVersion(
+                                                                    record?.id
+                                                                )
+                                                                e?.stopPropagation()
+                                                            },
+                                                            onCancel: (e) => {
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }
@@ -675,35 +718,50 @@ export default function TrainingProgramCatalog() {
                         ]}
                         headerRight={({ id }) => (
                             <div className="flex gap-2.5 w-[85px] items-center">
-                                <CreateIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onOpenCurriculumVersion({
-                                            curriculumId: id,
-                                            versionId: '',
-                                        })
-                                    }}
-                                    title="Thêm mới phiên bản"
-                                />
-                                <EditIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onOpenCurriculum(id)
-                                    }}
-                                    className="text-sm text-blue-700 cursor-pointer"
-                                />
-                                <DeleteIcon
-                                    popConfirm={{
-                                        onConfirm: (e) => {
-                                            handleDeleteCurriculum(id)
-                                            e?.stopPropagation()
-                                        },
-                                        onCancel: (e) => {
-                                            e?.stopPropagation()
-                                        },
-                                    }}
-                                    onClick={(e) => e.stopPropagation()}
-                                />
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                    'THEM'
+                                ) && (
+                                    <CreateIcon
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            onOpenCurriculumVersion({
+                                                curriculumId: id,
+                                                versionId: '',
+                                            })
+                                        }}
+                                        title="Thêm mới phiên bản"
+                                    />
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                    'SUA'
+                                ) && (
+                                    <EditIcon
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            onOpenCurriculum(id)
+                                        }}
+                                        className="text-sm text-blue-700 cursor-pointer"
+                                    />
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                    'XOA'
+                                ) && (
+                                    <DeleteIcon
+                                        popConfirm={{
+                                            onConfirm: (e) => {
+                                                handleDeleteCurriculum(id)
+                                                e?.stopPropagation()
+                                            },
+                                            onCancel: (e) => {
+                                                e?.stopPropagation()
+                                            },
+                                        }}
+                                        onClick={(e) => e.stopPropagation()}
+                                    />
+                                )}
                             </div>
                         )}
                         data={data}

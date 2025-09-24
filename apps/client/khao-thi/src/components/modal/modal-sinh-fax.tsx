@@ -47,7 +47,7 @@ const ModalSinhFax = () => {
                 message.error(res.data.message)
                 return
             }
-            message.success('Sinh fax thành công')
+            message.success('Sinh phách thành công')
             onClose()
         } catch (error: any) {
             if (error?.info?.message) {
@@ -74,12 +74,12 @@ const ModalSinhFax = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={'Tinh fax tự động'}
+            title={'Sinh phách tự động'}
             className="w-[30vw]"
             okText="Xác nhận"
         >
             <Col span={24}>
-                <FormItem form={form} name="count" label="Số lượng fax" required>
+                <FormItem form={form} name="count" label="Số lượng phách" required>
                     <InputNumber type="number" step={1} min={1} className="w-full" />
                 </FormItem>
             </Col>

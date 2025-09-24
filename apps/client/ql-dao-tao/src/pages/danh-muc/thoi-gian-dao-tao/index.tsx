@@ -10,12 +10,15 @@ import {
     useFindManyTrainingTime,
     useUpdateTrainingTime,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function TrainingTimePage() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [_searchText, _setSearchText] = useState<string>('')
@@ -100,9 +103,14 @@ export default function TrainingTimePage() {
                     <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_THOI_GIAN_DAO_TAO,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -142,17 +150,32 @@ export default function TrainingTimePage() {
                                 title: 'Thao tác',
                                 width: 150,
                                 align: 'center',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_THOI_GIAN_DAO_TAO,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <EditIcon
-                                            onClick={onOpen.bind(null, id)}
-                                            className="text-sm text-blue-700 cursor-pointer"
-                                        />
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () => handleDelete(id),
-                                            }}
-                                        />
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_THOI_GIAN_DAO_TAO,
+                                            'SUA'
+                                        ) && (
+                                            <EditIcon
+                                                onClick={onOpen.bind(null, id)}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                        )}
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_THOI_GIAN_DAO_TAO,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () => handleDelete(id),
+                                                }}
+                                            />
+                                        )}
                                     </Row>
                                 ),
                             },

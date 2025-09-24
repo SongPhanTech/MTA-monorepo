@@ -16,7 +16,8 @@ import {
     useUpdateSchoolYear,
     useUpdateSemester,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -26,6 +27,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function YearAndSemester() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -248,17 +250,26 @@ function YearAndSemester() {
                         </Flex>
                     </Col>
 
-                    {/* Thêm mới */}
                     <Col span={12}>
                         <Flex justify="end" gap={10}>
-                            <Button onClick={handleModal} className="border-primary text-primary">
-                                <BookPlus />
-                                Thêm mới năm học
-                            </Button>
-                            <Button onClick={handleModalSemester} type="primary">
-                                <BookPlus />
-                                Thêm mới kỳ học
-                            </Button>
+                            {can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                'THEM'
+                            ) && (
+                                <>
+                                    <Button
+                                        onClick={handleModal}
+                                        className="border-primary text-primary"
+                                    >
+                                        <BookPlus />
+                                        Thêm mới năm học
+                                    </Button>
+                                    <Button onClick={handleModalSemester} type="primary">
+                                        <BookPlus />
+                                        Thêm mới kỳ học
+                                    </Button>
+                                </>
+                            )}
                         </Flex>
                     </Col>
                 </Row>
@@ -275,7 +286,12 @@ function YearAndSemester() {
                         setCurrentPage(1)
                     }}
                     onRowClick={({ id }) => {
-                        router.push(`${ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC}/${id}`)
+                        if (
+                            id &&
+                            can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC, 'XEM_CHI_TIET')
+                        ) {
+                            router.push(`${ROUTER_PATH.QL_DAO_TAO.NAM_HOC_KY_HOC}/${id}`)
+                        }
                     }}
                     columns={[
                         {
@@ -343,35 +359,59 @@ function YearAndSemester() {
                             width: 100,
                             align: 'center',
                             fixed: 'right',
+                            hidden: !canSome(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC,
+                                'XEM_CHI_TIET',
+                                'SUA',
+                                'XOA'
+                            ),
                             render: (_, { id, schoolYearId }) => (
                                 <Row className="justify-center gap-2">
-                                    <Tooltip title="Cảnh cáo học tập, Xét học bổng" placement="top">
-                                        <EyeOutlined className="text-sm cursor-pointer" />
-                                    </Tooltip>
-                                    <EditIcon
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            onOpenSemester({
-                                                schoolYearId: schoolYearId,
-                                                semesterId: id,
-                                            })
-                                        }}
-                                        className="text-sm text-blue-700 cursor-pointer"
-                                    />
-                                    <DeleteIcon
-                                        popConfirm={{
-                                            onConfirm: (e) => {
-                                                handleDeleteSemester(id)
-                                                e?.stopPropagation()
-                                            },
-                                            onCancel: (e) => {
-                                                e?.stopPropagation()
-                                            },
-                                        }}
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                        }}
-                                    />
+                                    {can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC,
+                                        'XEM_CHI_TIET'
+                                    ) && (
+                                        <Tooltip
+                                            title="Cảnh cáo học tập, Xét học bổng"
+                                            placement="top"
+                                        >
+                                            <EyeOutlined className="text-sm cursor-pointer" />
+                                        </Tooltip>
+                                    )}
+                                    {can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC,
+                                        'SUA'
+                                    ) && (
+                                        <EditIcon
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenSemester({
+                                                    schoolYearId: schoolYearId,
+                                                    semesterId: id,
+                                                })
+                                            }}
+                                            className="text-sm text-blue-700 cursor-pointer"
+                                        />
+                                    )}
+                                    {can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC,
+                                        'XOA'
+                                    ) && (
+                                        <DeleteIcon
+                                            popConfirm={{
+                                                onConfirm: (e) => {
+                                                    handleDeleteSemester(id)
+                                                    e?.stopPropagation()
+                                                },
+                                                onCancel: (e) => {
+                                                    e?.stopPropagation()
+                                                },
+                                            }}
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                            }}
+                                        />
+                                    )}
                                 </Row>
                             ),
                         },
@@ -393,29 +433,35 @@ function YearAndSemester() {
                     defaultExpandAll
                     headerRight={({ id }) => (
                         <div className="flex gap-2.5 w-[88px] items-center">
-                            <CreateIcon
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onOpenSemester({
-                                        schoolYearId: id,
-                                        semesterId: '',
-                                    })
-                                }}
-                                title="Thêm học kỳ"
-                            />
-                            <EditIcon
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onOpenSchoolYear(id)
-                                }}
-                                className="text-sm text-blue-700 cursor-pointer"
-                            />
-                            <DeleteIcon
-                                popConfirm={{
-                                    onConfirm: () => handleDeleteSchoolYear(id),
-                                }}
-                                onClick={(e) => e.stopPropagation()}
-                            />
+                            {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC, 'THEM') && (
+                                <CreateIcon
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onOpenSemester({
+                                            schoolYearId: id,
+                                            semesterId: '',
+                                        })
+                                    }}
+                                    title="Thêm học kỳ"
+                                />
+                            )}
+                            {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC, 'SUA') && (
+                                <EditIcon
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onOpenSchoolYear(id)
+                                    }}
+                                    className="text-sm text-blue-700 cursor-pointer"
+                                />
+                            )}
+                            {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC, 'XOA') && (
+                                <DeleteIcon
+                                    popConfirm={{
+                                        onConfirm: () => handleDeleteSchoolYear(id),
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                />
+                            )}
                         </div>
                     )}
                 />

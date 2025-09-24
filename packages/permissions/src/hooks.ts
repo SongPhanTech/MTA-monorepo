@@ -19,14 +19,19 @@ declare global {
 
 const PERMISSIONS = {
     XEM: 1 << 0,
-    SUA: 1 << 1,
-    THEM: 1 << 2,
-    XOA: 1 << 3,
-    IN: 1 << 4,
-    XUAT_EXCEL: 1 << 5,
-    TAI_TEP: 1 << 6,
-    NHAP_EXCEL: 1 << 7,
-    DUYET: 1 << 8,
+    XEM_TAT_CA: 1 << 1,
+    XEM_CHI_TIET: 1 << 2,
+    THEM: 1 << 3,
+    SUA: 1 << 4,
+    IN: 1 << 5,
+    NHAP_EXCEL: 1 << 6,
+    XUAT_EXCEL: 1 << 7,
+    TAI_TEP: 1 << 8,
+    NHAP_DIEM: 1 << 9,
+    DUYET: 1 << 10,
+    IN_PHIEU_DIEM: 1 << 11,
+    IN_DS_THI: 1 << 12,
+    XOA: 1 << 13,
 } as const
 
 function combine(perms: (keyof typeof PERMISSIONS)[]): number {
@@ -48,6 +53,21 @@ const useAbility = () => {
 
             const actions = combine(action)
             return (Number(perm[perm.length - 1]) & actions) === actions
+        },
+        canSome: (
+            subject:
+                | KHAO_THI_PERMISSION
+                | PORTAL_PERMISSION
+                | QL_DAO_TAO_PERMISSION
+                | TRO_LY_AO_PERMISSION,
+            ...action: (keyof typeof PERMISSIONS)[]
+        ) => {
+            const perm = ability.actionsFor(subject)
+            if (perm.length === 0) return false
+
+            return action
+                .map((p) => PERMISSIONS[p])
+                .some((a) => (Number(perm[perm.length - 1]) & a) === a)
         },
         // cannot: (action: keyof typeof PERMISSIONS, subject = '') => {
         //     const perm = ability.actionsFor(subject)

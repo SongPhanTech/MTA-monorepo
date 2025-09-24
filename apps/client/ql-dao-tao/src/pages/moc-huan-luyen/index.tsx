@@ -12,6 +12,8 @@ import {
     useFindManySchoolYear,
     useUpdateMilestone,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import type React from 'react'
@@ -19,6 +21,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function MilestonePage() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -134,12 +137,13 @@ export default function MilestonePage() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 0]} align="top" justify="space-between">
-                        {/* Thêm mới */}
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
+                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_MOC_HUAN_LUYEN, 'THEM') && (
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -225,17 +229,32 @@ export default function MilestonePage() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_MOC_HUAN_LUYEN,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <EditIcon
-                                            onClick={onOpen.bind(null, id)}
-                                            className="text-sm text-blue-700 cursor-pointer"
-                                        />
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () => handleDelete(id),
-                                            }}
-                                        />
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_MOC_HUAN_LUYEN,
+                                            'SUA'
+                                        ) && (
+                                            <EditIcon
+                                                onClick={onOpen.bind(null, id)}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                        )}
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_MOC_HUAN_LUYEN,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () => handleDelete(id),
+                                                }}
+                                            />
+                                        )}
                                     </Row>
                                 ),
                             },

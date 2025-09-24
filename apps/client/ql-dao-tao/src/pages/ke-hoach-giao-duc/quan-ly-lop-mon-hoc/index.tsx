@@ -27,6 +27,8 @@ import {
     useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
 import { putManySubjectClass } from '@workspace/libs/api/training'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
@@ -35,6 +37,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function TeachingAssignment() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -485,20 +488,30 @@ export default function TeachingAssignment() {
 
                         <Col span={8}>
                             <Flex justify="end" gap={4}>
-                                <Button
-                                    onClick={() => handleModal()}
-                                    //TODO: handle save
-                                    type="primary"
-                                >
-                                    Thêm mới lớp MH
-                                </Button>
-                                <Button
-                                    //TODO: handle export
-                                    type="primary"
-                                >
-                                    <EditIcon stroke="white" />
-                                    Nhập
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        onClick={() => handleModal()}
+                                        //TODO: handle save
+                                        type="primary"
+                                    >
+                                        Thêm mới lớp MH
+                                    </Button>
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                    'NHAP_EXCEL'
+                                ) && (
+                                    <Button
+                                        //TODO: handle export
+                                        type="primary"
+                                    >
+                                        <EditIcon stroke="white" />
+                                        Nhập
+                                    </Button>
+                                )}
                                 {isEdit ? (
                                     <>
                                         <Button
@@ -519,14 +532,19 @@ export default function TeachingAssignment() {
                                         </Button>
                                     </>
                                 ) : (
-                                    <Button
-                                        onClick={() => setIsEdit(true)}
-                                        //TODO: handle save
-                                        type="primary"
-                                        disabled={!dataSubmit.length}
-                                    >
-                                        PCGD
-                                    </Button>
+                                    can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                        'SUA'
+                                    ) && (
+                                        <Button
+                                            onClick={() => setIsEdit(true)}
+                                            //TODO: handle save
+                                            type="primary"
+                                            disabled={!dataSubmit.length}
+                                        >
+                                            PCGD
+                                        </Button>
+                                    )
                                 )}
                             </Flex>
                         </Col>
@@ -827,34 +845,40 @@ export default function TeachingAssignment() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (record, { id }) => {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                {/* <Tooltip
-                                                    title="Xem chi tiết"
-                                                    placement="leftTop"
-                                                >
-                                                    <EyeOutlined
-                                                        onClick={onOpen.bind(
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={onOpenEditSubjectClass.bind(
                                                             null,
                                                             id
                                                         )}
                                                         className="text-sm text-blue-700 cursor-pointer"
                                                     />
-                                                </Tooltip> */}
-                                                <EditIcon
-                                                    onClick={onOpenEditSubjectClass.bind(null, id)}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () => handleDelete(id),
-                                                    }}
-                                                    disabled={
-                                                        record?.subjectClassStudent?.length > 0
-                                                    }
-                                                />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: () => handleDelete(id),
+                                                        }}
+                                                        disabled={
+                                                            record?.subjectClassStudent?.length > 0
+                                                        }
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

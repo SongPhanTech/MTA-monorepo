@@ -15,7 +15,8 @@ import {
     useFindManyTrainingCourse,
     useUpdateAcademicActionConfig,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
@@ -25,6 +26,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function AcademicActionConfig() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -259,41 +261,58 @@ export default function AcademicActionConfig() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_XU_LY_HOC_TAP,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <Tooltip
-                                                    title="Xem chi tiết cấu hình"
-                                                    placement="top"
-                                                >
-                                                    <EyeOutlined className="text-sm cursor-pointer" />
-                                                </Tooltip>
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpenPutAcademicActionConfig({
-                                                            id: record?.id,
-                                                            trainingCourseId:
-                                                                record?.trainingCourseId,
-                                                        })
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeletePutAcademicActionConfig(
-                                                                record?.id
-                                                            )
-                                                            e?.stopPropagation()
-                                                        },
-                                                        onCancel: (e) => {
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_XU_LY_HOC_TAP,
+                                                    'SUA'
+                                                ) && (
+                                                    <>
+                                                        <Tooltip
+                                                            title="Xem chi tiết cấu hình"
+                                                            placement="top"
+                                                        >
+                                                            <EyeOutlined className="text-sm cursor-pointer" />
+                                                        </Tooltip>
+                                                        <EditIcon
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                onOpenPutAcademicActionConfig({
+                                                                    id: record?.id,
+                                                                    trainingCourseId:
+                                                                        record?.trainingCourseId,
+                                                                })
+                                                            }}
+                                                            className="text-sm text-blue-700 cursor-pointer"
+                                                        />
+                                                    </>
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_XU_LY_HOC_TAP,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleDeletePutAcademicActionConfig(
+                                                                    record?.id
+                                                                )
+                                                                e?.stopPropagation()
+                                                            },
+                                                            onCancel: (e) => {
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }
@@ -304,20 +323,31 @@ export default function AcademicActionConfig() {
                         childrenFieldName="academicActionConfig"
                         headerRight={({ id: trainingCourseId }) => (
                             <div className="flex gap-2.5 w-[85px] items-center">
-                                <CreateIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onOpenPutAcademicActionConfig({
-                                            id: '',
-                                            trainingCourseId: trainingCourseId,
-                                        })
-                                    }}
-                                    title="Thêm mới cấu hình"
-                                />
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_XU_LY_HOC_TAP,
+                                    'THEM'
+                                ) && (
+                                    <CreateIcon
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            onOpenPutAcademicActionConfig({
+                                                id: '',
+                                                trainingCourseId: trainingCourseId,
+                                            })
+                                        }}
+                                        title="Thêm mới cấu hình"
+                                    />
+                                )}
                             </div>
                         )}
                         onRowClick={(record) => {
-                            if (record.id) {
+                            if (
+                                can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_XU_LY_HOC_TAP,
+                                    'SUA'
+                                ) &&
+                                record.id
+                            ) {
                                 router.push(
                                     `${ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_XU_LY_HOC_TAP_ID.replace('[id]', record.id)}`
                                 )

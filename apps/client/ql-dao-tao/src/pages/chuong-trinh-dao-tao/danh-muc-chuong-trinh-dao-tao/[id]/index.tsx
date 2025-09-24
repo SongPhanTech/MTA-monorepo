@@ -24,7 +24,8 @@ import {
     useFindUniqueCurriculumVersion,
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Divider, Flex, message, Row, Tag, Tooltip } from 'antd'
 import { BookPlus, CopyPlus, FileDown, FileUp } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -33,6 +34,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CreateIcon from '../../../../components/icons/create'
 export default function TrainingProgramSubjects() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const id = router.query.id as string
     const [importModalVisible, setImportModalVisible] = useState(false)
@@ -378,56 +380,75 @@ export default function TrainingProgramSubjects() {
                     <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={12}>
                             <Flex justify="end" gap={4}>
-                                <Button
-                                    onClick={() => setImportModalVisible(true)}
-                                    className="text-primary border-primary mr-2"
-                                >
-                                    <FileUp />
-                                    Nhập dữ liệu bằng excel
-                                </Button>
-                                <Button
-                                    onClick={() => onOpenTrainingBlock()}
-                                    className="text-primary border-primary mr-2"
-                                >
-                                    <FileDown />
-                                    Tải file mẫu excel
-                                </Button>
-                                <ImportCurriculumVersionModal
-                                    visible={importModalVisible}
-                                    onCancel={() => setImportModalVisible(false)}
-                                />
-                                <Tooltip title="Sao chép phiên bản CTĐT">
-                                    <Button
-                                        onClick={() =>
-                                            initialValue &&
-                                            handleCloneCurriculumVersion(
-                                                initialValue as CurriculumVersion & {
-                                                    trainingBlocks: TrainingBlockOnCurriculumVersion[]
-                                                    documentFiles: DocumentFile[]
-                                                }
-                                            )
-                                        }
-                                        className="text-primary border-primary mr-2"
-                                        disabled={!initialValue}
-                                    >
-                                        <CopyPlus />
-                                        Sao chép
-                                    </Button>
-                                </Tooltip>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                    'NHAP_EXCEL'
+                                ) && (
+                                    <>
+                                        <Button
+                                            onClick={() => setImportModalVisible(true)}
+                                            className="text-primary border-primary mr-2"
+                                        >
+                                            <FileUp />
+                                            Nhập dữ liệu bằng excel
+                                        </Button>
+                                        <Button
+                                            onClick={() => onOpenTrainingBlock()}
+                                            className="text-primary border-primary mr-2"
+                                        >
+                                            <FileDown />
+                                            Tải file mẫu excel
+                                        </Button>
 
-                                <Tooltip title="Cập nhật khối kiến thức cho CTĐT">
-                                    <Button
-                                        onClick={() =>
-                                            onOpenTrainingBlock({
-                                                curriculumVersionId: initialValue?.id as string,
-                                            })
-                                        }
-                                        type="primary"
-                                    >
-                                        <BookPlus />
-                                        Cập nhật
-                                    </Button>
-                                </Tooltip>
+                                        <ImportCurriculumVersionModal
+                                            visible={importModalVisible}
+                                            onCancel={() => setImportModalVisible(false)}
+                                        />
+                                    </>
+                                )}
+
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                    'THEM'
+                                ) && (
+                                    <Tooltip title="Sao chép phiên bản CTĐT">
+                                        <Button
+                                            onClick={() =>
+                                                initialValue &&
+                                                handleCloneCurriculumVersion(
+                                                    initialValue as CurriculumVersion & {
+                                                        trainingBlocks: TrainingBlockOnCurriculumVersion[]
+                                                        documentFiles: DocumentFile[]
+                                                    }
+                                                )
+                                            }
+                                            className="text-primary border-primary mr-2"
+                                            disabled={!initialValue}
+                                        >
+                                            <CopyPlus />
+                                            Sao chép
+                                        </Button>
+                                    </Tooltip>
+                                )}
+
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                    'SUA'
+                                ) && (
+                                    <Tooltip title="Cập nhật khối kiến thức cho CTĐT">
+                                        <Button
+                                            onClick={() =>
+                                                onOpenTrainingBlock({
+                                                    curriculumVersionId: initialValue?.id as string,
+                                                })
+                                            }
+                                            type="primary"
+                                        >
+                                            <BookPlus />
+                                            Cập nhật
+                                        </Button>
+                                    </Tooltip>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -700,6 +721,10 @@ export default function TrainingProgramSubjects() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                    'SUA'
+                                ),
                                 render: (__, record: any) => {
                                     if (record.trainingBlockOnCurriculumVersionId) {
                                         return (

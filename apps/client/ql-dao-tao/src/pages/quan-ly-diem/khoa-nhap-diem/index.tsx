@@ -5,6 +5,8 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
@@ -14,6 +16,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function SubjectClassScore() {
+    const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -238,7 +241,7 @@ export default function SubjectClassScore() {
                         <Table
                             rowKey="id"
                             id="training-category"
-                            rowSelection={rowSelection}
+                            // rowSelection={rowSelection}
                             filters={filters}
                             setFilters={(value) => {
                                 setFilters(value)
@@ -276,7 +279,7 @@ export default function SubjectClassScore() {
                                     type: 'input',
                                 },
                                 {
-                                    title: 'Số tín chỉ',
+                                    title: 'Số TC',
                                     width: 80,
                                     align: 'center',
                                     render: (text, record) => record?.subject?.credit || text,
@@ -478,6 +481,10 @@ export default function SubjectClassScore() {
                                     width: 100,
                                     align: 'center',
                                     fixed: 'right',
+                                    hidden: !canSome(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_KHOA_NHAP_DIEM,
+                                        'SUA'
+                                    ),
                                     render: (text, record) => {
                                         if (record.id) {
                                             return (

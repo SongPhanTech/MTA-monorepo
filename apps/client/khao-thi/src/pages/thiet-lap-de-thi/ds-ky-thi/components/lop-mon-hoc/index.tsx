@@ -1,16 +1,18 @@
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import TableCollapse from '@components/commons/tableCollapse'
-import type { FilterProps } from '@components/commons/typeFilte'
+import type { FilterProps } from '@components/commons/typeFilter'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useCountSubjectVersion, useFindManySubjectVersion } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Input, Row, Tag } from 'antd'
 import { BookOpenCheck, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
 function SubjectVersion() {
+    const { can } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -297,21 +299,26 @@ function SubjectVersion() {
                         </Col>
                         <Col span={12}>
                             <Flex justify="end">
-                                <Button
-                                    onClick={() => {
-                                        if (selectedRowKeys.length === 0) {
-                                            return
-                                        }
-                                        router.push(
-                                            `${ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI}/create?ids=${selectedRowKeys.join(',')}`
-                                        )
-                                    }}
-                                    type="primary"
-                                    disabled={selectedRowKeys.length === 0}
-                                >
-                                    <BookOpenCheck />
-                                    Tạo kỳ thi
-                                </Button>
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_DS_KY_THI,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        onClick={() => {
+                                            if (selectedRowKeys.length === 0) {
+                                                return
+                                            }
+                                            router.push(
+                                                `${ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI}/create?ids=${selectedRowKeys.join(',')}`
+                                            )
+                                        }}
+                                        type="primary"
+                                        disabled={selectedRowKeys.length === 0}
+                                    >
+                                        <BookOpenCheck />
+                                        Tạo kỳ thi
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -419,6 +426,10 @@ function SubjectVersion() {
                                 width: 120,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_DS_KY_THI,
+                                    'THEM'
+                                ),
                                 render: (_, { id, exam }) => (
                                     <Row className="justify-center gap-2">
                                         <Button

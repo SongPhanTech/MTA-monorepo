@@ -28,3 +28,26 @@
 .ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline {
     background-color: #ffffff;
 }
+.collapse-content .content {
+  overflow: hidden;
+  position: relative;
+}
+
+.collapse-content .content:not(.is-collapsed) {
+  max-height: 99999px !important;
+  transition: max-height 1s ease-in-out;
+}
+
+.collapse-content .content.is-collapsed {
+  transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+}
+
+.collapse-content .content.is-collapsed::after {
+  content: "";
+  height: 30px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: linear-gradient(transparent, #fff);
+}

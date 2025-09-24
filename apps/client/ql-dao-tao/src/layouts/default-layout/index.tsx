@@ -7,6 +7,7 @@ import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindManyTrainingObjectType, useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
+import { ROUTER_PATH } from '@workspace/router'
 import { SelectTrainingObjectType } from '@workspace/ui'
 import { Breadcrumb, Divider, Layout, theme } from 'antd'
 import Image from 'next/image'
@@ -17,7 +18,7 @@ import { IdleTimerProvider } from 'react-idle-timer'
 import HeaderApp from '@/components/header'
 
 const { Header, Content } = Layout
-interface breadcrumListProps {
+interface BreadcrumbListProps {
     title: string
     href?: string
 }
@@ -30,7 +31,7 @@ const DefaultLayout = ({
 }: {
     children: ReactNode
     className?: string
-    breadcrumbList?: breadcrumListProps[]
+    breadcrumbList?: BreadcrumbListProps[]
     unLayout?: boolean
 }) => {
     const router = useRouter()
@@ -86,7 +87,7 @@ const DefaultLayout = ({
               : [
                     {
                         title: (
-                            <Link href="/home">
+                            <Link href={ROUTER_PATH.QL_DAO_TAO.HOME}>
                                 <HomeOutlined className="mr-1" />
                                 Trang chủ
                             </Link>

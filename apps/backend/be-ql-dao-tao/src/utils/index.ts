@@ -295,7 +295,16 @@ export const buildSubjectMapOrThrow = async (
         where: {
             OR: uniqueTuples.map(([name, organizationCode, credit]) => ({
                 name,
-                ...(organizationCode ? { managementOrganization: { sMa: organizationCode } } : {}),
+
+                ...(organizationCode
+                    ? {
+                          subject: {
+                              managementOrganization: {
+                                  sMa: organizationCode,
+                              },
+                          },
+                      }
+                    : {}),
                 ...(credit ? { credit } : {}),
             })),
         },

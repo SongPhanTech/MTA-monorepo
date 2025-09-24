@@ -458,10 +458,10 @@ app.openapi(graduationCheck, async (c) => {
         }
 
         const cumulativeBase10 = totalPassCredit
-            ? totalScoreBase10.div(totalPassCredit).toNumber() / totalPassCredit
+            ? totalScoreBase10.div(totalPassCredit).toNumber()
             : 0
         const cumulativeBase4 = totalPassCredit
-            ? totalScoreBase4.div(totalPassCredit).toNumber() / totalPassCredit
+            ? totalScoreBase4.div(totalPassCredit).toNumber()
             : 0
 
         const rankLevels = student.fixedClass?.trainingCourse.academicRankingConvert

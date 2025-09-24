@@ -16,10 +16,11 @@ PKG_KHAO_THI := khao-thi
 PKG_DAO_TAO := ql-dao-tao
 PKG_HO_SO := ql-ho-so
 PKG_AI := tro-ly-ao
+PKG_PORTAL := portal
 
 # Maps for build types (backend/frontend)
 BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL)
-FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO)
+FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_PORTAL)
 
 # Targets
 .PHONY: all clean push deploy release \
@@ -35,6 +36,7 @@ help:
 	@echo "  all-$(PKG_HO_SO)"
 	@echo "  all-$(PKG_KHAO_THI)"
 	@echo "  all-$(PKG_AI)"
+	@echo "  all-$(PKG_PORTAL)"
 	@echo "  all-clients"
 
 ql-dao-tao:
@@ -43,6 +45,20 @@ ql-dao-tao:
 	zip -r out.zip out && \
 	scp out.zip swan1:app && \
 	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down && rm -rf lms-cdn && unzip out.zip && mv out lms-cdn && docker compose -f app-docker-compose.yml up -d"
+
+portal:
+	cd apps/client/portal && \
+	pnpm build && \
+	zip -r out.zip out && \
+	scp out.zip swan1:app && \
+	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down && rm -rf portal-cdn && unzip out.zip && mv out portal-cdn && docker compose -f app-docker-compose.yml up -d"
+
+tro-ly-ao:
+	cd apps/client/tro-ly-ao && \
+	pnpm build && \
+	zip -r out.zip out && \
+	scp out.zip swan1:app && \
+	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down && rm -rf chatbot-cdn && unzip out.zip && mv out chatbot-cdn && docker compose -f app-docker-compose.yml up -d"
 
 ql-ho-so:
 	cd apps/client/ql-ho-so && \

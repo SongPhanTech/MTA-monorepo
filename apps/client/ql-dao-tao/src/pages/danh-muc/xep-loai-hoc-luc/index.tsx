@@ -12,6 +12,8 @@ import {
     useDeleteManyAcademicRankingConvert,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
@@ -32,6 +34,7 @@ const DataActive = [
 ]
 
 export default function AcademicRankingConvertPage() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -234,9 +237,14 @@ export default function AcademicRankingConvertPage() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_HOC_LUC,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -247,30 +255,33 @@ export default function AcademicRankingConvertPage() {
                         data={data}
                         headerRight={(record) => (
                             <Row className="justify-center gap-2 mr-2">
-                                {record.academicRankingConvert.length > 0 ? (
-                                    <Tooltip title="Nhân bản">
-                                        <Copy
-                                            onClick={onOpenCopy.bind(null, { record })}
-                                            size={16}
-                                            strokeWidth={1.5}
-                                            className="text-sm cursor-pointer"
-                                        />
-                                    </Tooltip>
-                                ) : (
-                                    <Copy
-                                        size={16}
-                                        strokeWidth={1.5}
-                                        className="text-sm text-gray-400 cursor-not-allowed"
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_HOC_LUC,
+                                    'THEM'
+                                ) &&
+                                    record.academicRankingConvert.length > 0 && (
+                                        <Tooltip title="Nhân bản">
+                                            <Copy
+                                                onClick={onOpenCopy.bind(null, { record })}
+                                                size={16}
+                                                strokeWidth={1.5}
+                                                className="text-sm cursor-pointer"
+                                            />
+                                        </Tooltip>
+                                    )}
+
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_HOC_LUC,
+                                    'XOA'
+                                ) && (
+                                    <DeleteIcon
+                                        disabled={!record.academicRankingConvert.length}
+                                        title="Xóa xếp loại của khoá"
+                                        popConfirm={{
+                                            onConfirm: () => handleDeleteMultil(record),
+                                        }}
                                     />
                                 )}
-
-                                <DeleteIcon
-                                    disabled={!record.academicRankingConvert.length}
-                                    title="Xóa xếp loại của khóa"
-                                    popConfirm={{
-                                        onConfirm: () => handleDeleteMultil(record),
-                                    }}
-                                />
                             </Row>
                         )}
                         columns={[
@@ -315,19 +326,34 @@ export default function AcademicRankingConvertPage() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_HOC_LUC,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={() => onOpen({ id })}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () => handleDelete(id),
-                                                    }}
-                                                />
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_HOC_LUC,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={() => onOpen({ id })}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_HOC_LUC,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: () => handleDelete(id),
+                                                        }}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

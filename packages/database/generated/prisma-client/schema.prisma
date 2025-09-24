@@ -1819,7 +1819,8 @@ model StudentSemesterResult {
   accumulatedCredits       Int
   totalCreditsByCurriculum Int
   totalFailedCredits       Int
-  foreignLangPass          Boolean
+  foreignLangPass          Boolean                 @default(false)
+  computerSkillPass        Boolean                 @default(false)
   isClassMonitor           Boolean
   isUnionLeader            Boolean
   entryScore               Float?

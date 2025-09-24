@@ -1,7 +1,10 @@
 import type { NextConfig } from 'next'
-import TerserPlugin from 'terser-webpack-plugin'
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+const assetPrefix = process.env.NEXT_PUBLIC_ASSET_PREFIX || ''
 const nextConfig: NextConfig = {
+    basePath,
+    assetPrefix,
     /* config options here */
     reactStrictMode: true,
     transpilePackages: [
@@ -10,34 +13,12 @@ const nextConfig: NextConfig = {
         '@workspace/db',
         '@workspace/router',
         '@workspace/ui',
-        '@ant-design/icons',
-        'antd',
-        '@ant-design',
-        'rc-util',
-        'rc-pagination',
-        'rc-picker',
-        'rc-notification',
-        'rc-tooltip',
-        'rc-tree',
-        'rc-table',
     ],
-    output: 'standalone',
-    crossOrigin: 'anonymous',
-    webpack: (config) => {
-        config.optimization.minimize = true
-        config.optimization.minimizer = [
-            new TerserPlugin({
-                parallel: true,
-                terserOptions: {
-                    // keep_classnames: true,
-                    keep_fnames: true,
-                },
-                extractComments: false,
-                include: 'src/components/modal/*',
-            }),
-        ]
-        return config
+    images: {
+        unoptimized: true,
     },
+    output: 'export',
+    crossOrigin: 'anonymous',
 }
 
 export default nextConfig

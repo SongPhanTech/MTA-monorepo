@@ -49,7 +49,7 @@ export const customModelFetch = async <T>(url: string, options: RequestInit): Pr
 export const customTrainingFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl(
         process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
-            ? 'http://localhost:3003'
+            ? 'http://localhost:3002'
             : 'https://api.daotao.mta.swantech.vn',
         url
     )
@@ -63,7 +63,7 @@ export const customTrainingFetch = async <T>(url: string, options: RequestInit):
 export const customExamFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl(
         process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
-            ? 'http://localhost:3004'
+            ? 'http://localhost:3003'
             : 'https://api.khaothi.mta.swantech.vn',
         url
     )
@@ -77,7 +77,7 @@ export const customExamFetch = async <T>(url: string, options: RequestInit): Pro
 export const customPortalFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl(
         process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
-            ? 'http://localhost:3005'
+            ? 'http://localhost:3004'
             : 'https://api.portal.mta.swantech.vn',
         url
     )
@@ -89,7 +89,12 @@ export const customPortalFetch = async <T>(url: string, options: RequestInit): P
 }
 
 export const customSystemFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
-    const requestUrl = getUrl('https://mta.swantech.vn', url)
+    const requestUrl = getUrl(
+        process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
+            ? `http://localhost:3001/api/system/${process.env.NEXT_PUBLIC_APP_CODE}`
+            : `https://api.model.mta.swantech.vn/api/system/${process.env.NEXT_PUBLIC_APP_CODE}`,
+        url
+    )
 
     const response = await fetchInstance(requestUrl, options)
     const data = await getBody<T>(response)

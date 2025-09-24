@@ -20,7 +20,7 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function TrainingBlock() {
-    const { can } = useAbility()
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -153,13 +153,13 @@ export default function TrainingBlock() {
                                 title: 'Mã khối kiến thức',
                                 dataIndex: 'code',
                                 align: 'center',
-                                width: 150,
+                                width: 250,
                                 type: 'input',
                             },
                             {
                                 title: 'Tên khối kiến thức',
                                 dataIndex: 'name',
-                                width: 150,
+                                align: 'center',
                                 type: 'input',
                             },
                             // {
@@ -201,7 +201,7 @@ export default function TrainingBlock() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                hidden: !can(
+                                hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
                                     'SUA',
                                     'XOA'

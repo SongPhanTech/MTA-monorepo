@@ -1,5 +1,5 @@
 import TableCollapse from '@components/commons/tableCollapse'
-import type { FilterProps } from '@components/commons/typeFilte'
+import type { FilterProps } from '@components/commons/typeFilter'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -12,6 +12,8 @@ import {
     useDeleteEvidenceCategory,
     useFindManyEvidenceCategory,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, Input, message, Row, Tooltip } from 'antd'
 import { BookPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -19,6 +21,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvidenceCategory() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -149,15 +152,20 @@ export default function EvidenceCategory() {
                         {/* Thêm mới */}
                         <Col span={12}>
                             <Flex justify="end">
-                                <Button
-                                    type="primary"
-                                    onClick={() => {
-                                        onOpenPutEvidenceCategory()
-                                    }}
-                                >
-                                    <BookPlus />
-                                    Thêm mới nhóm
-                                </Button>
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => {
+                                            onOpenPutEvidenceCategory()
+                                        }}
+                                    >
+                                        <BookPlus />
+                                        Thêm mới nhóm
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -176,35 +184,50 @@ export default function EvidenceCategory() {
                         }}
                         headerRight={(record) => (
                             <div className="flex gap-2.5 w-[85px] items-center">
-                                <CreateIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onOpenPutEvidence({
-                                            id: '',
-                                            categoryId: record?.id,
-                                        })
-                                    }}
-                                    title="Thêm mới minh chứng"
-                                />
-                                <EditIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onOpenPutEvidenceCategory(record?.id)
-                                    }}
-                                    className="text-sm text-blue-700 cursor-pointer"
-                                />
-                                <DeleteIcon
-                                    popConfirm={{
-                                        onConfirm: (e) => {
-                                            handleDeleteEvidenceCategory(record?.id)
-                                            e?.stopPropagation()
-                                        },
-                                        onCancel: (e) => {
-                                            e?.stopPropagation()
-                                        },
-                                    }}
-                                    onClick={(e) => e.stopPropagation()}
-                                />
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
+                                    'THEM'
+                                ) && (
+                                    <CreateIcon
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            onOpenPutEvidence({
+                                                id: '',
+                                                categoryId: record?.id,
+                                            })
+                                        }}
+                                        title="Thêm mới minh chứng"
+                                    />
+                                )}
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
+                                    'SUA'
+                                ) && (
+                                    <EditIcon
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            onOpenPutEvidenceCategory(record?.id)
+                                        }}
+                                        className="text-sm text-blue-700 cursor-pointer"
+                                    />
+                                )}
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
+                                    'XOA'
+                                ) && (
+                                    <DeleteIcon
+                                        popConfirm={{
+                                            onConfirm: (e) => {
+                                                handleDeleteEvidenceCategory(record?.id)
+                                                e?.stopPropagation()
+                                            },
+                                            onCancel: (e) => {
+                                                e?.stopPropagation()
+                                            },
+                                        }}
+                                        onClick={(e) => e.stopPropagation()}
+                                    />
+                                )}
                             </div>
                         )}
                         // onRowClick={({ id }) => {
@@ -244,6 +267,11 @@ export default function EvidenceCategory() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
@@ -251,28 +279,39 @@ export default function EvidenceCategory() {
                                                 {/* <Tooltip title="Chi tiết tiêu chí" placement="top">
                                                     <EyeOutlined className="text-sm cursor-pointer" />
                                                 </Tooltip> */}
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpenPutEvidence({
-                                                            id: record?.id,
-                                                            categoryId: record?.categoryId,
-                                                        })
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeleteEvidence(record?.id)
-                                                            e?.stopPropagation()
-                                                        },
-                                                        onCancel: (e) => {
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            onOpenPutEvidence({
+                                                                id: record?.id,
+                                                                categoryId: record?.categoryId,
+                                                            })
+                                                        }}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleDeleteEvidence(record?.id)
+                                                                e?.stopPropagation()
+                                                            },
+                                                            onCancel: (e) => {
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

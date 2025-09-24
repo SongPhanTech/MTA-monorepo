@@ -11,7 +11,8 @@ import {
     useFindManySubjectClass,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
@@ -38,6 +39,7 @@ interface FilterProps {
 }
 
 export default function ClassSubject() {
+    const { can } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -383,9 +385,9 @@ export default function ClassSubject() {
                                 render: (text, record) => record.subject?.name || text,
                             },
                             {
-                                title: 'Số tín chỉ',
+                                title: 'Số TC',
                                 dataIndex: 'stc',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                                 render: (text, record) => record.subject?.credit || text,
                             },
@@ -413,24 +415,12 @@ export default function ClassSubject() {
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
-                                title: 'Hạn đợi',
-                                dataIndex: 'ngayDot',
-                                width: 100,
-                                align: 'center',
-                            },
-                            {
                                 title: 'Ngày thi',
                                 dataIndex: 'examDate',
                                 width: 150,
                                 align: 'center',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
-                            },
-                            {
-                                title: 'Số ngày',
-                                dataIndex: 'ngayDot',
-                                width: 100,
-                                align: 'center',
                             },
                             {
                                 title: 'Hạn ĐT',
@@ -470,25 +460,11 @@ export default function ClassSubject() {
                                     return <span>{mainLecturer}</span>
                                 },
                             },
-                            {
-                                title: 'Trạng thái',
-                                dataIndex: 'trangThai',
-                                width: 150,
-                                align: 'center',
-                                render: (text, record) => {
-                                    if (record.active === true || record.active === 'active') {
-                                        return <Tag color="green">Đang hoạt động</Tag>
-                                    }
-                                    if (record.active === false || record.active === 'inactive') {
-                                        return <Tag color="red">Kết thúc</Tag>
-                                    }
-                                    return ''
-                                },
-                            },
+
                             {
                                 title: 'Mã bộ môn',
                                 dataIndex: '',
-                                width: 200,
+                                width: 120,
                                 align: 'center',
                             },
                             {
@@ -526,10 +502,29 @@ export default function ClassSubject() {
                                 },
                             },
                             {
+                                title: 'Trạng thái',
+                                dataIndex: 'trangThai',
+                                width: 150,
+                                align: 'center',
+                                render: (text, record) => {
+                                    if (record.active === true || record.active === 'active') {
+                                        return <Tag color="green">Đang hoạt động</Tag>
+                                    }
+                                    if (record.active === false || record.active === 'inactive') {
+                                        return <Tag color="red">Kết thúc</Tag>
+                                    }
+                                    return ''
+                                },
+                            },
+                            {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
+                                    'NHAP_DIEM'
+                                ),
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (

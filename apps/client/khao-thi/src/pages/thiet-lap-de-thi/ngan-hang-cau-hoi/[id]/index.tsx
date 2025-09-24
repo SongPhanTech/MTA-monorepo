@@ -1,7 +1,8 @@
 import { EllipsisOutlined } from '@ant-design/icons'
+import HtmlTruncate from '@components/commons/html-truncate'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Table from '@components/commons/table'
-import type { FilterProps } from '@components/commons/typeFilte'
+import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { WordImportModal } from '@components/sub-pages'
@@ -310,13 +311,15 @@ export default function QuestionPage() {
                                 fixed: 'left',
                                 type: 'input',
                                 render: (html: string) => (
-                                    <div
-                                        dangerouslySetInnerHTML={{
-                                            __html: html
-                                                ? renderWithMath(html)
-                                                : '<i>Chưa có nội dung</i>',
-                                        }}
-                                    />
+                                    <HtmlTruncate key="explanation">
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: html
+                                                    ? renderWithMath(html)
+                                                    : '<i>Chưa có nội dung</i>',
+                                            }}
+                                        />
+                                    </HtmlTruncate>
                                 ),
                             },
                             {
@@ -384,14 +387,17 @@ export default function QuestionPage() {
                                 dataIndex: 'explanation',
                                 width: 300,
                                 type: 'input',
+
                                 render: (html: string) => (
-                                    <div
-                                        dangerouslySetInnerHTML={{
-                                            __html: html
-                                                ? renderWithMath(html)
-                                                : '<i>Chưa có nội dung</i>',
-                                        }}
-                                    />
+                                    <HtmlTruncate key="explanation">
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: html
+                                                    ? renderWithMath(html)
+                                                    : '<i>Chưa có nội dung</i>',
+                                            }}
+                                        />
+                                    </HtmlTruncate>
                                 ),
                             },
                             // {

@@ -1,5 +1,5 @@
 import TableCollapse from '@components/commons/tableCollapse'
-import type { FilterProps } from '@components/commons/typeFilte'
+import type { FilterProps } from '@components/commons/typeFilter'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -12,12 +12,15 @@ import {
     useFindManySubjectVersion,
     useUpdateKnowledgeBlock,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Col, Flex, Form, Input, message, Row, Tooltip } from 'antd'
 import { Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function KnowledgeBlock() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -249,30 +252,48 @@ export default function KnowledgeBlock() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_DANH_MUC_CHUONG_MUC,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpenPutKnowledgeBlock({
-                                                            id: record.id,
-                                                            subjectVersionId:
-                                                                record.subjectVersionId,
-                                                        })
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeleteKnowledgeBlock(record?.id)
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_DANH_MUC_CHUONG_MUC,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            onOpenPutKnowledgeBlock({
+                                                                id: record.id,
+                                                                subjectVersionId:
+                                                                    record.subjectVersionId,
+                                                            })
+                                                        }}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_DANH_MUC_CHUONG_MUC,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleDeleteKnowledgeBlock(
+                                                                    record?.id
+                                                                )
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }
@@ -283,15 +304,20 @@ export default function KnowledgeBlock() {
                         data={data}
                         headerRight={({ id }) => (
                             <div className="flex gap-2.5 w-[85px] items-center">
-                                <CreateIcon
-                                    onClick={() => {
-                                        onOpenPutKnowledgeBlock({
-                                            id: '',
-                                            subjectVersionId: id,
-                                        })
-                                    }}
-                                    title="Thêm mới chương mục"
-                                />
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_DANH_MUC_CHUONG_MUC,
+                                    'THEM'
+                                ) && (
+                                    <CreateIcon
+                                        onClick={() => {
+                                            onOpenPutKnowledgeBlock({
+                                                id: '',
+                                                subjectVersionId: id,
+                                            })
+                                        }}
+                                        title="Thêm mới chương mục"
+                                    />
+                                )}
                             </div>
                         )}
                         pagination={{

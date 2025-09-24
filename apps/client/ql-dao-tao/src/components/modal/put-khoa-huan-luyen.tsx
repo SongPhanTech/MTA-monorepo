@@ -311,274 +311,301 @@ const PutTrainingCourseModal = () => {
             title={id ? 'Chỉnh sửa khóa' : 'Thêm mới khóa'}
             className="w-[1000px]"
         >
-            <Col span={8}>
-                <FormItem
-                    form={form}
-                    name="trainingObjectTypeId"
-                    label="Đối tượng đào tạo"
-                    required
+            <Row gutter={16} className="px-6 mt-3">
+                <Col
+                    span={24}
+                    className="text-base font-semibold mb-4 underline-offset-2 underline"
                 >
-                    <Select
-                        placeholder="Chọn đối tượng đào tạo"
-                        options={trainingObjectTypeData.map((i: TrainingObjectType) => {
-                            return {
-                                value: i.id,
-                                label: i.name,
-                            }
-                        })}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="code" label="Mã khoá học" required>
-                    <Input placeholder="Nhập mã khoá học" />
-                </FormItem>
-            </Col>
+                    Thông tin chung
+                </Col>
+                <Col span={8}>
+                    <FormItem
+                        form={form}
+                        name="trainingObjectTypeId"
+                        label="Đối tượng đào tạo"
+                        required
+                    >
+                        <Select
+                            placeholder="Chọn đối tượng đào tạo"
+                            options={trainingObjectTypeData.map((i: TrainingObjectType) => {
+                                return {
+                                    value: i.id,
+                                    label: i.name,
+                                }
+                            })}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="code" label="Mã khoá học" required>
+                        <Input placeholder="Nhập mã khoá học" />
+                    </FormItem>
+                </Col>
 
-            <Col span={8}>
-                <FormItem form={form} name="name" label="Tên khoá học" required>
-                    <Input placeholder="Nhập tên khoá học" />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem
-                    form={form}
-                    name="schoolYearId"
-                    label="Năm học bắt đầu"
-                    // required
+                <Col span={8}>
+                    <FormItem form={form} name="name" label="Tên khoá học" required>
+                        <Input placeholder="Nhập tên khoá học" />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem
+                        form={form}
+                        name="schoolYearId"
+                        label="Năm học bắt đầu"
+                        // required
+                    >
+                        <Select
+                            placeholder="Chọn năm học bắt đầu"
+                            options={dataSchoolYear.map((i: SchoolYear) => {
+                                return {
+                                    value: i.id,
+                                    label: i.name,
+                                }
+                            })}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="semesterStartId" label="Kỳ học bắt đầu" required>
+                        <Select
+                            placeholder="Chọn kỳ học bắt đầu"
+                            options={semesterData.map((i) => {
+                                return {
+                                    value: i.id,
+                                    label: [i?.name, i?.schoolYear?.name]
+                                        .filter(Boolean)
+                                        .join(' - '),
+                                }
+                            })}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="academicYear" label="Niên khoá">
+                        <Input placeholder="Nhập niên khoá" />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="maxTrainingTime" label="Thời gian đào tạo Max">
+                        <InputNumber
+                            type="number"
+                            style={{ width: '100%' }}
+                            min={0}
+                            step={1}
+                            placeholder="Nhập thời gian đào tạo"
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="admissionQuota" label="Chỉ tiêu tuyển sinh">
+                        <InputNumber
+                            type="number"
+                            style={{ width: '100%' }}
+                            min={0}
+                            step={1}
+                            placeholder="Nhập chỉ tiêu tuyển sinh"
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name={'active'} label="Trạng thái" required>
+                        <Radio.Group buttonStyle="solid">
+                            <Radio value={true}>Đang hoạt động</Radio>
+                            <Radio value={false}>Ngừng hoạt động</Radio>
+                        </Radio.Group>
+                    </FormItem>
+                </Col>
+            </Row>
+
+            <Row gutter={16} className="px-6">
+                <Col
+                    span={24}
+                    className="text-base font-semibold mb-4 underline-offset-2 underline"
                 >
-                    <Select
-                        placeholder="Chọn năm học bắt đầu"
-                        options={dataSchoolYear.map((i: SchoolYear) => {
-                            return {
-                                value: i.id,
-                                label: i.name,
-                            }
-                        })}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="semesterStartId" label="Kỳ học bắt đầu" required>
-                    <Select
-                        placeholder="Chọn kỳ học bắt đầu"
-                        options={semesterData.map((i) => {
-                            return {
-                                value: i.id,
-                                label: [i?.name, i?.schoolYear?.name].filter(Boolean).join(' - '),
-                            }
-                        })}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="trainingCourseClone" label="Sao chép quy chế">
-                    <Select
-                        placeholder="Chọn khóa để sao chép"
-                        options={trainingCourse.map((i) => {
-                            return {
-                                value: i.id,
-                                label: i.name,
-                            }
-                        })}
-                        onChange={handleSelectChange}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="baseScore" label="Hệ số điểm" required>
-                    <Select
-                        placeholder="Chọn đối tượng đào tạo"
-                        options={[
+                    Thông tin điểm
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="trainingCourseClone" label="Sao chép quy chế">
+                        <Select
+                            placeholder="Chọn khóa để sao chép"
+                            options={trainingCourse.map((i) => {
+                                return {
+                                    value: i.id,
+                                    label: i.name,
+                                }
+                            })}
+                            onChange={handleSelectChange}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="baseScore" label="Hệ số điểm" required>
+                        <Select
+                            placeholder="Chọn đối tượng đào tạo"
+                            options={[
+                                {
+                                    label: 'Hệ 10',
+                                    value: 'Base10',
+                                },
+                                {
+                                    label: 'Hệ 4',
+                                    value: 'Base4',
+                                },
+                            ]}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem
+                        form={form}
+                        name="scoreToTakeExam"
+                        label="Điểm tối thiểu được thi"
+                        required
+                    >
+                        <InputNumber
+                            min={0}
+                            type="number"
+                            placeholder="Nhập điểm tối thiểu được thi"
+                            className="w-full"
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="scoreToPass" label="Điểm tối thiểu để qua" required>
+                        <InputNumber
+                            min={0}
+                            type="number"
+                            placeholder="Nhập điểm tối thiểu để qua"
+                            className="w-full"
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem
+                        form={form}
+                        name="scoreToPassConditional"
+                        label="Điểm tối thiểu để qua môn điều kiện"
+                    >
+                        <InputNumber
+                            min={0}
+                            type="number"
+                            placeholder="Nhập điểm tối thiểu để qua môn điều kiện"
+                            className="w-full"
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem
+                        form={form}
+                        name="scoreToTakeGraduation"
+                        label="Điểm liệt môn tốt nghiệp"
+                    >
+                        <InputNumber
+                            min={0}
+                            type="number"
+                            placeholder="Nhập điểm liệt môn tốt nghiệp"
+                            className="w-full"
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem
+                        form={form}
+                        name="scoreToPassGraduation"
+                        label="Điểm để qua môn tốt nghiệp"
+                    >
+                        <InputNumber
+                            min={0}
+                            type="number"
+                            placeholder="Nhập điểm để qua môn tốt nghiệp"
+                            className="w-full"
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem
+                        form={form}
+                        name="coef_1"
+                        label="Hệ số điểm chuyên cần"
+                        rules={[
                             {
-                                label: 'Hệ 10',
-                                value: 'Base10',
-                            },
-                            {
-                                label: 'Hệ 4',
-                                value: 'Base4',
+                                validator: validateCoefficient('coef_1'),
                             },
                         ]}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem
-                    form={form}
-                    name="scoreToTakeExam"
-                    label="Điểm tối thiểu được thi"
-                    required
-                >
-                    <InputNumber
-                        min={0}
-                        type="number"
-                        placeholder="Nhập điểm tối thiểu được thi"
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="scoreToPass" label="Điểm tối thiểu để qua" required>
-                    <InputNumber
-                        min={0}
-                        type="number"
-                        placeholder="Nhập điểm tối thiểu để qua"
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem
-                    form={form}
-                    name="scoreToPassConditional"
-                    label="Điểm tối thiểu để qua môn điều kiện"
-                >
-                    <InputNumber
-                        min={0}
-                        type="number"
-                        placeholder="Nhập điểm tối thiểu để qua môn điều kiện"
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="scoreToTakeGraduation" label="Điểm liệt môn tốt nghiệp">
-                    <InputNumber
-                        min={0}
-                        type="number"
-                        placeholder="Nhập điểm liệt môn tốt nghiệp"
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem
-                    form={form}
-                    name="scoreToPassGraduation"
-                    label="Điểm để qua môn tốt nghiệp"
-                >
-                    <InputNumber
-                        min={0}
-                        type="number"
-                        placeholder="Nhập điểm để qua môn tốt nghiệp"
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem
-                    form={form}
-                    name="coef_1"
-                    label="Hệ số điểm chuyên cần"
-                    rules={[
-                        {
-                            validator: validateCoefficient('coef_1'),
-                        },
-                    ]}
-                >
-                    <InputNumber
-                        type="number"
-                        min={0}
-                        max={1}
-                        step={0.1}
-                        placeholder="Nhập hệ số điểm chuyên cần"
-                        className="w-full"
-                        onChange={() => {
-                            setTimeout(() => debouncedValidate(['coef_2', 'coef_3']), 300)
-                        }}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem
-                    form={form}
-                    name="coef_2"
-                    label="Hệ số điểm thường xuyên"
-                    rules={[
-                        {
-                            validator: validateCoefficient('coef_2'),
-                        },
-                    ]}
-                >
-                    <InputNumber
-                        type="number"
-                        min={0}
-                        max={1}
-                        step={0.1}
-                        placeholder="Nhập hệ số điểm thường xuyên"
-                        className="w-full"
-                        onChange={() => {
-                            setTimeout(() => debouncedValidate(['coef_1', 'coef_3']), 300)
-                        }}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem
-                    form={form}
-                    name="coef_3"
-                    label="Hệ số điểm điểm thi"
-                    rules={[
-                        {
-                            validator: validateCoefficient('coef_3'),
-                        },
-                        {
-                            validator: validateCoefficientSum,
-                        },
-                    ]}
-                >
-                    <InputNumber
-                        type="number"
-                        min={0}
-                        max={1}
-                        step={0.1}
-                        placeholder="Nhập hệ số điểm điểm thi"
-                        className="w-full"
-                        onChange={() => {
-                            setTimeout(() => debouncedValidate(['coef_1', 'coef_2']), 300)
-                        }}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="academicYear" label="Niên khoá">
-                    <Input placeholder="Nhập niên khoá" />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="maxTrainingTime" label="Thời gian đào tạo Max">
-                    <InputNumber
-                        type="number"
-                        style={{ width: '100%' }}
-                        min={0}
-                        step={1}
-                        placeholder="Nhập thời gian đào tạo"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="admissionQuota" label="Chỉ tiêu tuyển sinh">
-                    <InputNumber
-                        type="number"
-                        style={{ width: '100%' }}
-                        min={0}
-                        step={1}
-                        placeholder="Nhập chỉ tiêu tuyển sinh"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name={'active'} label="Trạng thái" required>
-                    <Radio.Group buttonStyle="solid">
-                        <Radio value={true}>Đang hoạt động</Radio>
-                        <Radio value={false}>Ngừng hoạt động</Radio>
-                    </Radio.Group>
-                </FormItem>
-            </Col>
-            <Col span={24}>
+                    >
+                        <InputNumber
+                            type="number"
+                            min={0}
+                            max={1}
+                            step={0.1}
+                            placeholder="Nhập hệ số điểm chuyên cần"
+                            className="w-full"
+                            onChange={() => {
+                                setTimeout(() => debouncedValidate(['coef_2', 'coef_3']), 300)
+                            }}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem
+                        form={form}
+                        name="coef_2"
+                        label="Hệ số điểm thường xuyên"
+                        rules={[
+                            {
+                                validator: validateCoefficient('coef_2'),
+                            },
+                        ]}
+                    >
+                        <InputNumber
+                            type="number"
+                            min={0}
+                            max={1}
+                            step={0.1}
+                            placeholder="Nhập hệ số điểm thường xuyên"
+                            className="w-full"
+                            onChange={() => {
+                                setTimeout(() => debouncedValidate(['coef_1', 'coef_3']), 300)
+                            }}
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem
+                        form={form}
+                        name="coef_3"
+                        label="Hệ số điểm điểm thi"
+                        rules={[
+                            {
+                                validator: validateCoefficient('coef_3'),
+                            },
+                            {
+                                validator: validateCoefficientSum,
+                            },
+                        ]}
+                    >
+                        <InputNumber
+                            type="number"
+                            min={0}
+                            max={1}
+                            step={0.1}
+                            placeholder="Nhập hệ số điểm điểm thi"
+                            className="w-full"
+                            onChange={() => {
+                                setTimeout(() => debouncedValidate(['coef_1', 'coef_2']), 300)
+                            }}
+                        />
+                    </FormItem>
+                </Col>
+            </Row>
+
+            <Col span={24} className="px-6">
                 <div className="flex items-center justify-between">
-                    <div>Tiêu chí bổ sung</div>
+                    <div className="text-base font-semibold underline-offset-2 underline">
+                        Tham số bổ sung
+                    </div>
                     <Button
+                        type="primary"
                         size="small"
                         onClick={() => {
                             form.setFieldsValue({
@@ -592,7 +619,7 @@ const PutTrainingCourseModal = () => {
                             })
                         }}
                     >
-                        Thêm tiêu chí
+                        Thêm tham số
                     </Button>
                 </div>
                 <FormItem form={form} name="trainingCourseRegulation">
@@ -607,7 +634,7 @@ const PutTrainingCourseModal = () => {
                                 render: (_, __, index) => index + 1,
                             },
                             {
-                                title: 'Mã tiêu chí',
+                                title: 'Mã tham số',
                                 dataIndex: 'code',
                                 width: 200,
                                 render: (record, __, index) => (
@@ -618,16 +645,16 @@ const PutTrainingCourseModal = () => {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lồng nhập mã tiêu chí',
+                                                message: 'Vui lồng nhập mã tham số',
                                             },
                                         ]}
                                     >
-                                        <Input placeholder="Nhập mã tiêu chí" />
+                                        <Input placeholder="Nhập mã tham số" />
                                     </Form.Item>
                                 ),
                             },
                             {
-                                title: 'Tên tiêu chí',
+                                title: 'Tên tham số',
                                 dataIndex: 'name',
                                 render: (record, __, index) => (
                                     <Form.Item
@@ -637,11 +664,11 @@ const PutTrainingCourseModal = () => {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lồng nhập tên tiêu chí',
+                                                message: 'Vui lồng nhập tên tham số',
                                             },
                                         ]}
                                     >
-                                        <Input placeholder="Nhập mã tiêu chí" />
+                                        <Input placeholder="Nhập mã tham số" />
                                     </Form.Item>
                                 ),
                             },
