@@ -11,13 +11,15 @@ import {
     useFindManySurveyTopic,
     useUpdateSurveyQuestionGroup,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function TabNhomCauHoi() {
+    const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const router = useRouter()
@@ -106,9 +108,14 @@ function TabNhomCauHoi() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     <Flex justify="end">
-                        <Button onClick={handleModal} type="primary">
-                            Thêm mới
-                        </Button>
+                        {can(
+                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                            'THEM'
+                        ) && (
+                            <Button onClick={handleModal} type="primary">
+                                Thêm mới
+                            </Button>
+                        )}
                     </Flex>
                 </Col>
                 <Col span={24}>
@@ -161,35 +168,53 @@ function TabNhomCauHoi() {
                                 align: 'center',
                                 render: (_, { id, surveyQuestion }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip title={'Xem danh sách câu hỏi'} placement="top">
-                                            <EyeOutlined
-                                                onClick={() => {
-                                                    router.push(
-                                                        `${ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT}/${id}`
-                                                    )
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT,
+                                            'XEM'
+                                        ) && (
+                                            <Tooltip
+                                                title={'Xem danh sách câu hỏi'}
+                                                placement="top"
+                                            >
+                                                <EyeOutlined
+                                                    onClick={() => {
+                                                        router.push(
+                                                            `${ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT}/${id}`
+                                                        )
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                        )}
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                                            'SUA'
+                                        ) && (
+                                            <EditIcon
+                                                onClick={(e: any) => {
+                                                    e.stopPropagation()
+                                                    onOpen(id)
                                                 }}
+                                                className="text-sm text-blue-700 cursor-pointer"
                                             />
-                                        </Tooltip>
-                                        <EditIcon
-                                            onClick={(e: any) => {
-                                                e.stopPropagation()
-                                                onOpen(id)
-                                            }}
-                                            className="text-sm text-blue-700 cursor-pointer"
-                                        />
-                                        <DeleteIcon
-                                            disabled={surveyQuestion.length > 0}
-                                            popConfirm={{
-                                                onConfirm: (e) => {
-                                                    handleDelete(id)
-                                                    e?.stopPropagation()
-                                                },
-                                                onCancel: (e) => {
-                                                    e?.stopPropagation()
-                                                },
-                                            }}
-                                            onClick={(e) => e.stopPropagation()}
-                                        />
+                                        )}
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                disabled={surveyQuestion.length > 0}
+                                                popConfirm={{
+                                                    onConfirm: (e) => {
+                                                        handleDelete(id)
+                                                        e?.stopPropagation()
+                                                    },
+                                                    onCancel: (e) => {
+                                                        e?.stopPropagation()
+                                                    },
+                                                }}
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
+                                        )}
                                     </Row>
                                 ),
                             },

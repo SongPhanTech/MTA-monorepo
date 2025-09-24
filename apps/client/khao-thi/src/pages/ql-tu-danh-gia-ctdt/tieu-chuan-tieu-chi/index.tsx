@@ -15,7 +15,8 @@ import {
     useFindManyScoreScaleCatalog,
     useFindManyStandardCatalog,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Form, Input, message, Row, Tooltip } from 'antd'
 import { BookPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -23,6 +24,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function StandardCatalog() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -202,15 +204,20 @@ export default function StandardCatalog() {
                         {/* Thêm mới */}
                         <Col span={12}>
                             <Flex justify="end">
-                                <Button
-                                    type="primary"
-                                    onClick={() => {
-                                        onOpenPutStandardCatalog({ id: '', count: count || 0 })
-                                    }}
-                                >
-                                    <BookPlus />
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => {
+                                            onOpenPutStandardCatalog({ id: '', count: count || 0 })
+                                        }}
+                                    >
+                                        <BookPlus />
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -231,44 +238,67 @@ export default function StandardCatalog() {
                         }}
                         headerRight={(record) => (
                             <div className="flex px-3 gap-2.5 w-[100px] items-center justify-end">
-                                <CreateIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onOpenPutCriterionCatalog({
-                                            id: '',
-                                            standardId: record?.id,
-                                        })
-                                    }}
-                                    title="Thêm mới phiên bản"
-                                />
-                                <EditIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onOpenPutStandardCatalog({
-                                            id: record?.id,
-                                            count: count || 0,
-                                        })
-                                    }}
-                                    className="text-sm text-blue-700 cursor-pointer"
-                                />
-                                <DeleteIcon
-                                    popConfirm={{
-                                        onConfirm: (e) => {
-                                            handleDeleteStandardCatalog(record?.id)
-                                            e?.stopPropagation()
-                                        },
-                                        onCancel: (e) => {
-                                            e?.stopPropagation()
-                                        },
-                                    }}
-                                    onClick={(e) => e.stopPropagation()}
-                                />
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                    'THEM'
+                                ) && (
+                                    <CreateIcon
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            onOpenPutCriterionCatalog({
+                                                id: '',
+                                                standardId: record?.id,
+                                            })
+                                        }}
+                                        title="Thêm mới phiên bản"
+                                    />
+                                )}
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                    'SUA'
+                                ) && (
+                                    <EditIcon
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            onOpenPutStandardCatalog({
+                                                id: record?.id,
+                                                count: count || 0,
+                                            })
+                                        }}
+                                        className="text-sm text-blue-700 cursor-pointer"
+                                    />
+                                )}
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                    'XOA'
+                                ) && (
+                                    <DeleteIcon
+                                        popConfirm={{
+                                            onConfirm: (e) => {
+                                                handleDeleteStandardCatalog(record?.id)
+                                                e?.stopPropagation()
+                                            },
+                                            onCancel: (e) => {
+                                                e?.stopPropagation()
+                                            },
+                                        }}
+                                        onClick={(e) => e.stopPropagation()}
+                                    />
+                                )}
                             </div>
                         )}
                         onRowClick={({ id }) => {
-                            router.push(
-                                `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI}/${id}`
-                            )
+                            if (
+                                id &&
+                                can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                    'XEM'
+                                )
+                            ) {
+                                router.push(
+                                    `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI}/${id}`
+                                )
+                            }
                         }}
                         columns={[
                             {
@@ -305,38 +335,64 @@ export default function StandardCatalog() {
                                 align: 'center',
                                 width: 80,
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-end gap-2 px-3">
-                                                <Tooltip title="Chi tiết tiêu chí" placement="top">
-                                                    <EyeOutlined
-                                                        style={{ fontSize: '24px' }}
-                                                        className="text-sm cursor-pointer"
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                                    'XEM'
+                                                ) && (
+                                                    <Tooltip
+                                                        title="Chi tiết tiêu chí"
+                                                        placement="top"
+                                                    >
+                                                        <EyeOutlined
+                                                            style={{ fontSize: '24px' }}
+                                                            className="text-sm cursor-pointer"
+                                                        />
+                                                    </Tooltip>
+                                                )}
+
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            onOpenPutCriterionCatalog({
+                                                                id: record?.id,
+                                                                standardId: record?.standardId,
+                                                            })
+                                                        }}
+                                                        className="text-sm text-blue-700 cursor-pointer"
                                                     />
-                                                </Tooltip>
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpenPutCriterionCatalog({
-                                                            id: record?.id,
-                                                            standardId: record?.standardId,
-                                                        })
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeleteCriterionCatalog(record?.id)
-                                                            e?.stopPropagation()
-                                                        },
-                                                        onCancel: (e) => {
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                )}
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleDeleteCriterionCatalog(
+                                                                    record?.id
+                                                                )
+                                                                e?.stopPropagation()
+                                                            },
+                                                            onCancel: (e) => {
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

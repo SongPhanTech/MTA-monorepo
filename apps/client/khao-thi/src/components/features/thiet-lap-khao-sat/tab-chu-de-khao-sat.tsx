@@ -9,11 +9,14 @@ import {
     useFindManySurveyTopic,
     useUpdateSurveyTopic,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function TabChuDeKhaoSat() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -93,9 +96,14 @@ function TabChuDeKhaoSat() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     <Flex justify="end">
-                        <Button onClick={handleModal} type="primary">
-                            Thêm mới
-                        </Button>
+                        {can(
+                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                            'THEM'
+                        ) && (
+                            <Button onClick={handleModal} type="primary">
+                                Thêm mới
+                            </Button>
+                        )}
                     </Flex>
                 </Col>
                 <Col span={24}>
@@ -127,18 +135,33 @@ function TabChuDeKhaoSat() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
+                                hidden: !canSome(
+                                    KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id, surveyQuestionGroup }) => (
                                     <Row className="justify-center gap-2">
-                                        <EditIcon
-                                            onClick={onOpen.bind(null, id)}
-                                            className="text-sm text-blue-700 cursor-pointer"
-                                        />
-                                        <DeleteIcon
-                                            disabled={surveyQuestionGroup.length > 0}
-                                            popConfirm={{
-                                                onConfirm: () => handleDelete(id),
-                                            }}
-                                        />
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                                            'SUA'
+                                        ) && (
+                                            <EditIcon
+                                                onClick={onOpen.bind(null, id)}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                        )}
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                disabled={surveyQuestionGroup.length > 0}
+                                                popConfirm={{
+                                                    onConfirm: () => handleDelete(id),
+                                                }}
+                                            />
+                                        )}
                                     </Row>
                                 ),
                             },

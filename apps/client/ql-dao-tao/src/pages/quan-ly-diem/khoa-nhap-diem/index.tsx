@@ -481,7 +481,7 @@ export default function SubjectClassScore() {
                                     width: 100,
                                     align: 'center',
                                     fixed: 'right',
-                                    hidden: !can(
+                                    hidden: !canSome(
                                         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_KHOA_NHAP_DIEM,
                                         'SUA'
                                     ),

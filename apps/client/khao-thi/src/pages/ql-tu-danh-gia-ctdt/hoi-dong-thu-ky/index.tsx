@@ -11,7 +11,8 @@ import {
     useFindManyEvaluationSecretarYCouncil,
     useUpdateEvaluationSecretarYCouncil,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -19,6 +20,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluationSecretarYCouncil() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -89,15 +91,20 @@ export default function EvaluationSecretarYCouncil() {
                         {/* Thêm mới */}
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button
-                                    type="primary"
-                                    onClick={() => {
-                                        onOpenPutEvaluationSecretarYCouncil()
-                                    }}
-                                >
-                                    <BookPlus />
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => {
+                                            onOpenPutEvaluationSecretarYCouncil()
+                                        }}
+                                    >
+                                        <BookPlus />
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -151,40 +158,61 @@ export default function EvaluationSecretarYCouncil() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY,
+                                    'XEM_CHI_TIET',
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <Tooltip title={'Xem chi tiết'} placement="top">
-                                                    <EyeOutlined
-                                                        style={{ fontSize: '16px' }}
-                                                        onClick={() => {
-                                                            router.push(
-                                                                `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY}/${record?.id}`
-                                                            )
-                                                        }}
-                                                    />
-                                                </Tooltip>
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpenPutEvaluationSecretarYCouncil(
-                                                            record?.id
-                                                        )
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeleteEvaluationSecretarYCouncil(
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY,
+                                                    'XEM_CHI_TIET'
+                                                ) && (
+                                                    <Tooltip title={'Xem chi tiết'} placement="top">
+                                                        <EyeOutlined
+                                                            style={{ fontSize: '16px' }}
+                                                            onClick={() => {
+                                                                router.push(
+                                                                    `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY}/${record?.id}`
+                                                                )
+                                                            }}
+                                                        />
+                                                    </Tooltip>
+                                                )}
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            onOpenPutEvaluationSecretarYCouncil(
                                                                 record?.id
                                                             )
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                        }}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleDeleteEvaluationSecretarYCouncil(
+                                                                    record?.id
+                                                                )
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

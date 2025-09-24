@@ -11,7 +11,8 @@ import {
     useFindManyEvaluationCouncil,
     useUpdateEvaluationCouncil,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -19,6 +20,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluationCouncil() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -90,15 +92,20 @@ export default function EvaluationCouncil() {
                         {/* Thêm mới */}
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button
-                                    type="primary"
-                                    onClick={() => {
-                                        onOpenPutEvaluationCouncil()
-                                    }}
-                                >
-                                    <BookPlus />
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => {
+                                            onOpenPutEvaluationCouncil()
+                                        }}
+                                    >
+                                        <BookPlus />
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -152,38 +159,59 @@ export default function EvaluationCouncil() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                                    'XEM_CHI_TIET',
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <Tooltip title={'Xem chi tiết'} placement="top">
-                                                    <EyeOutlined
-                                                        style={{ fontSize: '16px' }}
-                                                        onClick={() => {
-                                                            router.push(
-                                                                `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA}/${record?.id}`
-                                                            )
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                                                    'XEM_CHI_TIET'
+                                                ) && (
+                                                    <Tooltip title={'Xem chi tiết'} placement="top">
+                                                        <EyeOutlined
+                                                            style={{ fontSize: '16px' }}
+                                                            onClick={() => {
+                                                                router.push(
+                                                                    `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA}/${record?.id}`
+                                                                )
+                                                            }}
+                                                        />
+                                                    </Tooltip>
+                                                )}
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            onOpenPutEvaluationCouncil(record?.id)
                                                         }}
+                                                        className="text-sm text-blue-700 cursor-pointer"
                                                     />
-                                                </Tooltip>
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpenPutEvaluationCouncil(record?.id)
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeleteEvaluationCouncil(
-                                                                record?.id
-                                                            )
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                )}
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleDeleteEvaluationCouncil(
+                                                                    record?.id
+                                                                )
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

@@ -721,7 +721,7 @@ export default function TrainingProgramSubjects() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                hidden: !can(
+                                hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                                     'SUA'
                                 ),

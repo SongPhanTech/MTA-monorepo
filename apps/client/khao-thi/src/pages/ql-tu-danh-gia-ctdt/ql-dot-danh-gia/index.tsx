@@ -11,7 +11,8 @@ import {
     useFindManyEvaluationPeriod,
     useUpdateEvaluationPeriod,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
@@ -20,6 +21,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function EvaluationPeriod() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -110,15 +112,20 @@ export default function EvaluationPeriod() {
                         {/* Thêm mới */}
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button
-                                    type="primary"
-                                    onClick={() => {
-                                        onOpenPutEvaluationPeriod()
-                                    }}
-                                >
-                                    <BookPlus />
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => {
+                                            onOpenPutEvaluationPeriod()
+                                        }}
+                                    >
+                                        <BookPlus />
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -185,35 +192,58 @@ export default function EvaluationPeriod() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                                    'SUA',
+                                    'XOA',
+                                    'XEM_CHI_TIET'
+                                ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <Tooltip title={'Chi tiết'} placement="top">
-                                                    <EyeOutlined
-                                                        onClick={() => {
-                                                            router.push(
-                                                                `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA}/${record?.id}`
-                                                            )
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                                                    'XEM_CHI_TIET'
+                                                ) && (
+                                                    <Tooltip title={'Chi tiết'} placement="top">
+                                                        <EyeOutlined
+                                                            onClick={() => {
+                                                                router.push(
+                                                                    `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA}/${record?.id}`
+                                                                )
+                                                            }}
+                                                        />
+                                                    </Tooltip>
+                                                )}
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            onOpenPutEvaluationPeriod(record?.id)
                                                         }}
+                                                        className="text-sm text-blue-700 cursor-pointer"
                                                     />
-                                                </Tooltip>
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpenPutEvaluationPeriod(record?.id)
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeleteEvaluationPeriod(record?.id)
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                )}
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleDeleteEvaluationPeriod(
+                                                                    record?.id
+                                                                )
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

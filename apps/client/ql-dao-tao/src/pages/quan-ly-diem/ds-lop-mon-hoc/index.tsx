@@ -521,7 +521,7 @@ export default function ClassSubject() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                hidden: !can(
+                                hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
                                     'NHAP_DIEM'
                                 ),

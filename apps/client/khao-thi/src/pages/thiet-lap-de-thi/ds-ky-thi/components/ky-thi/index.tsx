@@ -11,7 +11,8 @@ import {
     useFindManyQuestionBank,
     useUpdateExam,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Checkbox, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus, Pencil } from 'lucide-react'
@@ -19,6 +20,7 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
 function Exam() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -151,17 +153,22 @@ function Exam() {
                     <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button
-                                    onClick={() => {
-                                        router.push(
-                                            `${ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI}/create`
-                                        )
-                                    }}
-                                    type="primary"
-                                >
-                                    <BookPlus />
-                                    Thêm kỳ thi
-                                </Button>
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_DS_KY_THI,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        onClick={() => {
+                                            router.push(
+                                                `${ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI}/create`
+                                            )
+                                        }}
+                                        type="primary"
+                                    >
+                                        <BookPlus />
+                                        Thêm kỳ thi
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -174,7 +181,17 @@ function Exam() {
                             setCurrentPage(1)
                         }}
                         onRowClick={({ id }) => {
-                            router.push(`${ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI}/${id}`)
+                            if (
+                                id &&
+                                can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_DS_KY_THI,
+                                    'XEM_CHI_TIET'
+                                )
+                            ) {
+                                router.push(
+                                    `${ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI}/${id}`
+                                )
+                            }
                         }}
                         columns={[
                             {
@@ -297,27 +314,43 @@ function Exam() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_DS_KY_THI,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip title="Chỉnh sửa" placement="top">
-                                            <Pencil
-                                                size={16}
-                                                strokeWidth={1.5}
-                                                className="text-sm cursor-pointer text-blue-700"
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_DS_KY_THI,
+                                            'SUA'
+                                        ) && (
+                                            <Tooltip title="Chỉnh sửa" placement="top">
+                                                <Pencil
+                                                    size={16}
+                                                    strokeWidth={1.5}
+                                                    className="text-sm cursor-pointer text-blue-700"
+                                                />
+                                            </Tooltip>
+                                        )}
+
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_DS_KY_THI,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: (e) => {
+                                                        handleDeleteExam(id)
+                                                        e?.stopPropagation()
+                                                    },
+                                                    onCancel: (e) => {
+                                                        e?.stopPropagation()
+                                                    },
+                                                }}
+                                                onClick={(e) => e.stopPropagation()}
                                             />
-                                        </Tooltip>
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: (e) => {
-                                                    handleDeleteExam(id)
-                                                    e?.stopPropagation()
-                                                },
-                                                onCancel: (e) => {
-                                                    e?.stopPropagation()
-                                                },
-                                            }}
-                                            onClick={(e) => e.stopPropagation()}
-                                        />
+                                        )}
                                     </Row>
                                 ),
                             },

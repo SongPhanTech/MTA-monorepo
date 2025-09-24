@@ -14,6 +14,8 @@ import {
     useFindManySurveyTopic,
     useUpdateSurvey,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -21,6 +23,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function TabDotKhaoSat() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -150,9 +153,14 @@ function TabDotKhaoSat() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                    'XEM_CHI_TIET'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -226,54 +234,88 @@ function TabDotKhaoSat() {
                                 title: 'Thao tác',
                                 width: 170,
                                 align: 'center',
+                                hidden: !canSome(
+                                    KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                    'THEM',
+                                    'SUA',
+                                    'XOA',
+                                    'XEM_CHI_TIET'
+                                ),
                                 render: (_, { id, surveyTopicId, surveyQuestion }) => (
                                     <Row className="justify-end gap-2">
-                                        <Tooltip
-                                            className="mr-2"
-                                            title={'Báo cáo khảo sát'}
-                                            placement="top"
-                                        >
-                                            <BarChartOutlined
-                                                onClick={() => {
-                                                    router.push(`/bao-cao-khao-sat/${id}`)
-                                                }}
-                                                style={{ fontSize: '16px' }}
-                                            />
-                                        </Tooltip>
-                                        {surveyQuestion?.length > 0 && (
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                            'XEM_CHI_TIET'
+                                        ) && (
                                             <Tooltip
                                                 className="mr-2"
-                                                title={'Xem đề khảo sát'}
+                                                title={'Báo cáo khảo sát'}
                                                 placement="top"
                                             >
-                                                <EyeOutlined
+                                                <BarChartOutlined
                                                     onClick={() => {
-                                                        router.push(`/lam-khao-sat/${id}`)
+                                                        router.push(`/bao-cao-khao-sat/${id}`)
                                                     }}
                                                     style={{ fontSize: '16px' }}
                                                 />
                                             </Tooltip>
                                         )}
-                                        <Tooltip
-                                            className="mr-2"
-                                            title={'Tạo đề khảo sát'}
-                                            placement="top"
-                                        >
-                                            <PlusCircleOutlined
-                                                onClick={() =>
-                                                    handleModalCreateExam({ id, surveyTopicId })
-                                                }
+
+                                        {surveyQuestion?.length > 0 &&
+                                            can(
+                                                KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                                'XEM_CHI_TIET'
+                                            ) && (
+                                                <Tooltip
+                                                    className="mr-2"
+                                                    title={'Xem đề khảo sát'}
+                                                    placement="top"
+                                                >
+                                                    <EyeOutlined
+                                                        onClick={() => {
+                                                            router.push(`/lam-khao-sat/${id}`)
+                                                        }}
+                                                        style={{ fontSize: '16px' }}
+                                                    />
+                                                </Tooltip>
+                                            )}
+
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                            'THEM'
+                                        ) && (
+                                            <Tooltip
+                                                className="mr-2"
+                                                title={'Tạo đề khảo sát'}
+                                                placement="top"
+                                            >
+                                                <PlusCircleOutlined
+                                                    onClick={() =>
+                                                        handleModalCreateExam({ id, surveyTopicId })
+                                                    }
+                                                />
+                                            </Tooltip>
+                                        )}
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                            'SUA'
+                                        ) && (
+                                            <EditIcon
+                                                onClick={onOpen.bind(null, id)}
+                                                className="text-sm text-blue-700 cursor-pointer mr-2"
                                             />
-                                        </Tooltip>
-                                        <EditIcon
-                                            onClick={onOpen.bind(null, id)}
-                                            className="text-sm text-blue-700 cursor-pointer mr-2"
-                                        />
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () => handleDelete(id),
-                                            }}
-                                        />
+                                        )}
+
+                                        {can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () => handleDelete(id),
+                                                }}
+                                            />
+                                        )}
                                     </Row>
                                 ),
                             },
