@@ -23,15 +23,15 @@ const PERMISSIONS = {
     XEM_CHI_TIET: 1 << 2,
     THEM: 1 << 3,
     SUA: 1 << 4,
-    XOA: 1 << 5,
-    IN: 1 << 6,
-    NHAP_EXCEL: 1 << 7,
-    XUAT_EXCEL: 1 << 8,
-    TAI_TEP: 1 << 9,
-    NHAP_DIEM: 1 << 10,
-    DUYET: 1 << 11,
+    IN: 1 << 5,
+    NHAP_EXCEL: 1 << 6,
+    XUAT_EXCEL: 1 << 7,
+    TAI_TEP: 1 << 8,
+    NHAP_DIEM: 1 << 9,
+    DUYET: 1 << 10,
+    IN_PHIEU_DIEM: 1 << 11,
     IN_DS_THI: 1 << 12,
-    IN_PHIEU_DIEM: 1 << 13,
+    XOA: 1 << 13,
 } as const
 
 function combine(perms: (keyof typeof PERMISSIONS)[]): number {

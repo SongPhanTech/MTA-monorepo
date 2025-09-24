@@ -34,7 +34,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import CreateIcon from '../../../../components/icons/create'
 export default function TrainingProgramSubjects() {
-    const { can } = useAbility()
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const id = router.query.id as string
     const [importModalVisible, setImportModalVisible] = useState(false)
