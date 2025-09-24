@@ -1,40 +1,47 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type TypeProps = {
     arr: { key: string; label: string }[]
     key: string
-    record: any
 }
-export default function TextTruncate({ arr, key, record }: TypeProps) {
-    const [listShowAll, setListShowAll] = useState<string[]>([])
+export default function TextTruncate({ arr, key }: TypeProps) {
+    const [show, setShow] = useState(false)
+    const [showButton, setShowButton] = useState(false)
+    const textRef = useRef<HTMLDivElement>(null)
 
-    const handleShowMore = (value: string) => {
-        const result = listShowAll.includes(value)
-        if (result) {
-            setListShowAll(listShowAll.filter((item) => item !== value))
-        } else {
-            setListShowAll([...listShowAll, value])
-        }
+    const handleShowMore = () => {
+        setShow(!show)
     }
+
+    useEffect(() => {
+        if (textRef.current) {
+            const el = textRef.current
+            if (el.scrollHeight >= 44 && arr?.length > 2) {
+                console.log(el.scrollHeight, arr?.length > 2)
+
+                setShowButton(true)
+            }
+        }
+    }, [arr?.length])
     return (
-        <div>
+        <div ref={textRef} className="relative collapse-content">
             <ul
                 style={{
                     paddingLeft: 0,
                     margin: 0,
                 }}
-                className={`text-left transition-all duration-500 overflow-hidden ${listShowAll.includes(`${record.id}-${key}`) || arr.length <= 2 ? '' : 'line-clamp-2'}`}
+                className={`content text-left ${!showButton && !show ? '' : 'is-collapsed'} ${show ? '' : 'line-clamp-2'}  `}
             >
                 {arr?.map((val: any, index: number) => (
                     <li key={val.key}>- {val.label}</li>
                 ))}
             </ul>
-            {arr?.length > 2 && (
+            {showButton && (
                 <div
-                    onClick={() => handleShowMore(`${record.id}-${key}`)}
+                    onClick={() => handleShowMore()}
                     className="flex  justify-end text-xs text-green-600"
                 >
-                    {listShowAll.includes(`${record.id}-${key}`) ? 'Ẩn bớt' : 'Xem thêm'}
+                    {show ? 'Ẩn bớt' : 'Xem thêm'}
                 </div>
             )}
         </div>

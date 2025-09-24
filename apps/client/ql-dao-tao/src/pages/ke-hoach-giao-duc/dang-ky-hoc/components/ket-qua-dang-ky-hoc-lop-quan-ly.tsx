@@ -246,7 +246,6 @@ export default function RegisterResult({ setSemesterId, setSubjectClassId }: Reg
                                         return { key: i?.id, label: i?.name }
                                     })}
                                     key="fixedClasses"
-                                    record={record}
                                 />
                             ) : (
                                 ''

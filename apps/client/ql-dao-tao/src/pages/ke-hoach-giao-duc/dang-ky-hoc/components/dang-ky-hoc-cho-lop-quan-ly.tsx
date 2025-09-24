@@ -257,7 +257,6 @@ export default function RegisterClassManager({
                                         return { key: i?.id, label: i.name }
                                     })}
                                     key="fixedClasses"
-                                    record={record}
                                 />
                             ) : (
                                 ''

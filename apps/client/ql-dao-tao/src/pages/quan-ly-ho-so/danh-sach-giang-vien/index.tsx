@@ -335,7 +335,6 @@ export default function UserProfilePageLecture() {
                                                 return { key: i?.id, label: i?.name }
                                             })}
                                             key="mainSubjectClasses"
-                                            record={record}
                                         />
                                     ) : (
                                         ''
@@ -354,7 +353,6 @@ export default function UserProfilePageLecture() {
                                                 return { key: i?.id, label: i?.name }
                                             })}
                                             key="extraSubjectClasses"
-                                            record={record}
                                         />
                                     ) : (
                                         ''
@@ -373,7 +371,6 @@ export default function UserProfilePageLecture() {
                                                 return { key: i?.id, label: i?.name }
                                             })}
                                             key="manageFixedClass"
-                                            record={record}
                                         />
                                     ) : (
                                         ''

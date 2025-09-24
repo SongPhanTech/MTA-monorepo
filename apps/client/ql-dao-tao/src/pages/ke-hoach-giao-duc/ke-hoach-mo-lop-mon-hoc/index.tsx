@@ -245,7 +245,6 @@ export default function SubjectOpeningPlan() {
                                                 }
                                             })}
                                             key="subjectClass"
-                                            record={record}
                                         />
                                     ) : (
                                         ''
@@ -267,7 +266,6 @@ export default function SubjectOpeningPlan() {
                                                 }
                                             })}
                                             key="fixedClass"
-                                            record={record}
                                         />
                                     ) : (
                                         ''
@@ -290,7 +288,6 @@ export default function SubjectOpeningPlan() {
                                                 }
                                             })}
                                             key="curriculumVersion"
-                                            record={record}
                                         />
                                     ) : (
                                         ''
