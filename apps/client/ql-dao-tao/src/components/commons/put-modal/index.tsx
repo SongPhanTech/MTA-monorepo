@@ -4,7 +4,6 @@ import {
     Form,
     type FormInstance,
     type FormProps,
-    Row,
 } from 'antd'
 
 export type PutModalFormType = {}
@@ -30,7 +29,7 @@ const PutFormModal = <T extends PutModalFormType>({
         <AntdModal
             okText="Lưu"
             cancelText="Hủy"
-            width={800}
+            // width={800}
             maskClosable={false}
             onOk={form.submit}
             {...rest}
@@ -43,7 +42,7 @@ const PutFormModal = <T extends PutModalFormType>({
                 wrapperCol={wrapperCol}
                 {...rest.formProps}
             >
-                <Row gutter={16}>{children}</Row>
+                {children}
             </Form>
         </AntdModal>
     )

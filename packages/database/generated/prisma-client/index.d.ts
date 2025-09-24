@@ -95017,6 +95017,7 @@ export namespace Prisma {
     totalCreditsByCurriculum: number | null
     totalFailedCredits: number | null
     foreignLangPass: boolean | null
+    computerSkillPass: boolean | null
     isClassMonitor: boolean | null
     isUnionLeader: boolean | null
     entryScore: number | null
@@ -95059,6 +95060,7 @@ export namespace Prisma {
     totalCreditsByCurriculum: number | null
     totalFailedCredits: number | null
     foreignLangPass: boolean | null
+    computerSkillPass: boolean | null
     isClassMonitor: boolean | null
     isUnionLeader: boolean | null
     entryScore: number | null
@@ -95101,6 +95103,7 @@ export namespace Prisma {
     totalCreditsByCurriculum: number
     totalFailedCredits: number
     foreignLangPass: number
+    computerSkillPass: number
     isClassMonitor: number
     isUnionLeader: number
     entryScore: number
@@ -95191,6 +95194,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: true
     totalFailedCredits?: true
     foreignLangPass?: true
+    computerSkillPass?: true
     isClassMonitor?: true
     isUnionLeader?: true
     entryScore?: true
@@ -95233,6 +95237,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: true
     totalFailedCredits?: true
     foreignLangPass?: true
+    computerSkillPass?: true
     isClassMonitor?: true
     isUnionLeader?: true
     entryScore?: true
@@ -95275,6 +95280,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: true
     totalFailedCredits?: true
     foreignLangPass?: true
+    computerSkillPass?: true
     isClassMonitor?: true
     isUnionLeader?: true
     entryScore?: true
@@ -95404,6 +95410,7 @@ export namespace Prisma {
     totalCreditsByCurriculum: number
     totalFailedCredits: number
     foreignLangPass: boolean
+    computerSkillPass: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
     entryScore: number | null
@@ -95465,6 +95472,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: boolean
     totalFailedCredits?: boolean
     foreignLangPass?: boolean
+    computerSkillPass?: boolean
     isClassMonitor?: boolean
     isUnionLeader?: boolean
     entryScore?: boolean
@@ -95509,6 +95517,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: boolean
     totalFailedCredits?: boolean
     foreignLangPass?: boolean
+    computerSkillPass?: boolean
     isClassMonitor?: boolean
     isUnionLeader?: boolean
     entryScore?: boolean
@@ -95553,6 +95562,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: boolean
     totalFailedCredits?: boolean
     foreignLangPass?: boolean
+    computerSkillPass?: boolean
     isClassMonitor?: boolean
     isUnionLeader?: boolean
     entryScore?: boolean
@@ -95597,6 +95607,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: boolean
     totalFailedCredits?: boolean
     foreignLangPass?: boolean
+    computerSkillPass?: boolean
     isClassMonitor?: boolean
     isUnionLeader?: boolean
     entryScore?: boolean
@@ -95608,7 +95619,7 @@ export namespace Prisma {
     expelled?: boolean
   }
 
-  export type StudentSemesterResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "studentId" | "semesterId" | "studyYear" | "semesterIndexInCourse" | "isLastSemester" | "baseScore" | "gpaBase4" | "cumulativeGpaBase4" | "gpaBase10" | "cumulativeGpaBase10" | "conductScore" | "studentTrainingType" | "lowestFinalScore" | "lowestGraduationScore" | "totalCredits" | "registeredCredits" | "retakingCredits" | "passedCredits" | "failedCredits" | "accumulatedCredits" | "totalCreditsByCurriculum" | "totalFailedCredits" | "foreignLangPass" | "isClassMonitor" | "isUnionLeader" | "entryScore" | "isImproving" | "postponeWithReason" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled", ExtArgs["result"]["studentSemesterResult"]>
+  export type StudentSemesterResultOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "studentId" | "semesterId" | "studyYear" | "semesterIndexInCourse" | "isLastSemester" | "baseScore" | "gpaBase4" | "cumulativeGpaBase4" | "gpaBase10" | "cumulativeGpaBase10" | "conductScore" | "studentTrainingType" | "lowestFinalScore" | "lowestGraduationScore" | "totalCredits" | "registeredCredits" | "retakingCredits" | "passedCredits" | "failedCredits" | "accumulatedCredits" | "totalCreditsByCurriculum" | "totalFailedCredits" | "foreignLangPass" | "computerSkillPass" | "isClassMonitor" | "isUnionLeader" | "entryScore" | "isImproving" | "postponeWithReason" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled", ExtArgs["result"]["studentSemesterResult"]>
   export type StudentSemesterResultInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     semester?: boolean | SemesterDefaultArgs<ExtArgs>
@@ -95659,6 +95670,7 @@ export namespace Prisma {
       totalCreditsByCurriculum: number
       totalFailedCredits: number
       foreignLangPass: boolean
+      computerSkillPass: boolean
       isClassMonitor: boolean
       isUnionLeader: boolean
       entryScore: number | null
@@ -96123,6 +96135,7 @@ export namespace Prisma {
     readonly totalCreditsByCurriculum: FieldRef<"StudentSemesterResult", 'Int'>
     readonly totalFailedCredits: FieldRef<"StudentSemesterResult", 'Int'>
     readonly foreignLangPass: FieldRef<"StudentSemesterResult", 'Boolean'>
+    readonly computerSkillPass: FieldRef<"StudentSemesterResult", 'Boolean'>
     readonly isClassMonitor: FieldRef<"StudentSemesterResult", 'Boolean'>
     readonly isUnionLeader: FieldRef<"StudentSemesterResult", 'Boolean'>
     readonly entryScore: FieldRef<"StudentSemesterResult", 'Float'>
@@ -302472,6 +302485,7 @@ export namespace Prisma {
     totalCreditsByCurriculum: 'totalCreditsByCurriculum',
     totalFailedCredits: 'totalFailedCredits',
     foreignLangPass: 'foreignLangPass',
+    computerSkillPass: 'computerSkillPass',
     isClassMonitor: 'isClassMonitor',
     isUnionLeader: 'isUnionLeader',
     entryScore: 'entryScore',
@@ -315052,6 +315066,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntFilter<"StudentSemesterResult"> | number
     totalFailedCredits?: IntFilter<"StudentSemesterResult"> | number
     foreignLangPass?: BoolFilter<"StudentSemesterResult"> | boolean
+    computerSkillPass?: BoolFilter<"StudentSemesterResult"> | boolean
     isClassMonitor?: BoolFilter<"StudentSemesterResult"> | boolean
     isUnionLeader?: BoolFilter<"StudentSemesterResult"> | boolean
     entryScore?: FloatNullableFilter<"StudentSemesterResult"> | number | null
@@ -315096,6 +315111,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: SortOrder
     totalFailedCredits?: SortOrder
     foreignLangPass?: SortOrder
+    computerSkillPass?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
     entryScore?: SortOrderInput | SortOrder
@@ -315145,6 +315161,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntFilter<"StudentSemesterResult"> | number
     totalFailedCredits?: IntFilter<"StudentSemesterResult"> | number
     foreignLangPass?: BoolFilter<"StudentSemesterResult"> | boolean
+    computerSkillPass?: BoolFilter<"StudentSemesterResult"> | boolean
     isClassMonitor?: BoolFilter<"StudentSemesterResult"> | boolean
     isUnionLeader?: BoolFilter<"StudentSemesterResult"> | boolean
     entryScore?: FloatNullableFilter<"StudentSemesterResult"> | number | null
@@ -315189,6 +315206,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: SortOrder
     totalFailedCredits?: SortOrder
     foreignLangPass?: SortOrder
+    computerSkillPass?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
     entryScore?: SortOrderInput | SortOrder
@@ -315239,6 +315257,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntWithAggregatesFilter<"StudentSemesterResult"> | number
     totalFailedCredits?: IntWithAggregatesFilter<"StudentSemesterResult"> | number
     foreignLangPass?: BoolWithAggregatesFilter<"StudentSemesterResult"> | boolean
+    computerSkillPass?: BoolWithAggregatesFilter<"StudentSemesterResult"> | boolean
     isClassMonitor?: BoolWithAggregatesFilter<"StudentSemesterResult"> | boolean
     isUnionLeader?: BoolWithAggregatesFilter<"StudentSemesterResult"> | boolean
     entryScore?: FloatNullableWithAggregatesFilter<"StudentSemesterResult"> | number | null
@@ -338907,7 +338926,8 @@ export namespace Prisma {
     accumulatedCredits: number
     totalCreditsByCurriculum: number
     totalFailedCredits: number
-    foreignLangPass: boolean
+    foreignLangPass?: boolean
+    computerSkillPass?: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
     entryScore?: number | null
@@ -338951,7 +338971,8 @@ export namespace Prisma {
     accumulatedCredits: number
     totalCreditsByCurriculum: number
     totalFailedCredits: number
-    foreignLangPass: boolean
+    foreignLangPass?: boolean
+    computerSkillPass?: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
     entryScore?: number | null
@@ -338992,6 +339013,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
     totalFailedCredits?: IntFieldUpdateOperationsInput | number
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+    computerSkillPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -339036,6 +339058,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
     totalFailedCredits?: IntFieldUpdateOperationsInput | number
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+    computerSkillPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -339077,7 +339100,8 @@ export namespace Prisma {
     accumulatedCredits: number
     totalCreditsByCurriculum: number
     totalFailedCredits: number
-    foreignLangPass: boolean
+    foreignLangPass?: boolean
+    computerSkillPass?: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
     entryScore?: number | null
@@ -339118,6 +339142,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
     totalFailedCredits?: IntFieldUpdateOperationsInput | number
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+    computerSkillPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -339160,6 +339185,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
     totalFailedCredits?: IntFieldUpdateOperationsInput | number
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+    computerSkillPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -363690,6 +363716,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: SortOrder
     totalFailedCredits?: SortOrder
     foreignLangPass?: SortOrder
+    computerSkillPass?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
     entryScore?: SortOrder
@@ -363755,6 +363782,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: SortOrder
     totalFailedCredits?: SortOrder
     foreignLangPass?: SortOrder
+    computerSkillPass?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
     entryScore?: SortOrder
@@ -363797,6 +363825,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: SortOrder
     totalFailedCredits?: SortOrder
     foreignLangPass?: SortOrder
+    computerSkillPass?: SortOrder
     isClassMonitor?: SortOrder
     isUnionLeader?: SortOrder
     entryScore?: SortOrder
@@ -402064,7 +402093,8 @@ export namespace Prisma {
     accumulatedCredits: number
     totalCreditsByCurriculum: number
     totalFailedCredits: number
-    foreignLangPass: boolean
+    foreignLangPass?: boolean
+    computerSkillPass?: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
     entryScore?: number | null
@@ -402106,7 +402136,8 @@ export namespace Prisma {
     accumulatedCredits: number
     totalCreditsByCurriculum: number
     totalFailedCredits: number
-    foreignLangPass: boolean
+    foreignLangPass?: boolean
+    computerSkillPass?: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
     entryScore?: number | null
@@ -402525,6 +402556,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntFilter<"StudentSemesterResult"> | number
     totalFailedCredits?: IntFilter<"StudentSemesterResult"> | number
     foreignLangPass?: BoolFilter<"StudentSemesterResult"> | boolean
+    computerSkillPass?: BoolFilter<"StudentSemesterResult"> | boolean
     isClassMonitor?: BoolFilter<"StudentSemesterResult"> | boolean
     isUnionLeader?: BoolFilter<"StudentSemesterResult"> | boolean
     entryScore?: FloatNullableFilter<"StudentSemesterResult"> | number | null
@@ -417212,7 +417244,8 @@ export namespace Prisma {
     accumulatedCredits: number
     totalCreditsByCurriculum: number
     totalFailedCredits: number
-    foreignLangPass: boolean
+    foreignLangPass?: boolean
+    computerSkillPass?: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
     entryScore?: number | null
@@ -417254,7 +417287,8 @@ export namespace Prisma {
     accumulatedCredits: number
     totalCreditsByCurriculum: number
     totalFailedCredits: number
-    foreignLangPass: boolean
+    foreignLangPass?: boolean
+    computerSkillPass?: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
     entryScore?: number | null
@@ -485834,7 +485868,8 @@ export namespace Prisma {
     accumulatedCredits: number
     totalCreditsByCurriculum: number
     totalFailedCredits: number
-    foreignLangPass: boolean
+    foreignLangPass?: boolean
+    computerSkillPass?: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
     entryScore?: number | null
@@ -486200,6 +486235,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
     totalFailedCredits?: IntFieldUpdateOperationsInput | number
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+    computerSkillPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -486242,6 +486278,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
     totalFailedCredits?: IntFieldUpdateOperationsInput | number
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+    computerSkillPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -486283,6 +486320,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
     totalFailedCredits?: IntFieldUpdateOperationsInput | number
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+    computerSkillPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -493842,7 +493880,8 @@ export namespace Prisma {
     accumulatedCredits: number
     totalCreditsByCurriculum: number
     totalFailedCredits: number
-    foreignLangPass: boolean
+    foreignLangPass?: boolean
+    computerSkillPass?: boolean
     isClassMonitor: boolean
     isUnionLeader: boolean
     entryScore?: number | null
@@ -494267,6 +494306,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
     totalFailedCredits?: IntFieldUpdateOperationsInput | number
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+    computerSkillPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -494309,6 +494349,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
     totalFailedCredits?: IntFieldUpdateOperationsInput | number
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+    computerSkillPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -494350,6 +494391,7 @@ export namespace Prisma {
     totalCreditsByCurriculum?: IntFieldUpdateOperationsInput | number
     totalFailedCredits?: IntFieldUpdateOperationsInput | number
     foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+    computerSkillPass?: BoolFieldUpdateOperationsInput | boolean
     isClassMonitor?: BoolFieldUpdateOperationsInput | boolean
     isUnionLeader?: BoolFieldUpdateOperationsInput | boolean
     entryScore?: NullableFloatFieldUpdateOperationsInput | number | null

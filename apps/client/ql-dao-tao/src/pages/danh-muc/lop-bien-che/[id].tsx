@@ -1,3 +1,4 @@
+import { SafetyCertificateOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
@@ -223,6 +224,12 @@ export default function StudentFixedClassPage() {
         dataFixedClass: any
     }>({
         tag: 'ModalPrintToDSHV',
+    })
+
+    const { onOpen: onOpenStandardOutput } = useDisclosure<{
+        id: string
+    }>({
+        tag: 'PutChuanDauRaModal',
     })
 
     // TODO!: anh TUẤN sửa
@@ -524,12 +531,11 @@ export default function StudentFixedClassPage() {
                                                 size={16}
                                             />
                                         </Tooltip>
-                                        {/* <EditIcon
-                                            onClick={onOpenUpdate.bind(null, {
-                                                id: id,
-                                            })}
-                                            className="text-sm text-blue-700 cursor-pointer"
-                                        /> */}
+                                        <Tooltip title="Chuẩn đầu ra">
+                                            <SafetyCertificateOutlined
+                                                onClick={() => onOpenStandardOutput(id)}
+                                            />
+                                        </Tooltip>
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () => handleDelete(id),

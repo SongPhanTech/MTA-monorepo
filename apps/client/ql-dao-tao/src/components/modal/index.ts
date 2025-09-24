@@ -21,6 +21,7 @@ import NhapDiemThuCong from './nhap-diem'
 import PutDiplomaType from './put-bac-dao-tao'
 import PutDisciplinaryWarningReason from './put-canh-cao-hoc-duong'
 import PutAcademicWarningRule from './put-canh-cao-hoc-tap'
+import PutChuanDauRaModal from './put-chuan-dau-ra'
 import PutCertificateScoreModal from './put-chung-chi-score'
 import PutConvertScore from './put-chuyen-doi-diem'
 import PutExpertProfile from './put-chuyen-gia'
@@ -177,4 +178,5 @@ export {
     PutClassRegisterSession,
     ModalPrintSupervisorGuide,
     NhapDiemThuCong,
+    PutChuanDauRaModal,
 }
