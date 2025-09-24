@@ -2,7 +2,7 @@ import { CloseOutlined } from '@ant-design/icons'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { importLecturer } from '@workspace/libs/api/training'
-import { parseSheetHeQuanSu } from '@workspace/libs/parseExcel'
+import { parseSheetLecturer } from '@workspace/libs/parseExcel'
 import { Button, Col, Collapse, Empty, Modal, message, Row, Space, Table, Tag } from 'antd'
 import { useState } from 'react'
 
@@ -19,13 +19,7 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportStudentModalProps) => 
     const [errorData, setErrorData] = useState<any[]>([])
     const [file, setFile] = useState<File | null>(null)
     const [disbaledButton, setDisbaledButton] = useState<boolean>(true)
-    const [data, setData] = useState<{
-        trainingObjectType: string | undefined
-        trainingCourse: string | undefined
-    }>({
-        trainingObjectType: '',
-        trainingCourse: '',
-    })
+
     const [fileName, setFileName] = useState<string>('')
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,11 +31,8 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportStudentModalProps) => 
 
         const reader = new FileReader()
         reader.onload = (e) => {
-            const { trainingObjectType, trainingCourse, students, errors } = parseSheetHeQuanSu(
-                e.target?.result as ArrayBuffer
-            )
-            setPreviewData(students)
-            setData({ trainingObjectType, trainingCourse })
+            const { lecturers, errors } = parseSheetLecturer(e.target?.result as ArrayBuffer)
+            setPreviewData(lecturers)
             if (errors.length === 0) {
                 setDisbaledButton(false)
             }
