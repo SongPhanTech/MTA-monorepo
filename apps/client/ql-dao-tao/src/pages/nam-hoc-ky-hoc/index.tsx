@@ -27,7 +27,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 function YearAndSemester() {
-    const { can } = useAbility()
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -359,6 +359,12 @@ function YearAndSemester() {
                             width: 100,
                             align: 'center',
                             fixed: 'right',
+                            hidden: !canSome(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NAM_HOC_KY_HOC,
+                                'XEM_CHI_TIET',
+                                'SUA',
+                                'XOA'
+                            ),
                             render: (_, { id, schoolYearId }) => (
                                 <Row className="justify-center gap-2">
                                     {can(

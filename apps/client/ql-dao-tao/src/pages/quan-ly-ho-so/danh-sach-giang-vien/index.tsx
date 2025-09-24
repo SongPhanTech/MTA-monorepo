@@ -14,9 +14,11 @@ import {
     useFindManyLecturer,
     useFindManyLecturerType,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Row } from 'antd'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { Button, Col, Flex, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
@@ -25,6 +27,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 dayjs.locale('vi')
 
 export default function UserProfilePageLecture() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [importModalVisible, setImportModalVisible] = useState(false)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -242,6 +245,19 @@ export default function UserProfilePageLecture() {
                 <Col span={24}>
                     <Table
                         filters={filters}
+                        onRowClick={(record) => {
+                            if (
+                                can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
+                                    'XEM_CHI_TIET'
+                                ) &&
+                                record?.id
+                            ) {
+                                router.push(
+                                    `${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN}/${record.id}`
+                                )
+                            }
+                        }}
                         setFilters={(value) => {
                             setFilters(value)
                             setCurrentPage(1)
@@ -362,6 +378,37 @@ export default function UserProfilePageLecture() {
                                     ) : (
                                         ''
                                     )
+                                },
+                            },
+                            {
+                                title: 'Thao tác',
+                                width: 100,
+                                align: 'center',
+                                fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
+                                    'XEM_CHI_TIET'
+                                ),
+                                render: (_, { id }) => {
+                                    if (id) {
+                                        return (
+                                            <Row className="justify-center gap-2">
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
+                                                    'XEM_CHI_TIET'
+                                                ) && (
+                                                    <Tooltip title="Xem chi tiết" placement="top">
+                                                        <Eye
+                                                            size={16}
+                                                            strokeWidth={1.5}
+                                                            className="text-base cursor-pointer"
+                                                        />
+                                                    </Tooltip>
+                                                )}
+                                            </Row>
+                                        )
+                                    }
+                                    return ''
                                 },
                             },
                         ]}

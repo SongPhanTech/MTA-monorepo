@@ -11,6 +11,8 @@ import {
     useFindManyDisciplinaryWarningReason,
     useUpdateDisciplinaryWarningReason,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import { BookPlus } from 'lucide-react'
 import type React from 'react'
@@ -18,6 +20,7 @@ import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function DisciplinaryWarningReason() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -100,10 +103,15 @@ export default function DisciplinaryWarningReason() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24}>
                             <Flex justify="end" gap={4}>
-                                <Button onClick={handleModal} type="primary">
-                                    <BookPlus />
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CANH_CAO_HOC_DUONG,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        <BookPlus />
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -171,26 +179,41 @@ export default function DisciplinaryWarningReason() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CANH_CAO_HOC_DUONG,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={() =>
-                                                        onOpenPutDisciplinaryWarningReason(
-                                                            record?.id
-                                                        )
-                                                    }
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDeleteDisciplinaryWarningReason(
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CANH_CAO_HOC_DUONG,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={() =>
+                                                            onOpenPutDisciplinaryWarningReason(
                                                                 record?.id
-                                                            ),
-                                                    }}
-                                                />
+                                                            )
+                                                        }
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CANH_CAO_HOC_DUONG,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: () =>
+                                                                handleDeleteDisciplinaryWarningReason(
+                                                                    record?.id
+                                                                ),
+                                                        }}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

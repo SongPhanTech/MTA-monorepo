@@ -5,6 +5,8 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { DiplomaVerificationApplication, DocumentFile } from '@workspace/db'
 import { useCreateDiplomaVerificationApplication } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import { useEffect, useState } from 'react'
 
@@ -15,6 +17,7 @@ export type PutDiplomaVerificationApplication = DiplomaVerificationApplication &
 }
 
 export default function ĐONANGKY() {
+    const { can, canSome } = useAbility()
     const [form] = Form.useForm<PutDiplomaVerificationApplication>()
     const [attachments, setAttachments] = useState<DocumentFile[]>([])
     const [documentFront, setDocumentFront] = useState<DocumentFile | null>(null)
@@ -266,9 +269,14 @@ export default function ĐONANGKY() {
                         </Col>
                         <Col span={24}>
                             <Flex justify="end" className="mt-6">
-                                <Button type="primary" onClick={() => form.submit()}>
-                                    Tạo đơn
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_VAN_BANG_DON_DANG_KY_XAC_MINH,
+                                    'THEM'
+                                ) && (
+                                    <Button type="primary" onClick={() => form.submit()}>
+                                        Tạo đơn
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>

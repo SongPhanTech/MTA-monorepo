@@ -34,7 +34,7 @@ const DataActive = [
 ]
 
 export default function TrainingFieldPage() {
-    const { can } = useAbility()
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -336,7 +336,7 @@ export default function TrainingFieldPage() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                hidden: !can(
+                                hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
                                     'SUA',
                                     'XOA'

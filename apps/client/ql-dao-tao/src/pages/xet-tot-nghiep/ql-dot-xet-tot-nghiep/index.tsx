@@ -11,7 +11,8 @@ import {
     useFindManyGraduationSession,
     useUpdateGraduationSession,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
@@ -21,6 +22,7 @@ import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function GraduationSession() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const {
         graduationSessionStatusOptions,
@@ -180,7 +182,13 @@ export default function GraduationSession() {
     }
 
     const handleRowClick = (record: { id?: string }) => {
-        if (record?.id) {
+        if (
+            can(
+                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
+                'XEM_CHI_TIET'
+            ) &&
+            record?.id
+        ) {
             router.push(
                 `${ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP}/${record.id}`
             )
@@ -194,10 +202,15 @@ export default function GraduationSession() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    <BookPlus />
-                                    Thêm
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        <BookPlus />
+                                        Thêm
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -281,36 +294,57 @@ export default function GraduationSession() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
+                                    'XEM_CHI_TIET',
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <Tooltip title="Xem chi tiết" placement="top">
-                                                    <Eye
-                                                        size={16}
-                                                        strokeWidth={1.5}
-                                                        className="text-base cursor-pointer"
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
+                                                    'XEM_CHI_TIET'
+                                                ) && (
+                                                    <Tooltip title="Xem chi tiết" placement="top">
+                                                        <Eye
+                                                            size={16}
+                                                            strokeWidth={1.5}
+                                                            className="text-base cursor-pointer"
+                                                        />
+                                                    </Tooltip>
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            onOpen(id)
+                                                        }}
+                                                        className="text-sm text-blue-700 cursor-pointer"
                                                     />
-                                                </Tooltip>
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpen(id)
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            e?.stopPropagation()
-                                                            handleDelete(id)
-                                                        },
-                                                        onCancel: (e) => {
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                e?.stopPropagation()
+                                                                handleDelete(id)
+                                                            },
+                                                            onCancel: (e) => {
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

@@ -54,6 +54,21 @@ const useAbility = () => {
             const actions = combine(action)
             return (Number(perm[perm.length - 1]) & actions) === actions
         },
+        canSome: (
+            subject:
+                | KHAO_THI_PERMISSION
+                | PORTAL_PERMISSION
+                | QL_DAO_TAO_PERMISSION
+                | TRO_LY_AO_PERMISSION,
+            ...action: (keyof typeof PERMISSIONS)[]
+        ) => {
+            const perm = ability.actionsFor(subject)
+            if (perm.length === 0) return false
+
+            return action
+                .map((p) => PERMISSIONS[p])
+                .some((a) => (Number(perm[perm.length - 1]) & a) === a)
+        },
         // cannot: (action: keyof typeof PERMISSIONS, subject = '') => {
         //     const perm = ability.actionsFor(subject)
         //     if (perm.length === 0) return false

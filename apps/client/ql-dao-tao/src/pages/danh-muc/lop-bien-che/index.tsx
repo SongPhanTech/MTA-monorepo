@@ -20,7 +20,8 @@ import {
     useFindManyTrainingObjectType,
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import { Eye } from 'lucide-react'
@@ -29,6 +30,7 @@ import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [_searchText, _setSearchText] = useState<string>('')
@@ -235,9 +237,14 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                     <Row gutter={[16, 16]} align="top" justify={'end'}>
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -252,12 +259,19 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                             setCurrentPage(1)
                         }}
                         onRowClick={(record) => {
-                            router.push(
-                                ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_ID.replace(
-                                    '[id]',
-                                    String(record.id)
+                            if (
+                                can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
+                                    'XEM_CHI_TIET'
                                 )
-                            )
+                            ) {
+                                router.push(
+                                    ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_ID.replace(
+                                        '[id]',
+                                        String(record.id)
+                                    )
+                                )
+                            }
                         }}
                         columns={[
                             {
@@ -419,34 +433,55 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 width: 100,
                                 fixed: 'right',
                                 align: 'center',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
+                                    'XEM_CHI_TIET',
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip title="Xem chi tiết" placement="top">
-                                            <Eye
-                                                size={16}
-                                                strokeWidth={1.5}
-                                                className="text-base cursor-pointer"
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
+                                            'XEM_CHI_TIET'
+                                        ) && (
+                                            <Tooltip title="Xem chi tiết" placement="top">
+                                                <Eye
+                                                    size={16}
+                                                    strokeWidth={1.5}
+                                                    className="text-base cursor-pointer"
+                                                />
+                                            </Tooltip>
+                                        )}
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
+                                            'SUA'
+                                        ) && (
+                                            <EditIcon
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onOpen(id)
+                                                }}
+                                                className="text-sm text-blue-700 cursor-pointer"
                                             />
-                                        </Tooltip>
-                                        <EditIcon
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                onOpen(id)
-                                            }}
-                                            className="text-sm text-blue-700 cursor-pointer"
-                                        />
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: (e) => {
-                                                    handleDelete(id)
-                                                    e?.stopPropagation()
-                                                },
-                                                onCancel: (e) => {
-                                                    e?.stopPropagation()
-                                                },
-                                            }}
-                                            onClick={(e) => e.stopPropagation()}
-                                        />
+                                        )}
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: (e) => {
+                                                        handleDelete(id)
+                                                        e?.stopPropagation()
+                                                    },
+                                                    onCancel: (e) => {
+                                                        e?.stopPropagation()
+                                                    },
+                                                }}
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
+                                        )}
                                     </Row>
                                 ),
                             },

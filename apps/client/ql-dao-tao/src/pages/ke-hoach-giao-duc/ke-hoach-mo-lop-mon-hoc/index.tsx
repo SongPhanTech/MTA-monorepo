@@ -27,7 +27,7 @@ interface FilterProps {
 }
 
 export default function SubjectOpeningPlan() {
-    const { can } = useAbility()
+    const { can, canSome } = useAbility()
     const [form] = Form.useForm<FilterProps>()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -327,7 +327,7 @@ export default function SubjectOpeningPlan() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                hidden: !can(
+                                hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
                                     'THEM'
                                 ),

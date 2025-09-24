@@ -12,7 +12,8 @@ import {
     useUpdateBuilding,
     useUpdateTrainingLocation,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { Building2Icon } from 'lucide-react'
@@ -22,6 +23,7 @@ import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function TrainingLocationPage() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -160,9 +162,14 @@ export default function TrainingLocationPage() {
                     <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -183,31 +190,46 @@ export default function TrainingLocationPage() {
                         }}
                         headerRight={(record) => (
                             <Row className="justify-center gap-2 mr-2">
-                                <Tooltip title="Thêm tòa nhà">
-                                    <Building2Icon
-                                        className="text-yellow-700 cursor-pointer"
-                                        size={16}
-                                        onClick={openPutBuilding.bind(null, {
-                                            trainingLocationId: record.id,
-                                        })}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                    'THEM'
+                                ) && (
+                                    <Tooltip title="Thêm tòa nhà">
+                                        <Building2Icon
+                                            className="text-yellow-700 cursor-pointer"
+                                            size={16}
+                                            onClick={openPutBuilding.bind(null, {
+                                                trainingLocationId: record.id,
+                                            })}
+                                        />
+                                    </Tooltip>
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                    'SUA'
+                                ) && (
+                                    <EditIcon
+                                        onClick={onOpen.bind(null, record.id)}
+                                        className="text-sm text-blue-700 cursor-pointer"
                                     />
-                                </Tooltip>
-                                <EditIcon
-                                    onClick={onOpen.bind(null, record.id)}
-                                    className="text-sm text-blue-700 cursor-pointer"
-                                />
-                                <DeleteIcon
-                                    popConfirm={{
-                                        onConfirm: (e) => {
-                                            handleDelete(record.id)
-                                            e?.stopPropagation()
-                                        },
-                                        onCancel: (e) => {
-                                            e?.stopPropagation()
-                                        },
-                                    }}
-                                    onClick={(e) => e.stopPropagation()}
-                                />
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                    'XOA'
+                                ) && (
+                                    <DeleteIcon
+                                        popConfirm={{
+                                            onConfirm: (e) => {
+                                                handleDelete(record.id)
+                                                e?.stopPropagation()
+                                            },
+                                            onCancel: (e) => {
+                                                e?.stopPropagation()
+                                            },
+                                        }}
+                                        onClick={(e) => e.stopPropagation()}
+                                    />
+                                )}
                             </Row>
                         )}
                         defaultExpandAll
@@ -276,34 +298,47 @@ export default function TrainingLocationPage() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                    'THEM'
+                                ),
                                 render: (_, { id, trainingLocationId, rooms }) => {
                                     if (id && trainingLocationId) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        openPutBuilding({
-                                                            trainingLocationId,
-                                                            id,
-                                                        })
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                {!rooms.length && (
-                                                    <DeleteIcon
-                                                        popConfirm={{
-                                                            onConfirm: (e) => {
-                                                                handleDeleteBuilding(id)
-                                                                e?.stopPropagation()
-                                                            },
-                                                            onCancel: (e) => {
-                                                                e?.stopPropagation()
-                                                            },
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            openPutBuilding({
+                                                                trainingLocationId,
+                                                                id,
+                                                            })
                                                         }}
-                                                        onClick={(e) => e.stopPropagation()}
+                                                        className="text-sm text-blue-700 cursor-pointer"
                                                     />
                                                 )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                                    'XOA'
+                                                ) &&
+                                                    !rooms.length && (
+                                                        <DeleteIcon
+                                                            popConfirm={{
+                                                                onConfirm: (e) => {
+                                                                    handleDeleteBuilding(id)
+                                                                    e?.stopPropagation()
+                                                                },
+                                                                onCancel: (e) => {
+                                                                    e?.stopPropagation()
+                                                                },
+                                                            }}
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        />
+                                                    )}
                                             </Row>
                                         )
                                     }

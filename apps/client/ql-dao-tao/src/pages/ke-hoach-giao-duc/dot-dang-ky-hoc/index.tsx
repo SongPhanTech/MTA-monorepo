@@ -24,7 +24,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function ClassRegisterSession() {
-    const { can } = useAbility()
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
     const [currentPage, setCurrentPage] = useState(1)
@@ -318,7 +318,7 @@ export default function ClassRegisterSession() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                hidden: !can(
+                                hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
                                     'XEM_CHI_TIET',
                                     'SUA',

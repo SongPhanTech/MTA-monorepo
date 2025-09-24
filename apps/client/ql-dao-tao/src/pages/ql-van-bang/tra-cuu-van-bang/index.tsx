@@ -26,6 +26,8 @@ import {
     useFindManyTrainingMajor,
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Col, Flex, Form, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -34,6 +36,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 export default function GraduationDecisionDiploma() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [student, setStudent] = useState<any>(null)
@@ -586,53 +589,74 @@ export default function GraduationDecisionDiploma() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_VAN_BANG_TRA_CUU_VAN_BANG,
+                                    'XEM_CHI_TIET',
+                                    'SUA'
+                                ),
                                 render: (_, record) => {
                                     if (record?.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <ViewIcon
-                                                    title="Xem văn bằng"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpenVanBang(record?.student?.id)
-                                                    }}
-                                                />
-                                                <Tooltip title="Phụ lục văn bằng" placement="top">
-                                                    <BookCheckIcon
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_VAN_BANG_TRA_CUU_VAN_BANG,
+                                                    'XEM_CHI_TIET'
+                                                ) && (
+                                                    <>
+                                                        <ViewIcon
+                                                            title="Xem văn bằng"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                onOpenVanBang(record?.student?.id)
+                                                            }}
+                                                        />
+                                                        <Tooltip
+                                                            title="Phụ lục văn bằng"
+                                                            placement="top"
+                                                        >
+                                                            <BookCheckIcon
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation()
+                                                                    setStudent(record?.student)
+                                                                    if (
+                                                                        record?.diplomaType
+                                                                            ?.type === 'MASTER'
+                                                                    ) {
+                                                                        // xử lý riêng cho MASTER
+                                                                        onOpenPhuLucThacSi(
+                                                                            record?.studentId
+                                                                        )
+                                                                    } else {
+                                                                        // xử lý mặc định
+                                                                        onOpenPhuLucVanBang({
+                                                                            dataStudent:
+                                                                                record?.student,
+                                                                            dataTable,
+                                                                        })
+                                                                    }
+                                                                }}
+                                                                size={16}
+                                                            />
+                                                        </Tooltip>
+                                                    </>
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_VAN_BANG_TRA_CUU_VAN_BANG,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
                                                         onClick={(e) => {
                                                             e.stopPropagation()
-                                                            setStudent(record?.student)
-                                                            if (
-                                                                record?.diplomaType?.type ===
-                                                                'MASTER'
-                                                            ) {
-                                                                // xử lý riêng cho MASTER
-                                                                onOpenPhuLucThacSi(
-                                                                    record?.studentId
-                                                                )
-                                                            } else {
-                                                                // xử lý mặc định
-                                                                onOpenPhuLucVanBang({
-                                                                    dataStudent: record?.student,
-                                                                    dataTable,
-                                                                })
-                                                            }
+                                                            onOpen({
+                                                                id: record?.id,
+                                                                trainingCourseId:
+                                                                    record?.student?.fixedClass
+                                                                        ?.trainingCourseId,
+                                                            })
                                                         }}
-                                                        size={16}
+                                                        className="text-sm text-blue-700 cursor-pointer"
                                                     />
-                                                </Tooltip>
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpen({
-                                                            id: record?.id,
-                                                            trainingCourseId:
-                                                                record?.student?.fixedClass
-                                                                    ?.trainingCourseId,
-                                                        })
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
+                                                )}
                                             </Row>
                                         )
                                     }

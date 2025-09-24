@@ -20,7 +20,8 @@ import {
     useFindManyThesisProject,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus, Search } from 'lucide-react'
@@ -31,6 +32,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import { BsGear } from 'react-icons/bs'
 
 export default function ThesisProject() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const { getThesisProjectStatusColor, getThesisProjectStatusLabel, thesisProjectStatusOptions } =
         useThesisProjectStatusOptions()
@@ -318,7 +320,10 @@ export default function ThesisProject() {
     }
 
     const handleNavigate = (record: { id?: string }) => {
-        if (record?.id) {
+        if (
+            can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN, 'XEM_CHI_TIET') &&
+            record?.id
+        ) {
             router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN}/${record.id}`)
         }
     }
@@ -436,83 +441,95 @@ export default function ThesisProject() {
                         </Col>
                         <Col>
                             <Flex justify="end" gap={4}>
-                                <Button
-                                    onClick={() =>
-                                        openPaymentRecord({
-                                            selectedRowKeys: selectedRowKeys as string[],
-                                        })
-                                    }
-                                    type="primary"
-                                    disabled={
-                                        selectedRowKeys.length === 0 ||
-                                        !isEligibleForPayment(selectedRowKeys as string[])
-                                    }
-                                >
-                                    Tạo thanh toán
-                                </Button>
-                                <Button
-                                    onClick={() => openPrintSupervisorGuide()}
-                                    type="primary"
-                                    disabled={
-                                        !subjectClass ||
-                                        subjectClass.length === 0 ||
-                                        !subjectClass.some(
-                                            (item) =>
-                                                item.thesisProjects &&
-                                                item.thesisProjects.length > 0
-                                        )
-                                    }
-                                >
-                                    In quyết định hướng dẫn
-                                </Button>
-                                <Button
-                                    onClick={() =>
-                                        openModalPrintDecision({
-                                            subjecClassData: subjectClass,
-                                            isCopy: false,
-                                        })
-                                    }
-                                    type="primary"
-                                    disabled={
-                                        !subjectClass ||
-                                        subjectClass.length === 0 ||
-                                        !subjectClass.some(
-                                            (item) =>
-                                                item.thesisProjects &&
-                                                item.thesisProjects.length > 0
-                                        )
-                                    }
-                                >
-                                    Quyết định
-                                </Button>
-                                <Button
-                                    onClick={() =>
-                                        openModalPrintDecision({
-                                            subjecClassData: subjectClass,
-                                            isCopy: true,
-                                        })
-                                    }
-                                    type="primary"
-                                    disabled={
-                                        !subjectClass ||
-                                        subjectClass.length === 0 ||
-                                        !subjectClass.some(
-                                            (item) =>
-                                                item.thesisProjects &&
-                                                item.thesisProjects.length > 0
-                                        )
-                                    }
-                                >
-                                    In bản sao Quyết định
-                                </Button>
-                                <Button
-                                    onClick={createInvitations}
-                                    type="primary"
-                                    disabled={selectedRowKeys.length === 0}
-                                >
-                                    <BookPlus />
-                                    Tạo thư mời
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                                    'SUA'
+                                ) && (
+                                    <Button
+                                        onClick={() =>
+                                            openPaymentRecord({
+                                                selectedRowKeys: selectedRowKeys as string[],
+                                            })
+                                        }
+                                        type="primary"
+                                        disabled={
+                                            selectedRowKeys.length === 0 ||
+                                            !isEligibleForPayment(selectedRowKeys as string[])
+                                        }
+                                    >
+                                        Tạo thanh toán
+                                    </Button>
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                                    'IN'
+                                ) && (
+                                    <>
+                                        <Button
+                                            onClick={() => openPrintSupervisorGuide()}
+                                            type="primary"
+                                            disabled={
+                                                !subjectClass ||
+                                                subjectClass.length === 0 ||
+                                                !subjectClass.some(
+                                                    (item) =>
+                                                        item.thesisProjects &&
+                                                        item.thesisProjects.length > 0
+                                                )
+                                            }
+                                        >
+                                            In quyết định hướng dẫn
+                                        </Button>
+                                        <Button
+                                            onClick={() =>
+                                                openModalPrintDecision({
+                                                    subjecClassData: subjectClass,
+                                                    isCopy: false,
+                                                })
+                                            }
+                                            type="primary"
+                                            disabled={
+                                                !subjectClass ||
+                                                subjectClass.length === 0 ||
+                                                !subjectClass.some(
+                                                    (item) =>
+                                                        item.thesisProjects &&
+                                                        item.thesisProjects.length > 0
+                                                )
+                                            }
+                                        >
+                                            Quyết định
+                                        </Button>
+                                        <Button
+                                            onClick={() =>
+                                                openModalPrintDecision({
+                                                    subjecClassData: subjectClass,
+                                                    isCopy: true,
+                                                })
+                                            }
+                                            type="primary"
+                                            disabled={
+                                                !subjectClass ||
+                                                subjectClass.length === 0 ||
+                                                !subjectClass.some(
+                                                    (item) =>
+                                                        item.thesisProjects &&
+                                                        item.thesisProjects.length > 0
+                                                )
+                                            }
+                                        >
+                                            In bản sao Quyết định
+                                        </Button>
+                                        <Button
+                                            onClick={createInvitations}
+                                            type="primary"
+                                            disabled={selectedRowKeys.length === 0}
+                                        >
+                                            <BookPlus />
+                                            Tạo thư mời
+                                        </Button>
+                                    </>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -548,21 +565,31 @@ export default function ThesisProject() {
                         }}
                         headerRight={({ id }) => (
                             <div className="flex gap-2.5 w-[85px] items-center justify-center">
-                                <CreateIcon
-                                    onClick={() => {
-                                        onOpen({
-                                            subjectClassId: id,
-                                            thesisProjectId: '',
-                                        })
-                                    }}
-                                    title="Thêm mới đề tài"
-                                />
-                                <Tooltip title="Cấu hình lớp đồ án" placement="top">
-                                    <BsGear
-                                        className="cursor-pointer"
-                                        onClick={() => handleNavigateSetting(id)}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                                    'THEM'
+                                ) && (
+                                    <CreateIcon
+                                        onClick={() => {
+                                            onOpen({
+                                                subjectClassId: id,
+                                                thesisProjectId: '',
+                                            })
+                                        }}
+                                        title="Thêm mới đề tài"
                                     />
-                                </Tooltip>
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                                    'SUA'
+                                ) && (
+                                    <Tooltip title="Cấu hình lớp đồ án" placement="top">
+                                        <BsGear
+                                            className="cursor-pointer"
+                                            onClick={() => handleNavigateSetting(id)}
+                                        />
+                                    </Tooltip>
+                                )}
                             </div>
                         )}
                         columns={[
@@ -660,33 +687,55 @@ export default function ThesisProject() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                                    'XEM_CHI_TIET',
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, record) => {
                                     if (record.id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <Tooltip title="Xem chi tiết" placement="top">
-                                                    <EyeOutlined className="text-sm cursor-pointer" />
-                                                </Tooltip>
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        onOpen({
-                                                            subjectClassId: record.subjectClassId,
-                                                            thesisProjectId: record.id,
-                                                        })
-                                                        e.stopPropagation()
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDelete(record.id)
-                                                            e?.stopPropagation()
-                                                        },
-                                                        onCancel: (e) => e?.stopPropagation(),
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                                                    'XEM_CHI_TIET'
+                                                ) && (
+                                                    <Tooltip title="Xem chi tiết" placement="top">
+                                                        <EyeOutlined className="text-sm cursor-pointer" />
+                                                    </Tooltip>
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={(e) => {
+                                                            onOpen({
+                                                                subjectClassId:
+                                                                    record.subjectClassId,
+                                                                thesisProjectId: record.id,
+                                                            })
+                                                            e.stopPropagation()
+                                                        }}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleDelete(record.id)
+                                                                e?.stopPropagation()
+                                                            },
+                                                            onCancel: (e) => e?.stopPropagation(),
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

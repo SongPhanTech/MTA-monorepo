@@ -28,6 +28,8 @@ import {
     useFindManyTrainingObjectType,
     useUpdateStudent,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookCheckIcon } from 'lucide-react'
@@ -36,6 +38,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [student, setStudent] = useState<any>(null)
@@ -360,21 +363,33 @@ export default function UserProfilePageDs() {
                     <Row gutter={[8, 8]} align="top" justify="end">
                         <Col xs={24}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
-                                <Button
-                                    type="primary"
-                                    onClick={() => setImportModalVisible(true)}
-                                    icon={<UploadOutlined />}
-                                >
-                                    Nhập dữ liêu Excel
-                                </Button>
-                                <ImportStudentModal
-                                    visible={importModalVisible}
-                                    onCancel={() => setImportModalVisible(false)}
-                                />
-                                <ExportTemplateStudent />
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                    'NHAP_EXCEL'
+                                ) && (
+                                    <>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => setImportModalVisible(true)}
+                                            icon={<UploadOutlined />}
+                                        >
+                                            Nhập dữ liêu Excel
+                                        </Button>
+                                        <ImportStudentModal
+                                            visible={importModalVisible}
+                                            onCancel={() => setImportModalVisible(false)}
+                                        />
+                                        <ExportTemplateStudent />
+                                    </>
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -542,17 +557,27 @@ export default function UserProfilePageDs() {
                                                 size={16}
                                             />
                                         </Tooltip>
-                                        <EditIcon
-                                            onClick={onOpenUpdate.bind(null, {
-                                                id: record.id,
-                                            })}
-                                            className="text-sm text-blue-700 cursor-pointer"
-                                        />
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () => handleDelete(record.id),
-                                            }}
-                                        />
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                            'XEM_CHI_TIET'
+                                        ) && (
+                                            <EditIcon
+                                                onClick={onOpenUpdate.bind(null, {
+                                                    id: record.id,
+                                                })}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                        )}
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () => handleDelete(record.id),
+                                                }}
+                                            />
+                                        )}
                                     </Row>
                                 ),
                             },

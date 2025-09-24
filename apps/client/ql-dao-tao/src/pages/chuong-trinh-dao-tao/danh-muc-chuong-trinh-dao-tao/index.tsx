@@ -43,7 +43,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 export default function TrainingProgramCatalog() {
-    const { can } = useAbility()
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -631,8 +631,9 @@ export default function TrainingProgramCatalog() {
                                 width: 120,
                                 fixed: 'right',
                                 align: 'center',
-                                hidden: !can(
+                                hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
+                                    'XEM_CHI_TIET',
                                     'THEM',
                                     'SUA',
                                     'XOA'

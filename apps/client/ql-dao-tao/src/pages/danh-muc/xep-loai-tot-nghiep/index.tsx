@@ -11,6 +11,8 @@ import {
     useFindManyTrainingCourse,
     useUpdateManyAcademicRankingConvert,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
@@ -24,6 +26,7 @@ interface FilterProps {
 }
 
 export default function GraduationRankingPage() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -96,7 +99,9 @@ export default function GraduationRankingPage() {
     }
 
     const handleOpenModalGraduationCriteria = (record: any) => {
-        onOpenGraduationCriteria(record.id)
+        if (can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_TOT_NGHIEP, 'SUA')) {
+            onOpenGraduationCriteria(record.id)
+        }
     }
 
     const { mutateAsync: deleteAcademicRanking } = useDeleteAcademicRankingConvert()
@@ -190,12 +195,17 @@ export default function GraduationRankingPage() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end">
-                                <Button
-                                    onClick={() => handleModal(RankingContext.GRADUATION)}
-                                    type="primary"
-                                >
-                                    Thêm mới
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_TOT_NGHIEP,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        onClick={() => handleModal(RankingContext.GRADUATION)}
+                                        type="primary"
+                                    >
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -249,39 +259,59 @@ export default function GraduationRankingPage() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_HOC_LUC,
+                                    'SUA',
+                                    'XOA'
+                                ),
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <Tooltip title="Chi tiết tiêu chí" placement="top">
-                                                    <Eye
-                                                        size={16}
-                                                        strokeWidth={1.5}
-                                                        className="text-base cursor-pointer"
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_TOT_NGHIEP,
+                                                    'SUA'
+                                                ) && (
+                                                    <>
+                                                        <Tooltip
+                                                            title="Chi tiết tiêu chí"
+                                                            placement="top"
+                                                        >
+                                                            <Eye
+                                                                size={16}
+                                                                strokeWidth={1.5}
+                                                                className="text-base cursor-pointer"
+                                                            />
+                                                        </Tooltip>
+                                                        <EditIcon
+                                                            onClick={(e) => {
+                                                                onOpen({
+                                                                    id,
+                                                                    type: RankingContext.GRADUATION,
+                                                                })
+                                                                e.stopPropagation()
+                                                            }}
+                                                            className="text-sm text-blue-700 cursor-pointer"
+                                                        />
+                                                    </>
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_TOT_NGHIEP,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleDelete(id)
+                                                                e?.stopPropagation()
+                                                            },
+                                                            onCancel: (e) => {
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
                                                     />
-                                                </Tooltip>
-                                                <EditIcon
-                                                    onClick={(e) => {
-                                                        onOpen({
-                                                            id,
-                                                            type: RankingContext.GRADUATION,
-                                                        })
-                                                        e.stopPropagation()
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDelete(id)
-                                                            e?.stopPropagation()
-                                                        },
-                                                        onCancel: (e) => {
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                )}
                                             </Row>
                                         )
                                     }
@@ -291,30 +321,32 @@ export default function GraduationRankingPage() {
                         ]}
                         headerRight={(record) => (
                             <Row className="justify-center gap-2 mr-2">
-                                {record.academicRankingConvert.length > 0 ? (
-                                    <Tooltip title="Nhân bản">
-                                        <Copy
-                                            onClick={onOpenCopy.bind(null, { record })}
-                                            size={16}
-                                            strokeWidth={1.5}
-                                            className="text-sm cursor-pointer"
-                                        />
-                                    </Tooltip>
-                                ) : (
-                                    <Copy
-                                        size={16}
-                                        strokeWidth={1.5}
-                                        className="text-sm text-gray-400 cursor-not-allowed"
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_TOT_NGHIEP,
+                                    'THEM'
+                                ) &&
+                                    record.academicRankingConvert.length > 0 && (
+                                        <Tooltip title="Nhân bản">
+                                            <Copy
+                                                onClick={onOpenCopy.bind(null, { record })}
+                                                size={16}
+                                                strokeWidth={1.5}
+                                                className="text-sm cursor-pointer"
+                                            />
+                                        </Tooltip>
+                                    )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_XEP_LOAI_TOT_NGHIEP,
+                                    'XOA'
+                                ) && (
+                                    <DeleteIcon
+                                        title="Xóa xếp loại của khoá"
+                                        disabled={!record.academicRankingConvert.length}
+                                        popConfirm={{
+                                            onConfirm: () => handleDeleteMultil(record),
+                                        }}
                                     />
                                 )}
-
-                                <DeleteIcon
-                                    title="Xóa xếp loại của khóa"
-                                    disabled={!record.academicRankingConvert.length}
-                                    popConfirm={{
-                                        onConfirm: () => handleDeleteMultil(record),
-                                    }}
-                                />
                             </Row>
                         )}
                         currentPage={currentPage}

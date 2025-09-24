@@ -13,6 +13,8 @@ import {
     useDeleteSupervisorPaymentRecord,
     useFindManySupervisorPaymentRecord,
 } from '@workspace/db/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import type React from 'react'
@@ -20,6 +22,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function SupervisorPaymentRecordPage() {
+    const { can, canSome } = useAbility()
     const { getPaymentStatusColor, getPaymentStatusLabel, paymentStatusOptions } =
         usePaymentStatusOptions()
     const [currentPage, setCurrentPage] = useState(1)
@@ -157,18 +160,23 @@ export default function SupervisorPaymentRecordPage() {
                         </Col>
                         <Col>
                             <Flex justify="end" gap={4}>
-                                <Button
-                                    onClick={() =>
-                                        openUpdatePaymentStatus({
-                                            paymentRecordIds: selectedRowKeys as string[],
-                                            isSupervisor: true,
-                                        })
-                                    }
-                                    disabled={selectedRowKeys.length === 0}
-                                    type="primary"
-                                >
-                                    Cập nhật trạng thái
-                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
+                                    'SUA'
+                                ) && (
+                                    <Button
+                                        onClick={() =>
+                                            openUpdatePaymentStatus({
+                                                paymentRecordIds: selectedRowKeys as string[],
+                                                isSupervisor: true,
+                                            })
+                                        }
+                                        disabled={selectedRowKeys.length === 0}
+                                        type="primary"
+                                    >
+                                        Cập nhật trạng thái
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -264,23 +272,37 @@ export default function SupervisorPaymentRecordPage() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
+                                    'THEM'
+                                ),
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={() => {
-                                                        openPaymentRecord({
-                                                            paymentRecordId: id,
-                                                        })
-                                                    }}
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () => handleDelete(id),
-                                                    }}
-                                                />
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={() => {
+                                                            openPaymentRecord({
+                                                                paymentRecordId: id,
+                                                            })
+                                                        }}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: () => handleDelete(id),
+                                                        }}
+                                                    />
+                                                )}
                                             </Row>
                                         )
                                     }

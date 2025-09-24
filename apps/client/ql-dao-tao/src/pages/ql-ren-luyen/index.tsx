@@ -14,7 +14,8 @@ import {
     useFindManyTrainingScoreSession,
     useUpdateTrainingScoreSession,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Form, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
@@ -23,6 +24,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function SubjectClassScore() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -158,10 +160,12 @@ export default function SubjectClassScore() {
                         </Col>
                         <Col span={4}>
                             <Flex justify="end" gap={10}>
-                                <Button type="primary" onClick={() => onOpen()}>
-                                    <BookPlus />
-                                    Thêm mới đợt đánh giá
-                                </Button>
+                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN, 'THEM') && (
+                                    <Button type="primary" onClick={() => onOpen()}>
+                                        <BookPlus />
+                                        Thêm mới đợt đánh giá
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                         <Col span={24}>
@@ -174,7 +178,14 @@ export default function SubjectClassScore() {
                                     setCurrentPage(1)
                                 }}
                                 onRowClick={({ id }) => {
-                                    router.push(`${ROUTER_PATH.QL_DAO_TAO.QL_REN_LUYEN}/${id}`)
+                                    if (
+                                        can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
+                                            'XEM_CHI_TIET'
+                                        )
+                                    ) {
+                                        router.push(`${ROUTER_PATH.QL_DAO_TAO.QL_REN_LUYEN}/${id}`)
+                                    }
                                 }}
                                 columns={[
                                     {
@@ -242,30 +253,51 @@ export default function SubjectClassScore() {
                                         dataIndex: 'action',
                                         width: 150,
                                         align: 'center',
+                                        hidden: !canSome(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
+                                            'XEM_CHI_TIET',
+                                            'SUA',
+                                            'XOA'
+                                        ),
                                         render: (text, record) => (
                                             <Row className="justify-center gap-2">
-                                                <Tooltip title="Xem chi tiết" placement="top">
-                                                    <EyeOutlined className="text-sm cursor-pointer" />
-                                                </Tooltip>
-                                                <EditIcon
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                    onClick={(e) => {
-                                                        onOpen(record.id)
-                                                        e.stopPropagation()
-                                                    }}
-                                                />
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: (e) => {
-                                                            handleDeleteDotDanhGia(record.id)
-                                                            e?.stopPropagation()
-                                                        },
-                                                        onCancel: (e) => {
-                                                            e?.stopPropagation()
-                                                        },
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                />
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
+                                                    'XEM_CHI_TIET'
+                                                ) && (
+                                                    <Tooltip title="Xem chi tiết" placement="top">
+                                                        <EyeOutlined className="text-sm cursor-pointer" />
+                                                    </Tooltip>
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                        onClick={(e) => {
+                                                            onOpen(record.id)
+                                                            e.stopPropagation()
+                                                        }}
+                                                    />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: (e) => {
+                                                                handleDeleteDotDanhGia(record.id)
+                                                                e?.stopPropagation()
+                                                            },
+                                                            onCancel: (e) => {
+                                                                e?.stopPropagation()
+                                                            },
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    />
+                                                )}
                                             </Row>
                                         ),
                                     },
