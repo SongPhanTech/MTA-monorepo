@@ -1,10 +1,4 @@
-import {
-    ArrowLeftOutlined,
-    ArrowRightOutlined,
-    LockOutlined,
-    PlusOutlined,
-    UnlockOutlined,
-} from '@ant-design/icons'
+import { ArrowLeftOutlined, ArrowRightOutlined, PlusOutlined } from '@ant-design/icons'
 import { useLocalStorage } from '@workspace/libs/hook/use-localstorage'
 import { Button, Col, DatePicker, Row, Table } from 'antd'
 import dayjs from 'dayjs'
@@ -660,47 +654,7 @@ export function TableWeekCalendar({
                                 gap: '8px',
                                 alignItems: 'center',
                             }}
-                        >
-                            {showAddButtons && (
-                                <Button
-                                    type="primary"
-                                    icon={<PlusOutlined />}
-                                    onClick={() => {
-                                        const startTime = new Date(weekStart)
-                                        startTime.setHours(0, 0, 0, 0)
-
-                                        const endTime = new Date(weekEnd)
-                                        endTime.setHours(23, 59, 59, 999)
-
-                                        onCreateWeekEvent?.(
-                                            startTime.toISOString(),
-                                            endTime.toISOString()
-                                        )
-                                    }}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    Thêm lịch tuần
-                                </Button>
-                            )}
-                            {showLockToggle && (
-                                <Button
-                                    type={!isUnlocked ? 'primary' : 'default'}
-                                    icon={isUnlocked ? <UnlockOutlined /> : <LockOutlined />}
-                                    onClick={handleToggleUnlock}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        width: 40,
-                                        minWidth: 40,
-                                        justifyContent: 'center',
-                                    }}
-                                />
-                            )}
-                        </div>
+                        />
                     </Col>
                 </Row>
             )}
