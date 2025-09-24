@@ -2226,3 +2226,4 @@ export const StudentRepeatGradeService = async (
         await prisma.$disconnect()
     }
 }
+export type { StudentRepeatGrade }

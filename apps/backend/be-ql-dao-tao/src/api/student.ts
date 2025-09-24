@@ -8,7 +8,7 @@ import {
     calculateStudentSemesterResult,
     listStudentResultInfo,
     resultCourseStudentResult,
-    StudentRepeatGrade,
+    StudentRepeatGradeService,
 } from '../services/student-result.service'
 import {
     buildCurriculumMapOrThrow,
@@ -215,7 +215,7 @@ app.openapi(PheDuyetLuuBan, async (c) => {
     }
     const studentIds = students.map((s) => s.id)
     try {
-        const listStudentRepeatGrade = await StudentRepeatGrade(studentIds, semesterId)
+        const listStudentRepeatGrade = await StudentRepeatGradeService(studentIds, semesterId)
 
         const result = students
             .filter((s) => listStudentRepeatGrade.includes(s.id))
