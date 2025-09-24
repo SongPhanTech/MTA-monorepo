@@ -22,6 +22,7 @@ import {
     CourseStudentResult,
     type ListAcademicAction,
     type StudentInfoCheck,
+    type StudentRepeatGrade,
     StudentResult,
 } from '../dto/student-info.dto'
 import type { StudentCondition, StudentDataContext } from '../types/student-context'
@@ -810,6 +811,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     active: true,
                     description: null,
                     deletedAt: null,
+                    computerSkillPass: student.ITCertificationPass, // Đạt trình độ tin học theo quy định
                 }
                 // Lưu kết quả học kỳ mới
                 results.push(newResult)
@@ -876,6 +878,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     active: existingResult?.active || true, // Trạng thái hoạt động
                     description: existingResult?.description || null,
                     deletedAt: existingResult?.deletedAt || null,
+
+                    computerSkillPass: existingResult?.computerSkillPass || true, // Đạt trình độ tin học theo quy định
                 }
                 // Cập nhật kết quả học kỳ
                 results.push(updatedResult)
@@ -2033,16 +2037,105 @@ const checkStudentResultForRepeatGrade = async (
         await prisma.$disconnect()
     }
 }
-const SaveStudentRepeatGrade = async (studentIds: string[], semesterId: string): Promise<void> => {
+const SaveStudentRepeatGrade = async (
+    studentIds: string[],
+    semesterId: string
+): Promise<StudentRepeatGrade[]> => {
     try {
-        const listStudentRepeatGrade = await checkStudentResultForRepeatGrade(
-            studentIds,
-            semesterId
-        )
+        const studentSemesterResult = await prisma.studentSemesterResult.findMany({
+            where: {
+                studentId: { in: studentIds },
+                semesterId,
+                deletedAt: null,
+                active: true,
+            },
+            include: {
+                student: {
+                    include: {
+                        userProfile: true,
+                        fixedClass: {
+                            include: {
+                                curriculumVersion: {
+                                    include: {
+                                        curriculum: {
+                                            include: {
+                                                trainingMajor: {
+                                                    include: {
+                                                        trainingField: true, // Bao gồm thông tin ngành
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        trainingObjectType: true,
+                    },
+                },
+            },
+            orderBy: {
+                student: {
+                    userProfile: {
+                        firstName: 'asc',
+                    },
+                },
+            },
+        })
+
+        if (!studentSemesterResult) {
+            throw new Error(
+                `Không tìm thấy kết quả học kỳ cho sinh viên trong học kỳ ${semesterId}`
+            )
+        }
+
+        const scoreToRetainList = await prisma.trainingCourse.findMany({
+            where: {
+                id: {
+                    in: studentSemesterResult.map(
+                        (s) => s.student.fixedClass?.trainingCourseId || ''
+                    ),
+                },
+                deletedAt: null,
+                active: true,
+            },
+        })
+
+        if (!scoreToRetainList) {
+            throw new Error(
+                `Không tìm thấy khóa học nào để xét điểm lưu ban cho sinh viên trong học kỳ ${semesterId}`
+            )
+        }
+
+        const listStudentRepeatGrade: string[] = studentSemesterResult
+            .map((result) => {
+                const scoreToRetain = scoreToRetainList.find(
+                    (course) => course.id === result.student.fixedClass?.trainingCourseId
+                )
+
+                if (
+                    scoreToRetain &&
+                    result.baseScore === 'Base10' &&
+                    result.gpaBase10.toNumber() <= scoreToRetain.scoreToRetain
+                ) {
+                    return result.studentId
+                }
+                if (
+                    scoreToRetain &&
+                    result.baseScore === 'Base4' &&
+                    result.gpaBase4.toNumber() <= scoreToRetain.scoreToRetain
+                ) {
+                    return result.studentId
+                }
+                return null // Ensure a value is always returned
+            })
+            .filter((id): id is string => id !== null)
+
+        console.log('listStudentRepeatGrade', listStudentRepeatGrade)
 
         if (listStudentRepeatGrade.length === 0) {
             console.log('No students to mark for repeat grade.')
-            return
+            return []
         }
 
         const existingDecisions = await prisma.studentAcademicDecision.findMany({
@@ -2077,6 +2170,40 @@ const SaveStudentRepeatGrade = async (studentIds: string[], semesterId: string):
         } else {
             console.log('All students already have repeat grade decisions.')
         }
+        const ListResult: StudentRepeatGrade[] = []
+        for (const studentId of studentIds) {
+            const newResult: StudentRepeatGrade = {
+                id: studentId,
+                studentName:
+                    studentSemesterResult.find((result) => result.studentId === studentId)?.student
+                        .userProfile.fullname || '',
+                studentCode:
+                    studentSemesterResult.find((result) => result.studentId === studentId)?.student
+                        .userProfile.code || '',
+                gpa_semester:
+                    studentSemesterResult
+                        .find((result) => result.studentId === studentId)
+                        ?.gpaBase10.toNumber() || 0,
+                gpa_academic:
+                    studentSemesterResult
+                        .find((result) => result.studentId === studentId)
+                        ?.cumulativeGpaBase10.toNumber() || 0,
+                total_credit:
+                    studentSemesterResult.find((result) => result.studentId === studentId)
+                        ?.totalCreditsByCurriculum || 0,
+                repeatGradeTimes:
+                    existingDecisions.filter((decision) => decision.studentId === studentId)
+                        .length +
+                    (newDecisions.some((decision) => decision.studentId === studentId) ? 1 : 0),
+                statusRepeatGrade: existingStudentIds.has(studentId)
+                    ? 'Đã có quyết định lưu ban'
+                    : newDecisions.some((decision) => decision.studentId === studentId)
+                      ? 'Chờ phê duyệt'
+                      : 'Không lưu ban',
+            }
+            ListResult.push(newResult)
+        }
+        return ListResult
     } catch (error) {
         console.error('Error in SaveStudentRepeatGrade function:', error)
         throw new Error(`${error instanceof Error ? error.message : 'Unknown error'}`)
@@ -2085,16 +2212,12 @@ const SaveStudentRepeatGrade = async (studentIds: string[], semesterId: string):
     }
 }
 
-export const StudentRepeatGrade = async (
+export const StudentRepeatGradeService = async (
     studentIds: string[],
     semesterId: string
 ): Promise<any[]> => {
     try {
-        const listStudentRepeatGrade = await checkStudentResultForRepeatGrade(
-            studentIds,
-            semesterId
-        )
-        await SaveStudentRepeatGrade(listStudentRepeatGrade, semesterId)
+        const listStudentRepeatGrade = await SaveStudentRepeatGrade(studentIds, semesterId)
         return listStudentRepeatGrade
     } catch (error) {
         console.error('Error in RepeatGrade function:', error)

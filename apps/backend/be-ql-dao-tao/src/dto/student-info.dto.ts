@@ -227,6 +227,17 @@ export const CourseStudentAcademicAction = z.object({
         .describe('Danh sách sinh viên lưu ban, thôi học trong khóa học'),
 })
 
+export const StudentRepeatGrade = z.object({
+    id: z.string().describe('ID của sinh viên'),
+    studentName: z.string().describe('Họ tên sinh viên'),
+    studentCode: z.string().describe('Mã sinh viên'),
+    gpa_semester: z.number().describe('Điểm trung bình học kỳ'),
+    gpa_academic: z.number().describe('Điểm trung bình tích lũy'),
+    total_credit: z.number().describe('Tổng số tín chỉ đã học'),
+    repeatGradeTimes: z.number().describe('Số lần lưu ban'),
+    statusRepeatGrade: z.string().describe('Trạng thái lưu ban'),
+})
+
 export type StudentInfo = z.infer<typeof StudentInfo>
 export type StudentTemplateData = z.infer<typeof StudentTemplateData>
 export type StudentScholarship = z.infer<typeof StudentScholarship>
@@ -240,3 +251,4 @@ export type StudentInfoCheck = z.infer<typeof StudentInfoCheck>
 export type StudentResult = z.infer<typeof StudentResult>
 export type CourseStudentResult = z.infer<typeof CourseStudentResult>
 export type ListAcademicAction = z.infer<typeof ListAcademicAction>
+export type StudentRepeatGrade = z.infer<typeof StudentRepeatGrade>
