@@ -176,7 +176,7 @@ const TableCollapse = <
                 render: (_: any, record: T) => {
                     if (record.$type !== 'child') return ''
 
-                    // @ts-ignore
+                    // @ts-expect-error
                     const order = allChildren.findIndex((item) => item.key === record.key)
                     return order >= 0
                         ? order +

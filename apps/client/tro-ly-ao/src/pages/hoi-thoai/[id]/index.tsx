@@ -22,6 +22,7 @@ export default function Page() {
     const [input, setInput] = useState('')
     const [messages, setMessages] = useState<{ id: number; role: string; content: string }[]>([])
     const [loading, setLoading] = useState(false)
+    const [isStreaming, setIsStreaming] = useState(false)
     const [abortController, setAbortController] = useState<AbortController | null>(null)
     const [isUserScrolling, setIsUserScrolling] = useState(false)
     const [showScrollButton, setShowScrollButton] = useState(false)
@@ -42,7 +43,13 @@ export default function Page() {
     })
 
     const handleSend = async () => {
-        if (!input.trim() || !id || loading) return
+        if (!input.trim() || !id || loading || isStreaming) return
+
+        // Abort any existing request
+        if (abortController) {
+            abortController.abort()
+            setAbortController(null)
+        }
 
         const currentInput = input
         setInput('')
@@ -132,8 +139,14 @@ export default function Page() {
                     if (reader) {
                         let accumulatedText = ''
                         setLoading(false) // Tắt loading khi bắt đầu trả lời
+                        setIsStreaming(true) // Bắt đầu streaming
 
                         while (true) {
+                            // Check if request was aborted
+                            if (controller.signal.aborted) {
+                                break
+                            }
+
                             const { done, value } = await reader.read()
                             if (done) break
 
@@ -150,6 +163,7 @@ export default function Page() {
                             )
                         }
 
+                        setIsStreaming(false) // Kết thúc streaming
                         botReply = accumulatedText
                     } else {
                         // Fallback nếu không có stream
@@ -164,6 +178,7 @@ export default function Page() {
 
                 setTimeout(() => {
                     setLoading(false)
+                    setIsStreaming(false)
                     setAbortController(null)
                 }, 0)
             } catch (err) {
@@ -175,6 +190,7 @@ export default function Page() {
                     message.error('Đã xảy ra lỗi khi gửi tin nhắn')
                 }
                 setLoading(false)
+                setIsStreaming(false)
             } finally {
                 setAbortController(null)
             }
@@ -188,6 +204,7 @@ export default function Page() {
             setAbortController(null)
         }
         setLoading(false)
+        setIsStreaming(false)
     }
 
     const scrollToBottom = () => {
@@ -238,13 +255,14 @@ export default function Page() {
 
         // Reset các state
         setLoading(false)
+        setIsStreaming(false)
         setAbortController(null)
         setInput('')
         setIsUserScrolling(false)
         setShowScrollButton(false)
     }, [id]) // Chạy khi id thay đổi
 
-    // Tự động gọi API khi conversation mới chỉ có 1 message từ user (trong vòng 1 phút)
+    // Tự động gọi API cho conversation mới (chỉ có USER message, chưa có BOT reply)
     useEffect(() => {
         if (
             messageList &&
@@ -252,19 +270,14 @@ export default function Page() {
             messageList[0].sender === 'USER' &&
             id &&
             !loading &&
-            conversationCurrent // conversationCurrent đã load
+            !isStreaming &&
+            conversationCurrent && // conversationCurrent đã load
+            !messageList.some((msg) => msg.sender === 'BOT') // Chưa có tin nhắn BOT nào
         ) {
             const userMessage = messageList[0]
-            const messageCreatedTime = new Date(userMessage.createdAt).getTime()
-            const currentTime = Date.now()
-            const oneMinuteInMs = 60 * 1000
-
-            // Chỉ gọi API nếu tin nhắn được tạo trong vòng 1 phút
-            if (currentTime - messageCreatedTime <= oneMinuteInMs) {
-                sendMessage(userMessage.content || '', Date.now(), true) // skipUserMessage = true
-            }
+            sendMessage(userMessage.content || '', Date.now(), true) // skipUserMessage = true
         }
-    }, [messageList, id, conversationCurrent, loading, sendMessage])
+    }, [messageList, id, conversationCurrent, loading, isStreaming, sendMessage])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {

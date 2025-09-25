@@ -1,6 +1,6 @@
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import { Form } from 'antd'
-import { PutRequirementCriterion } from '.'
+import type { PutRequirementCriterion } from '.'
 
 export default function FormEvaluationCriterion({ item }: any) {
     const form = Form.useFormInstance<PutRequirementCriterion>()
