@@ -33,7 +33,7 @@ const DefaultLayout = ({
 }) => {
     const router = useRouter()
     const currentPath = router.pathname
-    const breadcrumb = getDynamicBreadcrumb('PORTAL', currentPath)
+    const breadcrumb = getDynamicBreadcrumb('DANG_KY_HOC', currentPath)
     const [collapsed, setCollapsed] = useState(() => {
         return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
     })
