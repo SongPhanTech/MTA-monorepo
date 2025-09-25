@@ -6,7 +6,6 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Prisma } from '@workspace/db'
 import {
     useCountSubjectVersion,
     useFindManySubjectVersion,
@@ -33,9 +32,84 @@ export default function KnowledgeBlock() {
         return Object.values(filters).some((value) => !!value)
     }, [filters])
 
-    const where: Prisma.SubjectVersionWhereInput = useMemo(
-        () =>
-            isFiltering
+    const { data, refetch } = useFindManySubjectVersion({
+        where: isFiltering
+            ? {
+                  ...(filters.searchText
+                      ? {
+                            OR: [
+                                {
+                                    code: {
+                                        contains: filters.searchText,
+                                        mode: 'insensitive',
+                                    },
+                                },
+                                {
+                                    name: {
+                                        contains: filters.searchText,
+                                        mode: 'insensitive',
+                                    },
+                                },
+                            ],
+                        }
+                      : {}),
+                  ...(filters.code || filters.name
+                      ? {
+                            knowledgeBlocks: {
+                                some: {
+                                    ...(filters.name
+                                        ? {
+                                              name: {
+                                                  contains: filters.name,
+                                                  mode: 'insensitive',
+                                              },
+                                          }
+                                        : {}),
+                                    ...(filters.code
+                                        ? {
+                                              code: {
+                                                  contains: filters.code,
+                                                  mode: 'insensitive',
+                                              },
+                                          }
+                                        : {}),
+                                },
+                            },
+                        }
+                      : {}),
+              }
+            : {},
+        include: {
+            knowledgeBlocks: {
+                include: { questions: true },
+                where: {
+                    ...(filters.name
+                        ? {
+                              name: {
+                                  contains: filters.name,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                    ...(filters.code
+                        ? {
+                              code: {
+                                  contains: filters.code,
+                                  mode: 'insensitive',
+                              },
+                          }
+                        : {}),
+                },
+            },
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+        orderBy: { createdAt: 'desc' },
+    })
+
+    const { data: count } = useCountSubjectVersion({
+        where: {
+            ...(isFiltering
                 ? {
                       ...(filters.searchText
                           ? {
@@ -80,41 +154,10 @@ export default function KnowledgeBlock() {
                             }
                           : {}),
                   }
-                : {},
-        [filters, isFiltering]
-    )
-
-    const { data, refetch } = useFindManySubjectVersion({
-        where,
-        include: {
-            knowledgeBlocks: {
-                include: { questions: true },
-                where: {
-                    ...(filters.name
-                        ? {
-                              name: {
-                                  contains: filters.name,
-                                  mode: 'insensitive',
-                              },
-                          }
-                        : {}),
-                    ...(filters.code
-                        ? {
-                              code: {
-                                  contains: filters.code,
-                                  mode: 'insensitive',
-                              },
-                          }
-                        : {}),
-                },
-            },
+                : {}),
+            deletedAt: null,
         },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-        orderBy: { createdAt: 'desc' },
     })
-
-    const { data: count } = useCountSubjectVersion({ where: { ...where, deletedAt: null } })
 
     const { onOpen: onOpenPutKnowledgeBlock } = useDisclosure<{
         id: string
