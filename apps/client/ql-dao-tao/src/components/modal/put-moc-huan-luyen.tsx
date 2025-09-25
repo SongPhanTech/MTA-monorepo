@@ -43,7 +43,7 @@ const PutMilestoneModal = () => {
         try {
             showSpinner()
             const data = {
-                name: output.name,
+                name: output.name.trim(),
                 period: output.period,
                 startPeriod: output.startPeriod,
                 startDate: output.startDate,

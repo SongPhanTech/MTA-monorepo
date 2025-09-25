@@ -51,7 +51,7 @@ const PutTrainingBlock = () => {
             showSpinner()
             const payload = {
                 code: output.code,
-                name: output.name,
+                name: output.name.trim(),
                 active: output.active,
             }
 

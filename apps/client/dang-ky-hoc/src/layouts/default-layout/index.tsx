@@ -128,7 +128,7 @@ const DefaultLayout = ({
                         <div className="flex items-center justify-center text-center">
                             <Image src={logo_mta} alt="logo k01" className="w-10 h-10 mr-3" />
                             <span className="text-base font-bold color text-primary">
-                                Cổng thông tin
+                                Đăng ký học
                             </span>
                         </div>
                     }

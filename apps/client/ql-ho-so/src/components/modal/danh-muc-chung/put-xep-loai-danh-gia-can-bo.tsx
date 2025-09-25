@@ -33,7 +33,7 @@ export default function XepLoaiDanhGiaCanBoModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -41,7 +41,7 @@ export default function XepLoaiDanhGiaCanBoModal() {
             } else {
                 await createDM_XepLoaiDanhGiaCanBo({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

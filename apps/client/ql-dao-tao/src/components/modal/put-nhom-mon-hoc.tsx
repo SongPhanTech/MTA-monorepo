@@ -39,7 +39,7 @@ const PutSubjectModal = () => {
             if (id) {
                 await updateSubject({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         managementOrganizationId: output.managementOrganizationId,
                         information: output.information,
                     },
@@ -51,7 +51,7 @@ const PutSubjectModal = () => {
             } else {
                 await createSubject({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         managementOrganizationId: output.managementOrganizationId,
                         information: output.information,
                     },

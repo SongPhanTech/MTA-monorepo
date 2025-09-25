@@ -39,7 +39,7 @@ const PutSurveyQuestionModal = () => {
             if (input?.id) {
                 await update({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         surveyQuestionGroupId: output.surveyQuestionGroupId,
                         type: output.type,
                         description: output.description,
@@ -52,7 +52,7 @@ const PutSurveyQuestionModal = () => {
             } else {
                 await create({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         surveyQuestionGroupId: output.surveyQuestionGroupId,
                         type: output.type,
                         description: output.description,

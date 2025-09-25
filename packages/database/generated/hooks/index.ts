@@ -38,6 +38,7 @@ export * from './training-block-subject';
 export * from './class-register-session';
 export * from './class-register-logs';
 export * from './subject-class';
+export * from './subject-class-time';
 export * from './class-schedule';
 export * from './training-object-type';
 export * from './priority-object';

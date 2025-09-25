@@ -403,6 +403,10 @@ export default function TrainingProgramSubjects() {
                                         <ImportCurriculumVersionModal
                                             visible={importModalVisible}
                                             onCancel={() => setImportModalVisible(false)}
+                                            onSuccess={() => {
+                                                refetch()
+                                                setImportModalVisible(false)
+                                            }}
                                         />
                                     </>
                                 )}

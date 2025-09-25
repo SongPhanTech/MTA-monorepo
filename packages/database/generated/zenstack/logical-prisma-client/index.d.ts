@@ -367,6 +367,16 @@ export type ClassRegisterLogs = $Result.DefaultSelection<Prisma.$ClassRegisterLo
  */
 export type SubjectClass = $Result.DefaultSelection<Prisma.$SubjectClassPayload>;
 /**
+ * Model SubjectClassTime
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type SubjectClassTime = $Result.DefaultSelection<Prisma.$SubjectClassTimePayload>;
+/**
  * Model ClassSchedule
  * @
  * @allow ('all', auth() != null)
@@ -2709,6 +2719,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      * ```
      */
     get subjectClass(): Prisma.SubjectClassDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.subjectClassTime`: Exposes CRUD operations for the **SubjectClassTime** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more SubjectClassTimes
+     * const subjectClassTimes = await prisma.subjectClassTime.findMany()
+     * ```
+     */
+    get subjectClassTime(): Prisma.SubjectClassTimeDelegate<ExtArgs, ClientOptions>;
     /**
      * `prisma.classSchedule`: Exposes CRUD operations for the **ClassSchedule** model.
      * Example usage:
@@ -5135,6 +5154,7 @@ export namespace Prisma {
         ClassRegisterSession: 'ClassRegisterSession',
         ClassRegisterLogs: 'ClassRegisterLogs',
         SubjectClass: 'SubjectClass',
+        SubjectClassTime: 'SubjectClassTime',
         ClassSchedule: 'ClassSchedule',
         TrainingObjectType: 'TrainingObjectType',
         PriorityObject: 'PriorityObject',
@@ -5857,6 +5877,19 @@ export namespace Prisma {
         lecturerId: 'lecturerId',
         extraLecturerId: 'extraLecturerId',
         enterGradeLecturerId: 'enterGradeLecturerId'
+    };
+    export const SubjectClassTimeScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        subjectClassId: 'subjectClassId',
+        dayOfWeek: 'dayOfWeek',
+        startPeriod: 'startPeriod',
+        endPeriod: 'endPeriod'
     };
     export const ClassScheduleScalarFieldEnum: {
         id: 'id',
@@ -9015,6 +9048,12 @@ export namespace Prisma {
         lecturerId: 'lecturerId',
         extraLecturerId: 'extraLecturerId',
         enterGradeLecturerId: 'enterGradeLecturerId'
+    };
+    export const SubjectClassTimeOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        subjectClassId: 'subjectClassId'
     };
     export const ClassScheduleOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -23542,6 +23581,7 @@ export namespace Prisma {
         defenseRooms<T extends SubjectClass$defenseRoomsArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$defenseRoomsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         surveyObjectTypes<T extends SubjectClass$surveyObjectTypesArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$surveyObjectTypesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         classRegisterLogs<T extends SubjectClass$classRegisterLogsArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$classRegisterLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        subjectClassTimes<T extends SubjectClass$subjectClassTimesArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$subjectClassTimesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassTimePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -23597,6 +23637,389 @@ export namespace Prisma {
         readonly lecturerId: FieldRef<"SubjectClass", 'String'>;
         readonly extraLecturerId: FieldRef<"SubjectClass", 'String'>;
         readonly enterGradeLecturerId: FieldRef<"SubjectClass", 'String'>;
+    }
+
+    export interface SubjectClassTimeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SubjectClassTime'], meta: { name: 'SubjectClassTime' } };
+        /**
+         * Fields of the SubjectClassTime model
+         */
+        readonly fields: SubjectClassTimeFieldRefs;
+        /**
+         * Find zero or one SubjectClassTime that matches the filter.
+         * @param {SubjectClassTimeFindUniqueArgs} args - Arguments to find a SubjectClassTime
+         * @example
+         * // Get one SubjectClassTime
+         * const subjectClassTime = await prisma.subjectClassTime.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends SubjectClassTimeFindUniqueArgs>(args: SelectSubset<T, SubjectClassTimeFindUniqueArgs<ExtArgs>>): Prisma__SubjectClassTimeClient<$Result.GetResult<Prisma.$SubjectClassTimePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one SubjectClassTime that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {SubjectClassTimeFindUniqueOrThrowArgs} args - Arguments to find a SubjectClassTime
+         * @example
+         * // Get one SubjectClassTime
+         * const subjectClassTime = await prisma.subjectClassTime.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends SubjectClassTimeFindUniqueOrThrowArgs>(args: SelectSubset<T, SubjectClassTimeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SubjectClassTimeClient<$Result.GetResult<Prisma.$SubjectClassTimePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first SubjectClassTime that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SubjectClassTimeFindFirstArgs} args - Arguments to find a SubjectClassTime
+         * @example
+         * // Get one SubjectClassTime
+         * const subjectClassTime = await prisma.subjectClassTime.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends SubjectClassTimeFindFirstArgs>(args?: SelectSubset<T, SubjectClassTimeFindFirstArgs<ExtArgs>>): Prisma__SubjectClassTimeClient<$Result.GetResult<Prisma.$SubjectClassTimePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first SubjectClassTime that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SubjectClassTimeFindFirstOrThrowArgs} args - Arguments to find a SubjectClassTime
+         * @example
+         * // Get one SubjectClassTime
+         * const subjectClassTime = await prisma.subjectClassTime.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends SubjectClassTimeFindFirstOrThrowArgs>(args?: SelectSubset<T, SubjectClassTimeFindFirstOrThrowArgs<ExtArgs>>): Prisma__SubjectClassTimeClient<$Result.GetResult<Prisma.$SubjectClassTimePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more SubjectClassTimes that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SubjectClassTimeFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all SubjectClassTimes
+         * const subjectClassTimes = await prisma.subjectClassTime.findMany()
+         *
+         * // Get first 10 SubjectClassTimes
+         * const subjectClassTimes = await prisma.subjectClassTime.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const subjectClassTimeWithIdOnly = await prisma.subjectClassTime.findMany({ select: { id: true } })
+         */
+        findMany<T extends SubjectClassTimeFindManyArgs>(args?: SelectSubset<T, SubjectClassTimeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassTimePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a SubjectClassTime.
+         * @param {SubjectClassTimeCreateArgs} args - Arguments to create a SubjectClassTime.
+         * @example
+         * // Create one SubjectClassTime
+         * const SubjectClassTime = await prisma.subjectClassTime.create({
+         *   data: {
+         *     // ... data to create a SubjectClassTime
+         *   }
+         * })
+         */
+        create<T extends SubjectClassTimeCreateArgs>(args: SelectSubset<T, SubjectClassTimeCreateArgs<ExtArgs>>): Prisma__SubjectClassTimeClient<$Result.GetResult<Prisma.$SubjectClassTimePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many SubjectClassTimes.
+         * @param {SubjectClassTimeCreateManyArgs} args - Arguments to create many SubjectClassTimes.
+         * @example
+         * // Create many SubjectClassTimes
+         * const subjectClassTime = await prisma.subjectClassTime.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends SubjectClassTimeCreateManyArgs>(args?: SelectSubset<T, SubjectClassTimeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many SubjectClassTimes and returns the data saved in the database.
+         * @param {SubjectClassTimeCreateManyAndReturnArgs} args - Arguments to create many SubjectClassTimes.
+         * @example
+         * // Create many SubjectClassTimes
+         * const subjectClassTime = await prisma.subjectClassTime.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many SubjectClassTimes and only return the `id`
+         * const subjectClassTimeWithIdOnly = await prisma.subjectClassTime.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends SubjectClassTimeCreateManyAndReturnArgs>(args?: SelectSubset<T, SubjectClassTimeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassTimePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a SubjectClassTime.
+         * @param {SubjectClassTimeDeleteArgs} args - Arguments to delete one SubjectClassTime.
+         * @example
+         * // Delete one SubjectClassTime
+         * const SubjectClassTime = await prisma.subjectClassTime.delete({
+         *   where: {
+         *     // ... filter to delete one SubjectClassTime
+         *   }
+         * })
+         */
+        delete<T extends SubjectClassTimeDeleteArgs>(args: SelectSubset<T, SubjectClassTimeDeleteArgs<ExtArgs>>): Prisma__SubjectClassTimeClient<$Result.GetResult<Prisma.$SubjectClassTimePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one SubjectClassTime.
+         * @param {SubjectClassTimeUpdateArgs} args - Arguments to update one SubjectClassTime.
+         * @example
+         * // Update one SubjectClassTime
+         * const subjectClassTime = await prisma.subjectClassTime.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends SubjectClassTimeUpdateArgs>(args: SelectSubset<T, SubjectClassTimeUpdateArgs<ExtArgs>>): Prisma__SubjectClassTimeClient<$Result.GetResult<Prisma.$SubjectClassTimePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more SubjectClassTimes.
+         * @param {SubjectClassTimeDeleteManyArgs} args - Arguments to filter SubjectClassTimes to delete.
+         * @example
+         * // Delete a few SubjectClassTimes
+         * const { count } = await prisma.subjectClassTime.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends SubjectClassTimeDeleteManyArgs>(args?: SelectSubset<T, SubjectClassTimeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more SubjectClassTimes.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SubjectClassTimeUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many SubjectClassTimes
+         * const subjectClassTime = await prisma.subjectClassTime.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends SubjectClassTimeUpdateManyArgs>(args: SelectSubset<T, SubjectClassTimeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more SubjectClassTimes and returns the data updated in the database.
+         * @param {SubjectClassTimeUpdateManyAndReturnArgs} args - Arguments to update many SubjectClassTimes.
+         * @example
+         * // Update many SubjectClassTimes
+         * const subjectClassTime = await prisma.subjectClassTime.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more SubjectClassTimes and only return the `id`
+         * const subjectClassTimeWithIdOnly = await prisma.subjectClassTime.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends SubjectClassTimeUpdateManyAndReturnArgs>(args: SelectSubset<T, SubjectClassTimeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassTimePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one SubjectClassTime.
+         * @param {SubjectClassTimeUpsertArgs} args - Arguments to update or create a SubjectClassTime.
+         * @example
+         * // Update or create a SubjectClassTime
+         * const subjectClassTime = await prisma.subjectClassTime.upsert({
+         *   create: {
+         *     // ... data to create a SubjectClassTime
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the SubjectClassTime we want to update
+         *   }
+         * })
+         */
+        upsert<T extends SubjectClassTimeUpsertArgs>(args: SelectSubset<T, SubjectClassTimeUpsertArgs<ExtArgs>>): Prisma__SubjectClassTimeClient<$Result.GetResult<Prisma.$SubjectClassTimePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of SubjectClassTimes.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SubjectClassTimeCountArgs} args - Arguments to filter SubjectClassTimes to count.
+         * @example
+         * // Count the number of SubjectClassTimes
+         * const count = await prisma.subjectClassTime.count({
+         *   where: {
+         *     // ... the filter for the SubjectClassTimes we want to count
+         *   }
+         * })
+         */
+        count<T extends SubjectClassTimeCountArgs>(args?: Subset<T, SubjectClassTimeCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], SubjectClassTimeCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a SubjectClassTime.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SubjectClassTimeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends SubjectClassTimeAggregateArgs>(args: Subset<T, SubjectClassTimeAggregateArgs>): Prisma.PrismaPromise<GetSubjectClassTimeAggregateType<T>>;
+        /**
+         * Group by SubjectClassTime.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {SubjectClassTimeGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends SubjectClassTimeGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SubjectClassTimeGroupByArgs['orderBy'] }
+        : { orderBy?: SubjectClassTimeGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, SubjectClassTimeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSubjectClassTimeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for SubjectClassTime.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__SubjectClassTimeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        subjectClass<T extends SubjectClassDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClassDefaultArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the SubjectClassTime model
+     */
+    interface SubjectClassTimeFieldRefs {
+        readonly id: FieldRef<"SubjectClassTime", 'String'>;
+        readonly code: FieldRef<"SubjectClassTime", 'String'>;
+        readonly active: FieldRef<"SubjectClassTime", 'Boolean'>;
+        readonly description: FieldRef<"SubjectClassTime", 'String'>;
+        readonly deletedAt: FieldRef<"SubjectClassTime", 'DateTime'>;
+        readonly createdAt: FieldRef<"SubjectClassTime", 'DateTime'>;
+        readonly updatedAt: FieldRef<"SubjectClassTime", 'DateTime'>;
+        readonly subjectClassId: FieldRef<"SubjectClassTime", 'String'>;
+        readonly dayOfWeek: FieldRef<"SubjectClassTime", 'Int'>;
+        readonly startPeriod: FieldRef<"SubjectClassTime", 'Int'>;
+        readonly endPeriod: FieldRef<"SubjectClassTime", 'Int'>;
     }
 
     export interface ClassScheduleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -96972,7 +97395,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
+            modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -99415,6 +99838,80 @@ export namespace Prisma {
                     count: {
                         args: Prisma.SubjectClassCountArgs<ExtArgs>
                         result: $Utils.Optional<SubjectClassCountAggregateOutputType> | number
+                    }
+                }
+            }
+            SubjectClassTime: {
+                payload: Prisma.$SubjectClassTimePayload<ExtArgs>
+                fields: Prisma.SubjectClassTimeFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.SubjectClassTimeFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SubjectClassTimePayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.SubjectClassTimeFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SubjectClassTimePayload>
+                    }
+                    findFirst: {
+                        args: Prisma.SubjectClassTimeFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SubjectClassTimePayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.SubjectClassTimeFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SubjectClassTimePayload>
+                    }
+                    findMany: {
+                        args: Prisma.SubjectClassTimeFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SubjectClassTimePayload>[]
+                    }
+                    create: {
+                        args: Prisma.SubjectClassTimeCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SubjectClassTimePayload>
+                    }
+                    createMany: {
+                        args: Prisma.SubjectClassTimeCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.SubjectClassTimeCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SubjectClassTimePayload>[]
+                    }
+                    delete: {
+                        args: Prisma.SubjectClassTimeDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SubjectClassTimePayload>
+                    }
+                    update: {
+                        args: Prisma.SubjectClassTimeUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SubjectClassTimePayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.SubjectClassTimeDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.SubjectClassTimeUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.SubjectClassTimeUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SubjectClassTimePayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.SubjectClassTimeUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$SubjectClassTimePayload>
+                    }
+                    aggregate: {
+                        args: Prisma.SubjectClassTimeAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateSubjectClassTime>
+                    }
+                    groupBy: {
+                        args: Prisma.SubjectClassTimeGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<SubjectClassTimeGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.SubjectClassTimeCountArgs<ExtArgs>
+                        result: $Utils.Optional<SubjectClassTimeCountAggregateOutputType> | number
                     }
                 }
             }
@@ -113468,6 +113965,7 @@ export namespace Prisma {
         classRegisterSession?: ClassRegisterSessionOmit
         classRegisterLogs?: ClassRegisterLogsOmit
         subjectClass?: SubjectClassOmit
+        subjectClassTime?: SubjectClassTimeOmit
         classSchedule?: ClassScheduleOmit
         trainingObjectType?: TrainingObjectTypeOmit
         priorityObject?: PriorityObjectOmit
@@ -114627,6 +115125,7 @@ export namespace Prisma {
         defenseRooms: number
         surveyObjectTypes: number
         classRegisterLogs: number
+        subjectClassTimes: number
     };
     export type SubjectClassCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClassStudent?: boolean | SubjectClassCountOutputTypeCountSubjectClassStudentArgs
@@ -114637,6 +115136,7 @@ export namespace Prisma {
         defenseRooms?: boolean | SubjectClassCountOutputTypeCountDefenseRoomsArgs
         surveyObjectTypes?: boolean | SubjectClassCountOutputTypeCountSurveyObjectTypesArgs
         classRegisterLogs?: boolean | SubjectClassCountOutputTypeCountClassRegisterLogsArgs
+        subjectClassTimes?: boolean | SubjectClassCountOutputTypeCountSubjectClassTimesArgs
     };
     /**
      * SubjectClassCountOutputType without action
@@ -114694,6 +115194,12 @@ export namespace Prisma {
      */
     export type SubjectClassCountOutputTypeCountClassRegisterLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: ClassRegisterLogsWhereInput
+    };
+    /**
+     * SubjectClassCountOutputType without action
+     */
+    export type SubjectClassCountOutputTypeCountSubjectClassTimesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SubjectClassTimeWhereInput
     };
     /**
      * Count Type TrainingObjectTypeCountOutputType
@@ -144067,6 +144573,7 @@ export namespace Prisma {
         defenseRooms?: boolean | SubjectClass$defenseRoomsArgs<ExtArgs>
         surveyObjectTypes?: boolean | SubjectClass$surveyObjectTypesArgs<ExtArgs>
         classRegisterLogs?: boolean | SubjectClass$classRegisterLogsArgs<ExtArgs>
+        subjectClassTimes?: boolean | SubjectClass$subjectClassTimesArgs<ExtArgs>
         _count?: boolean | SubjectClassCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["subjectClass"]>;
     export type SubjectClassSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -144196,6 +144703,7 @@ export namespace Prisma {
         defenseRooms?: boolean | SubjectClass$defenseRoomsArgs<ExtArgs>
         surveyObjectTypes?: boolean | SubjectClass$surveyObjectTypesArgs<ExtArgs>
         classRegisterLogs?: boolean | SubjectClass$classRegisterLogsArgs<ExtArgs>
+        subjectClassTimes?: boolean | SubjectClass$subjectClassTimesArgs<ExtArgs>
         _count?: boolean | SubjectClassCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type SubjectClassIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -144237,6 +144745,7 @@ export namespace Prisma {
             defenseRooms: Prisma.$RoomPayload<ExtArgs>[]
             surveyObjectTypes: Prisma.$SurveyObjectTypePayload<ExtArgs>[]
             classRegisterLogs: Prisma.$ClassRegisterLogsPayload<ExtArgs>[]
+            subjectClassTimes: Prisma.$SubjectClassTimePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -144927,6 +145436,29 @@ export namespace Prisma {
         distinct?: ClassRegisterLogsScalarFieldEnum | ClassRegisterLogsScalarFieldEnum[]
     };
     /**
+     * SubjectClass.subjectClassTimes
+     */
+    export type SubjectClass$subjectClassTimesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassTime
+         */
+        select?: SubjectClassTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassTime
+         */
+        omit?: SubjectClassTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassTimeInclude<ExtArgs> | null
+        where?: SubjectClassTimeWhereInput
+        orderBy?: SubjectClassTimeOrderByWithRelationInput | SubjectClassTimeOrderByWithRelationInput[]
+        cursor?: SubjectClassTimeWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: SubjectClassTimeScalarFieldEnum | SubjectClassTimeScalarFieldEnum[]
+    };
+    /**
      * SubjectClass without action
      */
     export type SubjectClassDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -144942,6 +145474,709 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: SubjectClassInclude<ExtArgs> | null
+    };
+    /**
+     * Model SubjectClassTime
+     */
+    export type AggregateSubjectClassTime = {
+        _count: SubjectClassTimeCountAggregateOutputType | null
+        _avg: SubjectClassTimeAvgAggregateOutputType | null
+        _sum: SubjectClassTimeSumAggregateOutputType | null
+        _min: SubjectClassTimeMinAggregateOutputType | null
+        _max: SubjectClassTimeMaxAggregateOutputType | null
+    };
+    export type SubjectClassTimeAvgAggregateOutputType = {
+        dayOfWeek: number | null
+        startPeriod: number | null
+        endPeriod: number | null
+    };
+    export type SubjectClassTimeSumAggregateOutputType = {
+        dayOfWeek: number | null
+        startPeriod: number | null
+        endPeriod: number | null
+    };
+    export type SubjectClassTimeMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        subjectClassId: string | null
+        dayOfWeek: number | null
+        startPeriod: number | null
+        endPeriod: number | null
+    };
+    export type SubjectClassTimeMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        subjectClassId: string | null
+        dayOfWeek: number | null
+        startPeriod: number | null
+        endPeriod: number | null
+    };
+    export type SubjectClassTimeCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        subjectClassId: number
+        dayOfWeek: number
+        startPeriod: number
+        endPeriod: number
+        _all: number
+    };
+    export type SubjectClassTimeAvgAggregateInputType = {
+        dayOfWeek?: true
+        startPeriod?: true
+        endPeriod?: true
+    };
+    export type SubjectClassTimeSumAggregateInputType = {
+        dayOfWeek?: true
+        startPeriod?: true
+        endPeriod?: true
+    };
+    export type SubjectClassTimeMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        subjectClassId?: true
+        dayOfWeek?: true
+        startPeriod?: true
+        endPeriod?: true
+    };
+    export type SubjectClassTimeMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        subjectClassId?: true
+        dayOfWeek?: true
+        startPeriod?: true
+        endPeriod?: true
+    };
+    export type SubjectClassTimeCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        subjectClassId?: true
+        dayOfWeek?: true
+        startPeriod?: true
+        endPeriod?: true
+        _all?: true
+    };
+    export type SubjectClassTimeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which SubjectClassTime to aggregate.
+         */
+        where?: SubjectClassTimeWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of SubjectClassTimes to fetch.
+         */
+        orderBy?: SubjectClassTimeOrderByWithRelationInput | SubjectClassTimeOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: SubjectClassTimeWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` SubjectClassTimes from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` SubjectClassTimes.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned SubjectClassTimes
+        **/
+        _count?: true | SubjectClassTimeCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: SubjectClassTimeAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: SubjectClassTimeSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: SubjectClassTimeMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: SubjectClassTimeMaxAggregateInputType
+    };
+    export type GetSubjectClassTimeAggregateType<T extends SubjectClassTimeAggregateArgs> = {
+        [P in keyof T & keyof AggregateSubjectClassTime]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSubjectClassTime[P]>
+        : GetScalarType<T[P], AggregateSubjectClassTime[P]>
+    };
+    export type SubjectClassTimeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SubjectClassTimeWhereInput
+        orderBy?: SubjectClassTimeOrderByWithAggregationInput | SubjectClassTimeOrderByWithAggregationInput[]
+        by: SubjectClassTimeScalarFieldEnum[] | SubjectClassTimeScalarFieldEnum
+        having?: SubjectClassTimeScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: SubjectClassTimeCountAggregateInputType | true
+        _avg?: SubjectClassTimeAvgAggregateInputType
+        _sum?: SubjectClassTimeSumAggregateInputType
+        _min?: SubjectClassTimeMinAggregateInputType
+        _max?: SubjectClassTimeMaxAggregateInputType
+    };
+    export type SubjectClassTimeGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        subjectClassId: string
+        dayOfWeek: number
+        startPeriod: number
+        endPeriod: number
+        _count: SubjectClassTimeCountAggregateOutputType | null
+        _avg: SubjectClassTimeAvgAggregateOutputType | null
+        _sum: SubjectClassTimeSumAggregateOutputType | null
+        _min: SubjectClassTimeMinAggregateOutputType | null
+        _max: SubjectClassTimeMaxAggregateOutputType | null
+    };
+    type GetSubjectClassTimeGroupByPayload<T extends SubjectClassTimeGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<SubjectClassTimeGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof SubjectClassTimeGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], SubjectClassTimeGroupByOutputType[P]>
+                : GetScalarType<T[P], SubjectClassTimeGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type SubjectClassTimeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        subjectClassId?: boolean
+        dayOfWeek?: boolean
+        startPeriod?: boolean
+        endPeriod?: boolean
+        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["subjectClassTime"]>;
+    export type SubjectClassTimeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        subjectClassId?: boolean
+        dayOfWeek?: boolean
+        startPeriod?: boolean
+        endPeriod?: boolean
+        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["subjectClassTime"]>;
+    export type SubjectClassTimeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        subjectClassId?: boolean
+        dayOfWeek?: boolean
+        startPeriod?: boolean
+        endPeriod?: boolean
+        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["subjectClassTime"]>;
+    export type SubjectClassTimeSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        subjectClassId?: boolean
+        dayOfWeek?: boolean
+        startPeriod?: boolean
+        endPeriod?: boolean
+    };
+    export type SubjectClassTimeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "subjectClassId" | "dayOfWeek" | "startPeriod" | "endPeriod", ExtArgs["result"]["subjectClassTime"]>;
+    export type SubjectClassTimeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+    };
+    export type SubjectClassTimeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+    };
+    export type SubjectClassTimeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+    };
+    export type $SubjectClassTimePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "SubjectClassTime"
+        objects: {
+            subjectClass: Prisma.$SubjectClassPayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            subjectClassId: string
+            dayOfWeek: number
+            startPeriod: number
+            endPeriod: number
+        }, ExtArgs["result"]["subjectClassTime"]>
+        composites: {}
+    };
+    type SubjectClassTimeGetPayload<S extends boolean | null | undefined | SubjectClassTimeDefaultArgs> = $Result.GetResult<Prisma.$SubjectClassTimePayload, S>;
+    type SubjectClassTimeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<SubjectClassTimeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: SubjectClassTimeCountAggregateInputType | true
+    };
+    /**
+     * SubjectClassTime findUnique
+     */
+    export type SubjectClassTimeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassTime
+         */
+        select?: SubjectClassTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassTime
+         */
+        omit?: SubjectClassTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassTimeInclude<ExtArgs> | null
+        /**
+         * Filter, which SubjectClassTime to fetch.
+         */
+        where: SubjectClassTimeWhereUniqueInput
+    };
+    /**
+     * SubjectClassTime findUniqueOrThrow
+     */
+    export type SubjectClassTimeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassTime
+         */
+        select?: SubjectClassTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassTime
+         */
+        omit?: SubjectClassTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassTimeInclude<ExtArgs> | null
+        /**
+         * Filter, which SubjectClassTime to fetch.
+         */
+        where: SubjectClassTimeWhereUniqueInput
+    };
+    /**
+     * SubjectClassTime findFirst
+     */
+    export type SubjectClassTimeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassTime
+         */
+        select?: SubjectClassTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassTime
+         */
+        omit?: SubjectClassTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassTimeInclude<ExtArgs> | null
+        /**
+         * Filter, which SubjectClassTime to fetch.
+         */
+        where?: SubjectClassTimeWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of SubjectClassTimes to fetch.
+         */
+        orderBy?: SubjectClassTimeOrderByWithRelationInput | SubjectClassTimeOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for SubjectClassTimes.
+         */
+        cursor?: SubjectClassTimeWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` SubjectClassTimes from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` SubjectClassTimes.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of SubjectClassTimes.
+         */
+        distinct?: SubjectClassTimeScalarFieldEnum | SubjectClassTimeScalarFieldEnum[]
+    };
+    /**
+     * SubjectClassTime findFirstOrThrow
+     */
+    export type SubjectClassTimeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassTime
+         */
+        select?: SubjectClassTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassTime
+         */
+        omit?: SubjectClassTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassTimeInclude<ExtArgs> | null
+        /**
+         * Filter, which SubjectClassTime to fetch.
+         */
+        where?: SubjectClassTimeWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of SubjectClassTimes to fetch.
+         */
+        orderBy?: SubjectClassTimeOrderByWithRelationInput | SubjectClassTimeOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for SubjectClassTimes.
+         */
+        cursor?: SubjectClassTimeWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` SubjectClassTimes from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` SubjectClassTimes.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of SubjectClassTimes.
+         */
+        distinct?: SubjectClassTimeScalarFieldEnum | SubjectClassTimeScalarFieldEnum[]
+    };
+    /**
+     * SubjectClassTime findMany
+     */
+    export type SubjectClassTimeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassTime
+         */
+        select?: SubjectClassTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassTime
+         */
+        omit?: SubjectClassTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassTimeInclude<ExtArgs> | null
+        /**
+         * Filter, which SubjectClassTimes to fetch.
+         */
+        where?: SubjectClassTimeWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of SubjectClassTimes to fetch.
+         */
+        orderBy?: SubjectClassTimeOrderByWithRelationInput | SubjectClassTimeOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing SubjectClassTimes.
+         */
+        cursor?: SubjectClassTimeWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` SubjectClassTimes from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` SubjectClassTimes.
+         */
+        skip?: number
+        distinct?: SubjectClassTimeScalarFieldEnum | SubjectClassTimeScalarFieldEnum[]
+    };
+    /**
+     * SubjectClassTime create
+     */
+    export type SubjectClassTimeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassTime
+         */
+        select?: SubjectClassTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassTime
+         */
+        omit?: SubjectClassTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassTimeInclude<ExtArgs> | null
+        /**
+         * The data needed to create a SubjectClassTime.
+         */
+        data: XOR<SubjectClassTimeCreateInput, SubjectClassTimeUncheckedCreateInput>
+    };
+    /**
+     * SubjectClassTime createMany
+     */
+    export type SubjectClassTimeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many SubjectClassTimes.
+         */
+        data: SubjectClassTimeCreateManyInput | SubjectClassTimeCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * SubjectClassTime createManyAndReturn
+     */
+    export type SubjectClassTimeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassTime
+         */
+        select?: SubjectClassTimeSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassTime
+         */
+        omit?: SubjectClassTimeOmit<ExtArgs> | null
+        /**
+         * The data used to create many SubjectClassTimes.
+         */
+        data: SubjectClassTimeCreateManyInput | SubjectClassTimeCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassTimeIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * SubjectClassTime update
+     */
+    export type SubjectClassTimeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassTime
+         */
+        select?: SubjectClassTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassTime
+         */
+        omit?: SubjectClassTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassTimeInclude<ExtArgs> | null
+        /**
+         * The data needed to update a SubjectClassTime.
+         */
+        data: XOR<SubjectClassTimeUpdateInput, SubjectClassTimeUncheckedUpdateInput>
+        /**
+         * Choose, which SubjectClassTime to update.
+         */
+        where: SubjectClassTimeWhereUniqueInput
+    };
+    /**
+     * SubjectClassTime updateMany
+     */
+    export type SubjectClassTimeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update SubjectClassTimes.
+         */
+        data: XOR<SubjectClassTimeUpdateManyMutationInput, SubjectClassTimeUncheckedUpdateManyInput>
+        /**
+         * Filter which SubjectClassTimes to update
+         */
+        where?: SubjectClassTimeWhereInput
+        /**
+         * Limit how many SubjectClassTimes to update.
+         */
+        limit?: number
+    };
+    /**
+     * SubjectClassTime updateManyAndReturn
+     */
+    export type SubjectClassTimeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassTime
+         */
+        select?: SubjectClassTimeSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassTime
+         */
+        omit?: SubjectClassTimeOmit<ExtArgs> | null
+        /**
+         * The data used to update SubjectClassTimes.
+         */
+        data: XOR<SubjectClassTimeUpdateManyMutationInput, SubjectClassTimeUncheckedUpdateManyInput>
+        /**
+         * Filter which SubjectClassTimes to update
+         */
+        where?: SubjectClassTimeWhereInput
+        /**
+         * Limit how many SubjectClassTimes to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassTimeIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * SubjectClassTime upsert
+     */
+    export type SubjectClassTimeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassTime
+         */
+        select?: SubjectClassTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassTime
+         */
+        omit?: SubjectClassTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassTimeInclude<ExtArgs> | null
+        /**
+         * The filter to search for the SubjectClassTime to update in case it exists.
+         */
+        where: SubjectClassTimeWhereUniqueInput
+        /**
+         * In case the SubjectClassTime found by the `where` argument doesn't exist, create a new SubjectClassTime with this data.
+         */
+        create: XOR<SubjectClassTimeCreateInput, SubjectClassTimeUncheckedCreateInput>
+        /**
+         * In case the SubjectClassTime was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<SubjectClassTimeUpdateInput, SubjectClassTimeUncheckedUpdateInput>
+    };
+    /**
+     * SubjectClassTime delete
+     */
+    export type SubjectClassTimeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassTime
+         */
+        select?: SubjectClassTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassTime
+         */
+        omit?: SubjectClassTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassTimeInclude<ExtArgs> | null
+        /**
+         * Filter which SubjectClassTime to delete.
+         */
+        where: SubjectClassTimeWhereUniqueInput
+    };
+    /**
+     * SubjectClassTime deleteMany
+     */
+    export type SubjectClassTimeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which SubjectClassTimes to delete
+         */
+        where?: SubjectClassTimeWhereInput
+        /**
+         * Limit how many SubjectClassTimes to delete.
+         */
+        limit?: number
+    };
+    /**
+     * SubjectClassTime without action
+     */
+    export type SubjectClassTimeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClassTime
+         */
+        select?: SubjectClassTimeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClassTime
+         */
+        omit?: SubjectClassTimeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassTimeInclude<ExtArgs> | null
     };
     /**
      * Model ClassSchedule
@@ -285994,6 +287229,7 @@ export namespace Prisma {
     export type ClassRegisterSessionScalarFieldEnum = (typeof ClassRegisterSessionScalarFieldEnum)[keyof typeof ClassRegisterSessionScalarFieldEnum];
     export type ClassRegisterLogsScalarFieldEnum = (typeof ClassRegisterLogsScalarFieldEnum)[keyof typeof ClassRegisterLogsScalarFieldEnum];
     export type SubjectClassScalarFieldEnum = (typeof SubjectClassScalarFieldEnum)[keyof typeof SubjectClassScalarFieldEnum];
+    export type SubjectClassTimeScalarFieldEnum = (typeof SubjectClassTimeScalarFieldEnum)[keyof typeof SubjectClassTimeScalarFieldEnum];
     export type ClassScheduleScalarFieldEnum = (typeof ClassScheduleScalarFieldEnum)[keyof typeof ClassScheduleScalarFieldEnum];
     export type TrainingObjectTypeScalarFieldEnum = (typeof TrainingObjectTypeScalarFieldEnum)[keyof typeof TrainingObjectTypeScalarFieldEnum];
     export type PriorityObjectScalarFieldEnum = (typeof PriorityObjectScalarFieldEnum)[keyof typeof PriorityObjectScalarFieldEnum];
@@ -286219,6 +287455,7 @@ export namespace Prisma {
     export type ClassRegisterSessionOrderByRelevanceFieldEnum = (typeof ClassRegisterSessionOrderByRelevanceFieldEnum)[keyof typeof ClassRegisterSessionOrderByRelevanceFieldEnum];
     export type ClassRegisterLogsOrderByRelevanceFieldEnum = (typeof ClassRegisterLogsOrderByRelevanceFieldEnum)[keyof typeof ClassRegisterLogsOrderByRelevanceFieldEnum];
     export type SubjectClassOrderByRelevanceFieldEnum = (typeof SubjectClassOrderByRelevanceFieldEnum)[keyof typeof SubjectClassOrderByRelevanceFieldEnum];
+    export type SubjectClassTimeOrderByRelevanceFieldEnum = (typeof SubjectClassTimeOrderByRelevanceFieldEnum)[keyof typeof SubjectClassTimeOrderByRelevanceFieldEnum];
     export type ClassScheduleOrderByRelevanceFieldEnum = (typeof ClassScheduleOrderByRelevanceFieldEnum)[keyof typeof ClassScheduleOrderByRelevanceFieldEnum];
     export type TrainingObjectTypeOrderByRelevanceFieldEnum = (typeof TrainingObjectTypeOrderByRelevanceFieldEnum)[keyof typeof TrainingObjectTypeOrderByRelevanceFieldEnum];
     export type PriorityObjectOrderByRelevanceFieldEnum = (typeof PriorityObjectOrderByRelevanceFieldEnum)[keyof typeof PriorityObjectOrderByRelevanceFieldEnum];
@@ -290210,6 +291447,7 @@ export namespace Prisma {
         defenseRooms?: RoomListRelationFilter
         surveyObjectTypes?: SurveyObjectTypeListRelationFilter
         classRegisterLogs?: ClassRegisterLogsListRelationFilter
+        subjectClassTimes?: SubjectClassTimeListRelationFilter
     };
     export type SubjectClassOrderByWithRelationInput = {
         id?: SortOrder
@@ -290257,6 +291495,7 @@ export namespace Prisma {
         defenseRooms?: RoomOrderByRelationAggregateInput
         surveyObjectTypes?: SurveyObjectTypeOrderByRelationAggregateInput
         classRegisterLogs?: ClassRegisterLogsOrderByRelationAggregateInput
+        subjectClassTimes?: SubjectClassTimeOrderByRelationAggregateInput
         _relevance?: SubjectClassOrderByRelevanceInput
     };
     export type SubjectClassWhereUniqueInput = Prisma.AtLeast<{
@@ -290308,6 +291547,7 @@ export namespace Prisma {
         defenseRooms?: RoomListRelationFilter
         surveyObjectTypes?: SurveyObjectTypeListRelationFilter
         classRegisterLogs?: ClassRegisterLogsListRelationFilter
+        subjectClassTimes?: SubjectClassTimeListRelationFilter
     }, "id">;
     export type SubjectClassOrderByWithAggregationInput = {
         id?: SortOrder
@@ -290378,6 +291618,89 @@ export namespace Prisma {
         lecturerId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
         extraLecturerId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
         enterGradeLecturerId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
+    };
+    export type SubjectClassTimeWhereInput = {
+        AND?: SubjectClassTimeWhereInput | SubjectClassTimeWhereInput[]
+        OR?: SubjectClassTimeWhereInput[]
+        NOT?: SubjectClassTimeWhereInput | SubjectClassTimeWhereInput[]
+        id?: StringFilter<"SubjectClassTime"> | string
+        code?: StringNullableFilter<"SubjectClassTime"> | string | null
+        active?: BoolFilter<"SubjectClassTime"> | boolean
+        description?: StringNullableFilter<"SubjectClassTime"> | string | null
+        deletedAt?: DateTimeNullableFilter<"SubjectClassTime"> | Date | string | null
+        createdAt?: DateTimeFilter<"SubjectClassTime"> | Date | string
+        updatedAt?: DateTimeFilter<"SubjectClassTime"> | Date | string
+        subjectClassId?: StringFilter<"SubjectClassTime"> | string
+        dayOfWeek?: IntFilter<"SubjectClassTime"> | number
+        startPeriod?: IntFilter<"SubjectClassTime"> | number
+        endPeriod?: IntFilter<"SubjectClassTime"> | number
+        subjectClass?: XOR<SubjectClassScalarRelationFilter, SubjectClassWhereInput>
+    };
+    export type SubjectClassTimeOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        subjectClassId?: SortOrder
+        dayOfWeek?: SortOrder
+        startPeriod?: SortOrder
+        endPeriod?: SortOrder
+        subjectClass?: SubjectClassOrderByWithRelationInput
+        _relevance?: SubjectClassTimeOrderByRelevanceInput
+    };
+    export type SubjectClassTimeWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: SubjectClassTimeWhereInput | SubjectClassTimeWhereInput[]
+        OR?: SubjectClassTimeWhereInput[]
+        NOT?: SubjectClassTimeWhereInput | SubjectClassTimeWhereInput[]
+        active?: BoolFilter<"SubjectClassTime"> | boolean
+        description?: StringNullableFilter<"SubjectClassTime"> | string | null
+        deletedAt?: DateTimeNullableFilter<"SubjectClassTime"> | Date | string | null
+        createdAt?: DateTimeFilter<"SubjectClassTime"> | Date | string
+        updatedAt?: DateTimeFilter<"SubjectClassTime"> | Date | string
+        subjectClassId?: StringFilter<"SubjectClassTime"> | string
+        dayOfWeek?: IntFilter<"SubjectClassTime"> | number
+        startPeriod?: IntFilter<"SubjectClassTime"> | number
+        endPeriod?: IntFilter<"SubjectClassTime"> | number
+        subjectClass?: XOR<SubjectClassScalarRelationFilter, SubjectClassWhereInput>
+    }, "id" | "code">;
+    export type SubjectClassTimeOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        subjectClassId?: SortOrder
+        dayOfWeek?: SortOrder
+        startPeriod?: SortOrder
+        endPeriod?: SortOrder
+        _count?: SubjectClassTimeCountOrderByAggregateInput
+        _avg?: SubjectClassTimeAvgOrderByAggregateInput
+        _max?: SubjectClassTimeMaxOrderByAggregateInput
+        _min?: SubjectClassTimeMinOrderByAggregateInput
+        _sum?: SubjectClassTimeSumOrderByAggregateInput
+    };
+    export type SubjectClassTimeScalarWhereWithAggregatesInput = {
+        AND?: SubjectClassTimeScalarWhereWithAggregatesInput | SubjectClassTimeScalarWhereWithAggregatesInput[]
+        OR?: SubjectClassTimeScalarWhereWithAggregatesInput[]
+        NOT?: SubjectClassTimeScalarWhereWithAggregatesInput | SubjectClassTimeScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"SubjectClassTime"> | string
+        code?: StringNullableWithAggregatesFilter<"SubjectClassTime"> | string | null
+        active?: BoolWithAggregatesFilter<"SubjectClassTime"> | boolean
+        description?: StringNullableWithAggregatesFilter<"SubjectClassTime"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"SubjectClassTime"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"SubjectClassTime"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"SubjectClassTime"> | Date | string
+        subjectClassId?: StringWithAggregatesFilter<"SubjectClassTime"> | string
+        dayOfWeek?: IntWithAggregatesFilter<"SubjectClassTime"> | number
+        startPeriod?: IntWithAggregatesFilter<"SubjectClassTime"> | number
+        endPeriod?: IntWithAggregatesFilter<"SubjectClassTime"> | number
     };
     export type ClassScheduleWhereInput = {
         AND?: ClassScheduleWhereInput | ClassScheduleWhereInput[]
@@ -312616,6 +313939,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateInput = {
         id?: string
@@ -312655,6 +313979,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -312694,6 +314019,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -312733,6 +314059,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassCreateManyInput = {
         id?: string
@@ -312818,6 +314145,96 @@ export namespace Prisma {
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type SubjectClassTimeCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        dayOfWeek: number
+        startPeriod: number
+        endPeriod: number
+        subjectClass: SubjectClassCreateNestedOneWithoutSubjectClassTimesInput
+    };
+    export type SubjectClassTimeUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        subjectClassId: string
+        dayOfWeek: number
+        startPeriod: number
+        endPeriod: number
+    };
+    export type SubjectClassTimeUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        dayOfWeek?: IntFieldUpdateOperationsInput | number
+        startPeriod?: IntFieldUpdateOperationsInput | number
+        endPeriod?: IntFieldUpdateOperationsInput | number
+        subjectClass?: SubjectClassUpdateOneRequiredWithoutSubjectClassTimesNestedInput
+    };
+    export type SubjectClassTimeUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        subjectClassId?: StringFieldUpdateOperationsInput | string
+        dayOfWeek?: IntFieldUpdateOperationsInput | number
+        startPeriod?: IntFieldUpdateOperationsInput | number
+        endPeriod?: IntFieldUpdateOperationsInput | number
+    };
+    export type SubjectClassTimeCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        subjectClassId: string
+        dayOfWeek: number
+        startPeriod: number
+        endPeriod: number
+    };
+    export type SubjectClassTimeUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        dayOfWeek?: IntFieldUpdateOperationsInput | number
+        startPeriod?: IntFieldUpdateOperationsInput | number
+        endPeriod?: IntFieldUpdateOperationsInput | number
+    };
+    export type SubjectClassTimeUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        subjectClassId?: StringFieldUpdateOperationsInput | string
+        dayOfWeek?: IntFieldUpdateOperationsInput | number
+        startPeriod?: IntFieldUpdateOperationsInput | number
+        endPeriod?: IntFieldUpdateOperationsInput | number
     };
     export type ClassScheduleCreateInput = {
         id?: string
@@ -336600,6 +338017,11 @@ export namespace Prisma {
         some?: ExpertProfileWhereInput
         none?: ExpertProfileWhereInput
     };
+    export type SubjectClassTimeListRelationFilter = {
+        every?: SubjectClassTimeWhereInput
+        some?: SubjectClassTimeWhereInput
+        none?: SubjectClassTimeWhereInput
+    };
     export type ClassScheduleOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -336607,6 +338029,9 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type ExpertProfileOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type SubjectClassTimeOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type SubjectClassOrderByRelevanceInput = {
@@ -336730,6 +338155,60 @@ export namespace Prisma {
         _count?: NestedIntNullableFilter<$PrismaModel>
         _min?: NestedEnumExamTypeNullableFilter<$PrismaModel>
         _max?: NestedEnumExamTypeNullableFilter<$PrismaModel>
+    };
+    export type SubjectClassTimeOrderByRelevanceInput = {
+        fields: SubjectClassTimeOrderByRelevanceFieldEnum | SubjectClassTimeOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type SubjectClassTimeCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        subjectClassId?: SortOrder
+        dayOfWeek?: SortOrder
+        startPeriod?: SortOrder
+        endPeriod?: SortOrder
+    };
+    export type SubjectClassTimeAvgOrderByAggregateInput = {
+        dayOfWeek?: SortOrder
+        startPeriod?: SortOrder
+        endPeriod?: SortOrder
+    };
+    export type SubjectClassTimeMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        subjectClassId?: SortOrder
+        dayOfWeek?: SortOrder
+        startPeriod?: SortOrder
+        endPeriod?: SortOrder
+    };
+    export type SubjectClassTimeMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        subjectClassId?: SortOrder
+        dayOfWeek?: SortOrder
+        startPeriod?: SortOrder
+        endPeriod?: SortOrder
+    };
+    export type SubjectClassTimeSumOrderByAggregateInput = {
+        dayOfWeek?: SortOrder
+        startPeriod?: SortOrder
+        endPeriod?: SortOrder
     };
     export type EnumPeriodTypeFilter<$PrismaModel = never> = {
         equals?: $Enums.PeriodType | EnumPeriodTypeFieldRefInput<$PrismaModel>
@@ -352328,6 +353807,12 @@ export namespace Prisma {
         createMany?: ClassRegisterLogsCreateManySubjectClassInputEnvelope
         connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
     };
+    export type SubjectClassTimeCreateNestedManyWithoutSubjectClassInput = {
+        create?: XOR<SubjectClassTimeCreateWithoutSubjectClassInput, SubjectClassTimeUncheckedCreateWithoutSubjectClassInput> | SubjectClassTimeCreateWithoutSubjectClassInput[] | SubjectClassTimeUncheckedCreateWithoutSubjectClassInput[]
+        connectOrCreate?: SubjectClassTimeCreateOrConnectWithoutSubjectClassInput | SubjectClassTimeCreateOrConnectWithoutSubjectClassInput[]
+        createMany?: SubjectClassTimeCreateManySubjectClassInputEnvelope
+        connect?: SubjectClassTimeWhereUniqueInput | SubjectClassTimeWhereUniqueInput[]
+    };
     export type StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput = {
         create?: XOR<StudentSubjectScoreCreateWithoutSubjectClassInput, StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput> | StudentSubjectScoreCreateWithoutSubjectClassInput[] | StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput[]
         connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput | StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput[]
@@ -352371,6 +353856,12 @@ export namespace Prisma {
         connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutSubjectClassInput | ClassRegisterLogsCreateOrConnectWithoutSubjectClassInput[]
         createMany?: ClassRegisterLogsCreateManySubjectClassInputEnvelope
         connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    };
+    export type SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput = {
+        create?: XOR<SubjectClassTimeCreateWithoutSubjectClassInput, SubjectClassTimeUncheckedCreateWithoutSubjectClassInput> | SubjectClassTimeCreateWithoutSubjectClassInput[] | SubjectClassTimeUncheckedCreateWithoutSubjectClassInput[]
+        connectOrCreate?: SubjectClassTimeCreateOrConnectWithoutSubjectClassInput | SubjectClassTimeCreateOrConnectWithoutSubjectClassInput[]
+        createMany?: SubjectClassTimeCreateManySubjectClassInputEnvelope
+        connect?: SubjectClassTimeWhereUniqueInput | SubjectClassTimeWhereUniqueInput[]
     };
     export type EnumSubjectClassScheduleFieldUpdateOperationsInput = {
         set?: $Enums.SubjectClassSchedule
@@ -352544,6 +354035,19 @@ export namespace Prisma {
         updateMany?: ClassRegisterLogsUpdateManyWithWhereWithoutSubjectClassInput | ClassRegisterLogsUpdateManyWithWhereWithoutSubjectClassInput[]
         deleteMany?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
     };
+    export type SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput = {
+        create?: XOR<SubjectClassTimeCreateWithoutSubjectClassInput, SubjectClassTimeUncheckedCreateWithoutSubjectClassInput> | SubjectClassTimeCreateWithoutSubjectClassInput[] | SubjectClassTimeUncheckedCreateWithoutSubjectClassInput[]
+        connectOrCreate?: SubjectClassTimeCreateOrConnectWithoutSubjectClassInput | SubjectClassTimeCreateOrConnectWithoutSubjectClassInput[]
+        upsert?: SubjectClassTimeUpsertWithWhereUniqueWithoutSubjectClassInput | SubjectClassTimeUpsertWithWhereUniqueWithoutSubjectClassInput[]
+        createMany?: SubjectClassTimeCreateManySubjectClassInputEnvelope
+        set?: SubjectClassTimeWhereUniqueInput | SubjectClassTimeWhereUniqueInput[]
+        disconnect?: SubjectClassTimeWhereUniqueInput | SubjectClassTimeWhereUniqueInput[]
+        delete?: SubjectClassTimeWhereUniqueInput | SubjectClassTimeWhereUniqueInput[]
+        connect?: SubjectClassTimeWhereUniqueInput | SubjectClassTimeWhereUniqueInput[]
+        update?: SubjectClassTimeUpdateWithWhereUniqueWithoutSubjectClassInput | SubjectClassTimeUpdateWithWhereUniqueWithoutSubjectClassInput[]
+        updateMany?: SubjectClassTimeUpdateManyWithWhereWithoutSubjectClassInput | SubjectClassTimeUpdateManyWithWhereWithoutSubjectClassInput[]
+        deleteMany?: SubjectClassTimeScalarWhereInput | SubjectClassTimeScalarWhereInput[]
+    };
     export type StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput = {
         create?: XOR<StudentSubjectScoreCreateWithoutSubjectClassInput, StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput> | StudentSubjectScoreCreateWithoutSubjectClassInput[] | StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput[]
         connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput | StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput[]
@@ -352643,6 +354147,31 @@ export namespace Prisma {
         update?: ClassRegisterLogsUpdateWithWhereUniqueWithoutSubjectClassInput | ClassRegisterLogsUpdateWithWhereUniqueWithoutSubjectClassInput[]
         updateMany?: ClassRegisterLogsUpdateManyWithWhereWithoutSubjectClassInput | ClassRegisterLogsUpdateManyWithWhereWithoutSubjectClassInput[]
         deleteMany?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
+    };
+    export type SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput = {
+        create?: XOR<SubjectClassTimeCreateWithoutSubjectClassInput, SubjectClassTimeUncheckedCreateWithoutSubjectClassInput> | SubjectClassTimeCreateWithoutSubjectClassInput[] | SubjectClassTimeUncheckedCreateWithoutSubjectClassInput[]
+        connectOrCreate?: SubjectClassTimeCreateOrConnectWithoutSubjectClassInput | SubjectClassTimeCreateOrConnectWithoutSubjectClassInput[]
+        upsert?: SubjectClassTimeUpsertWithWhereUniqueWithoutSubjectClassInput | SubjectClassTimeUpsertWithWhereUniqueWithoutSubjectClassInput[]
+        createMany?: SubjectClassTimeCreateManySubjectClassInputEnvelope
+        set?: SubjectClassTimeWhereUniqueInput | SubjectClassTimeWhereUniqueInput[]
+        disconnect?: SubjectClassTimeWhereUniqueInput | SubjectClassTimeWhereUniqueInput[]
+        delete?: SubjectClassTimeWhereUniqueInput | SubjectClassTimeWhereUniqueInput[]
+        connect?: SubjectClassTimeWhereUniqueInput | SubjectClassTimeWhereUniqueInput[]
+        update?: SubjectClassTimeUpdateWithWhereUniqueWithoutSubjectClassInput | SubjectClassTimeUpdateWithWhereUniqueWithoutSubjectClassInput[]
+        updateMany?: SubjectClassTimeUpdateManyWithWhereWithoutSubjectClassInput | SubjectClassTimeUpdateManyWithWhereWithoutSubjectClassInput[]
+        deleteMany?: SubjectClassTimeScalarWhereInput | SubjectClassTimeScalarWhereInput[]
+    };
+    export type SubjectClassCreateNestedOneWithoutSubjectClassTimesInput = {
+        create?: XOR<SubjectClassCreateWithoutSubjectClassTimesInput, SubjectClassUncheckedCreateWithoutSubjectClassTimesInput>
+        connectOrCreate?: SubjectClassCreateOrConnectWithoutSubjectClassTimesInput
+        connect?: SubjectClassWhereUniqueInput
+    };
+    export type SubjectClassUpdateOneRequiredWithoutSubjectClassTimesNestedInput = {
+        create?: XOR<SubjectClassCreateWithoutSubjectClassTimesInput, SubjectClassUncheckedCreateWithoutSubjectClassTimesInput>
+        connectOrCreate?: SubjectClassCreateOrConnectWithoutSubjectClassTimesInput
+        upsert?: SubjectClassUpsertWithoutSubjectClassTimesInput
+        connect?: SubjectClassWhereUniqueInput
+        update?: XOR<XOR<SubjectClassUpdateToOneWithWhereWithoutSubjectClassTimesInput, SubjectClassUpdateWithoutSubjectClassTimesInput>, SubjectClassUncheckedUpdateWithoutSubjectClassTimesInput>
     };
     export type SubjectClassCreateNestedOneWithoutClassSchedulesInput = {
         create?: XOR<SubjectClassCreateWithoutClassSchedulesInput, SubjectClassUncheckedCreateWithoutClassSchedulesInput>
@@ -368837,6 +370366,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutExamInput = {
         id?: string
@@ -368875,6 +370405,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutExamInput = {
         where: SubjectClassWhereUniqueInput
@@ -370601,6 +372132,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutSubjectClassStudentInput = {
         id?: string
@@ -370639,6 +372171,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutSubjectClassStudentInput = {
         where: SubjectClassWhereUniqueInput
@@ -370992,6 +372525,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutSubjectClassStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -371030,6 +372564,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectVersionUpsertWithoutStudentSubjectScoreInput = {
         update: XOR<SubjectVersionUpdateWithoutStudentSubjectScoreInput, SubjectVersionUncheckedUpdateWithoutStudentSubjectScoreInput>
@@ -372355,6 +373890,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutSemesterInput = {
         id?: string
@@ -372393,6 +373929,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutSemesterInput = {
         where: SubjectClassWhereUniqueInput
@@ -374930,6 +376467,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutFixedClassesInput = {
         id?: string
@@ -374968,6 +376506,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutFixedClassesInput = {
         where: SubjectClassWhereUniqueInput
@@ -377731,6 +379270,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutSubjectInput = {
         id?: string
@@ -377769,6 +379309,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutSubjectInput = {
         where: SubjectClassWhereUniqueInput
@@ -379124,6 +380665,7 @@ export namespace Prisma {
         expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutClassRegisterLogsInput = {
         id?: string
@@ -379162,6 +380704,7 @@ export namespace Prisma {
         expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutClassRegisterLogsInput = {
         where: SubjectClassWhereUniqueInput
@@ -379362,6 +380905,7 @@ export namespace Prisma {
         expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutClassRegisterLogsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -379400,6 +380944,7 @@ export namespace Prisma {
         expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type StudentUpsertWithoutClassRegisterLogsInput = {
         update: XOR<StudentUpdateWithoutClassRegisterLogsInput, StudentUncheckedUpdateWithoutClassRegisterLogsInput>
@@ -380390,6 +381935,38 @@ export namespace Prisma {
         data: ClassRegisterLogsCreateManySubjectClassInput | ClassRegisterLogsCreateManySubjectClassInput[]
         skipDuplicates?: boolean
     };
+    export type SubjectClassTimeCreateWithoutSubjectClassInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        dayOfWeek: number
+        startPeriod: number
+        endPeriod: number
+    };
+    export type SubjectClassTimeUncheckedCreateWithoutSubjectClassInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        dayOfWeek: number
+        startPeriod: number
+        endPeriod: number
+    };
+    export type SubjectClassTimeCreateOrConnectWithoutSubjectClassInput = {
+        where: SubjectClassTimeWhereUniqueInput
+        create: XOR<SubjectClassTimeCreateWithoutSubjectClassInput, SubjectClassTimeUncheckedCreateWithoutSubjectClassInput>
+    };
+    export type SubjectClassTimeCreateManySubjectClassInputEnvelope = {
+        data: SubjectClassTimeCreateManySubjectClassInput | SubjectClassTimeCreateManySubjectClassInput[]
+        skipDuplicates?: boolean
+    };
     export type SubjectVersionUpsertWithoutSubjectClassInput = {
         update: XOR<SubjectVersionUpdateWithoutSubjectClassInput, SubjectVersionUncheckedUpdateWithoutSubjectClassInput>
         create: XOR<SubjectVersionCreateWithoutSubjectClassInput, SubjectVersionUncheckedCreateWithoutSubjectClassInput>
@@ -381072,6 +382649,204 @@ export namespace Prisma {
         where: ClassRegisterLogsScalarWhereInput
         data: XOR<ClassRegisterLogsUpdateManyMutationInput, ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassInput>
     };
+    export type SubjectClassTimeUpsertWithWhereUniqueWithoutSubjectClassInput = {
+        where: SubjectClassTimeWhereUniqueInput
+        update: XOR<SubjectClassTimeUpdateWithoutSubjectClassInput, SubjectClassTimeUncheckedUpdateWithoutSubjectClassInput>
+        create: XOR<SubjectClassTimeCreateWithoutSubjectClassInput, SubjectClassTimeUncheckedCreateWithoutSubjectClassInput>
+    };
+    export type SubjectClassTimeUpdateWithWhereUniqueWithoutSubjectClassInput = {
+        where: SubjectClassTimeWhereUniqueInput
+        data: XOR<SubjectClassTimeUpdateWithoutSubjectClassInput, SubjectClassTimeUncheckedUpdateWithoutSubjectClassInput>
+    };
+    export type SubjectClassTimeUpdateManyWithWhereWithoutSubjectClassInput = {
+        where: SubjectClassTimeScalarWhereInput
+        data: XOR<SubjectClassTimeUpdateManyMutationInput, SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassInput>
+    };
+    export type SubjectClassTimeScalarWhereInput = {
+        AND?: SubjectClassTimeScalarWhereInput | SubjectClassTimeScalarWhereInput[]
+        OR?: SubjectClassTimeScalarWhereInput[]
+        NOT?: SubjectClassTimeScalarWhereInput | SubjectClassTimeScalarWhereInput[]
+        id?: StringFilter<"SubjectClassTime"> | string
+        code?: StringNullableFilter<"SubjectClassTime"> | string | null
+        active?: BoolFilter<"SubjectClassTime"> | boolean
+        description?: StringNullableFilter<"SubjectClassTime"> | string | null
+        deletedAt?: DateTimeNullableFilter<"SubjectClassTime"> | Date | string | null
+        createdAt?: DateTimeFilter<"SubjectClassTime"> | Date | string
+        updatedAt?: DateTimeFilter<"SubjectClassTime"> | Date | string
+        subjectClassId?: StringFilter<"SubjectClassTime"> | string
+        dayOfWeek?: IntFilter<"SubjectClassTime"> | number
+        startPeriod?: IntFilter<"SubjectClassTime"> | number
+        endPeriod?: IntFilter<"SubjectClassTime"> | number
+    };
+    export type SubjectClassCreateWithoutSubjectClassTimesInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        code: string
+        name: string
+        startDate: Date | string
+        endDate?: Date | string | null
+        schedule: $Enums.SubjectClassSchedule
+        maxStudent: number
+        cancelled?: boolean
+        lecturerAssignmentDeadline?: Date | string | null
+        examDate?: Date | string | null
+        scoreDeadline?: Date | string | null
+        examScoreDeadline?: Date | string | null
+        examType?: $Enums.ExamType | null
+        isLockScore?: boolean
+        isLockExamScore?: boolean
+        issuedScoreAt?: Date | string | null
+        subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutSubjectClassInput
+        semester: SemesterCreateNestedOneWithoutSubjectClassesInput
+        exam?: ExamCreateNestedOneWithoutSubjectClassInput
+        room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
+        extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
+        enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
+        subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutSubjectClassInput
+        fixedClasses?: FixedClassCreateNestedManyWithoutSubjectClassesInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutSubjectClassInput
+        thesisProjects?: ThesisProjectCreateNestedManyWithoutSubjectClassInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
+        defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
+        surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+    };
+    export type SubjectClassUncheckedCreateWithoutSubjectClassTimesInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        code: string
+        name: string
+        startDate: Date | string
+        endDate?: Date | string | null
+        subjectId: string
+        schedule: $Enums.SubjectClassSchedule
+        maxStudent: number
+        trainingObjectTypeId: string
+        semesterId: string
+        cancelled?: boolean
+        lecturerAssignmentDeadline?: Date | string | null
+        examDate?: Date | string | null
+        scoreDeadline?: Date | string | null
+        examScoreDeadline?: Date | string | null
+        examType?: $Enums.ExamType | null
+        examId?: string | null
+        isLockScore?: boolean
+        isLockExamScore?: boolean
+        issuedScoreAt?: Date | string | null
+        roomId?: string | null
+        lecturerId?: string | null
+        extraLecturerId?: string | null
+        enterGradeLecturerId?: string | null
+        subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput
+        fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSubjectClassesInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutSubjectClassInput
+        thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSubjectClassInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
+        defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+    };
+    export type SubjectClassCreateOrConnectWithoutSubjectClassTimesInput = {
+        where: SubjectClassWhereUniqueInput
+        create: XOR<SubjectClassCreateWithoutSubjectClassTimesInput, SubjectClassUncheckedCreateWithoutSubjectClassTimesInput>
+    };
+    export type SubjectClassUpsertWithoutSubjectClassTimesInput = {
+        update: XOR<SubjectClassUpdateWithoutSubjectClassTimesInput, SubjectClassUncheckedUpdateWithoutSubjectClassTimesInput>
+        create: XOR<SubjectClassCreateWithoutSubjectClassTimesInput, SubjectClassUncheckedCreateWithoutSubjectClassTimesInput>
+        where?: SubjectClassWhereInput
+    };
+    export type SubjectClassUpdateToOneWithWhereWithoutSubjectClassTimesInput = {
+        where?: SubjectClassWhereInput
+        data: XOR<SubjectClassUpdateWithoutSubjectClassTimesInput, SubjectClassUncheckedUpdateWithoutSubjectClassTimesInput>
+    };
+    export type SubjectClassUpdateWithoutSubjectClassTimesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+        maxStudent?: IntFieldUpdateOperationsInput | number
+        cancelled?: BoolFieldUpdateOperationsInput | boolean
+        lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        isLockScore?: BoolFieldUpdateOperationsInput | boolean
+        isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+        issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutSubjectClassNestedInput
+        semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
+        exam?: ExamUpdateOneWithoutSubjectClassNestedInput
+        room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
+        extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
+        enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
+        subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutSubjectClassNestedInput
+        fixedClasses?: FixedClassUpdateManyWithoutSubjectClassesNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutSubjectClassNestedInput
+        thesisProjects?: ThesisProjectUpdateManyWithoutSubjectClassNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
+        defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+    };
+    export type SubjectClassUncheckedUpdateWithoutSubjectClassTimesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        subjectId?: StringFieldUpdateOperationsInput | string
+        schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+        maxStudent?: IntFieldUpdateOperationsInput | number
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        semesterId?: StringFieldUpdateOperationsInput | string
+        cancelled?: BoolFieldUpdateOperationsInput | boolean
+        lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        isLockScore?: BoolFieldUpdateOperationsInput | boolean
+        isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+        issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput
+        fixedClasses?: FixedClassUncheckedUpdateManyWithoutSubjectClassesNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutSubjectClassNestedInput
+        thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSubjectClassNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
+        defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+    };
     export type SubjectClassCreateWithoutClassSchedulesInput = {
         id?: string
         active?: boolean
@@ -381109,6 +382884,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutClassSchedulesInput = {
         id?: string
@@ -381147,6 +382923,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutClassSchedulesInput = {
         where: SubjectClassWhereUniqueInput
@@ -381454,6 +383231,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -381492,6 +383270,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type RoomUpsertWithoutClassSchedulesInput = {
         update: XOR<RoomUpdateWithoutClassSchedulesInput, RoomUncheckedUpdateWithoutClassSchedulesInput>
@@ -382177,6 +383956,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutTrainingObjectTypeInput = {
         id?: string
@@ -382215,6 +383995,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutTrainingObjectTypeInput = {
         where: SubjectClassWhereUniqueInput
@@ -383439,6 +385220,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutRoomInput = {
         id?: string
@@ -383477,6 +385259,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutRoomInput = {
         where: SubjectClassWhereUniqueInput
@@ -383523,6 +385306,7 @@ export namespace Prisma {
         expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutDefenseRoomsInput = {
         id?: string
@@ -383561,6 +385345,7 @@ export namespace Prisma {
         expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutDefenseRoomsInput = {
         where: SubjectClassWhereUniqueInput
@@ -425091,6 +426876,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutMainLecturerInput = {
         id?: string
@@ -425129,6 +426915,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutMainLecturerInput = {
         where: SubjectClassWhereUniqueInput
@@ -425175,6 +426962,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutExtraLecturerInput = {
         id?: string
@@ -425213,6 +427001,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutExtraLecturerInput = {
         where: SubjectClassWhereUniqueInput
@@ -425259,6 +427048,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutEnterGradeLecturerInput = {
         id?: string
@@ -425297,6 +427087,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutEnterGradeLecturerInput = {
         where: SubjectClassWhereUniqueInput
@@ -428042,6 +429833,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutThesisProjectsInput = {
         id?: string
@@ -428080,6 +429872,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutThesisProjectsInput = {
         where: SubjectClassWhereUniqueInput
@@ -428601,6 +430394,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutThesisProjectsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -428639,6 +430433,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type ExpertProfileUpsertWithoutSupervisedThesesInput = {
         update: XOR<ExpertProfileUpdateWithoutSupervisedThesesInput, ExpertProfileUncheckedUpdateWithoutSupervisedThesesInput>
@@ -430191,6 +431986,7 @@ export namespace Prisma {
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutExpertProfileInput = {
         id?: string
@@ -430229,6 +432025,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutExpertProfileInput = {
         where: SubjectClassWhereUniqueInput
@@ -443027,6 +444824,7 @@ export namespace Prisma {
         expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
         defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassUncheckedCreateWithoutSurveyObjectTypesInput = {
         id?: string
@@ -443065,6 +444863,7 @@ export namespace Prisma {
         expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
         defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
     };
     export type SubjectClassCreateOrConnectWithoutSurveyObjectTypesInput = {
         where: SubjectClassWhereUniqueInput
@@ -450556,6 +452355,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -450594,6 +452394,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateManyWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -451919,6 +453720,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -451957,6 +453759,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateManyWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -453271,6 +455074,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutFixedClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -453309,6 +455113,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateManyWithoutFixedClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -454993,6 +456798,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -455031,6 +456837,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateManyWithoutSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -455530,6 +457337,18 @@ export namespace Prisma {
         studentId: string
         status?: $Enums.ClassRegisterStatus
         reason?: string | null
+    };
+    export type SubjectClassTimeCreateManySubjectClassInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        dayOfWeek: number
+        startPeriod: number
+        endPeriod: number
     };
     export type StudentSubjectScoreUpdateWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -456059,6 +457878,42 @@ export namespace Prisma {
         studentId?: StringFieldUpdateOperationsInput | string
         status?: EnumClassRegisterStatusFieldUpdateOperationsInput | $Enums.ClassRegisterStatus
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type SubjectClassTimeUpdateWithoutSubjectClassInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        dayOfWeek?: IntFieldUpdateOperationsInput | number
+        startPeriod?: IntFieldUpdateOperationsInput | number
+        endPeriod?: IntFieldUpdateOperationsInput | number
+    };
+    export type SubjectClassTimeUncheckedUpdateWithoutSubjectClassInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        dayOfWeek?: IntFieldUpdateOperationsInput | number
+        startPeriod?: IntFieldUpdateOperationsInput | number
+        endPeriod?: IntFieldUpdateOperationsInput | number
+    };
+    export type SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        dayOfWeek?: IntFieldUpdateOperationsInput | number
+        startPeriod?: IntFieldUpdateOperationsInput | number
+        endPeriod?: IntFieldUpdateOperationsInput | number
     };
     export type TrainingCourseCreateManyTrainingObjectTypeInput = {
         id?: string
@@ -456703,6 +458558,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -456741,6 +458597,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -458092,6 +459949,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -458130,6 +459988,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateManyWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -458198,6 +460057,7 @@ export namespace Prisma {
         expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutDefenseRoomsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -458236,6 +460096,7 @@ export namespace Prisma {
         expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateManyWithoutDefenseRoomsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -481990,6 +483851,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutMainLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -482028,6 +483890,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateManyWithoutMainLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -482096,6 +483959,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutExtraLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -482134,6 +483998,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateManyWithoutExtraLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -482202,6 +484067,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutEnterGradeLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -482240,6 +484106,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -483637,6 +485504,7 @@ export namespace Prisma {
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutExpertProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -483675,6 +485543,7 @@ export namespace Prisma {
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateManyWithoutExpertProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -486787,6 +488656,7 @@ export namespace Prisma {
         expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
         defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateWithoutSurveyObjectTypesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -486825,6 +488695,7 @@ export namespace Prisma {
         expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
         defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
     };
     export type SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesInput = {
         id?: StringFieldUpdateOperationsInput | string

@@ -42,7 +42,7 @@ const PutDotRenLuyen = () => {
             showSpinner()
 
             const data = {
-                name: output.name,
+                name: output.name.trim(),
                 time: output.time,
                 semesterId: output.semesterId,
                 trainingObjectTypeId: output.trainingObjectTypeId,

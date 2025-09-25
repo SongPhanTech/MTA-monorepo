@@ -32,7 +32,7 @@ const PutDifficulty = () => {
             showSpinner()
             const data = {
                 code: output.code,
-                name: output.name,
+                name: output.name.trim(),
                 level: output.level,
                 description: output.description,
             }

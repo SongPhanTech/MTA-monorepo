@@ -34,7 +34,7 @@ const PutEvaluationSecretarYCouncil = () => {
             showSpinner()
             const data = {
                 code: output.code,
-                name: output.name,
+                name: output.name.trim(),
                 description: output.description,
                 periodId: output?.periodId,
             }

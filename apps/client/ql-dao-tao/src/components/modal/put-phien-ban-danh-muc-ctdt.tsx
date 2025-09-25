@@ -70,7 +70,7 @@ const PutCurriculumVersion = () => {
             const baseData = {
                 curriculumId: input?.curriculumId || '',
                 code: output.code,
-                name: output.name,
+                name: output.name.trim(),
                 shortName: output?.shortName,
                 englishName: output.englishName,
                 trainingLanguage: output.trainingLanguage,

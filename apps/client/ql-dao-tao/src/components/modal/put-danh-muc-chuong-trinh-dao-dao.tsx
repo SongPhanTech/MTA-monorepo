@@ -52,7 +52,7 @@ const PutCurriculum = () => {
             showSpinner()
             const baseData = {
                 code: output.code,
-                name: output.name,
+                name: output.name.trim(),
                 englishName: output.englishName,
                 description: output.description,
                 trainingMajorId: output.trainingMajorId,

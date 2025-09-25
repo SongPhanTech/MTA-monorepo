@@ -28,7 +28,7 @@ const PutStandardCatalog = () => {
             showSpinner()
             const data = {
                 order: output.order,
-                name: output.name,
+                name: output.name.trim(),
             }
             if (input?.id) {
                 await updateStandardCatalog({

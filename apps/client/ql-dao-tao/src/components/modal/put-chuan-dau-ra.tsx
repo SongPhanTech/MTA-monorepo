@@ -57,6 +57,7 @@ const PutChuanDauRaModal = () => {
             maskClosable={true}
             title={'Cập nhật chuẩn đầu ra'}
             layout="horizontal"
+            rowWrap={false}
         >
             <FormItem
                 form={form}

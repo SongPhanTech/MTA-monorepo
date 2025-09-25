@@ -18,7 +18,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
     const [previewData, setPreviewData] = useState<any[]>([])
     const [errorData, setErrorData] = useState<any[]>([])
     const [file, setFile] = useState<File | null>(null)
-    const [disbaledButton, setDisbaledButton] = useState<boolean>(true)
+    const [disabledButton, setDisabledButton] = useState<boolean>(true)
     const [data, setData] = useState<{
         trainingObjectType: string | undefined
         trainingCourse: string | undefined
@@ -43,7 +43,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
             setPreviewData(students)
             setData({ trainingObjectType, trainingCourse })
             if (errors.length === 0) {
-                setDisbaledButton(false)
+                setDisabledButton(false)
             }
             setErrorData(errors)
             console.log(errors)
@@ -74,9 +74,9 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
             if (!file) return
             const res = await importHeQuanSu({ file: file, timeout: 30 })
             if (res?.status === 200) {
-                message.success(res?.data?.message || 'Nhâp dữ liệu sinh viên từ file thành công')
+                message.success(res?.data?.message || 'Nhập dữ liệu sinh viên từ file thành công')
             } else {
-                message.error(res?.data?.message || 'Nhâp dữ liệu sinh viên từ file thất bại')
+                message.error(res?.data?.message || 'Nhập dữ liệu sinh viên từ file thất bại')
             }
         } catch (error: any) {
             if (error?.info?.message) {
@@ -103,7 +103,7 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                     key="confirm"
                     type="primary"
                     onClick={handleConfirm}
-                    disabled={disbaledButton}
+                    disabled={disabledButton}
                 >
                     Xác nhận
                 </Button>,

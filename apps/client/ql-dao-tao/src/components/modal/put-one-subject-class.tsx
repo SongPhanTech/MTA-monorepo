@@ -19,17 +19,23 @@ import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import Table from '@components/commons/table'
 import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
+import { PERIOD } from '@workspace/ui'
 
 dayjs.locale('vi')
 
 export type PutOneSubjectClassType = SubjectClass & {
     trainingLocationId: string
+    dayOfWeeks?: number[]
+    times?: { dayOfWeek: number; startPeriod: number; endPeriod: number }[]
 }
 
 const PutOneSubjectClassModal = () => {
     const [form] = Form.useForm<PutOneSubjectClassType>()
+
+    const times = Form.useWatch('times', form) ?? []
     const {
         isOpen,
         onClose,
@@ -47,8 +53,14 @@ const PutOneSubjectClassModal = () => {
     // const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
     async function onOk(output?: PutOneSubjectClassType) {
         if (!output) return
+        console.log(output.times)
+
         try {
             showSpinner()
+            await updateSubjectClass({
+                data: { subjectClassTimes: { deleteMany: {} } },
+                where: { id },
+            })
             await updateSubjectClass({
                 data: {
                     startDate: output.startDate,
@@ -66,6 +78,13 @@ const PutOneSubjectClassModal = () => {
                     scoreDeadline: output?.scoreDeadline,
                     examScoreDeadline: output.examScoreDeadline,
                     lecturerAssignmentDeadline: output.lecturerAssignmentDeadline,
+                    subjectClassTimes: {
+                        create: output.times?.map((time) => ({
+                            dayOfWeek: time.dayOfWeek,
+                            startPeriod: Number(time.startPeriod),
+                            endPeriod: Number(time.endPeriod),
+                        })),
+                    },
                 },
                 where: {
                     id,
@@ -94,8 +113,7 @@ const PutOneSubjectClassModal = () => {
         })
     }
 
-    const { data: trainingLocationData = [], refetch: refetchTrainingLocationData } =
-        useFindManyTrainingLocation()
+    const { data: trainingLocationData = [] } = useFindManyTrainingLocation()
 
     const { data: subjectVersionData = [] } = useFindManySubjectVersion({})
 
@@ -104,18 +122,18 @@ const PutOneSubjectClassModal = () => {
         orderBy: { startDate: 'desc' },
     })
 
-    const TrainingLocationForm = Form.useWatch('trainingLocationId', form)
+    const trainingLocationId = Form.useWatch('trainingLocationId', form)
 
-    const { data: roomData = [], refetch: refetchRoomData } = useFindManyRoom({
+    const { data: roomData = [] } = useFindManyRoom({
         where: {
             trainingRoom: true,
             building: {
-                trainingLocationId: TrainingLocationForm,
+                trainingLocationId,
             },
         },
     })
 
-    const { data: lecturerData = [], refetch: refetchLecturer } = useFindManyLecturer({
+    const { data: lecturerData = [] } = useFindManyLecturer({
         include: {
             userProfile: true,
         },
@@ -134,6 +152,7 @@ const PutOneSubjectClassModal = () => {
                         },
                     },
                 },
+                subjectClassTimes: true,
             },
         },
         {
@@ -167,6 +186,12 @@ const PutOneSubjectClassModal = () => {
                 examScoreDeadline: subjectClassData.examScoreDeadline
                     ? dayjs(subjectClassData.examScoreDeadline)
                     : null,
+                dayOfWeeks: subjectClassData.subjectClassTimes?.map((item) => item.dayOfWeek),
+                times: subjectClassData.subjectClassTimes?.map((item) => ({
+                    dayOfWeek: item.dayOfWeek,
+                    startPeriod: item.startPeriod,
+                    endPeriod: item.endPeriod,
+                })),
             })
         }
     }, [subjectClassData])
@@ -377,6 +402,113 @@ const PutOneSubjectClassModal = () => {
                 <FormItem form={form} name="examType" label="Hình thức thi" required>
                     <Select placeholder="Chọn hình thức thi" options={options} />
                 </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="dayOfWeeks" label="Ngày trong tuần">
+                    <Select
+                        placeholder="Chọn ngày trong tuần"
+                        mode="multiple"
+                        allowClear
+                        options={[
+                            { label: 'Thứ 2', value: 2 },
+                            { label: 'Thứ 3', value: 3 },
+                            { label: 'Thứ 4', value: 4 },
+                            { label: 'Thứ 5', value: 5 },
+                            { label: 'Thứ 6', value: 6 },
+                            { label: 'Thứ 7', value: 7 },
+                            { label: 'Chủ nhật', value: 8 },
+                        ]}
+                        onChange={(value) => {
+                            form.setFieldsValue({
+                                times: value.map((dayOfWeek: number) => ({
+                                    dayOfWeek,
+                                    startPeriod: 1,
+                                    endPeriod: 1,
+                                })),
+                            })
+                        }}
+                    />
+                </FormItem>
+            </Col>
+            <FormItem form={form} name="times" hidden />
+            <Col span={24}>
+                <Table
+                    columns={[
+                        {
+                            title: 'Thứ',
+                            dataIndex: 'dayOfWeek',
+                            key: 'dayOfWeek',
+                            align: 'center',
+                            render: (value) => {
+                                if (value === 2) return 'Thứ 2'
+                                if (value === 3) return 'Thứ 3'
+                                if (value === 4) return 'Thứ 4'
+                                if (value === 5) return 'Thứ 5'
+                                if (value === 6) return 'Thứ 6'
+                                if (value === 7) return 'Thứ 7'
+                                if (value === 8) return 'Chủ nhật'
+                                return ''
+                            },
+                        },
+                        {
+                            title: 'Tiết bắt đầu',
+                            dataIndex: 'startPeriod',
+                            key: 'startPeriod',
+                            align: 'center',
+                            render: (value) => (
+                                <Select
+                                    defaultValue={value}
+                                    options={Object.entries(PERIOD).map(([key, val]) => ({
+                                        label: `${key} - ${val.startTime.format('HH:mm')}`,
+                                        value: Number(key),
+                                    }))}
+                                    onChange={(val) => {
+                                        const newTimes = times.map((time) => {
+                                            if (time.startPeriod === value) {
+                                                return { ...time, startPeriod: val }
+                                            }
+                                            return time
+                                        })
+                                        form.setFieldsValue({
+                                            times: newTimes,
+                                        })
+                                    }}
+                                    className="w-full"
+                                />
+                            ),
+                        },
+                        {
+                            title: 'Tiết kết thúc',
+                            dataIndex: 'endPeriod',
+                            key: 'endPeriod',
+                            align: 'center',
+                            render: (value, record) => (
+                                <Select
+                                    defaultValue={value}
+                                    options={Object.entries(PERIOD)
+                                        .map(([key, val]) => ({
+                                            label: `${key} - ${val.endTime.format('HH:mm')}`,
+                                            value: Number(key),
+                                        }))
+                                        .filter((item) => Number(item.value) >= record.startPeriod)}
+                                    onChange={(val) => {
+                                        const newTimes = times.map((time) => {
+                                            if (time.endPeriod === value) {
+                                                return { ...time, endPeriod: val }
+                                            }
+                                            return time
+                                        })
+                                        form.setFieldsValue({
+                                            times: newTimes,
+                                        })
+                                    }}
+                                    className="w-full"
+                                />
+                            ),
+                        },
+                    ]}
+                    data={times}
+                />
             </Col>
         </PutFormModal>
     )

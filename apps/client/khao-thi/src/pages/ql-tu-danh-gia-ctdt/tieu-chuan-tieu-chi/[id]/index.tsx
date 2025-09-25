@@ -262,7 +262,7 @@ RequirementCriterionCatalog.getLayout = function getLayout(page: React.ReactElem
         <DefaultLayout
             breadcrumbList={[
                 {
-                    title: 'Quản lý Tự đánh giá CTĐT',
+                    title: 'QL tự đánh giá CTĐT',
                 },
                 {
                     title: 'Tiêu chuẩn, tiêu chí',

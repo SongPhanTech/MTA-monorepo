@@ -41,7 +41,11 @@ export default function HocViForm({ expland, setExpland }: DomProps) {
         }
     )
     const { data: hocViData = [] } = useFindManyDM_HocVi(
-        {},
+        {
+            where: {
+                bActive: true,
+            },
+        },
         {
             enabled: expland.includes('hocVi'),
         }

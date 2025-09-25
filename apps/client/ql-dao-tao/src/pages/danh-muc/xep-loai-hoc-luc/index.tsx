@@ -5,7 +5,7 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { RankingContext, type TrainingCourse } from '@workspace/db'
+import { type Prisma, RankingContext, type TrainingCourse } from '@workspace/db'
 import {
     useCountTrainingCourse,
     useDeleteAcademicRankingConvert,
@@ -19,7 +19,7 @@ import { Button, Col, Flex, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { Copy, Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
@@ -44,8 +44,8 @@ export default function AcademicRankingConvertPage() {
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    const { data = [], refetch } = useFindManyTrainingCourse({
-        where: {
+    const where: Prisma.TrainingCourseWhereInput = useMemo(
+        () => ({
             active: true,
             academicRankingConvert: {
                 some: {
@@ -79,7 +79,13 @@ export default function AcademicRankingConvertPage() {
                 },
             },
             trainingObjectTypeId,
-        },
+            deletedAt: null,
+        }),
+        [filters, trainingObjectTypeId]
+    )
+
+    const { data = [], refetch } = useFindManyTrainingCourse({
+        where,
         include: {
             academicRankingConvert: {
                 where: {
@@ -120,7 +126,7 @@ export default function AcademicRankingConvertPage() {
         },
     })
 
-    const { data: count } = useCountTrainingCourse({})
+    const { data: count } = useCountTrainingCourse({ where })
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {

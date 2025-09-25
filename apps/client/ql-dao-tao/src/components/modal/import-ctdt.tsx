@@ -9,11 +9,16 @@ const { Panel } = Collapse
 interface ImportCurriculumVersionModalProps {
     visible: boolean
     onCancel: () => void
+    onSuccess: () => void
 }
 
-const ImportCurriculumVersionModal = ({ visible, onCancel }: ImportCurriculumVersionModalProps) => {
+const ImportCurriculumVersionModal = ({
+    visible,
+    onCancel,
+    onSuccess,
+}: ImportCurriculumVersionModalProps) => {
     const [file, setFile] = useState<File | null>(null)
-    const [disbaledButton, setDisbaledButton] = useState<boolean>(true)
+    const [disabledButton, setDisabledButton] = useState<boolean>(true)
     const router = useRouter()
     const id = router.query.id as string
     const [fileName, setFileName] = useState<string>('')
@@ -24,7 +29,7 @@ const ImportCurriculumVersionModal = ({ visible, onCancel }: ImportCurriculumVer
 
         setFile(file)
         setFileName(`Dữ liệu phiên bản chương trình đào tạo.${file.name.split('.')[1]}`)
-        setDisbaledButton(false)
+        setDisabledButton(false)
         const reader = new FileReader()
         // reader.onload = (e) => {
         //     const { trainingObjectType, trainingCourse, students, errors } = parseSheetHeQuanSu(
@@ -33,7 +38,7 @@ const ImportCurriculumVersionModal = ({ visible, onCancel }: ImportCurriculumVer
         //     setPreviewData(students)
         //     setData({ trainingObjectType, trainingCourse })
         //     if (errors.length === 0) {
-        //         setDisbaledButton(false)
+        //         setDisabledButton(false)
         //     }
         //     setErrorData(errors)
         //     console.log(errors)
@@ -65,14 +70,15 @@ const ImportCurriculumVersionModal = ({ visible, onCancel }: ImportCurriculumVer
             if (res?.status === 200) {
                 message.success(
                     res?.data?.message ||
-                        'Nhâp dữ liệu phiên bản chương trình đào tạo từ file thành công'
+                        'Nhập dữ liệu phiên bản chương trình đào tạo từ file thành công'
                 )
             } else {
                 message.error(
                     res?.data?.message ||
-                        'Nhâp dữ liệu phiên bản chương trình đào tạo từ file thất bại'
+                        'Nhập dữ liệu phiên bản chương trình đào tạo từ file thất bại'
                 )
             }
+            onSuccess()
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -98,7 +104,7 @@ const ImportCurriculumVersionModal = ({ visible, onCancel }: ImportCurriculumVer
                     key="confirm"
                     type="primary"
                     onClick={handleConfirm}
-                    disabled={disbaledButton}
+                    disabled={disabledButton}
                 >
                     Xác nhận
                 </Button>,

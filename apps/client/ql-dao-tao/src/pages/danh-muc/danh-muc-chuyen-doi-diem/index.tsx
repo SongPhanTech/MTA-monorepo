@@ -119,6 +119,8 @@ export default function TrainingFieldPage() {
 
     const { data: count } = useCountScoreConvert({
         where: {
+            trainingCourse: { trainingObjectTypeId },
+            deletedAt: null,
             active:
                 filters.active === 'true' ? true : filters.active === 'false' ? false : undefined,
             ...(filters.searchText && filters.searchText.trim() !== ''

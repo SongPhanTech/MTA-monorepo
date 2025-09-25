@@ -26,7 +26,11 @@ export default function HocHamForm({ expland, setExpland }: DomProps) {
     })
 
     const { data: hocHamData = [] } = useFindManyDM_HocHam(
-        {},
+        {
+            where: {
+                bActive: true,
+            },
+        },
         {
             enabled: expland.includes('hocHam'),
         }
@@ -110,7 +114,7 @@ export default function HocHamForm({ expland, setExpland }: DomProps) {
                             render: (_, __, index) => index + 1,
                         },
                         {
-                            title: 'Học vị',
+                            title: 'Học hàm',
                             align: 'center',
                             width: 120,
                             fixed: 'left',

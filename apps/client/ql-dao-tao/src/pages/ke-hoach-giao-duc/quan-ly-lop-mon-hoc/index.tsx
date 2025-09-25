@@ -411,14 +411,13 @@ export default function TeachingAssignment() {
         }
     }
 
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<string>({
         tag: 'PutOpenSubjectClassModal',
     })
 
-    const { onOpen: onOpenEditSubjectClass, onClose: onCloseEditSubjectClass } =
-        useDisclosure<string>({
-            tag: 'PutOneSubjectClassModal',
-        })
+    const { onOpen: onOpenEditSubjectClass } = useDisclosure<string>({
+        tag: 'PutOneSubjectClassModal',
+    })
 
     const handleModal = () => {
         onOpen()
@@ -501,7 +500,7 @@ export default function TeachingAssignment() {
                                     </Button>
                                 )}
                                 {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
                                     'NHAP_EXCEL'
                                 ) && (
                                     <Button
@@ -533,7 +532,7 @@ export default function TeachingAssignment() {
                                     </>
                                 ) : (
                                     can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
                                         'SUA'
                                     ) && (
                                         <Button
@@ -846,7 +845,7 @@ export default function TeachingAssignment() {
                                 align: 'center',
                                 fixed: 'right',
                                 hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
                                     'SUA',
                                     'XOA'
                                 ),
@@ -855,7 +854,7 @@ export default function TeachingAssignment() {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
                                                     'SUA'
                                                 ) && (
                                                     <EditIcon
@@ -867,7 +866,7 @@ export default function TeachingAssignment() {
                                                     />
                                                 )}
                                                 {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
                                                     'XOA'
                                                 ) && (
                                                     <DeleteIcon

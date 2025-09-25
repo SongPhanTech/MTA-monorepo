@@ -608,7 +608,19 @@ model SubjectClass extends BaseNoCode {
 
   surveyObjectTypes          SurveyObjectType[]
   classRegisterLogs          ClassRegisterLogs[]
+  subjectClassTimes          SubjectClassTime[]  // Thứ trong tuần và tiết học
 
+  @@schema("ql-dao-tao")
+}
+
+// Bảng thứ trong tuần và tiết học
+model SubjectClassTime extends Base {
+  subjectClass   SubjectClass @relation(fields: [subjectClassId], references: [id])
+  subjectClassId String
+
+  dayOfWeek      Int            // Thứ trong tuần (2-8 tương ứng với Thứ Hai - Chủ Nhật)
+  startPeriod    Int            // Tiết bắt đầu (1, 2, 3, ...)
+  endPeriod      Int            // Tiết kết thúc (1, 2, 3, ...)
   @@schema("ql-dao-tao")
 }
 

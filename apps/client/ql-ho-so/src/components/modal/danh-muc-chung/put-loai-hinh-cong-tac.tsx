@@ -30,7 +30,7 @@ export default function LoaiHinhCongTacModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function LoaiHinhCongTacModal() {
             } else {
                 await createDM_LoaiHinhCongTac({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

@@ -135,7 +135,7 @@ EvaluationPeriodPage.getLayout = function getLayout(page: React.ReactElement) {
     return (
         <DefaultLayout
             breadcrumbList={[
-                { title: 'Quản lý Tự đánh giá CTĐT' },
+                { title: 'QL tự đánh giá CTĐT' },
                 {
                     title: 'Quản lý đợt tự đánh giá',
                     href: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,

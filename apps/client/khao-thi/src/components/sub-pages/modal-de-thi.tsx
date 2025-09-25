@@ -2,7 +2,6 @@ import { renderWithMath } from '@components/commons/rich-text-editor/renderWithM
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
 import { emptyObjectIf } from '@workspace/constant'
@@ -46,8 +45,6 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
     duration,
     disabled = false,
 }) => {
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { options: questionTypeOptions, getQuestionTypeLabel } = useQuestionTypeOptions()
     const [filters, setFilters] = useState<FilterProps>({
         content: '',
@@ -143,8 +140,6 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                 { order: 'asc' },
                 { createdAt: 'asc' },
             ],
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
         },
         {
             enabled: !!examBankId,
@@ -263,7 +258,6 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)
-                            setCurrentPage(1)
                         }}
                         columns={[
                             {
@@ -271,8 +265,7 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                                 align: 'center',
                                 fixed: 'left',
                                 width: 60,
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                render: (_, __, index) => index + 1,
                             },
                             {
                                 title: 'Nội dung câu hỏi',
@@ -371,19 +364,7 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                             },
                         ]}
                         data={data}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
+                        pagination={false}
                     />
                 </Col>
             </Row>

@@ -30,7 +30,7 @@ export default function TrangThaiLamViecModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function TrangThaiLamViecModal() {
             } else {
                 await createDM_TrangThaiLamViec({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
