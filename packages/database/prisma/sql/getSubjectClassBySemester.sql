@@ -30,7 +30,6 @@ WITH FCS AS (
                 dv."sTen" as management_organization_name,
                 tc."trainingObjectTypeId" as training_object_type_id,
                 COUNT(fc.id) as fixed_class_count
-                
         FROM "ql-dao-tao"."SubjectVersion" sv
                 JOIN "ql-dao-tao"."TrainingBlockSubject" tbs ON sv.id = tbs."subjectId"
                 JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" tbocv ON tbs."trainingBlockOnCurriculumVersionId" = tbocv.id
