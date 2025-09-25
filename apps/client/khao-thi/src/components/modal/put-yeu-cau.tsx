@@ -38,7 +38,7 @@ const PutRequirementCriterionCatalog = () => {
             showSpinner()
             const data = {
                 order: output.order,
-                name: output.name,
+                name: output.name.trim(),
                 criterionCatalogId: input?.criterionCatalogId || '',
                 description: output.description,
                 questions: output.questions,

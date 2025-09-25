@@ -63,7 +63,7 @@ const PutClassRegisterSession = () => {
         try {
             showSpinner()
             const data = {
-                name: output.name,
+                name: output.name.trim(),
                 startDate: dayjs(output.startDate).toDate(),
                 endDate: dayjs(output.endDate).toDate(),
                 semesterId: output.semesterId,

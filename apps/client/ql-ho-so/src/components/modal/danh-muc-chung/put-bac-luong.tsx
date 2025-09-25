@@ -30,7 +30,7 @@ export default function BacLuongModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function BacLuongModal() {
             } else {
                 await createDM_BacLuong({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

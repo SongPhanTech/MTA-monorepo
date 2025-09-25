@@ -31,7 +31,7 @@ const PutScoreScaleCatalog = () => {
         try {
             showSpinner()
             const data = {
-                name: output.name,
+                name: output.name.trim(),
                 minValue: output.minValue,
                 maxValue: output.maxValue,
                 passFrom: output.passFrom,

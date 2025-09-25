@@ -33,7 +33,7 @@ export default function TrinhDoLyLuanChinhTriModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -41,7 +41,7 @@ export default function TrinhDoLyLuanChinhTriModal() {
             } else {
                 await createDM_TrinhDoLyLuanChinhTri({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

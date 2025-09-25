@@ -18,7 +18,7 @@ export default function BoiDuongQuocPhongAnNinhForm({ expland, setExpland }: Dom
     const { onOpen } = useDisclosure<
         Partial<BoiDuongQuocPhongAnNinh> & { onSave: (val: BoiDuongQuocPhongAnNinh) => void }
     >({
-        tag: 'PutBoiDuongQuocPhongAnNinhModal',
+        tag: 'PutBoiDuongQuocPhongModal',
     })
 
     const handleSave = (data: BoiDuongQuocPhongAnNinh) => {

@@ -30,7 +30,7 @@ export default function LoaiHinhDiHocTapModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function LoaiHinhDiHocTapModal() {
             } else {
                 await createDM_LoaiHinhDiHocTap({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

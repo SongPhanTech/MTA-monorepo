@@ -30,7 +30,7 @@ export default function TrinhDoHocVanModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function TrinhDoHocVanModal() {
             } else {
                 await createDM_TrinhDoHocVan({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

@@ -108,7 +108,7 @@ const PutVersionSubjectModal = () => {
             const baseData = {
                 codeTkb: output.codeTkb,
                 code: output.code,
-                name: output.name,
+                name: output.name.trim(),
                 description: output.description,
                 active: output.active,
                 examType: output.examType,

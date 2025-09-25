@@ -43,7 +43,7 @@ const PutSurveyModal = () => {
                 await update({
                     data: {
                         code: output.code,
-                        name: output.name,
+                        name: output.name.trim(),
                         surveyObjectType: {
                             set: output.surveyObjectTypes.map((item) => ({ id: item })) || [],
                         },
@@ -63,7 +63,7 @@ const PutSurveyModal = () => {
                 await create({
                     data: {
                         code: output.code,
-                        name: output.name,
+                        name: output.name.trim(),
                         surveyObjectType: {
                             connect: output.surveyObjectTypes.map((item) => ({ id: item })) || [],
                         },

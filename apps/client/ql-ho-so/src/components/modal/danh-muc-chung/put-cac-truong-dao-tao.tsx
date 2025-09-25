@@ -30,7 +30,7 @@ export default function CacTruongDaoTaoBacDHModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function CacTruongDaoTaoBacDHModal() {
             } else {
                 await createDM_TruongDaoTaoBacDH({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

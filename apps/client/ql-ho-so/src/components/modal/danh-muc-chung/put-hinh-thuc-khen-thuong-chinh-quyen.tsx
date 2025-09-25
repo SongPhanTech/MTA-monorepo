@@ -35,7 +35,7 @@ export default function HinhThucKhenThuongChinhQuyenModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -43,7 +43,7 @@ export default function HinhThucKhenThuongChinhQuyenModal() {
             } else {
                 await createDM_HinhThucKhenThuongChinhQuyen({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

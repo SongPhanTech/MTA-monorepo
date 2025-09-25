@@ -26,7 +26,11 @@ export default function PutHocViModal() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: hocVi = [] } = useFindManyDM_HocVi()
+    const { data: hocVi = [] } = useFindManyDM_HocVi({
+        where: {
+            bActive: true,
+        },
+    })
     const { data: quocGia = [] } = useFindManyDM_QuocGia()
     const { data: truong = [] } = useFindManyDM_TruongDaoTaoBacDH()
 

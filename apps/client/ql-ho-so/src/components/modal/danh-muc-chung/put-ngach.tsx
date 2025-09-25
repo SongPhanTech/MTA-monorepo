@@ -30,7 +30,7 @@ export default function NgachModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function NgachModal() {
             } else {
                 await createDM_Ngach({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

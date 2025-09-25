@@ -59,7 +59,7 @@ const PutSurveyObjectTypeModal = () => {
                 await update({
                     data: {
                         code: output.code,
-                        name: output.name,
+                        name: output.name.trim(),
                         type: output.type,
                         organizations: {
                             set:
@@ -107,7 +107,7 @@ const PutSurveyObjectTypeModal = () => {
                 await create({
                     data: {
                         code: output.code,
-                        name: output.name,
+                        name: output.name.trim(),
                         type: output.type,
                         organizations: {
                             connect:

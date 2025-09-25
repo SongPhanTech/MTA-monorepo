@@ -30,7 +30,7 @@ export default function CacNuocCuDiHocTapModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function CacNuocCuDiHocTapModal() {
             } else {
                 await createDM_NuocCuDiHocTap({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

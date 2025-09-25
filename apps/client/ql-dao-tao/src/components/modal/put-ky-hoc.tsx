@@ -47,7 +47,7 @@ const PutSemesterModal = () => {
             const schoolYearId = input?.schoolYearId ?? output.schoolYearId
             const data = {
                 code: output.code,
-                name: output.name,
+                name: output.name.trim(),
                 description: output.description,
                 startDate: output.startDate,
                 endDate: output.endDate,
