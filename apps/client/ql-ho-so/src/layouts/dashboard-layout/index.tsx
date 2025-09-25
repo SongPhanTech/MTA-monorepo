@@ -1,6 +1,5 @@
 import logo_mta from '@assets/images/hoso.svg'
 import HeaderApp from '@components/header'
-import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
 import { CONFIG_KEY } from '@workspace/constant'
@@ -43,7 +42,7 @@ const DashboardLayout = ({ children, className }: { children: ReactNode; classNa
     return (
         <IdleTimerProvider
             timeout={Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000}
-            onIdle={signOutAction}
+            onIdle={() => {}}
         >
             <Layout style={{ minHeight: '100vh' }} hasSider className="bg-blue-50">
                 <SiderDefaultLayout

@@ -15,11 +15,11 @@ export const env = createEnv({
         NEXT_PUBLIC_ENVIRONMENT: z.enum(['develop', 'test', 'product', 'local']),
         NEXT_PUBLIC_APP_CODE: z.string(),
         NEXT_PUBLIC_API_MODEL_BASE_URL: z.string().url(),
-        NEXT_PUBLIC_MY_ACCOUNT: z.string().url(),
         NEXT_PUBLIC_MINIO_ENDPOINT: z.string().url(),
         NEXT_PUBLIC_AUTH_ISSUER: z.string().url().optional(),
         NEXT_PUBLIC_ASSET_PREFIX: z.string().url(),
         NEXT_PUBLIC_CHATBOT_SRC: z.string().url().optional(),
+        NEXT_PUBLIC_BASE_PATH: z.string().default('portal'),
     },
 
     /**
@@ -30,11 +30,11 @@ export const env = createEnv({
         NEXT_PUBLIC_APP_CODE: process.env.NEXT_PUBLIC_APP_CODE,
         NEXT_PUBLIC_ENVIRONMENT: process.env.NEXT_PUBLIC_ENVIRONMENT,
         NEXT_PUBLIC_API_MODEL_BASE_URL: process.env.NEXT_PUBLIC_API_MODEL_BASE_URL,
-        NEXT_PUBLIC_MY_ACCOUNT: process.env.NEXT_PUBLIC_MY_ACCOUNT,
         NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
         NEXT_PUBLIC_AUTH_ISSUER: process.env.NEXT_PUBLIC_AUTH_ISSUER,
         NEXT_PUBLIC_ASSET_PREFIX: process.env.NEXT_PUBLIC_ASSET_PREFIX,
         NEXT_PUBLIC_CHATBOT_SRC: process.env.NEXT_PUBLIC_CHATBOT_SRC,
+        NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH,
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

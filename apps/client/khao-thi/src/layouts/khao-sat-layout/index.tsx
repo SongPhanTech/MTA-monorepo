@@ -1,4 +1,3 @@
-import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import { cn } from '@lib/utils'
 
 import { Layout } from 'antd'
@@ -9,7 +8,7 @@ const { Header, Content } = Layout
 
 const KhaoSatLayout = ({ children, className }: { children: ReactNode; className?: string }) => {
     return (
-        <IdleTimerProvider timeout={Number.parseFloat('15') * 60 * 1000} onIdle={signOutAction}>
+        <IdleTimerProvider timeout={Number.parseFloat('15') * 60 * 1000} onIdle={() => {}}>
             <Layout style={{ minHeight: '100vh' }} hasSider>
                 {/* <SiderDefaultLayout
                     logo1={

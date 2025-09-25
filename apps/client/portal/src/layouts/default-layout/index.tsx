@@ -1,6 +1,5 @@
 import { HomeOutlined } from '@ant-design/icons'
 import logo_mta from '@assets/images/daotao.svg'
-import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
@@ -120,7 +119,7 @@ const DefaultLayout = ({
     return (
         <IdleTimerProvider
             timeout={Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000}
-            onIdle={signOutAction}
+            onIdle={() => {}}
         >
             <Layout style={{ minHeight: '100vh' }} hasSider>
                 <SiderDefaultLayout
@@ -152,11 +151,6 @@ const DefaultLayout = ({
                         </span> */}
                         <div>{<Breadcrumb items={listBreadcrumb} />}</div>
                         <HeaderApp />
-
-                        {/* <div className="flex gap-2 items-center">
-                            <SearchSystem />
-                            <AvatarDropdown />
-                        </div> */}
                     </Header>
                     <Content className="mx-2 mt-20">
                         {unLayout ? (

@@ -1,6 +1,4 @@
 import logo_mta from '@assets/images/logo_mta.png'
-import AvatarDropdown from '@components/layouts/avatar-dropdown'
-import signOutAction from '@components/layouts/avatar-dropdown/sign-out'
 import SiderDefaultLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
@@ -49,7 +47,7 @@ const DefaultLayout = ({ children, className }: { children: ReactNode; className
     return (
         <IdleTimerProvider
             timeout={Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000}
-            onIdle={signOutAction}
+            onIdle={() => {}}
         >
             {/* Header */}
             <Header className="fixed z-50 top-0 left-0 right-0 flex justify-between items-center bg-white shadow rounded-xl px-4 py-2 m-2 h-[64px]">
@@ -61,7 +59,6 @@ const DefaultLayout = ({ children, className }: { children: ReactNode; className
                 </div>
                 <div className="flex gap-2 items-center">
                     <SearchSystem />
-                    <AvatarDropdown />
                 </div>
             </Header>
 
