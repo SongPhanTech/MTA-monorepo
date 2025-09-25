@@ -204,7 +204,7 @@ EvaluationCouncil.getLayout = function getLayout(page: React.ReactElement) {
     return (
         <DefaultLayout
             breadcrumbList={[
-                { title: 'Quản lý Tự đánh giá CTĐT' },
+                { title: 'QL tự đánh giá CTĐT' },
                 {
                     title: 'Hội đồng đánh giá',
                     href: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY,

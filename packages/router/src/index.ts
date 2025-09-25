@@ -549,7 +549,7 @@ const NAVIGATION: NavigationType = {
             },
             {
                 id: 'ql-danh-gia-ctdt',
-                label: 'Quản lý Tự đánh giá CTĐT',
+                label: 'QL tự đánh giá CTĐT',
                 icon: ClipboardCheck,
                 children: [
                     {
