@@ -38,6 +38,7 @@ export * from './TrainingBlockSubject.schema';
 export * from './ClassRegisterSession.schema';
 export * from './ClassRegisterLogs.schema';
 export * from './SubjectClass.schema';
+export * from './SubjectClassTime.schema';
 export * from './ClassSchedule.schema';
 export * from './TrainingObjectType.schema';
 export * from './PriorityObject.schema';

@@ -719,6 +719,26 @@ const policy: PolicyDef = {
             },
 
         },
+        subjectClassTime: {
+            modelLevel: {
+                read: { guard: SubjectClassTime_read, },
+                create: { guard: SubjectClassTime_create, inputChecker: SubjectClassTime_create_input, },
+                update: { guard: SubjectClassTime_update, },
+                postUpdate: { guard: SubjectClassTime_postUpdate, },
+                delete: { guard: SubjectClassTime_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         classSchedule: {
             modelLevel: {
                 read: { guard: ClassSchedule_read, },
@@ -4534,6 +4554,7 @@ const policy: PolicyDef = {
         classRegisterSession: { hasValidation: false },
         classRegisterLogs: { hasValidation: false },
         subjectClass: { hasValidation: false },
+        subjectClassTime: { hasValidation: false },
         classSchedule: { hasValidation: false },
         trainingObjectType: { hasValidation: false },
         priorityObject: { hasValidation: false },
@@ -6866,6 +6887,71 @@ function SubjectClass_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_SubjectClass_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassTime_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_SubjectClassTime_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassTime_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClassTime_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassTime_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function SubjectClassTime_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClassTime_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassTime_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_SubjectClassTime_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function SubjectClassTime_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClassTime_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

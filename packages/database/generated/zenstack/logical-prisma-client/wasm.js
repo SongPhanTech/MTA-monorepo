@@ -676,6 +676,20 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   enterGradeLecturerId: 'enterGradeLecturerId'
 };
 
+exports.Prisma.SubjectClassTimeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  subjectClassId: 'subjectClassId',
+  dayOfWeek: 'dayOfWeek',
+  startPeriod: 'startPeriod',
+  endPeriod: 'endPeriod'
+};
+
 exports.Prisma.ClassScheduleScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -4059,6 +4073,13 @@ exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   enterGradeLecturerId: 'enterGradeLecturerId'
 };
 
+exports.Prisma.SubjectClassTimeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  subjectClassId: 'subjectClassId'
+};
+
 exports.Prisma.ClassScheduleOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6346,6 +6367,7 @@ exports.Prisma.ModelName = {
   ClassRegisterSession: 'ClassRegisterSession',
   ClassRegisterLogs: 'ClassRegisterLogs',
   SubjectClass: 'SubjectClass',
+  SubjectClassTime: 'SubjectClassTime',
   ClassSchedule: 'ClassSchedule',
   TrainingObjectType: 'TrainingObjectType',
   PriorityObject: 'PriorityObject',

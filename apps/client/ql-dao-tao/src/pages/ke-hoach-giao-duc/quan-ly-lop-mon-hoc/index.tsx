@@ -411,14 +411,13 @@ export default function TeachingAssignment() {
         }
     }
 
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<string>({
         tag: 'PutOpenSubjectClassModal',
     })
 
-    const { onOpen: onOpenEditSubjectClass, onClose: onCloseEditSubjectClass } =
-        useDisclosure<string>({
-            tag: 'PutOneSubjectClassModal',
-        })
+    const { onOpen: onOpenEditSubjectClass } = useDisclosure<string>({
+        tag: 'PutOneSubjectClassModal',
+    })
 
     const handleModal = () => {
         onOpen()

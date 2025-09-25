@@ -1345,6 +1345,24 @@ model SubjectClass {
   defenseRooms               Room[]                @relation("DefenseRooms")
   surveyObjectTypes          SurveyObjectType[]
   classRegisterLogs          ClassRegisterLogs[]
+  subjectClassTimes          SubjectClassTime[]
+
+  @@schema("ql-dao-tao")
+}
+
+model SubjectClassTime {
+  id             String       @id() @default(cuid())
+  code           String?      @unique()
+  active         Boolean      @default(true)
+  description    String?      @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @default(now()) @updatedAt()
+  subjectClass   SubjectClass @relation(fields: [subjectClassId], references: [id])
+  subjectClassId String
+  dayOfWeek      Int
+  startPeriod    Int
+  endPeriod      Int
 
   @@schema("ql-dao-tao")
 }

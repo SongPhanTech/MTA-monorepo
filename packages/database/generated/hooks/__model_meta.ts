@@ -3355,11 +3355,80 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
+                }, subjectClassTimes: {
+                    name: "subjectClassTimes",
+                    type: "SubjectClassTime",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
                 },
             }, uniqueConstraints: {
                 id: {
                     name: "id",
                     fields: ["id"]
+                },
+            },
+        },
+        subjectClassTime: {
+            name: 'SubjectClassTime', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    backLink: 'subjectClassTimes',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
+                }, dayOfWeek: {
+                    name: "dayOfWeek",
+                    type: "Int",
+                }, startPeriod: {
+                    name: "startPeriod",
+                    type: "Int",
+                }, endPeriod: {
+                    name: "endPeriod",
+                    type: "Int",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 },
             },
         },

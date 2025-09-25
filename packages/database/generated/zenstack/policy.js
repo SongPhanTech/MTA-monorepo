@@ -435,6 +435,19 @@ const policy = {
                 update: {},
             },
         },
+        subjectClassTime: {
+            modelLevel: {
+                read: { guard: SubjectClassTime_read, },
+                create: { guard: SubjectClassTime_create, inputChecker: SubjectClassTime_create_input, },
+                update: { guard: SubjectClassTime_update, },
+                postUpdate: { guard: SubjectClassTime_postUpdate, },
+                delete: { guard: SubjectClassTime_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         classSchedule: {
             modelLevel: {
                 read: { guard: ClassSchedule_read, },
@@ -2927,6 +2940,7 @@ const policy = {
         classRegisterSession: { hasValidation: false },
         classRegisterLogs: { hasValidation: false },
         subjectClass: { hasValidation: false },
+        subjectClassTime: { hasValidation: false },
         classSchedule: { hasValidation: false },
         trainingObjectType: { hasValidation: false },
         priorityObject: { hasValidation: false },
@@ -5685,6 +5699,84 @@ function SubjectClass_delete(context, db) {
     return { OR: [] };
 }
 function $check_SubjectClass_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectClassTime_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_SubjectClassTime_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectClassTime_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectClassTime_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectClassTime_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function SubjectClassTime_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectClassTime_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectClassTime_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_SubjectClassTime_postUpdate(input, context) {
+    return true;
+}
+function SubjectClassTime_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectClassTime_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
