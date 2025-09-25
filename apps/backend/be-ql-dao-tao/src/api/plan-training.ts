@@ -298,13 +298,16 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                   : $Enums.SubjectClassSchedule.EVENING,
                         quanSo: quanSo ? Number(quanSo) : 0,
                     }
+
+                    const tienHoc = String(tietHoc)
+                        .trim()
+                        .match(/\b(\d+)\s*(?:->|-|→)\s*(\d+)\b/)
+                    const tuTietHoc = tienHoc ? Number(tienHoc[1]) : null
+                    const denTietHoc = tienHoc ? Number(tienHoc[2]) : null
                     const scheduleInfo = {
                         ngayHoc: ngayHoc ? new Date(ngayHoc) : null,
                         tietHoc: tietHoc
-                            ? String(tietHoc)
-                                  .trim()
-                                  .split('->')
-                                  .map((e) => e.trim())
+                            ? ([tuTietHoc, denTietHoc].filter((e) => e !== null) as number[])
                             : [],
                         hinhThucHoc:
                             hinhThucHoc === 'Thí nghiệm'

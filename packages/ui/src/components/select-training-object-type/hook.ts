@@ -1,5 +1,4 @@
 import { Store, useStore } from '@tanstack/react-store'
-import { useLocalStorage } from '@workspace/libs/hook/use-localstorage'
 import { useEffect } from 'react'
 export type TrainingObjectTypeState = {
     selectedTrainingObjectTypeId?: string
@@ -18,12 +17,12 @@ export const selectTrainingObjectType = (id: string) => {
 }
 
 export const useTrainingObjectTypeStore = () => {
-    const [idLocalStorage] = useLocalStorage('selectedTrainingObjectTypeId', '')
+    const { selectedTrainingObjectTypeId } = useStore(trainingObjectTypeStore)
     useEffect(() => {
+        const idLocalStorage = localStorage.getItem('selectedTrainingObjectTypeId')
         if (idLocalStorage) {
             selectTrainingObjectType(idLocalStorage)
         }
-    }, [idLocalStorage])
-    const { selectedTrainingObjectTypeId } = useStore(trainingObjectTypeStore)
+    }, [])
     return { id: selectedTrainingObjectTypeId, onSelect: selectTrainingObjectType }
 }
