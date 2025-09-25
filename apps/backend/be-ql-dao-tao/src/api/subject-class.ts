@@ -442,7 +442,8 @@ app.openapi(openSubjectClass, async (c) => {
             semesterType,
             trainingCourseId ?? null,
             search ? `%${search}%` : null,
-            trainingMajorId ?? null
+            trainingMajorId ?? null,
+            trainingObjectTypeId
         )
     )
 
