@@ -2,6 +2,7 @@ import NAVIGATION, {
     type KHAO_THI_PERMISSION,
     type PORTAL_PERMISSION,
     type QL_DAO_TAO_PERMISSION,
+    type QL_HO_SO_PERMISSION,
     ROUTER_PATH,
     type TRO_LY_AO_PERMISSION,
 } from '@workspace/router'
@@ -45,7 +46,8 @@ const useAbility = () => {
                 | KHAO_THI_PERMISSION
                 | PORTAL_PERMISSION
                 | QL_DAO_TAO_PERMISSION
-                | TRO_LY_AO_PERMISSION,
+                | TRO_LY_AO_PERMISSION
+                | QL_HO_SO_PERMISSION,
             ...action: (keyof typeof PERMISSIONS)[]
         ) => {
             const perm = ability.actionsFor(subject)
@@ -59,7 +61,8 @@ const useAbility = () => {
                 | KHAO_THI_PERMISSION
                 | PORTAL_PERMISSION
                 | QL_DAO_TAO_PERMISSION
-                | TRO_LY_AO_PERMISSION,
+                | TRO_LY_AO_PERMISSION
+                | QL_HO_SO_PERMISSION,
             ...action: (keyof typeof PERMISSIONS)[]
         ) => {
             const perm = ability.actionsFor(subject)

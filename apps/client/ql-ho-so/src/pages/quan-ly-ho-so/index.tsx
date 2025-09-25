@@ -14,7 +14,8 @@ import {
     useFindManyUserProfile,
     useUpdateStudent,
 } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_HO_SO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Dropdown, Flex, Form, Input, Menu, message, Row, Tag } from 'antd'
 import axios from 'axios'
 import dayjs from 'dayjs'
@@ -28,6 +29,7 @@ import TreeSelect from '@/components/commons/tree-select'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -341,9 +343,11 @@ export default function UserProfilePageDs() {
                                     onCancel={() => setImportModalVisible(false)}
                                 />
                                 <ExportTemplateStudent /> */}
-                                <Button onClick={handleModal} type="primary">
-                                    Thêm mới
-                                </Button>
+                                {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'THEM') && (
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm mới
+                                    </Button>
+                                )}
                             </Flex>
                         </Col>
                     </Row>
@@ -494,41 +498,55 @@ export default function UserProfilePageDs() {
                                 width: 120,
                                 align: 'center',
                                 fixed: 'right',
+                                hidden: !canSome(
+                                    QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO,
+                                    'IN',
+                                    'XOA',
+                                    'SUA'
+                                ),
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
-                                        <Dropdown
-                                            overlay={
-                                                <Menu>
-                                                    {list.map((item) => (
-                                                        <Menu.Item
-                                                            key={item.key}
-                                                            onClick={(e) => item.onClick({ id })}
-                                                        >
-                                                            {item.label}
-                                                        </Menu.Item>
-                                                    ))}
-                                                </Menu>
-                                            }
-                                            trigger={['click']}
-                                        >
-                                            <Button
-                                                className="w-fit"
-                                                type="link"
-                                                icon={<Printer className="text-[#212121]" />}
-                                                size="large"
+                                        {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'IN') && (
+                                            <Dropdown
+                                                overlay={
+                                                    <Menu>
+                                                        {list.map((item) => (
+                                                            <Menu.Item
+                                                                key={item.key}
+                                                                onClick={(e) =>
+                                                                    item.onClick({ id })
+                                                                }
+                                                            >
+                                                                {item.label}
+                                                            </Menu.Item>
+                                                        ))}
+                                                    </Menu>
+                                                }
+                                                trigger={['click']}
+                                            >
+                                                <Button
+                                                    className="w-fit"
+                                                    type="link"
+                                                    icon={<Printer className="text-[#212121]" />}
+                                                    size="large"
+                                                />
+                                            </Dropdown>
+                                        )}
+                                        {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'SUA') && (
+                                            <EditIcon
+                                                onClick={() => {
+                                                    router.push(`quan-ly-ho-so/${id}`)
+                                                }}
+                                                className="text-sm text-blue-700 cursor-pointer"
                                             />
-                                        </Dropdown>
-                                        <EditIcon
-                                            onClick={() => {
-                                                router.push(`quan-ly-ho-so/${id}`)
-                                            }}
-                                            className="text-sm text-blue-700 cursor-pointer"
-                                        />
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                onConfirm: () => handleDelete(id),
-                                            }}
-                                        />
+                                        )}
+                                        {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'XOA') && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: () => handleDelete(id),
+                                                }}
+                                            />
+                                        )}
                                     </Row>
                                 ),
                             },
