@@ -28,8 +28,8 @@ import {
     ScrollText,
     Settings,
 } from 'lucide-react'
+import { DANG_KY_HOC_PERMISSION } from '../generated/dang-ky-hoc'
 import { KHAO_THI_PERMISSION } from '../generated/khao-thi'
-import { PORTAL_PERMISSION } from '../generated/portal'
 import { QL_DAO_TAO_PERMISSION } from '../generated/ql-dao-tao'
 import { QL_HO_SO_PERMISSION } from '../generated/ql-ho-so'
 import ROUTER_PATH from '../generated/router'
@@ -60,40 +60,40 @@ type NavigationType = Record<
 >
 
 const NAVIGATION: NavigationType = {
-    PORTAL: {
+    DANG_KY_HOC: {
         label: 'Cổng thông tin sinh viên',
         menus: [
             {
-                id: PORTAL_PERMISSION.PORTAL_HOME,
+                id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_HOME,
                 label: 'Trang chủ',
                 icon: House,
-                path: ROUTER_PATH.PORTAL.HOME,
+                path: ROUTER_PATH.DANG_KY_HOC.HOME,
                 description: 'Thông tin thời khoá biểu, lịch thi, thông báo...',
             },
             {
-                id: PORTAL_PERMISSION.PORTAL_KET_QUA_HOC_TAP,
+                id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_KET_QUA_HOC_TAP,
                 label: 'Kết quả học tập',
                 icon: FileOutlined,
-                path: ROUTER_PATH.PORTAL.KET_QUA_HOC_TAP,
+                path: ROUTER_PATH.DANG_KY_HOC.KET_QUA_HOC_TAP,
             },
             {
-                id: PORTAL_PERMISSION.PORTAL_DANG_KY_HOC,
+                id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_DANG_KY_HOC,
                 label: 'Đăng ký học',
                 icon: CalendarRange,
-                path: ROUTER_PATH.PORTAL.DANG_KY_HOC,
+                path: ROUTER_PATH.DANG_KY_HOC.DANG_KY_HOC,
             },
             {
-                id: PORTAL_PERMISSION.PORTAL_KHAO_SAT,
+                id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_KHAO_SAT,
                 label: 'Khảo sát',
                 icon: FileOutlined,
-                path: ROUTER_PATH.PORTAL.KHAO_SAT,
+                path: ROUTER_PATH.DANG_KY_HOC.KHAO_SAT,
             },
 
             {
-                id: PORTAL_PERMISSION.PORTAL_CHUONG_TRINH_DAO_TAO,
+                id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_CHUONG_TRINH_DAO_TAO,
                 label: 'Chương trình đào tạo',
                 icon: Library,
-                path: ROUTER_PATH.PORTAL.CHUONG_TRINH_DAO_TAO,
+                path: ROUTER_PATH.DANG_KY_HOC.CHUONG_TRINH_DAO_TAO,
             },
         ],
     },
@@ -629,7 +629,13 @@ const NAVIGATION: NavigationType = {
 }
 
 const PUBLIC_ROUTER = [ROUTER_PATH.KHAO_THI.LAM_KHAO_SAT_ID.replace('[id]', '')]
-export { KHAO_THI_PERMISSION, PORTAL_PERMISSION, QL_DAO_TAO_PERMISSION, TRO_LY_AO_PERMISSION }
+export {
+    KHAO_THI_PERMISSION,
+    DANG_KY_HOC_PERMISSION,
+    QL_DAO_TAO_PERMISSION,
+    TRO_LY_AO_PERMISSION,
+    QL_HO_SO_PERMISSION,
+}
 export { ROUTER_PATH, PUBLIC_ROUTER }
 export type { MenuItem, NavigationType }
 export default NAVIGATION
