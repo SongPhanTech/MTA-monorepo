@@ -4,6 +4,7 @@ import {
     Form,
     type FormInstance,
     type FormProps,
+    Row,
 } from 'antd'
 
 export type PutModalFormType = {}
@@ -13,6 +14,7 @@ export type ModalProps<T = PutModalFormType> = {
     layout?: 'horizontal' | 'vertical' // Cho phép truyền layout là horizontal hoặc vertical
     labelCol?: { span: number }
     wrapperCol?: { span: number }
+    rowWrap?: boolean
     formProps?: FormProps<T>
 } & AntdModalProps
 
@@ -23,6 +25,7 @@ const PutFormModal = <T extends PutModalFormType>({
     layout = 'vertical', // Mặc định layout là 'vertical' nếu không truyền
     labelCol,
     wrapperCol,
+    rowWrap = true,
     ...rest
 }: ModalProps<T>) => {
     return (
@@ -42,7 +45,7 @@ const PutFormModal = <T extends PutModalFormType>({
                 wrapperCol={wrapperCol}
                 {...rest.formProps}
             >
-                {children}
+                {rowWrap ? <Row gutter={16}>{children}</Row> : children}
             </Form>
         </AntdModal>
     )
