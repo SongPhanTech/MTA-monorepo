@@ -71,7 +71,6 @@ export default function TrainingProgramCatalog() {
             ...(filters.code && {
                 code: { contains: filters.code, mode: 'insensitive' as const },
             }),
-            trainingObjectTypeId,
             ...(filters.trainingCourses && {
                 fixedClasses: {
                     some: { trainingCourseId: { in: filters.trainingCourses } },
@@ -117,7 +116,6 @@ export default function TrainingProgramCatalog() {
         filters.code,
         filters.managementOrganizationId,
         filters.trainingMajorId,
-        trainingObjectTypeId,
     ])
 
     const { data = [] } = useFindManyCurriculum({
