@@ -21,6 +21,7 @@
     "@workspace/db": "workspace:*",
     "@workspace/libs": "workspace:*",
     "axios": "catalog:",
+    "dayjs": "catalog:",
     "decimal.js": "catalog:",
     "docxtemplater": "catalog:",
     "exceljs": "catalog:",

@@ -1,5 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { $Enums, type SubjectClass } from '@workspace/db'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { read, utils } from 'xlsx'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
@@ -7,6 +9,7 @@ import { exportPCGDdata } from '../services/lecturer'
 import { fillExcelTemplate, getBufferFromUrl } from '../services/template.service'
 import { getCurrentDateForReport } from '../utils'
 
+dayjs.extend(customParseFormat)
 const app = new OpenAPIHono({ strict: false })
 
 const exportPhanCongGiangDay = createRoute({
@@ -190,7 +193,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                     .forEach((e) => danhSachTenGV.add(e))
             }
             if (maMon && tenMon) {
-                danhSachMaTKBMonHoc.add(maMon.trim())
+                danhSachMaTKBMonHoc.add(String(maMon).trim())
             }
             if (maLopNienChe && tenLopNienChe) {
                 danhSachMaLopNienChe.add(maLopNienChe.trim())
@@ -287,7 +290,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                         maLopMonHoc: null as string | null,
                         lopNienChe: [] as string[],
                         phongHoc: null as string | null,
-                        ngayBatDau: ngayHoc ? new Date(ngayHoc) : null,
+                        ngayBatDau: ngayHoc ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate() : null,
                         ngayKetThuc: null as Date | null,
                         ngayThi: null as Date | null,
                         caHoc:
@@ -298,6 +301,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                   : $Enums.SubjectClassSchedule.EVENING,
                         quanSo: quanSo ? Number(quanSo) : 0,
                     }
+                    console.log('subjectClass', ngayHoc, subjectClass)
 
                     const tienHoc = String(tietHoc)
                         .trim()
@@ -305,7 +309,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                     const tuTietHoc = tienHoc ? Number(tienHoc[1]) : null
                     const denTietHoc = tienHoc ? Number(tienHoc[2]) : null
                     const scheduleInfo = {
-                        ngayHoc: ngayHoc ? new Date(ngayHoc) : null,
+                        ngayHoc: ngayHoc ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate() : null,
                         tietHoc: tietHoc
                             ? ([tuTietHoc, denTietHoc].filter((e) => e !== null) as number[])
                             : [],
