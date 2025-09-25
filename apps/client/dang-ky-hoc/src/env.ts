@@ -19,7 +19,7 @@ export const env = createEnv({
         NEXT_PUBLIC_AUTH_ISSUER: z.string().url().optional(),
         NEXT_PUBLIC_ASSET_PREFIX: z.string().url(),
         NEXT_PUBLIC_CHATBOT_SRC: z.string().url().optional(),
-        NEXT_PUBLIC_BASE_PATH: z.string().default('portal'),
+        NEXT_PUBLIC_BASE_PATH: z.string(),
     },
 
     /**

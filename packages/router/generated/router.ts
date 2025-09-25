@@ -1,4 +1,12 @@
 export default {
+  "DANG_KY_HOC": {
+    "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",
+    "DANG_KY_HOC": "/dang-ky-hoc",
+    "HOME": "/home",
+    "INDEX": "/",
+    "KET_QUA_HOC_TAP": "/ket-qua-hoc-tap",
+    "KHAO_SAT": "/khao-sat"
+  },
   "KHAO_THI": {
     "BAO_CAO_KHAO_SAT_ID": "/bao-cao-khao-sat/[id]",
     "DANH_MUC_DANH_MUC_CHUONG_MUC": "/danh-muc/danh-muc-chuong-muc",
@@ -30,16 +38,7 @@ export default {
     "THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT": "/thiet-lap-khao-sat/cau-hoi-khao-sat",
     "THIET_LAP_KHAO_SAT_DOT_KHAO_SAT": "/thiet-lap-khao-sat/dot-khao-sat",
     "THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT_ID": "/thiet-lap-khao-sat/nhom-cau-hoi-khao-sat/[id]",
-    "THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT": "/thiet-lap-khao-sat/nhom-cau-hoi-khao-sat",
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung"
-  },
-  "PORTAL": {
-    "CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao",
-    "DANG_KY_HOC": "/dang-ky-hoc",
-    "HOME": "/home",
-    "INDEX": "/",
-    "KET_QUA_HOC_TAP": "/ket-qua-hoc-tap",
-    "KHAO_SAT": "/khao-sat"
   },
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
@@ -96,7 +95,6 @@ export default {
     "QUAN_LY_DIEM_QL_DIEM_CONG_COMPONENTS_OLYMPIC_AWARD": "/quan-ly-diem/ql-diem-cong/components/olympic-award",
     "QUAN_LY_DIEM_QL_DIEM_CONG": "/quan-ly-diem/ql-diem-cong",
     "QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC": "/quan-ly-diem/ql-diem-lop-mon-hoc",
-    "QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC_LOP_MON_HOC": "/quan-ly-diem/ql-diem-lop-mon-hoc/lop-mon-hoc",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN_ID": "/quan-ly-do-an/danh-muc-do-an/[id]",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN_CAU_HINH_HOI_DONG": "/quan-ly-do-an/danh-muc-do-an/cau-hinh-hoi-dong",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN": "/quan-ly-do-an/danh-muc-do-an",

@@ -60,40 +60,40 @@ type NavigationType = Record<
 >
 
 const NAVIGATION: NavigationType = {
-    PORTAL: {
+    DANG_KY_HOC: {
         label: 'Cổng thông tin sinh viên',
         menus: [
             {
                 id: PORTAL_PERMISSION.PORTAL_HOME,
                 label: 'Trang chủ',
                 icon: House,
-                path: ROUTER_PATH.PORTAL.HOME,
+                path: ROUTER_PATH.DANG_KY_HOC.HOME,
                 description: 'Thông tin thời khoá biểu, lịch thi, thông báo...',
             },
             {
                 id: PORTAL_PERMISSION.PORTAL_KET_QUA_HOC_TAP,
                 label: 'Kết quả học tập',
                 icon: FileOutlined,
-                path: ROUTER_PATH.PORTAL.KET_QUA_HOC_TAP,
+                path: ROUTER_PATH.DANG_KY_HOC.KET_QUA_HOC_TAP,
             },
             {
                 id: PORTAL_PERMISSION.PORTAL_DANG_KY_HOC,
                 label: 'Đăng ký học',
                 icon: CalendarRange,
-                path: ROUTER_PATH.PORTAL.DANG_KY_HOC,
+                path: ROUTER_PATH.DANG_KY_HOC.DANG_KY_HOC,
             },
             {
                 id: PORTAL_PERMISSION.PORTAL_KHAO_SAT,
                 label: 'Khảo sát',
                 icon: FileOutlined,
-                path: ROUTER_PATH.PORTAL.KHAO_SAT,
+                path: ROUTER_PATH.DANG_KY_HOC.KHAO_SAT,
             },
 
             {
                 id: PORTAL_PERMISSION.PORTAL_CHUONG_TRINH_DAO_TAO,
                 label: 'Chương trình đào tạo',
                 icon: Library,
-                path: ROUTER_PATH.PORTAL.CHUONG_TRINH_DAO_TAO,
+                path: ROUTER_PATH.DANG_KY_HOC.CHUONG_TRINH_DAO_TAO,
             },
         ],
     },
