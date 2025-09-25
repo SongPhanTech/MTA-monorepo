@@ -445,7 +445,6 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
                                     type: 'mask',
                                 }}
                                 className="w-full h-9"
-                                disabledDate={(date) => date && date > dayjs().endOf('day')}
                             />
                         </FormItem>
                     </Col>

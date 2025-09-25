@@ -70,7 +70,7 @@ const PutGraduationSession = () => {
         try {
             showSpinner()
             const payload = {
-                name: output.name,
+                name: output.name.trim(),
                 sessionDate: output.sessionDate,
                 applicationStart: output.applicationStart,
                 applicationEnd: output.applicationEnd,

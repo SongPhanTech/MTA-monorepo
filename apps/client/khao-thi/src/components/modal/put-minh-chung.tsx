@@ -34,7 +34,7 @@ const PutEvidence = () => {
         try {
             showSpinner()
             const data = {
-                name: output.name,
+                name: output.name.trim(),
                 categoryId: input?.categoryId || '',
                 information: output.information,
                 issuer: output.issuer,

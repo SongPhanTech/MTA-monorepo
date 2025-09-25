@@ -216,7 +216,7 @@ const PutFixedClassModal = () => {
             showSpinner()
             const payload = {
                 code: output.code,
-                name: output.name,
+                name: output.name.trim(),
                 description: output.description,
                 startYear: output.startYear,
                 graduated: output.graduated,

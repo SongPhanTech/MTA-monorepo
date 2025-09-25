@@ -33,7 +33,7 @@ export default function ChuyenNganhDaoTaoModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -41,7 +41,7 @@ export default function ChuyenNganhDaoTaoModal() {
             } else {
                 await createDM_ChuyenNganhDaoTaoBacDH({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

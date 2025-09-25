@@ -30,7 +30,7 @@ export default function ToChucXaHoiModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function ToChucXaHoiModal() {
             } else {
                 await createDM_ToChucXaHoi({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

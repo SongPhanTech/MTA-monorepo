@@ -33,7 +33,7 @@ export default function XepLoaiDanhGiaChatLuongDangVienModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -41,7 +41,7 @@ export default function XepLoaiDanhGiaChatLuongDangVienModal() {
             } else {
                 await createDM_XepLoaiDanhGiaDV({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

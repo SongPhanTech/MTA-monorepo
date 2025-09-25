@@ -30,7 +30,7 @@ export default function ChucDanhNgachKySuModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function ChucDanhNgachKySuModal() {
             } else {
                 await createDM_ChucDanhCMNVKySu({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

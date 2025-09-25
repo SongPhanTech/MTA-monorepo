@@ -31,7 +31,7 @@ const PutEvidenceCategory = () => {
         try {
             showSpinner()
             const data = {
-                name: output.name,
+                name: output.name.trim(),
                 description: output.description,
                 code: output.code,
             }

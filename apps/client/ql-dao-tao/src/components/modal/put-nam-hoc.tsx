@@ -36,7 +36,7 @@ const PutSchoolYearModal = () => {
             showSpinner()
             const data = {
                 code: output.code,
-                name: output.name,
+                name: output.name.trim(),
                 startDate: output.startDate,
                 endDate: output.endDate,
                 description: output.description,

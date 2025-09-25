@@ -36,7 +36,7 @@ const PutKnowledgeBlock = () => {
             }
             const data = {
                 code: output.code,
-                name: output.name,
+                name: output.name.trim(),
                 description: output.description,
                 subjectVersionId: input.subjectVersionId,
             }

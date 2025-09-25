@@ -33,7 +33,7 @@ export default function TrinhDoQuanLyNhaNuocModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -41,7 +41,7 @@ export default function TrinhDoQuanLyNhaNuocModal() {
             } else {
                 await createDM_TrinhDoQuanLyNhaNuoc({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

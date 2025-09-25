@@ -30,7 +30,7 @@ export default function ChiHuyQuanLyModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function ChiHuyQuanLyModal() {
             } else {
                 await createDM_ChiHuyQuanLy({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

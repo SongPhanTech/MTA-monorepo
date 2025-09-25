@@ -22,7 +22,11 @@ export default function PutHocHamModal() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: hocHam = [] } = useFindManyDM_HocHam()
+    const { data: hocHam = [] } = useFindManyDM_HocHam({
+        where: {
+            bActive: true,
+        },
+    })
 
     async function onOk(output: HocHam) {
         if (!output) return

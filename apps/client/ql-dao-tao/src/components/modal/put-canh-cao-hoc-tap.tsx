@@ -168,7 +168,12 @@ const PutAcademicWarningRule = () => {
                 </FormItem>
             </Col> */}
             <Col span={12}>
-                <FormItem form={form} name="severity" label="Mức độ cảnh cáo sẽ tăng nếu vi phạm">
+                <FormItem
+                    form={form}
+                    name="severity"
+                    label="Mức độ cảnh cáo sẽ tăng nếu vi phạm"
+                    required
+                >
                     <InputNumber
                         type="number"
                         placeholder="Nhập mức độ cảnh cáo sẽ tăng"

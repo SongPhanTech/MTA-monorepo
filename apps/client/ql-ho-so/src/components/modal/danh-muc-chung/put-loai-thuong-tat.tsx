@@ -30,7 +30,7 @@ export default function LoaiThuongTatModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function LoaiThuongTatModal() {
             } else {
                 await createDM_LoaiThuongTat({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

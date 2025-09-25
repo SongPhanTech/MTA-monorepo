@@ -23,7 +23,7 @@ import _ from 'lodash'
 import { Printer } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 
@@ -42,12 +42,12 @@ export default function UserProfilePageDs() {
         idCardNumber: '',
         originalPlace: '',
         sDM_DonViId: '',
+        searchText: '',
     })
 
     const router = useRouter()
-
-    const { data: UserProfileData = [], refetch } = useFindManyUserProfile({
-        where: {
+    const where = useMemo(() => {
+        return {
             ...(filters.originalPlace
                 ? {
                       originalPlace: {
@@ -77,11 +77,19 @@ export default function UserProfilePageDs() {
                           {
                               firstName: {
                                   contains: filters.name,
+                                  mode: 'insensitive',
                               },
                           },
                           {
                               lastName: {
                                   contains: filters.name,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              fullname: {
+                                  contains: filters.name,
+                                  mode: 'insensitive',
                               },
                           },
                       ],
@@ -118,7 +126,11 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-        },
+        } as any
+    }, [filters])
+
+    const { data: UserProfileData = [], refetch } = useFindManyUserProfile({
+        where,
         include: {
             gender: true,
             capBac: {
@@ -130,75 +142,12 @@ export default function UserProfilePageDs() {
         orderBy: {
             createdAt: 'desc',
         },
-        take: DEFAULT_PAGINATE_SIZE,
-        skip: (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
     })
 
     const { data: count } = useCountUserProfile({
-        where: {
-            ...(filters.originalPlace
-                ? {
-                      originalPlace: {
-                          contains: filters.originalPlace,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.name
-                ? {
-                      OR: [
-                          {
-                              firstName: {
-                                  contains: filters.name,
-                              },
-                          },
-                          {
-                              lastName: {
-                                  contains: filters.name,
-                              },
-                          },
-                      ],
-                  }
-                : {}),
-            ...(filters.sDM_DonViId
-                ? {
-                      sDM_DonViId: {
-                          equals: filters.sDM_DonViId,
-                      },
-                  }
-                : {}),
-            ...(filters.dateOfBirth?.length === 2
-                ? {
-                      dateOfBirth: {
-                          gte: dayjs(filters.dateOfBirth?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.dateOfBirth?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(filters.gender
-                ? {
-                      genderId: {
-                          in: filters.gender,
-                      },
-                  }
-                : {}),
-            ...(filters.phoneNumber
-                ? {
-                      phoneNumber: {
-                          contains: filters.phoneNumber,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(filters.email
-                ? {
-                      email: {
-                          contains: filters.email,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-        },
+        where,
         orderBy: {
             firstName: 'asc',
         },
@@ -297,7 +246,7 @@ export default function UserProfilePageDs() {
                             <Flex>
                                 <Form.Item
                                     className="mb-0 mr-3"
-                                    name="sDM_DonViId"
+                                    name="name"
                                     labelCol={{ span: 24 }}
                                     wrapperCol={{ span: 24 }}
                                     labelAlign="left"

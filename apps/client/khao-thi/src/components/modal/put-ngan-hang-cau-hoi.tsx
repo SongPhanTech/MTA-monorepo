@@ -34,7 +34,7 @@ const PutQuestionBank = () => {
             showSpinner()
             const data = {
                 code: output.code,
-                name: output.name,
+                name: output.name.trim(),
                 subjectVersionId: output.subjectVersionId,
                 description: output.description,
             }

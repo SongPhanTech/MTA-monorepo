@@ -36,7 +36,7 @@ const PutDiplomaType = () => {
             showSpinner()
             const data = {
                 code: output.code,
-                name: output.name,
+                name: output.name.trim(),
                 englishName: output.englishName,
                 description: output.description,
                 type: output.type,

@@ -30,7 +30,7 @@ export default function TinhTrangCongTacModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function TinhTrangCongTacModal() {
             } else {
                 await createDM_TinhTrangCongTac({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

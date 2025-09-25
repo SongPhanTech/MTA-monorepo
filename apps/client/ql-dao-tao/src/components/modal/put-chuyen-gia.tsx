@@ -99,7 +99,7 @@ const PutExpertProfile = () => {
                 workplace: output.workplace,
                 phone: output.phone,
                 email: output.email,
-                name: output.name,
+                name: output.name.trim(),
                 eligibleSecretary: output.eligibleSecretary,
                 eligiblePresident: output.eligiblePresident,
             }

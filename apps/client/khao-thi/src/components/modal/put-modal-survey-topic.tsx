@@ -34,7 +34,7 @@ const PutSurveyTopicModal = () => {
                 await update({
                     data: {
                         code: output.code,
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                     where: {
@@ -46,7 +46,7 @@ const PutSurveyTopicModal = () => {
                 await create({
                     data: {
                         code: output.code,
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

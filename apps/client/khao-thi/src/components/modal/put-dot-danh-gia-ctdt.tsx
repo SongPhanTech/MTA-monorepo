@@ -132,7 +132,7 @@ const PutEvaluationPeriod = () => {
         try {
             showSpinner()
             const data = {
-                name: output.name,
+                name: output.name.trim(),
                 startDate: output.startDate,
                 endDate: output.endDate,
                 description: output.description,

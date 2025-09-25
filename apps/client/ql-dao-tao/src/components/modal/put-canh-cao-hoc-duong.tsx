@@ -34,7 +34,7 @@ const PutDisciplinaryWarningReason = () => {
         try {
             showSpinner()
             const data = {
-                name: output.name,
+                name: output.name.trim(),
                 severityLevel: output.severityLevel,
                 description: output.description,
                 active: output.active,

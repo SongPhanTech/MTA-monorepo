@@ -30,7 +30,7 @@ export default function TinhTrangDiHocTapModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -38,7 +38,7 @@ export default function TinhTrangDiHocTapModal() {
             } else {
                 await createDM_TinhTrangDiHocTap({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })

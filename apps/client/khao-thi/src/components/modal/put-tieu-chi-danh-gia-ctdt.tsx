@@ -33,7 +33,7 @@ const PutCriterionCatalog = () => {
             showSpinner()
             const data = {
                 order: output.order,
-                name: output.name,
+                name: output.name.trim(),
                 standardId: input?.standardId || '',
                 description: output.description,
                 scoreScaleId: output.scoreScaleId,

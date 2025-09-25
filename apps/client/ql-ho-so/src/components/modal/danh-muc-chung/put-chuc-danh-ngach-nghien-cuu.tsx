@@ -35,7 +35,7 @@ export default function ChucDanhNgachNghienCuuModal() {
                         id: input.id,
                     },
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
@@ -43,7 +43,7 @@ export default function ChucDanhNgachNghienCuuModal() {
             } else {
                 await createDM_ChucDanhCMNVNghienCuuVien({
                     data: {
-                        name: output.name,
+                        name: output.name.trim(),
                         description: output.description,
                     },
                 })
