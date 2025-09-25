@@ -142,7 +142,6 @@ export default function SubjectClassScore() {
     const [subjectClassFullData, setSubjectClassFullData] = useState<SubjectClass[]>([])
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
-    const [camThi, setCamThi] = useState<boolean>(false)
     const { subjectId } = router.query
 
     const [open, setOpen] = useState(false)
@@ -1262,17 +1261,13 @@ export default function SubjectClassScore() {
                             },
                             {
                                 title: 'Cấm thi',
-                                dataIndex: 'code',
+                                dataIndex: 'examBanned',
                                 width: 80,
                                 align: 'center',
-                                render: (text, record) => {
-                                    const isCheck =
-                                        scoreCamThi.find((item) => item.id === record.id)?.value ??
-                                        record.examBanned ??
-                                        false
+                                render: (value, record) => {
                                     return (
                                         <Checkbox
-                                            checked={isCheck}
+                                            defaultChecked={value}
                                             onChange={(e) => {
                                                 const newValue = e.target.checked
                                                 setScoreCamThi((prevScores) => {
@@ -1297,7 +1292,6 @@ export default function SubjectClassScore() {
                                                 })
                                                 // Handle checkbox change for exam prohibition reason
                                             }}
-                                            disabled={!camThi}
                                         />
                                     )
                                 },
@@ -1309,17 +1303,13 @@ export default function SubjectClassScore() {
                             },
                             {
                                 title: 'Hoãn thi',
-                                dataIndex: 'code',
+                                dataIndex: 'examPostponed',
                                 width: 80,
                                 align: 'center',
-                                render: (text, record) => {
-                                    const isCheck =
-                                        scoreHoanThi.find((item) => item.id === record.id)?.value ??
-                                        record.examPostponed ??
-                                        false
+                                render: (value, record) => {
                                     return (
                                         <Checkbox
-                                            checked={isCheck}
+                                            defaultChecked={value}
                                             onChange={(e) => {
                                                 const newValue = e.target.checked
                                                 setScoreHoanThi((prevScores) => {
@@ -1344,7 +1334,6 @@ export default function SubjectClassScore() {
                                                 })
                                                 // Handle checkbox change for exam prohibition reason
                                             }}
-                                            disabled={!camThi}
                                         />
                                     )
                                 },
@@ -1356,17 +1345,13 @@ export default function SubjectClassScore() {
                             },
                             {
                                 title: 'Đình chỉ',
-                                dataIndex: 'code',
+                                dataIndex: 'suspended',
                                 width: 80,
                                 align: 'center',
-                                render: (text, record) => {
-                                    const isCheck =
-                                        scoreDinhChi.find((item) => item.id === record.id)?.value ??
-                                        record.examPostponed ??
-                                        false
+                                render: (value, record) => {
                                     return (
                                         <Checkbox
-                                            checked={isCheck}
+                                            defaultChecked={value}
                                             onChange={(e) => {
                                                 const newValue = e.target.checked
                                                 setscoreDinhChi((prevScores) => {
@@ -1391,58 +1376,49 @@ export default function SubjectClassScore() {
                                                 })
                                                 // Handle checkbox change for exam prohibition reason
                                             }}
-                                            disabled={!camThi}
                                         />
                                     )
                                 },
                             },
                             {
                                 title: 'Ghi chú',
-                                dataIndex: 'code',
+                                dataIndex: 'description',
                                 width: 150,
                                 align: 'center',
-                                render: (text, record) => {
-                                    if (camThi) {
-                                        const note =
-                                            scoreLyDo.find((item) => item.id === record.id)
-                                                ?.value ??
-                                            record.description ??
-                                            ''
-                                        return (
-                                            <Input
-                                                placeholder="Nhập ghi chú lý do"
-                                                style={{
-                                                    width: '100%',
-                                                }}
-                                                value={note}
-                                                onChange={(e) => {
-                                                    // Handle input change for bonus score
-                                                    const newNote = e.target.value
-                                                    setScoreLyDo((prevScores) => {
-                                                        const index = prevScores.findIndex(
-                                                            (item) => item.id === record.id
-                                                        )
-                                                        if (index > -1) {
-                                                            const updated = [...prevScores]
-                                                            updated[index] = {
-                                                                id: record.id,
-                                                                value: newNote,
-                                                            }
-                                                            return updated
+                                render: (value, record) => {
+                                    return (
+                                        <Input
+                                            placeholder="Nhập ghi chú lý do"
+                                            style={{
+                                                width: '100%',
+                                            }}
+                                            defaultValue={value || ''}
+                                            onChange={(e) => {
+                                                // Handle input change for bonus score
+                                                const newNote = e.target.value
+                                                setScoreLyDo((prevScores) => {
+                                                    const index = prevScores.findIndex(
+                                                        (item) => item.id === record.id
+                                                    )
+                                                    if (index > -1) {
+                                                        const updated = [...prevScores]
+                                                        updated[index] = {
+                                                            id: record.id,
+                                                            value: newNote,
                                                         }
-                                                        return [
-                                                            ...prevScores,
-                                                            {
-                                                                id: record.id,
-                                                                value: newNote,
-                                                            },
-                                                        ]
-                                                    })
-                                                }}
-                                            />
-                                        )
-                                    }
-                                    return record.description || ''
+                                                        return updated
+                                                    }
+                                                    return [
+                                                        ...prevScores,
+                                                        {
+                                                            id: record.id,
+                                                            value: newNote,
+                                                        },
+                                                    ]
+                                                })
+                                            }}
+                                        />
+                                    )
                                 },
                             },
                         ]}
