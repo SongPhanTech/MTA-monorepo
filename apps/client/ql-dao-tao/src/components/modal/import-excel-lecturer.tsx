@@ -18,7 +18,7 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportStudentModalProps) => 
     const [previewData, setPreviewData] = useState<any[]>([])
     const [errorData, setErrorData] = useState<any[]>([])
     const [file, setFile] = useState<File | null>(null)
-    const [disbaledButton, setDisbaledButton] = useState<boolean>(true)
+    const [disabledButton, setDisabledButton] = useState<boolean>(true)
 
     const [fileName, setFileName] = useState<string>('')
 
@@ -34,7 +34,7 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportStudentModalProps) => 
             const { lecturers, errors } = parseSheetLecturer(e.target?.result as ArrayBuffer)
             setPreviewData(lecturers)
             if (errors.length === 0) {
-                setDisbaledButton(false)
+                setDisabledButton(false)
             }
             setErrorData(errors)
             console.log(errors)
@@ -65,9 +65,9 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportStudentModalProps) => 
             if (!file) return
             const res = await importLecturer({ file: file, timeout: 30 })
             if (res?.status === 200) {
-                message.success(res?.data?.message || 'Nhâp dữ liệu giảng viên từ file thành công')
+                message.success(res?.data?.message || 'Nhập dữ liệu giảng viên từ file thành công')
             } else {
-                message.error(res?.data?.message || 'Nhâp dữ liệu giảng viên từ file thất bại')
+                message.error(res?.data?.message || 'Nhập dữ liệu giảng viên từ file thất bại')
             }
         } catch (error: any) {
             if (error?.info?.message) {
@@ -94,7 +94,7 @@ const ImportLecturerModal = ({ visible, onCancel }: ImportStudentModalProps) => 
                     key="confirm"
                     type="primary"
                     onClick={handleConfirm}
-                    disabled={disbaledButton}
+                    disabled={disabledButton}
                 >
                     Xác nhận
                 </Button>,

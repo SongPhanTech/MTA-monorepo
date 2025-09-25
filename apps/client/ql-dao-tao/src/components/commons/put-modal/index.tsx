@@ -32,7 +32,7 @@ const PutFormModal = <T extends PutModalFormType>({
         <AntdModal
             okText="Lưu"
             cancelText="Hủy"
-            // width={800}
+            width={800}
             maskClosable={false}
             onOk={form.submit}
             {...rest}

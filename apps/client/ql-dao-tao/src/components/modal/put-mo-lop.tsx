@@ -22,6 +22,7 @@ import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import type { OpenSubjectClass } from '@workspace/libs/api/schemas/openSubjectClass'
 import { putManySubjectClass } from '@workspace/libs/api/training'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 
 dayjs.locale('vi')
 
@@ -51,6 +52,7 @@ export type PutSubjectClass = {
 }
 
 const PutOpenClassModal = () => {
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [form] = Form.useForm<PutSubjectClass>()
     const {
         isOpen,
@@ -88,6 +90,7 @@ const PutOpenClassModal = () => {
                         lecturerAssignmentDeadline: i.lecturerAssignmentDeadline,
                         scoreDeadline: i.scoreDeadline,
                         examType: i.examType,
+                        trainingObjectTypeId,
                     })),
                 })
             } else {
@@ -103,6 +106,7 @@ const PutOpenClassModal = () => {
                         scoreDeadline: i.scoreDeadline,
                         examType: i.examType,
                         semesterId: dataClass?.semester,
+                        trainingObjectTypeId,
                     }))
                 )
             }
