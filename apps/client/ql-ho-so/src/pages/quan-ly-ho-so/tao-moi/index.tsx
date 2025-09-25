@@ -5,7 +5,7 @@ import ThongTinCoBan from '@components/modal/quan-ly-ho-so/form/thong-tin-co-ban
 import ThongTinThanNhanForm from '@components/modal/quan-ly-ho-so/form/thong-tin-than-nhan'
 import TrinhDoLyLuanChinhTriForm from '@components/modal/quan-ly-ho-so/form/trinh-do-ly-luan-chinh-tri'
 import CreateLayout from '@layouts/create-layout'
-import { ROUTER_PATH } from '@workspace/router'
+import { QL_HO_SO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import {
     Button,
     Divider,
@@ -22,6 +22,7 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import './index.css'
 import { queryClient } from '@api/index'
+import ForbiddenPage from '@components/commons/403'
 import FormItem from '@components/commons/form-item'
 import BoiDuongQuocPhongAnNinhForm from '@components/modal/quan-ly-ho-so/form/boi-duong-quoc-phong-an-ninh'
 import CapBacForm from '@components/modal/quan-ly-ho-so/form/cap-bac'
@@ -50,6 +51,7 @@ import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
 import type { Prisma } from '@workspace/db'
 import { useCreateLecturer, useCreateStaff, useCreateUserProfile } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
+import { useAbility } from '@workspace/permissions/hooks'
 import ImgCrop from 'antd-img-crop'
 import axios from 'axios'
 import dayjs from 'dayjs'
@@ -101,6 +103,7 @@ export type SubmitForm = Prisma.UserProfileGetPayload<{
 }
 
 export default function CreateUserPage() {
+    const { can, canSome } = useAbility()
     const [form] = Form.useForm<SubmitForm>()
     const [search, setSearch] = useState<string>('')
     const [activeKey, setActiveKey] = useState('thongTinCoBan')
@@ -811,113 +814,119 @@ export default function CreateUserPage() {
     }, [avatar])
 
     return (
-        <Form form={form} onFinish={handleSubmit}>
-            <div>
-                <Flex justify="space-between" className="p-4">
-                    <div className="text-xl font-semibold">Thêm hồ sơ</div>
-                    <Flex justify="end">
-                        <Button
-                            className="mr-3"
-                            onClick={() => {
-                                router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
-                            }}
-                        >
-                            Hủy
-                        </Button>
-                        <Button type="primary" htmlType="submit">
-                            Lưu
-                        </Button>
-                    </Flex>
-                </Flex>
-                <Flex justify="space-between" className="w-full h-[calc(100vh-175px)]">
-                    <div className="bg-white rounded-lg shadow h-full overflow-y-auto w-[250px]">
-                        <div className="p-4">
-                            <Input
-                                id="search"
-                                className="w-full"
-                                onChange={(e) => setSearch(e.target.value)}
-                                placeholder="Tìm kiếm ..."
-                            />
-                        </div>
-
-                        {listTabsRender.length ? (
-                            <div className="mt-2">
-                                {listTabsRender.map((item) => (
-                                    <div
-                                        className="relative cursor-pointer mb-2 px-5 py-2 hover:bg-gray-100"
-                                        key={item.id}
-                                        onClick={() => handleScroll(item)}
-                                    >
-                                        {activeKey === item.id && (
-                                            <div className="bg-primary absolute top-0 left-0 h-full w-[3px]" />
-                                        )}
-                                        <div
-                                            className={
-                                                activeKey === item.id
-                                                    ? 'text-primary font-[500]'
-                                                    : ''
-                                            }
-                                        >
-                                            {item.title}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="px-4">Không tìm thấy kết quả</div>
-                        )}
-                    </div>
-                    <div className="h-full overflow-y-auto w-[calc(100%-266px)] ">
-                        <div className="p-6 shadow rounded-lg bg-white mb-4">
-                            <FormItem name="avatar" form={form} className="mb-0 relative">
-                                <ImgCrop rotationSlider>
-                                    <Upload
-                                        listType="picture-circle"
-                                        maxCount={1}
-                                        fileList={avatar ? fileListValue : fileList}
-                                        onChange={onChange}
-                                        onRemove={() => {
-                                            setFileList([])
-                                            form.setFieldValue('avatar', null)
-                                        }}
-                                        showUploadList={{
-                                            showPreviewIcon: false,
-                                        }}
-                                        className="avatar-upload "
-                                    >
-                                        {fileList.length > 0
-                                            ? ''
-                                            : fileList.length < 1 && (
-                                                  <div className="relative flex items-center justify-center">
-                                                      <UserOutlined
-                                                          style={{
-                                                              fontSize: '20px',
-                                                              color: '#686C7B',
-                                                          }}
-                                                      />
-                                                  </div>
-                                              )}
-                                    </Upload>
-                                </ImgCrop>
-                                <div className="absolute bottom-[0px] left-[52px] w-[24px] h-[24px] rounded-[50%] bg-[#e0e0e0] flex items-center justify-center">
-                                    <CameraFilled style={{ color: '#686C7B' }} />
+        <>
+            {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'THEM') ? (
+                <Form form={form} onFinish={handleSubmit}>
+                    <div>
+                        <Flex justify="space-between" className="p-4">
+                            <div className="text-xl font-semibold">Thêm hồ sơ</div>
+                            <Flex justify="end">
+                                <Button
+                                    className="mr-3"
+                                    onClick={() => {
+                                        router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
+                                    }}
+                                >
+                                    Hủy
+                                </Button>
+                                <Button type="primary" htmlType="submit">
+                                    Lưu
+                                </Button>
+                            </Flex>
+                        </Flex>
+                        <Flex justify="space-between" className="w-full h-[calc(100vh-175px)]">
+                            <div className="bg-white rounded-lg shadow h-full overflow-y-auto w-[250px]">
+                                <div className="p-4">
+                                    <Input
+                                        id="search"
+                                        className="w-full"
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        placeholder="Tìm kiếm ..."
+                                    />
                                 </div>
-                            </FormItem>
-                        </div>
-                        <div className="p-6 shadow rounded-lg bg-white form-userprofile">
-                            {listTabs.map((i) => {
-                                return (
-                                    <div key={i.id} id={i.id}>
-                                        <div>{i?.render}</div>
-                                        <Divider className="my-3" />
+
+                                {listTabsRender.length ? (
+                                    <div className="mt-2">
+                                        {listTabsRender.map((item) => (
+                                            <div
+                                                className="relative cursor-pointer mb-2 px-5 py-2 hover:bg-gray-100"
+                                                key={item.id}
+                                                onClick={() => handleScroll(item)}
+                                            >
+                                                {activeKey === item.id && (
+                                                    <div className="bg-primary absolute top-0 left-0 h-full w-[3px]" />
+                                                )}
+                                                <div
+                                                    className={
+                                                        activeKey === item.id
+                                                            ? 'text-primary font-[500]'
+                                                            : ''
+                                                    }
+                                                >
+                                                    {item.title}
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                )
-                            })}
-                        </div>
+                                ) : (
+                                    <div className="px-4">Không tìm thấy kết quả</div>
+                                )}
+                            </div>
+                            <div className="h-full overflow-y-auto w-[calc(100%-266px)] ">
+                                <div className="p-6 shadow rounded-lg bg-white mb-4">
+                                    <FormItem name="avatar" form={form} className="mb-0 relative">
+                                        <ImgCrop rotationSlider>
+                                            <Upload
+                                                listType="picture-circle"
+                                                maxCount={1}
+                                                fileList={avatar ? fileListValue : fileList}
+                                                onChange={onChange}
+                                                onRemove={() => {
+                                                    setFileList([])
+                                                    form.setFieldValue('avatar', null)
+                                                }}
+                                                showUploadList={{
+                                                    showPreviewIcon: false,
+                                                }}
+                                                className="avatar-upload "
+                                            >
+                                                {fileList.length > 0
+                                                    ? ''
+                                                    : fileList.length < 1 && (
+                                                          <div className="relative flex items-center justify-center">
+                                                              <UserOutlined
+                                                                  style={{
+                                                                      fontSize: '20px',
+                                                                      color: '#686C7B',
+                                                                  }}
+                                                              />
+                                                          </div>
+                                                      )}
+                                            </Upload>
+                                        </ImgCrop>
+                                        <div className="absolute bottom-[0px] left-[52px] w-[24px] h-[24px] rounded-[50%] bg-[#e0e0e0] flex items-center justify-center">
+                                            <CameraFilled style={{ color: '#686C7B' }} />
+                                        </div>
+                                    </FormItem>
+                                </div>
+                                <div className="p-6 shadow rounded-lg bg-white form-userprofile">
+                                    {listTabs.map((i) => {
+                                        return (
+                                            <div key={i.id} id={i.id}>
+                                                <div>{i?.render}</div>
+                                                <Divider className="my-3" />
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        </Flex>
                     </div>
-                </Flex>
-            </div>
-        </Form>
+                </Form>
+            ) : (
+                <ForbiddenPage />
+            )}
+        </>
     )
 }
 

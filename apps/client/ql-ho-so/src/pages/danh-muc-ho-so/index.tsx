@@ -1,5 +1,7 @@
+import ForbiddenPage from '@components/commons/403'
 import DefaultLayout from '@layouts/default-layout'
-import { ROUTER_PATH } from '@workspace/router'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_HO_SO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Col, Flex, Input, Row } from 'antd'
 import {
     Backpack,
@@ -48,6 +50,7 @@ type ListDataType = {
 }
 
 export default function DanhMucHoSo() {
+    const { can, canSome } = useAbility()
     const router = useRouter()
     const [search, setSearch] = useState<string>('')
     const list = [
@@ -320,66 +323,96 @@ export default function DanhMucHoSo() {
         return result
     }, [search, list, searchTree])
     return (
-        <div>
-            <Col className="mb-6" xs={6} xl={4}>
-                <div className="text-xl font-semibold mb-4 w-full min-w-[250px]">Tìm kiếm</div>
-                <Input
-                    id="search"
-                    className="w-full min-w-[250px]"
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Tìm kiếm ..."
-                />
-            </Col>
-            {data?.length > 0 ? (
-                data.map((item: ListDataType) => {
-                    return (
-                        <div key={item?.id} className="mb-7">
-                            <div className="flex items-center w-full">
-                                {/* Khối màu xanh có text */}
-                                <div className="bg-green-800 text-white font-bold text-sm px-4 py-1 relative">
-                                    <span>{item?.label}</span>
-                                    {/* Góc xiên bên phải */}
-                                    <div
-                                        className="absolute top-0 right-[-30px] w-0 h-0 
+        <>
+            {can(QL_HO_SO_PERMISSION.QL_HO_SO_DANH_MUC_HO_SO, 'XEM') ? (
+                <div>
+                    <Col className="mb-6" xs={6} xl={4}>
+                        <div className="text-xl font-semibold mb-4 w-full min-w-[250px]">
+                            Tìm kiếm
+                        </div>
+                        <Input
+                            id="search"
+                            className="w-full min-w-[250px]"
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Tìm kiếm ..."
+                        />
+                    </Col>
+                    {data?.length > 0 ? (
+                        data.map((item: ListDataType) => {
+                            return (
+                                <div key={item?.id} className="mb-7">
+                                    <div className="flex items-center w-full">
+                                        {/* Khối màu xanh có text */}
+                                        <div className="bg-green-800 text-white font-bold text-sm px-4 py-1 relative">
+                                            <span>{item?.label}</span>
+                                            {/* Góc xiên bên phải */}
+                                            <div
+                                                className="absolute top-0 right-[-30px] w-0 h-0 
                         border-t-[28px] border-t-transparent 
                         border-l-[30px] border-l-green-800 
                         border-b-[00px] border-b-transparent"
-                                    >
-                                        {' '}
+                                            >
+                                                {' '}
+                                            </div>
+                                        </div>
+                                        {/* Đường kẻ ngang */}
+                                        <div className="flex-1 border-b border-green-800 pb-[26px]">
+                                            {' '}
+                                        </div>
                                     </div>
+                                    <Row className="gap-y-4 mt-4" gutter={16}>
+                                        {item?.children?.length > 0 &&
+                                            item?.children.map((i: MenuItem) => {
+                                                return (
+                                                    <Col
+                                                        key={i.id}
+                                                        xs={24}
+                                                        sm={24}
+                                                        md={12}
+                                                        lg={12}
+                                                        xl={8}
+                                                    >
+                                                        <Flex
+                                                            align="center"
+                                                            className="h-[64px] border-[1px] border-solid px-4 py-3 rounded-lg cursor-pointer hover:!border-[#166534] hover:shadow-md"
+                                                            onClick={() => {
+                                                                if (
+                                                                    canSome(
+                                                                        QL_HO_SO_PERMISSION.QL_HO_SO_DANH_MUC_HO_SO,
+                                                                        'THEM',
+                                                                        'SUA',
+                                                                        'XOA'
+                                                                    )
+                                                                ) {
+                                                                    router.push(i.path)
+                                                                }
+                                                            }}
+                                                        >
+                                                            <div>{i?.icon}</div>
+                                                            <div className="ml-4">
+                                                                <p className="font-semibold truncate text-sm">
+                                                                    {i.label}
+                                                                </p>
+                                                                <p className="text-xs">
+                                                                    {i.description}
+                                                                </p>
+                                                            </div>
+                                                        </Flex>
+                                                    </Col>
+                                                )
+                                            })}
+                                    </Row>
                                 </div>
-                                {/* Đường kẻ ngang */}
-                                <div className="flex-1 border-b border-green-800 pb-[26px]"> </div>
-                            </div>
-                            <Row className="gap-y-4 mt-4" gutter={16}>
-                                {item?.children?.length > 0 &&
-                                    item?.children.map((i: MenuItem) => {
-                                        return (
-                                            <Col key={i.id} xs={24} sm={24} md={12} lg={12} xl={8}>
-                                                <Flex
-                                                    align="center"
-                                                    className="h-[64px] border-[1px] border-solid px-4 py-3 rounded-lg cursor-pointer hover:!border-[#166534] hover:shadow-md"
-                                                    onClick={() => router.push(i.path)}
-                                                >
-                                                    <div>{i?.icon}</div>
-                                                    <div className="ml-4">
-                                                        <p className="font-semibold truncate text-sm">
-                                                            {i.label}
-                                                        </p>
-                                                        <p className="text-xs">{i.description}</p>
-                                                    </div>
-                                                </Flex>
-                                            </Col>
-                                        )
-                                    })}
-                            </Row>
-                        </div>
-                    )
-                })
+                            )
+                        })
+                    ) : (
+                        <div>Không tìm thấy danh mục</div>
+                    )}
+                </div>
             ) : (
-                <div>Không tìm thấy danh mục</div>
+                <ForbiddenPage />
             )}
-        </div>
+        </>
     )
 }
 

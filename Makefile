@@ -44,35 +44,35 @@ ql-dao-tao:
 	pnpm build && \
 	zip -r out.zip out && \
 	scp out.zip swan1:app && \
-	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down && rm -rf lms-cdn && unzip out.zip && mv out lms-cdn && docker compose -f app-docker-compose.yml up -d"
+	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down mta-lms-cdn && rm -rf lms-cdn && unzip out.zip && mv out lms-cdn && docker compose -f app-docker-compose.yml up mta-lms-cdn -d"
 
 dang-ky-hoc:
 	cd apps/client/dang-ky-hoc && \
 	pnpm build && \
 	zip -r out.zip out && \
 	scp out.zip swan1:app && \
-	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down && rm -rf dang-ky-hoc-cdn && unzip out.zip && mv out dang-ky-hoc-cdn && docker compose -f app-docker-compose.yml up -d"
+	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down mta-dang-ky-hoc-cdn && rm -rf dang-ky-hoc-cdn mta-portal-cdn && unzip out.zip && mv out dang-ky-hoc-cdn && docker compose -f app-docker-compose.yml up mta-dang-ky-hoc-cdn -d"
 
 tro-ly-ao:
 	cd apps/client/tro-ly-ao && \
 	pnpm build && \
 	zip -r out.zip out && \
 	scp out.zip swan1:app && \
-	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down && rm -rf chatbot-cdn && unzip out.zip && mv out chatbot-cdn && docker compose -f app-docker-compose.yml up -d"
+	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down mta-chatbot-cdn && rm -rf chatbot-cdn && unzip out.zip && mv out chatbot-cdn && docker compose -f app-docker-compose.yml up mta-chatbot-cdn -d"
 
 ql-ho-so:
 	cd apps/client/ql-ho-so && \
 	pnpm build && \
 	zip -r out.zip out && \
 	scp out.zip swan1:app && \
-	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down && rm -rf hrm-cdn && unzip out.zip && mv out hrm-cdn && docker compose -f app-docker-compose.yml up -d"
+	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down mta-hrm-cdn && rm -rf hrm-cdn && unzip out.zip && mv out hrm-cdn && docker compose -f app-docker-compose.yml up mta-hrm-cdn -d"
 
 khao-thi:
 	cd apps/client/khao-thi && \
 	pnpm build && \
 	zip -r out.zip out && \
 	scp out.zip swan1:app && \
-	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down && rm -rf ems-cdn && unzip out.zip && mv out ems-cdn && docker compose -f app-docker-compose.yml up -d"
+	ssh swan1 "cd app && docker compose -f app-docker-compose.yml down mta-ems-cdn && rm -rf ems-cdn && unzip out.zip && mv out ems-cdn && docker compose -f app-docker-compose.yml up mta-ems-cdn -d"
 
 # Pattern rule: build-<name>
 build-%:
