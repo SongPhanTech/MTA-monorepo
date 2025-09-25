@@ -209,7 +209,6 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                 danhSachMaPhongHoc.add(maPhongHoc.trim())
             }
         }
-
         const danhSachGV = await prisma.lecturer.findMany({
             where: {
                 userProfile: {
@@ -220,6 +219,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
             },
             select: {
                 id: true,
+                code: true,
                 userProfile: {
                     select: {
                         fullname: true,
@@ -268,7 +268,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                     // Xử lý từng dòng dữ liệu ở đây
                     const [
                         ,
-                        ,
+                        maGV,
                         tenGV,
                         maMon,
                         tenMon,
@@ -301,13 +301,11 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                   : $Enums.SubjectClassSchedule.EVENING,
                         quanSo: quanSo ? Number(quanSo) : 0,
                     }
-                    console.log('subjectClass', ngayHoc, subjectClass)
-
-                    const tienHoc = String(tietHoc)
+                    const dsTietHoc = String(tietHoc)
                         .trim()
                         .match(/\b(\d+)\s*(?:->|-|→)\s*(\d+)\b/)
-                    const tuTietHoc = tienHoc ? Number(tienHoc[1]) : null
-                    const denTietHoc = tienHoc ? Number(tienHoc[2]) : null
+                    const tuTietHoc = dsTietHoc ? Number(dsTietHoc[1]) : null
+                    const denTietHoc = dsTietHoc ? Number(dsTietHoc[2]) : null
                     const scheduleInfo = {
                         ngayHoc: ngayHoc ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate() : null,
                         tietHoc: tietHoc
@@ -323,23 +321,15 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                     : $Enums.PeriodType.THEORY,
                     }
 
-                    if (tenGV) {
-                        const [tenGvChinh, tenGvPhu] = tenGV
+                    if (maGV && tenGV) {
+                        const [, tenGvPhu] = tenGV
                             .split(',')
                             .map((e) => e.replace(/\([^)]*\)/g, '').trim())
-                        if (tenGvChinh) {
-                            const gvChinh = danhSachGV.find(
-                                (gv) =>
-                                    gv.userProfile.fullname?.toLowerCase() ===
-                                    tenGvChinh.toLowerCase()
-                            )
-                            if (gvChinh) {
-                                subjectClass.gvChinh = gvChinh.id
-                            } else {
-                                console.log(
-                                    `Không tìm thấy giảng viên chính với tên: ${tenGvChinh}`
-                                )
-                            }
+                        const gvChinh = danhSachGV.find((gv) => gv.code === maGV)
+                        if (gvChinh) {
+                            subjectClass.gvChinh = gvChinh.id
+                        } else {
+                            console.log(`Không tìm thấy giảng viên chính với mã: ${maGV}`)
                         }
                         if (tenGvPhu) {
                             const gvPhu = danhSachGV.find(
@@ -405,7 +395,6 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                         where: {
                             semesterId,
                             schedule: subjectClass.caHoc,
-                            maxStudent: subjectClass.quanSo,
                             lecturerId: subjectClass.gvChinh ?? '',
                             extraLecturerId: subjectClass.gvPhu ?? '',
                             subjectId: subjectClass.monHoc ?? '',
@@ -418,6 +407,10 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                 id: existSubjectClass.id,
                             },
                             data: {
+                                maxStudent: subjectClass.quanSo,
+                                lecturerId: subjectClass.gvChinh ?? existSubjectClass.lecturerId,
+                                extraLecturerId:
+                                    subjectClass.gvPhu ?? existSubjectClass.extraLecturerId,
                                 endDate: subjectClass.ngayKetThuc ?? existSubjectClass.endDate,
                                 fixedClasses: {
                                     set: subjectClass.lopNienChe.map((e) => ({
@@ -438,6 +431,8 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                                               : scheduleInfo.tietHoc[0]
                                                       ) ?? 1,
                                                   periodType: scheduleInfo.hinhThucHoc,
+                                                  lecturerId: subjectClass.gvChinh ?? '',
+                                                  extraLecturerId: subjectClass.gvPhu ?? '',
                                               },
                                           }
                                         : {},
@@ -495,6 +490,8 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                                               : scheduleInfo.tietHoc[0]
                                                       ) ?? 1,
                                                   periodType: scheduleInfo.hinhThucHoc,
+                                                  lecturerId: subjectClass.gvChinh ?? '',
+                                                  extraLecturerId: subjectClass.gvPhu ?? '',
                                               },
                                           }
                                         : {},

@@ -186,22 +186,30 @@ export function LichCongTac({
                     subjectClass: {
                         subjectClassStudent: {
                             some: {
-                                studentId: profileIdLogin,
+                                student: {
+                                    userProfileId: profileIdLogin,
+                                },
                             },
                         },
                     },
                 },
                 {
-                    lecturerId: profileIdLogin,
-                },
-                {
-                    subjectClass: {
-                        lecturerId: profileIdLogin,
+                    lecturer: {
+                        userProfileId: profileIdLogin,
                     },
                 },
                 {
                     subjectClass: {
-                        extraLecturerId: profileIdLogin,
+                        mainLecturer: {
+                            userProfileId: profileIdLogin,
+                        },
+                    },
+                },
+                {
+                    subjectClass: {
+                        extraLecturer: {
+                            userProfileId: profileIdLogin,
+                        },
                     },
                 },
             ],
@@ -214,10 +222,6 @@ export function LichCongTac({
                         return type
                     })
                     .filter(Boolean) as PeriodType[],
-            },
-            classDate: {
-                gte: weekStart.toISOString(),
-                lte: weekEnd.toISOString(),
             },
         },
         include: {
@@ -284,8 +288,14 @@ export function LichCongTac({
                     ?.value || '#1890ff'
             const title = event.subjectClass?.name || ''
             // Handle multi-day events
-            const start = dayjs(PERIOD[event.startPeriod as keyof typeof PERIOD].startTime)
-            const end = dayjs(PERIOD[event.endPeriod as keyof typeof PERIOD].endTime)
+            const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
+            const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]
+            const start = dayjs(event.classDate)
+                .set('hour', dayjs(startPeriod.startTime).hour())
+                .set('minute', dayjs(startPeriod.startTime).minute())
+            const end = dayjs(event.classDate)
+                .set('hour', dayjs(endPeriod.endTime).hour())
+                .set('minute', dayjs(endPeriod.endTime).minute())
             let current = start
 
             while (current.isSameOrBefore(end, 'day')) {
@@ -364,30 +374,40 @@ export function LichCongTac({
     const transformedEventsDataTableCalendar = useMemo(() => {
         if (!eventsDataTableCalendar) return []
 
-        return eventsDataTableCalendar.map((event) => ({
-            id: event.id,
-            startTime: PERIOD[event.startPeriod as keyof typeof PERIOD].startTime.toISOString(),
-            endTime: PERIOD[event.endPeriod as keyof typeof PERIOD].endTime.toISOString(),
-            content: event.subjectClass?.name || '',
-            location: event.subjectClass?.room?.name || '',
-            note: event.notes || undefined,
-            color:
-                TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find((opt) => opt.type === event.periodType)
-                    ?.value || '#1890ff',
-            host: [event.lecturerId, event.extraLecturerId].filter(Boolean) as string[],
-            attendees: event.subjectClass.subjectClassStudent.map((scs) => scs.student.id),
-            hostProfile: transformProfileDataTableCalendar(
-                [
-                    event.subjectClass.mainLecturer?.userProfile,
-                    event.subjectClass.extraLecturer?.userProfile,
-                ].filter(Boolean) as UserProfile[]
-            ),
-            attendeesProfile: transformProfileDataTableCalendar(
-                event.subjectClass.subjectClassStudent
-                    .map((scs) => scs.student.userProfile)
-                    .filter(Boolean) as UserProfile[]
-            ),
-        }))
+        return eventsDataTableCalendar.map((event) => {
+            const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
+            const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]
+            const start = dayjs(event.classDate)
+                .set('hour', dayjs(startPeriod.startTime).hour())
+                .set('minute', dayjs(startPeriod.startTime).minute())
+            const end = dayjs(event.classDate)
+                .set('hour', dayjs(endPeriod.endTime).hour())
+                .set('minute', dayjs(endPeriod.endTime).minute())
+            return {
+                id: event.id,
+                startTime: start.toISOString(),
+                endTime: end.toISOString(),
+                content: event.subjectClass?.name || '',
+                location: event.subjectClass?.room?.name || '',
+                note: event.notes || undefined,
+                color:
+                    TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find((opt) => opt.type === event.periodType)
+                        ?.value || '#1890ff',
+                host: [event.lecturerId, event.extraLecturerId].filter(Boolean) as string[],
+                attendees: event.subjectClass.subjectClassStudent.map((scs) => scs.student.id),
+                hostProfile: transformProfileDataTableCalendar(
+                    [
+                        event.subjectClass.mainLecturer?.userProfile,
+                        event.subjectClass.extraLecturer?.userProfile,
+                    ].filter(Boolean) as UserProfile[]
+                ),
+                attendeesProfile: transformProfileDataTableCalendar(
+                    event.subjectClass.subjectClassStudent
+                        .map((scs) => scs.student.userProfile)
+                        .filter(Boolean) as UserProfile[]
+                ),
+            }
+        })
     }, [eventsDataTableCalendar])
 
     // ============ RENDER COMPONENTS ============
