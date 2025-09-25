@@ -39,7 +39,7 @@ interface FilterProps {
 }
 
 export default function ClassSubject() {
-    const { can } = useAbility()
+    const { canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
