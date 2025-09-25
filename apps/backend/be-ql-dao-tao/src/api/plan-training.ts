@@ -437,6 +437,19 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                               },
                                           }
                                         : {},
+                                subjectClassTimes: {
+                                    create: {
+                                        dayOfWeek:
+                                            dayjs(subjectClass.ngayKetThuc ?? new Date()).day() ===
+                                            0
+                                                ? 8
+                                                : dayjs(
+                                                      subjectClass.ngayKetThuc ?? new Date()
+                                                  ).day() + 1,
+                                        startPeriod: Number(scheduleInfo.tietHoc[0]) ?? 1,
+                                        endPeriod: Number(scheduleInfo.tietHoc[1]) ?? 1,
+                                    },
+                                },
                             },
                         })
                         danhSachLopMonHoc.push(res)
@@ -482,6 +495,18 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                           }
                                         : {},
                                 trainingObjectTypeId,
+                                subjectClassTimes: {
+                                    create: {
+                                        dayOfWeek:
+                                            dayjs(subjectClass.ngayBatDau ?? new Date()).day() === 0
+                                                ? 8
+                                                : dayjs(
+                                                      subjectClass.ngayBatDau ?? new Date()
+                                                  ).day() + 1,
+                                        startPeriod: Number(scheduleInfo.tietHoc[0]) ?? 1,
+                                        endPeriod: Number(scheduleInfo.tietHoc[1]) ?? 1,
+                                    },
+                                },
                             },
                         })
                         danhSachLopMonHoc.push(res)
