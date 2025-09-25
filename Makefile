@@ -16,11 +16,10 @@ PKG_KHAO_THI := khao-thi
 PKG_DAO_TAO := ql-dao-tao
 PKG_HO_SO := ql-ho-so
 PKG_AI := tro-ly-ao
-PKG_PORTAL := portal
 
 # Maps for build types (backend/frontend)
 BE_PKGS := $(PKG_BE_MODEL) $(PKG_BE_DAO_TAO) $(PKG_BE_KHAO_THI) $(PKG_BE_PORTAL)
-FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) $(PKG_PORTAL)
+FE_PKGS := $(PKG_DAO_TAO) $(PKG_AI) $(PKG_KHAO_THI) $(PKG_HO_SO) 
 
 # Targets
 .PHONY: all clean push deploy release \

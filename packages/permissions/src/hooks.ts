@@ -1,6 +1,6 @@
 import NAVIGATION, {
+    type DANG_KY_HOC_PERMISSION,
     type KHAO_THI_PERMISSION,
-    type PORTAL_PERMISSION,
     type QL_DAO_TAO_PERMISSION,
     type QL_HO_SO_PERMISSION,
     ROUTER_PATH,
@@ -44,7 +44,7 @@ const useAbility = () => {
         can: (
             subject:
                 | KHAO_THI_PERMISSION
-                | PORTAL_PERMISSION
+                | DANG_KY_HOC_PERMISSION
                 | QL_DAO_TAO_PERMISSION
                 | TRO_LY_AO_PERMISSION
                 | QL_HO_SO_PERMISSION,
@@ -59,7 +59,7 @@ const useAbility = () => {
         canSome: (
             subject:
                 | KHAO_THI_PERMISSION
-                | PORTAL_PERMISSION
+                | DANG_KY_HOC_PERMISSION
                 | QL_DAO_TAO_PERMISSION
                 | TRO_LY_AO_PERMISSION
                 | QL_HO_SO_PERMISSION,
@@ -362,4 +362,4 @@ const usePermissions = () => {
     return permissions
 }
 
-export { useAbility, usePermissions, PERMISSIONS, getDynamicTitle, getDynamicBreadcrumb }
+export { getDynamicBreadcrumb, getDynamicTitle, PERMISSIONS, useAbility, usePermissions }
