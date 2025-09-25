@@ -35,7 +35,11 @@ export default function DangKyHocPage() {
                     type="card"
                     items={
                         classRegisterSession?.data?.map((session) => ({
-                            label: session.name,
+                            label: [
+                                session.name,
+                                session.semester.name,
+                                session.semester.schoolYear.name,
+                            ].join(' - '),
                             key: session.id,
                             children: (
                                 <DanhSachMonDangKy
