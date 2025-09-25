@@ -22,5 +22,5 @@
     visibility: visible;
 }
 .ant-table-expanded-row:hover {
-    background-color: aliceblue !important;
+    background-color: aliceblue;
 }

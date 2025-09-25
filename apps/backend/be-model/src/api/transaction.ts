@@ -47,7 +47,7 @@ app.openapi(
                         `Operation ${element.operation} not found in model ${element.model}`
                     )
                 }
-                // @ts-ignore
+                // @ts-expect-error
                 result.push(await tx[key][operation](element.data))
             }
             return result
