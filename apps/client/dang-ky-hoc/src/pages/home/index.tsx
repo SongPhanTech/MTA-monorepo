@@ -134,7 +134,11 @@ function Page() {
                             <Progress
                                 type="circle"
                                 size={'small'}
-                                percent={20}
+                                percent={
+                                    (gpaScore.totalCredits /
+                                        ((subjectScoreData?.requiredCredits ?? 0) +
+                                            (subjectScoreData?.electiveCredits ?? 0)) || 1) * 100
+                                }
                                 format={() => (
                                     <span>
                                         {gpaScore.totalCredits}/
