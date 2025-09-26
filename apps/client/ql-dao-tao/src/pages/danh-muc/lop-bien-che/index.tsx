@@ -7,6 +7,7 @@ import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
+import { useSession } from '@workspace/auth/react'
 import { emptyObjectIf } from '@workspace/constant'
 import type { TrainingCourse } from '@workspace/db'
 import {
@@ -45,7 +46,13 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
         startYear: undefined,
     })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const canReadAll = can(
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
+        'XEM_TAT_CA'
+    )
 
+    const { data: session } = useSession()
+    const profileId = session?.sDM_NhanVienId || ''
     const router = useRouter()
 
     const where = useMemo(() => {
@@ -112,6 +119,23 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
             trainingCourse: {
                 trainingObjectTypeId,
             },
+            active: true,
+            ...(!canReadAll
+                ? {
+                      OR: [
+                          {
+                              lecturerManagement: {
+                                  userProfileId: profileId,
+                              },
+                          },
+                          {
+                              staffManagement: {
+                                  userProfileId: profileId,
+                              },
+                          },
+                      ],
+                  }
+                : {}),
         }
     }, [
         filters.code,
@@ -122,6 +146,8 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
         filters.trainingMajors,
         filters.trainingLevel,
         trainingObjectTypeId,
+        canReadAll,
+        profileId,
     ])
 
     const { data = [] } = useFindManyFixedClass({

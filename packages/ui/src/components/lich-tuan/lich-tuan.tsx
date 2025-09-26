@@ -191,7 +191,7 @@ const convertApiToCalendarEventReactBigCalendar = (
                     .join(', ') || '',
             attendees:
                 event.subjectClass?.subjectClassStudent
-                    ?.map((student) => student?.userProfile?.fullname)
+                    ?.map((student) => student.student.userProfile?.fullname)
                     ?.filter(Boolean)
                     .join(', ') || '',
         }

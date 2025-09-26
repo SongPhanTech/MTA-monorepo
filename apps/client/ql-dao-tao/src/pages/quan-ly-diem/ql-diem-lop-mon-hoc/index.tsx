@@ -8,6 +8,7 @@ import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { useSession } from '@workspace/auth/react'
 import type { ArchivedAward, StudentSubjectScore } from '@workspace/db'
 import {
     useFindManyStudentSubjectScore,
@@ -137,6 +138,13 @@ type FilterTable = FilterProps & {
 
 export default function SubjectClassScore() {
     const { can } = useAbility()
+    const canReadAll = can(
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
+        'XEM_TAT_CA'
+    )
+
+    const { data: session } = useSession()
+    const profileId = session?.sDM_NhanVienId || ''
     const router = useRouter()
     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
@@ -246,6 +254,15 @@ export default function SubjectClassScore() {
                       },
                   }
                 : {}),
+            ...(!canReadAll
+                ? {
+                      mainLecturer: {
+                          userProfileId: profileId,
+                      },
+                  } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
+                : {}),
+            deletedAt: null,
+            active: true,
         },
         include: {
             subject: {
@@ -282,7 +299,6 @@ export default function SubjectClassScore() {
         orderBy: {
             createdAt: 'desc',
         },
-        take: 25,
     })
 
     const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore(

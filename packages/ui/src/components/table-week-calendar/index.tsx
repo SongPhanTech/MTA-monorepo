@@ -1350,7 +1350,7 @@ export function TableWeekCalendar({
                                         return '-'
                                     }
                                     const hostItems = record.event.hostProfile
-                                        .map((item) => item.fullname)
+                                        .map((item: any) => item.fullname)
                                         .filter(Boolean)
                                         .join(', ')
                                     return hostItems

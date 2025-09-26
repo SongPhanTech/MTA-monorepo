@@ -5,6 +5,7 @@ import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import DefaultLayout from '@layouts/default-layout'
+import { useSession } from '@workspace/auth/react'
 import type { ExamType, SubjectClass } from '@workspace/db'
 import {
     useCountSubjectClass,
@@ -39,7 +40,7 @@ interface FilterProps {
 }
 
 export default function ClassSubject() {
-    const { canSome } = useAbility()
+    const { canSome, can } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -75,6 +76,13 @@ export default function ClassSubject() {
 
     //#endregion
 
+    const canReadAll = can(
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
+        'XEM_TAT_CA'
+    )
+
+    const { data: session } = useSession()
+    const profileId = session?.sDM_NhanVienId || ''
     //#region Mới
     /* Mới */
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
@@ -124,6 +132,14 @@ export default function ClassSubject() {
                       },
                   }
                 : {}),
+            ...(!canReadAll
+                ? {
+                      mainLecturer: {
+                          userProfileId: profileId,
+                      },
+                  } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
+                : {}),
+            active: true,
             deletedAt: null,
         },
         include: {
@@ -166,6 +182,19 @@ export default function ClassSubject() {
             ...(filters.searchText && filters.searchText !== ''
                 ? { code: { contains: filters.searchText } }
                 : {}),
+            trainingObjectTypeId,
+            ...(!canReadAll
+                ? {
+                      OR: [
+                          {
+                              mainLecturer: {
+                                  userProfileId: profileId,
+                              },
+                          },
+                      ],
+                  } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
+                : {}),
+            active: true,
             deletedAt: null,
         },
     })
@@ -430,7 +459,6 @@ export default function ClassSubject() {
                             },
                             {
                                 title: 'Giảng viên',
-                                dataIndex: 'tenMonHoc',
                                 width: 180,
                                 align: 'center',
                                 render: (text, record) => {
@@ -450,7 +478,6 @@ export default function ClassSubject() {
                             },
                             {
                                 title: 'Giảng viên NĐ',
-                                dataIndex: 'tenMonHoc',
                                 width: 180,
                                 align: 'center',
                                 render: (text, record) => {
