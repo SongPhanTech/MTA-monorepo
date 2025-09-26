@@ -53,7 +53,7 @@ const StaffByOrg: React.FC<ChartProps> = ({ className, dataMap }) => {
                 if (datum?.frequency) {
                     return { name: 'Số lượng', value: datum.frequency }
                 }
-                return { name: 'Số lượng', value: 'N/A' }
+                return { name: 'Số lượng', value: '-' }
             },
         },
         onReady: (chart: import('@ant-design/plots').Plot) => {

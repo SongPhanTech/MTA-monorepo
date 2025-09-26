@@ -305,7 +305,7 @@ export default function SubjectClassScore() {
                                         const examScoreDeadline = dayjs(record?.examScoreDeadline)
 
                                         if (!scoreDeadline && !examScoreDeadline) {
-                                            return 'N/A'
+                                            return '-'
                                         }
 
                                         let daysRemaining: number

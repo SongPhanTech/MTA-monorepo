@@ -14,7 +14,7 @@ export function useScoreConverter(scoreRanges: ScoreConvert[] = []) {
         if (!matched) {
             return {
                 base4: null,
-                letter: 'N/A',
+                letter: '-',
                 classification: 'Không xác định',
                 pass: false,
                 improvementRegister: false,

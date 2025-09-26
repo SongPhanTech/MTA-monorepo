@@ -361,7 +361,7 @@ export default function QuestionPage() {
                                         return 'Chưa xác định'
                                     }
                                     if (!record.difficulty.name) {
-                                        return `Level ${record.difficulty.level || 'N/A'}`
+                                        return `Level ${record.difficulty.level || '-'}`
                                     }
                                     if (!record.difficulty.level) {
                                         return record.difficulty.name

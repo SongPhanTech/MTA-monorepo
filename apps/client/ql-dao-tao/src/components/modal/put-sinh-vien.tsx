@@ -18,6 +18,7 @@ import 'dayjs/locale/vi'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import { STUDENT_STATUS_OPTIONS } from '@constants/constants'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import type { PutStudentProfile } from './quan-ly-ho-so/type'
@@ -43,7 +44,7 @@ const PutStudentModal = () => {
             curriculumVersion: true,
         },
     })
-
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: studentData } = useFindUniqueStudent(
         {
             where: { id },
@@ -240,7 +241,7 @@ const PutStudentModal = () => {
             form.setFieldsValue({
                 // Student fields với ID
                 code: studentData.code,
-                trainingObjectTypeId: studentData.trainingObjectTypeId ?? undefined,
+                trainingObjectTypeId: studentData.trainingObjectTypeId ?? trainingObjectTypeId,
                 fixedClassId: studentData.fixedClassId ?? undefined,
                 trainingCourseId: studentData.fixedClass?.trainingCourse?.id ?? undefined,
                 status: studentData.status,
@@ -253,7 +254,7 @@ const PutStudentModal = () => {
                 idCardNumber: studentData.userProfile?.idCardNumber,
             })
         }
-    }, [studentData, form])
+    }, [studentData, form, trainingObjectTypeId])
 
     // Effect để fill thông tin khi có dữ liệu từ API
     useEffect(() => {
@@ -272,6 +273,11 @@ const PutStudentModal = () => {
             title={id ? 'Chỉnh sửa sinh viên, học viên' : 'Thêm sinh viên, học viên'}
             className="w-[1000px]"
             layout="vertical"
+            formProps={{
+                initialValues: {
+                    trainingObjectTypeId,
+                },
+            }}
             // labelCol={{ span: 8 }} // label chiếm 6 cột (trên 24)
             // wrapperCol={{ span: 16 }} // input chiếm 18 cột
         >
@@ -311,10 +317,12 @@ const PutStudentModal = () => {
                         >
                             <Select
                                 placeholder="Chọn đối tượng đào tạo"
+                                value={trainingObjectTypeId}
                                 options={trainingObjectTypeData.map((value) => ({
                                     value: value.id,
                                     label: value.name,
                                 }))}
+                                disabled
                             />
                         </FormItem>
                     </Col>

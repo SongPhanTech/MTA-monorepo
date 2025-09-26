@@ -322,7 +322,7 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                                         return 'Chưa xác định'
                                     }
                                     if (!record.question?.difficulty.name) {
-                                        return `Level ${record.question?.difficulty.level || 'N/A'}`
+                                        return `Level ${record.question?.difficulty.level || '-'}`
                                     }
                                     if (!record.question?.difficulty.level) {
                                         return record.question?.difficulty.name

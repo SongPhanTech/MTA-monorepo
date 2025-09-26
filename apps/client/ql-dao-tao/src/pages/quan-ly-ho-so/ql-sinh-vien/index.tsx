@@ -13,7 +13,6 @@ import type {
     TrainingCourse,
     TrainingField,
     TrainingMajor,
-    TrainingObjectType,
     UserProfile,
 } from '@workspace/db'
 import {
@@ -25,11 +24,11 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingField,
     useFindManyTrainingMajor,
-    useFindManyTrainingObjectType,
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookCheckIcon } from 'lucide-react'
@@ -52,16 +51,17 @@ export default function UserProfilePageDs() {
         trainingCourse: undefined,
         trainingMajors: undefined,
         curriculumVersion: undefined,
-        trainingObjectTypes: undefined,
     })
 
     const [importModalVisible, setImportModalVisible] = useState(false)
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const where = useMemo(
         () => ({
-            ...(filters.trainingObjectTypes && {
-                trainingObjectTypeId: { in: filters.trainingObjectTypes },
-            }),
+            // ...(filters.trainingObjectTypes && {
+            //     trainingObjectTypeId: { in: filters.trainingObjectTypes },
+            // }),
+            trainingObjectTypeId,
             ...(filters.code && filters.code !== ''
                 ? {
                       code: {
@@ -149,7 +149,7 @@ export default function UserProfilePageDs() {
         [
             filters.code,
             filters.name,
-            filters?.trainingObjectTypes,
+            trainingObjectTypeId,
             filters.trainingMajors,
             filters.fixedClass,
             filters.trainingField,
@@ -231,7 +231,6 @@ export default function UserProfilePageDs() {
     })
 
     const { data: trainingFieldData = [] } = useFindManyTrainingField()
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
@@ -435,12 +434,12 @@ export default function UserProfilePageDs() {
                                 title: 'ĐTĐT',
                                 align: 'center',
                                 width: 150,
-                                type: 'select',
+                                // type: 'select',
                                 dataIndex: 'trainingObjectTypes',
-                                options: trainingObjectTypeData.map((item: TrainingObjectType) => ({
-                                    label: item.name,
-                                    value: item.id,
-                                })),
+                                // options: trainingObjectTypeData.map((item: TrainingObjectType) => ({
+                                //     label: item.name,
+                                //     value: item.id,
+                                // })),
                                 render: (__, record: any) =>
                                     record?.trainingObjectType
                                         ? record?.trainingObjectType?.name
