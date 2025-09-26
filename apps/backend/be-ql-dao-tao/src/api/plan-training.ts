@@ -165,6 +165,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
         const danhSachMaTKBMonHoc = new Set<string>()
         const danhSachMaLopNienChe = new Set<string>()
         const danhSachMaPhongHoc = new Set<string>()
+        const maMonMaLop = new Map<string, Array<string>>() // key: {maMon}, value: [maLop]
 
         for (const row of rowData) {
             // Xử lý từng dòng dữ liệu ở đây
@@ -197,6 +198,13 @@ app.openapi(importPhanCongGiangDay, async (c) => {
             }
             if (maLopNienChe && tenLopNienChe) {
                 danhSachMaLopNienChe.add(maLopNienChe.trim())
+            }
+            if (maMon && maLopNienChe) {
+                if (!maMonMaLop.has(String(maMon))) {
+                    maMonMaLop.set(String(maMon), [String(maLopNienChe)])
+                } else {
+                    maMonMaLop.get(String(maMon))?.push(String(maLopNienChe))
+                }
             }
             if (hocChung) {
                 hocChung
@@ -262,8 +270,24 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                 code: true,
             },
         })
+
         await prisma.$transaction(
             async (tx) => {
+                await tx.classSchedule.deleteMany({
+                    where: {
+                        subjectClass: {
+                            semesterId,
+                        },
+                    },
+                })
+                await tx.subjectClassTime.deleteMany({
+                    where: {
+                        subjectClass: {
+                            semesterId,
+                        },
+                    },
+                })
+
                 for (const row of rowData) {
                     // Xử lý từng dòng dữ liệu ở đây
                     const [
@@ -287,7 +311,6 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                         gvChinh: null as string | null,
                         gvPhu: null as string | null,
                         monHoc: null as string | null,
-                        maLopMonHoc: null as string | null,
                         lopNienChe: [] as string[],
                         phongHoc: null as string | null,
                         ngayBatDau: ngayHoc ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate() : null,
@@ -350,7 +373,6 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                         )
                         if (monHoc) {
                             subjectClass.monHoc = monHoc.id
-                            subjectClass.maLopMonHoc = `${monHoc.code}-${Math.random().toString(10).substr(2, 2)}`
                         } else {
                             console.log(`Không tìm thấy môn học với mã: ${maMon}`)
                         }
@@ -391,14 +413,12 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                         }
                     }
                     subjectClass.ngayKetThuc = scheduleInfo.ngayHoc
+                    const maLopMonHoc = `${danhSachMonHoc.find((e) => e.codeTkb?.toLowerCase() === String(maMon).toLowerCase())?.code} ${((maMonMaLop.get(String(maMon))?.indexOf(String(maLopNienChe)) ?? 0) + 1).toString().padStart(2, '0')}`
+
                     const existSubjectClass = await tx.subjectClass.findFirst({
                         where: {
                             semesterId,
-                            schedule: subjectClass.caHoc,
-                            lecturerId: subjectClass.gvChinh ?? '',
-                            extraLecturerId: subjectClass.gvPhu ?? '',
-                            subjectId: subjectClass.monHoc ?? '',
-                            roomId: subjectClass.phongHoc ?? '',
+                            code: maLopMonHoc,
                         },
                     })
                     if (existSubjectClass) {
@@ -460,7 +480,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                     ) {
                         const res = await tx.subjectClass.create({
                             data: {
-                                code: subjectClass.maLopMonHoc ?? '',
+                                code: maLopMonHoc ?? '',
                                 name: tenMon ? tenMon.trim() : '',
                                 schedule: subjectClass.caHoc,
                                 maxStudent: subjectClass.quanSo,

@@ -1,24 +1,20 @@
 import Loading from '@components/commons/loading'
-import { useMenuList } from '@hooks/menu-list'
 import { useSession } from '@workspace/auth/react'
+import { ROUTER_PATH } from '@workspace/router'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 const IndexPage: NextPage = () => {
-    const menus = useMenuList()
     const { status, goToLastPage } = useSession()
     const router = useRouter()
 
     useEffect(() => {
         if (status === 'authenticated') {
             if (goToLastPage('lms')) return
-            const firstMenu = menus.flat()
-            if (firstMenu.length > 0 && firstMenu[0].path) {
-                router.push(firstMenu[0].path)
-            }
+            router.push(ROUTER_PATH.QL_DAO_TAO.HOME)
         }
-    }, [status, goToLastPage, menus.flat, router.push])
+    }, [status, router.push, goToLastPage])
     return <Loading />
 }
 export default IndexPage

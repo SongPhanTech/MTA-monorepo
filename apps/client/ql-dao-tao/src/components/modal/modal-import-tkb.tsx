@@ -42,7 +42,7 @@ const ModalNhapTKB = () => {
         if (!file) return
 
         setFile(file)
-        setFileName(`Dữ liệu phiên bản chương trình đào tạo.${file.name.split('.')[1]}`)
+        setFileName(`Dữ liệu thời khoá biểu.${file.name.split('.')[1]}`)
         const reader = new FileReader()
         reader.readAsArrayBuffer(file)
     }
