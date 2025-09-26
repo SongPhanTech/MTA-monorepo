@@ -37,8 +37,8 @@ const DocumentPaths: React.FC<DocumentPathsComponentProps> = ({
     relationType,
     titleForm = 'documentFiles',
     multiple = true,
-    accept = '.doc,.docx,.xls,.xlsx',
-    text = 'DOC, DOCX, XLSX, XLS',
+    accept = '.doc,.docx,.xls,.xlsx,.pdf,.ppt,.txt',
+    text = 'DOC, DOCX, XLSX, XLS, PDF, PPT, TXT',
 }) => {
     const [fileList, setFileList] = useState<UploadedFileItem[]>([])
 

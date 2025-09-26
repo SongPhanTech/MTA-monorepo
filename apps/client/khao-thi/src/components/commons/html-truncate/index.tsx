@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 type TypeProps = {
     key: string
@@ -9,14 +9,14 @@ export default function HtmlTruncate({ key, children }: TypeProps) {
     const [showButton, setShowButton] = useState(false)
     const textRef = useRef<HTMLDivElement>(null)
 
-    //   const classContent=useMemo(()=>{
-    //      let className = "";
-    //   if (showButton) {
-    //     if (show) className += " is-collapsed";
-    //   }
-    //   return className;
-    //   },[])
-
+    const classContent = useMemo(() => {
+        if (showButton) {
+            if (!show) {
+                return 'is-collapsed'
+            }
+        }
+        return ''
+    }, [show, showButton])
     const handleShowMore = () => {
         setShow(!show)
         console.log(show)
@@ -33,9 +33,7 @@ export default function HtmlTruncate({ key, children }: TypeProps) {
     }, [])
     return (
         <div className="relative collapse-content">
-            <div
-                className={`content text-left ${!showButton && !show ? '' : 'is-collapsed'} ${show ? '' : 'max-h-[44px]'}  `}
-            >
+            <div className={`content text-left ${classContent} ${show ? '' : 'max-h-[44px]'}  `}>
                 <div ref={textRef}>{children}</div>
             </div>
             {showButton && (

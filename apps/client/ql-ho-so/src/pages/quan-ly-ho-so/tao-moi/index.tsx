@@ -413,7 +413,7 @@ export default function CreateUserPage() {
         try {
             showSpinner()
 
-            const res = await axios.post('https://mta.swantech.vn/DM_NhanViens', {
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/DM_NhanViens`, {
                 sDM_DonViId: values.sDM_DonViId,
                 sMa: values.code,
                 sHoVaDem: values.lastName.trim(),
@@ -423,11 +423,11 @@ export default function CreateUserPage() {
                 sDM_GioiTinhId: values.genderId,
                 dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
                 sCCCD: values.idCardNumber,
-                sSDTDiDong: values.phoneNumber,
-                sEmail: values.email,
+                sSDTDiDong: values?.phoneNumber || '',
+                sEmail: values?.email || '',
             })
 
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 const resProfile = await createUserProfile({
                     data: {
                         ...values,

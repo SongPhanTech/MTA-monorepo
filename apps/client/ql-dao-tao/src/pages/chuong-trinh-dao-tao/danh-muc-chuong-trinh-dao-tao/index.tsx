@@ -322,9 +322,9 @@ export default function TrainingProgramCatalog() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={12}>
+                        <Col span={18}>
                             <Flex>
-                                <Col span={8}>
+                                <Col span={6}>
                                     <Input
                                         id="search"
                                         onChange={(e) =>
@@ -363,8 +363,9 @@ export default function TrainingProgramCatalog() {
                                         className="w-full"
                                     />
                                 </Col>
-                                <Col span={8}>
+                                <Col span={6}>
                                     <Select
+                                        className="w-full"
                                         placeholder="Chọn chuyên ngành đào tạo"
                                         options={trainingMajorData.map((i: TrainingMajor) => ({
                                             value: i.id,

@@ -447,85 +447,90 @@ const PutVersionSubjectModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Tabs
-                items={[
-                    {
-                        key: '1',
-                        label: 'Mục tiêu',
-                        children: (
-                            <FormItem form={form} name="objectives">
-                                <Input.TextArea rows={6} placeholder="Nhập mục tiêu" />
-                            </FormItem>
-                        ),
-                    },
-                    {
-                        key: '2',
-                        label: 'Chuẩn đầu ra',
-                        children: (
-                            <FormItem form={form} name="learningOutcome">
-                                <Input.TextArea rows={6} placeholder="Nhập chuẩn đầu ra" />
-                            </FormItem>
-                        ),
-                    },
-                    {
-                        key: '3',
-                        label: 'Cấu trúc chương trình đào',
-                        children: (
-                            <FormItem form={form} name="structure">
-                                <Input.TextArea
-                                    rows={6}
-                                    placeholder="Nhập cấu trúc chương trình đào"
-                                />
-                            </FormItem>
-                        ),
-                    },
-                    {
-                        key: '4',
-                        label: 'Kế hoạch và phương pháp dạy học',
-                        children: (
-                            <FormItem form={form} name="guild">
-                                <Input.TextArea
-                                    rows={6}
-                                    placeholder="Nhập kế hoạch và phương pháp dạy học"
-                                />
-                            </FormItem>
-                        ),
-                    },
-                    {
-                        key: '5',
-                        label: 'Đánh giá kết quả học tập',
-                        children: (
-                            <FormItem form={form} name="academicResults">
-                                <Input.TextArea
-                                    rows={6}
-                                    placeholder="Nhập đánh giá kết quả học tập"
-                                />
-                            </FormItem>
-                        ),
-                    },
-                    {
-                        key: '6',
-                        label: 'Cơ sở vật chất, học liệu',
-                        children: (
-                            <FormItem form={form} name="materials">
-                                <Input.TextArea
-                                    rows={6}
-                                    placeholder="Nhập cơ sở vật chất, học liệu"
-                                />
-                            </FormItem>
-                        ),
-                    },
-                    {
-                        key: '7',
-                        label: 'Quy định của học phần',
-                        children: (
-                            <FormItem form={form} name="rules">
-                                <Input.TextArea rows={6} placeholder="Nhập quy định của học phần" />
-                            </FormItem>
-                        ),
-                    },
-                ]}
-            />
+            <Col span={24}>
+                <Tabs
+                    items={[
+                        {
+                            key: '1',
+                            label: 'Mục tiêu',
+                            children: (
+                                <FormItem form={form} name="objectives">
+                                    <Input.TextArea rows={6} placeholder="Nhập mục tiêu" />
+                                </FormItem>
+                            ),
+                        },
+                        {
+                            key: '2',
+                            label: 'Chuẩn đầu ra',
+                            children: (
+                                <FormItem form={form} name="learningOutcome">
+                                    <Input.TextArea rows={6} placeholder="Nhập chuẩn đầu ra" />
+                                </FormItem>
+                            ),
+                        },
+                        {
+                            key: '3',
+                            label: 'Cấu trúc chương trình đào',
+                            children: (
+                                <FormItem form={form} name="structure">
+                                    <Input.TextArea
+                                        rows={6}
+                                        placeholder="Nhập cấu trúc chương trình đào"
+                                    />
+                                </FormItem>
+                            ),
+                        },
+                        {
+                            key: '4',
+                            label: 'Kế hoạch và phương pháp dạy học',
+                            children: (
+                                <FormItem form={form} name="guild">
+                                    <Input.TextArea
+                                        rows={6}
+                                        placeholder="Nhập kế hoạch và phương pháp dạy học"
+                                    />
+                                </FormItem>
+                            ),
+                        },
+                        {
+                            key: '5',
+                            label: 'Đánh giá kết quả học tập',
+                            children: (
+                                <FormItem form={form} name="academicResults">
+                                    <Input.TextArea
+                                        rows={6}
+                                        placeholder="Nhập đánh giá kết quả học tập"
+                                    />
+                                </FormItem>
+                            ),
+                        },
+                        {
+                            key: '6',
+                            label: 'Cơ sở vật chất, học liệu',
+                            children: (
+                                <FormItem form={form} name="materials">
+                                    <Input.TextArea
+                                        rows={6}
+                                        placeholder="Nhập cơ sở vật chất, học liệu"
+                                    />
+                                </FormItem>
+                            ),
+                        },
+                        {
+                            key: '7',
+                            label: 'Quy định của học phần',
+                            children: (
+                                <FormItem form={form} name="rules">
+                                    <Input.TextArea
+                                        rows={6}
+                                        placeholder="Nhập quy định của học phần"
+                                    />
+                                </FormItem>
+                            ),
+                        },
+                    ]}
+                />
+            </Col>
         </PutFormModal>
     )
 }

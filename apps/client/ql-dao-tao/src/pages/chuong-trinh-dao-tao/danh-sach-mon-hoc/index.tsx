@@ -258,7 +258,7 @@ export default function SubjectList() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={8}>
+                                <Col span={12}>
                                     <Form.Item
                                         className="mb-0"
                                         name="managementOrganizationId"

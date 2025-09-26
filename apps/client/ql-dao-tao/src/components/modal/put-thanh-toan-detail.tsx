@@ -14,7 +14,6 @@ import { Col, Form, Input, InputNumber, message, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { formatter } from '@/utils/formatterInputNumber'
 
 export type PutPaymentRecord = PaymentRecord
 
@@ -132,13 +131,6 @@ const PutPaymentRecordDetail = () => {
                         min={0}
                         placeholder="Nhập số tiền thanh toán"
                         suffix="VNĐ"
-                        formatter={formatter}
-                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
-                        onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                                e.preventDefault()
-                            }
-                        }}
                     />
                 </FormItem>
             </Col>

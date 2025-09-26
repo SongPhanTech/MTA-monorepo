@@ -1,7 +1,7 @@
 import { SafetyCertificateOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
-import { DEFAULT_PAGINATE_SIZE, FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
+import { FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -31,8 +31,6 @@ dayjs.locale('vi')
 export default function StudentFixedClassPage() {
     const router = useRouter()
     const fixedClassId = router.query.id as string
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
     const [open, setOpen] = useState(false)
     const [filters, setFilters] = useState<FilterProps>({
@@ -203,8 +201,6 @@ export default function StudentFixedClassPage() {
         orderBy: {
             createdAt: 'desc',
         },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
     })
 
     const debouncedRefetch = useCallback(
@@ -391,8 +387,7 @@ export default function StudentFixedClassPage() {
                                 width: 60,
                                 align: 'center',
                                 fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                render: (_, __, index) => index + 1,
                             },
                             {
                                 title: 'Mã sinh viên',

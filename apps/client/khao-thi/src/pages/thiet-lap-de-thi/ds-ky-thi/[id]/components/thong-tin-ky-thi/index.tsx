@@ -245,7 +245,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                     </FormItem>
                 </Col>
                 <Col span={12}>
-                    <FormItem form={form} name="duration" label="Thời gia thi (phút)" required>
+                    <FormItem form={form} name="duration" label="Thời gian thi (phút)" required>
                         <InputNumber
                             min={0}
                             type="number"

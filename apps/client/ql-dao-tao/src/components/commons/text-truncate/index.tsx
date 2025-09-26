@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 type TypeProps = {
     arr: { key: string; label: string }[]
@@ -12,13 +12,19 @@ export default function TextTruncate({ arr, key }: TypeProps) {
     const handleShowMore = () => {
         setShow(!show)
     }
+    const classContent = useMemo(() => {
+        if (showButton) {
+            if (!show) {
+                return 'is-collapsed'
+            }
+        }
+        return ''
+    }, [show, showButton])
 
     useEffect(() => {
         if (textRef.current) {
             const el = textRef.current
             if (el.scrollHeight >= 44 && arr?.length > 2) {
-                console.log(el.scrollHeight, arr?.length > 2)
-
                 setShowButton(true)
             }
         }
@@ -30,7 +36,7 @@ export default function TextTruncate({ arr, key }: TypeProps) {
                     paddingLeft: 0,
                     margin: 0,
                 }}
-                className={`content text-left ${!showButton && !show ? '' : 'is-collapsed'} ${show ? '' : 'line-clamp-2'}  `}
+                className={`content text-left ${classContent}  ${show ? '' : 'line-clamp-2'} `}
             >
                 {arr?.map((val: any, index: number) => (
                     <li key={val.key}>- {val.label}</li>
