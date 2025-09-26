@@ -67,7 +67,7 @@ export default function TroLyAo() {
             const newId = res?.id
             if (newId) {
                 setInput('') // Reset input after successful creation
-                router.push({ pathname: `/hoi-thoai/${newId}` })
+                router.push({ pathname: `/hoi-thoai/${newId}`, query: { isInitMessage: 'true' } })
             } else {
                 throw new Error('Không tạo được cuộc trò chuyện mới')
             }
@@ -113,7 +113,7 @@ export default function TroLyAo() {
             const newId = res?.id
             if (newId) {
                 setInput('') // Reset input after successful creation
-                router.push({ pathname: `/hoi-thoai/${newId}` })
+                router.push({ pathname: `/hoi-thoai/${newId}`, query: { isInitMessage: 'true' } })
             } else {
                 throw new Error('Không tạo được cuộc trò chuyện mới')
             }

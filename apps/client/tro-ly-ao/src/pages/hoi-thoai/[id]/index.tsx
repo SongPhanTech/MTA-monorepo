@@ -16,7 +16,7 @@ import { fetchHoiDap, fetchHoiDapFaq } from '@/api/hoi-dap'
 
 export default function Page() {
     const router = useRouter()
-    const { id } = router.query
+    const { id, isInitMessage } = router.query
     const scrollRef = useRef<HTMLDivElement>(null)
     const [isFaqMode, setIsFaqMode] = useState(false)
     const [input, setInput] = useState('')
@@ -26,6 +26,7 @@ export default function Page() {
     const [abortController, setAbortController] = useState<AbortController | null>(null)
     const [isUserScrolling, setIsUserScrolling] = useState(false)
     const [showScrollButton, setShowScrollButton] = useState(false)
+    const [hasAutoReplied, setHasAutoReplied] = useState(false)
 
     const { mutateAsync: updateConversation } = useUpdateConversation()
 
@@ -260,6 +261,7 @@ export default function Page() {
         setInput('')
         setIsUserScrolling(false)
         setShowScrollButton(false)
+        setHasAutoReplied(false)
     }, [id]) // Chạy khi id thay đổi
 
     // Tự động gọi API cho conversation mới (chỉ có USER message, chưa có BOT reply)
@@ -271,13 +273,29 @@ export default function Page() {
             id &&
             !loading &&
             !isStreaming &&
+            !hasAutoReplied &&
             conversationCurrent && // conversationCurrent đã load
-            !messageList.some((msg) => msg.sender === 'BOT') // Chưa có tin nhắn BOT nào
+            !messageList.some((msg) => msg.sender === 'BOT') && // Chưa có tin nhắn BOT nào
+            isInitMessage === 'true' // Chỉ auto reply cho tin nhắn init
         ) {
             const userMessage = messageList[0]
+            setHasAutoReplied(true)
             sendMessage(userMessage.content || '', Date.now(), true) // skipUserMessage = true
+
+            // Xóa param isInitMessage khỏi URL sau khi đã xử lý
+            router.replace(`/hoi-thoai/${id}`, undefined, { shallow: true })
         }
-    }, [messageList, id, conversationCurrent, loading, isStreaming, sendMessage])
+    }, [
+        messageList,
+        id,
+        conversationCurrent,
+        loading,
+        isStreaming,
+        hasAutoReplied,
+        sendMessage,
+        isInitMessage,
+        router,
+    ])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
