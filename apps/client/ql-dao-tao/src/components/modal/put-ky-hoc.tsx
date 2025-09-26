@@ -102,6 +102,7 @@ const PutSemesterModal = () => {
         } else {
             form.setFieldsValue({
                 active: true,
+                schoolYearId: input?.schoolYearId,
             })
         }
     }, [initialData])

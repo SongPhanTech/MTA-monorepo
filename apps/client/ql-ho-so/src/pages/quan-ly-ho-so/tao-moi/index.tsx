@@ -815,7 +815,7 @@ export default function CreateUserPage() {
 
     return (
         <>
-            {!can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'THEM') ? (
+            {can(QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO, 'THEM') ? (
                 <Form form={form} onFinish={handleSubmit}>
                     <div>
                         <Flex justify="space-between" className="p-4">
