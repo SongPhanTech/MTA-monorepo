@@ -47,29 +47,31 @@ export const calcFinalScore = (
 ): Decimal | null => {
     const rawFinalScore = !subjectScore.examScore
         ? null
-        : subjectScore.examScore < coef.scoreToPass
+        : subjectScore.examScore < coef?.scoreToPass
           ? subjectScore.examScore
           : Math.min(
-                (subjectScore.attendanceScore || 0) * coef.coef_1 +
-                    (subjectScore.midtermScore || 0) * coef.coef_2 +
-                    subjectScore.examScore * coef.coef_3,
+                (subjectScore.attendanceScore || 0) * coef?.coef_1 +
+                    (subjectScore.midtermScore || 0) * coef?.coef_2 +
+                    subjectScore.examScore * coef?.coef_3,
                 10
             )
 
     const maxCertFinalScore = subjectScore.certificates?.length
-        ? Math.max(...subjectScore.certificates.map((cert) => cert.archivedCertificate.finalScore))
+        ? Math.max(
+              ...subjectScore.certificates.map((cert) => cert?.archivedCertificate?.finalScore)
+          )
         : null
 
     if (rawFinalScore === null && maxCertFinalScore === null) {
         return null
     }
 
-    if (rawFinalScore && maxCertFinalScore === null && rawFinalScore < coef.scoreToPass) {
+    if (rawFinalScore && maxCertFinalScore === null && rawFinalScore < coef?.scoreToPass) {
         return new Decimal(rawFinalScore)
     }
 
     const bonusScore = subjectScore.awards.reduce(
-        (prev, curr) => prev + curr.archivedAward.bonusScore,
+        (prev, curr) => prev + curr?.archivedAward?.bonusScore,
         0
     )
 

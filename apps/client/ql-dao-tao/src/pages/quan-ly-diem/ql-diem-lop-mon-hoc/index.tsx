@@ -491,17 +491,17 @@ export default function SubjectClassScore() {
     const renderFinalScore = (record: any) => {
         const attendanceScore =
             scoreCC.find((item) => item.id === record.id)?.value ??
-            (record.attendanceScore !== undefined ? Number(record.attendanceScore) : null)
+            (record.attendanceScore !== undefined ? Number(record?.attendanceScore) : null)
 
         const midtermScore =
             scoreTX.find((item) => item.id === record.id)?.value ??
-            (record.midtermScore !== undefined ? Number(record.midtermScore) : null)
+            (record.midtermScore !== undefined ? Number(record?.midtermScore) : null)
 
         const examScore =
             scoreThi.find((item) => item.id === record.id)?.value ??
-            (record.examScore !== undefined ? Number(record.examScore) : null)
+            (record.examScore !== undefined ? Number(record?.examScore) : null)
 
-        const finalScore = calcFinalScore(record.student.fixedClass.trainingCourse, {
+        const finalScore = calcFinalScore(record?.student?.fixedClass?.trainingCourse, {
             ...record,
             attendanceScore,
             midtermScore,

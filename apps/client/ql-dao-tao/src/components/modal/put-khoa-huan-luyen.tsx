@@ -2,6 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import type {
     SchoolYear,
@@ -16,16 +17,14 @@ import {
     useFindManyTrainingCourse,
     useFindManyTrainingObjectType,
     useFindUniqueTrainingCourse,
-    useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Form, Input, InputNumber, message, Radio, Row } from 'antd'
 import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
+import { Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
-import Table from '@components/commons/table'
-import { sqlTransaction } from '@workspace/libs/api/model'
-import { Trash2 } from 'lucide-react'
 export type PutTrainingCourse = TrainingCourse & {
     schoolYearId: string | undefined
     trainingCourseClone: string | null
@@ -50,11 +49,44 @@ const PutTrainingCourseModal = () => {
     >([])
     const { data: trainingCourse = [] } = useFindManyTrainingCourse()
 
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-        useFindManyTrainingObjectType()
-
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: selectedTrainingCourse } = useFindUniqueTrainingCourse(
+        {
+            where: {
+                id: selectedId,
+            },
+            include: {
+                trainingCourseRegulation: true,
+                academicRankingConvert: {
+                    include: {
+                        downgradeRules: {
+                            include: {
+                                conditions: true,
+                            },
+                        },
+                        rankingCondition: true,
+                    },
+                }, // xếp loại học lực, xếp loại tốt nghiệp
+                scholarships: {
+                    include: {
+                        criteria: true,
+                    },
+                }, // học bổng
+                academicWarningRule: true, // cảnh cáo học tập,
+                academicActionConfig: {
+                    include: {
+                        ruleSets: {
+                            include: {
+                                conditions: true,
+                            },
+                        },
+                    },
+                }, // xử lý học tập
+            },
+        },
+        { enabled: !!selectedId }
+    )
     const { mutateAsync: createTrainingCourse } = useCreateTrainingCourse()
-    const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
     async function onOk(output?: PutTrainingCourse) {
         if (!output) return
         const {
@@ -72,8 +104,6 @@ const PutTrainingCourseModal = () => {
                 semesterStart: { connect: { id: semesterStartId } },
                 ...rest,
             }
-            console.log(data, 'data')
-
             if (id) {
                 const listUpdate = trainingCourseRegulation.filter((i) => i?.id)
                 const listCreate = trainingCourseRegulation.filter((i) => !i?.id)
@@ -157,9 +187,103 @@ const PutTrainingCourseModal = () => {
                         trainingCourseRegulation: {
                             createMany: {
                                 data: trainingCourseRegulation.map((i) => ({
-                                    ...i,
+                                    name: i.name,
+                                    code: i.code,
+                                    value: i.value,
+                                    description: i.description,
                                 })),
                             },
+                        },
+                        academicRankingConvert: {
+                            create: selectedTrainingCourse?.academicRankingConvert.map((e) => ({
+                                baseScore: e.baseScore,
+                                classification: e.classification,
+                                context: e.context,
+                                description: e.description,
+                                graduated: e.graduated,
+                                rankOrder: e.rankOrder,
+                                base10Max: e.base10Max,
+                                base10Min: e.base10Min,
+                                base4Max: e.base4Max,
+                                base4Min: e.base4Min,
+                                downgradeRules: {
+                                    create: e.downgradeRules.map((dr) => ({
+                                        conditions: {
+                                            create: dr.conditions.map((c) => ({
+                                                field: c.field,
+                                                operator: c.operator,
+                                                invert: c.invert,
+                                                value: c.value,
+                                                tuple: c.tuple,
+                                            })),
+                                        },
+                                    })),
+                                },
+                                rankingCondition: {
+                                    create: e.rankingCondition.map((rc) => ({
+                                        field: rc.field,
+                                        operator: rc.operator,
+                                        invert: rc.invert,
+                                        value: rc.value,
+                                        tuple: rc.tuple,
+                                    })),
+                                },
+                            })),
+                        },
+                        scholarships: {
+                            create: selectedTrainingCourse?.scholarships.map((s) => ({
+                                name: s.name,
+                                description: s.description,
+                                rankOrder: s.rankOrder,
+                                baseAmount: s.baseAmount,
+                                multiplier: s.multiplier,
+                                effectiveFrom: s.effectiveFrom,
+                                effectiveTo: s.effectiveTo,
+                                criteria: {
+                                    create: s.criteria.map((c) => ({
+                                        field: c.field,
+                                        operator: c.operator,
+                                        value: c.value,
+                                        tuple: c.tuple,
+                                        bonusValue: c.bonusValue,
+                                    })),
+                                },
+                            })),
+                        },
+                        academicWarningRule: {
+                            create: selectedTrainingCourse?.academicWarningRule.map((awr) => ({
+                                field: awr.field,
+                                operator: awr.operator,
+                                invert: awr.invert,
+                                threshold: awr.threshold,
+                                tuple: awr.tuple,
+                                severity: awr.severity,
+                                yearCondition: awr.yearCondition,
+                                semesterCondition: awr.semesterCondition,
+                                description: awr.description,
+                            })),
+                        },
+                        academicActionConfig: {
+                            create: selectedTrainingCourse?.academicActionConfig.map((aac) => ({
+                                name: aac.name,
+                                description: aac.description,
+                                actionType: aac.actionType,
+                                ruleSets: {
+                                    create: aac.ruleSets.map((rs) => ({
+                                        conditions: {
+                                            create: rs.conditions.map((c) => ({
+                                                field: c.field,
+                                                operator: c.operator,
+                                                invert: c.invert,
+                                                value: c.value,
+                                                tuple: c.tuple,
+                                                yearCondition: c.yearCondition,
+                                                isPriorityStudent: c.isPriorityStudent,
+                                            })),
+                                        },
+                                    })),
+                                },
+                            })),
                         },
                     },
                 })
@@ -182,8 +306,8 @@ const PutTrainingCourseModal = () => {
     }
     const schoolYearIdForm = Form.useWatch('schoolYearId', form)
 
-    const { data: dataSchoolYear = [], refetch: refetchSchoolYear } = useFindManySchoolYear()
-    const { data: semesterData = [], refetch: refetchSemesters } = useFindManySemester({
+    const { data: dataSchoolYear = [] } = useFindManySchoolYear()
+    const { data: semesterData = [] } = useFindManySemester({
         where: schoolYearIdForm
             ? {
                   schoolYearId: schoolYearIdForm,
@@ -204,18 +328,6 @@ const PutTrainingCourseModal = () => {
         {
             enabled: !!id,
         }
-    )
-
-    const { data: selectedTraniningCourse } = useFindUniqueTrainingCourse(
-        {
-            where: {
-                id: selectedId,
-            },
-            include: {
-                trainingCourseRegulation: true,
-            },
-        },
-        { enabled: !!selectedId }
     )
 
     const handleSelectChange = async (value: string) => {
@@ -276,20 +388,20 @@ const PutTrainingCourseModal = () => {
                 ...level,
                 schoolYearId: level.semesterStart?.schoolYearId,
             })
-        } else if (selectedTraniningCourse) {
+        } else if (selectedTrainingCourse) {
             //TODO: clone trainingCourse
             form.setFieldsValue({
-                coef_1: selectedTraniningCourse.coef_1,
-                coef_2: selectedTraniningCourse.coef_2,
-                coef_3: selectedTraniningCourse.coef_3,
-                scoreToTakeExam: selectedTraniningCourse.scoreToTakeExam,
-                scoreToPass: selectedTraniningCourse.scoreToPass,
-                scoreToPassConditional: selectedTraniningCourse.scoreToPassConditional,
-                scoreToTakeGraduation: selectedTraniningCourse.scoreToTakeGraduation,
-                scoreToPassGraduation: selectedTraniningCourse.scoreToPassGraduation,
-                admissionQuota: selectedTraniningCourse.admissionQuota,
-                maxTrainingTime: selectedTraniningCourse.maxTrainingTime,
-                trainingCourseRegulation: selectedTraniningCourse.trainingCourseRegulation,
+                coef_1: selectedTrainingCourse.coef_1,
+                coef_2: selectedTrainingCourse.coef_2,
+                coef_3: selectedTrainingCourse.coef_3,
+                scoreToTakeExam: selectedTrainingCourse.scoreToTakeExam,
+                scoreToPass: selectedTrainingCourse.scoreToPass,
+                scoreToPassConditional: selectedTrainingCourse.scoreToPassConditional,
+                scoreToTakeGraduation: selectedTrainingCourse.scoreToTakeGraduation,
+                scoreToPassGraduation: selectedTrainingCourse.scoreToPassGraduation,
+                admissionQuota: selectedTrainingCourse.admissionQuota,
+                maxTrainingTime: selectedTrainingCourse.maxTrainingTime,
+                trainingCourseRegulation: selectedTrainingCourse.trainingCourseRegulation,
             })
         } else {
             form.setFieldsValue({
@@ -299,7 +411,7 @@ const PutTrainingCourseModal = () => {
                 ],
             })
         }
-    }, [level, selectedTraniningCourse])
+    }, [level, selectedTrainingCourse])
 
     return (
         <PutFormModal
