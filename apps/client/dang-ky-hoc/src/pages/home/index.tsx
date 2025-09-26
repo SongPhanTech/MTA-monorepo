@@ -84,20 +84,10 @@ function Page() {
         subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.academicRankingConvert,
         subjectScoreData?.fixedClasses?.[0]?.trainingCourse?.baseScore
     )
-    console.log('subjectScoreData', subjectScoreData?.fixedClasses?.[0]?.trainingCourse)
-
-    const totalCredits = subjectScoreData?.trainingBlocks[0]?.subjects
-        ?.filter(
-            (subjectItem: any) =>
-                subjectItem.print === true && subjectItem.useForFinalScore === true
-        )
-        ?.reduce((sum: number, subjectItem: any) => sum + (subjectItem.subject?.credit || 0), 0)
-
     const gpaScore = useMemo(() => {
         const validSubjects =
             subjectScoreData?.trainingBlocks[0]?.subjects?.filter(
-                (subjectItem: any) =>
-                    subjectItem.print === true && subjectItem.useForFinalScore === true
+                (subjectItem) => subjectItem.print === true && subjectItem.useForFinalScore === true
             ) || []
 
         let totalWeightedScore = 0
@@ -118,7 +108,7 @@ function Page() {
         })
 
         const gpa = totalCredits > 0 ? totalWeightedScore / totalCredits : 0
-        return gpa
+        return { gpa, totalCredits }
     }, [subjectScoreData, convertScore])
 
     return (
@@ -147,7 +137,7 @@ function Page() {
                                 percent={20}
                                 format={() => (
                                     <span>
-                                        {totalCredits}/
+                                        {gpaScore.totalCredits}/
                                         {(subjectScoreData?.requiredCredits ?? 0) +
                                             (subjectScoreData?.electiveCredits ?? 0)}
                                     </span>
@@ -157,13 +147,13 @@ function Page() {
                                 <div className="flex flex-col items-center">
                                     <p>Điểm trung bình tích luỹ</p>
                                     <span className="text-3xl font-bold">
-                                        {gpaScore.toFixed(2)}
+                                        {gpaScore.gpa.toFixed(2)}
                                     </span>
                                 </div>
                                 <div className="flex flex-col items-center">
                                     <p>Xếp hạng</p>
                                     <span className="text-3xl font-bold">
-                                        {convertAcademicRanking(gpaScore).classification || '-'}
+                                        {convertAcademicRanking(gpaScore.gpa).classification || '-'}
                                     </span>
                                 </div>
                             </div>

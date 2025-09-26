@@ -11,7 +11,7 @@ import {
     useGetClassRegisterSession,
 } from '@workspace/libs/api/portal'
 import type { GetClassesInfo200ItemSubjectClassItem } from '@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem'
-import type { GetClassesInfo200ItemSubjectClassItemClassSchedulesItem } from '@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItemClassSchedulesItem'
+import type { GetClassesInfo200ItemSubjectClassItemSubjectClassTimesItem } from '@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItemSubjectClassTimesItem'
 import { Button, Checkbox, message, Popconfirm, Tabs } from 'antd'
 import dayjs from 'dayjs'
 import { CircleXIcon, LogOutIcon } from 'lucide-react'
@@ -348,13 +348,13 @@ const DanhSachMonDangKy = ({
                             width: 300,
                             align: 'center',
                             render: (_, record) => {
-                                return record.classSchedules?.map?.(
+                                return record.subjectClassTimes?.map?.(
                                     (
-                                        tkb: GetClassesInfo200ItemSubjectClassItemClassSchedulesItem
+                                        tkb: GetClassesInfo200ItemSubjectClassItemSubjectClassTimesItem
                                     ) => {
                                         return (
                                             <p>
-                                                {dayjs(tkb.classDate).format('ddd')} -{' '}
+                                                {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
                                                 {tkb.startPeriod} - {tkb.endPeriod}
                                             </p>
                                         )
