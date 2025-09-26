@@ -1,6 +1,6 @@
 import { CalendarOutlined, TableOutlined } from '@ant-design/icons'
 import { useSession } from '@workspace/auth/react'
-import { PeriodType, type UserProfile } from '@workspace/db'
+import { PeriodType, type Prisma, type UserProfile } from '@workspace/db'
 import { useFindManyClassSchedule } from '@workspace/db/hooks'
 import { useLocalStorage } from '@workspace/libs/hook/use-localstorage'
 import { lightThemeCustom } from '@workspace/ui/assets/styles/theme/global-theme-custom'
@@ -107,22 +107,83 @@ const isAllDayEvent = (startDate: Date, endDate: Date): boolean => {
     return isStartOfDay && isEndOfDay
 }
 
-const convertApiToCalendarEventReactBigCalendar = (apiData: any[]) => {
-    return apiData.map((item) => {
-        const startDate = new Date(item.startTime)
-        const endDate = new Date(item.endTime)
+const convertApiToCalendarEventReactBigCalendar = (
+    apiData: Prisma.ClassScheduleGetPayload<{
+        include: {
+            subjectClass: {
+                select: {
+                    name: true
+                    code: true
+                    room: true
+                    mainLecturer: {
+                        select: {
+                            userProfile: {
+                                select: {
+                                    id: true
+                                    fullname: true
+                                    firstName: true
+                                    lastName: true
+                                }
+                            }
+                        }
+                    }
+                    extraLecturer: {
+                        select: {
+                            userProfile: {
+                                select: {
+                                    id: true
+                                    fullname: true
+                                    firstName: true
+                                    lastName: true
+                                }
+                            }
+                        }
+                    }
+                    subjectClassStudent: {
+                        select: {
+                            student: {
+                                select: {
+                                    id: true
+                                    userProfile: {
+                                        select: {
+                                            id: true
+                                            fullname: true
+                                            firstName: true
+                                            lastName: true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }>[]
+) => {
+    return apiData.map((event) => {
+        const startPeriod = PERIOD[event.startPeriod as keyof typeof PERIOD]
+        const endPeriod = PERIOD[event.endPeriod as keyof typeof PERIOD]
+        const start = dayjs(event.classDate)
+            .set('hour', dayjs(startPeriod.startTime).hour())
+            .set('minute', dayjs(startPeriod.startTime).minute())
+        const end = dayjs(event.classDate)
+            .set('hour', dayjs(endPeriod.endTime).hour())
+            .set('minute', dayjs(endPeriod.endTime).minute())
 
         return {
-            id: item.id,
-            title: item.content || '',
-            start: startDate,
-            end: endDate,
-            allDay: isAllDayEvent(startDate, endDate),
-            color: item.color || undefined,
-            description: item.note || '',
-            location: item.location || '',
-            host: item.host || '',
-            attendees: item.attendees || '',
+            id: event.id,
+            title: event.subjectClass.name || '',
+            start: start.toDate(),
+            end: end.toDate(),
+            location: event.subjectClass?.room?.name || '',
+            allDay: isAllDayEvent(start.toDate(), end.toDate()),
+            color:
+                TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find((opt) => opt.type === event.periodType)
+                    ?.value || '#1890ff',
+            description: event.notes || '',
+            host: '',
+            attendees: '',
         }
     })
 }
