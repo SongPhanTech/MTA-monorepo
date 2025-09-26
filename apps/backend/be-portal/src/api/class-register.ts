@@ -126,6 +126,13 @@ const GetClassesInfoResponseSchema = z.array(
                         }),
                     })
                 ),
+                subjectClassTimes: z.array(
+                    z.object({
+                        dayOfWeek: z.number().optional(),
+                        startPeriod: z.number().optional(),
+                        endPeriod: z.number().optional(),
+                    })
+                ),
                 type: models.TrainingBlockSubjectScalarSchema.shape.type.optional(),
             })
         ),
@@ -301,6 +308,13 @@ app.openapi(getClassesInfo, async (c) => {
                             student: {
                                 userProfileId: session.id,
                             },
+                        },
+                    },
+                    subjectClassTimes: {
+                        select: {
+                            dayOfWeek: true,
+                            startPeriod: true,
+                            endPeriod: true,
                         },
                     },
                     classSchedules: { take: 1, orderBy: { classDate: 'asc' } },

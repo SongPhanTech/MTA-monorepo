@@ -168,11 +168,16 @@ import type {
     GetDMXaPhuongsId401,
     GetDMXaPhuongsId403,
     GetDMXaPhuongsIdParams,
+    GetMenusPermissionDTO,
     GetUserPermissionDTO,
     GetUserPermissionsAccessLevelAppCodeUserId400,
     GetUserPermissionsAccessLevelAppCodeUserId401,
     GetUserPermissionsAccessLevelAppCodeUserId403,
     GetUserPermissionsAccessLevelAppCodeUserId500,
+    GetUserPermissionsMenusPermissionUserId400,
+    GetUserPermissionsMenusPermissionUserId401,
+    GetUserPermissionsMenusPermissionUserId403,
+    GetUserPermissionsMenusPermissionUserId500,
     GetUserPermissionsPermissionAppCodeUserId400,
     GetUserPermissionsPermissionAppCodeUserId401,
     GetUserPermissionsPermissionAppCodeUserId403,
@@ -9054,6 +9059,229 @@ export function useGetUserPermissionsAccessLevelAppCodeUserId<
         userId,
         options
     )
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+/**
+ * Menu chức năng user có quyền
+ * @summary Quyền, Danh sách nghiệp vụ mà user có quyền
+ */
+export type getUserPermissionsMenusPermissionUserIdResponse200 = {
+    data: GetMenusPermissionDTO
+    status: 200
+}
+
+export type getUserPermissionsMenusPermissionUserIdResponse400 = {
+    data: GetUserPermissionsMenusPermissionUserId400
+    status: 400
+}
+
+export type getUserPermissionsMenusPermissionUserIdResponse401 = {
+    data: GetUserPermissionsMenusPermissionUserId401
+    status: 401
+}
+
+export type getUserPermissionsMenusPermissionUserIdResponse403 = {
+    data: GetUserPermissionsMenusPermissionUserId403
+    status: 403
+}
+
+export type getUserPermissionsMenusPermissionUserIdResponse500 = {
+    data: GetUserPermissionsMenusPermissionUserId500
+    status: 500
+}
+
+export type getUserPermissionsMenusPermissionUserIdResponseComposite =
+    | getUserPermissionsMenusPermissionUserIdResponse200
+    | getUserPermissionsMenusPermissionUserIdResponse400
+    | getUserPermissionsMenusPermissionUserIdResponse401
+    | getUserPermissionsMenusPermissionUserIdResponse403
+    | getUserPermissionsMenusPermissionUserIdResponse500
+
+export type getUserPermissionsMenusPermissionUserIdResponse =
+    getUserPermissionsMenusPermissionUserIdResponseComposite & {
+        headers: Headers
+    }
+
+export const getGetUserPermissionsMenusPermissionUserIdUrl = (userId: string) => {
+    return `/UserPermissions/menus-permission/${userId}`
+}
+
+export const getUserPermissionsMenusPermissionUserId = async (
+    userId: string,
+    options?: RequestInit
+): Promise<getUserPermissionsMenusPermissionUserIdResponse> => {
+    return customSystemFetch<getUserPermissionsMenusPermissionUserIdResponse>(
+        getGetUserPermissionsMenusPermissionUserIdUrl(userId),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getGetUserPermissionsMenusPermissionUserIdQueryKey = (userId: string) => {
+    return [`/UserPermissions/menus-permission/${userId}`] as const
+}
+
+export const getGetUserPermissionsMenusPermissionUserIdQueryOptions = <
+    TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+    TError =
+        | GetUserPermissionsMenusPermissionUserId400
+        | GetUserPermissionsMenusPermissionUserId401
+        | GetUserPermissionsMenusPermissionUserId403
+        | GetUserPermissionsMenusPermissionUserId500,
+>(
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetUserPermissionsMenusPermissionUserIdQueryKey(userId)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>
+    > = ({ signal }) =>
+        getUserPermissionsMenusPermissionUserId(userId, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, enabled: !!userId, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUserPermissionsMenusPermissionUserIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>
+>
+export type GetUserPermissionsMenusPermissionUserIdQueryError =
+    | GetUserPermissionsMenusPermissionUserId400
+    | GetUserPermissionsMenusPermissionUserId401
+    | GetUserPermissionsMenusPermissionUserId403
+    | GetUserPermissionsMenusPermissionUserId500
+
+export function useGetUserPermissionsMenusPermissionUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+    TError =
+        | GetUserPermissionsMenusPermissionUserId400
+        | GetUserPermissionsMenusPermissionUserId401
+        | GetUserPermissionsMenusPermissionUserId403
+        | GetUserPermissionsMenusPermissionUserId500,
+>(
+    userId: string,
+    options: {
+        query: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsMenusPermissionUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+    TError =
+        | GetUserPermissionsMenusPermissionUserId400
+        | GetUserPermissionsMenusPermissionUserId401
+        | GetUserPermissionsMenusPermissionUserId403
+        | GetUserPermissionsMenusPermissionUserId500,
+>(
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                TError,
+                TData
+            >
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                    TError,
+                    Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserPermissionsMenusPermissionUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+    TError =
+        | GetUserPermissionsMenusPermissionUserId400
+        | GetUserPermissionsMenusPermissionUserId401
+        | GetUserPermissionsMenusPermissionUserId403
+        | GetUserPermissionsMenusPermissionUserId500,
+>(
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Quyền, Danh sách nghiệp vụ mà user có quyền
+ */
+
+export function useGetUserPermissionsMenusPermissionUserId<
+    TData = Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+    TError =
+        | GetUserPermissionsMenusPermissionUserId400
+        | GetUserPermissionsMenusPermissionUserId401
+        | GetUserPermissionsMenusPermissionUserId403
+        | GetUserPermissionsMenusPermissionUserId500,
+>(
+    userId: string,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<
+                Awaited<ReturnType<typeof getUserPermissionsMenusPermissionUserId>>,
+                TError,
+                TData
+            >
+        >
+        request?: SecondParameter<typeof customSystemFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getGetUserPermissionsMenusPermissionUserIdQueryOptions(userId, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>

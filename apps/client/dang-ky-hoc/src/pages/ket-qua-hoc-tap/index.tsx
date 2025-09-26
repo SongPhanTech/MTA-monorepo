@@ -205,7 +205,6 @@ export default function StudentScoreClassPage() {
                             },
                             {
                                 title: 'Tên môn học',
-                                align: 'center',
                                 dataIndex: ['subjectClassStudent', '0', 'subjectVersion', 'name'],
                                 fixed: 'left',
                                 width: 200,

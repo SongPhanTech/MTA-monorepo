@@ -14,12 +14,11 @@ import type { GetClassesInfo200ItemSubjectClassItemPrerequisiteSubjectItem } fro
 import type { GetClassesInfo200ItemSubjectClassItemRoom } from './getClassesInfo200ItemSubjectClassItemRoom'
 import type { GetClassesInfo200ItemSubjectClassItemSchedule } from './getClassesInfo200ItemSubjectClassItemSchedule'
 import type { GetClassesInfo200ItemSubjectClassItemSubjectClassStudentItem } from './getClassesInfo200ItemSubjectClassItemSubjectClassStudentItem'
+import type { GetClassesInfo200ItemSubjectClassItemSubjectClassTimesItem } from './getClassesInfo200ItemSubjectClassItemSubjectClassTimesItem'
 import type { GetClassesInfo200ItemSubjectClassItemType } from './getClassesInfo200ItemSubjectClassItemType'
 
 export type GetClassesInfo200ItemSubjectClassItem = {
     id: string
-    /** @nullable */
-    code?: string | null
     active?: boolean
     /** @nullable */
     description?: string | null
@@ -29,6 +28,7 @@ export type GetClassesInfo200ItemSubjectClassItem = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    code: string
     name: string
     /** @nullable */
     startDate: string | null
@@ -63,5 +63,6 @@ export type GetClassesInfo200ItemSubjectClassItem = {
     credit?: number
     _count: _GetClassesInfo200ItemSubjectClassItemCount
     subjectClassStudent: GetClassesInfo200ItemSubjectClassItemSubjectClassStudentItem[]
+    subjectClassTimes: GetClassesInfo200ItemSubjectClassItemSubjectClassTimesItem[]
     type?: GetClassesInfo200ItemSubjectClassItemType
 }

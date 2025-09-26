@@ -76,4 +76,5 @@ export type DMMenu = BaseEntity & {
     sUrl?: string | null
     /** @nullable */
     sTitle?: string | null
+    bAllowAccessFromPersonalPage?: boolean
 }

@@ -22,6 +22,8 @@ export type GetClassesInfo200Item = {
     /** @nullable */
     updatedAt?: string | null
     name: string
+    /** @nullable */
+    codeTkb?: string | null
     examType: GetClassesInfo200ItemExamType
     type: GetClassesInfo200ItemType
     credit: number

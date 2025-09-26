@@ -54,18 +54,27 @@ import type { BaseEntity } from './baseEntity'
 
 export type NhatKyQuanLyTK = BaseEntity & {
     Id?: string
-    /** @nullable */
-    sUserId?: string | null
+    sUserId?: string
     /** @nullable */
     sUserName?: string | null
-    dLogTime?: string
-    iVaiTro?: number
+    /** @nullable */
+    sVaiTro?: string | null
+    /** @nullable */
+    dLogTime?: string | null
     /** @nullable */
     sActionType?: string | null
     /** @nullable */
+    sActionName?: string | null
+    /** @nullable */
     sDescription?: string | null
+    /** @nullable */
+    sClientId?: string | null
     /** @nullable */
     sIPAddress?: string | null
     /** @nullable */
     sRawUserAgent?: string | null
+    /** @nullable */
+    sDevice?: string | null
+    /** @nullable */
+    sOS?: string | null
 }

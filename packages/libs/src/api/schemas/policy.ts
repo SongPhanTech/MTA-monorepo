@@ -100,16 +100,4 @@ export type Policy = BaseEntity & {
     iLT_FailureResetTimeUnit?: number | null
     /** @nullable */
     iMaximumTemporaryLock?: number | null
-    /** @nullable */
-    bCoChuHoa?: boolean | null
-    /** @nullable */
-    bCoChuThuong?: boolean | null
-    /** @nullable */
-    bCoKiTuDacBiet?: boolean | null
-    /** @nullable */
-    bCoChuSo?: boolean | null
-    /** @nullable */
-    iDoDaiToiDa?: number | null
-    /** @nullable */
-    iDoDaiToiThieu?: number | null
 }

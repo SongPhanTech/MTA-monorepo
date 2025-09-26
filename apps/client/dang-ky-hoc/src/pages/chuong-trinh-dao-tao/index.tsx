@@ -318,7 +318,6 @@ export default function TrainingProgramSubjects() {
                                 title: 'Tên môn học',
                                 dataIndex: 'name',
                                 width: 200,
-                                align: 'center',
                                 fixed: 'left',
                                 type: 'input',
                                 render: (__, record: { subject?: SubjectVersion }) => {
@@ -329,7 +328,6 @@ export default function TrainingProgramSubjects() {
                                 title: 'Đơn vị quản lý',
                                 dataIndex: 'organization',
                                 width: 200,
-                                align: 'center',
                                 type: 'tree_select',
                                 options: treeData,
                                 render: (_, record) => {

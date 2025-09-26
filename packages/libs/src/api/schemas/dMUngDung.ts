@@ -84,4 +84,12 @@ export type DMUngDung = BaseEntity & {
     iDictionaryKey?: number | null
     /** @nullable */
     iSTT?: number | null
+    /** @nullable */
+    sListEventIds?: string | null
+    /** @nullable */
+    sHomeUrl?: string | null
+    /** @nullable */
+    sRootUrl?: string | null
+    /** @nullable */
+    sValidRedirecUrl?: string | null
 }

@@ -191,11 +191,11 @@ const DanhSachMonDangKy = ({
                             width: 300,
                             align: 'center',
                             render: (_, record) => {
-                                return record.classSchedules?.map?.((tkb) => {
+                                return record.subjectClassTimes?.map?.((tkb) => {
                                     return (
                                         <p>
-                                            {dayjs(tkb.classDate).format('ddd')} - {tkb.startPeriod}{' '}
-                                            - {tkb.endPeriod}
+                                            {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
+                                            {tkb.startPeriod} - {tkb.endPeriod}
                                         </p>
                                     )
                                 })

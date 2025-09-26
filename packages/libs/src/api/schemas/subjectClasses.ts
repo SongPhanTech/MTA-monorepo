@@ -10,8 +10,6 @@ import type { SubjectClassesSchedule } from './subjectClassesSchedule'
 
 export interface SubjectClasses {
     id: string
-    /** @nullable */
-    code?: string | null
     active?: boolean
     /** @nullable */
     description?: string | null
@@ -21,6 +19,7 @@ export interface SubjectClasses {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    code?: string
     name?: string
     /** @nullable */
     startDate?: string | null

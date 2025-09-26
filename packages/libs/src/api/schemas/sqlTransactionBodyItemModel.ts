@@ -43,6 +43,7 @@ export const SqlTransactionBodyItemModel = {
     ClassRegisterSession: 'ClassRegisterSession',
     ClassRegisterLogs: 'ClassRegisterLogs',
     SubjectClass: 'SubjectClass',
+    SubjectClassTime: 'SubjectClassTime',
     ClassSchedule: 'ClassSchedule',
     TrainingObjectType: 'TrainingObjectType',
     PriorityObject: 'PriorityObject',
