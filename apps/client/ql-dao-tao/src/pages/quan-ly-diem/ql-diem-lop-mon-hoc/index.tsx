@@ -8,7 +8,7 @@ import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { ArchivedAward, StudentSubjectScore, SubjectClass } from '@workspace/db'
+import type { ArchivedAward, StudentSubjectScore } from '@workspace/db'
 import {
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
@@ -139,7 +139,6 @@ export default function SubjectClassScore() {
     const { can } = useAbility()
     const router = useRouter()
     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
-    const [subjectClassFullData, setSubjectClassFullData] = useState<SubjectClass[]>([])
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
     const { subjectId } = router.query
@@ -681,11 +680,7 @@ export default function SubjectClassScore() {
         }
     }
 
-    useEffect(() => {
-        setSubjectClassFullData(subjectClassData)
-    }, [subjectClassData])
-
-    const selectedClassInfo = subjectClassFullData.find((item) => item.id === selectedFixedClass)
+    const selectedClassInfo = subjectClassData.find((item) => item.id === selectedFixedClass)
 
     const handleScoreInputKeyDown = (
         e: React.KeyboardEvent<HTMLInputElement>,

@@ -655,9 +655,5 @@ model ClassSchedule extends Base {
 
   cancelReason        String?          // Lý do hủy
 
-  @@index([subjectClassId])
-  @@index([roomId])
-  @@index([lecturerId])
-
   @@schema("ql-dao-tao")
 }

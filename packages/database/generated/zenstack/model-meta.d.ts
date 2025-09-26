@@ -6807,7 +6807,7 @@ declare const metadata: {
                     fields: string[];
                 };
             };
-            attributes: ({
+            attributes: {
                 name: string;
                 args: ({
                     name: string;
@@ -6816,13 +6816,7 @@ declare const metadata: {
                     name: string;
                     value?: undefined;
                 })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
+            }[];
         };
         trainingObjectType: {
             name: string;

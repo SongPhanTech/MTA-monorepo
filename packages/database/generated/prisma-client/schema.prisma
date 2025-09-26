@@ -1394,9 +1394,6 @@ model ClassSchedule {
   replacementSchedule ClassSchedule? @relation("ReplacementSchedule")
   cancelReason        String?
 
-  @@index([subjectClassId])
-  @@index([roomId])
-  @@index([lecturerId])
   @@schema("ql-dao-tao")
 }
 

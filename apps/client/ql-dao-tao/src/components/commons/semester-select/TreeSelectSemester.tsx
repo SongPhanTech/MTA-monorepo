@@ -86,6 +86,12 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
     }, [schoolYears, semesters])
 
     useEffect(() => {
+        const savedSemesterId = localStorage.getItem('selectedSemesterId')
+        if (savedSemesterId) {
+            setInternalValue(savedSemesterId)
+            onChange?.(savedSemesterId)
+            return
+        }
         if ((filterTimeNow || selectLatestCreated) && !internalValue && semesters?.length) {
             const nowTime = new Date()
 
@@ -117,6 +123,7 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
         if (onChange) {
             onChange(newValue)
         }
+        localStorage.setItem('selectedSemesterId', newValue)
     }
 
     const handlePopupScroll: TreeSelectProps['onPopupScroll'] = (e) => {

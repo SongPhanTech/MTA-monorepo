@@ -444,12 +444,7 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                                   roomId: existSubjectClass.roomId,
                                                   classDate: scheduleInfo.ngayHoc,
                                                   startPeriod: Number(scheduleInfo.tietHoc[0]) ?? 1,
-                                                  endPeriod:
-                                                      Number(
-                                                          scheduleInfo.tietHoc.length > 1
-                                                              ? scheduleInfo.tietHoc[1]
-                                                              : scheduleInfo.tietHoc[0]
-                                                      ) ?? 1,
+                                                  endPeriod: Number(scheduleInfo.tietHoc[1]) ?? 1,
                                                   periodType: scheduleInfo.hinhThucHoc,
                                                   lecturerId: subjectClass.gvChinh ?? '',
                                                   extraLecturerId: subjectClass.gvPhu ?? '',
@@ -503,15 +498,10 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                                                   roomId: subjectClass.phongHoc,
                                                   classDate: scheduleInfo.ngayHoc,
                                                   startPeriod: Number(scheduleInfo.tietHoc[0]) ?? 1,
-                                                  endPeriod:
-                                                      Number(
-                                                          scheduleInfo.tietHoc.length > 1
-                                                              ? scheduleInfo.tietHoc[1]
-                                                              : scheduleInfo.tietHoc[0]
-                                                      ) ?? 1,
+                                                  endPeriod: Number(scheduleInfo.tietHoc[1]) ?? 1,
                                                   periodType: scheduleInfo.hinhThucHoc,
-                                                  lecturerId: subjectClass.gvChinh ?? '',
-                                                  extraLecturerId: subjectClass.gvPhu ?? '',
+                                                  lecturerId: subjectClass.gvChinh,
+                                                  extraLecturerId: subjectClass.gvPhu,
                                               },
                                           }
                                         : {},
