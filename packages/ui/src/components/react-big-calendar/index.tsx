@@ -109,6 +109,7 @@ const ReactBigCalendarCustom: React.FC<ReactBigCalendarCustomProps> = ({
                 section?.scrollIntoView({
                     behavior: 'instant',
                     block: 'start',
+                    inline: 'nearest',
                 })
             }, 0)
         }

@@ -1295,7 +1295,7 @@ export function TableWeekCalendar({
                                 },
                             },
                             {
-                                title: 'Nội dung công việc',
+                                title: 'Môn học',
                                 key: 'content',
                                 align: 'left',
                                 width: 300,
@@ -1341,7 +1341,7 @@ export function TableWeekCalendar({
                                 },
                             },
                             {
-                                title: 'Chủ trì',
+                                title: 'Giảng viên/Người phụ trách',
                                 key: 'host',
                                 width: 250,
                                 align: 'center',
@@ -1349,23 +1349,11 @@ export function TableWeekCalendar({
                                     if (!record.event) {
                                         return '-'
                                     }
-
-                                    const hostItems = [
-                                        ...(record.event.hostProfile || []).map((profile: any) => ({
-                                            name:
-                                                profile.fullname ||
-                                                `${profile.firstname} ${profile.lastname}`,
-                                            organization: profile.organization?.name || null,
-                                        })),
-                                        ...(record.event.host || []).map((name: string) => ({
-                                            name,
-                                            organization: null,
-                                        })),
-                                    ].filter((item) => item.name)
-
-                                    if (hostItems.length === 0) return '-'
-
-                                    return ''
+                                    const hostItems = record.event.hostProfile
+                                        .map((item) => item.fullname)
+                                        .filter(Boolean)
+                                        .join(', ')
+                                    return hostItems
                                 },
                             },
                             {
@@ -1377,25 +1365,9 @@ export function TableWeekCalendar({
                                     if (!record.event) {
                                         return '-'
                                     }
-
-                                    const attendeeItems = [
-                                        ...(record.event.attendeesProfile || []).map(
-                                            (profile: any) => ({
-                                                name:
-                                                    profile.fullname ||
-                                                    `${profile.firstname} ${profile.lastname}`,
-                                                organization: profile.organization?.name || null,
-                                            })
-                                        ),
-                                        ...(record.event.attendees || []).map((name: any) => ({
-                                            name,
-                                            organization: null,
-                                        })),
-                                    ].filter((item) => item.name)
-
-                                    if (attendeeItems.length === 0) return '-'
-
-                                    return ''
+                                    return record.event.attendeesProfile.length
+                                        ? `${record.event.attendeesProfile.length} học viên`
+                                        : '-'
                                 },
                             },
                             {
@@ -1408,14 +1380,9 @@ export function TableWeekCalendar({
                                         return '-'
                                     }
 
-                                    return (
-                                        <div style={{ textAlign: 'left' }}>
-                                            {record.event.location || '-'}
-                                        </div>
-                                    )
+                                    return record.event.location
                                 },
                             },
-
                             {
                                 title: 'Ghi chú',
                                 key: 'note',

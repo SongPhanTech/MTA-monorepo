@@ -4,7 +4,7 @@ import { PeriodType, type Prisma, type UserProfile } from '@workspace/db'
 import { useFindManyClassSchedule } from '@workspace/db/hooks'
 import { useLocalStorage } from '@workspace/libs/hook/use-localstorage'
 import { lightThemeCustom } from '@workspace/ui/assets/styles/theme/global-theme-custom'
-import { Checkbox, Col, ConfigProvider, Row, Segmented } from 'antd'
+import { Checkbox, Col, ConfigProvider, Modal, Row, Segmented } from 'antd'
 import viVN from 'antd/locale/vi_VN'
 import { useMemo, useState } from 'react'
 import { dayjs } from '..'
@@ -182,8 +182,18 @@ const convertApiToCalendarEventReactBigCalendar = (
                 TYPE_WORK_SCHEDULE_COLOR_OPTIONS.find((opt) => opt.type === event.periodType)
                     ?.value || '#1890ff',
             description: event.notes || '',
-            host: '',
-            attendees: '',
+            host:
+                [
+                    event.subjectClass?.mainLecturer?.userProfile?.fullname,
+                    event.subjectClass?.extraLecturer?.userProfile?.fullname,
+                ]
+                    .filter(Boolean)
+                    .join(', ') || '',
+            attendees:
+                event.subjectClass?.subjectClassStudent
+                    ?.map((student) => student?.userProfile?.fullname)
+                    ?.filter(Boolean)
+                    .join(', ') || '',
         }
     })
 }
@@ -418,12 +428,32 @@ export function LichCongTac({
             const diffDays = diffMs / (1000 * 60 * 60 * 24)
             source = diffDays >= 1 ? 'multi-day' : 'single-day'
         }
+        Modal.info({
+            title: event?.title,
+            content: (
+                <div>
+                    <p>
+                        <p>Ngày {dayjs(event.start).format('DD/MM/YYYY')}</p>
+                        <p>
+                            Từ {dayjs(event.start).format('HH:mm')} đến{' '}
+                            {dayjs(event.end).format('HH:mm')}
+                        </p>
+                    </p>
+                    <p>Địa điểm: {event?.location || '-'}</p>
+                    <p>Giảng viên: {event?.host || '-'}</p>
+                </div>
+            ),
+            // okButtonProps: { hidden: true },
+            okText: 'Đóng',
+            okButtonProps: { className: 'bg-primary text-white' },
+        })
     }
 
     const handleEventClickTableCalendar = (eventId: string, eventRecord?: any) => {
         let source = 'single-day'
         if (eventRecord?.isWeekRow) source = 'full-week'
         else if (eventRecord?.isMultiDayRow) source = 'multi-day'
+        console.log('eventRecord', eventRecord)
     }
 
     const handleCreateEventTableCalendar = (startTime: string, endTime: string) => {
@@ -458,13 +488,13 @@ export function LichCongTac({
                 attendees: event.subjectClass.subjectClassStudent.map((scs) => scs.student.id),
                 hostProfile: transformProfileDataTableCalendar(
                     [
-                        event.subjectClass.mainLecturer?.userProfile,
-                        event.subjectClass.extraLecturer?.userProfile,
+                        event.subjectClass?.mainLecturer?.userProfile,
+                        event.subjectClass?.extraLecturer?.userProfile,
                     ].filter(Boolean) as UserProfile[]
                 ),
                 attendeesProfile: transformProfileDataTableCalendar(
-                    event.subjectClass.subjectClassStudent
-                        .map((scs) => scs.student.userProfile)
+                    event.subjectClass?.subjectClassStudent
+                        ?.map((scs) => scs.student.userProfile)
                         .filter(Boolean) as UserProfile[]
                 ),
             }

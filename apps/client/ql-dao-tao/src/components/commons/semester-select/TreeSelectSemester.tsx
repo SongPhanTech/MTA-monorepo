@@ -86,15 +86,14 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
     }, [schoolYears, semesters])
 
     useEffect(() => {
-        const savedSemesterId = localStorage.getItem('selectedSemesterId')
-        if (savedSemesterId) {
-            setInternalValue(savedSemesterId)
-            onChange?.(savedSemesterId)
-            return
-        }
         if ((filterTimeNow || selectLatestCreated) && !internalValue && semesters?.length) {
             const nowTime = new Date()
-
+            const savedSemesterId = localStorage.getItem('selectedSemesterId')
+            if (savedSemesterId) {
+                setInternalValue(savedSemesterId)
+                onChange?.(savedSemesterId)
+                return
+            }
             // Ưu tiên filterTimeNow nếu cả hai prop đều true
             if (filterTimeNow) {
                 const currentSemester = semesters.find((semester) =>
