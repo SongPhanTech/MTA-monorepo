@@ -230,8 +230,8 @@ Page.getLayout = function getLayout(page: React.ReactNode) {
             breadcrumbList={[
                 { title: 'Thiết lập khảo sát' },
                 {
-                    title: 'Nhóm câu hỏi khảo sát',
-                    href: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT,
+                    title: 'Thiết lập chung',
+                    href: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
                 },
                 { title: 'Danh sách câu hỏi trong nhóm câu hỏi' },
             ]}
