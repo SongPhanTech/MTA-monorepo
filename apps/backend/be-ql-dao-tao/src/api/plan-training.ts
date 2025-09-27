@@ -263,14 +263,15 @@ const importFileGiaoVienCoGioGiay = async (
                 await tx.subjectClass.deleteMany({
                     where: {
                         semesterId,
+                        trainingObjectTypeId,
                     },
                 })
             }
-
             await tx.classSchedule.deleteMany({
                 where: {
                     subjectClass: {
                         semesterId,
+                        trainingObjectTypeId,
                     },
                 },
             })
@@ -278,6 +279,7 @@ const importFileGiaoVienCoGioGiay = async (
                 where: {
                     subjectClass: {
                         semesterId,
+                        trainingObjectTypeId,
                     },
                 },
             })
@@ -570,9 +572,14 @@ const importFileTKBTheoLopHocPhan = async (
     let ngayKetThuc: Date | null = null
     if (ghiChu?.[0]) {
         const match = ghiChu[0].toLowerCase().match(regex)
+
         if (match) {
-            ngayBatDau = dayjs(match[1], 'DD/MM/YYYY').toDate()
-            ngayKetThuc = dayjs(match[2], 'DD/MM/YYYY').toDate()
+            ngayBatDau = dayjs(match[1], 'DD/M/YYYY').isValid()
+                ? dayjs(match[1], 'DD/M/YYYY').toDate()
+                : dayjs(match[1], 'DD/MM/YYYY').toDate()
+            ngayKetThuc = dayjs(match[2], 'DD/M/YYYY').isValid()
+                ? dayjs(match[2], 'DD/M/YYYY').toDate()
+                : dayjs(match[2], 'DD/MM/YYYY').toDate()
         }
     }
     const indexOfFooter = rowData.findIndex((row) => {
@@ -649,6 +656,7 @@ const importFileTKBTheoLopHocPhan = async (
                 await tx.subjectClass.deleteMany({
                     where: {
                         semesterId,
+                        trainingObjectTypeId,
                     },
                 })
             }
@@ -656,6 +664,7 @@ const importFileTKBTheoLopHocPhan = async (
                 where: {
                     subjectClass: {
                         semesterId,
+                        trainingObjectTypeId,
                     },
                 },
             })
@@ -663,6 +672,7 @@ const importFileTKBTheoLopHocPhan = async (
                 where: {
                     subjectClass: {
                         semesterId,
+                        trainingObjectTypeId,
                     },
                 },
             })

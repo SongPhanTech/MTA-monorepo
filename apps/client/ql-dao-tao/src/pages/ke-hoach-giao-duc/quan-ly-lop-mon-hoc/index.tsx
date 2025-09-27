@@ -255,6 +255,7 @@ export default function TeachingAssignment() {
     const { data: count } = useCountSubjectClass({
         where: {
             ...where,
+            trainingObjectTypeId,
             deletedAt: null,
         },
     })

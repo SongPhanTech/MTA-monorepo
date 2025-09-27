@@ -1,4 +1,5 @@
 import { CloseOutlined } from '@ant-design/icons'
+import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
@@ -81,6 +82,9 @@ const ModalNhapTKB = () => {
             if (res?.status === 200) {
                 message.success(res?.data?.message || 'Nhập dữ liệu từ file thành công')
                 onClose()
+                queryClient.invalidateQueries({
+                    queryKey: ['zenstack', 'SubjectClass'],
+                })
             } else {
                 message.error(res?.data?.message || 'Nhập dữ liệu từ file thất bại')
             }
