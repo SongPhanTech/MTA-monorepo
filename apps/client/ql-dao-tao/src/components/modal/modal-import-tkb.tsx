@@ -7,7 +7,7 @@ import useSpinner from '@hooks/spinner'
 import { useImportPhanCongGiangDay } from '@workspace/libs/api/training'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Form, message, Radio, Space, Tag } from 'antd'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
@@ -31,13 +31,6 @@ const ModalNhapTKB = () => {
 
     const [file, setFile] = useState<File | null>(null)
     const [fileName, setFileName] = useState<string>('')
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
-    useEffect(() => {
-        form.setFieldsValue({
-            semesterId: id,
-        })
-    }, [])
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
@@ -108,6 +101,12 @@ const ModalNhapTKB = () => {
             onCancel={handleCancel}
             title={'Import danh sách phân công giảng dạy'}
             className="w-[60vw]"
+            formProps={{
+                initialValues: {
+                    fileType: 'THONG_KE_GIAO_VIEN_GIANG_DAY',
+                    semesterId: id,
+                },
+            }}
         >
             <Col span={24}>
                 <FormItem form={form} name="file" label="File Excel" required>
