@@ -8,7 +8,7 @@ import 'dayjs/locale/vi'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 export type StudentOutputStandards = {
     foreignLangPass: boolean
-    computerSkillPass: boolean
+    ITCertificationPass: boolean
 }
 
 const PutChuanDauRaModal = () => {
@@ -74,7 +74,7 @@ const PutChuanDauRaModal = () => {
 
             <FormItem
                 form={form}
-                name="computerSkillPass"
+                name="ITCertificationPass"
                 label="Đạt chuẩn tin học"
                 valuePropName="checked"
             >
