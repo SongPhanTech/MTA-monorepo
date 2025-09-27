@@ -1,14 +1,15 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { useUpdateStudent } from '@workspace/db/hooks'
+import { useFindUniqueStudent, useUpdateStudent } from '@workspace/db/hooks'
 import { Form, message, Switch } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import { useEffect } from 'react'
 export type StudentOutputStandards = {
     foreignLangPass: boolean
-    computerSkillPass: boolean
+    ITCertificationPass: boolean
 }
 
 const PutChuanDauRaModal = () => {
@@ -48,6 +49,24 @@ const PutChuanDauRaModal = () => {
         }
     }
 
+    const { data: initialValue } = useFindUniqueStudent(
+        {
+            where: { id },
+        },
+        {
+            enabled: !!id,
+        }
+    )
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+    useEffect(() => {
+        if (initialValue) {
+            form.setFieldsValue({
+                ...initialValue,
+            })
+        }
+    }, [initialValue])
+
     return (
         <PutFormModal
             open={isOpen}
@@ -74,7 +93,7 @@ const PutChuanDauRaModal = () => {
 
             <FormItem
                 form={form}
-                name="computerSkillPass"
+                name="ITCertificationPass"
                 label="Đạt chuẩn tin học"
                 valuePropName="checked"
             >

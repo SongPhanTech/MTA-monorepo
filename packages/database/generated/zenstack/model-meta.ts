@@ -5653,11 +5653,6 @@ const metadata = {
                 }, foreignLangPass: {
                     name: "foreignLangPass",
                     type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, computerSkillPass: {
-                    name: "computerSkillPass",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, isClassMonitor: {
                     name: "isClassMonitor",
                     type: "Boolean",

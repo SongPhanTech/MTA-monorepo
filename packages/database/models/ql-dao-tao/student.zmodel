@@ -132,8 +132,7 @@ model StudentSemesterResult extends Base {
   totalCreditsByCurriculum Int      // Tổng tín chỉ học kỳ theo chương trình đào tạo
   totalFailedCredits       Int      // tổng tín chỉ nợ từ đầu khoá đến hiện tại
 
-  foreignLangPass          Boolean                 @default(false)  // Đạt chuẩn ngoại ngữ
-  computerSkillPass        Boolean                 @default(false)  // Đạt chứng chỉ tin học
+  foreignLangPass          Boolean  // Đạt chuẩn ngoại ngữ
 
   isClassMonitor           Boolean  // Lớp trưởng
   isUnionLeader            Boolean  // Bí thư đoàn/các chức vụ chính trị

@@ -38,8 +38,7 @@ const baseSchema = z.object({
     accumulatedCredits: z.number(),
     totalCreditsByCurriculum: z.number(),
     totalFailedCredits: z.number(),
-    foreignLangPass: z.boolean().default(false),
-    computerSkillPass: z.boolean().default(false),
+    foreignLangPass: z.boolean(),
     isClassMonitor: z.boolean(),
     isUnionLeader: z.boolean(),
     entryScore: z.number().nullish(),
@@ -113,8 +112,7 @@ export const StudentSemesterResultPrismaUpdateSchema = z.object({
     accumulatedCredits: z.union([z.number(), z.record(z.unknown())]),
     totalCreditsByCurriculum: z.union([z.number(), z.record(z.unknown())]),
     totalFailedCredits: z.union([z.number(), z.record(z.unknown())]),
-    foreignLangPass: z.boolean().default(false),
-    computerSkillPass: z.boolean().default(false),
+    foreignLangPass: z.boolean(),
     isClassMonitor: z.boolean(),
     isUnionLeader: z.boolean(),
     entryScore: z.union([z.number().nullish(), z.record(z.unknown())]),
@@ -131,7 +129,7 @@ export const StudentSemesterResultPrismaUpdateSchema = z.object({
  * `StudentSemesterResult` schema for create operations excluding foreign keys and relations.
  */
 export const StudentSemesterResultCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, foreignLangPass: true, computerSkillPass: true, postponeWithReason: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true
+    id: true, active: true, createdAt: true, updatedAt: true, postponeWithReason: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true
 });
 
 

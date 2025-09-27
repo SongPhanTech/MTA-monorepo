@@ -478,6 +478,57 @@ app.openapi(saveExamSessions, async (c) => {
             WHERE
                 "id" IN (${Prisma.join(ids)})
             `
+
+        const examSessions = await tx.examSession.findMany({
+            where: {
+                id: { in: ids },
+                studentId: { not: null },
+                examFaxId: { not: null },
+            },
+            select: {
+                studentId: true,
+                examId: true,
+                examFaxId: true,
+            },
+        })
+
+        if (examSessions.length > 0) {
+            const examIds = [...new Set(examSessions.map((es) => es.examId))]
+            const exams = await tx.exam.findMany({
+                where: { id: { in: examIds } },
+                select: { id: true, subjectClass: { select: { id: true } } },
+            })
+            const examToSubjectClassesMap = new Map(
+                exams.map((e) => [e.id, e.subjectClass.map((sc) => sc.id)])
+            )
+
+            const examFaxIdsWithScore = examSessions
+                .map((es) => es.examFaxId)
+                .filter((id): id is string => id !== null)
+            const faxes = await tx.examFax.findMany({
+                where: { id: { in: examFaxIdsWithScore }, score: { not: null } },
+                select: { id: true, score: true },
+            })
+            const faxToScoreMap = new Map(faxes.map((f) => [f.id, f.score!]))
+
+            for (const session of examSessions) {
+                const score = faxToScoreMap.get(session.examFaxId!)
+                if (score === undefined) continue
+
+                const subjectClassIds = examToSubjectClassesMap.get(session.examId)
+                if (!subjectClassIds || subjectClassIds.length === 0) continue
+
+                await tx.studentSubjectScore.updateMany({
+                    where: {
+                        studentId: session.studentId!,
+                        subjectClassId: { in: subjectClassIds },
+                    },
+                    data: {
+                        examScore: score?.toNumber(),
+                    },
+                })
+            }
+        }
     })
 
     return c.json({ success: true, message: 'Success' }, 200)

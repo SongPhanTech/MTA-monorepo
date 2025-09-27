@@ -10184,24 +10184,6 @@ declare const metadata: {
                 foreignLangPass: {
                     name: string;
                     type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                computerSkillPass: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
                 };
                 isClassMonitor: {
                     name: string;
