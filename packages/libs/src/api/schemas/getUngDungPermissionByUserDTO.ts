@@ -64,4 +64,6 @@ export interface GetUngDungPermissionByUserDTO {
      * @nullable
      */
     sTen?: string | null
+    /** Số thứ tự ứng dụng */
+    iSTT?: number
 }

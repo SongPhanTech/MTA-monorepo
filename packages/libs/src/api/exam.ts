@@ -36,10 +36,10 @@ import type {
     GenExamBank400,
     GenExamBank404,
     GenExamBankResult,
-    GenExamFax,
+    GenExamCode,
+    GenExamCodeResult,
     GenExamFax400,
     GenExamFax404,
-    GenExamFaxResult,
     GetAnswerStatisticsByLevel404,
     GetAnswerStatisticsByLevelParams,
     GetDissatisfiedCountByFacultyParams,
@@ -451,11 +451,11 @@ export const useGenExamBank = <TError = GenExamBank400 | GenExamBank404, TContex
 }
 
 /**
- * Sinh fax cho kỳ thi
- * @summary Sinh fax cho kỳ thi
+ * Sinh phách cho kỳ thi
+ * @summary Sinh phách cho kỳ thi
  */
 export type genExamFaxResponse200 = {
-    data: GenExamFaxResult
+    data: GenExamCodeResult
     status: 200
 }
 
@@ -483,14 +483,14 @@ export const getGenExamFaxUrl = () => {
 }
 
 export const genExamFax = async (
-    genExamFax: GenExamFax,
+    genExamCode: GenExamCode,
     options?: RequestInit
 ): Promise<genExamFaxResponse> => {
     return customExamFetch<genExamFaxResponse>(getGenExamFaxUrl(), {
         ...options,
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(genExamFax),
+        body: JSON.stringify(genExamCode),
     })
 }
 
@@ -501,14 +501,14 @@ export const getGenExamFaxMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof genExamFax>>,
         TError,
-        { data: GenExamFax },
+        { data: GenExamCode },
         TContext
     >
     request?: SecondParameter<typeof customExamFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof genExamFax>>,
     TError,
-    { data: GenExamFax },
+    { data: GenExamCode },
     TContext
 > => {
     const mutationKey = ['genExamFax']
@@ -520,7 +520,7 @@ export const getGenExamFaxMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof genExamFax>>,
-        { data: GenExamFax }
+        { data: GenExamCode }
     > = (props) => {
         const { data } = props ?? {}
 
@@ -531,18 +531,18 @@ export const getGenExamFaxMutationOptions = <
 }
 
 export type GenExamFaxMutationResult = NonNullable<Awaited<ReturnType<typeof genExamFax>>>
-export type GenExamFaxMutationBody = GenExamFax
+export type GenExamFaxMutationBody = GenExamCode
 export type GenExamFaxMutationError = GenExamFax400 | GenExamFax404
 
 /**
- * @summary Sinh fax cho kỳ thi
+ * @summary Sinh phách cho kỳ thi
  */
 export const useGenExamFax = <TError = GenExamFax400 | GenExamFax404, TContext = unknown>(
     options?: {
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof genExamFax>>,
             TError,
-            { data: GenExamFax },
+            { data: GenExamCode },
             TContext
         >
         request?: SecondParameter<typeof customExamFetch>
@@ -551,7 +551,7 @@ export const useGenExamFax = <TError = GenExamFax400 | GenExamFax404, TContext =
 ): UseMutationResult<
     Awaited<ReturnType<typeof genExamFax>>,
     TError,
-    { data: GenExamFax },
+    { data: GenExamCode },
     TContext
 > => {
     const mutationOptions = getGenExamFaxMutationOptions(options)
@@ -560,8 +560,8 @@ export const useGenExamFax = <TError = GenExamFax400 | GenExamFax404, TContext =
 }
 
 /**
- * Lưu điểm theo fax
- * @summary Lưu điểm theo fax
+ * Lưu điểm theo phách
+ * @summary Lưu điểm theo phách
  */
 export type saveExamFaxesResponse200 = {
     data: SaveExamFaxesResult
@@ -636,7 +636,7 @@ export type SaveExamFaxesMutationBody = ExamFaxes
 export type SaveExamFaxesMutationError = SaveExamFaxes400
 
 /**
- * @summary Lưu điểm theo fax
+ * @summary Lưu điểm theo phách
  */
 export const useSaveExamFaxes = <TError = SaveExamFaxes400, TContext = unknown>(
     options?: {
@@ -661,7 +661,7 @@ export const useSaveExamFaxes = <TError = SaveExamFaxes400, TContext = unknown>(
 }
 
 /**
- * Lưu fax và điểm thi
+ * Lưu phách và điểm thi
  * @summary Lưu kết quả thi
  */
 export type saveExamSessionsResponse200 = {

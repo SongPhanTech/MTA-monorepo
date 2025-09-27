@@ -2,7 +2,7 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { $Enums, type SubjectClass } from '@workspace/db'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import { read, utils } from 'xlsx'
+import { read, utils, type WorkSheet } from 'xlsx'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
 import { exportPCGDdata } from '../services/lecturer'
@@ -94,6 +94,10 @@ const importPhanCongGiangDay = createRoute({
                     schema: UploadExcelModel.extend({
                         semesterId: z.string(), // loại thông tin
                         trainingObjectTypeId: z.string(), // loại thông tin
+                        fileType: z
+                            .enum(['THONG_KE_GIAO_VIEN_GIANG_DAY', 'TKB_THEO_LOP_HOC_PHAN'])
+                            .default('THONG_KE_GIAO_VIEN_GIANG_DAY'), // loại thông tin
+                        importType: z.enum(['TAO_MOI', 'CAP_NHAT']).default('CAP_NHAT'), // loại thông tin
                     }).openapi('importPhanCongGiangDay'),
                 },
             },
@@ -121,8 +125,721 @@ const importPhanCongGiangDay = createRoute({
     },
 })
 
+const importFileGiaoVienCoGioGiay = async (
+    sheet: WorkSheet,
+    semesterId: string,
+    trainingObjectTypeId: string,
+    danhSachLopMonHoc: Array<SubjectClass>,
+    importType: 'TAO_MOI' | 'CAP_NHAT'
+) => {
+    const rowData = utils.sheet_to_json<string[]>(sheet, {
+        header: 1,
+    })
+    const indexOffHeader = rowData.findIndex((row, index) => {
+        if (row[0] === 'STT') {
+            return true // dừng lại khi tìm thấy
+        }
+        return false // tiếp tục tìm kiếm
+    })
+    if (indexOffHeader === -1) {
+        return { message: 'Không tìm thấy header trong file' }
+    }
+    // Xóa các dòng trống ở đầu file (nếu có)
+    rowData.splice(0, indexOffHeader + 1)
+
+    const danhSachTenGV = new Set<string>()
+    const danhSachMaTKBMonHoc = new Set<string>()
+    const danhSachMaLopNienChe = new Set<string>()
+    const danhSachMaPhongHoc = new Set<string>()
+    const maMonMaLop = new Map<string, Array<string>>() // key: {maMon}, value: [maLop]
+
+    for (const row of rowData) {
+        // Xử lý từng dòng dữ liệu ở đây
+        const [
+            ,
+            maGV,
+            tenGV,
+            maMon,
+            tenMon,
+            maLopNienChe,
+            tenLopNienChe,
+            ,
+            maPhongHoc,
+            tenPhong,
+            ,
+            ,
+            ,
+            ,
+            hocChung,
+        ] = row
+        if (tenGV && maGV) {
+            tenGV
+                .split(',')
+                .map((e) => e.replace(/\([^)]*\)/g, '').trim())
+                // biome-ignore lint/suspicious/useIterableCallbackReturn: <dung cho set>
+                .forEach((e) => danhSachTenGV.add(e))
+        }
+        if (maMon && tenMon) {
+            danhSachMaTKBMonHoc.add(String(maMon).trim())
+        }
+        if (maLopNienChe && tenLopNienChe) {
+            danhSachMaLopNienChe.add(maLopNienChe.trim())
+        }
+        if (maMon && maLopNienChe) {
+            if (!maMonMaLop.has(String(maMon))) {
+                maMonMaLop.set(String(maMon), [String(maLopNienChe)])
+            } else {
+                maMonMaLop.get(String(maMon))?.push(String(maLopNienChe))
+            }
+        }
+        if (hocChung) {
+            hocChung
+                .split(',')
+                .map((e) => e.replace(/\([^)]*\)/g, '').trim())
+                // biome-ignore lint/suspicious/useIterableCallbackReturn: <dung cho set>
+                .forEach((e) => danhSachMaLopNienChe.add(e))
+        }
+        if (maPhongHoc && tenPhong) {
+            danhSachMaPhongHoc.add(maPhongHoc.trim())
+        }
+    }
+    const danhSachGV = await prisma.lecturer.findMany({
+        where: {
+            userProfile: {
+                fullname: {
+                    in: Array.from(danhSachTenGV),
+                },
+            },
+        },
+        select: {
+            id: true,
+            code: true,
+            userProfile: {
+                select: {
+                    fullname: true,
+                },
+            },
+        },
+    })
+
+    const danhSachMonHoc = await prisma.subjectVersion.findMany({
+        where: {
+            codeTkb: {
+                in: Array.from(danhSachMaTKBMonHoc),
+            },
+        },
+        select: {
+            id: true,
+            codeTkb: true,
+            code: true,
+        },
+    })
+    const danhSachLopNienChe = await prisma.fixedClass.findMany({
+        where: {
+            code: {
+                in: Array.from(danhSachMaLopNienChe),
+            },
+        },
+        select: {
+            id: true,
+            code: true,
+        },
+    })
+    const danhSachPhongHoc = await prisma.room.findMany({
+        where: {
+            code: {
+                in: Array.from(danhSachMaPhongHoc),
+            },
+        },
+        select: {
+            id: true,
+            code: true,
+        },
+    })
+
+    await prisma.$transaction(
+        async (tx) => {
+            if (importType === 'TAO_MOI') {
+                await tx.subjectClass.deleteMany({
+                    where: {
+                        semesterId,
+                    },
+                })
+            }
+
+            await tx.classSchedule.deleteMany({
+                where: {
+                    subjectClass: {
+                        semesterId,
+                    },
+                },
+            })
+            await tx.subjectClassTime.deleteMany({
+                where: {
+                    subjectClass: {
+                        semesterId,
+                    },
+                },
+            })
+
+            for (const row of rowData) {
+                // Xử lý từng dòng dữ liệu ở đây
+                const [
+                    ,
+                    maGV,
+                    tenGV,
+                    maMon,
+                    tenMon,
+                    maLopNienChe,
+                    ,
+                    quanSo,
+                    maPhongHoc,
+                    ,
+                    hinhThucHoc,
+                    ngayHoc,
+                    caHoc,
+                    tietHoc,
+                    hocChung,
+                ] = row
+                const subjectClass = {
+                    gvChinh: null as string | null,
+                    gvPhu: null as string | null,
+                    monHoc: null as string | null,
+                    lopNienChe: [] as string[],
+                    phongHoc: null as string | null,
+                    ngayBatDau: ngayHoc ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate() : null,
+                    ngayKetThuc: null as Date | null,
+                    ngayThi: null as Date | null,
+                    caHoc:
+                        caHoc === 'Sáng'
+                            ? $Enums.SubjectClassSchedule.MORNING
+                            : caHoc === 'Chiều'
+                              ? $Enums.SubjectClassSchedule.AFTERNOON
+                              : $Enums.SubjectClassSchedule.EVENING,
+                    quanSo: quanSo ? Number(quanSo) : 0,
+                }
+                const dsTietHoc = String(tietHoc)
+                    .trim()
+                    .match(/\b(\d+)\s*(?:->|-|→)\s*(\d+)\b/)
+                const tuTietHoc = dsTietHoc ? Number(dsTietHoc[1]) : null
+                const denTietHoc = dsTietHoc ? Number(dsTietHoc[2]) : null
+                const scheduleInfo = {
+                    ngayHoc: ngayHoc ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate() : null,
+                    tietHoc: tietHoc
+                        ? ([tuTietHoc, denTietHoc].filter((e) => e !== null) as number[])
+                        : [],
+                    hinhThucHoc:
+                        hinhThucHoc === 'Thí nghiệm'
+                            ? $Enums.PeriodType.LAB
+                            : hinhThucHoc === 'Thực hành'
+                              ? $Enums.PeriodType.PRACTICE
+                              : hinhThucHoc === 'Thi'
+                                ? $Enums.PeriodType.EXAM
+                                : $Enums.PeriodType.THEORY,
+                }
+
+                if (maGV && tenGV) {
+                    const [, tenGvPhu] = tenGV
+                        .split(',')
+                        .map((e) => e.replace(/\([^)]*\)/g, '').trim())
+                    const gvChinh = danhSachGV.find((gv) => gv.code === maGV)
+                    if (gvChinh) {
+                        subjectClass.gvChinh = gvChinh.id
+                    } else {
+                        console.log(`Không tìm thấy giảng viên chính với mã: ${maGV}`)
+                    }
+                    if (tenGvPhu) {
+                        const gvPhu = danhSachGV.find(
+                            (gv) =>
+                                gv.userProfile.fullname?.toLowerCase() === tenGvPhu.toLowerCase()
+                        )
+                        if (gvPhu) {
+                            subjectClass.gvPhu = gvPhu.id
+                        } else {
+                            console.log(`Không tìm thấy giảng viên phụ với tên: ${tenGvPhu}`)
+                        }
+                    }
+                }
+                if (maMon) {
+                    const monHoc = danhSachMonHoc.find(
+                        (mh) => mh.codeTkb?.toLowerCase() === String(maMon).toLowerCase()
+                    )
+                    if (monHoc) {
+                        subjectClass.monHoc = monHoc.id
+                    } else {
+                        console.log(`Không tìm thấy môn học với mã: ${maMon}`)
+                    }
+                }
+                if (maLopNienChe) {
+                    const lopNienChe = danhSachLopNienChe.find(
+                        (lop) => lop.code?.toLowerCase() === String(maLopNienChe).toLowerCase()
+                    )
+                    if (lopNienChe) {
+                        subjectClass.lopNienChe.push(lopNienChe.id)
+                    } else {
+                        console.log(`Không tìm thấy lớp niên chế với mã: ${maLopNienChe}`)
+                    }
+                }
+                if (hocChung) {
+                    hocChung
+                        .split(',')
+                        .map((e) => e.replace(/\([^)]*\)/g, '').trim())
+                        .forEach((e) => {
+                            const lopNienChe = danhSachLopNienChe.find(
+                                (lop) => lop.code?.toLowerCase() === e.toLowerCase()
+                            )
+                            if (lopNienChe) {
+                                subjectClass.lopNienChe.push(lopNienChe.id)
+                            } else {
+                                console.log(`Không tìm thấy lớp niên chế với mã: ${e}`)
+                            }
+                        })
+                }
+                if (maPhongHoc) {
+                    const phongHoc = danhSachPhongHoc.find(
+                        (ph) => ph.code?.toLowerCase() === String(maPhongHoc).toLowerCase()
+                    )
+                    if (phongHoc) {
+                        subjectClass.phongHoc = phongHoc.id
+                    } else {
+                        console.log(`Không tìm thấy phòng học với mã: ${maPhongHoc}`)
+                    }
+                }
+                subjectClass.ngayKetThuc = scheduleInfo.ngayHoc
+                const maLopMonHoc = `${danhSachMonHoc.find((e) => e.codeTkb?.toLowerCase() === String(maMon).toLowerCase())?.code} ${((maMonMaLop.get(String(maMon))?.indexOf(String(maLopNienChe)) ?? 0) + 1).toString().padStart(2, '0')}`
+
+                const existSubjectClass = await tx.subjectClass.findFirst({
+                    where: {
+                        semesterId,
+                        code: maLopMonHoc,
+                        trainingObjectTypeId,
+                    },
+                })
+                if (existSubjectClass) {
+                    const res = await tx.subjectClass.update({
+                        where: {
+                            id: existSubjectClass.id,
+                        },
+                        data: {
+                            maxStudent: subjectClass.quanSo,
+                            lecturerId: subjectClass.gvChinh ?? existSubjectClass.lecturerId,
+                            extraLecturerId:
+                                subjectClass.gvPhu ?? existSubjectClass.extraLecturerId,
+                            endDate: subjectClass.ngayKetThuc ?? existSubjectClass.endDate,
+                            fixedClasses: {
+                                set: subjectClass.lopNienChe.map((e) => ({
+                                    id: e,
+                                })),
+                            },
+                            classSchedules:
+                                scheduleInfo.ngayHoc && scheduleInfo.tietHoc
+                                    ? {
+                                          create: {
+                                              roomId: existSubjectClass.roomId,
+                                              classDate: scheduleInfo.ngayHoc,
+                                              startPeriod: scheduleInfo.tietHoc[0]
+                                                  ? Number(scheduleInfo.tietHoc[0])
+                                                  : 1,
+                                              endPeriod: scheduleInfo.tietHoc[1]
+                                                  ? Number(scheduleInfo.tietHoc[1])
+                                                  : 1,
+                                              periodType: scheduleInfo.hinhThucHoc,
+                                              lecturerId: subjectClass.gvChinh ?? '',
+                                              extraLecturerId: subjectClass.gvPhu ?? '',
+                                          },
+                                      }
+                                    : {},
+                            subjectClassTimes: {
+                                create: {
+                                    dayOfWeek:
+                                        dayjs(subjectClass.ngayKetThuc ?? new Date()).day() === 0
+                                            ? 8
+                                            : dayjs(subjectClass.ngayKetThuc ?? new Date()).day() +
+                                              1,
+                                    startPeriod: scheduleInfo.tietHoc[0]
+                                        ? Number(scheduleInfo.tietHoc[0])
+                                        : 1,
+                                    endPeriod: scheduleInfo.tietHoc[1]
+                                        ? Number(scheduleInfo.tietHoc[1])
+                                        : 1,
+                                },
+                            },
+                        },
+                    })
+                    danhSachLopMonHoc.push(res)
+                } else if (
+                    subjectClass.gvChinh &&
+                    subjectClass.monHoc &&
+                    subjectClass.lopNienChe.length > 0 &&
+                    subjectClass.phongHoc
+                ) {
+                    const res = await tx.subjectClass.create({
+                        data: {
+                            code: maLopMonHoc ?? '',
+                            name: tenMon ? tenMon.trim() : '',
+                            schedule: subjectClass.caHoc,
+                            maxStudent: subjectClass.quanSo,
+                            startDate: subjectClass.ngayBatDau ?? new Date(),
+                            examDate: subjectClass.ngayThi ?? new Date(),
+                            semesterId,
+                            lecturerId: subjectClass.gvChinh,
+                            extraLecturerId: subjectClass.gvPhu,
+                            subjectId: subjectClass.monHoc,
+                            roomId: subjectClass.phongHoc,
+                            fixedClasses: {
+                                connect: subjectClass.lopNienChe.map((e) => ({
+                                    id: e,
+                                })),
+                            },
+                            classSchedules:
+                                scheduleInfo.ngayHoc && scheduleInfo.tietHoc
+                                    ? {
+                                          create: {
+                                              roomId: subjectClass.phongHoc,
+                                              classDate: scheduleInfo.ngayHoc,
+                                              startPeriod: scheduleInfo.tietHoc[0]
+                                                  ? Number(scheduleInfo.tietHoc[0])
+                                                  : 1,
+                                              endPeriod: scheduleInfo.tietHoc[1]
+                                                  ? Number(scheduleInfo.tietHoc[1])
+                                                  : 1,
+                                              periodType: scheduleInfo.hinhThucHoc,
+                                              lecturerId: subjectClass.gvChinh,
+                                              extraLecturerId: subjectClass.gvPhu,
+                                          },
+                                      }
+                                    : {},
+                            trainingObjectTypeId,
+                            subjectClassTimes: {
+                                create: {
+                                    dayOfWeek:
+                                        dayjs(subjectClass.ngayBatDau ?? new Date()).day() === 0
+                                            ? 8
+                                            : dayjs(subjectClass.ngayBatDau ?? new Date()).day() +
+                                              1,
+                                    startPeriod: scheduleInfo.tietHoc[0]
+                                        ? Number(scheduleInfo.tietHoc[0])
+                                        : 1,
+                                    endPeriod: scheduleInfo.tietHoc[1]
+                                        ? Number(scheduleInfo.tietHoc[1])
+                                        : 1,
+                                },
+                            },
+                        },
+                    })
+                    danhSachLopMonHoc.push(res)
+                }
+            }
+        },
+        {
+            maxWait: 200000,
+            timeout: 1500000,
+        }
+    )
+}
+
+const importFileTKBTheoLopHocPhan = async (
+    sheet: WorkSheet,
+    semesterId: string,
+    trainingObjectTypeId: string,
+    danhSachLopMonHoc: Array<SubjectClass>,
+    importType: 'TAO_MOI' | 'CAP_NHAT'
+) => {
+    const rowData = utils.sheet_to_json<string[]>(sheet, {
+        header: 1,
+    })
+
+    const indexOffHeader = rowData.findIndex((row, index) => {
+        if (row[0] === 'TT') {
+            return true // dừng lại khi tìm thấy
+        }
+        return false // tiếp tục tìm kiếm
+    })
+
+    if (indexOffHeader === -1) {
+        return { message: 'Không tìm thấy header trong file' }
+    }
+    // Xóa các dòng trống ở đầu file (nếu có)
+    rowData.splice(0, indexOffHeader + 1)
+
+    const ghiChu = rowData.find((row) => {
+        return row[0] && typeof row[0] === 'string' && row[0].toLowerCase()?.includes('ghi chú:')
+    })
+    const regex = /bắt đầu từ ngày\s*(\d{2}\/\d{1,2}\/\d{4})\s*đến ngày\s*(\d{2}\/\d{1,2}\/\d{4})/
+    let ngayBatDau: Date | null = null
+    let ngayKetThuc: Date | null = null
+    if (ghiChu?.[0]) {
+        const match = ghiChu[0].toLowerCase().match(regex)
+        if (match) {
+            ngayBatDau = dayjs(match[1], 'DD/MM/YYYY').toDate()
+            ngayKetThuc = dayjs(match[2], 'DD/MM/YYYY').toDate()
+        }
+    }
+    const indexOfFooter = rowData.findIndex((row) => {
+        return row[0] && typeof row[0] === 'string' && row[0].toLowerCase()?.includes('ghi chú:')
+    })
+    rowData.splice(indexOfFooter, rowData.length)
+    const danhSachTenGV = new Set<string>()
+    const danhSachMaMonHoc = new Set<string>()
+    const danhSachMaPhongHoc = new Set<string>()
+    for (const row of rowData) {
+        // Xử lý từng dòng dữ liệu ở đây
+        const [, maMon, , , , tenGV, , , maPhongHoc] = row
+        if (tenGV) {
+            tenGV
+                .split(';')
+                .map((e) => e.replace(/\([^)]*\)/g, '').trim())
+                // biome-ignore lint/suspicious/useIterableCallbackReturn: <dung cho set>
+                .forEach((e) => danhSachTenGV.add(e))
+        }
+        if (maMon) {
+            danhSachMaMonHoc.add(String(maMon).trim())
+        }
+        if (maPhongHoc) {
+            danhSachMaPhongHoc.add(maPhongHoc.trim())
+        }
+    }
+    const danhSachGV = await prisma.lecturer.findMany({
+        where: {
+            userProfile: {
+                fullname: {
+                    in: Array.from(danhSachTenGV),
+                },
+            },
+        },
+        select: {
+            id: true,
+            code: true,
+            userProfile: {
+                select: {
+                    fullname: true,
+                },
+            },
+        },
+    })
+
+    const danhSachMonHoc = await prisma.subjectVersion.findMany({
+        where: {
+            codeTkb: {
+                in: Array.from(danhSachMaMonHoc),
+            },
+        },
+        select: {
+            id: true,
+            codeTkb: true,
+            code: true,
+        },
+    })
+
+    const danhSachPhongHoc = await prisma.room.findMany({
+        where: {
+            code: {
+                in: Array.from(danhSachMaPhongHoc),
+            },
+        },
+        select: {
+            id: true,
+            code: true,
+        },
+    })
+
+    await prisma.$transaction(
+        async (tx) => {
+            if (importType === 'TAO_MOI') {
+                await tx.subjectClass.deleteMany({
+                    where: {
+                        semesterId,
+                    },
+                })
+            }
+            await tx.classSchedule.deleteMany({
+                where: {
+                    subjectClass: {
+                        semesterId,
+                    },
+                },
+            })
+            await tx.subjectClassTime.deleteMany({
+                where: {
+                    subjectClass: {
+                        semesterId,
+                    },
+                },
+            })
+
+            for (const row of rowData) {
+                // Xử lý từng dòng dữ liệu ở đây
+                const [
+                    ,
+                    maMon,
+                    tenMon,
+                    ,
+                    maLopMonHoc,
+                    tenGV,
+                    thuTrongTuan,
+                    tietHoc,
+                    maPhongHoc,
+                    sinhVienToiDa,
+                ] = row
+                const subjectClass = {
+                    gvChinh: null as string | null,
+                    gvPhu: null as string | null,
+                    monHoc: null as string | null,
+                    phongHoc: null as string | null,
+                    quanSo: sinhVienToiDa ? Number(sinhVienToiDa) : 0,
+                }
+                const dsTietHoc = String(tietHoc)
+                    .trim()
+                    .match(/\b(\d+)\s*(?:->|-|→)\s*(\d+)\b/)
+                const tuTietHoc = dsTietHoc ? Number(dsTietHoc[1]) : null
+                const denTietHoc = dsTietHoc ? Number(dsTietHoc[2]) : null
+                const scheduleInfo = {
+                    tietHoc: tietHoc
+                        ? ([tuTietHoc, denTietHoc].filter((e) => e !== null) as number[])
+                        : [],
+                }
+
+                if (tenGV) {
+                    const [tenGVChinh, tenGvPhu] = tenGV
+                        .split(';')
+                        .map((e) => e.replace(/\([^)]*\)/g, '').trim())
+                    const gvChinh = danhSachGV.find(
+                        (gv) => gv.userProfile.fullname?.toLowerCase() === tenGVChinh?.toLowerCase()
+                    )
+                    if (gvChinh) {
+                        subjectClass.gvChinh = gvChinh.id
+                    } else {
+                        console.log(`Không tìm thấy giảng viên chính với tên: ${tenGVChinh}`)
+                    }
+                    if (tenGvPhu) {
+                        const gvPhu = danhSachGV.find(
+                            (gv) =>
+                                gv.userProfile.fullname?.toLowerCase() === tenGvPhu?.toLowerCase()
+                        )
+                        if (gvPhu) {
+                            subjectClass.gvPhu = gvPhu.id
+                        } else {
+                            console.log(`Không tìm thấy giảng viên phụ với tên: ${tenGvPhu}`)
+                        }
+                    }
+                }
+                if (maMon) {
+                    const monHoc = danhSachMonHoc.find(
+                        (mh) => mh.code?.toLowerCase() === String(maMon).toLowerCase()
+                    )
+                    if (monHoc) {
+                        subjectClass.monHoc = monHoc.id
+                    } else {
+                        console.log(`Không tìm thấy môn học với mã: ${maMon}`)
+                    }
+                }
+                if (maPhongHoc) {
+                    const phongHoc = danhSachPhongHoc.find(
+                        (ph) => ph.code?.toLowerCase() === String(maPhongHoc).toLowerCase()
+                    )
+                    if (phongHoc) {
+                        subjectClass.phongHoc = phongHoc.id
+                    } else {
+                        console.log(`Không tìm thấy phòng học với mã: ${maPhongHoc}`)
+                    }
+                }
+                const existSubjectClass = await tx.subjectClass.findFirst({
+                    where: {
+                        semesterId,
+                        code: String(maLopMonHoc).trim(),
+                        trainingObjectTypeId,
+                    },
+                })
+
+                let scheduleOfSubjectClass: $Enums.SubjectClassSchedule =
+                    $Enums.SubjectClassSchedule.MORNING
+                if (scheduleInfo.tietHoc[0]) {
+                    if (scheduleInfo.tietHoc[0] >= 1 && scheduleInfo.tietHoc[0] <= 5) {
+                        scheduleOfSubjectClass = $Enums.SubjectClassSchedule.MORNING
+                    }
+                    if (scheduleInfo.tietHoc[0] >= 6 && scheduleInfo.tietHoc[0] <= 11) {
+                        scheduleOfSubjectClass = $Enums.SubjectClassSchedule.AFTERNOON
+                    }
+                    if (scheduleInfo.tietHoc[0] >= 12) {
+                        scheduleOfSubjectClass = $Enums.SubjectClassSchedule.EVENING
+                    }
+                }
+
+                if (existSubjectClass) {
+                    const res = await tx.subjectClass.update({
+                        where: {
+                            id: existSubjectClass.id,
+                        },
+                        data: {
+                            maxStudent: subjectClass.quanSo,
+                            lecturerId: subjectClass.gvChinh ?? existSubjectClass.lecturerId,
+                            extraLecturerId:
+                                subjectClass.gvPhu ?? existSubjectClass.extraLecturerId,
+                            schedule: scheduleOfSubjectClass,
+                            startDate: ngayBatDau ?? existSubjectClass.startDate,
+                            endDate: ngayKetThuc ?? existSubjectClass.endDate,
+                            roomId: subjectClass.phongHoc ?? existSubjectClass.roomId,
+                            subjectClassTimes:
+                                thuTrongTuan && String(thuTrongTuan).trim()
+                                    ? {
+                                          create: {
+                                              dayOfWeek: Number(thuTrongTuan),
+                                              startPeriod: scheduleInfo.tietHoc[0]
+                                                  ? Number(scheduleInfo.tietHoc[0])
+                                                  : 1,
+                                              endPeriod: scheduleInfo.tietHoc[1]
+                                                  ? Number(scheduleInfo.tietHoc[1])
+                                                  : 1,
+                                          },
+                                      }
+                                    : {},
+                        },
+                    })
+                    danhSachLopMonHoc.push(res)
+                } else if (subjectClass.gvChinh && subjectClass.monHoc) {
+                    const res = await tx.subjectClass.create({
+                        data: {
+                            code: maLopMonHoc ?? '',
+                            name: tenMon ? tenMon.trim() : '',
+                            schedule: scheduleOfSubjectClass,
+                            maxStudent: subjectClass.quanSo,
+                            startDate: ngayBatDau ?? new Date(),
+                            endDate: ngayKetThuc,
+                            semesterId,
+                            lecturerId: subjectClass.gvChinh,
+                            extraLecturerId: subjectClass.gvPhu,
+                            subjectId: subjectClass.monHoc,
+                            roomId: subjectClass.phongHoc,
+                            trainingObjectTypeId,
+                            subjectClassTimes:
+                                thuTrongTuan && String(thuTrongTuan).trim()
+                                    ? {
+                                          create: {
+                                              dayOfWeek: Number(thuTrongTuan),
+                                              startPeriod: scheduleInfo.tietHoc[0]
+                                                  ? Number(scheduleInfo.tietHoc[0])
+                                                  : 1,
+                                              endPeriod: scheduleInfo.tietHoc[1]
+                                                  ? Number(scheduleInfo.tietHoc[1])
+                                                  : 1,
+                                          },
+                                      }
+                                    : {},
+                        },
+                    })
+                    danhSachLopMonHoc.push(res)
+                }
+            }
+        },
+        {
+            maxWait: 200000,
+            timeout: 1500000,
+        }
+    )
+}
+
 app.openapi(importPhanCongGiangDay, async (c) => {
-    const { file, semesterId, trainingObjectTypeId } = c.req.valid('form')
+    const { file, semesterId, trainingObjectTypeId, fileType, importType } = c.req.valid('form')
 
     const maxFileSize = 50 * 1024 * 1024 // 50MB
     if (file.size > maxFileSize) {
@@ -144,391 +861,26 @@ app.openapi(importPhanCongGiangDay, async (c) => {
         if (!sheet) {
             return c.json({ message: 'Không tìm thấy sheet' }, 400)
         }
-
+        if (fileType === 'THONG_KE_GIAO_VIEN_GIANG_DAY') {
+            await importFileGiaoVienCoGioGiay(
+                sheet,
+                semesterId,
+                trainingObjectTypeId,
+                danhSachLopMonHoc,
+                importType
+            )
+        } else if (fileType === 'TKB_THEO_LOP_HOC_PHAN') {
+            await importFileTKBTheoLopHocPhan(
+                sheet,
+                semesterId,
+                trainingObjectTypeId,
+                danhSachLopMonHoc,
+                importType
+            )
+        } else {
+            return c.json({ message: 'Loại file không hợp lệ' }, 400)
+        }
         // Chuyển đổi dữ liệu từ sheet thành JSON
-        const rowData = utils.sheet_to_json<string[]>(sheet, {
-            header: 1,
-        })
-        const indexOffHeader = rowData.findIndex((row, index) => {
-            if (row[0] === 'STT') {
-                return true // dừng lại khi tìm thấy
-            }
-            return false // tiếp tục tìm kiếm
-        })
-        if (indexOffHeader === -1) {
-            continue
-        }
-        // Xóa các dòng trống ở đầu file (nếu có)
-        rowData.splice(0, indexOffHeader + 1)
-
-        const danhSachTenGV = new Set<string>()
-        const danhSachMaTKBMonHoc = new Set<string>()
-        const danhSachMaLopNienChe = new Set<string>()
-        const danhSachMaPhongHoc = new Set<string>()
-        const maMonMaLop = new Map<string, Array<string>>() // key: {maMon}, value: [maLop]
-
-        for (const row of rowData) {
-            // Xử lý từng dòng dữ liệu ở đây
-            const [
-                ,
-                maGV,
-                tenGV,
-                maMon,
-                tenMon,
-                maLopNienChe,
-                tenLopNienChe,
-                ,
-                maPhongHoc,
-                tenPhong,
-                ,
-                ,
-                ,
-                ,
-                hocChung,
-            ] = row
-            if (tenGV && maGV) {
-                tenGV
-                    .split(',')
-                    .map((e) => e.replace(/\([^)]*\)/g, '').trim())
-                    // biome-ignore lint/suspicious/useIterableCallbackReturn: <dung cho set>
-                    .forEach((e) => danhSachTenGV.add(e))
-            }
-            if (maMon && tenMon) {
-                danhSachMaTKBMonHoc.add(String(maMon).trim())
-            }
-            if (maLopNienChe && tenLopNienChe) {
-                danhSachMaLopNienChe.add(maLopNienChe.trim())
-            }
-            if (maMon && maLopNienChe) {
-                if (!maMonMaLop.has(String(maMon))) {
-                    maMonMaLop.set(String(maMon), [String(maLopNienChe)])
-                } else {
-                    maMonMaLop.get(String(maMon))?.push(String(maLopNienChe))
-                }
-            }
-            if (hocChung) {
-                hocChung
-                    .split(',')
-                    .map((e) => e.replace(/\([^)]*\)/g, '').trim())
-                    // biome-ignore lint/suspicious/useIterableCallbackReturn: <dung cho set>
-                    .forEach((e) => danhSachMaLopNienChe.add(e))
-            }
-            if (maPhongHoc && tenPhong) {
-                danhSachMaPhongHoc.add(maPhongHoc.trim())
-            }
-        }
-        const danhSachGV = await prisma.lecturer.findMany({
-            where: {
-                userProfile: {
-                    fullname: {
-                        in: Array.from(danhSachTenGV),
-                    },
-                },
-            },
-            select: {
-                id: true,
-                code: true,
-                userProfile: {
-                    select: {
-                        fullname: true,
-                    },
-                },
-            },
-        })
-
-        const danhSachMonHoc = await prisma.subjectVersion.findMany({
-            where: {
-                codeTkb: {
-                    in: Array.from(danhSachMaTKBMonHoc),
-                },
-            },
-            select: {
-                id: true,
-                codeTkb: true,
-                code: true,
-            },
-        })
-        const danhSachLopNienChe = await prisma.fixedClass.findMany({
-            where: {
-                code: {
-                    in: Array.from(danhSachMaLopNienChe),
-                },
-            },
-            select: {
-                id: true,
-                code: true,
-            },
-        })
-        const danhSachPhongHoc = await prisma.room.findMany({
-            where: {
-                code: {
-                    in: Array.from(danhSachMaPhongHoc),
-                },
-            },
-            select: {
-                id: true,
-                code: true,
-            },
-        })
-
-        await prisma.$transaction(
-            async (tx) => {
-                await tx.classSchedule.deleteMany({
-                    where: {
-                        subjectClass: {
-                            semesterId,
-                        },
-                    },
-                })
-                await tx.subjectClassTime.deleteMany({
-                    where: {
-                        subjectClass: {
-                            semesterId,
-                        },
-                    },
-                })
-
-                for (const row of rowData) {
-                    // Xử lý từng dòng dữ liệu ở đây
-                    const [
-                        ,
-                        maGV,
-                        tenGV,
-                        maMon,
-                        tenMon,
-                        maLopNienChe,
-                        ,
-                        quanSo,
-                        maPhongHoc,
-                        ,
-                        hinhThucHoc,
-                        ngayHoc,
-                        caHoc,
-                        tietHoc,
-                        hocChung,
-                    ] = row
-                    const subjectClass = {
-                        gvChinh: null as string | null,
-                        gvPhu: null as string | null,
-                        monHoc: null as string | null,
-                        lopNienChe: [] as string[],
-                        phongHoc: null as string | null,
-                        ngayBatDau: ngayHoc ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate() : null,
-                        ngayKetThuc: null as Date | null,
-                        ngayThi: null as Date | null,
-                        caHoc:
-                            caHoc === 'Sáng'
-                                ? $Enums.SubjectClassSchedule.MORNING
-                                : caHoc === 'Chiều'
-                                  ? $Enums.SubjectClassSchedule.AFTERNOON
-                                  : $Enums.SubjectClassSchedule.EVENING,
-                        quanSo: quanSo ? Number(quanSo) : 0,
-                    }
-                    const dsTietHoc = String(tietHoc)
-                        .trim()
-                        .match(/\b(\d+)\s*(?:->|-|→)\s*(\d+)\b/)
-                    const tuTietHoc = dsTietHoc ? Number(dsTietHoc[1]) : null
-                    const denTietHoc = dsTietHoc ? Number(dsTietHoc[2]) : null
-                    const scheduleInfo = {
-                        ngayHoc: ngayHoc ? dayjs(ngayHoc, 'DD/MM/YYYY').toDate() : null,
-                        tietHoc: tietHoc
-                            ? ([tuTietHoc, denTietHoc].filter((e) => e !== null) as number[])
-                            : [],
-                        hinhThucHoc:
-                            hinhThucHoc === 'Thí nghiệm'
-                                ? $Enums.PeriodType.LAB
-                                : hinhThucHoc === 'Thực hành'
-                                  ? $Enums.PeriodType.PRACTICE
-                                  : hinhThucHoc === 'Thi'
-                                    ? $Enums.PeriodType.EXAM
-                                    : $Enums.PeriodType.THEORY,
-                    }
-
-                    if (maGV && tenGV) {
-                        const [, tenGvPhu] = tenGV
-                            .split(',')
-                            .map((e) => e.replace(/\([^)]*\)/g, '').trim())
-                        const gvChinh = danhSachGV.find((gv) => gv.code === maGV)
-                        if (gvChinh) {
-                            subjectClass.gvChinh = gvChinh.id
-                        } else {
-                            console.log(`Không tìm thấy giảng viên chính với mã: ${maGV}`)
-                        }
-                        if (tenGvPhu) {
-                            const gvPhu = danhSachGV.find(
-                                (gv) =>
-                                    gv.userProfile.fullname?.toLowerCase() ===
-                                    tenGvPhu.toLowerCase()
-                            )
-                            if (gvPhu) {
-                                subjectClass.gvPhu = gvPhu.id
-                            } else {
-                                console.log(`Không tìm thấy giảng viên phụ với tên: ${tenGvPhu}`)
-                            }
-                        }
-                    }
-                    if (maMon) {
-                        const monHoc = danhSachMonHoc.find(
-                            (mh) => mh.codeTkb?.toLowerCase() === String(maMon).toLowerCase()
-                        )
-                        if (monHoc) {
-                            subjectClass.monHoc = monHoc.id
-                        } else {
-                            console.log(`Không tìm thấy môn học với mã: ${maMon}`)
-                        }
-                    }
-                    if (maLopNienChe) {
-                        const lopNienChe = danhSachLopNienChe.find(
-                            (lop) => lop.code?.toLowerCase() === String(maLopNienChe).toLowerCase()
-                        )
-                        if (lopNienChe) {
-                            subjectClass.lopNienChe.push(lopNienChe.id)
-                        } else {
-                            console.log(`Không tìm thấy lớp niên chế với mã: ${maLopNienChe}`)
-                        }
-                    }
-                    if (hocChung) {
-                        hocChung
-                            .split(',')
-                            .map((e) => e.replace(/\([^)]*\)/g, '').trim())
-                            .forEach((e) => {
-                                const lopNienChe = danhSachLopNienChe.find(
-                                    (lop) => lop.code?.toLowerCase() === e.toLowerCase()
-                                )
-                                if (lopNienChe) {
-                                    subjectClass.lopNienChe.push(lopNienChe.id)
-                                } else {
-                                    console.log(`Không tìm thấy lớp niên chế với mã: ${e}`)
-                                }
-                            })
-                    }
-                    if (maPhongHoc) {
-                        const phongHoc = danhSachPhongHoc.find(
-                            (ph) => ph.code?.toLowerCase() === String(maPhongHoc).toLowerCase()
-                        )
-                        if (phongHoc) {
-                            subjectClass.phongHoc = phongHoc.id
-                        } else {
-                            console.log(`Không tìm thấy phòng học với mã: ${maPhongHoc}`)
-                        }
-                    }
-                    subjectClass.ngayKetThuc = scheduleInfo.ngayHoc
-                    const maLopMonHoc = `${danhSachMonHoc.find((e) => e.codeTkb?.toLowerCase() === String(maMon).toLowerCase())?.code} ${((maMonMaLop.get(String(maMon))?.indexOf(String(maLopNienChe)) ?? 0) + 1).toString().padStart(2, '0')}`
-
-                    const existSubjectClass = await tx.subjectClass.findFirst({
-                        where: {
-                            semesterId,
-                            code: maLopMonHoc,
-                        },
-                    })
-                    if (existSubjectClass) {
-                        const res = await tx.subjectClass.update({
-                            where: {
-                                id: existSubjectClass.id,
-                            },
-                            data: {
-                                maxStudent: subjectClass.quanSo,
-                                lecturerId: subjectClass.gvChinh ?? existSubjectClass.lecturerId,
-                                extraLecturerId:
-                                    subjectClass.gvPhu ?? existSubjectClass.extraLecturerId,
-                                endDate: subjectClass.ngayKetThuc ?? existSubjectClass.endDate,
-                                fixedClasses: {
-                                    set: subjectClass.lopNienChe.map((e) => ({
-                                        id: e,
-                                    })),
-                                },
-                                classSchedules:
-                                    scheduleInfo.ngayHoc && scheduleInfo.tietHoc
-                                        ? {
-                                              create: {
-                                                  roomId: existSubjectClass.roomId,
-                                                  classDate: scheduleInfo.ngayHoc,
-                                                  startPeriod: Number(scheduleInfo.tietHoc[0]) ?? 1,
-                                                  endPeriod: Number(scheduleInfo.tietHoc[1]) ?? 1,
-                                                  periodType: scheduleInfo.hinhThucHoc,
-                                                  lecturerId: subjectClass.gvChinh ?? '',
-                                                  extraLecturerId: subjectClass.gvPhu ?? '',
-                                              },
-                                          }
-                                        : {},
-                                subjectClassTimes: {
-                                    create: {
-                                        dayOfWeek:
-                                            dayjs(subjectClass.ngayKetThuc ?? new Date()).day() ===
-                                            0
-                                                ? 8
-                                                : dayjs(
-                                                      subjectClass.ngayKetThuc ?? new Date()
-                                                  ).day() + 1,
-                                        startPeriod: Number(scheduleInfo.tietHoc[0]) ?? 1,
-                                        endPeriod: Number(scheduleInfo.tietHoc[1]) ?? 1,
-                                    },
-                                },
-                            },
-                        })
-                        danhSachLopMonHoc.push(res)
-                    } else if (
-                        subjectClass.gvChinh &&
-                        subjectClass.monHoc &&
-                        subjectClass.lopNienChe.length > 0 &&
-                        subjectClass.phongHoc
-                    ) {
-                        const res = await tx.subjectClass.create({
-                            data: {
-                                code: maLopMonHoc ?? '',
-                                name: tenMon ? tenMon.trim() : '',
-                                schedule: subjectClass.caHoc,
-                                maxStudent: subjectClass.quanSo,
-                                startDate: subjectClass.ngayBatDau ?? new Date(),
-                                examDate: subjectClass.ngayThi ?? new Date(),
-                                semesterId,
-                                lecturerId: subjectClass.gvChinh,
-                                extraLecturerId: subjectClass.gvPhu,
-                                subjectId: subjectClass.monHoc,
-                                roomId: subjectClass.phongHoc,
-                                fixedClasses: {
-                                    connect: subjectClass.lopNienChe.map((e) => ({
-                                        id: e,
-                                    })),
-                                },
-                                classSchedules:
-                                    scheduleInfo.ngayHoc && scheduleInfo.tietHoc
-                                        ? {
-                                              create: {
-                                                  roomId: subjectClass.phongHoc,
-                                                  classDate: scheduleInfo.ngayHoc,
-                                                  startPeriod: Number(scheduleInfo.tietHoc[0]) ?? 1,
-                                                  endPeriod: Number(scheduleInfo.tietHoc[1]) ?? 1,
-                                                  periodType: scheduleInfo.hinhThucHoc,
-                                                  lecturerId: subjectClass.gvChinh,
-                                                  extraLecturerId: subjectClass.gvPhu,
-                                              },
-                                          }
-                                        : {},
-                                trainingObjectTypeId,
-                                subjectClassTimes: {
-                                    create: {
-                                        dayOfWeek:
-                                            dayjs(subjectClass.ngayBatDau ?? new Date()).day() === 0
-                                                ? 8
-                                                : dayjs(
-                                                      subjectClass.ngayBatDau ?? new Date()
-                                                  ).day() + 1,
-                                        startPeriod: Number(scheduleInfo.tietHoc[0]) ?? 1,
-                                        endPeriod: Number(scheduleInfo.tietHoc[1]) ?? 1,
-                                    },
-                                },
-                            },
-                        })
-                        danhSachLopMonHoc.push(res)
-                    }
-                }
-            },
-            {
-                maxWait: 200000,
-                timeout: 1500000,
-            }
-        )
     }
 
     const endTime = Date.now()

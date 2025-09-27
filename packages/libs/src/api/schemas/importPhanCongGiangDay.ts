@@ -4,9 +4,13 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
+import type { ImportPhanCongGiangDayFileType } from './importPhanCongGiangDayFileType'
+import type { ImportPhanCongGiangDayImportType } from './importPhanCongGiangDayImportType'
 
 export interface ImportPhanCongGiangDay {
     file: Blob
     semesterId: string
     trainingObjectTypeId: string
+    fileType?: ImportPhanCongGiangDayFileType
+    importType?: ImportPhanCongGiangDayImportType
 }

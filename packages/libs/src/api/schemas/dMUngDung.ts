@@ -87,9 +87,5 @@ export type DMUngDung = BaseEntity & {
     /** @nullable */
     sListEventIds?: string | null
     /** @nullable */
-    sHomeUrl?: string | null
-    /** @nullable */
-    sRootUrl?: string | null
-    /** @nullable */
-    sValidRedirecUrl?: string | null
+    sBackchannelLogoutURL?: string | null
 }

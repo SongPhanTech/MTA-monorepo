@@ -76,4 +76,6 @@ export interface GetMenusPermissionByUserAndAppDTO {
     sUrl?: string | null
     /** FK_Menu thuộc về ứng dụng vào */
     sDM_UngDungId?: string
+    /** Số thứ tự menu */
+    iSTT?: number
 }

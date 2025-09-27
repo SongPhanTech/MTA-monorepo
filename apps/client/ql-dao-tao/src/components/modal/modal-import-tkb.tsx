@@ -4,16 +4,15 @@ import PutFormModal from '@components/commons/put-modal'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import useSpinner from '@hooks/spinner'
 import { useImportPhanCongGiangDay } from '@workspace/libs/api/training'
-import { ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Form, message, Space, Tag } from 'antd'
-import { useRouter } from 'next/router'
+import { Button, Col, Form, message, Radio, Space, Tag } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface FilterProps {
     file?: File
     semesterId?: string
+    fileType?: 'THONG_KE_GIAO_VIEN_GIANG_DAY' | 'TKB_THEO_LOP_HOC_PHAN'
 }
 
 const ModalNhapTKB = () => {
@@ -60,8 +59,6 @@ const ModalNhapTKB = () => {
 
     const { mutateAsync: ImportPhanCongGiangDay } = useImportPhanCongGiangDay()
 
-    const router = useRouter()
-
     const handleSubmit = async (output?: FilterProps) => {
         if (!trainingObjectTypeId) {
             message.warning('Vui lòng chọn đối tượng đào tạo')
@@ -78,11 +75,11 @@ const ModalNhapTKB = () => {
                     file: file,
                     semesterId: output.semesterId || '',
                     trainingObjectTypeId,
+                    fileType: output.fileType,
                 },
             })
             if (res?.status === 200) {
                 message.success(res?.data?.message || 'Nhập dữ liệu từ file thành công')
-                router.push(ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC)
                 onClose()
             } else {
                 message.error(res?.data?.message || 'Nhập dữ liệu từ file thất bại')
@@ -106,7 +103,7 @@ const ModalNhapTKB = () => {
             open={isOpen}
             onCancel={handleCancel}
             title={'Import danh sách phân công giảng dạy'}
-            className="w-[30vw]"
+            className="w-[60vw]"
         >
             <Col span={24}>
                 <FormItem form={form} name="file" label="File Excel" required>
@@ -146,6 +143,25 @@ const ModalNhapTKB = () => {
             <Col span={24}>
                 <FormItem form={form} name="semesterId" label="Kỳ học" required>
                     <TreeSelectSemester defaultValue={id || undefined} />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="fileType" label="Mẫu" required>
+                    <Radio.Group
+                        options={[
+                            {
+                                label: 'Mẫu 1: Thống kê các giáo viên đang có giờ dạy',
+                                value: 'THONG_KE_GIAO_VIEN_GIANG_DAY',
+                            },
+                            {
+                                label: 'Mẫu 2: TKB dự kiến theo lớp học phần',
+                                value: 'TKB_THEO_LOP_HOC_PHAN',
+                            },
+                        ]}
+                        defaultValue={'THONG_KE_GIAO_VIEN_GIANG_DAY'}
+                        optionType="button"
+                        buttonStyle="solid"
+                    />
                 </FormItem>
             </Col>
         </PutFormModal>

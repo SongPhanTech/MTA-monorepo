@@ -3555,6 +3555,12 @@ export const importPhanCongGiangDay = async (
     formData.append('file', importPhanCongGiangDay.file)
     formData.append('semesterId', importPhanCongGiangDay.semesterId)
     formData.append('trainingObjectTypeId', importPhanCongGiangDay.trainingObjectTypeId)
+    if (importPhanCongGiangDay.fileType !== undefined) {
+        formData.append('fileType', importPhanCongGiangDay.fileType)
+    }
+    if (importPhanCongGiangDay.importType !== undefined) {
+        formData.append('importType', importPhanCongGiangDay.importType)
+    }
 
     return customTrainingFetch<importPhanCongGiangDayResponse>(getImportPhanCongGiangDayUrl(), {
         ...options,

@@ -411,6 +411,10 @@ export default function TeachingAssignment() {
         }
     }
 
+    const { onOpen: onOpenModalNhapTKB } = useDisclosure<string>({
+        tag: 'ModalNhapTKB',
+    })
+
     const { onOpen } = useDisclosure<string>({
         tag: 'PutOpenSubjectClassModal',
     })
@@ -504,11 +508,13 @@ export default function TeachingAssignment() {
                                     'NHAP_EXCEL'
                                 ) && (
                                     <Button
-                                        //TODO: handle export
                                         type="primary"
+                                        onClick={() =>
+                                            onOpenModalNhapTKB(filters.semesterStartId || '')
+                                        }
                                     >
                                         <EditIcon stroke="white" />
-                                        Nhập
+                                        Nhập từ TKB
                                     </Button>
                                 )}
                                 {isEdit ? (

@@ -4,7 +4,6 @@ import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
-import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import type { TrainingCourse, TrainingMajor } from '@workspace/db'
@@ -76,10 +75,6 @@ export default function SubjectOpeningPlan() {
 
     const { onOpen: onOpenXuatFileMoLop } = useDisclosure<string>({
         tag: 'ModalExportFileSubjectClass',
-    })
-
-    const { onOpen: onOpenModalNhapTKB } = useDisclosure<string>({
-        tag: 'ModalNhapTKB',
     })
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
@@ -179,7 +174,7 @@ export default function SubjectOpeningPlan() {
                                         Xuất file mẫu
                                     </Button>
                                 )}
-                                {can(
+                                {/* {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
                                     'NHAP_EXCEL'
                                 ) && (
@@ -190,7 +185,7 @@ export default function SubjectOpeningPlan() {
                                         <EditIcon stroke="white" />
                                         Nhập từ file TKB
                                     </Button>
-                                )}
+                                )} */}
                             </Flex>
                         </Col>
                     </Row>
