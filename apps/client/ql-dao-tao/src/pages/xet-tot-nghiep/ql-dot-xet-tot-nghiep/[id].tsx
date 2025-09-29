@@ -640,26 +640,24 @@ export default function StudentGraduationApplication() {
                                                     width: 220,
                                                     align: 'center',
                                                     render: (record) => {
-                                                        if (
-                                                            record?.rank?.downgradeRules?.length > 0
-                                                        ) {
+                                                        if (record?.downgraded) {
                                                             return (
                                                                 <span>
-                                                                    Hạ bậc:{' '}
-                                                                    {record.rank.downgradeRules
-                                                                        .flatMap(
-                                                                            (rule: any) =>
-                                                                                rule.conditions?.map(
-                                                                                    (
-                                                                                        condition: any
-                                                                                    ) =>
-                                                                                        getCriteriaFieldLabel(
-                                                                                            condition.field
-                                                                                        )
-                                                                                ) || []
-                                                                        )
-                                                                        .filter(Boolean)
-                                                                        .join(', ')}
+                                                                    Hạ bậc ($
+                                                                    {
+                                                                        record.downgraded.from
+                                                                            .classification
+                                                                    }
+                                                                    ):{' '}
+                                                                    {record.downgraded.conditions?.map(
+                                                                        (condition: any) =>
+                                                                            getCriteriaFieldLabel(
+                                                                                condition.field
+                                                                            )
+                                                                    ) ||
+                                                                        []
+                                                                            .filter(Boolean)
+                                                                            .join(', ')}
                                                                 </span>
                                                             )
                                                         }
