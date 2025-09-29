@@ -1,5 +1,6 @@
 import '../base'
 import '../ql-danh-muc/core-categories'
+import '../ql-ho-so/profile'
 
 model ChatBotConfig extends Base {
   name  String @unique
@@ -24,10 +25,10 @@ model Document extends Base {
   fileSize     Int?
   type         DocumentType
   reason       String?
-  uploadedBy   DM_NhanVien    @relation("DocumentUploaded", fields: [uploadedById], references: [Id])
-  uploadedById String         @default(auth().id) @db.Uuid
-  approvedBy   DM_NhanVien?   @relation("DocumentApproved", fields: [approvedById], references: [Id])
-  approvedById String?        @db.Uuid
+  uploadedBy   UserProfile    @relation("DocumentUploaded", fields: [uploadedById], references: [id])
+  uploadedById String         @default(auth().id)
+  approvedBy   UserProfile?   @relation("DocumentApproved", fields: [approvedById], references: [id])
+  approvedById String?
   @@schema("tro-ly-ao")
 }
 
@@ -37,10 +38,10 @@ model FAQ  extends Base {
   status       DocumentStatus @default(PENDING)
   type         DocumentType
   reason       String?
-  uploadedBy   DM_NhanVien    @relation("FAQUploaded", fields: [uploadedById], references: [Id])
-  uploadedById String         @default(auth().id) @db.Uuid
-  approvedBy   DM_NhanVien?   @relation("FAQApproved", fields: [approvedById], references: [Id])
-  approvedById String?        @db.Uuid
+  uploadedBy   UserProfile    @relation("FAQUploaded", fields: [uploadedById], references: [id])
+  uploadedById String         @default(auth().id)
+  approvedBy   UserProfile?   @relation("FAQApproved", fields: [approvedById], references: [id])
+  approvedById String?
   @@schema("tro-ly-ao")
 }
 
@@ -54,8 +55,8 @@ model Prompt extends Base {
 
 model Conversation extends Base {
   name      String?
-  user      DM_NhanVien?  @relation(fields: [userId], references: [Id])
-  userId    String?       @db.Uuid
+  user      UserProfile?  @relation(fields: [userId], references: [id])
+  userId    String?
   session   UserSession?  @relation(fields: [sessionId], references: [id])
   sessionId String?
   type      DocumentType?
