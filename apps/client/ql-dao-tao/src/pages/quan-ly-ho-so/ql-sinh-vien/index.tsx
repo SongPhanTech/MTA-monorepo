@@ -559,7 +559,7 @@ export default function UserProfilePageDs() {
                                         </Tooltip>
                                         {can(
                                             QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
-                                            'XEM_CHI_TIET'
+                                            'SUA'
                                         ) && (
                                             <EditIcon
                                                 onClick={onOpenUpdate.bind(null, {

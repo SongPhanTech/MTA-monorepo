@@ -24652,21 +24652,11 @@ export namespace Prisma {
   export type DM_NhanVienCountOutputType = {
     notification: number
     feedback: number
-    conversation: number
-    documentUploaded: number
-    documentApproved: number
-    fAQUploaded: number
-    fAQApproved: number
   }
 
   export type DM_NhanVienCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     notification?: boolean | DM_NhanVienCountOutputTypeCountNotificationArgs
     feedback?: boolean | DM_NhanVienCountOutputTypeCountFeedbackArgs
-    conversation?: boolean | DM_NhanVienCountOutputTypeCountConversationArgs
-    documentUploaded?: boolean | DM_NhanVienCountOutputTypeCountDocumentUploadedArgs
-    documentApproved?: boolean | DM_NhanVienCountOutputTypeCountDocumentApprovedArgs
-    fAQUploaded?: boolean | DM_NhanVienCountOutputTypeCountFAQUploadedArgs
-    fAQApproved?: boolean | DM_NhanVienCountOutputTypeCountFAQApprovedArgs
   }
 
   // Custom InputTypes
@@ -24692,41 +24682,6 @@ export namespace Prisma {
    */
   export type DM_NhanVienCountOutputTypeCountFeedbackArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FeedbackWhereInput
-  }
-
-  /**
-   * DM_NhanVienCountOutputType without action
-   */
-  export type DM_NhanVienCountOutputTypeCountConversationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ConversationWhereInput
-  }
-
-  /**
-   * DM_NhanVienCountOutputType without action
-   */
-  export type DM_NhanVienCountOutputTypeCountDocumentUploadedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DocumentWhereInput
-  }
-
-  /**
-   * DM_NhanVienCountOutputType without action
-   */
-  export type DM_NhanVienCountOutputTypeCountDocumentApprovedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DocumentWhereInput
-  }
-
-  /**
-   * DM_NhanVienCountOutputType without action
-   */
-  export type DM_NhanVienCountOutputTypeCountFAQUploadedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FAQWhereInput
-  }
-
-  /**
-   * DM_NhanVienCountOutputType without action
-   */
-  export type DM_NhanVienCountOutputTypeCountFAQApprovedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FAQWhereInput
   }
 
 
@@ -25102,6 +25057,11 @@ export namespace Prisma {
     lecturerHistory: number
     staffHistory: number
     evidenceFiles: number
+    documentsUploaded: number
+    documentsApproved: number
+    faqsUploaded: number
+    faqsApproved: number
+    conversations: number
   }
 
   export type UserProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -25133,6 +25093,11 @@ export namespace Prisma {
     lecturerHistory?: boolean | UserProfileCountOutputTypeCountLecturerHistoryArgs
     staffHistory?: boolean | UserProfileCountOutputTypeCountStaffHistoryArgs
     evidenceFiles?: boolean | UserProfileCountOutputTypeCountEvidenceFilesArgs
+    documentsUploaded?: boolean | UserProfileCountOutputTypeCountDocumentsUploadedArgs
+    documentsApproved?: boolean | UserProfileCountOutputTypeCountDocumentsApprovedArgs
+    faqsUploaded?: boolean | UserProfileCountOutputTypeCountFaqsUploadedArgs
+    faqsApproved?: boolean | UserProfileCountOutputTypeCountFaqsApprovedArgs
+    conversations?: boolean | UserProfileCountOutputTypeCountConversationsArgs
   }
 
   // Custom InputTypes
@@ -25340,6 +25305,41 @@ export namespace Prisma {
    */
   export type UserProfileCountOutputTypeCountEvidenceFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EvidenceFileWhereInput
+  }
+
+  /**
+   * UserProfileCountOutputType without action
+   */
+  export type UserProfileCountOutputTypeCountDocumentsUploadedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentWhereInput
+  }
+
+  /**
+   * UserProfileCountOutputType without action
+   */
+  export type UserProfileCountOutputTypeCountDocumentsApprovedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentWhereInput
+  }
+
+  /**
+   * UserProfileCountOutputType without action
+   */
+  export type UserProfileCountOutputTypeCountFaqsUploadedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FAQWhereInput
+  }
+
+  /**
+   * UserProfileCountOutputType without action
+   */
+  export type UserProfileCountOutputTypeCountFaqsApprovedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FAQWhereInput
+  }
+
+  /**
+   * UserProfileCountOutputType without action
+   */
+  export type UserProfileCountOutputTypeCountConversationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ConversationWhereInput
   }
 
 
@@ -106476,7 +106476,7 @@ export namespace Prisma {
     reason?: boolean
     uploadedById?: boolean
     approvedById?: boolean
-    uploadedBy?: boolean | DM_NhanVienDefaultArgs<ExtArgs>
+    uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
   }, ExtArgs["result"]["document"]>
 
@@ -106498,7 +106498,7 @@ export namespace Prisma {
     reason?: boolean
     uploadedById?: boolean
     approvedById?: boolean
-    uploadedBy?: boolean | DM_NhanVienDefaultArgs<ExtArgs>
+    uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
   }, ExtArgs["result"]["document"]>
 
@@ -106520,7 +106520,7 @@ export namespace Prisma {
     reason?: boolean
     uploadedById?: boolean
     approvedById?: boolean
-    uploadedBy?: boolean | DM_NhanVienDefaultArgs<ExtArgs>
+    uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
   }, ExtArgs["result"]["document"]>
 
@@ -106546,23 +106546,23 @@ export namespace Prisma {
 
   export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "title" | "body" | "status" | "uri" | "fileType" | "fileSize" | "type" | "reason" | "uploadedById" | "approvedById", ExtArgs["result"]["document"]>
   export type DocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    uploadedBy?: boolean | DM_NhanVienDefaultArgs<ExtArgs>
+    uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
   }
   export type DocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    uploadedBy?: boolean | DM_NhanVienDefaultArgs<ExtArgs>
+    uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
   }
   export type DocumentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    uploadedBy?: boolean | DM_NhanVienDefaultArgs<ExtArgs>
+    uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
   }
 
   export type $DocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Document"
     objects: {
-      uploadedBy: Prisma.$DM_NhanVienPayload<ExtArgs>
-      approvedBy: Prisma.$DM_NhanVienPayload<ExtArgs> | null
+      uploadedBy: Prisma.$UserProfilePayload<ExtArgs>
+      approvedBy: Prisma.$UserProfilePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -106976,8 +106976,8 @@ export namespace Prisma {
    */
   export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    uploadedBy<T extends DM_NhanVienDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DM_NhanVienDefaultArgs<ExtArgs>>): Prisma__DM_NhanVienClient<$Result.GetResult<Prisma.$DM_NhanVienPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    approvedBy<T extends Document$approvedByArgs<ExtArgs> = {}>(args?: Subset<T, Document$approvedByArgs<ExtArgs>>): Prisma__DM_NhanVienClient<$Result.GetResult<Prisma.$DM_NhanVienPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    uploadedBy<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    approvedBy<T extends Document$approvedByArgs<ExtArgs> = {}>(args?: Subset<T, Document$approvedByArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -107424,18 +107424,18 @@ export namespace Prisma {
    */
   export type Document$approvedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the DM_NhanVien
+     * Select specific fields to fetch from the UserProfile
      */
-    select?: DM_NhanVienSelect<ExtArgs> | null
+    select?: UserProfileSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the DM_NhanVien
+     * Omit specific fields from the UserProfile
      */
-    omit?: DM_NhanVienOmit<ExtArgs> | null
+    omit?: UserProfileOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: DM_NhanVienInclude<ExtArgs> | null
-    where?: DM_NhanVienWhereInput
+    include?: UserProfileInclude<ExtArgs> | null
+    where?: UserProfileWhereInput
   }
 
   /**
@@ -107693,7 +107693,7 @@ export namespace Prisma {
     reason?: boolean
     uploadedById?: boolean
     approvedById?: boolean
-    uploadedBy?: boolean | DM_NhanVienDefaultArgs<ExtArgs>
+    uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | FAQ$approvedByArgs<ExtArgs>
   }, ExtArgs["result"]["fAQ"]>
 
@@ -107712,7 +107712,7 @@ export namespace Prisma {
     reason?: boolean
     uploadedById?: boolean
     approvedById?: boolean
-    uploadedBy?: boolean | DM_NhanVienDefaultArgs<ExtArgs>
+    uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | FAQ$approvedByArgs<ExtArgs>
   }, ExtArgs["result"]["fAQ"]>
 
@@ -107731,7 +107731,7 @@ export namespace Prisma {
     reason?: boolean
     uploadedById?: boolean
     approvedById?: boolean
-    uploadedBy?: boolean | DM_NhanVienDefaultArgs<ExtArgs>
+    uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | FAQ$approvedByArgs<ExtArgs>
   }, ExtArgs["result"]["fAQ"]>
 
@@ -107754,23 +107754,23 @@ export namespace Prisma {
 
   export type FAQOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "question" | "answer" | "status" | "type" | "reason" | "uploadedById" | "approvedById", ExtArgs["result"]["fAQ"]>
   export type FAQInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    uploadedBy?: boolean | DM_NhanVienDefaultArgs<ExtArgs>
+    uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | FAQ$approvedByArgs<ExtArgs>
   }
   export type FAQIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    uploadedBy?: boolean | DM_NhanVienDefaultArgs<ExtArgs>
+    uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | FAQ$approvedByArgs<ExtArgs>
   }
   export type FAQIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    uploadedBy?: boolean | DM_NhanVienDefaultArgs<ExtArgs>
+    uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | FAQ$approvedByArgs<ExtArgs>
   }
 
   export type $FAQPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "FAQ"
     objects: {
-      uploadedBy: Prisma.$DM_NhanVienPayload<ExtArgs>
-      approvedBy: Prisma.$DM_NhanVienPayload<ExtArgs> | null
+      uploadedBy: Prisma.$UserProfilePayload<ExtArgs>
+      approvedBy: Prisma.$UserProfilePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -108181,8 +108181,8 @@ export namespace Prisma {
    */
   export interface Prisma__FAQClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    uploadedBy<T extends DM_NhanVienDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DM_NhanVienDefaultArgs<ExtArgs>>): Prisma__DM_NhanVienClient<$Result.GetResult<Prisma.$DM_NhanVienPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    approvedBy<T extends FAQ$approvedByArgs<ExtArgs> = {}>(args?: Subset<T, FAQ$approvedByArgs<ExtArgs>>): Prisma__DM_NhanVienClient<$Result.GetResult<Prisma.$DM_NhanVienPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    uploadedBy<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    approvedBy<T extends FAQ$approvedByArgs<ExtArgs> = {}>(args?: Subset<T, FAQ$approvedByArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -108626,18 +108626,18 @@ export namespace Prisma {
    */
   export type FAQ$approvedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the DM_NhanVien
+     * Select specific fields to fetch from the UserProfile
      */
-    select?: DM_NhanVienSelect<ExtArgs> | null
+    select?: UserProfileSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the DM_NhanVien
+     * Omit specific fields from the UserProfile
      */
-    omit?: DM_NhanVienOmit<ExtArgs> | null
+    omit?: UserProfileOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: DM_NhanVienInclude<ExtArgs> | null
-    where?: DM_NhanVienWhereInput
+    include?: UserProfileInclude<ExtArgs> | null
+    where?: UserProfileWhereInput
   }
 
   /**
@@ -110015,7 +110015,7 @@ export namespace Prisma {
   export type $ConversationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Conversation"
     objects: {
-      user: Prisma.$DM_NhanVienPayload<ExtArgs> | null
+      user: Prisma.$UserProfilePayload<ExtArgs> | null
       session: Prisma.$UserSessionPayload<ExtArgs> | null
       message: Prisma.$MessagePayload<ExtArgs>[]
     }
@@ -110425,7 +110425,7 @@ export namespace Prisma {
    */
   export interface Prisma__ConversationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends Conversation$userArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$userArgs<ExtArgs>>): Prisma__DM_NhanVienClient<$Result.GetResult<Prisma.$DM_NhanVienPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    user<T extends Conversation$userArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$userArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     session<T extends Conversation$sessionArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$sessionArgs<ExtArgs>>): Prisma__UserSessionClient<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     message<T extends Conversation$messageArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$messageArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -110868,18 +110868,18 @@ export namespace Prisma {
    */
   export type Conversation$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the DM_NhanVien
+     * Select specific fields to fetch from the UserProfile
      */
-    select?: DM_NhanVienSelect<ExtArgs> | null
+    select?: UserProfileSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the DM_NhanVien
+     * Omit specific fields from the UserProfile
      */
-    omit?: DM_NhanVienOmit<ExtArgs> | null
+    omit?: UserProfileOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: DM_NhanVienInclude<ExtArgs> | null
-    where?: DM_NhanVienWhereInput
+    include?: UserProfileInclude<ExtArgs> | null
+    where?: UserProfileWhereInput
   }
 
   /**
@@ -131688,11 +131688,6 @@ export namespace Prisma {
     group?: boolean | DM_NhanVien$groupArgs<ExtArgs>
     notification?: boolean | DM_NhanVien$notificationArgs<ExtArgs>
     feedback?: boolean | DM_NhanVien$feedbackArgs<ExtArgs>
-    conversation?: boolean | DM_NhanVien$conversationArgs<ExtArgs>
-    documentUploaded?: boolean | DM_NhanVien$documentUploadedArgs<ExtArgs>
-    documentApproved?: boolean | DM_NhanVien$documentApprovedArgs<ExtArgs>
-    fAQUploaded?: boolean | DM_NhanVien$fAQUploadedArgs<ExtArgs>
-    fAQApproved?: boolean | DM_NhanVien$fAQApprovedArgs<ExtArgs>
     _count?: boolean | DM_NhanVienCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dM_NhanVien"]>
 
@@ -131817,11 +131812,6 @@ export namespace Prisma {
     group?: boolean | DM_NhanVien$groupArgs<ExtArgs>
     notification?: boolean | DM_NhanVien$notificationArgs<ExtArgs>
     feedback?: boolean | DM_NhanVien$feedbackArgs<ExtArgs>
-    conversation?: boolean | DM_NhanVien$conversationArgs<ExtArgs>
-    documentUploaded?: boolean | DM_NhanVien$documentUploadedArgs<ExtArgs>
-    documentApproved?: boolean | DM_NhanVien$documentApprovedArgs<ExtArgs>
-    fAQUploaded?: boolean | DM_NhanVien$fAQUploadedArgs<ExtArgs>
-    fAQApproved?: boolean | DM_NhanVien$fAQApprovedArgs<ExtArgs>
     _count?: boolean | DM_NhanVienCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DM_NhanVienIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -131837,11 +131827,6 @@ export namespace Prisma {
       group: Prisma.$GroupPayload<ExtArgs> | null
       notification: Prisma.$NotificationPayload<ExtArgs>[]
       feedback: Prisma.$FeedbackPayload<ExtArgs>[]
-      conversation: Prisma.$ConversationPayload<ExtArgs>[]
-      documentUploaded: Prisma.$DocumentPayload<ExtArgs>[]
-      documentApproved: Prisma.$DocumentPayload<ExtArgs>[]
-      fAQUploaded: Prisma.$FAQPayload<ExtArgs>[]
-      fAQApproved: Prisma.$FAQPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       Id: string
@@ -132276,11 +132261,6 @@ export namespace Prisma {
     group<T extends DM_NhanVien$groupArgs<ExtArgs> = {}>(args?: Subset<T, DM_NhanVien$groupArgs<ExtArgs>>): Prisma__GroupClient<$Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     notification<T extends DM_NhanVien$notificationArgs<ExtArgs> = {}>(args?: Subset<T, DM_NhanVien$notificationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     feedback<T extends DM_NhanVien$feedbackArgs<ExtArgs> = {}>(args?: Subset<T, DM_NhanVien$feedbackArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    conversation<T extends DM_NhanVien$conversationArgs<ExtArgs> = {}>(args?: Subset<T, DM_NhanVien$conversationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    documentUploaded<T extends DM_NhanVien$documentUploadedArgs<ExtArgs> = {}>(args?: Subset<T, DM_NhanVien$documentUploadedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    documentApproved<T extends DM_NhanVien$documentApprovedArgs<ExtArgs> = {}>(args?: Subset<T, DM_NhanVien$documentApprovedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    fAQUploaded<T extends DM_NhanVien$fAQUploadedArgs<ExtArgs> = {}>(args?: Subset<T, DM_NhanVien$fAQUploadedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FAQPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    fAQApproved<T extends DM_NhanVien$fAQApprovedArgs<ExtArgs> = {}>(args?: Subset<T, DM_NhanVien$fAQApprovedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FAQPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -132805,126 +132785,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FeedbackScalarFieldEnum | FeedbackScalarFieldEnum[]
-  }
-
-  /**
-   * DM_NhanVien.conversation
-   */
-  export type DM_NhanVien$conversationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Conversation
-     */
-    select?: ConversationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Conversation
-     */
-    omit?: ConversationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConversationInclude<ExtArgs> | null
-    where?: ConversationWhereInput
-    orderBy?: ConversationOrderByWithRelationInput | ConversationOrderByWithRelationInput[]
-    cursor?: ConversationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ConversationScalarFieldEnum | ConversationScalarFieldEnum[]
-  }
-
-  /**
-   * DM_NhanVien.documentUploaded
-   */
-  export type DM_NhanVien$documentUploadedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Document
-     */
-    select?: DocumentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Document
-     */
-    omit?: DocumentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DocumentInclude<ExtArgs> | null
-    where?: DocumentWhereInput
-    orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
-    cursor?: DocumentWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
-  }
-
-  /**
-   * DM_NhanVien.documentApproved
-   */
-  export type DM_NhanVien$documentApprovedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Document
-     */
-    select?: DocumentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Document
-     */
-    omit?: DocumentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DocumentInclude<ExtArgs> | null
-    where?: DocumentWhereInput
-    orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
-    cursor?: DocumentWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
-  }
-
-  /**
-   * DM_NhanVien.fAQUploaded
-   */
-  export type DM_NhanVien$fAQUploadedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FAQ
-     */
-    select?: FAQSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FAQ
-     */
-    omit?: FAQOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FAQInclude<ExtArgs> | null
-    where?: FAQWhereInput
-    orderBy?: FAQOrderByWithRelationInput | FAQOrderByWithRelationInput[]
-    cursor?: FAQWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: FAQScalarFieldEnum | FAQScalarFieldEnum[]
-  }
-
-  /**
-   * DM_NhanVien.fAQApproved
-   */
-  export type DM_NhanVien$fAQApprovedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FAQ
-     */
-    select?: FAQSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FAQ
-     */
-    omit?: FAQOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FAQInclude<ExtArgs> | null
-    where?: FAQWhereInput
-    orderBy?: FAQOrderByWithRelationInput | FAQOrderByWithRelationInput[]
-    cursor?: FAQWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: FAQScalarFieldEnum | FAQScalarFieldEnum[]
   }
 
   /**
@@ -148103,6 +147963,11 @@ export namespace Prisma {
     staffs?: boolean | UserProfile$staffsArgs<ExtArgs>
     staffHistory?: boolean | UserProfile$staffHistoryArgs<ExtArgs>
     evidenceFiles?: boolean | UserProfile$evidenceFilesArgs<ExtArgs>
+    documentsUploaded?: boolean | UserProfile$documentsUploadedArgs<ExtArgs>
+    documentsApproved?: boolean | UserProfile$documentsApprovedArgs<ExtArgs>
+    faqsUploaded?: boolean | UserProfile$faqsUploadedArgs<ExtArgs>
+    faqsApproved?: boolean | UserProfile$faqsApprovedArgs<ExtArgs>
+    conversations?: boolean | UserProfile$conversationsArgs<ExtArgs>
     _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userProfile"]>
 
@@ -148600,6 +148465,11 @@ export namespace Prisma {
     staffs?: boolean | UserProfile$staffsArgs<ExtArgs>
     staffHistory?: boolean | UserProfile$staffHistoryArgs<ExtArgs>
     evidenceFiles?: boolean | UserProfile$evidenceFilesArgs<ExtArgs>
+    documentsUploaded?: boolean | UserProfile$documentsUploadedArgs<ExtArgs>
+    documentsApproved?: boolean | UserProfile$documentsApprovedArgs<ExtArgs>
+    faqsUploaded?: boolean | UserProfile$faqsUploadedArgs<ExtArgs>
+    faqsApproved?: boolean | UserProfile$faqsApprovedArgs<ExtArgs>
+    conversations?: boolean | UserProfile$conversationsArgs<ExtArgs>
     _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -148754,6 +148624,11 @@ export namespace Prisma {
       staffs: Prisma.$StaffPayload<ExtArgs> | null
       staffHistory: Prisma.$StaffHistoryPayload<ExtArgs>[]
       evidenceFiles: Prisma.$EvidenceFilePayload<ExtArgs>[]
+      documentsUploaded: Prisma.$DocumentPayload<ExtArgs>[]
+      documentsApproved: Prisma.$DocumentPayload<ExtArgs>[]
+      faqsUploaded: Prisma.$FAQPayload<ExtArgs>[]
+      faqsApproved: Prisma.$FAQPayload<ExtArgs>[]
+      conversations: Prisma.$ConversationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -149331,6 +149206,11 @@ export namespace Prisma {
     staffs<T extends UserProfile$staffsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$staffsArgs<ExtArgs>>): Prisma__StaffClient<$Result.GetResult<Prisma.$StaffPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     staffHistory<T extends UserProfile$staffHistoryArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$staffHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     evidenceFiles<T extends UserProfile$evidenceFilesArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$evidenceFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvidenceFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    documentsUploaded<T extends UserProfile$documentsUploadedArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$documentsUploadedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    documentsApproved<T extends UserProfile$documentsApprovedArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$documentsApprovedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    faqsUploaded<T extends UserProfile$faqsUploadedArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$faqsUploadedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FAQPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    faqsApproved<T extends UserProfile$faqsApprovedArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$faqsApprovedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FAQPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    conversations<T extends UserProfile$conversationsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -151244,6 +151124,126 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EvidenceFileScalarFieldEnum | EvidenceFileScalarFieldEnum[]
+  }
+
+  /**
+   * UserProfile.documentsUploaded
+   */
+  export type UserProfile$documentsUploadedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Document
+     */
+    omit?: DocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    where?: DocumentWhereInput
+    orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
+    cursor?: DocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
+  }
+
+  /**
+   * UserProfile.documentsApproved
+   */
+  export type UserProfile$documentsApprovedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Document
+     */
+    omit?: DocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    where?: DocumentWhereInput
+    orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
+    cursor?: DocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
+  }
+
+  /**
+   * UserProfile.faqsUploaded
+   */
+  export type UserProfile$faqsUploadedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FAQ
+     */
+    select?: FAQSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FAQ
+     */
+    omit?: FAQOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FAQInclude<ExtArgs> | null
+    where?: FAQWhereInput
+    orderBy?: FAQOrderByWithRelationInput | FAQOrderByWithRelationInput[]
+    cursor?: FAQWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FAQScalarFieldEnum | FAQScalarFieldEnum[]
+  }
+
+  /**
+   * UserProfile.faqsApproved
+   */
+  export type UserProfile$faqsApprovedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FAQ
+     */
+    select?: FAQSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FAQ
+     */
+    omit?: FAQOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FAQInclude<ExtArgs> | null
+    where?: FAQWhereInput
+    orderBy?: FAQOrderByWithRelationInput | FAQOrderByWithRelationInput[]
+    cursor?: FAQWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FAQScalarFieldEnum | FAQScalarFieldEnum[]
+  }
+
+  /**
+   * UserProfile.conversations
+   */
+  export type UserProfile$conversationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Conversation
+     */
+    select?: ConversationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Conversation
+     */
+    omit?: ConversationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConversationInclude<ExtArgs> | null
+    where?: ConversationWhereInput
+    orderBy?: ConversationOrderByWithRelationInput | ConversationOrderByWithRelationInput[]
+    cursor?: ConversationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ConversationScalarFieldEnum | ConversationScalarFieldEnum[]
   }
 
   /**
@@ -317365,10 +317365,10 @@ export namespace Prisma {
     fileSize?: IntNullableFilter<"Document"> | number | null
     type?: EnumDocumentTypeFilter<"Document"> | $Enums.DocumentType
     reason?: StringNullableFilter<"Document"> | string | null
-    uploadedById?: UuidFilter<"Document"> | string
-    approvedById?: UuidNullableFilter<"Document"> | string | null
-    uploadedBy?: XOR<DM_NhanVienScalarRelationFilter, DM_NhanVienWhereInput>
-    approvedBy?: XOR<DM_NhanVienNullableScalarRelationFilter, DM_NhanVienWhereInput> | null
+    uploadedById?: StringFilter<"Document"> | string
+    approvedById?: StringNullableFilter<"Document"> | string | null
+    uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
   }
 
   export type DocumentOrderByWithRelationInput = {
@@ -317389,8 +317389,8 @@ export namespace Prisma {
     reason?: SortOrderInput | SortOrder
     uploadedById?: SortOrder
     approvedById?: SortOrderInput | SortOrder
-    uploadedBy?: DM_NhanVienOrderByWithRelationInput
-    approvedBy?: DM_NhanVienOrderByWithRelationInput
+    uploadedBy?: UserProfileOrderByWithRelationInput
+    approvedBy?: UserProfileOrderByWithRelationInput
     _relevance?: DocumentOrderByRelevanceInput
   }
 
@@ -317413,10 +317413,10 @@ export namespace Prisma {
     fileSize?: IntNullableFilter<"Document"> | number | null
     type?: EnumDocumentTypeFilter<"Document"> | $Enums.DocumentType
     reason?: StringNullableFilter<"Document"> | string | null
-    uploadedById?: UuidFilter<"Document"> | string
-    approvedById?: UuidNullableFilter<"Document"> | string | null
-    uploadedBy?: XOR<DM_NhanVienScalarRelationFilter, DM_NhanVienWhereInput>
-    approvedBy?: XOR<DM_NhanVienNullableScalarRelationFilter, DM_NhanVienWhereInput> | null
+    uploadedById?: StringFilter<"Document"> | string
+    approvedById?: StringNullableFilter<"Document"> | string | null
+    uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
   }, "id" | "code">
 
   export type DocumentOrderByWithAggregationInput = {
@@ -317463,8 +317463,8 @@ export namespace Prisma {
     fileSize?: IntNullableWithAggregatesFilter<"Document"> | number | null
     type?: EnumDocumentTypeWithAggregatesFilter<"Document"> | $Enums.DocumentType
     reason?: StringNullableWithAggregatesFilter<"Document"> | string | null
-    uploadedById?: UuidWithAggregatesFilter<"Document"> | string
-    approvedById?: UuidNullableWithAggregatesFilter<"Document"> | string | null
+    uploadedById?: StringWithAggregatesFilter<"Document"> | string
+    approvedById?: StringNullableWithAggregatesFilter<"Document"> | string | null
   }
 
   export type FAQWhereInput = {
@@ -317483,10 +317483,10 @@ export namespace Prisma {
     status?: EnumDocumentStatusFilter<"FAQ"> | $Enums.DocumentStatus
     type?: EnumDocumentTypeFilter<"FAQ"> | $Enums.DocumentType
     reason?: StringNullableFilter<"FAQ"> | string | null
-    uploadedById?: UuidFilter<"FAQ"> | string
-    approvedById?: UuidNullableFilter<"FAQ"> | string | null
-    uploadedBy?: XOR<DM_NhanVienScalarRelationFilter, DM_NhanVienWhereInput>
-    approvedBy?: XOR<DM_NhanVienNullableScalarRelationFilter, DM_NhanVienWhereInput> | null
+    uploadedById?: StringFilter<"FAQ"> | string
+    approvedById?: StringNullableFilter<"FAQ"> | string | null
+    uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
   }
 
   export type FAQOrderByWithRelationInput = {
@@ -317504,8 +317504,8 @@ export namespace Prisma {
     reason?: SortOrderInput | SortOrder
     uploadedById?: SortOrder
     approvedById?: SortOrderInput | SortOrder
-    uploadedBy?: DM_NhanVienOrderByWithRelationInput
-    approvedBy?: DM_NhanVienOrderByWithRelationInput
+    uploadedBy?: UserProfileOrderByWithRelationInput
+    approvedBy?: UserProfileOrderByWithRelationInput
     _relevance?: FAQOrderByRelevanceInput
   }
 
@@ -317525,10 +317525,10 @@ export namespace Prisma {
     status?: EnumDocumentStatusFilter<"FAQ"> | $Enums.DocumentStatus
     type?: EnumDocumentTypeFilter<"FAQ"> | $Enums.DocumentType
     reason?: StringNullableFilter<"FAQ"> | string | null
-    uploadedById?: UuidFilter<"FAQ"> | string
-    approvedById?: UuidNullableFilter<"FAQ"> | string | null
-    uploadedBy?: XOR<DM_NhanVienScalarRelationFilter, DM_NhanVienWhereInput>
-    approvedBy?: XOR<DM_NhanVienNullableScalarRelationFilter, DM_NhanVienWhereInput> | null
+    uploadedById?: StringFilter<"FAQ"> | string
+    approvedById?: StringNullableFilter<"FAQ"> | string | null
+    uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
   }, "id" | "code">
 
   export type FAQOrderByWithAggregationInput = {
@@ -317567,8 +317567,8 @@ export namespace Prisma {
     status?: EnumDocumentStatusWithAggregatesFilter<"FAQ"> | $Enums.DocumentStatus
     type?: EnumDocumentTypeWithAggregatesFilter<"FAQ"> | $Enums.DocumentType
     reason?: StringNullableWithAggregatesFilter<"FAQ"> | string | null
-    uploadedById?: UuidWithAggregatesFilter<"FAQ"> | string
-    approvedById?: UuidNullableWithAggregatesFilter<"FAQ"> | string | null
+    uploadedById?: StringWithAggregatesFilter<"FAQ"> | string
+    approvedById?: StringNullableWithAggregatesFilter<"FAQ"> | string | null
   }
 
   export type PromptWhereInput = {
@@ -317666,10 +317666,10 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     name?: StringNullableFilter<"Conversation"> | string | null
-    userId?: UuidNullableFilter<"Conversation"> | string | null
+    userId?: StringNullableFilter<"Conversation"> | string | null
     sessionId?: StringNullableFilter<"Conversation"> | string | null
     type?: EnumDocumentTypeNullableFilter<"Conversation"> | $Enums.DocumentType | null
-    user?: XOR<DM_NhanVienNullableScalarRelationFilter, DM_NhanVienWhereInput> | null
+    user?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
     session?: XOR<UserSessionNullableScalarRelationFilter, UserSessionWhereInput> | null
     message?: MessageListRelationFilter
   }
@@ -317686,7 +317686,7 @@ export namespace Prisma {
     userId?: SortOrderInput | SortOrder
     sessionId?: SortOrderInput | SortOrder
     type?: SortOrderInput | SortOrder
-    user?: DM_NhanVienOrderByWithRelationInput
+    user?: UserProfileOrderByWithRelationInput
     session?: UserSessionOrderByWithRelationInput
     message?: MessageOrderByRelationAggregateInput
     _relevance?: ConversationOrderByRelevanceInput
@@ -317704,10 +317704,10 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     name?: StringNullableFilter<"Conversation"> | string | null
-    userId?: UuidNullableFilter<"Conversation"> | string | null
+    userId?: StringNullableFilter<"Conversation"> | string | null
     sessionId?: StringNullableFilter<"Conversation"> | string | null
     type?: EnumDocumentTypeNullableFilter<"Conversation"> | $Enums.DocumentType | null
-    user?: XOR<DM_NhanVienNullableScalarRelationFilter, DM_NhanVienWhereInput> | null
+    user?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
     session?: XOR<UserSessionNullableScalarRelationFilter, UserSessionWhereInput> | null
     message?: MessageListRelationFilter
   }, "id" | "code">
@@ -317741,7 +317741,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Conversation"> | Date | string
     name?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
-    userId?: UuidNullableWithAggregatesFilter<"Conversation"> | string | null
+    userId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
     sessionId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
     type?: EnumDocumentTypeNullableWithAggregatesFilter<"Conversation"> | $Enums.DocumentType | null
   }
@@ -319622,11 +319622,6 @@ export namespace Prisma {
     group?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
     notification?: NotificationListRelationFilter
     feedback?: FeedbackListRelationFilter
-    conversation?: ConversationListRelationFilter
-    documentUploaded?: DocumentListRelationFilter
-    documentApproved?: DocumentListRelationFilter
-    fAQUploaded?: FAQListRelationFilter
-    fAQApproved?: FAQListRelationFilter
   }
 
   export type DM_NhanVienOrderByWithRelationInput = {
@@ -319668,11 +319663,6 @@ export namespace Prisma {
     group?: GroupOrderByWithRelationInput
     notification?: NotificationOrderByRelationAggregateInput
     feedback?: FeedbackOrderByRelationAggregateInput
-    conversation?: ConversationOrderByRelationAggregateInput
-    documentUploaded?: DocumentOrderByRelationAggregateInput
-    documentApproved?: DocumentOrderByRelationAggregateInput
-    fAQUploaded?: FAQOrderByRelationAggregateInput
-    fAQApproved?: FAQOrderByRelationAggregateInput
     _relevance?: DM_NhanVienOrderByRelevanceInput
   }
 
@@ -319718,11 +319708,6 @@ export namespace Prisma {
     group?: XOR<GroupNullableScalarRelationFilter, GroupWhereInput> | null
     notification?: NotificationListRelationFilter
     feedback?: FeedbackListRelationFilter
-    conversation?: ConversationListRelationFilter
-    documentUploaded?: DocumentListRelationFilter
-    documentApproved?: DocumentListRelationFilter
-    fAQUploaded?: FAQListRelationFilter
-    fAQApproved?: FAQListRelationFilter
   }, "Id">
 
   export type DM_NhanVienOrderByWithAggregationInput = {
@@ -321313,6 +321298,11 @@ export namespace Prisma {
     staffs?: XOR<StaffNullableScalarRelationFilter, StaffWhereInput> | null
     staffHistory?: StaffHistoryListRelationFilter
     evidenceFiles?: EvidenceFileListRelationFilter
+    documentsUploaded?: DocumentListRelationFilter
+    documentsApproved?: DocumentListRelationFilter
+    faqsUploaded?: FAQListRelationFilter
+    faqsApproved?: FAQListRelationFilter
+    conversations?: ConversationListRelationFilter
   }
 
   export type UserProfileOrderByWithRelationInput = {
@@ -321497,6 +321487,11 @@ export namespace Prisma {
     staffs?: StaffOrderByWithRelationInput
     staffHistory?: StaffHistoryOrderByRelationAggregateInput
     evidenceFiles?: EvidenceFileOrderByRelationAggregateInput
+    documentsUploaded?: DocumentOrderByRelationAggregateInput
+    documentsApproved?: DocumentOrderByRelationAggregateInput
+    faqsUploaded?: FAQOrderByRelationAggregateInput
+    faqsApproved?: FAQOrderByRelationAggregateInput
+    conversations?: ConversationOrderByRelationAggregateInput
     _relevance?: UserProfileOrderByRelevanceInput
   }
 
@@ -321685,6 +321680,11 @@ export namespace Prisma {
     staffs?: XOR<StaffNullableScalarRelationFilter, StaffWhereInput> | null
     staffHistory?: StaffHistoryListRelationFilter
     evidenceFiles?: EvidenceFileListRelationFilter
+    documentsUploaded?: DocumentListRelationFilter
+    documentsApproved?: DocumentListRelationFilter
+    faqsUploaded?: FAQListRelationFilter
+    faqsApproved?: FAQListRelationFilter
+    conversations?: ConversationListRelationFilter
   }, "id" | "code" | "idCardNumber">
 
   export type UserProfileOrderByWithAggregationInput = {
@@ -341502,8 +341502,8 @@ export namespace Prisma {
     fileSize?: number | null
     type: $Enums.DocumentType
     reason?: string | null
-    uploadedBy: DM_NhanVienCreateNestedOneWithoutDocumentUploadedInput
-    approvedBy?: DM_NhanVienCreateNestedOneWithoutDocumentApprovedInput
+    uploadedBy: UserProfileCreateNestedOneWithoutDocumentsUploadedInput
+    approvedBy?: UserProfileCreateNestedOneWithoutDocumentsApprovedInput
   }
 
   export type DocumentUncheckedCreateInput = {
@@ -341542,8 +341542,8 @@ export namespace Prisma {
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
     type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
     reason?: NullableStringFieldUpdateOperationsInput | string | null
-    uploadedBy?: DM_NhanVienUpdateOneRequiredWithoutDocumentUploadedNestedInput
-    approvedBy?: DM_NhanVienUpdateOneWithoutDocumentApprovedNestedInput
+    uploadedBy?: UserProfileUpdateOneRequiredWithoutDocumentsUploadedNestedInput
+    approvedBy?: UserProfileUpdateOneWithoutDocumentsApprovedNestedInput
   }
 
   export type DocumentUncheckedUpdateInput = {
@@ -341637,8 +341637,8 @@ export namespace Prisma {
     status?: $Enums.DocumentStatus
     type: $Enums.DocumentType
     reason?: string | null
-    uploadedBy: DM_NhanVienCreateNestedOneWithoutFAQUploadedInput
-    approvedBy?: DM_NhanVienCreateNestedOneWithoutFAQApprovedInput
+    uploadedBy: UserProfileCreateNestedOneWithoutFaqsUploadedInput
+    approvedBy?: UserProfileCreateNestedOneWithoutFaqsApprovedInput
   }
 
   export type FAQUncheckedCreateInput = {
@@ -341671,8 +341671,8 @@ export namespace Prisma {
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
     type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
     reason?: NullableStringFieldUpdateOperationsInput | string | null
-    uploadedBy?: DM_NhanVienUpdateOneRequiredWithoutFAQUploadedNestedInput
-    approvedBy?: DM_NhanVienUpdateOneWithoutFAQApprovedNestedInput
+    uploadedBy?: UserProfileUpdateOneRequiredWithoutFaqsUploadedNestedInput
+    approvedBy?: UserProfileUpdateOneWithoutFaqsApprovedNestedInput
   }
 
   export type FAQUncheckedUpdateInput = {
@@ -341849,7 +341849,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name?: string | null
     type?: $Enums.DocumentType | null
-    user?: DM_NhanVienCreateNestedOneWithoutConversationInput
+    user?: UserProfileCreateNestedOneWithoutConversationsInput
     session?: UserSessionCreateNestedOneWithoutConversationInput
     message?: MessageCreateNestedManyWithoutConversationInput
   }
@@ -341879,7 +341879,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
-    user?: DM_NhanVienUpdateOneWithoutConversationNestedInput
+    user?: UserProfileUpdateOneWithoutConversationsNestedInput
     session?: UserSessionUpdateOneWithoutConversationNestedInput
     message?: MessageUpdateManyWithoutConversationNestedInput
   }
@@ -344200,11 +344200,6 @@ export namespace Prisma {
     group?: GroupCreateNestedOneWithoutUsersInput
     notification?: NotificationCreateNestedManyWithoutCreatedByInput
     feedback?: FeedbackCreateNestedManyWithoutUserInput
-    conversation?: ConversationCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQCreateNestedManyWithoutApprovedByInput
   }
 
   export type DM_NhanVienUncheckedCreateInput = {
@@ -344245,11 +344240,6 @@ export namespace Prisma {
     groupId?: string | null
     notification?: NotificationUncheckedCreateNestedManyWithoutCreatedByInput
     feedback?: FeedbackUncheckedCreateNestedManyWithoutUserInput
-    conversation?: ConversationUncheckedCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type DM_NhanVienUpdateInput = {
@@ -344290,11 +344280,6 @@ export namespace Prisma {
     group?: GroupUpdateOneWithoutUsersNestedInput
     notification?: NotificationUpdateManyWithoutCreatedByNestedInput
     feedback?: FeedbackUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUpdateManyWithoutApprovedByNestedInput
   }
 
   export type DM_NhanVienUncheckedUpdateInput = {
@@ -344335,11 +344320,6 @@ export namespace Prisma {
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
     feedback?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUncheckedUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type DM_NhanVienCreateManyInput = {
@@ -346213,6 +346193,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateInput = {
@@ -346362,6 +346347,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUpdateInput = {
@@ -346511,6 +346501,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateInput = {
@@ -346660,6 +346655,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateManyInput = {
@@ -365981,9 +365981,9 @@ export namespace Prisma {
     not?: NestedEnumDocumentTypeFilter<$PrismaModel> | $Enums.DocumentType
   }
 
-  export type DM_NhanVienNullableScalarRelationFilter = {
-    is?: DM_NhanVienWhereInput | null
-    isNot?: DM_NhanVienWhereInput | null
+  export type UserProfileNullableScalarRelationFilter = {
+    is?: UserProfileWhereInput | null
+    isNot?: UserProfileWhereInput | null
   }
 
   export type DocumentOrderByRelevanceInput = {
@@ -367598,27 +367598,7 @@ export namespace Prisma {
     none?: FeedbackWhereInput
   }
 
-  export type DocumentListRelationFilter = {
-    every?: DocumentWhereInput
-    some?: DocumentWhereInput
-    none?: DocumentWhereInput
-  }
-
-  export type FAQListRelationFilter = {
-    every?: FAQWhereInput
-    some?: FAQWhereInput
-    none?: FAQWhereInput
-  }
-
   export type FeedbackOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type DocumentOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type FAQOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -368796,6 +368776,18 @@ export namespace Prisma {
     none?: EvidenceFileWhereInput
   }
 
+  export type DocumentListRelationFilter = {
+    every?: DocumentWhereInput
+    some?: DocumentWhereInput
+    none?: DocumentWhereInput
+  }
+
+  export type FAQListRelationFilter = {
+    every?: FAQWhereInput
+    some?: FAQWhereInput
+    none?: FAQWhereInput
+  }
+
   export type RelativeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -368857,6 +368849,14 @@ export namespace Prisma {
   }
 
   export type EvidenceFileOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DocumentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FAQOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -374960,11 +374960,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumEvaluationSecretaryMemberRoleFilter<$PrismaModel>
     _max?: NestedEnumEvaluationSecretaryMemberRoleFilter<$PrismaModel>
-  }
-
-  export type UserProfileNullableScalarRelationFilter = {
-    is?: UserProfileWhereInput | null
-    isNot?: UserProfileWhereInput | null
   }
 
   export type EvidenceFileOrderByRelevanceInput = {
@@ -384893,16 +384888,16 @@ export namespace Prisma {
     deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
   }
 
-  export type DM_NhanVienCreateNestedOneWithoutDocumentUploadedInput = {
-    create?: XOR<DM_NhanVienCreateWithoutDocumentUploadedInput, DM_NhanVienUncheckedCreateWithoutDocumentUploadedInput>
-    connectOrCreate?: DM_NhanVienCreateOrConnectWithoutDocumentUploadedInput
-    connect?: DM_NhanVienWhereUniqueInput
+  export type UserProfileCreateNestedOneWithoutDocumentsUploadedInput = {
+    create?: XOR<UserProfileCreateWithoutDocumentsUploadedInput, UserProfileUncheckedCreateWithoutDocumentsUploadedInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutDocumentsUploadedInput
+    connect?: UserProfileWhereUniqueInput
   }
 
-  export type DM_NhanVienCreateNestedOneWithoutDocumentApprovedInput = {
-    create?: XOR<DM_NhanVienCreateWithoutDocumentApprovedInput, DM_NhanVienUncheckedCreateWithoutDocumentApprovedInput>
-    connectOrCreate?: DM_NhanVienCreateOrConnectWithoutDocumentApprovedInput
-    connect?: DM_NhanVienWhereUniqueInput
+  export type UserProfileCreateNestedOneWithoutDocumentsApprovedInput = {
+    create?: XOR<UserProfileCreateWithoutDocumentsApprovedInput, UserProfileUncheckedCreateWithoutDocumentsApprovedInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutDocumentsApprovedInput
+    connect?: UserProfileWhereUniqueInput
   }
 
   export type EnumDocumentStatusFieldUpdateOperationsInput = {
@@ -384913,58 +384908,58 @@ export namespace Prisma {
     set?: $Enums.DocumentType
   }
 
-  export type DM_NhanVienUpdateOneRequiredWithoutDocumentUploadedNestedInput = {
-    create?: XOR<DM_NhanVienCreateWithoutDocumentUploadedInput, DM_NhanVienUncheckedCreateWithoutDocumentUploadedInput>
-    connectOrCreate?: DM_NhanVienCreateOrConnectWithoutDocumentUploadedInput
-    upsert?: DM_NhanVienUpsertWithoutDocumentUploadedInput
-    connect?: DM_NhanVienWhereUniqueInput
-    update?: XOR<XOR<DM_NhanVienUpdateToOneWithWhereWithoutDocumentUploadedInput, DM_NhanVienUpdateWithoutDocumentUploadedInput>, DM_NhanVienUncheckedUpdateWithoutDocumentUploadedInput>
+  export type UserProfileUpdateOneRequiredWithoutDocumentsUploadedNestedInput = {
+    create?: XOR<UserProfileCreateWithoutDocumentsUploadedInput, UserProfileUncheckedCreateWithoutDocumentsUploadedInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutDocumentsUploadedInput
+    upsert?: UserProfileUpsertWithoutDocumentsUploadedInput
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutDocumentsUploadedInput, UserProfileUpdateWithoutDocumentsUploadedInput>, UserProfileUncheckedUpdateWithoutDocumentsUploadedInput>
   }
 
-  export type DM_NhanVienUpdateOneWithoutDocumentApprovedNestedInput = {
-    create?: XOR<DM_NhanVienCreateWithoutDocumentApprovedInput, DM_NhanVienUncheckedCreateWithoutDocumentApprovedInput>
-    connectOrCreate?: DM_NhanVienCreateOrConnectWithoutDocumentApprovedInput
-    upsert?: DM_NhanVienUpsertWithoutDocumentApprovedInput
-    disconnect?: DM_NhanVienWhereInput | boolean
-    delete?: DM_NhanVienWhereInput | boolean
-    connect?: DM_NhanVienWhereUniqueInput
-    update?: XOR<XOR<DM_NhanVienUpdateToOneWithWhereWithoutDocumentApprovedInput, DM_NhanVienUpdateWithoutDocumentApprovedInput>, DM_NhanVienUncheckedUpdateWithoutDocumentApprovedInput>
+  export type UserProfileUpdateOneWithoutDocumentsApprovedNestedInput = {
+    create?: XOR<UserProfileCreateWithoutDocumentsApprovedInput, UserProfileUncheckedCreateWithoutDocumentsApprovedInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutDocumentsApprovedInput
+    upsert?: UserProfileUpsertWithoutDocumentsApprovedInput
+    disconnect?: UserProfileWhereInput | boolean
+    delete?: UserProfileWhereInput | boolean
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutDocumentsApprovedInput, UserProfileUpdateWithoutDocumentsApprovedInput>, UserProfileUncheckedUpdateWithoutDocumentsApprovedInput>
   }
 
-  export type DM_NhanVienCreateNestedOneWithoutFAQUploadedInput = {
-    create?: XOR<DM_NhanVienCreateWithoutFAQUploadedInput, DM_NhanVienUncheckedCreateWithoutFAQUploadedInput>
-    connectOrCreate?: DM_NhanVienCreateOrConnectWithoutFAQUploadedInput
-    connect?: DM_NhanVienWhereUniqueInput
+  export type UserProfileCreateNestedOneWithoutFaqsUploadedInput = {
+    create?: XOR<UserProfileCreateWithoutFaqsUploadedInput, UserProfileUncheckedCreateWithoutFaqsUploadedInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutFaqsUploadedInput
+    connect?: UserProfileWhereUniqueInput
   }
 
-  export type DM_NhanVienCreateNestedOneWithoutFAQApprovedInput = {
-    create?: XOR<DM_NhanVienCreateWithoutFAQApprovedInput, DM_NhanVienUncheckedCreateWithoutFAQApprovedInput>
-    connectOrCreate?: DM_NhanVienCreateOrConnectWithoutFAQApprovedInput
-    connect?: DM_NhanVienWhereUniqueInput
+  export type UserProfileCreateNestedOneWithoutFaqsApprovedInput = {
+    create?: XOR<UserProfileCreateWithoutFaqsApprovedInput, UserProfileUncheckedCreateWithoutFaqsApprovedInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutFaqsApprovedInput
+    connect?: UserProfileWhereUniqueInput
   }
 
-  export type DM_NhanVienUpdateOneRequiredWithoutFAQUploadedNestedInput = {
-    create?: XOR<DM_NhanVienCreateWithoutFAQUploadedInput, DM_NhanVienUncheckedCreateWithoutFAQUploadedInput>
-    connectOrCreate?: DM_NhanVienCreateOrConnectWithoutFAQUploadedInput
-    upsert?: DM_NhanVienUpsertWithoutFAQUploadedInput
-    connect?: DM_NhanVienWhereUniqueInput
-    update?: XOR<XOR<DM_NhanVienUpdateToOneWithWhereWithoutFAQUploadedInput, DM_NhanVienUpdateWithoutFAQUploadedInput>, DM_NhanVienUncheckedUpdateWithoutFAQUploadedInput>
+  export type UserProfileUpdateOneRequiredWithoutFaqsUploadedNestedInput = {
+    create?: XOR<UserProfileCreateWithoutFaqsUploadedInput, UserProfileUncheckedCreateWithoutFaqsUploadedInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutFaqsUploadedInput
+    upsert?: UserProfileUpsertWithoutFaqsUploadedInput
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutFaqsUploadedInput, UserProfileUpdateWithoutFaqsUploadedInput>, UserProfileUncheckedUpdateWithoutFaqsUploadedInput>
   }
 
-  export type DM_NhanVienUpdateOneWithoutFAQApprovedNestedInput = {
-    create?: XOR<DM_NhanVienCreateWithoutFAQApprovedInput, DM_NhanVienUncheckedCreateWithoutFAQApprovedInput>
-    connectOrCreate?: DM_NhanVienCreateOrConnectWithoutFAQApprovedInput
-    upsert?: DM_NhanVienUpsertWithoutFAQApprovedInput
-    disconnect?: DM_NhanVienWhereInput | boolean
-    delete?: DM_NhanVienWhereInput | boolean
-    connect?: DM_NhanVienWhereUniqueInput
-    update?: XOR<XOR<DM_NhanVienUpdateToOneWithWhereWithoutFAQApprovedInput, DM_NhanVienUpdateWithoutFAQApprovedInput>, DM_NhanVienUncheckedUpdateWithoutFAQApprovedInput>
+  export type UserProfileUpdateOneWithoutFaqsApprovedNestedInput = {
+    create?: XOR<UserProfileCreateWithoutFaqsApprovedInput, UserProfileUncheckedCreateWithoutFaqsApprovedInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutFaqsApprovedInput
+    upsert?: UserProfileUpsertWithoutFaqsApprovedInput
+    disconnect?: UserProfileWhereInput | boolean
+    delete?: UserProfileWhereInput | boolean
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutFaqsApprovedInput, UserProfileUpdateWithoutFaqsApprovedInput>, UserProfileUncheckedUpdateWithoutFaqsApprovedInput>
   }
 
-  export type DM_NhanVienCreateNestedOneWithoutConversationInput = {
-    create?: XOR<DM_NhanVienCreateWithoutConversationInput, DM_NhanVienUncheckedCreateWithoutConversationInput>
-    connectOrCreate?: DM_NhanVienCreateOrConnectWithoutConversationInput
-    connect?: DM_NhanVienWhereUniqueInput
+  export type UserProfileCreateNestedOneWithoutConversationsInput = {
+    create?: XOR<UserProfileCreateWithoutConversationsInput, UserProfileUncheckedCreateWithoutConversationsInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutConversationsInput
+    connect?: UserProfileWhereUniqueInput
   }
 
   export type UserSessionCreateNestedOneWithoutConversationInput = {
@@ -384991,14 +384986,14 @@ export namespace Prisma {
     set?: $Enums.DocumentType | null
   }
 
-  export type DM_NhanVienUpdateOneWithoutConversationNestedInput = {
-    create?: XOR<DM_NhanVienCreateWithoutConversationInput, DM_NhanVienUncheckedCreateWithoutConversationInput>
-    connectOrCreate?: DM_NhanVienCreateOrConnectWithoutConversationInput
-    upsert?: DM_NhanVienUpsertWithoutConversationInput
-    disconnect?: DM_NhanVienWhereInput | boolean
-    delete?: DM_NhanVienWhereInput | boolean
-    connect?: DM_NhanVienWhereUniqueInput
-    update?: XOR<XOR<DM_NhanVienUpdateToOneWithWhereWithoutConversationInput, DM_NhanVienUpdateWithoutConversationInput>, DM_NhanVienUncheckedUpdateWithoutConversationInput>
+  export type UserProfileUpdateOneWithoutConversationsNestedInput = {
+    create?: XOR<UserProfileCreateWithoutConversationsInput, UserProfileUncheckedCreateWithoutConversationsInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutConversationsInput
+    upsert?: UserProfileUpsertWithoutConversationsInput
+    disconnect?: UserProfileWhereInput | boolean
+    delete?: UserProfileWhereInput | boolean
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutConversationsInput, UserProfileUpdateWithoutConversationsInput>, UserProfileUncheckedUpdateWithoutConversationsInput>
   }
 
   export type UserSessionUpdateOneWithoutConversationNestedInput = {
@@ -386377,41 +386372,6 @@ export namespace Prisma {
     connect?: FeedbackWhereUniqueInput | FeedbackWhereUniqueInput[]
   }
 
-  export type ConversationCreateNestedManyWithoutUserInput = {
-    create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
-    createMany?: ConversationCreateManyUserInputEnvelope
-    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
-  }
-
-  export type DocumentCreateNestedManyWithoutUploadedByInput = {
-    create?: XOR<DocumentCreateWithoutUploadedByInput, DocumentUncheckedCreateWithoutUploadedByInput> | DocumentCreateWithoutUploadedByInput[] | DocumentUncheckedCreateWithoutUploadedByInput[]
-    connectOrCreate?: DocumentCreateOrConnectWithoutUploadedByInput | DocumentCreateOrConnectWithoutUploadedByInput[]
-    createMany?: DocumentCreateManyUploadedByInputEnvelope
-    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-  }
-
-  export type DocumentCreateNestedManyWithoutApprovedByInput = {
-    create?: XOR<DocumentCreateWithoutApprovedByInput, DocumentUncheckedCreateWithoutApprovedByInput> | DocumentCreateWithoutApprovedByInput[] | DocumentUncheckedCreateWithoutApprovedByInput[]
-    connectOrCreate?: DocumentCreateOrConnectWithoutApprovedByInput | DocumentCreateOrConnectWithoutApprovedByInput[]
-    createMany?: DocumentCreateManyApprovedByInputEnvelope
-    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-  }
-
-  export type FAQCreateNestedManyWithoutUploadedByInput = {
-    create?: XOR<FAQCreateWithoutUploadedByInput, FAQUncheckedCreateWithoutUploadedByInput> | FAQCreateWithoutUploadedByInput[] | FAQUncheckedCreateWithoutUploadedByInput[]
-    connectOrCreate?: FAQCreateOrConnectWithoutUploadedByInput | FAQCreateOrConnectWithoutUploadedByInput[]
-    createMany?: FAQCreateManyUploadedByInputEnvelope
-    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-  }
-
-  export type FAQCreateNestedManyWithoutApprovedByInput = {
-    create?: XOR<FAQCreateWithoutApprovedByInput, FAQUncheckedCreateWithoutApprovedByInput> | FAQCreateWithoutApprovedByInput[] | FAQUncheckedCreateWithoutApprovedByInput[]
-    connectOrCreate?: FAQCreateOrConnectWithoutApprovedByInput | FAQCreateOrConnectWithoutApprovedByInput[]
-    createMany?: FAQCreateManyApprovedByInputEnvelope
-    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-  }
-
   export type NotificationUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<NotificationCreateWithoutCreatedByInput, NotificationUncheckedCreateWithoutCreatedByInput> | NotificationCreateWithoutCreatedByInput[] | NotificationUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: NotificationCreateOrConnectWithoutCreatedByInput | NotificationCreateOrConnectWithoutCreatedByInput[]
@@ -386424,41 +386384,6 @@ export namespace Prisma {
     connectOrCreate?: FeedbackCreateOrConnectWithoutUserInput | FeedbackCreateOrConnectWithoutUserInput[]
     createMany?: FeedbackCreateManyUserInputEnvelope
     connect?: FeedbackWhereUniqueInput | FeedbackWhereUniqueInput[]
-  }
-
-  export type ConversationUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
-    createMany?: ConversationCreateManyUserInputEnvelope
-    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
-  }
-
-  export type DocumentUncheckedCreateNestedManyWithoutUploadedByInput = {
-    create?: XOR<DocumentCreateWithoutUploadedByInput, DocumentUncheckedCreateWithoutUploadedByInput> | DocumentCreateWithoutUploadedByInput[] | DocumentUncheckedCreateWithoutUploadedByInput[]
-    connectOrCreate?: DocumentCreateOrConnectWithoutUploadedByInput | DocumentCreateOrConnectWithoutUploadedByInput[]
-    createMany?: DocumentCreateManyUploadedByInputEnvelope
-    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-  }
-
-  export type DocumentUncheckedCreateNestedManyWithoutApprovedByInput = {
-    create?: XOR<DocumentCreateWithoutApprovedByInput, DocumentUncheckedCreateWithoutApprovedByInput> | DocumentCreateWithoutApprovedByInput[] | DocumentUncheckedCreateWithoutApprovedByInput[]
-    connectOrCreate?: DocumentCreateOrConnectWithoutApprovedByInput | DocumentCreateOrConnectWithoutApprovedByInput[]
-    createMany?: DocumentCreateManyApprovedByInputEnvelope
-    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-  }
-
-  export type FAQUncheckedCreateNestedManyWithoutUploadedByInput = {
-    create?: XOR<FAQCreateWithoutUploadedByInput, FAQUncheckedCreateWithoutUploadedByInput> | FAQCreateWithoutUploadedByInput[] | FAQUncheckedCreateWithoutUploadedByInput[]
-    connectOrCreate?: FAQCreateOrConnectWithoutUploadedByInput | FAQCreateOrConnectWithoutUploadedByInput[]
-    createMany?: FAQCreateManyUploadedByInputEnvelope
-    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-  }
-
-  export type FAQUncheckedCreateNestedManyWithoutApprovedByInput = {
-    create?: XOR<FAQCreateWithoutApprovedByInput, FAQUncheckedCreateWithoutApprovedByInput> | FAQCreateWithoutApprovedByInput[] | FAQUncheckedCreateWithoutApprovedByInput[]
-    connectOrCreate?: FAQCreateOrConnectWithoutApprovedByInput | FAQCreateOrConnectWithoutApprovedByInput[]
-    createMany?: FAQCreateManyApprovedByInputEnvelope
-    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
   }
 
   export type GroupUpdateOneWithoutUsersNestedInput = {
@@ -386499,76 +386424,6 @@ export namespace Prisma {
     deleteMany?: FeedbackScalarWhereInput | FeedbackScalarWhereInput[]
   }
 
-  export type ConversationUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
-    upsert?: ConversationUpsertWithWhereUniqueWithoutUserInput | ConversationUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ConversationCreateManyUserInputEnvelope
-    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
-    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
-    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
-    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
-    update?: ConversationUpdateWithWhereUniqueWithoutUserInput | ConversationUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ConversationUpdateManyWithWhereWithoutUserInput | ConversationUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
-  }
-
-  export type DocumentUpdateManyWithoutUploadedByNestedInput = {
-    create?: XOR<DocumentCreateWithoutUploadedByInput, DocumentUncheckedCreateWithoutUploadedByInput> | DocumentCreateWithoutUploadedByInput[] | DocumentUncheckedCreateWithoutUploadedByInput[]
-    connectOrCreate?: DocumentCreateOrConnectWithoutUploadedByInput | DocumentCreateOrConnectWithoutUploadedByInput[]
-    upsert?: DocumentUpsertWithWhereUniqueWithoutUploadedByInput | DocumentUpsertWithWhereUniqueWithoutUploadedByInput[]
-    createMany?: DocumentCreateManyUploadedByInputEnvelope
-    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    update?: DocumentUpdateWithWhereUniqueWithoutUploadedByInput | DocumentUpdateWithWhereUniqueWithoutUploadedByInput[]
-    updateMany?: DocumentUpdateManyWithWhereWithoutUploadedByInput | DocumentUpdateManyWithWhereWithoutUploadedByInput[]
-    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
-  }
-
-  export type DocumentUpdateManyWithoutApprovedByNestedInput = {
-    create?: XOR<DocumentCreateWithoutApprovedByInput, DocumentUncheckedCreateWithoutApprovedByInput> | DocumentCreateWithoutApprovedByInput[] | DocumentUncheckedCreateWithoutApprovedByInput[]
-    connectOrCreate?: DocumentCreateOrConnectWithoutApprovedByInput | DocumentCreateOrConnectWithoutApprovedByInput[]
-    upsert?: DocumentUpsertWithWhereUniqueWithoutApprovedByInput | DocumentUpsertWithWhereUniqueWithoutApprovedByInput[]
-    createMany?: DocumentCreateManyApprovedByInputEnvelope
-    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    update?: DocumentUpdateWithWhereUniqueWithoutApprovedByInput | DocumentUpdateWithWhereUniqueWithoutApprovedByInput[]
-    updateMany?: DocumentUpdateManyWithWhereWithoutApprovedByInput | DocumentUpdateManyWithWhereWithoutApprovedByInput[]
-    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
-  }
-
-  export type FAQUpdateManyWithoutUploadedByNestedInput = {
-    create?: XOR<FAQCreateWithoutUploadedByInput, FAQUncheckedCreateWithoutUploadedByInput> | FAQCreateWithoutUploadedByInput[] | FAQUncheckedCreateWithoutUploadedByInput[]
-    connectOrCreate?: FAQCreateOrConnectWithoutUploadedByInput | FAQCreateOrConnectWithoutUploadedByInput[]
-    upsert?: FAQUpsertWithWhereUniqueWithoutUploadedByInput | FAQUpsertWithWhereUniqueWithoutUploadedByInput[]
-    createMany?: FAQCreateManyUploadedByInputEnvelope
-    set?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    disconnect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    delete?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    update?: FAQUpdateWithWhereUniqueWithoutUploadedByInput | FAQUpdateWithWhereUniqueWithoutUploadedByInput[]
-    updateMany?: FAQUpdateManyWithWhereWithoutUploadedByInput | FAQUpdateManyWithWhereWithoutUploadedByInput[]
-    deleteMany?: FAQScalarWhereInput | FAQScalarWhereInput[]
-  }
-
-  export type FAQUpdateManyWithoutApprovedByNestedInput = {
-    create?: XOR<FAQCreateWithoutApprovedByInput, FAQUncheckedCreateWithoutApprovedByInput> | FAQCreateWithoutApprovedByInput[] | FAQUncheckedCreateWithoutApprovedByInput[]
-    connectOrCreate?: FAQCreateOrConnectWithoutApprovedByInput | FAQCreateOrConnectWithoutApprovedByInput[]
-    upsert?: FAQUpsertWithWhereUniqueWithoutApprovedByInput | FAQUpsertWithWhereUniqueWithoutApprovedByInput[]
-    createMany?: FAQCreateManyApprovedByInputEnvelope
-    set?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    disconnect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    delete?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    update?: FAQUpdateWithWhereUniqueWithoutApprovedByInput | FAQUpdateWithWhereUniqueWithoutApprovedByInput[]
-    updateMany?: FAQUpdateManyWithWhereWithoutApprovedByInput | FAQUpdateManyWithWhereWithoutApprovedByInput[]
-    deleteMany?: FAQScalarWhereInput | FAQScalarWhereInput[]
-  }
-
   export type NotificationUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<NotificationCreateWithoutCreatedByInput, NotificationUncheckedCreateWithoutCreatedByInput> | NotificationCreateWithoutCreatedByInput[] | NotificationUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: NotificationCreateOrConnectWithoutCreatedByInput | NotificationCreateOrConnectWithoutCreatedByInput[]
@@ -386595,76 +386450,6 @@ export namespace Prisma {
     update?: FeedbackUpdateWithWhereUniqueWithoutUserInput | FeedbackUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: FeedbackUpdateManyWithWhereWithoutUserInput | FeedbackUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: FeedbackScalarWhereInput | FeedbackScalarWhereInput[]
-  }
-
-  export type ConversationUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
-    upsert?: ConversationUpsertWithWhereUniqueWithoutUserInput | ConversationUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ConversationCreateManyUserInputEnvelope
-    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
-    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
-    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
-    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
-    update?: ConversationUpdateWithWhereUniqueWithoutUserInput | ConversationUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ConversationUpdateManyWithWhereWithoutUserInput | ConversationUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
-  }
-
-  export type DocumentUncheckedUpdateManyWithoutUploadedByNestedInput = {
-    create?: XOR<DocumentCreateWithoutUploadedByInput, DocumentUncheckedCreateWithoutUploadedByInput> | DocumentCreateWithoutUploadedByInput[] | DocumentUncheckedCreateWithoutUploadedByInput[]
-    connectOrCreate?: DocumentCreateOrConnectWithoutUploadedByInput | DocumentCreateOrConnectWithoutUploadedByInput[]
-    upsert?: DocumentUpsertWithWhereUniqueWithoutUploadedByInput | DocumentUpsertWithWhereUniqueWithoutUploadedByInput[]
-    createMany?: DocumentCreateManyUploadedByInputEnvelope
-    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    update?: DocumentUpdateWithWhereUniqueWithoutUploadedByInput | DocumentUpdateWithWhereUniqueWithoutUploadedByInput[]
-    updateMany?: DocumentUpdateManyWithWhereWithoutUploadedByInput | DocumentUpdateManyWithWhereWithoutUploadedByInput[]
-    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
-  }
-
-  export type DocumentUncheckedUpdateManyWithoutApprovedByNestedInput = {
-    create?: XOR<DocumentCreateWithoutApprovedByInput, DocumentUncheckedCreateWithoutApprovedByInput> | DocumentCreateWithoutApprovedByInput[] | DocumentUncheckedCreateWithoutApprovedByInput[]
-    connectOrCreate?: DocumentCreateOrConnectWithoutApprovedByInput | DocumentCreateOrConnectWithoutApprovedByInput[]
-    upsert?: DocumentUpsertWithWhereUniqueWithoutApprovedByInput | DocumentUpsertWithWhereUniqueWithoutApprovedByInput[]
-    createMany?: DocumentCreateManyApprovedByInputEnvelope
-    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    update?: DocumentUpdateWithWhereUniqueWithoutApprovedByInput | DocumentUpdateWithWhereUniqueWithoutApprovedByInput[]
-    updateMany?: DocumentUpdateManyWithWhereWithoutApprovedByInput | DocumentUpdateManyWithWhereWithoutApprovedByInput[]
-    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
-  }
-
-  export type FAQUncheckedUpdateManyWithoutUploadedByNestedInput = {
-    create?: XOR<FAQCreateWithoutUploadedByInput, FAQUncheckedCreateWithoutUploadedByInput> | FAQCreateWithoutUploadedByInput[] | FAQUncheckedCreateWithoutUploadedByInput[]
-    connectOrCreate?: FAQCreateOrConnectWithoutUploadedByInput | FAQCreateOrConnectWithoutUploadedByInput[]
-    upsert?: FAQUpsertWithWhereUniqueWithoutUploadedByInput | FAQUpsertWithWhereUniqueWithoutUploadedByInput[]
-    createMany?: FAQCreateManyUploadedByInputEnvelope
-    set?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    disconnect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    delete?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    update?: FAQUpdateWithWhereUniqueWithoutUploadedByInput | FAQUpdateWithWhereUniqueWithoutUploadedByInput[]
-    updateMany?: FAQUpdateManyWithWhereWithoutUploadedByInput | FAQUpdateManyWithWhereWithoutUploadedByInput[]
-    deleteMany?: FAQScalarWhereInput | FAQScalarWhereInput[]
-  }
-
-  export type FAQUncheckedUpdateManyWithoutApprovedByNestedInput = {
-    create?: XOR<FAQCreateWithoutApprovedByInput, FAQUncheckedCreateWithoutApprovedByInput> | FAQCreateWithoutApprovedByInput[] | FAQUncheckedCreateWithoutApprovedByInput[]
-    connectOrCreate?: FAQCreateOrConnectWithoutApprovedByInput | FAQCreateOrConnectWithoutApprovedByInput[]
-    upsert?: FAQUpsertWithWhereUniqueWithoutApprovedByInput | FAQUpsertWithWhereUniqueWithoutApprovedByInput[]
-    createMany?: FAQCreateManyApprovedByInputEnvelope
-    set?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    disconnect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    delete?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
-    update?: FAQUpdateWithWhereUniqueWithoutApprovedByInput | FAQUpdateWithWhereUniqueWithoutApprovedByInput[]
-    updateMany?: FAQUpdateManyWithWhereWithoutApprovedByInput | FAQUpdateManyWithWhereWithoutApprovedByInput[]
-    deleteMany?: FAQScalarWhereInput | FAQScalarWhereInput[]
   }
 
   export type HocViCreateNestedManyWithoutNationalityInput = {
@@ -388051,6 +387836,41 @@ export namespace Prisma {
     connect?: EvidenceFileWhereUniqueInput | EvidenceFileWhereUniqueInput[]
   }
 
+  export type DocumentCreateNestedManyWithoutUploadedByInput = {
+    create?: XOR<DocumentCreateWithoutUploadedByInput, DocumentUncheckedCreateWithoutUploadedByInput> | DocumentCreateWithoutUploadedByInput[] | DocumentUncheckedCreateWithoutUploadedByInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutUploadedByInput | DocumentCreateOrConnectWithoutUploadedByInput[]
+    createMany?: DocumentCreateManyUploadedByInputEnvelope
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+  }
+
+  export type DocumentCreateNestedManyWithoutApprovedByInput = {
+    create?: XOR<DocumentCreateWithoutApprovedByInput, DocumentUncheckedCreateWithoutApprovedByInput> | DocumentCreateWithoutApprovedByInput[] | DocumentUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutApprovedByInput | DocumentCreateOrConnectWithoutApprovedByInput[]
+    createMany?: DocumentCreateManyApprovedByInputEnvelope
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+  }
+
+  export type FAQCreateNestedManyWithoutUploadedByInput = {
+    create?: XOR<FAQCreateWithoutUploadedByInput, FAQUncheckedCreateWithoutUploadedByInput> | FAQCreateWithoutUploadedByInput[] | FAQUncheckedCreateWithoutUploadedByInput[]
+    connectOrCreate?: FAQCreateOrConnectWithoutUploadedByInput | FAQCreateOrConnectWithoutUploadedByInput[]
+    createMany?: FAQCreateManyUploadedByInputEnvelope
+    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+  }
+
+  export type FAQCreateNestedManyWithoutApprovedByInput = {
+    create?: XOR<FAQCreateWithoutApprovedByInput, FAQUncheckedCreateWithoutApprovedByInput> | FAQCreateWithoutApprovedByInput[] | FAQUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: FAQCreateOrConnectWithoutApprovedByInput | FAQCreateOrConnectWithoutApprovedByInput[]
+    createMany?: FAQCreateManyApprovedByInputEnvelope
+    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+  }
+
+  export type ConversationCreateNestedManyWithoutUserInput = {
+    create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
+    createMany?: ConversationCreateManyUserInputEnvelope
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+  }
+
   export type RelativeUncheckedCreateNestedManyWithoutUserProfileInput = {
     create?: XOR<RelativeCreateWithoutUserProfileInput, RelativeUncheckedCreateWithoutUserProfileInput> | RelativeCreateWithoutUserProfileInput[] | RelativeUncheckedCreateWithoutUserProfileInput[]
     connectOrCreate?: RelativeCreateOrConnectWithoutUserProfileInput | RelativeCreateOrConnectWithoutUserProfileInput[]
@@ -388257,6 +388077,41 @@ export namespace Prisma {
     connectOrCreate?: EvidenceFileCreateOrConnectWithoutUserProfileInput | EvidenceFileCreateOrConnectWithoutUserProfileInput[]
     createMany?: EvidenceFileCreateManyUserProfileInputEnvelope
     connect?: EvidenceFileWhereUniqueInput | EvidenceFileWhereUniqueInput[]
+  }
+
+  export type DocumentUncheckedCreateNestedManyWithoutUploadedByInput = {
+    create?: XOR<DocumentCreateWithoutUploadedByInput, DocumentUncheckedCreateWithoutUploadedByInput> | DocumentCreateWithoutUploadedByInput[] | DocumentUncheckedCreateWithoutUploadedByInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutUploadedByInput | DocumentCreateOrConnectWithoutUploadedByInput[]
+    createMany?: DocumentCreateManyUploadedByInputEnvelope
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+  }
+
+  export type DocumentUncheckedCreateNestedManyWithoutApprovedByInput = {
+    create?: XOR<DocumentCreateWithoutApprovedByInput, DocumentUncheckedCreateWithoutApprovedByInput> | DocumentCreateWithoutApprovedByInput[] | DocumentUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutApprovedByInput | DocumentCreateOrConnectWithoutApprovedByInput[]
+    createMany?: DocumentCreateManyApprovedByInputEnvelope
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+  }
+
+  export type FAQUncheckedCreateNestedManyWithoutUploadedByInput = {
+    create?: XOR<FAQCreateWithoutUploadedByInput, FAQUncheckedCreateWithoutUploadedByInput> | FAQCreateWithoutUploadedByInput[] | FAQUncheckedCreateWithoutUploadedByInput[]
+    connectOrCreate?: FAQCreateOrConnectWithoutUploadedByInput | FAQCreateOrConnectWithoutUploadedByInput[]
+    createMany?: FAQCreateManyUploadedByInputEnvelope
+    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+  }
+
+  export type FAQUncheckedCreateNestedManyWithoutApprovedByInput = {
+    create?: XOR<FAQCreateWithoutApprovedByInput, FAQUncheckedCreateWithoutApprovedByInput> | FAQCreateWithoutApprovedByInput[] | FAQUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: FAQCreateOrConnectWithoutApprovedByInput | FAQCreateOrConnectWithoutApprovedByInput[]
+    createMany?: FAQCreateManyApprovedByInputEnvelope
+    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+  }
+
+  export type ConversationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
+    createMany?: ConversationCreateManyUserInputEnvelope
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
   }
 
   export type GroupUpdateOneWithoutUserProfileNestedInput = {
@@ -389021,6 +388876,76 @@ export namespace Prisma {
     deleteMany?: EvidenceFileScalarWhereInput | EvidenceFileScalarWhereInput[]
   }
 
+  export type DocumentUpdateManyWithoutUploadedByNestedInput = {
+    create?: XOR<DocumentCreateWithoutUploadedByInput, DocumentUncheckedCreateWithoutUploadedByInput> | DocumentCreateWithoutUploadedByInput[] | DocumentUncheckedCreateWithoutUploadedByInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutUploadedByInput | DocumentCreateOrConnectWithoutUploadedByInput[]
+    upsert?: DocumentUpsertWithWhereUniqueWithoutUploadedByInput | DocumentUpsertWithWhereUniqueWithoutUploadedByInput[]
+    createMany?: DocumentCreateManyUploadedByInputEnvelope
+    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    update?: DocumentUpdateWithWhereUniqueWithoutUploadedByInput | DocumentUpdateWithWhereUniqueWithoutUploadedByInput[]
+    updateMany?: DocumentUpdateManyWithWhereWithoutUploadedByInput | DocumentUpdateManyWithWhereWithoutUploadedByInput[]
+    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+  }
+
+  export type DocumentUpdateManyWithoutApprovedByNestedInput = {
+    create?: XOR<DocumentCreateWithoutApprovedByInput, DocumentUncheckedCreateWithoutApprovedByInput> | DocumentCreateWithoutApprovedByInput[] | DocumentUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutApprovedByInput | DocumentCreateOrConnectWithoutApprovedByInput[]
+    upsert?: DocumentUpsertWithWhereUniqueWithoutApprovedByInput | DocumentUpsertWithWhereUniqueWithoutApprovedByInput[]
+    createMany?: DocumentCreateManyApprovedByInputEnvelope
+    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    update?: DocumentUpdateWithWhereUniqueWithoutApprovedByInput | DocumentUpdateWithWhereUniqueWithoutApprovedByInput[]
+    updateMany?: DocumentUpdateManyWithWhereWithoutApprovedByInput | DocumentUpdateManyWithWhereWithoutApprovedByInput[]
+    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+  }
+
+  export type FAQUpdateManyWithoutUploadedByNestedInput = {
+    create?: XOR<FAQCreateWithoutUploadedByInput, FAQUncheckedCreateWithoutUploadedByInput> | FAQCreateWithoutUploadedByInput[] | FAQUncheckedCreateWithoutUploadedByInput[]
+    connectOrCreate?: FAQCreateOrConnectWithoutUploadedByInput | FAQCreateOrConnectWithoutUploadedByInput[]
+    upsert?: FAQUpsertWithWhereUniqueWithoutUploadedByInput | FAQUpsertWithWhereUniqueWithoutUploadedByInput[]
+    createMany?: FAQCreateManyUploadedByInputEnvelope
+    set?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    disconnect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    delete?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    update?: FAQUpdateWithWhereUniqueWithoutUploadedByInput | FAQUpdateWithWhereUniqueWithoutUploadedByInput[]
+    updateMany?: FAQUpdateManyWithWhereWithoutUploadedByInput | FAQUpdateManyWithWhereWithoutUploadedByInput[]
+    deleteMany?: FAQScalarWhereInput | FAQScalarWhereInput[]
+  }
+
+  export type FAQUpdateManyWithoutApprovedByNestedInput = {
+    create?: XOR<FAQCreateWithoutApprovedByInput, FAQUncheckedCreateWithoutApprovedByInput> | FAQCreateWithoutApprovedByInput[] | FAQUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: FAQCreateOrConnectWithoutApprovedByInput | FAQCreateOrConnectWithoutApprovedByInput[]
+    upsert?: FAQUpsertWithWhereUniqueWithoutApprovedByInput | FAQUpsertWithWhereUniqueWithoutApprovedByInput[]
+    createMany?: FAQCreateManyApprovedByInputEnvelope
+    set?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    disconnect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    delete?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    update?: FAQUpdateWithWhereUniqueWithoutApprovedByInput | FAQUpdateWithWhereUniqueWithoutApprovedByInput[]
+    updateMany?: FAQUpdateManyWithWhereWithoutApprovedByInput | FAQUpdateManyWithWhereWithoutApprovedByInput[]
+    deleteMany?: FAQScalarWhereInput | FAQScalarWhereInput[]
+  }
+
+  export type ConversationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
+    upsert?: ConversationUpsertWithWhereUniqueWithoutUserInput | ConversationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ConversationCreateManyUserInputEnvelope
+    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    update?: ConversationUpdateWithWhereUniqueWithoutUserInput | ConversationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ConversationUpdateManyWithWhereWithoutUserInput | ConversationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
+  }
+
   export type RelativeUncheckedUpdateManyWithoutUserProfileNestedInput = {
     create?: XOR<RelativeCreateWithoutUserProfileInput, RelativeUncheckedCreateWithoutUserProfileInput> | RelativeCreateWithoutUserProfileInput[] | RelativeUncheckedCreateWithoutUserProfileInput[]
     connectOrCreate?: RelativeCreateOrConnectWithoutUserProfileInput | RelativeCreateOrConnectWithoutUserProfileInput[]
@@ -389431,6 +389356,76 @@ export namespace Prisma {
     update?: EvidenceFileUpdateWithWhereUniqueWithoutUserProfileInput | EvidenceFileUpdateWithWhereUniqueWithoutUserProfileInput[]
     updateMany?: EvidenceFileUpdateManyWithWhereWithoutUserProfileInput | EvidenceFileUpdateManyWithWhereWithoutUserProfileInput[]
     deleteMany?: EvidenceFileScalarWhereInput | EvidenceFileScalarWhereInput[]
+  }
+
+  export type DocumentUncheckedUpdateManyWithoutUploadedByNestedInput = {
+    create?: XOR<DocumentCreateWithoutUploadedByInput, DocumentUncheckedCreateWithoutUploadedByInput> | DocumentCreateWithoutUploadedByInput[] | DocumentUncheckedCreateWithoutUploadedByInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutUploadedByInput | DocumentCreateOrConnectWithoutUploadedByInput[]
+    upsert?: DocumentUpsertWithWhereUniqueWithoutUploadedByInput | DocumentUpsertWithWhereUniqueWithoutUploadedByInput[]
+    createMany?: DocumentCreateManyUploadedByInputEnvelope
+    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    update?: DocumentUpdateWithWhereUniqueWithoutUploadedByInput | DocumentUpdateWithWhereUniqueWithoutUploadedByInput[]
+    updateMany?: DocumentUpdateManyWithWhereWithoutUploadedByInput | DocumentUpdateManyWithWhereWithoutUploadedByInput[]
+    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+  }
+
+  export type DocumentUncheckedUpdateManyWithoutApprovedByNestedInput = {
+    create?: XOR<DocumentCreateWithoutApprovedByInput, DocumentUncheckedCreateWithoutApprovedByInput> | DocumentCreateWithoutApprovedByInput[] | DocumentUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutApprovedByInput | DocumentCreateOrConnectWithoutApprovedByInput[]
+    upsert?: DocumentUpsertWithWhereUniqueWithoutApprovedByInput | DocumentUpsertWithWhereUniqueWithoutApprovedByInput[]
+    createMany?: DocumentCreateManyApprovedByInputEnvelope
+    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    update?: DocumentUpdateWithWhereUniqueWithoutApprovedByInput | DocumentUpdateWithWhereUniqueWithoutApprovedByInput[]
+    updateMany?: DocumentUpdateManyWithWhereWithoutApprovedByInput | DocumentUpdateManyWithWhereWithoutApprovedByInput[]
+    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+  }
+
+  export type FAQUncheckedUpdateManyWithoutUploadedByNestedInput = {
+    create?: XOR<FAQCreateWithoutUploadedByInput, FAQUncheckedCreateWithoutUploadedByInput> | FAQCreateWithoutUploadedByInput[] | FAQUncheckedCreateWithoutUploadedByInput[]
+    connectOrCreate?: FAQCreateOrConnectWithoutUploadedByInput | FAQCreateOrConnectWithoutUploadedByInput[]
+    upsert?: FAQUpsertWithWhereUniqueWithoutUploadedByInput | FAQUpsertWithWhereUniqueWithoutUploadedByInput[]
+    createMany?: FAQCreateManyUploadedByInputEnvelope
+    set?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    disconnect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    delete?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    update?: FAQUpdateWithWhereUniqueWithoutUploadedByInput | FAQUpdateWithWhereUniqueWithoutUploadedByInput[]
+    updateMany?: FAQUpdateManyWithWhereWithoutUploadedByInput | FAQUpdateManyWithWhereWithoutUploadedByInput[]
+    deleteMany?: FAQScalarWhereInput | FAQScalarWhereInput[]
+  }
+
+  export type FAQUncheckedUpdateManyWithoutApprovedByNestedInput = {
+    create?: XOR<FAQCreateWithoutApprovedByInput, FAQUncheckedCreateWithoutApprovedByInput> | FAQCreateWithoutApprovedByInput[] | FAQUncheckedCreateWithoutApprovedByInput[]
+    connectOrCreate?: FAQCreateOrConnectWithoutApprovedByInput | FAQCreateOrConnectWithoutApprovedByInput[]
+    upsert?: FAQUpsertWithWhereUniqueWithoutApprovedByInput | FAQUpsertWithWhereUniqueWithoutApprovedByInput[]
+    createMany?: FAQCreateManyApprovedByInputEnvelope
+    set?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    disconnect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    delete?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    update?: FAQUpdateWithWhereUniqueWithoutApprovedByInput | FAQUpdateWithWhereUniqueWithoutApprovedByInput[]
+    updateMany?: FAQUpdateManyWithWhereWithoutApprovedByInput | FAQUpdateManyWithWhereWithoutApprovedByInput[]
+    deleteMany?: FAQScalarWhereInput | FAQScalarWhereInput[]
+  }
+
+  export type ConversationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput> | ConversationCreateWithoutUserInput[] | ConversationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ConversationCreateOrConnectWithoutUserInput | ConversationCreateOrConnectWithoutUserInput[]
+    upsert?: ConversationUpsertWithWhereUniqueWithoutUserInput | ConversationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ConversationCreateManyUserInputEnvelope
+    set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    update?: ConversationUpdateWithWhereUniqueWithoutUserInput | ConversationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ConversationUpdateManyWithWhereWithoutUserInput | ConversationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
   }
 
   export type DM_HocHamCreateNestedOneWithoutHocHamInput = {
@@ -418665,6 +418660,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutEducationAndTrainingInput = {
@@ -418813,6 +418813,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutEducationAndTrainingInput = {
@@ -420363,6 +420368,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutEducationAndTrainingInput = {
@@ -420511,6 +420521,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TrainingLevelUpsertWithoutStudentsInput = {
@@ -422208,11 +422223,6 @@ export namespace Prisma {
     sAvatarId?: string | null
     group?: GroupCreateNestedOneWithoutUsersInput
     feedback?: FeedbackCreateNestedManyWithoutUserInput
-    conversation?: ConversationCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQCreateNestedManyWithoutApprovedByInput
   }
 
   export type DM_NhanVienUncheckedCreateWithoutNotificationInput = {
@@ -422252,11 +422262,6 @@ export namespace Prisma {
     sAvatarId?: string | null
     groupId?: string | null
     feedback?: FeedbackUncheckedCreateNestedManyWithoutUserInput
-    conversation?: ConversationUncheckedCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type DM_NhanVienCreateOrConnectWithoutNotificationInput = {
@@ -422426,11 +422431,6 @@ export namespace Prisma {
     sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
     group?: GroupUpdateOneWithoutUsersNestedInput
     feedback?: FeedbackUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUpdateManyWithoutApprovedByNestedInput
   }
 
   export type DM_NhanVienUncheckedUpdateWithoutNotificationInput = {
@@ -422470,11 +422470,6 @@ export namespace Prisma {
     sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     feedback?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUncheckedUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type DocumentFileUpsertWithWhereUniqueWithoutNotificationInput = {
@@ -422530,11 +422525,6 @@ export namespace Prisma {
     sAvatarId?: string | null
     notification?: NotificationCreateNestedManyWithoutCreatedByInput
     feedback?: FeedbackCreateNestedManyWithoutUserInput
-    conversation?: ConversationCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQCreateNestedManyWithoutApprovedByInput
   }
 
   export type DM_NhanVienUncheckedCreateWithoutGroupInput = {
@@ -422574,11 +422564,6 @@ export namespace Prisma {
     sAvatarId?: string | null
     notification?: NotificationUncheckedCreateNestedManyWithoutCreatedByInput
     feedback?: FeedbackUncheckedCreateNestedManyWithoutUserInput
-    conversation?: ConversationUncheckedCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type DM_NhanVienCreateOrConnectWithoutGroupInput = {
@@ -422766,6 +422751,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutGroupInput = {
@@ -422914,6 +422904,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutGroupInput = {
@@ -423330,7 +423325,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name?: string | null
     type?: $Enums.DocumentType | null
-    user?: DM_NhanVienCreateNestedOneWithoutConversationInput
+    user?: UserProfileCreateNestedOneWithoutConversationsInput
     message?: MessageCreateNestedManyWithoutConversationInput
   }
 
@@ -423386,870 +423381,2832 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Conversation"> | Date | string
     updatedAt?: DateTimeFilter<"Conversation"> | Date | string
     name?: StringNullableFilter<"Conversation"> | string | null
-    userId?: UuidNullableFilter<"Conversation"> | string | null
+    userId?: StringNullableFilter<"Conversation"> | string | null
     sessionId?: StringNullableFilter<"Conversation"> | string | null
     type?: EnumDocumentTypeNullableFilter<"Conversation"> | $Enums.DocumentType | null
   }
 
-  export type DM_NhanVienCreateWithoutDocumentUploadedInput = {
-    Id?: string
-    sMa?: string | null
-    sTen?: string | null
-    sGhiChu?: string | null
-    iSTT?: number | null
-    bActive?: boolean | null
-    bDeleted?: boolean | null
-    bSystem?: boolean | null
-    iDictionaryKey?: number | null
-    dNgayTao?: Date | string | null
-    dNgaySua?: Date | string | null
-    sNguoiTao?: string | null
-    sNguoiSua?: string | null
-    sThietBiTao?: string | null
-    sThietBiSua?: string | null
-    sCCCD?: string | null
-    sHoVaDem?: string | null
-    sTenDayDu?: string | null
-    dNgaySinh?: Date | string | null
-    iGioiTinh?: number | null
-    sDM_QuocGiaId?: string | null
-    sDM_TinhId?: string | null
-    sDM_QuanHuyenId?: string | null
-    sDM_XaPhuongId?: string | null
-    sDiaChi?: string | null
-    sSDTDiDong?: string | null
-    sEmail?: string | null
+  export type UserProfileCreateWithoutDocumentsUploadedInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     bLaNguoiDung?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
-    sAvatarId?: string | null
-    group?: GroupCreateNestedOneWithoutUsersInput
-    notification?: NotificationCreateNestedManyWithoutCreatedByInput
-    feedback?: FeedbackCreateNestedManyWithoutUserInput
-    conversation?: ConversationCreateNestedManyWithoutUserInput
-    documentApproved?: DocumentCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    iDictionaryKey?: number | null
+    bSystem?: boolean | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    avatar?: string | null
+    firstName: string
+    lastName: string
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    permanentAddress?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    officerNumber?: string | null
+    rankDate?: Date | string | null
+    academicDegreeDate?: Date | string | null
+    academicRankDate?: Date | string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    group?: GroupCreateNestedOneWithoutUserProfileInput
+    provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+    districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+    communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+    provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+    districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+    communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+    religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+    ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+    provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+    districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+    communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+    newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+    newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+    rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+    academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+    academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+    level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+    sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+    nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+    trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+    educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+    staffs?: StaffCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
-  export type DM_NhanVienUncheckedCreateWithoutDocumentUploadedInput = {
-    Id?: string
-    sMa?: string | null
-    sTen?: string | null
-    sGhiChu?: string | null
-    iSTT?: number | null
-    bActive?: boolean | null
-    bDeleted?: boolean | null
-    bSystem?: boolean | null
-    iDictionaryKey?: number | null
-    dNgayTao?: Date | string | null
-    dNgaySua?: Date | string | null
-    sNguoiTao?: string | null
-    sNguoiSua?: string | null
-    sThietBiTao?: string | null
-    sThietBiSua?: string | null
-    sCCCD?: string | null
-    sHoVaDem?: string | null
-    sTenDayDu?: string | null
-    dNgaySinh?: Date | string | null
-    iGioiTinh?: number | null
-    sDM_QuocGiaId?: string | null
-    sDM_TinhId?: string | null
-    sDM_QuanHuyenId?: string | null
-    sDM_XaPhuongId?: string | null
-    sDiaChi?: string | null
-    sSDTDiDong?: string | null
-    sEmail?: string | null
+  export type UserProfileUncheckedCreateWithoutDocumentsUploadedInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     bLaNguoiDung?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
-    sDM_DonViId?: string | null
-    sDM_ViTriCongViecId?: string | null
-    sQuanlyTrucTiepId?: string | null
-    sAvatarId?: string | null
     groupId?: string | null
-    notification?: NotificationUncheckedCreateNestedManyWithoutCreatedByInput
-    feedback?: FeedbackUncheckedCreateNestedManyWithoutUserInput
-    conversation?: ConversationUncheckedCreateNestedManyWithoutUserInput
-    documentApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
-  }
-
-  export type DM_NhanVienCreateOrConnectWithoutDocumentUploadedInput = {
-    where: DM_NhanVienWhereUniqueInput
-    create: XOR<DM_NhanVienCreateWithoutDocumentUploadedInput, DM_NhanVienUncheckedCreateWithoutDocumentUploadedInput>
-  }
-
-  export type DM_NhanVienCreateWithoutDocumentApprovedInput = {
-    Id?: string
-    sMa?: string | null
-    sTen?: string | null
-    sGhiChu?: string | null
-    iSTT?: number | null
-    bActive?: boolean | null
-    bDeleted?: boolean | null
-    bSystem?: boolean | null
+    sDM_DonViId?: string | null
+    sDM_ViTriCongViecId?: string | null
+    sQuanlyTrucTiepId?: string | null
     iDictionaryKey?: number | null
-    dNgayTao?: Date | string | null
-    dNgaySua?: Date | string | null
+    bSystem?: boolean | null
     sNguoiTao?: string | null
     sNguoiSua?: string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
-    sCCCD?: string | null
-    sHoVaDem?: string | null
-    sTenDayDu?: string | null
-    dNgaySinh?: Date | string | null
-    iGioiTinh?: number | null
-    sDM_QuocGiaId?: string | null
-    sDM_TinhId?: string | null
-    sDM_QuanHuyenId?: string | null
-    sDM_XaPhuongId?: string | null
-    sDiaChi?: string | null
-    sSDTDiDong?: string | null
-    sEmail?: string | null
+    avatar?: string | null
+    firstName: string
+    lastName: string
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    provinceCurrentAddressId?: string | null
+    districtCurrentAddressId?: string | null
+    communeCurrentAddressId?: string | null
+    newProvinceCurrentAddressId?: string | null
+    newCommuneCurrentAddressId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    provinceOfBirthId?: string | null
+    districtOfBirthId?: string | null
+    communeOfBirthId?: string | null
+    newProvinceOfBirthId?: string | null
+    newCommuneOfBirthId?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    genderId?: string | null
+    permanentAddress?: string | null
+    provincePermanentAddressId?: string | null
+    districtPermanentAddressId?: string | null
+    communePermanentAddressId?: string | null
+    newProvincePermanentAddressId?: string | null
+    newCommunePermanentAddressId?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    nationalityId?: string | null
+    religionId?: string | null
+    ethnicityId?: string | null
+    provinceHometownId?: string | null
+    districtHometownId?: string | null
+    communeHometownId?: string | null
+    newProvinceHometownId?: string | null
+    newCommuneHometownId?: string | null
+    officerNumber?: string | null
+    rankId?: string | null
+    rankDate?: Date | string | null
+    academicDegreeTypeId?: string | null
+    academicDegreeDate?: Date | string | null
+    academicRankTypeId?: string | null
+    academicRankDate?: Date | string | null
+    levelId?: string | null
+    chiHuyQuanLyId?: string | null
+    chuyenMonKyThuatId?: string | null
+    sucKhoeId?: string | null
+    nhomMauId?: string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    positionCPVId?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    trinhDoHocVanId?: string | null
+    relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+    educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileCreateOrConnectWithoutDocumentsUploadedInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutDocumentsUploadedInput, UserProfileUncheckedCreateWithoutDocumentsUploadedInput>
+  }
+
+  export type UserProfileCreateWithoutDocumentsApprovedInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     bLaNguoiDung?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
-    sAvatarId?: string | null
-    group?: GroupCreateNestedOneWithoutUsersInput
-    notification?: NotificationCreateNestedManyWithoutCreatedByInput
-    feedback?: FeedbackCreateNestedManyWithoutUserInput
-    conversation?: ConversationCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
-    fAQUploaded?: FAQCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQCreateNestedManyWithoutApprovedByInput
-  }
-
-  export type DM_NhanVienUncheckedCreateWithoutDocumentApprovedInput = {
-    Id?: string
-    sMa?: string | null
-    sTen?: string | null
-    sGhiChu?: string | null
-    iSTT?: number | null
-    bActive?: boolean | null
-    bDeleted?: boolean | null
-    bSystem?: boolean | null
     iDictionaryKey?: number | null
-    dNgayTao?: Date | string | null
-    dNgaySua?: Date | string | null
+    bSystem?: boolean | null
     sNguoiTao?: string | null
     sNguoiSua?: string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
-    sCCCD?: string | null
-    sHoVaDem?: string | null
-    sTenDayDu?: string | null
-    dNgaySinh?: Date | string | null
-    iGioiTinh?: number | null
-    sDM_QuocGiaId?: string | null
-    sDM_TinhId?: string | null
-    sDM_QuanHuyenId?: string | null
-    sDM_XaPhuongId?: string | null
-    sDiaChi?: string | null
-    sSDTDiDong?: string | null
-    sEmail?: string | null
+    avatar?: string | null
+    firstName: string
+    lastName: string
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    permanentAddress?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    officerNumber?: string | null
+    rankDate?: Date | string | null
+    academicDegreeDate?: Date | string | null
+    academicRankDate?: Date | string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    group?: GroupCreateNestedOneWithoutUserProfileInput
+    provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+    districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+    communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+    provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+    districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+    communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+    religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+    ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+    provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+    districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+    communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+    newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+    newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+    rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+    academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+    academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+    level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+    sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+    nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+    trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+    educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+    staffs?: StaffCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileUncheckedCreateWithoutDocumentsApprovedInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     bLaNguoiDung?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
-    sDM_DonViId?: string | null
-    sDM_ViTriCongViecId?: string | null
-    sQuanlyTrucTiepId?: string | null
-    sAvatarId?: string | null
     groupId?: string | null
-    notification?: NotificationUncheckedCreateNestedManyWithoutCreatedByInput
-    feedback?: FeedbackUncheckedCreateNestedManyWithoutUserInput
-    conversation?: ConversationUncheckedCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
-    fAQUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    sDM_DonViId?: string | null
+    sDM_ViTriCongViecId?: string | null
+    sQuanlyTrucTiepId?: string | null
+    iDictionaryKey?: number | null
+    bSystem?: boolean | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    avatar?: string | null
+    firstName: string
+    lastName: string
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    provinceCurrentAddressId?: string | null
+    districtCurrentAddressId?: string | null
+    communeCurrentAddressId?: string | null
+    newProvinceCurrentAddressId?: string | null
+    newCommuneCurrentAddressId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    provinceOfBirthId?: string | null
+    districtOfBirthId?: string | null
+    communeOfBirthId?: string | null
+    newProvinceOfBirthId?: string | null
+    newCommuneOfBirthId?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    genderId?: string | null
+    permanentAddress?: string | null
+    provincePermanentAddressId?: string | null
+    districtPermanentAddressId?: string | null
+    communePermanentAddressId?: string | null
+    newProvincePermanentAddressId?: string | null
+    newCommunePermanentAddressId?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    nationalityId?: string | null
+    religionId?: string | null
+    ethnicityId?: string | null
+    provinceHometownId?: string | null
+    districtHometownId?: string | null
+    communeHometownId?: string | null
+    newProvinceHometownId?: string | null
+    newCommuneHometownId?: string | null
+    officerNumber?: string | null
+    rankId?: string | null
+    rankDate?: Date | string | null
+    academicDegreeTypeId?: string | null
+    academicDegreeDate?: Date | string | null
+    academicRankTypeId?: string | null
+    academicRankDate?: Date | string | null
+    levelId?: string | null
+    chiHuyQuanLyId?: string | null
+    chuyenMonKyThuatId?: string | null
+    sucKhoeId?: string | null
+    nhomMauId?: string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    positionCPVId?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    trinhDoHocVanId?: string | null
+    relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+    educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type DM_NhanVienCreateOrConnectWithoutDocumentApprovedInput = {
-    where: DM_NhanVienWhereUniqueInput
-    create: XOR<DM_NhanVienCreateWithoutDocumentApprovedInput, DM_NhanVienUncheckedCreateWithoutDocumentApprovedInput>
+  export type UserProfileCreateOrConnectWithoutDocumentsApprovedInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutDocumentsApprovedInput, UserProfileUncheckedCreateWithoutDocumentsApprovedInput>
   }
 
-  export type DM_NhanVienUpsertWithoutDocumentUploadedInput = {
-    update: XOR<DM_NhanVienUpdateWithoutDocumentUploadedInput, DM_NhanVienUncheckedUpdateWithoutDocumentUploadedInput>
-    create: XOR<DM_NhanVienCreateWithoutDocumentUploadedInput, DM_NhanVienUncheckedCreateWithoutDocumentUploadedInput>
-    where?: DM_NhanVienWhereInput
+  export type UserProfileUpsertWithoutDocumentsUploadedInput = {
+    update: XOR<UserProfileUpdateWithoutDocumentsUploadedInput, UserProfileUncheckedUpdateWithoutDocumentsUploadedInput>
+    create: XOR<UserProfileCreateWithoutDocumentsUploadedInput, UserProfileUncheckedCreateWithoutDocumentsUploadedInput>
+    where?: UserProfileWhereInput
   }
 
-  export type DM_NhanVienUpdateToOneWithWhereWithoutDocumentUploadedInput = {
-    where?: DM_NhanVienWhereInput
-    data: XOR<DM_NhanVienUpdateWithoutDocumentUploadedInput, DM_NhanVienUncheckedUpdateWithoutDocumentUploadedInput>
+  export type UserProfileUpdateToOneWithWhereWithoutDocumentsUploadedInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutDocumentsUploadedInput, UserProfileUncheckedUpdateWithoutDocumentsUploadedInput>
   }
 
-  export type DM_NhanVienUpdateWithoutDocumentUploadedInput = {
-    Id?: StringFieldUpdateOperationsInput | string
-    sMa?: NullableStringFieldUpdateOperationsInput | string | null
-    sTen?: NullableStringFieldUpdateOperationsInput | string | null
-    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
-    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
-    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
-    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
-    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
-    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-    sCCCD?: NullableStringFieldUpdateOperationsInput | string | null
-    sHoVaDem?: NullableStringFieldUpdateOperationsInput | string | null
-    sTenDayDu?: NullableStringFieldUpdateOperationsInput | string | null
-    dNgaySinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    iGioiTinh?: NullableIntFieldUpdateOperationsInput | number | null
-    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_QuanHuyenId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_XaPhuongId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
-    sSDTDiDong?: NullableStringFieldUpdateOperationsInput | string | null
-    sEmail?: NullableStringFieldUpdateOperationsInput | string | null
+  export type UserProfileUpdateWithoutDocumentsUploadedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
-    sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
-    group?: GroupUpdateOneWithoutUsersNestedInput
-    notification?: NotificationUpdateManyWithoutCreatedByNestedInput
-    feedback?: FeedbackUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUpdateManyWithoutUserNestedInput
-    documentApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUpdateManyWithoutApprovedByNestedInput
-  }
-
-  export type DM_NhanVienUncheckedUpdateWithoutDocumentUploadedInput = {
-    Id?: StringFieldUpdateOperationsInput | string
-    sMa?: NullableStringFieldUpdateOperationsInput | string | null
-    sTen?: NullableStringFieldUpdateOperationsInput | string | null
-    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
-    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
-    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-    sCCCD?: NullableStringFieldUpdateOperationsInput | string | null
-    sHoVaDem?: NullableStringFieldUpdateOperationsInput | string | null
-    sTenDayDu?: NullableStringFieldUpdateOperationsInput | string | null
-    dNgaySinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    iGioiTinh?: NullableIntFieldUpdateOperationsInput | number | null
-    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_QuanHuyenId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_XaPhuongId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
-    sSDTDiDong?: NullableStringFieldUpdateOperationsInput | string | null
-    sEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: GroupUpdateOneWithoutUserProfileNestedInput
+    provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+    provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+    religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+    ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+    provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+    districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+    communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+    newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+    newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+    rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+    academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+    academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+    level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+    sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+    nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+    trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+    staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutDocumentsUploadedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
-    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
-    sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
-    notification?: NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
-    feedback?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUncheckedUpdateManyWithoutUserNestedInput
-    documentApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
-  }
-
-  export type DM_NhanVienUpsertWithoutDocumentApprovedInput = {
-    update: XOR<DM_NhanVienUpdateWithoutDocumentApprovedInput, DM_NhanVienUncheckedUpdateWithoutDocumentApprovedInput>
-    create: XOR<DM_NhanVienCreateWithoutDocumentApprovedInput, DM_NhanVienUncheckedCreateWithoutDocumentApprovedInput>
-    where?: DM_NhanVienWhereInput
-  }
-
-  export type DM_NhanVienUpdateToOneWithWhereWithoutDocumentApprovedInput = {
-    where?: DM_NhanVienWhereInput
-    data: XOR<DM_NhanVienUpdateWithoutDocumentApprovedInput, DM_NhanVienUncheckedUpdateWithoutDocumentApprovedInput>
-  }
-
-  export type DM_NhanVienUpdateWithoutDocumentApprovedInput = {
-    Id?: StringFieldUpdateOperationsInput | string
-    sMa?: NullableStringFieldUpdateOperationsInput | string | null
-    sTen?: NullableStringFieldUpdateOperationsInput | string | null
-    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
-    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
-    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-    sCCCD?: NullableStringFieldUpdateOperationsInput | string | null
-    sHoVaDem?: NullableStringFieldUpdateOperationsInput | string | null
-    sTenDayDu?: NullableStringFieldUpdateOperationsInput | string | null
-    dNgaySinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    iGioiTinh?: NullableIntFieldUpdateOperationsInput | number | null
-    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_QuanHuyenId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_XaPhuongId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
-    sSDTDiDong?: NullableStringFieldUpdateOperationsInput | string | null
-    sEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    genderId?: NullableStringFieldUpdateOperationsInput | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+    religionId?: NullableStringFieldUpdateOperationsInput | string | null
+    ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankId?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+    chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+    sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+    nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+    relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileUpsertWithoutDocumentsApprovedInput = {
+    update: XOR<UserProfileUpdateWithoutDocumentsApprovedInput, UserProfileUncheckedUpdateWithoutDocumentsApprovedInput>
+    create: XOR<UserProfileCreateWithoutDocumentsApprovedInput, UserProfileUncheckedCreateWithoutDocumentsApprovedInput>
+    where?: UserProfileWhereInput
+  }
+
+  export type UserProfileUpdateToOneWithWhereWithoutDocumentsApprovedInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutDocumentsApprovedInput, UserProfileUncheckedUpdateWithoutDocumentsApprovedInput>
+  }
+
+  export type UserProfileUpdateWithoutDocumentsApprovedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
-    sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
-    group?: GroupUpdateOneWithoutUsersNestedInput
-    notification?: NotificationUpdateManyWithoutCreatedByNestedInput
-    feedback?: FeedbackUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
-    fAQUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUpdateManyWithoutApprovedByNestedInput
-  }
-
-  export type DM_NhanVienUncheckedUpdateWithoutDocumentApprovedInput = {
-    Id?: StringFieldUpdateOperationsInput | string
-    sMa?: NullableStringFieldUpdateOperationsInput | string | null
-    sTen?: NullableStringFieldUpdateOperationsInput | string | null
-    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
-    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
-    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-    sCCCD?: NullableStringFieldUpdateOperationsInput | string | null
-    sHoVaDem?: NullableStringFieldUpdateOperationsInput | string | null
-    sTenDayDu?: NullableStringFieldUpdateOperationsInput | string | null
-    dNgaySinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    iGioiTinh?: NullableIntFieldUpdateOperationsInput | number | null
-    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_QuanHuyenId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_XaPhuongId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
-    sSDTDiDong?: NullableStringFieldUpdateOperationsInput | string | null
-    sEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: GroupUpdateOneWithoutUserProfileNestedInput
+    provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+    provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+    religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+    ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+    provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+    districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+    communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+    newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+    newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+    rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+    academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+    academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+    level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+    sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+    nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+    trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+    staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutDocumentsApprovedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
-    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
-    sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
-    notification?: NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
-    feedback?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUncheckedUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
-    fAQUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
-  }
-
-  export type DM_NhanVienCreateWithoutFAQUploadedInput = {
-    Id?: string
-    sMa?: string | null
-    sTen?: string | null
-    sGhiChu?: string | null
-    iSTT?: number | null
-    bActive?: boolean | null
-    bDeleted?: boolean | null
-    bSystem?: boolean | null
-    iDictionaryKey?: number | null
-    dNgayTao?: Date | string | null
-    dNgaySua?: Date | string | null
-    sNguoiTao?: string | null
-    sNguoiSua?: string | null
-    sThietBiTao?: string | null
-    sThietBiSua?: string | null
-    sCCCD?: string | null
-    sHoVaDem?: string | null
-    sTenDayDu?: string | null
-    dNgaySinh?: Date | string | null
-    iGioiTinh?: number | null
-    sDM_QuocGiaId?: string | null
-    sDM_TinhId?: string | null
-    sDM_QuanHuyenId?: string | null
-    sDM_XaPhuongId?: string | null
-    sDiaChi?: string | null
-    sSDTDiDong?: string | null
-    sEmail?: string | null
-    bLaNguoiDung?: boolean | null
-    bLaCanBoNhanVien?: boolean | null
-    bLaHocVien?: boolean | null
-    sDM_DonViId?: string | null
-    sDM_ViTriCongViecId?: string | null
-    sQuanlyTrucTiepId?: string | null
-    sAvatarId?: string | null
-    group?: GroupCreateNestedOneWithoutUsersInput
-    notification?: NotificationCreateNestedManyWithoutCreatedByInput
-    feedback?: FeedbackCreateNestedManyWithoutUserInput
-    conversation?: ConversationCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentCreateNestedManyWithoutApprovedByInput
-    fAQApproved?: FAQCreateNestedManyWithoutApprovedByInput
-  }
-
-  export type DM_NhanVienUncheckedCreateWithoutFAQUploadedInput = {
-    Id?: string
-    sMa?: string | null
-    sTen?: string | null
-    sGhiChu?: string | null
-    iSTT?: number | null
-    bActive?: boolean | null
-    bDeleted?: boolean | null
-    bSystem?: boolean | null
-    iDictionaryKey?: number | null
-    dNgayTao?: Date | string | null
-    dNgaySua?: Date | string | null
-    sNguoiTao?: string | null
-    sNguoiSua?: string | null
-    sThietBiTao?: string | null
-    sThietBiSua?: string | null
-    sCCCD?: string | null
-    sHoVaDem?: string | null
-    sTenDayDu?: string | null
-    dNgaySinh?: Date | string | null
-    iGioiTinh?: number | null
-    sDM_QuocGiaId?: string | null
-    sDM_TinhId?: string | null
-    sDM_QuanHuyenId?: string | null
-    sDM_XaPhuongId?: string | null
-    sDiaChi?: string | null
-    sSDTDiDong?: string | null
-    sEmail?: string | null
-    bLaNguoiDung?: boolean | null
-    bLaCanBoNhanVien?: boolean | null
-    bLaHocVien?: boolean | null
-    sDM_DonViId?: string | null
-    sDM_ViTriCongViecId?: string | null
-    sQuanlyTrucTiepId?: string | null
-    sAvatarId?: string | null
-    groupId?: string | null
-    notification?: NotificationUncheckedCreateNestedManyWithoutCreatedByInput
-    feedback?: FeedbackUncheckedCreateNestedManyWithoutUserInput
-    conversation?: ConversationUncheckedCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
-    fAQApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
-  }
-
-  export type DM_NhanVienCreateOrConnectWithoutFAQUploadedInput = {
-    where: DM_NhanVienWhereUniqueInput
-    create: XOR<DM_NhanVienCreateWithoutFAQUploadedInput, DM_NhanVienUncheckedCreateWithoutFAQUploadedInput>
-  }
-
-  export type DM_NhanVienCreateWithoutFAQApprovedInput = {
-    Id?: string
-    sMa?: string | null
-    sTen?: string | null
-    sGhiChu?: string | null
-    iSTT?: number | null
-    bActive?: boolean | null
-    bDeleted?: boolean | null
-    bSystem?: boolean | null
-    iDictionaryKey?: number | null
-    dNgayTao?: Date | string | null
-    dNgaySua?: Date | string | null
-    sNguoiTao?: string | null
-    sNguoiSua?: string | null
-    sThietBiTao?: string | null
-    sThietBiSua?: string | null
-    sCCCD?: string | null
-    sHoVaDem?: string | null
-    sTenDayDu?: string | null
-    dNgaySinh?: Date | string | null
-    iGioiTinh?: number | null
-    sDM_QuocGiaId?: string | null
-    sDM_TinhId?: string | null
-    sDM_QuanHuyenId?: string | null
-    sDM_XaPhuongId?: string | null
-    sDiaChi?: string | null
-    sSDTDiDong?: string | null
-    sEmail?: string | null
-    bLaNguoiDung?: boolean | null
-    bLaCanBoNhanVien?: boolean | null
-    bLaHocVien?: boolean | null
-    sDM_DonViId?: string | null
-    sDM_ViTriCongViecId?: string | null
-    sQuanlyTrucTiepId?: string | null
-    sAvatarId?: string | null
-    group?: GroupCreateNestedOneWithoutUsersInput
-    notification?: NotificationCreateNestedManyWithoutCreatedByInput
-    feedback?: FeedbackCreateNestedManyWithoutUserInput
-    conversation?: ConversationCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQCreateNestedManyWithoutUploadedByInput
-  }
-
-  export type DM_NhanVienUncheckedCreateWithoutFAQApprovedInput = {
-    Id?: string
-    sMa?: string | null
-    sTen?: string | null
-    sGhiChu?: string | null
-    iSTT?: number | null
-    bActive?: boolean | null
-    bDeleted?: boolean | null
-    bSystem?: boolean | null
-    iDictionaryKey?: number | null
-    dNgayTao?: Date | string | null
-    dNgaySua?: Date | string | null
-    sNguoiTao?: string | null
-    sNguoiSua?: string | null
-    sThietBiTao?: string | null
-    sThietBiSua?: string | null
-    sCCCD?: string | null
-    sHoVaDem?: string | null
-    sTenDayDu?: string | null
-    dNgaySinh?: Date | string | null
-    iGioiTinh?: number | null
-    sDM_QuocGiaId?: string | null
-    sDM_TinhId?: string | null
-    sDM_QuanHuyenId?: string | null
-    sDM_XaPhuongId?: string | null
-    sDiaChi?: string | null
-    sSDTDiDong?: string | null
-    sEmail?: string | null
-    bLaNguoiDung?: boolean | null
-    bLaCanBoNhanVien?: boolean | null
-    bLaHocVien?: boolean | null
-    sDM_DonViId?: string | null
-    sDM_ViTriCongViecId?: string | null
-    sQuanlyTrucTiepId?: string | null
-    sAvatarId?: string | null
-    groupId?: string | null
-    notification?: NotificationUncheckedCreateNestedManyWithoutCreatedByInput
-    feedback?: FeedbackUncheckedCreateNestedManyWithoutUserInput
-    conversation?: ConversationUncheckedCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
-  }
-
-  export type DM_NhanVienCreateOrConnectWithoutFAQApprovedInput = {
-    where: DM_NhanVienWhereUniqueInput
-    create: XOR<DM_NhanVienCreateWithoutFAQApprovedInput, DM_NhanVienUncheckedCreateWithoutFAQApprovedInput>
-  }
-
-  export type DM_NhanVienUpsertWithoutFAQUploadedInput = {
-    update: XOR<DM_NhanVienUpdateWithoutFAQUploadedInput, DM_NhanVienUncheckedUpdateWithoutFAQUploadedInput>
-    create: XOR<DM_NhanVienCreateWithoutFAQUploadedInput, DM_NhanVienUncheckedCreateWithoutFAQUploadedInput>
-    where?: DM_NhanVienWhereInput
-  }
-
-  export type DM_NhanVienUpdateToOneWithWhereWithoutFAQUploadedInput = {
-    where?: DM_NhanVienWhereInput
-    data: XOR<DM_NhanVienUpdateWithoutFAQUploadedInput, DM_NhanVienUncheckedUpdateWithoutFAQUploadedInput>
-  }
-
-  export type DM_NhanVienUpdateWithoutFAQUploadedInput = {
-    Id?: StringFieldUpdateOperationsInput | string
-    sMa?: NullableStringFieldUpdateOperationsInput | string | null
-    sTen?: NullableStringFieldUpdateOperationsInput | string | null
-    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
-    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
-    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-    sCCCD?: NullableStringFieldUpdateOperationsInput | string | null
-    sHoVaDem?: NullableStringFieldUpdateOperationsInput | string | null
-    sTenDayDu?: NullableStringFieldUpdateOperationsInput | string | null
-    dNgaySinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    iGioiTinh?: NullableIntFieldUpdateOperationsInput | number | null
-    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_QuanHuyenId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_XaPhuongId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
-    sSDTDiDong?: NullableStringFieldUpdateOperationsInput | string | null
-    sEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    genderId?: NullableStringFieldUpdateOperationsInput | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+    religionId?: NullableStringFieldUpdateOperationsInput | string | null
+    ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankId?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+    chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+    sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+    nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+    relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileCreateWithoutFaqsUploadedInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bLaNguoiDung?: boolean | null
+    bLaCanBoNhanVien?: boolean | null
+    bLaHocVien?: boolean | null
+    sDM_DonViId?: string | null
+    sDM_ViTriCongViecId?: string | null
+    sQuanlyTrucTiepId?: string | null
+    iDictionaryKey?: number | null
+    bSystem?: boolean | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    avatar?: string | null
+    firstName: string
+    lastName: string
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    permanentAddress?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    officerNumber?: string | null
+    rankDate?: Date | string | null
+    academicDegreeDate?: Date | string | null
+    academicRankDate?: Date | string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    group?: GroupCreateNestedOneWithoutUserProfileInput
+    provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+    districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+    communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+    provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+    districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+    communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+    religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+    ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+    provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+    districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+    communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+    newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+    newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+    rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+    academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+    academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+    level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+    sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+    nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+    trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+    educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+    staffs?: StaffCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileUncheckedCreateWithoutFaqsUploadedInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bLaNguoiDung?: boolean | null
+    bLaCanBoNhanVien?: boolean | null
+    bLaHocVien?: boolean | null
+    groupId?: string | null
+    sDM_DonViId?: string | null
+    sDM_ViTriCongViecId?: string | null
+    sQuanlyTrucTiepId?: string | null
+    iDictionaryKey?: number | null
+    bSystem?: boolean | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    avatar?: string | null
+    firstName: string
+    lastName: string
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    provinceCurrentAddressId?: string | null
+    districtCurrentAddressId?: string | null
+    communeCurrentAddressId?: string | null
+    newProvinceCurrentAddressId?: string | null
+    newCommuneCurrentAddressId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    provinceOfBirthId?: string | null
+    districtOfBirthId?: string | null
+    communeOfBirthId?: string | null
+    newProvinceOfBirthId?: string | null
+    newCommuneOfBirthId?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    genderId?: string | null
+    permanentAddress?: string | null
+    provincePermanentAddressId?: string | null
+    districtPermanentAddressId?: string | null
+    communePermanentAddressId?: string | null
+    newProvincePermanentAddressId?: string | null
+    newCommunePermanentAddressId?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    nationalityId?: string | null
+    religionId?: string | null
+    ethnicityId?: string | null
+    provinceHometownId?: string | null
+    districtHometownId?: string | null
+    communeHometownId?: string | null
+    newProvinceHometownId?: string | null
+    newCommuneHometownId?: string | null
+    officerNumber?: string | null
+    rankId?: string | null
+    rankDate?: Date | string | null
+    academicDegreeTypeId?: string | null
+    academicDegreeDate?: Date | string | null
+    academicRankTypeId?: string | null
+    academicRankDate?: Date | string | null
+    levelId?: string | null
+    chiHuyQuanLyId?: string | null
+    chuyenMonKyThuatId?: string | null
+    sucKhoeId?: string | null
+    nhomMauId?: string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    positionCPVId?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    trinhDoHocVanId?: string | null
+    relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+    educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileCreateOrConnectWithoutFaqsUploadedInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutFaqsUploadedInput, UserProfileUncheckedCreateWithoutFaqsUploadedInput>
+  }
+
+  export type UserProfileCreateWithoutFaqsApprovedInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bLaNguoiDung?: boolean | null
+    bLaCanBoNhanVien?: boolean | null
+    bLaHocVien?: boolean | null
+    sDM_DonViId?: string | null
+    sDM_ViTriCongViecId?: string | null
+    sQuanlyTrucTiepId?: string | null
+    iDictionaryKey?: number | null
+    bSystem?: boolean | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    avatar?: string | null
+    firstName: string
+    lastName: string
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    permanentAddress?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    officerNumber?: string | null
+    rankDate?: Date | string | null
+    academicDegreeDate?: Date | string | null
+    academicRankDate?: Date | string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    group?: GroupCreateNestedOneWithoutUserProfileInput
+    provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+    districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+    communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+    provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+    districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+    communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+    religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+    ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+    provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+    districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+    communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+    newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+    newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+    rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+    academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+    academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+    level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+    sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+    nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+    trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+    educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+    staffs?: StaffCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileUncheckedCreateWithoutFaqsApprovedInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bLaNguoiDung?: boolean | null
+    bLaCanBoNhanVien?: boolean | null
+    bLaHocVien?: boolean | null
+    groupId?: string | null
+    sDM_DonViId?: string | null
+    sDM_ViTriCongViecId?: string | null
+    sQuanlyTrucTiepId?: string | null
+    iDictionaryKey?: number | null
+    bSystem?: boolean | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    avatar?: string | null
+    firstName: string
+    lastName: string
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    provinceCurrentAddressId?: string | null
+    districtCurrentAddressId?: string | null
+    communeCurrentAddressId?: string | null
+    newProvinceCurrentAddressId?: string | null
+    newCommuneCurrentAddressId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    provinceOfBirthId?: string | null
+    districtOfBirthId?: string | null
+    communeOfBirthId?: string | null
+    newProvinceOfBirthId?: string | null
+    newCommuneOfBirthId?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    genderId?: string | null
+    permanentAddress?: string | null
+    provincePermanentAddressId?: string | null
+    districtPermanentAddressId?: string | null
+    communePermanentAddressId?: string | null
+    newProvincePermanentAddressId?: string | null
+    newCommunePermanentAddressId?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    nationalityId?: string | null
+    religionId?: string | null
+    ethnicityId?: string | null
+    provinceHometownId?: string | null
+    districtHometownId?: string | null
+    communeHometownId?: string | null
+    newProvinceHometownId?: string | null
+    newCommuneHometownId?: string | null
+    officerNumber?: string | null
+    rankId?: string | null
+    rankDate?: Date | string | null
+    academicDegreeTypeId?: string | null
+    academicDegreeDate?: Date | string | null
+    academicRankTypeId?: string | null
+    academicRankDate?: Date | string | null
+    levelId?: string | null
+    chiHuyQuanLyId?: string | null
+    chuyenMonKyThuatId?: string | null
+    sucKhoeId?: string | null
+    nhomMauId?: string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    positionCPVId?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    trinhDoHocVanId?: string | null
+    relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+    educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileCreateOrConnectWithoutFaqsApprovedInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutFaqsApprovedInput, UserProfileUncheckedCreateWithoutFaqsApprovedInput>
+  }
+
+  export type UserProfileUpsertWithoutFaqsUploadedInput = {
+    update: XOR<UserProfileUpdateWithoutFaqsUploadedInput, UserProfileUncheckedUpdateWithoutFaqsUploadedInput>
+    create: XOR<UserProfileCreateWithoutFaqsUploadedInput, UserProfileUncheckedCreateWithoutFaqsUploadedInput>
+    where?: UserProfileWhereInput
+  }
+
+  export type UserProfileUpdateToOneWithWhereWithoutFaqsUploadedInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutFaqsUploadedInput, UserProfileUncheckedUpdateWithoutFaqsUploadedInput>
+  }
+
+  export type UserProfileUpdateWithoutFaqsUploadedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
-    sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
-    group?: GroupUpdateOneWithoutUsersNestedInput
-    notification?: NotificationUpdateManyWithoutCreatedByNestedInput
-    feedback?: FeedbackUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
-    fAQApproved?: FAQUpdateManyWithoutApprovedByNestedInput
-  }
-
-  export type DM_NhanVienUncheckedUpdateWithoutFAQUploadedInput = {
-    Id?: StringFieldUpdateOperationsInput | string
-    sMa?: NullableStringFieldUpdateOperationsInput | string | null
-    sTen?: NullableStringFieldUpdateOperationsInput | string | null
-    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
-    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
-    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-    sCCCD?: NullableStringFieldUpdateOperationsInput | string | null
-    sHoVaDem?: NullableStringFieldUpdateOperationsInput | string | null
-    sTenDayDu?: NullableStringFieldUpdateOperationsInput | string | null
-    dNgaySinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    iGioiTinh?: NullableIntFieldUpdateOperationsInput | number | null
-    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_QuanHuyenId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_XaPhuongId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
-    sSDTDiDong?: NullableStringFieldUpdateOperationsInput | string | null
-    sEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: GroupUpdateOneWithoutUserProfileNestedInput
+    provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+    provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+    religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+    ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+    provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+    districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+    communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+    newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+    newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+    rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+    academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+    academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+    level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+    sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+    nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+    trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+    staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutFaqsUploadedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
-    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
-    sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
-    notification?: NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
-    feedback?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUncheckedUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
-    fAQApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
-  }
-
-  export type DM_NhanVienUpsertWithoutFAQApprovedInput = {
-    update: XOR<DM_NhanVienUpdateWithoutFAQApprovedInput, DM_NhanVienUncheckedUpdateWithoutFAQApprovedInput>
-    create: XOR<DM_NhanVienCreateWithoutFAQApprovedInput, DM_NhanVienUncheckedCreateWithoutFAQApprovedInput>
-    where?: DM_NhanVienWhereInput
-  }
-
-  export type DM_NhanVienUpdateToOneWithWhereWithoutFAQApprovedInput = {
-    where?: DM_NhanVienWhereInput
-    data: XOR<DM_NhanVienUpdateWithoutFAQApprovedInput, DM_NhanVienUncheckedUpdateWithoutFAQApprovedInput>
-  }
-
-  export type DM_NhanVienUpdateWithoutFAQApprovedInput = {
-    Id?: StringFieldUpdateOperationsInput | string
-    sMa?: NullableStringFieldUpdateOperationsInput | string | null
-    sTen?: NullableStringFieldUpdateOperationsInput | string | null
-    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
-    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
-    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-    sCCCD?: NullableStringFieldUpdateOperationsInput | string | null
-    sHoVaDem?: NullableStringFieldUpdateOperationsInput | string | null
-    sTenDayDu?: NullableStringFieldUpdateOperationsInput | string | null
-    dNgaySinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    iGioiTinh?: NullableIntFieldUpdateOperationsInput | number | null
-    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_QuanHuyenId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_XaPhuongId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
-    sSDTDiDong?: NullableStringFieldUpdateOperationsInput | string | null
-    sEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    genderId?: NullableStringFieldUpdateOperationsInput | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+    religionId?: NullableStringFieldUpdateOperationsInput | string | null
+    ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankId?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+    chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+    sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+    nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+    relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileUpsertWithoutFaqsApprovedInput = {
+    update: XOR<UserProfileUpdateWithoutFaqsApprovedInput, UserProfileUncheckedUpdateWithoutFaqsApprovedInput>
+    create: XOR<UserProfileCreateWithoutFaqsApprovedInput, UserProfileUncheckedCreateWithoutFaqsApprovedInput>
+    where?: UserProfileWhereInput
+  }
+
+  export type UserProfileUpdateToOneWithWhereWithoutFaqsApprovedInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutFaqsApprovedInput, UserProfileUncheckedUpdateWithoutFaqsApprovedInput>
+  }
+
+  export type UserProfileUpdateWithoutFaqsApprovedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
-    sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
-    group?: GroupUpdateOneWithoutUsersNestedInput
-    notification?: NotificationUpdateManyWithoutCreatedByNestedInput
-    feedback?: FeedbackUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
-  }
-
-  export type DM_NhanVienUncheckedUpdateWithoutFAQApprovedInput = {
-    Id?: StringFieldUpdateOperationsInput | string
-    sMa?: NullableStringFieldUpdateOperationsInput | string | null
-    sTen?: NullableStringFieldUpdateOperationsInput | string | null
-    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
-    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
-    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-    sCCCD?: NullableStringFieldUpdateOperationsInput | string | null
-    sHoVaDem?: NullableStringFieldUpdateOperationsInput | string | null
-    sTenDayDu?: NullableStringFieldUpdateOperationsInput | string | null
-    dNgaySinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    iGioiTinh?: NullableIntFieldUpdateOperationsInput | number | null
-    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_QuanHuyenId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_XaPhuongId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
-    sSDTDiDong?: NullableStringFieldUpdateOperationsInput | string | null
-    sEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: GroupUpdateOneWithoutUserProfileNestedInput
+    provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+    provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+    religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+    ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+    provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+    districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+    communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+    newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+    newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+    rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+    academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+    academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+    level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+    sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+    nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+    trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+    staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutFaqsApprovedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
-    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
-    sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
-    notification?: NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
-    feedback?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUncheckedUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    genderId?: NullableStringFieldUpdateOperationsInput | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+    religionId?: NullableStringFieldUpdateOperationsInput | string | null
+    ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankId?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+    chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+    sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+    nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+    relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type DM_NhanVienCreateWithoutConversationInput = {
-    Id?: string
-    sMa?: string | null
-    sTen?: string | null
-    sGhiChu?: string | null
-    iSTT?: number | null
-    bActive?: boolean | null
-    bDeleted?: boolean | null
-    bSystem?: boolean | null
-    iDictionaryKey?: number | null
-    dNgayTao?: Date | string | null
-    dNgaySua?: Date | string | null
-    sNguoiTao?: string | null
-    sNguoiSua?: string | null
-    sThietBiTao?: string | null
-    sThietBiSua?: string | null
-    sCCCD?: string | null
-    sHoVaDem?: string | null
-    sTenDayDu?: string | null
-    dNgaySinh?: Date | string | null
-    iGioiTinh?: number | null
-    sDM_QuocGiaId?: string | null
-    sDM_TinhId?: string | null
-    sDM_QuanHuyenId?: string | null
-    sDM_XaPhuongId?: string | null
-    sDiaChi?: string | null
-    sSDTDiDong?: string | null
-    sEmail?: string | null
+  export type UserProfileCreateWithoutConversationsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     bLaNguoiDung?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
     sDM_DonViId?: string | null
     sDM_ViTriCongViecId?: string | null
     sQuanlyTrucTiepId?: string | null
-    sAvatarId?: string | null
-    group?: GroupCreateNestedOneWithoutUsersInput
-    notification?: NotificationCreateNestedManyWithoutCreatedByInput
-    feedback?: FeedbackCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQCreateNestedManyWithoutApprovedByInput
-  }
-
-  export type DM_NhanVienUncheckedCreateWithoutConversationInput = {
-    Id?: string
-    sMa?: string | null
-    sTen?: string | null
-    sGhiChu?: string | null
-    iSTT?: number | null
-    bActive?: boolean | null
-    bDeleted?: boolean | null
-    bSystem?: boolean | null
     iDictionaryKey?: number | null
-    dNgayTao?: Date | string | null
-    dNgaySua?: Date | string | null
+    bSystem?: boolean | null
     sNguoiTao?: string | null
     sNguoiSua?: string | null
     sThietBiTao?: string | null
     sThietBiSua?: string | null
-    sCCCD?: string | null
-    sHoVaDem?: string | null
-    sTenDayDu?: string | null
-    dNgaySinh?: Date | string | null
-    iGioiTinh?: number | null
-    sDM_QuocGiaId?: string | null
-    sDM_TinhId?: string | null
-    sDM_QuanHuyenId?: string | null
-    sDM_XaPhuongId?: string | null
-    sDiaChi?: string | null
-    sSDTDiDong?: string | null
-    sEmail?: string | null
+    avatar?: string | null
+    firstName: string
+    lastName: string
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    permanentAddress?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    officerNumber?: string | null
+    rankDate?: Date | string | null
+    academicDegreeDate?: Date | string | null
+    academicRankDate?: Date | string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    group?: GroupCreateNestedOneWithoutUserProfileInput
+    provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+    districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+    communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+    provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+    gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+    provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+    districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+    communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+    nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+    religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+    ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+    provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+    districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+    communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+    newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+    newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+    rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+    academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+    academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+    level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+    sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+    nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+    positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+    relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+    trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+    educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+    staffs?: StaffCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+  }
+
+  export type UserProfileUncheckedCreateWithoutConversationsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     bLaNguoiDung?: boolean | null
     bLaCanBoNhanVien?: boolean | null
     bLaHocVien?: boolean | null
-    sDM_DonViId?: string | null
-    sDM_ViTriCongViecId?: string | null
-    sQuanlyTrucTiepId?: string | null
-    sAvatarId?: string | null
     groupId?: string | null
-    notification?: NotificationUncheckedCreateNestedManyWithoutCreatedByInput
-    feedback?: FeedbackUncheckedCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    sDM_DonViId?: string | null
+    sDM_ViTriCongViecId?: string | null
+    sQuanlyTrucTiepId?: string | null
+    iDictionaryKey?: number | null
+    bSystem?: boolean | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    avatar?: string | null
+    firstName: string
+    lastName: string
+    idCardNumber: string
+    placeOfIdCardNumber?: string | null
+    fullname?: string | null
+    healthInsuranceNumber?: string | null
+    bankAccountNumber?: string | null
+    bankName?: string | null
+    currentAddress?: string | null
+    newCurrentAddress?: string | null
+    occupationWhenRecruiting?: string | null
+    thuongBinh?: string | null
+    benh?: string | null
+    tinhHinhNhaO?: string | null
+    truocKhiNhapNgu?: string | null
+    thanhPhanGiaDinh?: string | null
+    soTruong?: string | null
+    hoTenThuongDung?: string | null
+    lichSuBanThan?: string | null
+    conThuMay?: number | null
+    chieuCao?: string | null
+    canNang?: string | null
+    soACE?: number | null
+    kinhTeGiaDinh?: string | null
+    chinhTriGiaDinh?: string | null
+    fSoACE?: number | null
+    fKinhTeGiaDinh?: string | null
+    fThanhPhanGiaDinh?: string | null
+    fChinhTriGiaDinh?: string | null
+    fBanThan?: string | null
+    nationalId?: string | null
+    provinceCurrentAddressId?: string | null
+    districtCurrentAddressId?: string | null
+    communeCurrentAddressId?: string | null
+    newProvinceCurrentAddressId?: string | null
+    newCommuneCurrentAddressId?: string | null
+    dateOfBirth?: Date | string | null
+    placeOfBirth?: string | null
+    provinceOfBirthId?: string | null
+    districtOfBirthId?: string | null
+    communeOfBirthId?: string | null
+    newProvinceOfBirthId?: string | null
+    newCommuneOfBirthId?: string | null
+    homeTown?: string | null
+    idCardDate?: Date | string | null
+    idCardExpirationDate?: Date | string | null
+    genderId?: string | null
+    permanentAddress?: string | null
+    provincePermanentAddressId?: string | null
+    districtPermanentAddressId?: string | null
+    communePermanentAddressId?: string | null
+    newProvincePermanentAddressId?: string | null
+    newCommunePermanentAddressId?: string | null
+    temporaryAddress?: string | null
+    contactAddress?: string | null
+    phoneNumber?: string | null
+    email?: string | null
+    nationalityId?: string | null
+    religionId?: string | null
+    ethnicityId?: string | null
+    provinceHometownId?: string | null
+    districtHometownId?: string | null
+    communeHometownId?: string | null
+    newProvinceHometownId?: string | null
+    newCommuneHometownId?: string | null
+    officerNumber?: string | null
+    rankId?: string | null
+    rankDate?: Date | string | null
+    academicDegreeTypeId?: string | null
+    academicDegreeDate?: Date | string | null
+    academicRankTypeId?: string | null
+    academicRankDate?: Date | string | null
+    levelId?: string | null
+    chiHuyQuanLyId?: string | null
+    chuyenMonKyThuatId?: string | null
+    sucKhoeId?: string | null
+    nhomMauId?: string | null
+    unionDate?: Date | string | null
+    unionPlace?: string | null
+    CPVJoinDate?: Date | string | null
+    officialCPVDate?: Date | string | null
+    CPVJoinPlace?: string | null
+    positionCPVId?: string | null
+    tenureDate?: Date | string | null
+    enlistmentDate?: Date | string | null
+    reEnlistmentDate?: Date | string | null
+    dischargeDate?: Date | string | null
+    recruitmentDate?: Date | string | null
+    recruitmentAgency?: string | null
+    mainJobAssigned?: string | null
+    revolutionaryDate?: Date | string | null
+    originalPlace?: string | null
+    familyPhone?: string | null
+    familyName?: string | null
+    trinhDoHocVanId?: string | null
+    relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+    ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+    tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+    capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+    khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+    kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+    hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+    hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+    tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+    chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+    diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+    thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+    danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+    educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+    lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+    lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+    staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
-  export type DM_NhanVienCreateOrConnectWithoutConversationInput = {
-    where: DM_NhanVienWhereUniqueInput
-    create: XOR<DM_NhanVienCreateWithoutConversationInput, DM_NhanVienUncheckedCreateWithoutConversationInput>
+  export type UserProfileCreateOrConnectWithoutConversationsInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutConversationsInput, UserProfileUncheckedCreateWithoutConversationsInput>
   }
 
   export type UserSessionCreateWithoutConversationInput = {
@@ -424317,103 +426274,321 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type DM_NhanVienUpsertWithoutConversationInput = {
-    update: XOR<DM_NhanVienUpdateWithoutConversationInput, DM_NhanVienUncheckedUpdateWithoutConversationInput>
-    create: XOR<DM_NhanVienCreateWithoutConversationInput, DM_NhanVienUncheckedCreateWithoutConversationInput>
-    where?: DM_NhanVienWhereInput
+  export type UserProfileUpsertWithoutConversationsInput = {
+    update: XOR<UserProfileUpdateWithoutConversationsInput, UserProfileUncheckedUpdateWithoutConversationsInput>
+    create: XOR<UserProfileCreateWithoutConversationsInput, UserProfileUncheckedCreateWithoutConversationsInput>
+    where?: UserProfileWhereInput
   }
 
-  export type DM_NhanVienUpdateToOneWithWhereWithoutConversationInput = {
-    where?: DM_NhanVienWhereInput
-    data: XOR<DM_NhanVienUpdateWithoutConversationInput, DM_NhanVienUncheckedUpdateWithoutConversationInput>
+  export type UserProfileUpdateToOneWithWhereWithoutConversationsInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutConversationsInput, UserProfileUncheckedUpdateWithoutConversationsInput>
   }
 
-  export type DM_NhanVienUpdateWithoutConversationInput = {
-    Id?: StringFieldUpdateOperationsInput | string
-    sMa?: NullableStringFieldUpdateOperationsInput | string | null
-    sTen?: NullableStringFieldUpdateOperationsInput | string | null
-    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
-    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
-    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
-    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
-    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
-    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-    sCCCD?: NullableStringFieldUpdateOperationsInput | string | null
-    sHoVaDem?: NullableStringFieldUpdateOperationsInput | string | null
-    sTenDayDu?: NullableStringFieldUpdateOperationsInput | string | null
-    dNgaySinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    iGioiTinh?: NullableIntFieldUpdateOperationsInput | number | null
-    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_QuanHuyenId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_XaPhuongId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
-    sSDTDiDong?: NullableStringFieldUpdateOperationsInput | string | null
-    sEmail?: NullableStringFieldUpdateOperationsInput | string | null
+  export type UserProfileUpdateWithoutConversationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
     sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
     sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
-    sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
-    group?: GroupUpdateOneWithoutUsersNestedInput
-    notification?: NotificationUpdateManyWithoutCreatedByNestedInput
-    feedback?: FeedbackUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUpdateManyWithoutApprovedByNestedInput
-  }
-
-  export type DM_NhanVienUncheckedUpdateWithoutConversationInput = {
-    Id?: StringFieldUpdateOperationsInput | string
-    sMa?: NullableStringFieldUpdateOperationsInput | string | null
-    sTen?: NullableStringFieldUpdateOperationsInput | string | null
-    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
-    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
-    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
     iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
-    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
     sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
     sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
-    sCCCD?: NullableStringFieldUpdateOperationsInput | string | null
-    sHoVaDem?: NullableStringFieldUpdateOperationsInput | string | null
-    sTenDayDu?: NullableStringFieldUpdateOperationsInput | string | null
-    dNgaySinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    iGioiTinh?: NullableIntFieldUpdateOperationsInput | number | null
-    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_QuanHuyenId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_XaPhuongId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
-    sSDTDiDong?: NullableStringFieldUpdateOperationsInput | string | null
-    sEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: GroupUpdateOneWithoutUserProfileNestedInput
+    provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+    provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+    gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+    provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+    nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+    religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+    ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+    provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+    districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+    communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+    newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+    newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+    rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+    academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+    academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+    level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+    chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+    chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+    sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+    nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+    positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+    relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+    trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+    staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutConversationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
     bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
-    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
-    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
-    sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
-    notification?: NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
-    feedback?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+    sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    idCardNumber?: StringFieldUpdateOperationsInput | string
+    placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullname?: NullableStringFieldUpdateOperationsInput | string | null
+    healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+    thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+    benh?: NullableStringFieldUpdateOperationsInput | string | null
+    tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+    truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+    thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+    hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+    lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+    chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+    canNang?: NullableStringFieldUpdateOperationsInput | string | null
+    soACE?: NullableIntFieldUpdateOperationsInput | number | null
+    kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+    fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+    fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+    homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+    idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    genderId?: NullableStringFieldUpdateOperationsInput | string | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+    temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+    religionId?: NullableStringFieldUpdateOperationsInput | string | null
+    ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+    provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+    officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    rankId?: NullableStringFieldUpdateOperationsInput | string | null
+    rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    levelId?: NullableStringFieldUpdateOperationsInput | string | null
+    chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+    chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+    sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+    nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+    unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+    tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+    mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+    revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+    familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    familyName?: NullableStringFieldUpdateOperationsInput | string | null
+    trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+    relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+    trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+    ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+    tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+    boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+    capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+    khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+    doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+    keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+    hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+    tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+    chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+    diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+    thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+    danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+    quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+    ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+    QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+    educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+    lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+    lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+    staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type UserSessionUpsertWithoutConversationInput = {
@@ -424495,7 +426670,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name?: string | null
     type?: $Enums.DocumentType | null
-    user?: DM_NhanVienCreateNestedOneWithoutConversationInput
+    user?: UserProfileCreateNestedOneWithoutConversationsInput
     session?: UserSessionCreateNestedOneWithoutConversationInput
   }
 
@@ -424539,7 +426714,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
-    user?: DM_NhanVienUpdateOneWithoutConversationNestedInput
+    user?: UserProfileUpdateOneWithoutConversationsNestedInput
     session?: UserSessionUpdateOneWithoutConversationNestedInput
   }
 
@@ -424703,6 +426878,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutRankInput = {
@@ -424851,6 +427031,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutRankInput = {
@@ -425097,6 +427282,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutLevelInput = {
@@ -425245,6 +427435,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutLevelInput = {
@@ -425419,6 +427614,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutPositionCPVInput = {
@@ -425567,6 +427767,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutPositionCPVInput = {
@@ -425900,6 +428105,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutAcademicRankTypeInput = {
@@ -426048,6 +428258,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutAcademicRankTypeInput = {
@@ -426297,6 +428512,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutAcademicDegreeTypeInput = {
@@ -426445,6 +428665,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutAcademicDegreeTypeInput = {
@@ -426694,6 +428919,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutEthnicityInput = {
@@ -426842,6 +429072,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutEthnicityInput = {
@@ -428358,6 +430593,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutReligionInput = {
@@ -428506,6 +430746,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutReligionInput = {
@@ -428813,6 +431058,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutGenderInput = {
@@ -428961,6 +431211,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutGenderInput = {
@@ -429108,224 +431363,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ConversationCreateWithoutUserInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    name?: string | null
-    type?: $Enums.DocumentType | null
-    session?: UserSessionCreateNestedOneWithoutConversationInput
-    message?: MessageCreateNestedManyWithoutConversationInput
-  }
-
-  export type ConversationUncheckedCreateWithoutUserInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    name?: string | null
-    sessionId?: string | null
-    type?: $Enums.DocumentType | null
-    message?: MessageUncheckedCreateNestedManyWithoutConversationInput
-  }
-
-  export type ConversationCreateOrConnectWithoutUserInput = {
-    where: ConversationWhereUniqueInput
-    create: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput>
-  }
-
-  export type ConversationCreateManyUserInputEnvelope = {
-    data: ConversationCreateManyUserInput | ConversationCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type DocumentCreateWithoutUploadedByInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    title?: string | null
-    body?: string | null
-    status?: $Enums.DocumentStatus
-    uri?: string | null
-    fileType?: string | null
-    fileSize?: number | null
-    type: $Enums.DocumentType
-    reason?: string | null
-    approvedBy?: DM_NhanVienCreateNestedOneWithoutDocumentApprovedInput
-  }
-
-  export type DocumentUncheckedCreateWithoutUploadedByInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    title?: string | null
-    body?: string | null
-    status?: $Enums.DocumentStatus
-    uri?: string | null
-    fileType?: string | null
-    fileSize?: number | null
-    type: $Enums.DocumentType
-    reason?: string | null
-    approvedById?: string | null
-  }
-
-  export type DocumentCreateOrConnectWithoutUploadedByInput = {
-    where: DocumentWhereUniqueInput
-    create: XOR<DocumentCreateWithoutUploadedByInput, DocumentUncheckedCreateWithoutUploadedByInput>
-  }
-
-  export type DocumentCreateManyUploadedByInputEnvelope = {
-    data: DocumentCreateManyUploadedByInput | DocumentCreateManyUploadedByInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type DocumentCreateWithoutApprovedByInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    title?: string | null
-    body?: string | null
-    status?: $Enums.DocumentStatus
-    uri?: string | null
-    fileType?: string | null
-    fileSize?: number | null
-    type: $Enums.DocumentType
-    reason?: string | null
-    uploadedBy: DM_NhanVienCreateNestedOneWithoutDocumentUploadedInput
-  }
-
-  export type DocumentUncheckedCreateWithoutApprovedByInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    title?: string | null
-    body?: string | null
-    status?: $Enums.DocumentStatus
-    uri?: string | null
-    fileType?: string | null
-    fileSize?: number | null
-    type: $Enums.DocumentType
-    reason?: string | null
-    uploadedById: string
-  }
-
-  export type DocumentCreateOrConnectWithoutApprovedByInput = {
-    where: DocumentWhereUniqueInput
-    create: XOR<DocumentCreateWithoutApprovedByInput, DocumentUncheckedCreateWithoutApprovedByInput>
-  }
-
-  export type DocumentCreateManyApprovedByInputEnvelope = {
-    data: DocumentCreateManyApprovedByInput | DocumentCreateManyApprovedByInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type FAQCreateWithoutUploadedByInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    question?: string | null
-    answer?: string | null
-    status?: $Enums.DocumentStatus
-    type: $Enums.DocumentType
-    reason?: string | null
-    approvedBy?: DM_NhanVienCreateNestedOneWithoutFAQApprovedInput
-  }
-
-  export type FAQUncheckedCreateWithoutUploadedByInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    question?: string | null
-    answer?: string | null
-    status?: $Enums.DocumentStatus
-    type: $Enums.DocumentType
-    reason?: string | null
-    approvedById?: string | null
-  }
-
-  export type FAQCreateOrConnectWithoutUploadedByInput = {
-    where: FAQWhereUniqueInput
-    create: XOR<FAQCreateWithoutUploadedByInput, FAQUncheckedCreateWithoutUploadedByInput>
-  }
-
-  export type FAQCreateManyUploadedByInputEnvelope = {
-    data: FAQCreateManyUploadedByInput | FAQCreateManyUploadedByInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type FAQCreateWithoutApprovedByInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    question?: string | null
-    answer?: string | null
-    status?: $Enums.DocumentStatus
-    type: $Enums.DocumentType
-    reason?: string | null
-    uploadedBy: DM_NhanVienCreateNestedOneWithoutFAQUploadedInput
-  }
-
-  export type FAQUncheckedCreateWithoutApprovedByInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    question?: string | null
-    answer?: string | null
-    status?: $Enums.DocumentStatus
-    type: $Enums.DocumentType
-    reason?: string | null
-    uploadedById: string
-  }
-
-  export type FAQCreateOrConnectWithoutApprovedByInput = {
-    where: FAQWhereUniqueInput
-    create: XOR<FAQCreateWithoutApprovedByInput, FAQUncheckedCreateWithoutApprovedByInput>
-  }
-
-  export type FAQCreateManyApprovedByInputEnvelope = {
-    data: FAQCreateManyApprovedByInput | FAQCreateManyApprovedByInput[]
-    skipDuplicates?: boolean
-  }
-
   export type GroupUpsertWithoutUsersInput = {
     update: XOR<GroupUpdateWithoutUsersInput, GroupUncheckedUpdateWithoutUsersInput>
     create: XOR<GroupCreateWithoutUsersInput, GroupUncheckedCreateWithoutUsersInput>
@@ -429410,129 +431447,6 @@ export namespace Prisma {
     status?: EnumFeedbackStatusFilter<"Feedback"> | $Enums.FeedbackStatus
     satisfaction?: EnumSatisfactionFilter<"Feedback"> | $Enums.Satisfaction
     userId?: UuidFilter<"Feedback"> | string
-  }
-
-  export type ConversationUpsertWithWhereUniqueWithoutUserInput = {
-    where: ConversationWhereUniqueInput
-    update: XOR<ConversationUpdateWithoutUserInput, ConversationUncheckedUpdateWithoutUserInput>
-    create: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput>
-  }
-
-  export type ConversationUpdateWithWhereUniqueWithoutUserInput = {
-    where: ConversationWhereUniqueInput
-    data: XOR<ConversationUpdateWithoutUserInput, ConversationUncheckedUpdateWithoutUserInput>
-  }
-
-  export type ConversationUpdateManyWithWhereWithoutUserInput = {
-    where: ConversationScalarWhereInput
-    data: XOR<ConversationUpdateManyMutationInput, ConversationUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type DocumentUpsertWithWhereUniqueWithoutUploadedByInput = {
-    where: DocumentWhereUniqueInput
-    update: XOR<DocumentUpdateWithoutUploadedByInput, DocumentUncheckedUpdateWithoutUploadedByInput>
-    create: XOR<DocumentCreateWithoutUploadedByInput, DocumentUncheckedCreateWithoutUploadedByInput>
-  }
-
-  export type DocumentUpdateWithWhereUniqueWithoutUploadedByInput = {
-    where: DocumentWhereUniqueInput
-    data: XOR<DocumentUpdateWithoutUploadedByInput, DocumentUncheckedUpdateWithoutUploadedByInput>
-  }
-
-  export type DocumentUpdateManyWithWhereWithoutUploadedByInput = {
-    where: DocumentScalarWhereInput
-    data: XOR<DocumentUpdateManyMutationInput, DocumentUncheckedUpdateManyWithoutUploadedByInput>
-  }
-
-  export type DocumentScalarWhereInput = {
-    AND?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
-    OR?: DocumentScalarWhereInput[]
-    NOT?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
-    id?: StringFilter<"Document"> | string
-    code?: StringNullableFilter<"Document"> | string | null
-    active?: BoolFilter<"Document"> | boolean
-    description?: StringNullableFilter<"Document"> | string | null
-    deletedAt?: DateTimeNullableFilter<"Document"> | Date | string | null
-    createdAt?: DateTimeFilter<"Document"> | Date | string
-    updatedAt?: DateTimeFilter<"Document"> | Date | string
-    title?: StringNullableFilter<"Document"> | string | null
-    body?: StringNullableFilter<"Document"> | string | null
-    status?: EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
-    uri?: StringNullableFilter<"Document"> | string | null
-    fileType?: StringNullableFilter<"Document"> | string | null
-    fileSize?: IntNullableFilter<"Document"> | number | null
-    type?: EnumDocumentTypeFilter<"Document"> | $Enums.DocumentType
-    reason?: StringNullableFilter<"Document"> | string | null
-    uploadedById?: UuidFilter<"Document"> | string
-    approvedById?: UuidNullableFilter<"Document"> | string | null
-  }
-
-  export type DocumentUpsertWithWhereUniqueWithoutApprovedByInput = {
-    where: DocumentWhereUniqueInput
-    update: XOR<DocumentUpdateWithoutApprovedByInput, DocumentUncheckedUpdateWithoutApprovedByInput>
-    create: XOR<DocumentCreateWithoutApprovedByInput, DocumentUncheckedCreateWithoutApprovedByInput>
-  }
-
-  export type DocumentUpdateWithWhereUniqueWithoutApprovedByInput = {
-    where: DocumentWhereUniqueInput
-    data: XOR<DocumentUpdateWithoutApprovedByInput, DocumentUncheckedUpdateWithoutApprovedByInput>
-  }
-
-  export type DocumentUpdateManyWithWhereWithoutApprovedByInput = {
-    where: DocumentScalarWhereInput
-    data: XOR<DocumentUpdateManyMutationInput, DocumentUncheckedUpdateManyWithoutApprovedByInput>
-  }
-
-  export type FAQUpsertWithWhereUniqueWithoutUploadedByInput = {
-    where: FAQWhereUniqueInput
-    update: XOR<FAQUpdateWithoutUploadedByInput, FAQUncheckedUpdateWithoutUploadedByInput>
-    create: XOR<FAQCreateWithoutUploadedByInput, FAQUncheckedCreateWithoutUploadedByInput>
-  }
-
-  export type FAQUpdateWithWhereUniqueWithoutUploadedByInput = {
-    where: FAQWhereUniqueInput
-    data: XOR<FAQUpdateWithoutUploadedByInput, FAQUncheckedUpdateWithoutUploadedByInput>
-  }
-
-  export type FAQUpdateManyWithWhereWithoutUploadedByInput = {
-    where: FAQScalarWhereInput
-    data: XOR<FAQUpdateManyMutationInput, FAQUncheckedUpdateManyWithoutUploadedByInput>
-  }
-
-  export type FAQScalarWhereInput = {
-    AND?: FAQScalarWhereInput | FAQScalarWhereInput[]
-    OR?: FAQScalarWhereInput[]
-    NOT?: FAQScalarWhereInput | FAQScalarWhereInput[]
-    id?: StringFilter<"FAQ"> | string
-    code?: StringNullableFilter<"FAQ"> | string | null
-    active?: BoolFilter<"FAQ"> | boolean
-    description?: StringNullableFilter<"FAQ"> | string | null
-    deletedAt?: DateTimeNullableFilter<"FAQ"> | Date | string | null
-    createdAt?: DateTimeFilter<"FAQ"> | Date | string
-    updatedAt?: DateTimeFilter<"FAQ"> | Date | string
-    question?: StringNullableFilter<"FAQ"> | string | null
-    answer?: StringNullableFilter<"FAQ"> | string | null
-    status?: EnumDocumentStatusFilter<"FAQ"> | $Enums.DocumentStatus
-    type?: EnumDocumentTypeFilter<"FAQ"> | $Enums.DocumentType
-    reason?: StringNullableFilter<"FAQ"> | string | null
-    uploadedById?: UuidFilter<"FAQ"> | string
-    approvedById?: UuidNullableFilter<"FAQ"> | string | null
-  }
-
-  export type FAQUpsertWithWhereUniqueWithoutApprovedByInput = {
-    where: FAQWhereUniqueInput
-    update: XOR<FAQUpdateWithoutApprovedByInput, FAQUncheckedUpdateWithoutApprovedByInput>
-    create: XOR<FAQCreateWithoutApprovedByInput, FAQUncheckedCreateWithoutApprovedByInput>
-  }
-
-  export type FAQUpdateWithWhereUniqueWithoutApprovedByInput = {
-    where: FAQWhereUniqueInput
-    data: XOR<FAQUpdateWithoutApprovedByInput, FAQUncheckedUpdateWithoutApprovedByInput>
-  }
-
-  export type FAQUpdateManyWithWhereWithoutApprovedByInput = {
-    where: FAQScalarWhereInput
-    data: XOR<FAQUpdateManyMutationInput, FAQUncheckedUpdateManyWithoutApprovedByInput>
   }
 
   export type HocViCreateWithoutNationalityInput = {
@@ -429721,6 +431635,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNationalityInput = {
@@ -429869,6 +431788,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNationalityInput = {
@@ -430131,6 +432055,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutProvinceHometownInput = {
@@ -430279,6 +432208,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutProvinceHometownInput = {
@@ -430437,6 +432371,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutProvinceOfBirthInput = {
@@ -430585,6 +432524,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutProvinceOfBirthInput = {
@@ -430743,6 +432687,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutProvincePermanentAddressInput = {
@@ -430891,6 +432840,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutProvincePermanentAddressInput = {
@@ -431049,6 +433003,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutProvinceCurrentAddressInput = {
@@ -431197,6 +433156,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutProvinceCurrentAddressInput = {
@@ -431419,6 +433383,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNewProvinceHometownInput = {
@@ -431567,6 +433536,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNewProvinceHometownInput = {
@@ -431725,6 +433699,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNewProvinceOfBirthInput = {
@@ -431873,6 +433852,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNewProvinceOfBirthInput = {
@@ -432031,6 +434015,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNewProvincePermanentAddressInput = {
@@ -432179,6 +434168,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNewProvincePermanentAddressInput = {
@@ -432337,6 +434331,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNewProvinceCurrentAddressInput = {
@@ -432485,6 +434484,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNewProvinceCurrentAddressInput = {
@@ -432707,6 +434711,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutDistrictHometownInput = {
@@ -432855,6 +434864,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutDistrictHometownInput = {
@@ -433013,6 +435027,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutDistrictOfBirthInput = {
@@ -433161,6 +435180,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutDistrictOfBirthInput = {
@@ -433319,6 +435343,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutDistrictPermanentAddressInput = {
@@ -433467,6 +435496,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutDistrictPermanentAddressInput = {
@@ -433625,6 +435659,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutDistrictCurrentAddressInput = {
@@ -433773,6 +435812,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutDistrictCurrentAddressInput = {
@@ -433995,6 +436039,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutCommuneHometownInput = {
@@ -434143,6 +436192,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutCommuneHometownInput = {
@@ -434301,6 +436355,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutCommuneOfBirthInput = {
@@ -434449,6 +436508,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutCommuneOfBirthInput = {
@@ -434607,6 +436671,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutCommunePermanentAddressInput = {
@@ -434755,6 +436824,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutCommunePermanentAddressInput = {
@@ -434913,6 +436987,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutCommuneCurrentAddressInput = {
@@ -435061,6 +437140,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutCommuneCurrentAddressInput = {
@@ -435283,6 +437367,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNewCommuneHometownInput = {
@@ -435431,6 +437520,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNewCommuneHometownInput = {
@@ -435589,6 +437683,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNewCommuneOfBirthInput = {
@@ -435737,6 +437836,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNewCommuneOfBirthInput = {
@@ -435895,6 +437999,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNewCommunePermanentAddressInput = {
@@ -436043,6 +438152,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNewCommunePermanentAddressInput = {
@@ -436201,6 +438315,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNewCommuneCurrentAddressInput = {
@@ -436349,6 +438468,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNewCommuneCurrentAddressInput = {
@@ -439354,6 +441478,224 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DocumentCreateWithoutUploadedByInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    title?: string | null
+    body?: string | null
+    status?: $Enums.DocumentStatus
+    uri?: string | null
+    fileType?: string | null
+    fileSize?: number | null
+    type: $Enums.DocumentType
+    reason?: string | null
+    approvedBy?: UserProfileCreateNestedOneWithoutDocumentsApprovedInput
+  }
+
+  export type DocumentUncheckedCreateWithoutUploadedByInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    title?: string | null
+    body?: string | null
+    status?: $Enums.DocumentStatus
+    uri?: string | null
+    fileType?: string | null
+    fileSize?: number | null
+    type: $Enums.DocumentType
+    reason?: string | null
+    approvedById?: string | null
+  }
+
+  export type DocumentCreateOrConnectWithoutUploadedByInput = {
+    where: DocumentWhereUniqueInput
+    create: XOR<DocumentCreateWithoutUploadedByInput, DocumentUncheckedCreateWithoutUploadedByInput>
+  }
+
+  export type DocumentCreateManyUploadedByInputEnvelope = {
+    data: DocumentCreateManyUploadedByInput | DocumentCreateManyUploadedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DocumentCreateWithoutApprovedByInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    title?: string | null
+    body?: string | null
+    status?: $Enums.DocumentStatus
+    uri?: string | null
+    fileType?: string | null
+    fileSize?: number | null
+    type: $Enums.DocumentType
+    reason?: string | null
+    uploadedBy: UserProfileCreateNestedOneWithoutDocumentsUploadedInput
+  }
+
+  export type DocumentUncheckedCreateWithoutApprovedByInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    title?: string | null
+    body?: string | null
+    status?: $Enums.DocumentStatus
+    uri?: string | null
+    fileType?: string | null
+    fileSize?: number | null
+    type: $Enums.DocumentType
+    reason?: string | null
+    uploadedById: string
+  }
+
+  export type DocumentCreateOrConnectWithoutApprovedByInput = {
+    where: DocumentWhereUniqueInput
+    create: XOR<DocumentCreateWithoutApprovedByInput, DocumentUncheckedCreateWithoutApprovedByInput>
+  }
+
+  export type DocumentCreateManyApprovedByInputEnvelope = {
+    data: DocumentCreateManyApprovedByInput | DocumentCreateManyApprovedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FAQCreateWithoutUploadedByInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    question?: string | null
+    answer?: string | null
+    status?: $Enums.DocumentStatus
+    type: $Enums.DocumentType
+    reason?: string | null
+    approvedBy?: UserProfileCreateNestedOneWithoutFaqsApprovedInput
+  }
+
+  export type FAQUncheckedCreateWithoutUploadedByInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    question?: string | null
+    answer?: string | null
+    status?: $Enums.DocumentStatus
+    type: $Enums.DocumentType
+    reason?: string | null
+    approvedById?: string | null
+  }
+
+  export type FAQCreateOrConnectWithoutUploadedByInput = {
+    where: FAQWhereUniqueInput
+    create: XOR<FAQCreateWithoutUploadedByInput, FAQUncheckedCreateWithoutUploadedByInput>
+  }
+
+  export type FAQCreateManyUploadedByInputEnvelope = {
+    data: FAQCreateManyUploadedByInput | FAQCreateManyUploadedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FAQCreateWithoutApprovedByInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    question?: string | null
+    answer?: string | null
+    status?: $Enums.DocumentStatus
+    type: $Enums.DocumentType
+    reason?: string | null
+    uploadedBy: UserProfileCreateNestedOneWithoutFaqsUploadedInput
+  }
+
+  export type FAQUncheckedCreateWithoutApprovedByInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    question?: string | null
+    answer?: string | null
+    status?: $Enums.DocumentStatus
+    type: $Enums.DocumentType
+    reason?: string | null
+    uploadedById: string
+  }
+
+  export type FAQCreateOrConnectWithoutApprovedByInput = {
+    where: FAQWhereUniqueInput
+    create: XOR<FAQCreateWithoutApprovedByInput, FAQUncheckedCreateWithoutApprovedByInput>
+  }
+
+  export type FAQCreateManyApprovedByInputEnvelope = {
+    data: FAQCreateManyApprovedByInput | FAQCreateManyApprovedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ConversationCreateWithoutUserInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name?: string | null
+    type?: $Enums.DocumentType | null
+    session?: UserSessionCreateNestedOneWithoutConversationInput
+    message?: MessageCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationUncheckedCreateWithoutUserInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name?: string | null
+    sessionId?: string | null
+    type?: $Enums.DocumentType | null
+    message?: MessageUncheckedCreateNestedManyWithoutConversationInput
+  }
+
+  export type ConversationCreateOrConnectWithoutUserInput = {
+    where: ConversationWhereUniqueInput
+    create: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput>
+  }
+
+  export type ConversationCreateManyUserInputEnvelope = {
+    data: ConversationCreateManyUserInput | ConversationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type GroupUpsertWithoutUserProfileInput = {
     update: XOR<GroupUpdateWithoutUserProfileInput, GroupUncheckedUpdateWithoutUserProfileInput>
     create: XOR<GroupCreateWithoutUserProfileInput, GroupUncheckedCreateWithoutUserProfileInput>
@@ -442049,6 +444391,129 @@ export namespace Prisma {
     userProfileId?: StringNullableFilter<"EvidenceFile"> | string | null
   }
 
+  export type DocumentUpsertWithWhereUniqueWithoutUploadedByInput = {
+    where: DocumentWhereUniqueInput
+    update: XOR<DocumentUpdateWithoutUploadedByInput, DocumentUncheckedUpdateWithoutUploadedByInput>
+    create: XOR<DocumentCreateWithoutUploadedByInput, DocumentUncheckedCreateWithoutUploadedByInput>
+  }
+
+  export type DocumentUpdateWithWhereUniqueWithoutUploadedByInput = {
+    where: DocumentWhereUniqueInput
+    data: XOR<DocumentUpdateWithoutUploadedByInput, DocumentUncheckedUpdateWithoutUploadedByInput>
+  }
+
+  export type DocumentUpdateManyWithWhereWithoutUploadedByInput = {
+    where: DocumentScalarWhereInput
+    data: XOR<DocumentUpdateManyMutationInput, DocumentUncheckedUpdateManyWithoutUploadedByInput>
+  }
+
+  export type DocumentScalarWhereInput = {
+    AND?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+    OR?: DocumentScalarWhereInput[]
+    NOT?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+    id?: StringFilter<"Document"> | string
+    code?: StringNullableFilter<"Document"> | string | null
+    active?: BoolFilter<"Document"> | boolean
+    description?: StringNullableFilter<"Document"> | string | null
+    deletedAt?: DateTimeNullableFilter<"Document"> | Date | string | null
+    createdAt?: DateTimeFilter<"Document"> | Date | string
+    updatedAt?: DateTimeFilter<"Document"> | Date | string
+    title?: StringNullableFilter<"Document"> | string | null
+    body?: StringNullableFilter<"Document"> | string | null
+    status?: EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
+    uri?: StringNullableFilter<"Document"> | string | null
+    fileType?: StringNullableFilter<"Document"> | string | null
+    fileSize?: IntNullableFilter<"Document"> | number | null
+    type?: EnumDocumentTypeFilter<"Document"> | $Enums.DocumentType
+    reason?: StringNullableFilter<"Document"> | string | null
+    uploadedById?: StringFilter<"Document"> | string
+    approvedById?: StringNullableFilter<"Document"> | string | null
+  }
+
+  export type DocumentUpsertWithWhereUniqueWithoutApprovedByInput = {
+    where: DocumentWhereUniqueInput
+    update: XOR<DocumentUpdateWithoutApprovedByInput, DocumentUncheckedUpdateWithoutApprovedByInput>
+    create: XOR<DocumentCreateWithoutApprovedByInput, DocumentUncheckedCreateWithoutApprovedByInput>
+  }
+
+  export type DocumentUpdateWithWhereUniqueWithoutApprovedByInput = {
+    where: DocumentWhereUniqueInput
+    data: XOR<DocumentUpdateWithoutApprovedByInput, DocumentUncheckedUpdateWithoutApprovedByInput>
+  }
+
+  export type DocumentUpdateManyWithWhereWithoutApprovedByInput = {
+    where: DocumentScalarWhereInput
+    data: XOR<DocumentUpdateManyMutationInput, DocumentUncheckedUpdateManyWithoutApprovedByInput>
+  }
+
+  export type FAQUpsertWithWhereUniqueWithoutUploadedByInput = {
+    where: FAQWhereUniqueInput
+    update: XOR<FAQUpdateWithoutUploadedByInput, FAQUncheckedUpdateWithoutUploadedByInput>
+    create: XOR<FAQCreateWithoutUploadedByInput, FAQUncheckedCreateWithoutUploadedByInput>
+  }
+
+  export type FAQUpdateWithWhereUniqueWithoutUploadedByInput = {
+    where: FAQWhereUniqueInput
+    data: XOR<FAQUpdateWithoutUploadedByInput, FAQUncheckedUpdateWithoutUploadedByInput>
+  }
+
+  export type FAQUpdateManyWithWhereWithoutUploadedByInput = {
+    where: FAQScalarWhereInput
+    data: XOR<FAQUpdateManyMutationInput, FAQUncheckedUpdateManyWithoutUploadedByInput>
+  }
+
+  export type FAQScalarWhereInput = {
+    AND?: FAQScalarWhereInput | FAQScalarWhereInput[]
+    OR?: FAQScalarWhereInput[]
+    NOT?: FAQScalarWhereInput | FAQScalarWhereInput[]
+    id?: StringFilter<"FAQ"> | string
+    code?: StringNullableFilter<"FAQ"> | string | null
+    active?: BoolFilter<"FAQ"> | boolean
+    description?: StringNullableFilter<"FAQ"> | string | null
+    deletedAt?: DateTimeNullableFilter<"FAQ"> | Date | string | null
+    createdAt?: DateTimeFilter<"FAQ"> | Date | string
+    updatedAt?: DateTimeFilter<"FAQ"> | Date | string
+    question?: StringNullableFilter<"FAQ"> | string | null
+    answer?: StringNullableFilter<"FAQ"> | string | null
+    status?: EnumDocumentStatusFilter<"FAQ"> | $Enums.DocumentStatus
+    type?: EnumDocumentTypeFilter<"FAQ"> | $Enums.DocumentType
+    reason?: StringNullableFilter<"FAQ"> | string | null
+    uploadedById?: StringFilter<"FAQ"> | string
+    approvedById?: StringNullableFilter<"FAQ"> | string | null
+  }
+
+  export type FAQUpsertWithWhereUniqueWithoutApprovedByInput = {
+    where: FAQWhereUniqueInput
+    update: XOR<FAQUpdateWithoutApprovedByInput, FAQUncheckedUpdateWithoutApprovedByInput>
+    create: XOR<FAQCreateWithoutApprovedByInput, FAQUncheckedCreateWithoutApprovedByInput>
+  }
+
+  export type FAQUpdateWithWhereUniqueWithoutApprovedByInput = {
+    where: FAQWhereUniqueInput
+    data: XOR<FAQUpdateWithoutApprovedByInput, FAQUncheckedUpdateWithoutApprovedByInput>
+  }
+
+  export type FAQUpdateManyWithWhereWithoutApprovedByInput = {
+    where: FAQScalarWhereInput
+    data: XOR<FAQUpdateManyMutationInput, FAQUncheckedUpdateManyWithoutApprovedByInput>
+  }
+
+  export type ConversationUpsertWithWhereUniqueWithoutUserInput = {
+    where: ConversationWhereUniqueInput
+    update: XOR<ConversationUpdateWithoutUserInput, ConversationUncheckedUpdateWithoutUserInput>
+    create: XOR<ConversationCreateWithoutUserInput, ConversationUncheckedCreateWithoutUserInput>
+  }
+
+  export type ConversationUpdateWithWhereUniqueWithoutUserInput = {
+    where: ConversationWhereUniqueInput
+    data: XOR<ConversationUpdateWithoutUserInput, ConversationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ConversationUpdateManyWithWhereWithoutUserInput = {
+    where: ConversationScalarWhereInput
+    data: XOR<ConversationUpdateManyMutationInput, ConversationUncheckedUpdateManyWithoutUserInput>
+  }
+
   export type DM_HocHamCreateWithoutHocHamInput = {
     Id?: string
     sMa?: string | null
@@ -442238,6 +444703,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutHocHamInput = {
@@ -442386,6 +444856,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutHocHamInput = {
@@ -442599,6 +445074,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutHocHamInput = {
@@ -442747,6 +445227,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_HocViCreateWithoutHocViInput = {
@@ -443014,6 +445499,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutHocViInput = {
@@ -443162,6 +445652,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutHocViInput = {
@@ -443463,6 +445958,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutHocViInput = {
@@ -443611,6 +446111,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutRelativesInput = {
@@ -443759,6 +446264,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutRelativesInput = {
@@ -443907,6 +446417,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutRelativesInput = {
@@ -444071,6 +446586,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutRelativesInput = {
@@ -444219,6 +446739,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutTrinhDoLyLuanChinhTriInput = {
@@ -444367,6 +446892,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutTrinhDoLyLuanChinhTriInput = {
@@ -444515,6 +447045,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutTrinhDoLyLuanChinhTriInput = {
@@ -444706,6 +447241,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutTrinhDoLyLuanChinhTriInput = {
@@ -444854,6 +447394,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_TrinhDoLyLuanChinhTriUpsertWithoutTrinhDoLyLuanChinhTriInput = {
@@ -445035,6 +447580,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutTrinhDoQuanLyNhaNuocInput = {
@@ -445183,6 +447733,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutTrinhDoQuanLyNhaNuocInput = {
@@ -445374,6 +447929,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutTrinhDoQuanLyNhaNuocInput = {
@@ -445522,6 +448082,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_TrinhDoQuanLyNhaNuocUpsertWithoutTrinhDoQuanLyNhaNuocInput = {
@@ -445787,6 +448352,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNgoaiNguInput = {
@@ -445935,6 +448505,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNgoaiNguInput = {
@@ -446195,6 +448770,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNgoaiNguInput = {
@@ -446343,6 +448923,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_TrinhDoTinHocCreateWithoutTinHocInput = {
@@ -446532,6 +449117,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutTinHocInput = {
@@ -446680,6 +449270,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutTinHocInput = {
@@ -446891,6 +449486,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutTinHocInput = {
@@ -447039,6 +449639,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutBoiDuongQuocPhongAnNinhInput = {
@@ -447187,6 +449792,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutBoiDuongQuocPhongAnNinhInput = {
@@ -447335,6 +449945,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutBoiDuongQuocPhongAnNinhInput = {
@@ -447499,6 +450114,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutBoiDuongQuocPhongAnNinhInput = {
@@ -447647,6 +450267,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_CapBacCreateWithoutCapBacInput = {
@@ -447838,6 +450463,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutCapBacInput = {
@@ -447986,6 +450616,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutCapBacInput = {
@@ -448199,6 +450834,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutCapBacInput = {
@@ -448347,6 +450987,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_ChucVuCreateWithoutQuaTrinhCongTacInput = {
@@ -448569,6 +451214,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutQuaTrinhCongTacInput = {
@@ -448717,6 +451367,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutQuaTrinhCongTacInput = {
@@ -448967,6 +451622,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutQuaTrinhCongTacInput = {
@@ -449115,6 +451775,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_ChucVuCreateWithoutQuaTrinhCuDiCongTacInput = {
@@ -449310,6 +451975,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutQuaTrinhCuDiCongTacInput = {
@@ -449458,6 +452128,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutQuaTrinhCuDiCongTacInput = {
@@ -449675,6 +452350,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutQuaTrinhCuDiCongTacInput = {
@@ -449823,6 +452503,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_LoaiHinhDiHocTapCreateWithoutQuaTrinhCuDiDaoTaoInput = {
@@ -449998,6 +452683,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutQuaTrinhCuDiDaoTaoInput = {
@@ -450146,6 +452836,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutQuaTrinhCuDiDaoTaoInput = {
@@ -450343,6 +453038,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutQuaTrinhCuDiDaoTaoInput = {
@@ -450491,6 +453191,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutKhenThuongInput = {
@@ -450639,6 +453344,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutKhenThuongInput = {
@@ -450787,6 +453497,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutKhenThuongInput = {
@@ -450951,6 +453666,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutKhenThuongInput = {
@@ -451099,6 +453819,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutKyLuatInput = {
@@ -451247,6 +453972,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutKyLuatInput = {
@@ -451395,6 +454125,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutKyLuatInput = {
@@ -451559,6 +454294,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutKyLuatInput = {
@@ -451707,6 +454447,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutDoiTuongChinhSachInput = {
@@ -451855,6 +454600,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutDoiTuongChinhSachInput = {
@@ -452003,6 +454753,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutDoiTuongChinhSachInput = {
@@ -452167,6 +454922,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutDoiTuongChinhSachInput = {
@@ -452315,6 +455075,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutKeKhaiTaiSanInput = {
@@ -452463,6 +455228,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutKeKhaiTaiSanInput = {
@@ -452611,6 +455381,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutKeKhaiTaiSanInput = {
@@ -452775,6 +455550,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutKeKhaiTaiSanInput = {
@@ -452923,6 +455703,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_DanTocCreateWithoutTiengDanTocInput = {
@@ -453118,6 +455903,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutTiengDanTocInput = {
@@ -453266,6 +456056,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutTiengDanTocInput = {
@@ -453483,6 +456278,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutTiengDanTocInput = {
@@ -453631,6 +456431,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutChienDauInput = {
@@ -453779,6 +456584,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutChienDauInput = {
@@ -453927,6 +456737,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutChienDauInput = {
@@ -454091,6 +456906,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutChienDauInput = {
@@ -454239,6 +457059,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_QuocGiaCreateWithoutNuocNgoaiInput = {
@@ -454434,6 +457259,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutDiNuocNgoaiInput = {
@@ -454582,6 +457412,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutDiNuocNgoaiInput = {
@@ -454799,6 +457634,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutDiNuocNgoaiInput = {
@@ -454947,6 +457787,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_LoaiThuongTatCreateWithoutThuongTatInput = {
@@ -455122,6 +457967,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutThuongTatInput = {
@@ -455270,6 +458120,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutThuongTatInput = {
@@ -455467,6 +458322,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutThuongTatInput = {
@@ -455615,6 +458475,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutDanhHieuInput = {
@@ -455763,6 +458628,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutDanhHieuInput = {
@@ -455911,6 +458781,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutDanhHieuInput = {
@@ -456075,6 +458950,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutDanhHieuInput = {
@@ -456223,6 +459103,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_TruongDaoTaoBacDHCreateWithoutQuaTrinhHocTapInput = {
@@ -456454,6 +459339,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutQuaTrinhHocTapInput = {
@@ -456602,6 +459492,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutQuaTrinhHocTapInput = {
@@ -456867,6 +459762,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutQuaTrinhHocTapInput = {
@@ -457015,6 +459915,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_ToChucXaHoiCreateWithoutToChucXaHoiInput = {
@@ -457190,6 +460095,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutToChucXaHoiInput = {
@@ -457338,6 +460248,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutToChucXaHoiInput = {
@@ -457535,6 +460450,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutToChucXaHoiInput = {
@@ -457683,6 +460603,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_NgachCreateWithoutQuaTrinhLuongInput = {
@@ -457885,6 +460810,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutQuaTrinhLuongInput = {
@@ -458033,6 +460963,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutQuaTrinhLuongInput = {
@@ -458263,6 +461198,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutQuaTrinhLuongInput = {
@@ -458411,6 +461351,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LecturerCreateWithoutLecturerTypeInput = {
@@ -458925,6 +461870,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutLecturerInput = {
@@ -459073,6 +462023,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutLecturerInput = {
@@ -460125,6 +463080,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutLecturerInput = {
@@ -460273,6 +463233,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_DonViUpsertWithoutLecturersInput = {
@@ -460800,6 +463765,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutLecturerHistoryInput = {
@@ -460948,6 +463918,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutLecturerHistoryInput = {
@@ -461218,6 +464193,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutLecturerHistoryInput = {
@@ -461366,6 +464346,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_DonViUpsertWithoutLecturerHistoryInput = {
@@ -477576,6 +480561,11 @@ export namespace Prisma {
     lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutEvidenceFilesInput = {
@@ -477724,6 +480714,11 @@ export namespace Prisma {
     lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutEvidenceFilesInput = {
@@ -477929,6 +480924,11 @@ export namespace Prisma {
     lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutEvidenceFilesInput = {
@@ -478077,6 +481077,11 @@ export namespace Prisma {
     lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SurveyCreateWithoutSurveyObjectTypeInput = {
@@ -480493,6 +483498,11 @@ export namespace Prisma {
     lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutStaffsInput = {
@@ -480641,6 +483651,11 @@ export namespace Prisma {
     lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutStaffsInput = {
@@ -481000,6 +484015,11 @@ export namespace Prisma {
     lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutStaffsInput = {
@@ -481148,6 +484168,11 @@ export namespace Prisma {
     lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_DonViUpsertWithoutStaffsInput = {
@@ -481465,6 +484490,11 @@ export namespace Prisma {
     lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutStaffHistoryInput = {
@@ -481613,6 +484643,11 @@ export namespace Prisma {
     lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutStaffHistoryInput = {
@@ -481912,6 +484947,11 @@ export namespace Prisma {
     lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutStaffHistoryInput = {
@@ -482060,6 +485100,11 @@ export namespace Prisma {
     lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DM_DonViUpsertWithoutStaffHistoryInput = {
@@ -482361,6 +485406,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutTrinhDoHocVanInput = {
@@ -482509,6 +485559,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutTrinhDoHocVanInput = {
@@ -483093,6 +486148,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutChiHuyQuanLyInput = {
@@ -483241,6 +486301,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutChiHuyQuanLyInput = {
@@ -483415,6 +486480,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutChuyenMonKyThuatInput = {
@@ -483563,6 +486633,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutChuyenMonKyThuatInput = {
@@ -483737,6 +486812,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutSucKhoeInput = {
@@ -483885,6 +486965,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutSucKhoeInput = {
@@ -484059,6 +487144,11 @@ export namespace Prisma {
     staffs?: StaffCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNhomMauInput = {
@@ -484207,6 +487297,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
     staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
     evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+    documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+    faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+    faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNhomMauInput = {
@@ -484568,11 +487663,6 @@ export namespace Prisma {
     sAvatarId?: string | null
     group?: GroupCreateNestedOneWithoutUsersInput
     notification?: NotificationCreateNestedManyWithoutCreatedByInput
-    conversation?: ConversationCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQCreateNestedManyWithoutApprovedByInput
   }
 
   export type DM_NhanVienUncheckedCreateWithoutFeedbackInput = {
@@ -484612,11 +487702,6 @@ export namespace Prisma {
     sAvatarId?: string | null
     groupId?: string | null
     notification?: NotificationUncheckedCreateNestedManyWithoutCreatedByInput
-    conversation?: ConversationUncheckedCreateNestedManyWithoutUserInput
-    documentUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
-    documentApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
-    fAQUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
-    fAQApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
   }
 
   export type DM_NhanVienCreateOrConnectWithoutFeedbackInput = {
@@ -484672,11 +487757,6 @@ export namespace Prisma {
     sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
     group?: GroupUpdateOneWithoutUsersNestedInput
     notification?: NotificationUpdateManyWithoutCreatedByNestedInput
-    conversation?: ConversationUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUpdateManyWithoutApprovedByNestedInput
   }
 
   export type DM_NhanVienUncheckedUpdateWithoutFeedbackInput = {
@@ -484716,11 +487796,6 @@ export namespace Prisma {
     sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
     groupId?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
-    conversation?: ConversationUncheckedUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type TrainingCourseCreateWithoutAcademicWarningRuleInput = {
@@ -497785,11 +500860,6 @@ export namespace Prisma {
     sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUpdateManyWithoutCreatedByNestedInput
     feedback?: FeedbackUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUpdateManyWithoutApprovedByNestedInput
   }
 
   export type DM_NhanVienUncheckedUpdateWithoutGroupInput = {
@@ -497829,11 +500899,6 @@ export namespace Prisma {
     sAvatarId?: NullableStringFieldUpdateOperationsInput | string | null
     notification?: NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
     feedback?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
-    conversation?: ConversationUncheckedUpdateManyWithoutUserNestedInput
-    documentUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
-    documentApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
-    fAQUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
-    fAQApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
   }
 
   export type DM_NhanVienUncheckedUpdateManyWithoutGroupInput = {
@@ -498054,6 +501119,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutGroupInput = {
@@ -498202,6 +501272,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutGroupInput = {
@@ -498456,7 +501531,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
-    user?: DM_NhanVienUpdateOneWithoutConversationNestedInput
+    user?: UserProfileUpdateOneWithoutConversationsNestedInput
     message?: MessageUpdateManyWithoutConversationNestedInput
   }
 
@@ -498813,6 +501888,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutRankInput = {
@@ -498961,6 +502041,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutRankInput = {
@@ -499387,6 +502472,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutLevelInput = {
@@ -499535,6 +502625,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutLevelInput = {
@@ -499952,6 +503047,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutPositionCPVInput = {
@@ -500100,6 +503200,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutPositionCPVInput = {
@@ -500598,6 +503703,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutAcademicRankTypeInput = {
@@ -500746,6 +503856,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutAcademicRankTypeInput = {
@@ -501190,6 +504305,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutAcademicDegreeTypeInput = {
@@ -501338,6 +504458,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutAcademicDegreeTypeInput = {
@@ -501781,6 +504906,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutEthnicityInput = {
@@ -501929,6 +505059,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutEthnicityInput = {
@@ -503647,6 +506782,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutReligionInput = {
@@ -503795,6 +506935,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutReligionInput = {
@@ -504303,6 +507448,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutGenderInput = {
@@ -504451,6 +507601,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutGenderInput = {
@@ -504601,89 +507756,6 @@ export namespace Prisma {
     satisfaction: $Enums.Satisfaction
   }
 
-  export type ConversationCreateManyUserInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    name?: string | null
-    sessionId?: string | null
-    type?: $Enums.DocumentType | null
-  }
-
-  export type DocumentCreateManyUploadedByInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    title?: string | null
-    body?: string | null
-    status?: $Enums.DocumentStatus
-    uri?: string | null
-    fileType?: string | null
-    fileSize?: number | null
-    type: $Enums.DocumentType
-    reason?: string | null
-    approvedById?: string | null
-  }
-
-  export type DocumentCreateManyApprovedByInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    title?: string | null
-    body?: string | null
-    status?: $Enums.DocumentStatus
-    uri?: string | null
-    fileType?: string | null
-    fileSize?: number | null
-    type: $Enums.DocumentType
-    reason?: string | null
-    uploadedById: string
-  }
-
-  export type FAQCreateManyUploadedByInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    question?: string | null
-    answer?: string | null
-    status?: $Enums.DocumentStatus
-    type: $Enums.DocumentType
-    reason?: string | null
-    approvedById?: string | null
-  }
-
-  export type FAQCreateManyApprovedByInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    question?: string | null
-    answer?: string | null
-    status?: $Enums.DocumentStatus
-    type: $Enums.DocumentType
-    reason?: string | null
-    uploadedById: string
-  }
-
   export type NotificationUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -504780,257 +507852,6 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     status?: EnumFeedbackStatusFieldUpdateOperationsInput | $Enums.FeedbackStatus
     satisfaction?: EnumSatisfactionFieldUpdateOperationsInput | $Enums.Satisfaction
-  }
-
-  export type ConversationUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
-    session?: UserSessionUpdateOneWithoutConversationNestedInput
-    message?: MessageUpdateManyWithoutConversationNestedInput
-  }
-
-  export type ConversationUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
-    message?: MessageUncheckedUpdateManyWithoutConversationNestedInput
-  }
-
-  export type ConversationUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
-  }
-
-  export type DocumentUpdateWithoutUploadedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    body?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    uri?: NullableStringFieldUpdateOperationsInput | string | null
-    fileType?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    approvedBy?: DM_NhanVienUpdateOneWithoutDocumentApprovedNestedInput
-  }
-
-  export type DocumentUncheckedUpdateWithoutUploadedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    body?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    uri?: NullableStringFieldUpdateOperationsInput | string | null
-    fileType?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type DocumentUncheckedUpdateManyWithoutUploadedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    body?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    uri?: NullableStringFieldUpdateOperationsInput | string | null
-    fileType?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type DocumentUpdateWithoutApprovedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    body?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    uri?: NullableStringFieldUpdateOperationsInput | string | null
-    fileType?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    uploadedBy?: DM_NhanVienUpdateOneRequiredWithoutDocumentUploadedNestedInput
-  }
-
-  export type DocumentUncheckedUpdateWithoutApprovedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    body?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    uri?: NullableStringFieldUpdateOperationsInput | string | null
-    fileType?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    uploadedById?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type DocumentUncheckedUpdateManyWithoutApprovedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    body?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    uri?: NullableStringFieldUpdateOperationsInput | string | null
-    fileType?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    uploadedById?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type FAQUpdateWithoutUploadedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    question?: NullableStringFieldUpdateOperationsInput | string | null
-    answer?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    approvedBy?: DM_NhanVienUpdateOneWithoutFAQApprovedNestedInput
-  }
-
-  export type FAQUncheckedUpdateWithoutUploadedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    question?: NullableStringFieldUpdateOperationsInput | string | null
-    answer?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type FAQUncheckedUpdateManyWithoutUploadedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    question?: NullableStringFieldUpdateOperationsInput | string | null
-    answer?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type FAQUpdateWithoutApprovedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    question?: NullableStringFieldUpdateOperationsInput | string | null
-    answer?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    uploadedBy?: DM_NhanVienUpdateOneRequiredWithoutFAQUploadedNestedInput
-  }
-
-  export type FAQUncheckedUpdateWithoutApprovedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    question?: NullableStringFieldUpdateOperationsInput | string | null
-    answer?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    uploadedById?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type FAQUncheckedUpdateManyWithoutApprovedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    question?: NullableStringFieldUpdateOperationsInput | string | null
-    answer?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    uploadedById?: StringFieldUpdateOperationsInput | string
   }
 
   export type HocViCreateManyNationalityInput = {
@@ -505371,6 +508192,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNationalityInput = {
@@ -505519,6 +508345,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutNationalityInput = {
@@ -506299,6 +509130,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutProvinceHometownInput = {
@@ -506447,6 +509283,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutProvinceHometownInput = {
@@ -506713,6 +509554,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutProvinceOfBirthInput = {
@@ -506861,6 +509707,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutProvinceOfBirthInput = {
@@ -507127,6 +509978,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutProvincePermanentAddressInput = {
@@ -507275,6 +510131,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutProvincePermanentAddressInput = {
@@ -507541,6 +510402,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutProvinceCurrentAddressInput = {
@@ -507689,6 +510555,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutProvinceCurrentAddressInput = {
@@ -508427,6 +511298,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNewProvinceHometownInput = {
@@ -508575,6 +511451,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutNewProvinceHometownInput = {
@@ -508841,6 +511722,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNewProvinceOfBirthInput = {
@@ -508989,6 +511875,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutNewProvinceOfBirthInput = {
@@ -509255,6 +512146,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNewProvincePermanentAddressInput = {
@@ -509403,6 +512299,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutNewProvincePermanentAddressInput = {
@@ -509669,6 +512570,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNewProvinceCurrentAddressInput = {
@@ -509817,6 +512723,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutNewProvinceCurrentAddressInput = {
@@ -510555,6 +513466,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutDistrictHometownInput = {
@@ -510703,6 +513619,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutDistrictHometownInput = {
@@ -510969,6 +513890,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutDistrictOfBirthInput = {
@@ -511117,6 +514043,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutDistrictOfBirthInput = {
@@ -511383,6 +514314,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutDistrictPermanentAddressInput = {
@@ -511531,6 +514467,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutDistrictPermanentAddressInput = {
@@ -511797,6 +514738,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutDistrictCurrentAddressInput = {
@@ -511945,6 +514891,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutDistrictCurrentAddressInput = {
@@ -512683,6 +515634,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutCommuneHometownInput = {
@@ -512831,6 +515787,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutCommuneHometownInput = {
@@ -513097,6 +516058,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutCommuneOfBirthInput = {
@@ -513245,6 +516211,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutCommuneOfBirthInput = {
@@ -513511,6 +516482,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutCommunePermanentAddressInput = {
@@ -513659,6 +516635,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutCommunePermanentAddressInput = {
@@ -513925,6 +516906,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutCommuneCurrentAddressInput = {
@@ -514073,6 +517059,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutCommuneCurrentAddressInput = {
@@ -514811,6 +517802,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNewCommuneHometownInput = {
@@ -514959,6 +517955,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutNewCommuneHometownInput = {
@@ -515225,6 +518226,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNewCommuneOfBirthInput = {
@@ -515373,6 +518379,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutNewCommuneOfBirthInput = {
@@ -515639,6 +518650,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNewCommunePermanentAddressInput = {
@@ -515787,6 +518803,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutNewCommunePermanentAddressInput = {
@@ -516053,6 +519074,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNewCommuneCurrentAddressInput = {
@@ -516201,6 +519227,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutNewCommuneCurrentAddressInput = {
@@ -516763,6 +519794,89 @@ export namespace Prisma {
     mimeType: string
     size: bigint | number
     evidenceId: string
+  }
+
+  export type DocumentCreateManyUploadedByInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    title?: string | null
+    body?: string | null
+    status?: $Enums.DocumentStatus
+    uri?: string | null
+    fileType?: string | null
+    fileSize?: number | null
+    type: $Enums.DocumentType
+    reason?: string | null
+    approvedById?: string | null
+  }
+
+  export type DocumentCreateManyApprovedByInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    title?: string | null
+    body?: string | null
+    status?: $Enums.DocumentStatus
+    uri?: string | null
+    fileType?: string | null
+    fileSize?: number | null
+    type: $Enums.DocumentType
+    reason?: string | null
+    uploadedById: string
+  }
+
+  export type FAQCreateManyUploadedByInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    question?: string | null
+    answer?: string | null
+    status?: $Enums.DocumentStatus
+    type: $Enums.DocumentType
+    reason?: string | null
+    approvedById?: string | null
+  }
+
+  export type FAQCreateManyApprovedByInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    question?: string | null
+    answer?: string | null
+    status?: $Enums.DocumentStatus
+    type: $Enums.DocumentType
+    reason?: string | null
+    uploadedById: string
+  }
+
+  export type ConversationCreateManyUserInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name?: string | null
+    sessionId?: string | null
+    type?: $Enums.DocumentType | null
   }
 
   export type RelativeUpdateWithoutUserProfileInput = {
@@ -518139,6 +521253,257 @@ export namespace Prisma {
     mimeType?: StringFieldUpdateOperationsInput | string
     size?: BigIntFieldUpdateOperationsInput | bigint | number
     evidenceId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DocumentUpdateWithoutUploadedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    uri?: NullableStringFieldUpdateOperationsInput | string | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: UserProfileUpdateOneWithoutDocumentsApprovedNestedInput
+  }
+
+  export type DocumentUncheckedUpdateWithoutUploadedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    uri?: NullableStringFieldUpdateOperationsInput | string | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DocumentUncheckedUpdateManyWithoutUploadedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    uri?: NullableStringFieldUpdateOperationsInput | string | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DocumentUpdateWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    uri?: NullableStringFieldUpdateOperationsInput | string | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedBy?: UserProfileUpdateOneRequiredWithoutDocumentsUploadedNestedInput
+  }
+
+  export type DocumentUncheckedUpdateWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    uri?: NullableStringFieldUpdateOperationsInput | string | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedById?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DocumentUncheckedUpdateManyWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    uri?: NullableStringFieldUpdateOperationsInput | string | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedById?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FAQUpdateWithoutUploadedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    question?: NullableStringFieldUpdateOperationsInput | string | null
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: UserProfileUpdateOneWithoutFaqsApprovedNestedInput
+  }
+
+  export type FAQUncheckedUpdateWithoutUploadedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    question?: NullableStringFieldUpdateOperationsInput | string | null
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FAQUncheckedUpdateManyWithoutUploadedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    question?: NullableStringFieldUpdateOperationsInput | string | null
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FAQUpdateWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    question?: NullableStringFieldUpdateOperationsInput | string | null
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedBy?: UserProfileUpdateOneRequiredWithoutFaqsUploadedNestedInput
+  }
+
+  export type FAQUncheckedUpdateWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    question?: NullableStringFieldUpdateOperationsInput | string | null
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedById?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FAQUncheckedUpdateManyWithoutApprovedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    question?: NullableStringFieldUpdateOperationsInput | string | null
+    answer?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedById?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ConversationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
+    session?: UserSessionUpdateOneWithoutConversationNestedInput
+    message?: MessageUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
+    message?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+  }
+
+  export type ConversationUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
   }
 
   export type LecturerCreateManyLecturerTypeInput = {
@@ -524915,6 +528280,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutTrinhDoHocVanInput = {
@@ -525063,6 +528433,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutTrinhDoHocVanInput = {
@@ -525903,6 +529278,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutChiHuyQuanLyInput = {
@@ -526051,6 +529431,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutChiHuyQuanLyInput = {
@@ -526435,6 +529820,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutChuyenMonKyThuatInput = {
@@ -526583,6 +529973,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutChuyenMonKyThuatInput = {
@@ -526967,6 +530362,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutSucKhoeInput = {
@@ -527115,6 +530515,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutSucKhoeInput = {
@@ -527499,6 +530904,11 @@ export namespace Prisma {
     staffs?: StaffUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNhomMauInput = {
@@ -527647,6 +531057,11 @@ export namespace Prisma {
     staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
     staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
     evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+    documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+    faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+    faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateManyWithoutNhomMauInput = {

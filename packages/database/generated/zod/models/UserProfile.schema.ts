@@ -156,6 +156,11 @@ const relationSchema = z.object({
     staffs: z.record(z.unknown()).optional(),
     staffHistory: z.array(z.unknown()).optional(),
     evidenceFiles: z.array(z.unknown()).optional(),
+    documentsUploaded: z.array(z.unknown()).optional(),
+    documentsApproved: z.array(z.unknown()).optional(),
+    faqsUploaded: z.array(z.unknown()).optional(),
+    faqsApproved: z.array(z.unknown()).optional(),
+    conversations: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
