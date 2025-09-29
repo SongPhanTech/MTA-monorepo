@@ -1008,7 +1008,6 @@ model TrainingCourse {
 /// Quy chế động của khoá
 model TrainingCourseRegulation {
   id               String         @id() @default(cuid())
-  code             String?        @unique()
   active           Boolean        @default(true)
   description      String?        @db.Text()
   deletedAt        DateTime?
@@ -1016,6 +1015,7 @@ model TrainingCourseRegulation {
   updatedAt        DateTime       @default(now()) @updatedAt()
   trainingCourse   TrainingCourse @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId String
+  code             String
   name             String
   value            Float
 

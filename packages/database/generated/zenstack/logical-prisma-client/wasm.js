@@ -442,13 +442,13 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
 
 exports.Prisma.TrainingCourseRegulationScalarFieldEnum = {
   id: 'id',
-  code: 'code',
   active: 'active',
   description: 'description',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   trainingCourseId: 'trainingCourseId',
+  code: 'code',
   name: 'name',
   value: 'value'
 };
@@ -3932,9 +3932,9 @@ exports.Prisma.TrainingCourseOrderByRelevanceFieldEnum = {
 
 exports.Prisma.TrainingCourseRegulationOrderByRelevanceFieldEnum = {
   id: 'id',
-  code: 'code',
   description: 'description',
   trainingCourseId: 'trainingCourseId',
+  code: 'code',
   name: 'name'
 };
 

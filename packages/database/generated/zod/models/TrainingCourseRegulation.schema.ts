@@ -8,12 +8,12 @@
 import { z } from 'zod';
 const baseSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    code: z.string(),
     name: z.string(),
     value: z.number(),
 }
@@ -52,12 +52,12 @@ export const TrainingCourseRegulationPrismaCreateSchema = baseSchema.partial().p
  */
 export const TrainingCourseRegulationPrismaUpdateSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    code: z.string(),
     name: z.string(),
     value: z.union([z.number(), z.record(z.unknown())])
 }).partial().passthrough();

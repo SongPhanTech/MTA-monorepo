@@ -5656,13 +5656,13 @@ export namespace Prisma {
     };
     export const TrainingCourseRegulationScalarFieldEnum: {
         id: 'id',
-        code: 'code',
         active: 'active',
         description: 'description',
         deletedAt: 'deletedAt',
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
         trainingCourseId: 'trainingCourseId',
+        code: 'code',
         name: 'name',
         value: 'value'
     };
@@ -8920,9 +8920,9 @@ export namespace Prisma {
     };
     export const TrainingCourseRegulationOrderByRelevanceFieldEnum: {
         id: 'id',
-        code: 'code',
         description: 'description',
         trainingCourseId: 'trainingCourseId',
+        code: 'code',
         name: 'name'
     };
     export const FixedClassOrderByRelevanceFieldEnum: {
@@ -19289,13 +19289,13 @@ export namespace Prisma {
      */
     interface TrainingCourseRegulationFieldRefs {
         readonly id: FieldRef<"TrainingCourseRegulation", 'String'>;
-        readonly code: FieldRef<"TrainingCourseRegulation", 'String'>;
         readonly active: FieldRef<"TrainingCourseRegulation", 'Boolean'>;
         readonly description: FieldRef<"TrainingCourseRegulation", 'String'>;
         readonly deletedAt: FieldRef<"TrainingCourseRegulation", 'DateTime'>;
         readonly createdAt: FieldRef<"TrainingCourseRegulation", 'DateTime'>;
         readonly updatedAt: FieldRef<"TrainingCourseRegulation", 'DateTime'>;
         readonly trainingCourseId: FieldRef<"TrainingCourseRegulation", 'String'>;
+        readonly code: FieldRef<"TrainingCourseRegulation", 'String'>;
         readonly name: FieldRef<"TrainingCourseRegulation", 'String'>;
         readonly value: FieldRef<"TrainingCourseRegulation", 'Float'>;
     }
@@ -135122,37 +135122,37 @@ export namespace Prisma {
     };
     export type TrainingCourseRegulationMinAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
         trainingCourseId: string | null
+        code: string | null
         name: string | null
         value: number | null
     };
     export type TrainingCourseRegulationMaxAggregateOutputType = {
         id: string | null
-        code: string | null
         active: boolean | null
         description: string | null
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
         trainingCourseId: string | null
+        code: string | null
         name: string | null
         value: number | null
     };
     export type TrainingCourseRegulationCountAggregateOutputType = {
         id: number
-        code: number
         active: number
         description: number
         deletedAt: number
         createdAt: number
         updatedAt: number
         trainingCourseId: number
+        code: number
         name: number
         value: number
         _all: number
@@ -135165,37 +135165,37 @@ export namespace Prisma {
     };
     export type TrainingCourseRegulationMinAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
         trainingCourseId?: true
+        code?: true
         name?: true
         value?: true
     };
     export type TrainingCourseRegulationMaxAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
         trainingCourseId?: true
+        code?: true
         name?: true
         value?: true
     };
     export type TrainingCourseRegulationCountAggregateInputType = {
         id?: true
-        code?: true
         active?: true
         description?: true
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
         trainingCourseId?: true
+        code?: true
         name?: true
         value?: true
         _all?: true
@@ -135282,13 +135282,13 @@ export namespace Prisma {
     };
     export type TrainingCourseRegulationGroupByOutputType = {
         id: string
-        code: string | null
         active: boolean
         description: string | null
         deletedAt: Date | null
         createdAt: Date
         updatedAt: Date
         trainingCourseId: string
+        code: string
         name: string
         value: number
         _count: TrainingCourseRegulationCountAggregateOutputType | null
@@ -135311,56 +135311,56 @@ export namespace Prisma {
     >;
     export type TrainingCourseRegulationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         trainingCourseId?: boolean
+        code?: boolean
         name?: boolean
         value?: boolean
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["trainingCourseRegulation"]>;
     export type TrainingCourseRegulationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         trainingCourseId?: boolean
+        code?: boolean
         name?: boolean
         value?: boolean
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["trainingCourseRegulation"]>;
     export type TrainingCourseRegulationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         trainingCourseId?: boolean
+        code?: boolean
         name?: boolean
         value?: boolean
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["trainingCourseRegulation"]>;
     export type TrainingCourseRegulationSelectScalar = {
         id?: boolean
-        code?: boolean
         active?: boolean
         description?: boolean
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
         trainingCourseId?: boolean
+        code?: boolean
         name?: boolean
         value?: boolean
     };
-    export type TrainingCourseRegulationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "trainingCourseId" | "name" | "value", ExtArgs["result"]["trainingCourseRegulation"]>;
+    export type TrainingCourseRegulationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "trainingCourseId" | "code" | "name" | "value", ExtArgs["result"]["trainingCourseRegulation"]>;
     export type TrainingCourseRegulationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
     };
@@ -135377,13 +135377,13 @@ export namespace Prisma {
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
-            code: string | null
             active: boolean
             description: string | null
             deletedAt: Date | null
             createdAt: Date
             updatedAt: Date
             trainingCourseId: string
+            code: string
             name: string
             value: number
         }, ExtArgs["result"]["trainingCourseRegulation"]>
@@ -290114,26 +290114,26 @@ export namespace Prisma {
         OR?: TrainingCourseRegulationWhereInput[]
         NOT?: TrainingCourseRegulationWhereInput | TrainingCourseRegulationWhereInput[]
         id?: StringFilter<"TrainingCourseRegulation"> | string
-        code?: StringNullableFilter<"TrainingCourseRegulation"> | string | null
         active?: BoolFilter<"TrainingCourseRegulation"> | boolean
         description?: StringNullableFilter<"TrainingCourseRegulation"> | string | null
         deletedAt?: DateTimeNullableFilter<"TrainingCourseRegulation"> | Date | string | null
         createdAt?: DateTimeFilter<"TrainingCourseRegulation"> | Date | string
         updatedAt?: DateTimeFilter<"TrainingCourseRegulation"> | Date | string
         trainingCourseId?: StringFilter<"TrainingCourseRegulation"> | string
+        code?: StringFilter<"TrainingCourseRegulation"> | string
         name?: StringFilter<"TrainingCourseRegulation"> | string
         value?: FloatFilter<"TrainingCourseRegulation"> | number
         trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
     };
     export type TrainingCourseRegulationOrderByWithRelationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         trainingCourseId?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         value?: SortOrder
         trainingCourse?: TrainingCourseOrderByWithRelationInput
@@ -290141,7 +290141,6 @@ export namespace Prisma {
     };
     export type TrainingCourseRegulationWhereUniqueInput = Prisma.AtLeast<{
         id?: string
-        code?: string
         AND?: TrainingCourseRegulationWhereInput | TrainingCourseRegulationWhereInput[]
         OR?: TrainingCourseRegulationWhereInput[]
         NOT?: TrainingCourseRegulationWhereInput | TrainingCourseRegulationWhereInput[]
@@ -290151,19 +290150,20 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"TrainingCourseRegulation"> | Date | string
         updatedAt?: DateTimeFilter<"TrainingCourseRegulation"> | Date | string
         trainingCourseId?: StringFilter<"TrainingCourseRegulation"> | string
+        code?: StringFilter<"TrainingCourseRegulation"> | string
         name?: StringFilter<"TrainingCourseRegulation"> | string
         value?: FloatFilter<"TrainingCourseRegulation"> | number
         trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
-    }, "id" | "code">;
+    }, "id">;
     export type TrainingCourseRegulationOrderByWithAggregationInput = {
         id?: SortOrder
-        code?: SortOrderInput | SortOrder
         active?: SortOrder
         description?: SortOrderInput | SortOrder
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         trainingCourseId?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         value?: SortOrder
         _count?: TrainingCourseRegulationCountOrderByAggregateInput
@@ -290177,13 +290177,13 @@ export namespace Prisma {
         OR?: TrainingCourseRegulationScalarWhereWithAggregatesInput[]
         NOT?: TrainingCourseRegulationScalarWhereWithAggregatesInput | TrainingCourseRegulationScalarWhereWithAggregatesInput[]
         id?: StringWithAggregatesFilter<"TrainingCourseRegulation"> | string
-        code?: StringNullableWithAggregatesFilter<"TrainingCourseRegulation"> | string | null
         active?: BoolWithAggregatesFilter<"TrainingCourseRegulation"> | boolean
         description?: StringNullableWithAggregatesFilter<"TrainingCourseRegulation"> | string | null
         deletedAt?: DateTimeNullableWithAggregatesFilter<"TrainingCourseRegulation"> | Date | string | null
         createdAt?: DateTimeWithAggregatesFilter<"TrainingCourseRegulation"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"TrainingCourseRegulation"> | Date | string
         trainingCourseId?: StringWithAggregatesFilter<"TrainingCourseRegulation"> | string
+        code?: StringWithAggregatesFilter<"TrainingCourseRegulation"> | string
         name?: StringWithAggregatesFilter<"TrainingCourseRegulation"> | string
         value?: FloatWithAggregatesFilter<"TrainingCourseRegulation"> | number
     };
@@ -312459,84 +312459,84 @@ export namespace Prisma {
     };
     export type TrainingCourseRegulationCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         value: number
         trainingCourse: TrainingCourseCreateNestedOneWithoutTrainingCourseRegulationInput
     };
     export type TrainingCourseRegulationUncheckedCreateInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         trainingCourseId: string
+        code: string
         name: string
         value: number
     };
     export type TrainingCourseRegulationUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         value?: FloatFieldUpdateOperationsInput | number
         trainingCourse?: TrainingCourseUpdateOneRequiredWithoutTrainingCourseRegulationNestedInput
     };
     export type TrainingCourseRegulationUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         trainingCourseId?: StringFieldUpdateOperationsInput | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         value?: FloatFieldUpdateOperationsInput | number
     };
     export type TrainingCourseRegulationCreateManyInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
         trainingCourseId: string
+        code: string
         name: string
         value: number
     };
     export type TrainingCourseRegulationUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         value?: FloatFieldUpdateOperationsInput | number
     };
     export type TrainingCourseRegulationUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         trainingCourseId?: StringFieldUpdateOperationsInput | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         value?: FloatFieldUpdateOperationsInput | number
     };
@@ -336976,13 +336976,13 @@ export namespace Prisma {
     };
     export type TrainingCourseRegulationCountOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         trainingCourseId?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         value?: SortOrder
     };
@@ -336991,25 +336991,25 @@ export namespace Prisma {
     };
     export type TrainingCourseRegulationMaxOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         trainingCourseId?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         value?: SortOrder
     };
     export type TrainingCourseRegulationMinOrderByAggregateInput = {
         id?: SortOrder
-        code?: SortOrder
         active?: SortOrder
         description?: SortOrder
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
         trainingCourseId?: SortOrder
+        code?: SortOrder
         name?: SortOrder
         value?: SortOrder
     };
@@ -374779,23 +374779,23 @@ export namespace Prisma {
     };
     export type TrainingCourseRegulationCreateWithoutTrainingCourseInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         value: number
     };
     export type TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         value: number
     };
@@ -375307,13 +375307,13 @@ export namespace Prisma {
         OR?: TrainingCourseRegulationScalarWhereInput[]
         NOT?: TrainingCourseRegulationScalarWhereInput | TrainingCourseRegulationScalarWhereInput[]
         id?: StringFilter<"TrainingCourseRegulation"> | string
-        code?: StringNullableFilter<"TrainingCourseRegulation"> | string | null
         active?: BoolFilter<"TrainingCourseRegulation"> | boolean
         description?: StringNullableFilter<"TrainingCourseRegulation"> | string | null
         deletedAt?: DateTimeNullableFilter<"TrainingCourseRegulation"> | Date | string | null
         createdAt?: DateTimeFilter<"TrainingCourseRegulation"> | Date | string
         updatedAt?: DateTimeFilter<"TrainingCourseRegulation"> | Date | string
         trainingCourseId?: StringFilter<"TrainingCourseRegulation"> | string
+        code?: StringFilter<"TrainingCourseRegulation"> | string
         name?: StringFilter<"TrainingCourseRegulation"> | string
         value?: FloatFilter<"TrainingCourseRegulation"> | number
     };
@@ -454231,12 +454231,12 @@ export namespace Prisma {
     };
     export type TrainingCourseRegulationCreateManyTrainingCourseInput = {
         id?: string
-        code?: string | null
         active?: boolean
         description?: string | null
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        code: string
         name: string
         value: number
     };
@@ -454339,34 +454339,34 @@ export namespace Prisma {
     };
     export type TrainingCourseRegulationUpdateWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         value?: FloatFieldUpdateOperationsInput | number
     };
     export type TrainingCourseRegulationUncheckedUpdateWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         value?: FloatFieldUpdateOperationsInput | number
     };
     export type TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
         description?: NullableStringFieldUpdateOperationsInput | string | null
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
         name?: StringFieldUpdateOperationsInput | string
         value?: FloatFieldUpdateOperationsInput | number
     };

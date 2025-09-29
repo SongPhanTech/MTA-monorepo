@@ -402,7 +402,6 @@ const PutTrainingCourseModal = () => {
                 schoolYearId: level.semesterStart?.schoolYearId,
             })
         } else if (selectedTrainingCourse) {
-            //TODO: clone trainingCourse
             form.setFieldsValue({
                 coef_1: selectedTrainingCourse.coef_1,
                 coef_2: selectedTrainingCourse.coef_2,

@@ -3699,15 +3699,6 @@ declare const metadata: {
                         }[];
                     }[];
                 };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
                 active: {
                     name: string;
                     type: string;
@@ -3776,6 +3767,10 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
+                code: {
+                    name: string;
+                    type: string;
+                };
                 name: {
                     name: string;
                     type: string;
@@ -3787,10 +3782,6 @@ declare const metadata: {
             };
             uniqueConstraints: {
                 id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
                     name: string;
                     fields: string[];
                 };

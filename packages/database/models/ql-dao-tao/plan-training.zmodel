@@ -220,9 +220,10 @@ model TrainingCourse extends Base {
 }
 
 /// Quy chế động của khoá
-model TrainingCourseRegulation extends Base {
+model TrainingCourseRegulation extends BaseNoCode {
   trainingCourse   TrainingCourse @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId String
+  code             String
   name             String
   value            Float
   @@schema("ql-dao-tao")
