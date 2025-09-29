@@ -309,7 +309,11 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                                 width: 120,
                                 align: 'center',
                                 fixed: 'right',
-                                render: (record) => record?.increasedFrom || '-',
+                                render: (record) => (
+                                    <Tag color={getWarningLevelColor(record?.increasedFrom)}>
+                                        {record?.increasedFrom || '-'}
+                                    </Tag>
+                                ),
                             },
                             {
                                 title: 'Nguyên do',
