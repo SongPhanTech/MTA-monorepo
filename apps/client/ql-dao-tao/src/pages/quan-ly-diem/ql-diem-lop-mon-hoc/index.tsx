@@ -33,6 +33,7 @@ interface Item {
     name: string
     id: string
     lecture?: string
+    count?: number
 }
 
 interface FlatListProps {
@@ -97,6 +98,7 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
             </h3>
             <p>{item.code}</p>
             <p>{item.lecture}</p>
+            {!!item.count && <p>Số SV/HV: {item.count}</p>}
         </div>
     )
 
@@ -295,6 +297,15 @@ export default function SubjectClassScore() {
                     },
                 },
             },
+            _count: {
+                select: {
+                    subjectClassStudent: {
+                        where: {
+                            deletedAt: null,
+                        },
+                    },
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
@@ -453,6 +464,7 @@ export default function SubjectClassScore() {
                     'Bạn có thay đổi chưa được lưu. Bạn có chắc muốn rời đi?'
                 )
                 if (!shouldProceed) {
+                    setHasUnsavedChanges(false)
                     return
                 }
             }
@@ -777,6 +789,7 @@ export default function SubjectClassScore() {
                                       lastName: '',
                                   },
                               },
+                        count: item._count.subjectClassStudent,
                     }))}
                     onChangeSelected={handleChangeFixedClass}
                     selectedItem={selectedFixedClass}
