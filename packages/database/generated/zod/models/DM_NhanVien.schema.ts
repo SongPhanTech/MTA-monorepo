@@ -47,11 +47,6 @@ const relationSchema = z.object({
     group: z.record(z.unknown()).optional(),
     notification: z.array(z.unknown()).optional(),
     feedback: z.array(z.unknown()).optional(),
-    conversation: z.array(z.unknown()).optional(),
-    documentUploaded: z.array(z.unknown()).optional(),
-    documentApproved: z.array(z.unknown()).optional(),
-    fAQUploaded: z.array(z.unknown()).optional(),
-    fAQApproved: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

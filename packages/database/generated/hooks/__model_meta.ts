@@ -5975,11 +5975,11 @@ const metadata = {
                     isOptional: true,
                 }, uploadedBy: {
                     name: "uploadedBy",
-                    type: "DM_NhanVien",
+                    type: "UserProfile",
                     isDataModel: true,
-                    backLink: 'documentUploaded',
+                    backLink: 'documentsUploaded',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "uploadedById" },
+                    foreignKeyMapping: { "id": "uploadedById" },
                 }, uploadedById: {
                     name: "uploadedById",
                     type: "String",
@@ -5989,12 +5989,12 @@ const metadata = {
                     relationField: 'uploadedBy',
                 }, approvedBy: {
                     name: "approvedBy",
-                    type: "DM_NhanVien",
+                    type: "UserProfile",
                     isDataModel: true,
                     isOptional: true,
-                    backLink: 'documentApproved',
+                    backLink: 'documentsApproved',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "approvedById" },
+                    foreignKeyMapping: { "id": "approvedById" },
                 }, approvedById: {
                     name: "approvedById",
                     type: "String",
@@ -6064,11 +6064,11 @@ const metadata = {
                     isOptional: true,
                 }, uploadedBy: {
                     name: "uploadedBy",
-                    type: "DM_NhanVien",
+                    type: "UserProfile",
                     isDataModel: true,
-                    backLink: 'fAQUploaded',
+                    backLink: 'faqsUploaded',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "uploadedById" },
+                    foreignKeyMapping: { "id": "uploadedById" },
                 }, uploadedById: {
                     name: "uploadedById",
                     type: "String",
@@ -6078,12 +6078,12 @@ const metadata = {
                     relationField: 'uploadedBy',
                 }, approvedBy: {
                     name: "approvedBy",
-                    type: "DM_NhanVien",
+                    type: "UserProfile",
                     isDataModel: true,
                     isOptional: true,
-                    backLink: 'fAQApproved',
+                    backLink: 'faqsApproved',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "approvedById" },
+                    foreignKeyMapping: { "id": "approvedById" },
                 }, approvedById: {
                     name: "approvedById",
                     type: "String",
@@ -6195,12 +6195,12 @@ const metadata = {
                     isOptional: true,
                 }, user: {
                     name: "user",
-                    type: "DM_NhanVien",
+                    type: "UserProfile",
                     isDataModel: true,
                     isOptional: true,
-                    backLink: 'conversation',
+                    backLink: 'conversations',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "Id": "userId" },
+                    foreignKeyMapping: { "id": "userId" },
                 }, userId: {
                     name: "userId",
                     type: "String",
@@ -7872,36 +7872,6 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'user',
-                }, conversation: {
-                    name: "conversation",
-                    type: "Conversation",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'user',
-                }, documentUploaded: {
-                    name: "documentUploaded",
-                    type: "Document",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'uploadedBy',
-                }, documentApproved: {
-                    name: "documentApproved",
-                    type: "Document",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'approvedBy',
-                }, fAQUploaded: {
-                    name: "fAQUploaded",
-                    type: "FAQ",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'uploadedBy',
-                }, fAQApproved: {
-                    name: "fAQApproved",
-                    type: "FAQ",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'approvedBy',
                 },
             }, uniqueConstraints: {
                 Id: {
@@ -9954,6 +9924,36 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'userProfile',
+                }, documentsUploaded: {
+                    name: "documentsUploaded",
+                    type: "Document",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'uploadedBy',
+                }, documentsApproved: {
+                    name: "documentsApproved",
+                    type: "Document",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'approvedBy',
+                }, faqsUploaded: {
+                    name: "faqsUploaded",
+                    type: "FAQ",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'uploadedBy',
+                }, faqsApproved: {
+                    name: "faqsApproved",
+                    type: "FAQ",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'approvedBy',
+                }, conversations: {
+                    name: "conversations",
+                    type: "Conversation",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'user',
                 },
             }, uniqueConstraints: {
                 id: {

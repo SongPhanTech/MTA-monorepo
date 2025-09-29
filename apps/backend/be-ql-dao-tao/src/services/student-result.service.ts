@@ -396,9 +396,6 @@ const ThongTinTichLuy = async (
             tongTinChiMoTrongKy: 0,
             tongTinChiNoTichLuy: 0, // Số tín chỉ nợ tích lũy
         }
-    } finally {
-        await prisma.$disconnect()
-        // console.log('Đã hoàn thành việc lấy thông tin tích lũy cho sinh viên:', studentId)
     }
 }
 
@@ -533,6 +530,11 @@ const ThongTinDiemHocKy = async (
             },
         })
 
+        console.log(
+            111,
+            DsDiem.map((item) => item.manualFinalScore || item.finalScore)
+        )
+
         // Danh sách chuyển đổi
         const DsDiemChuyenDoi = await prisma.scoreConvert.findMany({
             where: {
@@ -582,6 +584,7 @@ const ThongTinDiemHocKy = async (
             }
 
             const soTinChi = item.subjectVersion.credit // Số tín chỉ của môn học
+
             if (!checkScorePassed(AcademicRankingBaseType.Base10, diemHe10, DsDiemChuyenDoi)) {
                 soTinChiKhongDat += soTinChi // Cộng dồn số tín chỉ không đạt
             } else {
@@ -635,9 +638,6 @@ const ThongTinDiemHocKy = async (
             soTinChiDat: 0, // Số tín chỉ đạt trong kỳ
             soTinChiKhongDat: 0, // Số tín chỉ không đạt trong kỳ
         }
-    } finally {
-        await prisma.$disconnect()
-        // console.log('Đã hoàn thành việc lấy thông tin điểm cho sinh viên:', studentId)
     }
 }
 
@@ -898,9 +898,6 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
     } catch (error) {
         console.error('Lỗi khi tính toán kết quả học kỳ:', error)
         throw error // Ném lỗi để xử lý ở nơi gọi hàm
-    } finally {
-        await prisma.$disconnect()
-        console.log('Đã hoàn thành việc tính toán kết quả học kỳ cho tất cả sinh viên.')
     }
 }
 
@@ -1070,9 +1067,6 @@ export const listStudentResultInfo = async (semesterId: string) => {
     } catch (error) {
         console.error('Error fetching student info:', error)
         throw new Error('Failed to fetch student information')
-    } finally {
-        // Đóng kết nối Prisma nếu cần thiết
-        await prisma.$disconnect()
     }
 }
 
