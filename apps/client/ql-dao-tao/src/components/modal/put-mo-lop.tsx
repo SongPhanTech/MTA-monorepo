@@ -9,7 +9,6 @@ import {
     useCreateManySubjectClass,
     useFindManyRoom,
     useFindManySubjectClass,
-    useFindManyTrainingLocation,
     useFindUniqueSubjectVersion,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
@@ -217,8 +216,6 @@ const PutOpenClassModal = () => {
     }
 
     const handleChangeLocation = (value: string, key: string) => {}
-    const { data: trainingLocationData = [], refetch: refetchTrainingLocationData } =
-        useFindManyTrainingLocation()
 
     const TrainingLocationForm = Form.useWatch('trainingLocationId', form)
 

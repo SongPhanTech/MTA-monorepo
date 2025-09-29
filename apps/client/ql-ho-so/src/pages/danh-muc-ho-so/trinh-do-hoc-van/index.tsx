@@ -29,7 +29,7 @@ export default function EducationalLevel() {
     })
 
     const { data = [], refetch } = useFindManyDM_TrinhDoHocVan()
-    const { data: count } = useCountDM_TrinhDoHocVan()
+    const { data: count } = useCountDM_TrinhDoHocVan({ where: { deletedAt: null } })
     const { mutateAsync: updateTrinhDoHocVan } = useUpdateDM_TrinhDoHocVan()
 
     const handleModal = () => {

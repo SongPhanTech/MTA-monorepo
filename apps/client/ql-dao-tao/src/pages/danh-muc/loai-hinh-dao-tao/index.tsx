@@ -53,6 +53,7 @@ export default function TrainingTypePage() {
                       },
                   }
                 : {}),
+            deletedAt: null,
         },
     })
 

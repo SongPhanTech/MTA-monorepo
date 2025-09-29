@@ -113,9 +113,11 @@ const PutOneSubjectClassModal = () => {
         })
     }
 
-    const { data: trainingLocationData = [] } = useFindManyTrainingLocation()
+    const { data: trainingLocationData = [] } = useFindManyTrainingLocation({
+        where: { active: true },
+    })
 
-    const { data: subjectVersionData = [] } = useFindManySubjectVersion({})
+    const { data: subjectVersionData = [] } = useFindManySubjectVersion({ where: { active: true } })
 
     const { data: semesterData = [] } = useFindManySemester({
         include: { schoolYear: { select: { name: true } } },
@@ -126,6 +128,7 @@ const PutOneSubjectClassModal = () => {
 
     const { data: roomData = [] } = useFindManyRoom({
         where: {
+            active: true,
             trainingRoom: true,
             building: {
                 trainingLocationId,
@@ -267,6 +270,11 @@ const PutOneSubjectClassModal = () => {
                                 value: item.id,
                             }
                         })}
+                        onChange={() => {
+                            form.setFieldsValue({
+                                roomId: undefined,
+                            })
+                        }}
                         allowClear
                     />
                 </FormItem>
@@ -274,7 +282,7 @@ const PutOneSubjectClassModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="roomId" label="Chọn phòng học" required>
                     <Select
-                        placeholder="Chọn kíp học"
+                        placeholder="Chọn phòng học"
                         options={roomData.map((item) => {
                             return {
                                 label: item.name,

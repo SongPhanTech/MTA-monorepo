@@ -232,6 +232,7 @@ const AddStudentToFixedClassModal = () => {
                     },
                 ],
             },
+            deletedAt: null,
         },
     })
 

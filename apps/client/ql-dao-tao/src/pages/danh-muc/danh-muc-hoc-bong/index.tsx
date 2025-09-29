@@ -115,7 +115,10 @@ export default function Scholarship() {
     })
 
     const { data: count } = useCountScholarship({
-        where,
+        where: {
+            ...where,
+            deletedAt: null,
+        },
     })
 
     const debouncedRefetch = useCallback(

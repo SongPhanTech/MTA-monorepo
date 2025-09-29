@@ -126,7 +126,7 @@ export default function AcademicActionConfig() {
     })
 
     const { data: count } = useCountTrainingCourse({
-        where,
+        where: { ...where, deletedAt: null },
     })
 
     const debouncedRefetch = useCallback(

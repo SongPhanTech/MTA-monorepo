@@ -20,7 +20,7 @@ export default function Ngach() {
     })
 
     const { data = [], refetch } = useFindManyDM_Ngach()
-    const { data: count } = useCountDM_Ngach()
+    const { data: count } = useCountDM_Ngach({ where: { deletedAt: null } })
     const { mutateAsync: updateNgach } = useUpdateDM_Ngach()
 
     const handleModal = () => {

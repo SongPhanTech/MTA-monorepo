@@ -20,7 +20,7 @@ export default function HealthType() {
     })
 
     const { data = [], refetch } = useFindManyDM_SucKhoe()
-    const { data: count } = useCountDM_SucKhoe()
+    const { data: count } = useCountDM_SucKhoe({ where: { deletedAt: null } })
     const { mutateAsync: updateSucKhoe } = useUpdateDM_SucKhoe()
 
     const handleModal = () => {

@@ -24,7 +24,11 @@ export default function ManagementCommand() {
     })
 
     const { data = [], refetch } = useFindManyDM_ChiHuyQuanLy()
-    const { data: count } = useCountDM_ChiHuyQuanLy()
+    const { data: count } = useCountDM_ChiHuyQuanLy({
+        where: {
+            deletedAt: null,
+        },
+    })
     const { mutateAsync: updateChiHuyQuanLy } = useUpdateDM_ChiHuyQuanLy()
 
     const handleModal = () => {

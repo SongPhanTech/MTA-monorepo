@@ -24,7 +24,7 @@ export default function WorkingStatus() {
     })
 
     const { data = [], refetch } = useFindManyDM_TinhTrangCongTac()
-    const { data: count } = useCountDM_TinhTrangCongTac()
+    const { data: count } = useCountDM_TinhTrangCongTac({ where: { deletedAt: null } })
     const { mutateAsync: updateTinhTrangCongTac } = useUpdateDM_TinhTrangCongTac()
 
     const handleModal = () => {

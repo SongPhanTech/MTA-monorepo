@@ -84,6 +84,7 @@ export default function TrainingLocationPage() {
                       },
                   }
                 : {}),
+            deletedAt: null,
         },
     })
 

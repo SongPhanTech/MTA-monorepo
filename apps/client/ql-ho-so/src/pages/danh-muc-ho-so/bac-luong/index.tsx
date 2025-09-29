@@ -24,7 +24,11 @@ export default function BacLuong() {
     })
 
     const { data = [], refetch } = useFindManyDM_BacLuong()
-    const { data: count } = useCountDM_BacLuong()
+    const { data: count } = useCountDM_BacLuong({
+        where: {
+            deletedAt: null,
+        },
+    })
     const { mutateAsync: updateBacLuong } = useUpdateDM_BacLuong()
 
     const handleModal = () => {

@@ -24,7 +24,7 @@ export default function NganhHoc() {
     })
 
     const { data = [], refetch } = useFindManyDM_NganhHoc()
-    const { data: count } = useCountDM_NganhHoc()
+    const { data: count } = useCountDM_NganhHoc({ where: { deletedAt: null } })
     const { mutateAsync: updateNganhHoc } = useUpdateDM_NganhHoc()
 
     const handleModal = () => {

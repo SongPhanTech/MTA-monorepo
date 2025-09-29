@@ -419,9 +419,7 @@ const PutTrainingCourseModal = () => {
         } else {
             form.setFieldsValue({
                 active: true,
-                trainingCourseRegulation: [
-                    { name: '', value: undefined, id: undefined, code: undefined },
-                ],
+                trainingCourseRegulation: [],
             })
         }
     }, [level, selectedTrainingCourse])

@@ -49,6 +49,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                 contains: filters.name,
             },
             managementOrganizationId: filters.managementOrganizationId,
+            deletedAt: null,
         },
     })
 

@@ -29,7 +29,7 @@ export default function TypeOfWork() {
     })
 
     const { data = [], refetch } = useFindManyDM_LoaiHinhCongTac()
-    const { data: count } = useCountDM_LoaiHinhCongTac()
+    const { data: count } = useCountDM_LoaiHinhCongTac({ where: { deletedAt: null } })
     const { mutateAsync: updateLoaiHinhCongTac } = useUpdateDM_LoaiHinhCongTac()
 
     const handleModal = () => {

@@ -20,7 +20,7 @@ export default function BloodType() {
     })
 
     const { data = [], refetch } = useFindManyDM_NhomMau()
-    const { data: count } = useCountDM_NhomMau()
+    const { data: count } = useCountDM_NhomMau({ where: { deletedAt: null } })
     const { mutateAsync: updateNhomMau } = useUpdateDM_NhomMau()
 
     const handleModal = () => {

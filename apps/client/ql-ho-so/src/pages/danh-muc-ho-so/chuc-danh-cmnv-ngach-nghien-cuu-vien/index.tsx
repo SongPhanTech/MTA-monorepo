@@ -24,7 +24,7 @@ export default function ProfessionalTitleOfResearcher() {
     })
 
     const { data = [], refetch } = useFindManyDM_ChucDanhCMNVNghienCuuVien()
-    const { data: count } = useCountDM_ChucDanhCMNVNghienCuuVien()
+    const { data: count } = useCountDM_ChucDanhCMNVNghienCuuVien({ where: { deletedAt: null } })
     const { mutateAsync: updateChucDanh } = useUpdateDM_ChucDanhCMNVGiangVien()
 
     const handleModal = () => {

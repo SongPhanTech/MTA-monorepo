@@ -24,7 +24,7 @@ export default function SocialOrganization() {
     })
 
     const { data = [], refetch } = useFindManyDM_ToChucXaHoi()
-    const { data: count } = useCountDM_ToChucXaHoi()
+    const { data: count } = useCountDM_ToChucXaHoi({ where: { deletedAt: null } })
     const { mutateAsync: updateToChucXaHoi } = useUpdateDM_ToChucXaHoi()
 
     const handleModal = () => {

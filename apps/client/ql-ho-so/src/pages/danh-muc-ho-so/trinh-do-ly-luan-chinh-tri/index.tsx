@@ -24,7 +24,7 @@ export default function PoliticalTheoryLevel() {
     })
 
     const { data = [], refetch } = useFindManyDM_TrinhDoLyLuanChinhTri()
-    const { data: count } = useCountDM_TrinhDoLyLuanChinhTri()
+    const { data: count } = useCountDM_TrinhDoLyLuanChinhTri({ where: { deletedAt: null } })
     const { mutateAsync: updateTrinhDoLyLuan } = useUpdateDM_TrinhDoLyLuanChinhTri()
 
     const handleModal = () => {

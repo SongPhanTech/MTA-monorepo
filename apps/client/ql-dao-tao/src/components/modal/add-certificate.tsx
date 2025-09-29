@@ -71,6 +71,7 @@ const PutAddCertificateScoreModal = () => {
                 { name: { contains: filters.searchText, mode: 'insensitive' } },
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
+            deletedAt: null,
         },
     })
 

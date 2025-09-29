@@ -24,7 +24,7 @@ export default function StudyStatus() {
     })
 
     const { data = [], refetch } = useFindManyDM_TinhTrangDiHocTap()
-    const { data: count } = useCountDM_TinhTrangDiHocTap()
+    const { data: count } = useCountDM_TinhTrangDiHocTap({ where: { deletedAt: null } })
     const { mutateAsync: updateTinhTrangDiHocTap } = useUpdateDM_TinhTrangDiHocTap()
 
     const handleModal = () => {

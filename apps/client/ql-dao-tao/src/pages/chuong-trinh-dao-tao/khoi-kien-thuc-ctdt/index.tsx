@@ -58,6 +58,7 @@ export default function TrainingBlock() {
                       ...(filters.active.length === 1 ? { active: filters.active[0] } : {}),
                   }
                 : {}),
+            deletedAt: null,
         },
     })
 

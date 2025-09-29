@@ -47,6 +47,7 @@ export default function TrainingTimePage() {
         where: {
             name: { contains: filters.name, mode: 'insensitive' },
             code: { contains: filters.code, mode: 'insensitive' },
+            deletedAt: null,
         },
     })
 

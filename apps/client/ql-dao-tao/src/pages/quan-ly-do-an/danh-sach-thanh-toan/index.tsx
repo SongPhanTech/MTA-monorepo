@@ -116,6 +116,7 @@ export default function PaymentRecordPage() {
                     ? { councilMember: { role: { in: filters.role } } }
                     : { councilMember: { role: { equals: filters.role } } }
                 : {}),
+            deletedAt: null,
         },
     })
 

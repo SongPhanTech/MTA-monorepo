@@ -104,7 +104,10 @@ export default function ClassRegisterSession() {
     })
 
     const { data: count } = useCountClassRegisterSession({
-        where,
+        where: {
+            ...where,
+            deletedAt: null,
+        },
     })
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
