@@ -766,7 +766,13 @@ export default function SubjectClassScore() {
         return () => {
             router.events.off('routeChangeStart', handleRouteChange)
         }
-    }, [hasUnsavedChanges, router])
+    }, [
+        hasUnsavedChanges,
+        router.events.emit,
+        router.events.off,
+        router.events.on,
+        router.pathname,
+    ])
 
     return (
         <div className="flex gap-2 pr-2">

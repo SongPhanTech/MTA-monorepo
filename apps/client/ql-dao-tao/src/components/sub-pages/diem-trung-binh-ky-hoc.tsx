@@ -18,6 +18,7 @@ import {
     useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import { useCalculateStudentSemesterResultJson } from '@workspace/libs/api/training'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
 import TreeSelect from '@/components/commons/tree-select'
@@ -34,10 +35,10 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
-        trainingObjectId: '',
         trainingCourseId: '',
         managementOrganizationId: '',
     })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { getStudentTrainingTypeLabel, getStudentTrainingTypeColor } =
         useStudentTrainingTypeOptions()
     const { getAcademicRankingBaseTypeLabel } = useAcademicRankingBaseTypeOptions()
@@ -96,15 +97,6 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                               },
                           },
                       },
-                      ...(filters.trainingObjectId && filters.trainingObjectId !== ''
-                          ? {
-                                trainingCourse: {
-                                    is: {
-                                        trainingObjectTypeId: filters.trainingObjectId,
-                                    },
-                                },
-                            }
-                          : {}),
                       ...(filters.trainingCourseId && filters.trainingCourseId !== ''
                           ? {
                                 trainingCourseId: filters.trainingCourseId,
@@ -123,7 +115,12 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
 
     const { data: dataStudents, refetch } = useFindManyFixedClass(
         {
-            where,
+            where: {
+                ...where,
+                trainingCourse: {
+                    trainingObjectTypeId,
+                },
+            },
             include: {
                 managementOrganization: true,
                 trainingCourse: {
@@ -176,6 +173,9 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
             where: {
                 ...where,
                 deletedAt: null,
+                trainingCourse: {
+                    trainingObjectTypeId,
+                },
             },
         },
         { enabled: !!semesterId }
@@ -211,7 +211,6 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
     )
 
     const { mutateAsync: calculateSemesterResults } = useCalculateStudentSemesterResultJson()
-    console.log(dataStudents)
 
     const handleSummaryClick = async () => {
         if (!semesterId) {
