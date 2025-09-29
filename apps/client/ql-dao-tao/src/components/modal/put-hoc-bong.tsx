@@ -16,7 +16,6 @@ import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
-import { formatter } from '@/utils/formatterInputNumber'
 
 dayjs.locale('vi')
 const PutHocBong = () => {
@@ -139,13 +138,6 @@ const PutHocBong = () => {
                         min={1}
                         max={1000000000}
                         step={1}
-                        formatter={formatter}
-                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
-                        onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                                e.preventDefault()
-                            }
-                        }}
                         suffix="VNĐ"
                     />
                 </FormItem>
