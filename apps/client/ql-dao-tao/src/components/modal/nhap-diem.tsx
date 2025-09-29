@@ -1,18 +1,25 @@
-import PutFormModal from '@components/commons/put-modal'
-import useSpinner from '@hooks/spinner'
-import { useCreateManyStudentSubjectScore, useFindManySubjectVersion } from '@workspace/db/hooks'
-import { Col, Form, InputNumber, message } from 'antd'
-import dayjs from 'dayjs'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
-import type { AnyAaaaRecord } from 'node:dns'
 import FormItem from '@components/commons/form-item'
+import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import useSpinner from '@hooks/spinner'
+import type { StudentSubjectScore, SubjectVersion } from '@workspace/db'
+import {
+    useCreateManyStudentSubjectScore,
+    useDeleteManyStudentSubjectScore,
+    useFindManyStudentSubjectScore,
+    useFindManySubjectVersion,
+} from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { Col, Form, InputNumber, message } from 'antd'
 import { useWatch } from 'antd/es/form/Form'
+import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
+import { useEffect } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 export type NhapDiemFormType = {
-    subjectClassStudent: any[]
-    listSelected: any[]
+    subjectClassStudent: StudentSubjectScore[]
+    listSelected: SubjectVersion[]
 }
 dayjs.locale('vi')
 const NhapDiemThuCong = () => {
@@ -27,7 +34,24 @@ const NhapDiemThuCong = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
     const { mutateAsync: createManyStudentSubjectScore } = useCreateManyStudentSubjectScore()
-
+    const { mutateAsync: deleteManyStudentSubjectScore } = useDeleteManyStudentSubjectScore()
+    const { data: studentSubjectScoreData = [] } = useFindManyStudentSubjectScore(
+        {
+            where: {
+                studentId: id,
+                manualFinalScore: {
+                    gt: 0,
+                },
+            },
+            include: {
+                subjectVersion: true,
+            },
+        },
+        {
+            enabled: !!id,
+            refetchOnWindowFocus: false,
+        }
+    )
     async function onOk(output?: NhapDiemFormType) {
         if (!output) return
         if (output?.subjectClassStudent?.length <= 0) {
@@ -41,14 +65,32 @@ const NhapDiemThuCong = () => {
         }
         try {
             showSpinner()
-            createManyStudentSubjectScore({
-                data:
-                    output?.subjectClassStudent.map((i) => ({
-                        studentId: id as string,
-                        subjectVersionId: i?.id as string,
-                        manualFinalScore: i?.manualFinalScore as number,
-                    })) || [],
-            })
+            await sqlTransaction([
+                {
+                    model: 'StudentSubjectScore',
+                    operation: 'deleteMany',
+                    data: {
+                        where: {
+                            studentId: id as string,
+                            manualFinalScore: {
+                                gt: 0,
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'StudentSubjectScore',
+                    operation: 'createMany',
+                    data: {
+                        data:
+                            output?.subjectClassStudent.map((i) => ({
+                                studentId: id as string,
+                                subjectVersionId: i?.id as string,
+                                manualFinalScore: i?.manualFinalScore as number,
+                            })) || [],
+                    },
+                },
+            ])
             message.success('Thêm điểm thủ công thành công')
             onClose()
         } catch (error: any) {
@@ -64,30 +106,26 @@ const NhapDiemThuCong = () => {
 
     const { data: listSubjectVersion = [] } = useFindManySubjectVersion()
 
-    const onChange = (option: AnyAaaaRecord[]) => {
+    const onChange = (option: SubjectVersion[]) => {
         form.setFieldsValue({
             subjectClassStudent: option,
         })
     }
-    const subjectClassStudentData = useWatch('subjectClassStudent', form)
 
-    // const { data: initialValue } = useFindUniqueStudent(
-    //     {
-    //         where: { id },
-    //         include: {
-    //             subjectClassStudent: true,
-    //         },
-    //     },
-    //     { enabled: !!id }
-    // )
-    // // biome-ignore lint/correctness/useExhaustiveDependencies: <>
-    // useEffect(() => {
-    //     if (initialValue) {
-    //         form.setFieldsValue({
-    //             ...initialValue,
-    //         })
-    //     }
-    // }, [initialValue])
+    const subjectClassStudentData = useWatch('subjectClassStudent', form) || []
+
+    useEffect(() => {
+        if (
+            studentSubjectScoreData &&
+            studentSubjectScoreData.length > 0 &&
+            subjectClassStudentData.length === 0
+        ) {
+            form.setFieldsValue({
+                listSelected: studentSubjectScoreData.map((i) => i.subjectVersion),
+                subjectClassStudent: studentSubjectScoreData,
+            })
+        }
+    }, [studentSubjectScoreData, form, subjectClassStudentData])
 
     return (
         <PutFormModal
@@ -113,8 +151,8 @@ const NhapDiemThuCong = () => {
                                 label: item.name,
                             }
                         })}
-                        onChange={(value, option: any) => {
-                            onChange(option)
+                        onChange={(value, option) => {
+                            onChange(option as SubjectVersion[])
                         }}
                     />
                 </FormItem>

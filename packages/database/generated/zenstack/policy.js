@@ -396,6 +396,19 @@ const policy = {
                 update: {},
             },
         },
+        classRegisterSessionCredit: {
+            modelLevel: {
+                read: { guard: ClassRegisterSessionCredit_read, },
+                create: { guard: ClassRegisterSessionCredit_create, inputChecker: ClassRegisterSessionCredit_create_input, },
+                update: { guard: ClassRegisterSessionCredit_update, },
+                postUpdate: { guard: ClassRegisterSessionCredit_postUpdate, },
+                delete: { guard: ClassRegisterSessionCredit_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         classRegisterSession: {
             modelLevel: {
                 read: { guard: ClassRegisterSession_read, },
@@ -2937,6 +2950,7 @@ const policy = {
         equivalencyGroup: { hasValidation: false },
         subjectInGroup: { hasValidation: false },
         trainingBlockSubject: { hasValidation: false },
+        classRegisterSessionCredit: { hasValidation: false },
         classRegisterSession: { hasValidation: false },
         classRegisterLogs: { hasValidation: false },
         subjectClass: { hasValidation: false },
@@ -5465,6 +5479,84 @@ function TrainingBlockSubject_delete(context, db) {
     return { OR: [] };
 }
 function $check_TrainingBlockSubject_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterSessionCredit_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ClassRegisterSessionCredit_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterSessionCredit_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterSessionCredit_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterSessionCredit_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ClassRegisterSessionCredit_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterSessionCredit_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClassRegisterSessionCredit_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ClassRegisterSessionCredit_postUpdate(input, context) {
+    return true;
+}
+function ClassRegisterSessionCredit_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClassRegisterSessionCredit_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

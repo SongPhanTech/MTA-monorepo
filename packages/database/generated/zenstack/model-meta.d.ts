@@ -5630,6 +5630,141 @@ declare const metadata: {
                 })[];
             }[];
         };
+        classRegisterSessionCredit: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                classRegisterSession: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                classRegisterSessionId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                minCredit: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: number;
+                        }[];
+                    }[];
+                };
+                maxCredit: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: number;
+                        }[];
+                    }[];
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
+        };
         classRegisterSession: {
             name: string;
             fields: {
@@ -5733,10 +5868,23 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
-                maxCredit: {
+                tuitionPerCredit: {
                     name: string;
                     type: string;
-                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: number;
+                        }[];
+                    }[];
+                };
+                creditLimit: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
                 };
                 trainingCourses: {
                     name: string;

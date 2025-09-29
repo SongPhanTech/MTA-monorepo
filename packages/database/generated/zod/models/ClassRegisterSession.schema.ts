@@ -17,11 +17,12 @@ const baseSchema = z.object({
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date(),
-    maxCredit: z.number().nullish(),
+    tuitionPerCredit: z.number().default(0),
 }
 ).strict();
 const relationSchema = z.object({
     semester: z.record(z.unknown()),
+    creditLimit: z.array(z.unknown()).optional(),
     trainingCourses: z.array(z.unknown()).optional(),
     classRegisterLogs: z.array(z.unknown()).optional(),
 }
@@ -65,7 +66,7 @@ export const ClassRegisterSessionPrismaUpdateSchema = z.object({
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date(),
-    maxCredit: z.union([z.number().nullish(), z.record(z.unknown())])
+    tuitionPerCredit: z.union([z.number().default(0), z.record(z.unknown())])
 }).partial().passthrough();
 
 
@@ -73,7 +74,7 @@ export const ClassRegisterSessionPrismaUpdateSchema = z.object({
  * `ClassRegisterSession` schema for create operations excluding foreign keys and relations.
  */
 export const ClassRegisterSessionCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, tuitionPerCredit: true
 });
 
 

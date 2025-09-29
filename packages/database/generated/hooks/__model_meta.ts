@@ -2946,6 +2946,68 @@ const metadata = {
                 },
             },
         },
+        classRegisterSessionCredit: {
+            name: 'ClassRegisterSessionCredit', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, classRegisterSession: {
+                    name: "classRegisterSession",
+                    type: "ClassRegisterSession",
+                    isDataModel: true,
+                    backLink: 'creditLimit',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "classRegisterSessionId" },
+                }, classRegisterSessionId: {
+                    name: "classRegisterSessionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'classRegisterSession',
+                }, minCredit: {
+                    name: "minCredit",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, maxCredit: {
+                    name: "maxCredit",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 25 }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
         classRegisterSession: {
             name: 'ClassRegisterSession', fields: {
                 id: {
@@ -2998,10 +3060,16 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'semester',
-                }, maxCredit: {
-                    name: "maxCredit",
-                    type: "Int",
-                    isOptional: true,
+                }, tuitionPerCredit: {
+                    name: "tuitionPerCredit",
+                    type: "Float",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, creditLimit: {
+                    name: "creditLimit",
+                    type: "ClassRegisterSessionCredit",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'classRegisterSession',
                 }, trainingCourses: {
                     name: "trainingCourses",
                     type: "TrainingCourse",

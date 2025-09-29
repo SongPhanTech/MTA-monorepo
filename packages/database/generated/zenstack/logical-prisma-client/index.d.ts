@@ -336,6 +336,16 @@ export type SubjectInGroup = $Result.DefaultSelection<Prisma.$SubjectInGroupPayl
  */
 export type TrainingBlockSubject = $Result.DefaultSelection<Prisma.$TrainingBlockSubjectPayload>;
 /**
+ * Model ClassRegisterSessionCredit
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type ClassRegisterSessionCredit = $Result.DefaultSelection<Prisma.$ClassRegisterSessionCreditPayload>;
+/**
  * Model ClassRegisterSession
  * @
  * @allow ('all', auth() != null)
@@ -2692,6 +2702,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      * ```
      */
     get trainingBlockSubject(): Prisma.TrainingBlockSubjectDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.classRegisterSessionCredit`: Exposes CRUD operations for the **ClassRegisterSessionCredit** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more ClassRegisterSessionCredits
+     * const classRegisterSessionCredits = await prisma.classRegisterSessionCredit.findMany()
+     * ```
+     */
+    get classRegisterSessionCredit(): Prisma.ClassRegisterSessionCreditDelegate<ExtArgs, ClientOptions>;
     /**
      * `prisma.classRegisterSession`: Exposes CRUD operations for the **ClassRegisterSession** model.
      * Example usage:
@@ -5151,6 +5170,7 @@ export namespace Prisma {
         EquivalencyGroup: 'EquivalencyGroup',
         SubjectInGroup: 'SubjectInGroup',
         TrainingBlockSubject: 'TrainingBlockSubject',
+        ClassRegisterSessionCredit: 'ClassRegisterSessionCredit',
         ClassRegisterSession: 'ClassRegisterSession',
         ClassRegisterLogs: 'ClassRegisterLogs',
         SubjectClass: 'SubjectClass',
@@ -5819,6 +5839,18 @@ export namespace Prisma {
         project: 'project',
         print: 'print'
     };
+    export const ClassRegisterSessionCreditScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        classRegisterSessionId: 'classRegisterSessionId',
+        minCredit: 'minCredit',
+        maxCredit: 'maxCredit'
+    };
     export const ClassRegisterSessionScalarFieldEnum: {
         id: 'id',
         code: 'code',
@@ -5831,7 +5863,7 @@ export namespace Prisma {
         startDate: 'startDate',
         endDate: 'endDate',
         semesterId: 'semesterId',
-        maxCredit: 'maxCredit'
+        tuitionPerCredit: 'tuitionPerCredit'
     };
     export const ClassRegisterLogsScalarFieldEnum: {
         id: 'id',
@@ -9017,6 +9049,12 @@ export namespace Prisma {
         description: 'description',
         subjectId: 'subjectId',
         trainingBlockOnCurriculumVersionId: 'trainingBlockOnCurriculumVersionId'
+    };
+    export const ClassRegisterSessionCreditOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        classRegisterSessionId: 'classRegisterSessionId'
     };
     export const ClassRegisterSessionOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -22449,6 +22487,388 @@ export namespace Prisma {
         readonly print: FieldRef<"TrainingBlockSubject", 'Boolean'>;
     }
 
+    export interface ClassRegisterSessionCreditDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClassRegisterSessionCredit'], meta: { name: 'ClassRegisterSessionCredit' } };
+        /**
+         * Fields of the ClassRegisterSessionCredit model
+         */
+        readonly fields: ClassRegisterSessionCreditFieldRefs;
+        /**
+         * Find zero or one ClassRegisterSessionCredit that matches the filter.
+         * @param {ClassRegisterSessionCreditFindUniqueArgs} args - Arguments to find a ClassRegisterSessionCredit
+         * @example
+         * // Get one ClassRegisterSessionCredit
+         * const classRegisterSessionCredit = await prisma.classRegisterSessionCredit.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends ClassRegisterSessionCreditFindUniqueArgs>(args: SelectSubset<T, ClassRegisterSessionCreditFindUniqueArgs<ExtArgs>>): Prisma__ClassRegisterSessionCreditClient<$Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one ClassRegisterSessionCredit that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {ClassRegisterSessionCreditFindUniqueOrThrowArgs} args - Arguments to find a ClassRegisterSessionCredit
+         * @example
+         * // Get one ClassRegisterSessionCredit
+         * const classRegisterSessionCredit = await prisma.classRegisterSessionCredit.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends ClassRegisterSessionCreditFindUniqueOrThrowArgs>(args: SelectSubset<T, ClassRegisterSessionCreditFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ClassRegisterSessionCreditClient<$Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ClassRegisterSessionCredit that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionCreditFindFirstArgs} args - Arguments to find a ClassRegisterSessionCredit
+         * @example
+         * // Get one ClassRegisterSessionCredit
+         * const classRegisterSessionCredit = await prisma.classRegisterSessionCredit.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends ClassRegisterSessionCreditFindFirstArgs>(args?: SelectSubset<T, ClassRegisterSessionCreditFindFirstArgs<ExtArgs>>): Prisma__ClassRegisterSessionCreditClient<$Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ClassRegisterSessionCredit that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionCreditFindFirstOrThrowArgs} args - Arguments to find a ClassRegisterSessionCredit
+         * @example
+         * // Get one ClassRegisterSessionCredit
+         * const classRegisterSessionCredit = await prisma.classRegisterSessionCredit.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends ClassRegisterSessionCreditFindFirstOrThrowArgs>(args?: SelectSubset<T, ClassRegisterSessionCreditFindFirstOrThrowArgs<ExtArgs>>): Prisma__ClassRegisterSessionCreditClient<$Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more ClassRegisterSessionCredits that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionCreditFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all ClassRegisterSessionCredits
+         * const classRegisterSessionCredits = await prisma.classRegisterSessionCredit.findMany()
+         *
+         * // Get first 10 ClassRegisterSessionCredits
+         * const classRegisterSessionCredits = await prisma.classRegisterSessionCredit.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const classRegisterSessionCreditWithIdOnly = await prisma.classRegisterSessionCredit.findMany({ select: { id: true } })
+         */
+        findMany<T extends ClassRegisterSessionCreditFindManyArgs>(args?: SelectSubset<T, ClassRegisterSessionCreditFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a ClassRegisterSessionCredit.
+         * @param {ClassRegisterSessionCreditCreateArgs} args - Arguments to create a ClassRegisterSessionCredit.
+         * @example
+         * // Create one ClassRegisterSessionCredit
+         * const ClassRegisterSessionCredit = await prisma.classRegisterSessionCredit.create({
+         *   data: {
+         *     // ... data to create a ClassRegisterSessionCredit
+         *   }
+         * })
+         */
+        create<T extends ClassRegisterSessionCreditCreateArgs>(args: SelectSubset<T, ClassRegisterSessionCreditCreateArgs<ExtArgs>>): Prisma__ClassRegisterSessionCreditClient<$Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many ClassRegisterSessionCredits.
+         * @param {ClassRegisterSessionCreditCreateManyArgs} args - Arguments to create many ClassRegisterSessionCredits.
+         * @example
+         * // Create many ClassRegisterSessionCredits
+         * const classRegisterSessionCredit = await prisma.classRegisterSessionCredit.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends ClassRegisterSessionCreditCreateManyArgs>(args?: SelectSubset<T, ClassRegisterSessionCreditCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many ClassRegisterSessionCredits and returns the data saved in the database.
+         * @param {ClassRegisterSessionCreditCreateManyAndReturnArgs} args - Arguments to create many ClassRegisterSessionCredits.
+         * @example
+         * // Create many ClassRegisterSessionCredits
+         * const classRegisterSessionCredit = await prisma.classRegisterSessionCredit.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many ClassRegisterSessionCredits and only return the `id`
+         * const classRegisterSessionCreditWithIdOnly = await prisma.classRegisterSessionCredit.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends ClassRegisterSessionCreditCreateManyAndReturnArgs>(args?: SelectSubset<T, ClassRegisterSessionCreditCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a ClassRegisterSessionCredit.
+         * @param {ClassRegisterSessionCreditDeleteArgs} args - Arguments to delete one ClassRegisterSessionCredit.
+         * @example
+         * // Delete one ClassRegisterSessionCredit
+         * const ClassRegisterSessionCredit = await prisma.classRegisterSessionCredit.delete({
+         *   where: {
+         *     // ... filter to delete one ClassRegisterSessionCredit
+         *   }
+         * })
+         */
+        delete<T extends ClassRegisterSessionCreditDeleteArgs>(args: SelectSubset<T, ClassRegisterSessionCreditDeleteArgs<ExtArgs>>): Prisma__ClassRegisterSessionCreditClient<$Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one ClassRegisterSessionCredit.
+         * @param {ClassRegisterSessionCreditUpdateArgs} args - Arguments to update one ClassRegisterSessionCredit.
+         * @example
+         * // Update one ClassRegisterSessionCredit
+         * const classRegisterSessionCredit = await prisma.classRegisterSessionCredit.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends ClassRegisterSessionCreditUpdateArgs>(args: SelectSubset<T, ClassRegisterSessionCreditUpdateArgs<ExtArgs>>): Prisma__ClassRegisterSessionCreditClient<$Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more ClassRegisterSessionCredits.
+         * @param {ClassRegisterSessionCreditDeleteManyArgs} args - Arguments to filter ClassRegisterSessionCredits to delete.
+         * @example
+         * // Delete a few ClassRegisterSessionCredits
+         * const { count } = await prisma.classRegisterSessionCredit.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends ClassRegisterSessionCreditDeleteManyArgs>(args?: SelectSubset<T, ClassRegisterSessionCreditDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ClassRegisterSessionCredits.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionCreditUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many ClassRegisterSessionCredits
+         * const classRegisterSessionCredit = await prisma.classRegisterSessionCredit.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends ClassRegisterSessionCreditUpdateManyArgs>(args: SelectSubset<T, ClassRegisterSessionCreditUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ClassRegisterSessionCredits and returns the data updated in the database.
+         * @param {ClassRegisterSessionCreditUpdateManyAndReturnArgs} args - Arguments to update many ClassRegisterSessionCredits.
+         * @example
+         * // Update many ClassRegisterSessionCredits
+         * const classRegisterSessionCredit = await prisma.classRegisterSessionCredit.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more ClassRegisterSessionCredits and only return the `id`
+         * const classRegisterSessionCreditWithIdOnly = await prisma.classRegisterSessionCredit.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends ClassRegisterSessionCreditUpdateManyAndReturnArgs>(args: SelectSubset<T, ClassRegisterSessionCreditUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one ClassRegisterSessionCredit.
+         * @param {ClassRegisterSessionCreditUpsertArgs} args - Arguments to update or create a ClassRegisterSessionCredit.
+         * @example
+         * // Update or create a ClassRegisterSessionCredit
+         * const classRegisterSessionCredit = await prisma.classRegisterSessionCredit.upsert({
+         *   create: {
+         *     // ... data to create a ClassRegisterSessionCredit
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the ClassRegisterSessionCredit we want to update
+         *   }
+         * })
+         */
+        upsert<T extends ClassRegisterSessionCreditUpsertArgs>(args: SelectSubset<T, ClassRegisterSessionCreditUpsertArgs<ExtArgs>>): Prisma__ClassRegisterSessionCreditClient<$Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of ClassRegisterSessionCredits.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionCreditCountArgs} args - Arguments to filter ClassRegisterSessionCredits to count.
+         * @example
+         * // Count the number of ClassRegisterSessionCredits
+         * const count = await prisma.classRegisterSessionCredit.count({
+         *   where: {
+         *     // ... the filter for the ClassRegisterSessionCredits we want to count
+         *   }
+         * })
+         */
+        count<T extends ClassRegisterSessionCreditCountArgs>(args?: Subset<T, ClassRegisterSessionCreditCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], ClassRegisterSessionCreditCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a ClassRegisterSessionCredit.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionCreditAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends ClassRegisterSessionCreditAggregateArgs>(args: Subset<T, ClassRegisterSessionCreditAggregateArgs>): Prisma.PrismaPromise<GetClassRegisterSessionCreditAggregateType<T>>;
+        /**
+         * Group by ClassRegisterSessionCredit.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ClassRegisterSessionCreditGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends ClassRegisterSessionCreditGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ClassRegisterSessionCreditGroupByArgs['orderBy'] }
+        : { orderBy?: ClassRegisterSessionCreditGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, ClassRegisterSessionCreditGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClassRegisterSessionCreditGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for ClassRegisterSessionCredit.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__ClassRegisterSessionCreditClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        classRegisterSession<T extends ClassRegisterSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSessionDefaultArgs<ExtArgs>>): Prisma__ClassRegisterSessionClient<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the ClassRegisterSessionCredit model
+     */
+    interface ClassRegisterSessionCreditFieldRefs {
+        readonly id: FieldRef<"ClassRegisterSessionCredit", 'String'>;
+        readonly code: FieldRef<"ClassRegisterSessionCredit", 'String'>;
+        readonly active: FieldRef<"ClassRegisterSessionCredit", 'Boolean'>;
+        readonly description: FieldRef<"ClassRegisterSessionCredit", 'String'>;
+        readonly deletedAt: FieldRef<"ClassRegisterSessionCredit", 'DateTime'>;
+        readonly createdAt: FieldRef<"ClassRegisterSessionCredit", 'DateTime'>;
+        readonly updatedAt: FieldRef<"ClassRegisterSessionCredit", 'DateTime'>;
+        readonly classRegisterSessionId: FieldRef<"ClassRegisterSessionCredit", 'String'>;
+        readonly minCredit: FieldRef<"ClassRegisterSessionCredit", 'Int'>;
+        readonly maxCredit: FieldRef<"ClassRegisterSessionCredit", 'Int'>;
+    }
+
     export interface ClassRegisterSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
         [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ClassRegisterSession'], meta: { name: 'ClassRegisterSession' } };
         /**
@@ -22793,6 +23213,7 @@ export namespace Prisma {
     export interface Prisma__ClassRegisterSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         semester<T extends SemesterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SemesterDefaultArgs<ExtArgs>>): Prisma__SemesterClient<$Result.GetResult<Prisma.$SemesterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        creditLimit<T extends ClassRegisterSession$creditLimitArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSession$creditLimitArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         trainingCourses<T extends ClassRegisterSession$trainingCoursesArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSession$trainingCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingCoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         classRegisterLogs<T extends ClassRegisterSession$classRegisterLogsArgs<ExtArgs> = {}>(args?: Subset<T, ClassRegisterSession$classRegisterLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
@@ -22832,7 +23253,7 @@ export namespace Prisma {
         readonly startDate: FieldRef<"ClassRegisterSession", 'DateTime'>;
         readonly endDate: FieldRef<"ClassRegisterSession", 'DateTime'>;
         readonly semesterId: FieldRef<"ClassRegisterSession", 'String'>;
-        readonly maxCredit: FieldRef<"ClassRegisterSession", 'Int'>;
+        readonly tuitionPerCredit: FieldRef<"ClassRegisterSession", 'Float'>;
     }
 
     export interface ClassRegisterLogsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -97393,7 +97814,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
+            modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -99614,6 +100035,80 @@ export namespace Prisma {
                     count: {
                         args: Prisma.TrainingBlockSubjectCountArgs<ExtArgs>
                         result: $Utils.Optional<TrainingBlockSubjectCountAggregateOutputType> | number
+                    }
+                }
+            }
+            ClassRegisterSessionCredit: {
+                payload: Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>
+                fields: Prisma.ClassRegisterSessionCreditFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.ClassRegisterSessionCreditFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionCreditPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.ClassRegisterSessionCreditFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionCreditPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.ClassRegisterSessionCreditFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionCreditPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.ClassRegisterSessionCreditFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionCreditPayload>
+                    }
+                    findMany: {
+                        args: Prisma.ClassRegisterSessionCreditFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionCreditPayload>[]
+                    }
+                    create: {
+                        args: Prisma.ClassRegisterSessionCreditCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionCreditPayload>
+                    }
+                    createMany: {
+                        args: Prisma.ClassRegisterSessionCreditCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.ClassRegisterSessionCreditCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionCreditPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.ClassRegisterSessionCreditDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionCreditPayload>
+                    }
+                    update: {
+                        args: Prisma.ClassRegisterSessionCreditUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionCreditPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.ClassRegisterSessionCreditDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.ClassRegisterSessionCreditUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.ClassRegisterSessionCreditUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionCreditPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.ClassRegisterSessionCreditUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ClassRegisterSessionCreditPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.ClassRegisterSessionCreditAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateClassRegisterSessionCredit>
+                    }
+                    groupBy: {
+                        args: Prisma.ClassRegisterSessionCreditGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<ClassRegisterSessionCreditGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.ClassRegisterSessionCreditCountArgs<ExtArgs>
+                        result: $Utils.Optional<ClassRegisterSessionCreditCountAggregateOutputType> | number
                     }
                 }
             }
@@ -113960,6 +114455,7 @@ export namespace Prisma {
         equivalencyGroup?: EquivalencyGroupOmit
         subjectInGroup?: SubjectInGroupOmit
         trainingBlockSubject?: TrainingBlockSubjectOmit
+        classRegisterSessionCredit?: ClassRegisterSessionCreditOmit
         classRegisterSession?: ClassRegisterSessionOmit
         classRegisterLogs?: ClassRegisterLogsOmit
         subjectClass?: SubjectClassOmit
@@ -115083,10 +115579,12 @@ export namespace Prisma {
      * Count Type ClassRegisterSessionCountOutputType
      */
     export type ClassRegisterSessionCountOutputType = {
+        creditLimit: number
         trainingCourses: number
         classRegisterLogs: number
     };
     export type ClassRegisterSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        creditLimit?: boolean | ClassRegisterSessionCountOutputTypeCountCreditLimitArgs
         trainingCourses?: boolean | ClassRegisterSessionCountOutputTypeCountTrainingCoursesArgs
         classRegisterLogs?: boolean | ClassRegisterSessionCountOutputTypeCountClassRegisterLogsArgs
     };
@@ -115098,6 +115596,12 @@ export namespace Prisma {
          * Select specific fields to fetch from the ClassRegisterSessionCountOutputType
          */
         select?: ClassRegisterSessionCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * ClassRegisterSessionCountOutputType without action
+     */
+    export type ClassRegisterSessionCountOutputTypeCountCreditLimitArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ClassRegisterSessionCreditWhereInput
     };
     /**
      * ClassRegisterSessionCountOutputType without action
@@ -142736,6 +143240,693 @@ export namespace Prisma {
         include?: TrainingBlockSubjectInclude<ExtArgs> | null
     };
     /**
+     * Model ClassRegisterSessionCredit
+     */
+    export type AggregateClassRegisterSessionCredit = {
+        _count: ClassRegisterSessionCreditCountAggregateOutputType | null
+        _avg: ClassRegisterSessionCreditAvgAggregateOutputType | null
+        _sum: ClassRegisterSessionCreditSumAggregateOutputType | null
+        _min: ClassRegisterSessionCreditMinAggregateOutputType | null
+        _max: ClassRegisterSessionCreditMaxAggregateOutputType | null
+    };
+    export type ClassRegisterSessionCreditAvgAggregateOutputType = {
+        minCredit: number | null
+        maxCredit: number | null
+    };
+    export type ClassRegisterSessionCreditSumAggregateOutputType = {
+        minCredit: number | null
+        maxCredit: number | null
+    };
+    export type ClassRegisterSessionCreditMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        classRegisterSessionId: string | null
+        minCredit: number | null
+        maxCredit: number | null
+    };
+    export type ClassRegisterSessionCreditMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        classRegisterSessionId: string | null
+        minCredit: number | null
+        maxCredit: number | null
+    };
+    export type ClassRegisterSessionCreditCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        classRegisterSessionId: number
+        minCredit: number
+        maxCredit: number
+        _all: number
+    };
+    export type ClassRegisterSessionCreditAvgAggregateInputType = {
+        minCredit?: true
+        maxCredit?: true
+    };
+    export type ClassRegisterSessionCreditSumAggregateInputType = {
+        minCredit?: true
+        maxCredit?: true
+    };
+    export type ClassRegisterSessionCreditMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        classRegisterSessionId?: true
+        minCredit?: true
+        maxCredit?: true
+    };
+    export type ClassRegisterSessionCreditMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        classRegisterSessionId?: true
+        minCredit?: true
+        maxCredit?: true
+    };
+    export type ClassRegisterSessionCreditCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        classRegisterSessionId?: true
+        minCredit?: true
+        maxCredit?: true
+        _all?: true
+    };
+    export type ClassRegisterSessionCreditAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ClassRegisterSessionCredit to aggregate.
+         */
+        where?: ClassRegisterSessionCreditWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterSessionCredits to fetch.
+         */
+        orderBy?: ClassRegisterSessionCreditOrderByWithRelationInput | ClassRegisterSessionCreditOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: ClassRegisterSessionCreditWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterSessionCredits from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterSessionCredits.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned ClassRegisterSessionCredits
+        **/
+        _count?: true | ClassRegisterSessionCreditCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: ClassRegisterSessionCreditAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: ClassRegisterSessionCreditSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: ClassRegisterSessionCreditMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: ClassRegisterSessionCreditMaxAggregateInputType
+    };
+    export type GetClassRegisterSessionCreditAggregateType<T extends ClassRegisterSessionCreditAggregateArgs> = {
+        [P in keyof T & keyof AggregateClassRegisterSessionCredit]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClassRegisterSessionCredit[P]>
+        : GetScalarType<T[P], AggregateClassRegisterSessionCredit[P]>
+    };
+    export type ClassRegisterSessionCreditGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ClassRegisterSessionCreditWhereInput
+        orderBy?: ClassRegisterSessionCreditOrderByWithAggregationInput | ClassRegisterSessionCreditOrderByWithAggregationInput[]
+        by: ClassRegisterSessionCreditScalarFieldEnum[] | ClassRegisterSessionCreditScalarFieldEnum
+        having?: ClassRegisterSessionCreditScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: ClassRegisterSessionCreditCountAggregateInputType | true
+        _avg?: ClassRegisterSessionCreditAvgAggregateInputType
+        _sum?: ClassRegisterSessionCreditSumAggregateInputType
+        _min?: ClassRegisterSessionCreditMinAggregateInputType
+        _max?: ClassRegisterSessionCreditMaxAggregateInputType
+    };
+    export type ClassRegisterSessionCreditGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        classRegisterSessionId: string
+        minCredit: number
+        maxCredit: number
+        _count: ClassRegisterSessionCreditCountAggregateOutputType | null
+        _avg: ClassRegisterSessionCreditAvgAggregateOutputType | null
+        _sum: ClassRegisterSessionCreditSumAggregateOutputType | null
+        _min: ClassRegisterSessionCreditMinAggregateOutputType | null
+        _max: ClassRegisterSessionCreditMaxAggregateOutputType | null
+    };
+    type GetClassRegisterSessionCreditGroupByPayload<T extends ClassRegisterSessionCreditGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<ClassRegisterSessionCreditGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof ClassRegisterSessionCreditGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], ClassRegisterSessionCreditGroupByOutputType[P]>
+                : GetScalarType<T[P], ClassRegisterSessionCreditGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type ClassRegisterSessionCreditSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        classRegisterSessionId?: boolean
+        minCredit?: boolean
+        maxCredit?: boolean
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["classRegisterSessionCredit"]>;
+    export type ClassRegisterSessionCreditSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        classRegisterSessionId?: boolean
+        minCredit?: boolean
+        maxCredit?: boolean
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["classRegisterSessionCredit"]>;
+    export type ClassRegisterSessionCreditSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        classRegisterSessionId?: boolean
+        minCredit?: boolean
+        maxCredit?: boolean
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["classRegisterSessionCredit"]>;
+    export type ClassRegisterSessionCreditSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        classRegisterSessionId?: boolean
+        minCredit?: boolean
+        maxCredit?: boolean
+    };
+    export type ClassRegisterSessionCreditOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "classRegisterSessionId" | "minCredit" | "maxCredit", ExtArgs["result"]["classRegisterSessionCredit"]>;
+    export type ClassRegisterSessionCreditInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+    };
+    export type ClassRegisterSessionCreditIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+    };
+    export type ClassRegisterSessionCreditIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
+    };
+    export type $ClassRegisterSessionCreditPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "ClassRegisterSessionCredit"
+        objects: {
+            classRegisterSession: Prisma.$ClassRegisterSessionPayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            classRegisterSessionId: string
+            minCredit: number
+            maxCredit: number
+        }, ExtArgs["result"]["classRegisterSessionCredit"]>
+        composites: {}
+    };
+    type ClassRegisterSessionCreditGetPayload<S extends boolean | null | undefined | ClassRegisterSessionCreditDefaultArgs> = $Result.GetResult<Prisma.$ClassRegisterSessionCreditPayload, S>;
+    type ClassRegisterSessionCreditCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<ClassRegisterSessionCreditFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: ClassRegisterSessionCreditCountAggregateInputType | true
+    };
+    /**
+     * ClassRegisterSessionCredit findUnique
+     */
+    export type ClassRegisterSessionCreditFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCredit
+         */
+        select?: ClassRegisterSessionCreditSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSessionCredit
+         */
+        omit?: ClassRegisterSessionCreditOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionCreditInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterSessionCredit to fetch.
+         */
+        where: ClassRegisterSessionCreditWhereUniqueInput
+    };
+    /**
+     * ClassRegisterSessionCredit findUniqueOrThrow
+     */
+    export type ClassRegisterSessionCreditFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCredit
+         */
+        select?: ClassRegisterSessionCreditSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSessionCredit
+         */
+        omit?: ClassRegisterSessionCreditOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionCreditInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterSessionCredit to fetch.
+         */
+        where: ClassRegisterSessionCreditWhereUniqueInput
+    };
+    /**
+     * ClassRegisterSessionCredit findFirst
+     */
+    export type ClassRegisterSessionCreditFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCredit
+         */
+        select?: ClassRegisterSessionCreditSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSessionCredit
+         */
+        omit?: ClassRegisterSessionCreditOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionCreditInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterSessionCredit to fetch.
+         */
+        where?: ClassRegisterSessionCreditWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterSessionCredits to fetch.
+         */
+        orderBy?: ClassRegisterSessionCreditOrderByWithRelationInput | ClassRegisterSessionCreditOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ClassRegisterSessionCredits.
+         */
+        cursor?: ClassRegisterSessionCreditWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterSessionCredits from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterSessionCredits.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ClassRegisterSessionCredits.
+         */
+        distinct?: ClassRegisterSessionCreditScalarFieldEnum | ClassRegisterSessionCreditScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterSessionCredit findFirstOrThrow
+     */
+    export type ClassRegisterSessionCreditFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCredit
+         */
+        select?: ClassRegisterSessionCreditSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSessionCredit
+         */
+        omit?: ClassRegisterSessionCreditOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionCreditInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterSessionCredit to fetch.
+         */
+        where?: ClassRegisterSessionCreditWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterSessionCredits to fetch.
+         */
+        orderBy?: ClassRegisterSessionCreditOrderByWithRelationInput | ClassRegisterSessionCreditOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ClassRegisterSessionCredits.
+         */
+        cursor?: ClassRegisterSessionCreditWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterSessionCredits from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterSessionCredits.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ClassRegisterSessionCredits.
+         */
+        distinct?: ClassRegisterSessionCreditScalarFieldEnum | ClassRegisterSessionCreditScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterSessionCredit findMany
+     */
+    export type ClassRegisterSessionCreditFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCredit
+         */
+        select?: ClassRegisterSessionCreditSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSessionCredit
+         */
+        omit?: ClassRegisterSessionCreditOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionCreditInclude<ExtArgs> | null
+        /**
+         * Filter, which ClassRegisterSessionCredits to fetch.
+         */
+        where?: ClassRegisterSessionCreditWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ClassRegisterSessionCredits to fetch.
+         */
+        orderBy?: ClassRegisterSessionCreditOrderByWithRelationInput | ClassRegisterSessionCreditOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing ClassRegisterSessionCredits.
+         */
+        cursor?: ClassRegisterSessionCreditWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ClassRegisterSessionCredits from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ClassRegisterSessionCredits.
+         */
+        skip?: number
+        distinct?: ClassRegisterSessionCreditScalarFieldEnum | ClassRegisterSessionCreditScalarFieldEnum[]
+    };
+    /**
+     * ClassRegisterSessionCredit create
+     */
+    export type ClassRegisterSessionCreditCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCredit
+         */
+        select?: ClassRegisterSessionCreditSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSessionCredit
+         */
+        omit?: ClassRegisterSessionCreditOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionCreditInclude<ExtArgs> | null
+        /**
+         * The data needed to create a ClassRegisterSessionCredit.
+         */
+        data: XOR<ClassRegisterSessionCreditCreateInput, ClassRegisterSessionCreditUncheckedCreateInput>
+    };
+    /**
+     * ClassRegisterSessionCredit createMany
+     */
+    export type ClassRegisterSessionCreditCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many ClassRegisterSessionCredits.
+         */
+        data: ClassRegisterSessionCreditCreateManyInput | ClassRegisterSessionCreditCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * ClassRegisterSessionCredit createManyAndReturn
+     */
+    export type ClassRegisterSessionCreditCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCredit
+         */
+        select?: ClassRegisterSessionCreditSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSessionCredit
+         */
+        omit?: ClassRegisterSessionCreditOmit<ExtArgs> | null
+        /**
+         * The data used to create many ClassRegisterSessionCredits.
+         */
+        data: ClassRegisterSessionCreditCreateManyInput | ClassRegisterSessionCreditCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionCreditIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ClassRegisterSessionCredit update
+     */
+    export type ClassRegisterSessionCreditUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCredit
+         */
+        select?: ClassRegisterSessionCreditSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSessionCredit
+         */
+        omit?: ClassRegisterSessionCreditOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionCreditInclude<ExtArgs> | null
+        /**
+         * The data needed to update a ClassRegisterSessionCredit.
+         */
+        data: XOR<ClassRegisterSessionCreditUpdateInput, ClassRegisterSessionCreditUncheckedUpdateInput>
+        /**
+         * Choose, which ClassRegisterSessionCredit to update.
+         */
+        where: ClassRegisterSessionCreditWhereUniqueInput
+    };
+    /**
+     * ClassRegisterSessionCredit updateMany
+     */
+    export type ClassRegisterSessionCreditUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update ClassRegisterSessionCredits.
+         */
+        data: XOR<ClassRegisterSessionCreditUpdateManyMutationInput, ClassRegisterSessionCreditUncheckedUpdateManyInput>
+        /**
+         * Filter which ClassRegisterSessionCredits to update
+         */
+        where?: ClassRegisterSessionCreditWhereInput
+        /**
+         * Limit how many ClassRegisterSessionCredits to update.
+         */
+        limit?: number
+    };
+    /**
+     * ClassRegisterSessionCredit updateManyAndReturn
+     */
+    export type ClassRegisterSessionCreditUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCredit
+         */
+        select?: ClassRegisterSessionCreditSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSessionCredit
+         */
+        omit?: ClassRegisterSessionCreditOmit<ExtArgs> | null
+        /**
+         * The data used to update ClassRegisterSessionCredits.
+         */
+        data: XOR<ClassRegisterSessionCreditUpdateManyMutationInput, ClassRegisterSessionCreditUncheckedUpdateManyInput>
+        /**
+         * Filter which ClassRegisterSessionCredits to update
+         */
+        where?: ClassRegisterSessionCreditWhereInput
+        /**
+         * Limit how many ClassRegisterSessionCredits to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionCreditIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ClassRegisterSessionCredit upsert
+     */
+    export type ClassRegisterSessionCreditUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCredit
+         */
+        select?: ClassRegisterSessionCreditSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSessionCredit
+         */
+        omit?: ClassRegisterSessionCreditOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionCreditInclude<ExtArgs> | null
+        /**
+         * The filter to search for the ClassRegisterSessionCredit to update in case it exists.
+         */
+        where: ClassRegisterSessionCreditWhereUniqueInput
+        /**
+         * In case the ClassRegisterSessionCredit found by the `where` argument doesn't exist, create a new ClassRegisterSessionCredit with this data.
+         */
+        create: XOR<ClassRegisterSessionCreditCreateInput, ClassRegisterSessionCreditUncheckedCreateInput>
+        /**
+         * In case the ClassRegisterSessionCredit was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<ClassRegisterSessionCreditUpdateInput, ClassRegisterSessionCreditUncheckedUpdateInput>
+    };
+    /**
+     * ClassRegisterSessionCredit delete
+     */
+    export type ClassRegisterSessionCreditDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCredit
+         */
+        select?: ClassRegisterSessionCreditSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSessionCredit
+         */
+        omit?: ClassRegisterSessionCreditOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionCreditInclude<ExtArgs> | null
+        /**
+         * Filter which ClassRegisterSessionCredit to delete.
+         */
+        where: ClassRegisterSessionCreditWhereUniqueInput
+    };
+    /**
+     * ClassRegisterSessionCredit deleteMany
+     */
+    export type ClassRegisterSessionCreditDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ClassRegisterSessionCredits to delete
+         */
+        where?: ClassRegisterSessionCreditWhereInput
+        /**
+         * Limit how many ClassRegisterSessionCredits to delete.
+         */
+        limit?: number
+    };
+    /**
+     * ClassRegisterSessionCredit without action
+     */
+    export type ClassRegisterSessionCreditDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCredit
+         */
+        select?: ClassRegisterSessionCreditSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSessionCredit
+         */
+        omit?: ClassRegisterSessionCreditOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionCreditInclude<ExtArgs> | null
+    };
+    /**
      * Model ClassRegisterSession
      */
     export type AggregateClassRegisterSession = {
@@ -142746,10 +143937,10 @@ export namespace Prisma {
         _max: ClassRegisterSessionMaxAggregateOutputType | null
     };
     export type ClassRegisterSessionAvgAggregateOutputType = {
-        maxCredit: number | null
+        tuitionPerCredit: number | null
     };
     export type ClassRegisterSessionSumAggregateOutputType = {
-        maxCredit: number | null
+        tuitionPerCredit: number | null
     };
     export type ClassRegisterSessionMinAggregateOutputType = {
         id: string | null
@@ -142763,7 +143954,7 @@ export namespace Prisma {
         startDate: Date | null
         endDate: Date | null
         semesterId: string | null
-        maxCredit: number | null
+        tuitionPerCredit: number | null
     };
     export type ClassRegisterSessionMaxAggregateOutputType = {
         id: string | null
@@ -142777,7 +143968,7 @@ export namespace Prisma {
         startDate: Date | null
         endDate: Date | null
         semesterId: string | null
-        maxCredit: number | null
+        tuitionPerCredit: number | null
     };
     export type ClassRegisterSessionCountAggregateOutputType = {
         id: number
@@ -142791,14 +143982,14 @@ export namespace Prisma {
         startDate: number
         endDate: number
         semesterId: number
-        maxCredit: number
+        tuitionPerCredit: number
         _all: number
     };
     export type ClassRegisterSessionAvgAggregateInputType = {
-        maxCredit?: true
+        tuitionPerCredit?: true
     };
     export type ClassRegisterSessionSumAggregateInputType = {
-        maxCredit?: true
+        tuitionPerCredit?: true
     };
     export type ClassRegisterSessionMinAggregateInputType = {
         id?: true
@@ -142812,7 +144003,7 @@ export namespace Prisma {
         startDate?: true
         endDate?: true
         semesterId?: true
-        maxCredit?: true
+        tuitionPerCredit?: true
     };
     export type ClassRegisterSessionMaxAggregateInputType = {
         id?: true
@@ -142826,7 +144017,7 @@ export namespace Prisma {
         startDate?: true
         endDate?: true
         semesterId?: true
-        maxCredit?: true
+        tuitionPerCredit?: true
     };
     export type ClassRegisterSessionCountAggregateInputType = {
         id?: true
@@ -142840,7 +144031,7 @@ export namespace Prisma {
         startDate?: true
         endDate?: true
         semesterId?: true
-        maxCredit?: true
+        tuitionPerCredit?: true
         _all?: true
     };
     export type ClassRegisterSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -142935,7 +144126,7 @@ export namespace Prisma {
         startDate: Date
         endDate: Date
         semesterId: string
-        maxCredit: number | null
+        tuitionPerCredit: number
         _count: ClassRegisterSessionCountAggregateOutputType | null
         _avg: ClassRegisterSessionAvgAggregateOutputType | null
         _sum: ClassRegisterSessionSumAggregateOutputType | null
@@ -142966,8 +144157,9 @@ export namespace Prisma {
         startDate?: boolean
         endDate?: boolean
         semesterId?: boolean
-        maxCredit?: boolean
+        tuitionPerCredit?: boolean
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
+        creditLimit?: boolean | ClassRegisterSession$creditLimitArgs<ExtArgs>
         trainingCourses?: boolean | ClassRegisterSession$trainingCoursesArgs<ExtArgs>
         classRegisterLogs?: boolean | ClassRegisterSession$classRegisterLogsArgs<ExtArgs>
         _count?: boolean | ClassRegisterSessionCountOutputTypeDefaultArgs<ExtArgs>
@@ -142984,7 +144176,7 @@ export namespace Prisma {
         startDate?: boolean
         endDate?: boolean
         semesterId?: boolean
-        maxCredit?: boolean
+        tuitionPerCredit?: boolean
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["classRegisterSession"]>;
     export type ClassRegisterSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -142999,7 +144191,7 @@ export namespace Prisma {
         startDate?: boolean
         endDate?: boolean
         semesterId?: boolean
-        maxCredit?: boolean
+        tuitionPerCredit?: boolean
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["classRegisterSession"]>;
     export type ClassRegisterSessionSelectScalar = {
@@ -143014,11 +144206,12 @@ export namespace Prisma {
         startDate?: boolean
         endDate?: boolean
         semesterId?: boolean
-        maxCredit?: boolean
+        tuitionPerCredit?: boolean
     };
-    export type ClassRegisterSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "startDate" | "endDate" | "semesterId" | "maxCredit", ExtArgs["result"]["classRegisterSession"]>;
+    export type ClassRegisterSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "startDate" | "endDate" | "semesterId" | "tuitionPerCredit", ExtArgs["result"]["classRegisterSession"]>;
     export type ClassRegisterSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
+        creditLimit?: boolean | ClassRegisterSession$creditLimitArgs<ExtArgs>
         trainingCourses?: boolean | ClassRegisterSession$trainingCoursesArgs<ExtArgs>
         classRegisterLogs?: boolean | ClassRegisterSession$classRegisterLogsArgs<ExtArgs>
         _count?: boolean | ClassRegisterSessionCountOutputTypeDefaultArgs<ExtArgs>
@@ -143033,6 +144226,7 @@ export namespace Prisma {
         name: "ClassRegisterSession"
         objects: {
             semester: Prisma.$SemesterPayload<ExtArgs>
+            creditLimit: Prisma.$ClassRegisterSessionCreditPayload<ExtArgs>[]
             trainingCourses: Prisma.$TrainingCoursePayload<ExtArgs>[]
             classRegisterLogs: Prisma.$ClassRegisterLogsPayload<ExtArgs>[]
         }
@@ -143048,7 +144242,7 @@ export namespace Prisma {
             startDate: Date
             endDate: Date
             semesterId: string
-            maxCredit: number | null
+            tuitionPerCredit: number
         }, ExtArgs["result"]["classRegisterSession"]>
         composites: {}
     };
@@ -143432,6 +144626,29 @@ export namespace Prisma {
          * Limit how many ClassRegisterSessions to delete.
          */
         limit?: number
+    };
+    /**
+     * ClassRegisterSession.creditLimit
+     */
+    export type ClassRegisterSession$creditLimitArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClassRegisterSessionCredit
+         */
+        select?: ClassRegisterSessionCreditSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClassRegisterSessionCredit
+         */
+        omit?: ClassRegisterSessionCreditOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClassRegisterSessionCreditInclude<ExtArgs> | null
+        where?: ClassRegisterSessionCreditWhereInput
+        orderBy?: ClassRegisterSessionCreditOrderByWithRelationInput | ClassRegisterSessionCreditOrderByWithRelationInput[]
+        cursor?: ClassRegisterSessionCreditWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ClassRegisterSessionCreditScalarFieldEnum | ClassRegisterSessionCreditScalarFieldEnum[]
     };
     /**
      * ClassRegisterSession.trainingCourses
@@ -287212,6 +288429,7 @@ export namespace Prisma {
     export type EquivalencyGroupScalarFieldEnum = (typeof EquivalencyGroupScalarFieldEnum)[keyof typeof EquivalencyGroupScalarFieldEnum];
     export type SubjectInGroupScalarFieldEnum = (typeof SubjectInGroupScalarFieldEnum)[keyof typeof SubjectInGroupScalarFieldEnum];
     export type TrainingBlockSubjectScalarFieldEnum = (typeof TrainingBlockSubjectScalarFieldEnum)[keyof typeof TrainingBlockSubjectScalarFieldEnum];
+    export type ClassRegisterSessionCreditScalarFieldEnum = (typeof ClassRegisterSessionCreditScalarFieldEnum)[keyof typeof ClassRegisterSessionCreditScalarFieldEnum];
     export type ClassRegisterSessionScalarFieldEnum = (typeof ClassRegisterSessionScalarFieldEnum)[keyof typeof ClassRegisterSessionScalarFieldEnum];
     export type ClassRegisterLogsScalarFieldEnum = (typeof ClassRegisterLogsScalarFieldEnum)[keyof typeof ClassRegisterLogsScalarFieldEnum];
     export type SubjectClassScalarFieldEnum = (typeof SubjectClassScalarFieldEnum)[keyof typeof SubjectClassScalarFieldEnum];
@@ -287438,6 +288656,7 @@ export namespace Prisma {
     export type EquivalencyGroupOrderByRelevanceFieldEnum = (typeof EquivalencyGroupOrderByRelevanceFieldEnum)[keyof typeof EquivalencyGroupOrderByRelevanceFieldEnum];
     export type SubjectInGroupOrderByRelevanceFieldEnum = (typeof SubjectInGroupOrderByRelevanceFieldEnum)[keyof typeof SubjectInGroupOrderByRelevanceFieldEnum];
     export type TrainingBlockSubjectOrderByRelevanceFieldEnum = (typeof TrainingBlockSubjectOrderByRelevanceFieldEnum)[keyof typeof TrainingBlockSubjectOrderByRelevanceFieldEnum];
+    export type ClassRegisterSessionCreditOrderByRelevanceFieldEnum = (typeof ClassRegisterSessionCreditOrderByRelevanceFieldEnum)[keyof typeof ClassRegisterSessionCreditOrderByRelevanceFieldEnum];
     export type ClassRegisterSessionOrderByRelevanceFieldEnum = (typeof ClassRegisterSessionOrderByRelevanceFieldEnum)[keyof typeof ClassRegisterSessionOrderByRelevanceFieldEnum];
     export type ClassRegisterLogsOrderByRelevanceFieldEnum = (typeof ClassRegisterLogsOrderByRelevanceFieldEnum)[keyof typeof ClassRegisterLogsOrderByRelevanceFieldEnum];
     export type SubjectClassOrderByRelevanceFieldEnum = (typeof SubjectClassOrderByRelevanceFieldEnum)[keyof typeof SubjectClassOrderByRelevanceFieldEnum];
@@ -291198,6 +292417,84 @@ export namespace Prisma {
         project?: BoolWithAggregatesFilter<"TrainingBlockSubject"> | boolean
         print?: BoolWithAggregatesFilter<"TrainingBlockSubject"> | boolean
     };
+    export type ClassRegisterSessionCreditWhereInput = {
+        AND?: ClassRegisterSessionCreditWhereInput | ClassRegisterSessionCreditWhereInput[]
+        OR?: ClassRegisterSessionCreditWhereInput[]
+        NOT?: ClassRegisterSessionCreditWhereInput | ClassRegisterSessionCreditWhereInput[]
+        id?: StringFilter<"ClassRegisterSessionCredit"> | string
+        code?: StringNullableFilter<"ClassRegisterSessionCredit"> | string | null
+        active?: BoolFilter<"ClassRegisterSessionCredit"> | boolean
+        description?: StringNullableFilter<"ClassRegisterSessionCredit"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ClassRegisterSessionCredit"> | Date | string | null
+        createdAt?: DateTimeFilter<"ClassRegisterSessionCredit"> | Date | string
+        updatedAt?: DateTimeFilter<"ClassRegisterSessionCredit"> | Date | string
+        classRegisterSessionId?: StringFilter<"ClassRegisterSessionCredit"> | string
+        minCredit?: IntFilter<"ClassRegisterSessionCredit"> | number
+        maxCredit?: IntFilter<"ClassRegisterSessionCredit"> | number
+        classRegisterSession?: XOR<ClassRegisterSessionScalarRelationFilter, ClassRegisterSessionWhereInput>
+    };
+    export type ClassRegisterSessionCreditOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        classRegisterSessionId?: SortOrder
+        minCredit?: SortOrder
+        maxCredit?: SortOrder
+        classRegisterSession?: ClassRegisterSessionOrderByWithRelationInput
+        _relevance?: ClassRegisterSessionCreditOrderByRelevanceInput
+    };
+    export type ClassRegisterSessionCreditWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: ClassRegisterSessionCreditWhereInput | ClassRegisterSessionCreditWhereInput[]
+        OR?: ClassRegisterSessionCreditWhereInput[]
+        NOT?: ClassRegisterSessionCreditWhereInput | ClassRegisterSessionCreditWhereInput[]
+        active?: BoolFilter<"ClassRegisterSessionCredit"> | boolean
+        description?: StringNullableFilter<"ClassRegisterSessionCredit"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ClassRegisterSessionCredit"> | Date | string | null
+        createdAt?: DateTimeFilter<"ClassRegisterSessionCredit"> | Date | string
+        updatedAt?: DateTimeFilter<"ClassRegisterSessionCredit"> | Date | string
+        classRegisterSessionId?: StringFilter<"ClassRegisterSessionCredit"> | string
+        minCredit?: IntFilter<"ClassRegisterSessionCredit"> | number
+        maxCredit?: IntFilter<"ClassRegisterSessionCredit"> | number
+        classRegisterSession?: XOR<ClassRegisterSessionScalarRelationFilter, ClassRegisterSessionWhereInput>
+    }, "id" | "code">;
+    export type ClassRegisterSessionCreditOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        classRegisterSessionId?: SortOrder
+        minCredit?: SortOrder
+        maxCredit?: SortOrder
+        _count?: ClassRegisterSessionCreditCountOrderByAggregateInput
+        _avg?: ClassRegisterSessionCreditAvgOrderByAggregateInput
+        _max?: ClassRegisterSessionCreditMaxOrderByAggregateInput
+        _min?: ClassRegisterSessionCreditMinOrderByAggregateInput
+        _sum?: ClassRegisterSessionCreditSumOrderByAggregateInput
+    };
+    export type ClassRegisterSessionCreditScalarWhereWithAggregatesInput = {
+        AND?: ClassRegisterSessionCreditScalarWhereWithAggregatesInput | ClassRegisterSessionCreditScalarWhereWithAggregatesInput[]
+        OR?: ClassRegisterSessionCreditScalarWhereWithAggregatesInput[]
+        NOT?: ClassRegisterSessionCreditScalarWhereWithAggregatesInput | ClassRegisterSessionCreditScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"ClassRegisterSessionCredit"> | string
+        code?: StringNullableWithAggregatesFilter<"ClassRegisterSessionCredit"> | string | null
+        active?: BoolWithAggregatesFilter<"ClassRegisterSessionCredit"> | boolean
+        description?: StringNullableWithAggregatesFilter<"ClassRegisterSessionCredit"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"ClassRegisterSessionCredit"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"ClassRegisterSessionCredit"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"ClassRegisterSessionCredit"> | Date | string
+        classRegisterSessionId?: StringWithAggregatesFilter<"ClassRegisterSessionCredit"> | string
+        minCredit?: IntWithAggregatesFilter<"ClassRegisterSessionCredit"> | number
+        maxCredit?: IntWithAggregatesFilter<"ClassRegisterSessionCredit"> | number
+    };
     export type ClassRegisterSessionWhereInput = {
         AND?: ClassRegisterSessionWhereInput | ClassRegisterSessionWhereInput[]
         OR?: ClassRegisterSessionWhereInput[]
@@ -291213,8 +292510,9 @@ export namespace Prisma {
         startDate?: DateTimeFilter<"ClassRegisterSession"> | Date | string
         endDate?: DateTimeFilter<"ClassRegisterSession"> | Date | string
         semesterId?: StringFilter<"ClassRegisterSession"> | string
-        maxCredit?: IntNullableFilter<"ClassRegisterSession"> | number | null
+        tuitionPerCredit?: FloatFilter<"ClassRegisterSession"> | number
         semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
+        creditLimit?: ClassRegisterSessionCreditListRelationFilter
         trainingCourses?: TrainingCourseListRelationFilter
         classRegisterLogs?: ClassRegisterLogsListRelationFilter
     };
@@ -291230,8 +292528,9 @@ export namespace Prisma {
         startDate?: SortOrder
         endDate?: SortOrder
         semesterId?: SortOrder
-        maxCredit?: SortOrderInput | SortOrder
+        tuitionPerCredit?: SortOrder
         semester?: SemesterOrderByWithRelationInput
+        creditLimit?: ClassRegisterSessionCreditOrderByRelationAggregateInput
         trainingCourses?: TrainingCourseOrderByRelationAggregateInput
         classRegisterLogs?: ClassRegisterLogsOrderByRelationAggregateInput
         _relevance?: ClassRegisterSessionOrderByRelevanceInput
@@ -291251,8 +292550,9 @@ export namespace Prisma {
         startDate?: DateTimeFilter<"ClassRegisterSession"> | Date | string
         endDate?: DateTimeFilter<"ClassRegisterSession"> | Date | string
         semesterId?: StringFilter<"ClassRegisterSession"> | string
-        maxCredit?: IntNullableFilter<"ClassRegisterSession"> | number | null
+        tuitionPerCredit?: FloatFilter<"ClassRegisterSession"> | number
         semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
+        creditLimit?: ClassRegisterSessionCreditListRelationFilter
         trainingCourses?: TrainingCourseListRelationFilter
         classRegisterLogs?: ClassRegisterLogsListRelationFilter
     }, "id" | "code">;
@@ -291268,7 +292568,7 @@ export namespace Prisma {
         startDate?: SortOrder
         endDate?: SortOrder
         semesterId?: SortOrder
-        maxCredit?: SortOrderInput | SortOrder
+        tuitionPerCredit?: SortOrder
         _count?: ClassRegisterSessionCountOrderByAggregateInput
         _avg?: ClassRegisterSessionAvgOrderByAggregateInput
         _max?: ClassRegisterSessionMaxOrderByAggregateInput
@@ -291290,7 +292590,7 @@ export namespace Prisma {
         startDate?: DateTimeWithAggregatesFilter<"ClassRegisterSession"> | Date | string
         endDate?: DateTimeWithAggregatesFilter<"ClassRegisterSession"> | Date | string
         semesterId?: StringWithAggregatesFilter<"ClassRegisterSession"> | string
-        maxCredit?: IntNullableWithAggregatesFilter<"ClassRegisterSession"> | number | null
+        tuitionPerCredit?: FloatWithAggregatesFilter<"ClassRegisterSession"> | number
     };
     export type ClassRegisterLogsWhereInput = {
         AND?: ClassRegisterLogsWhereInput | ClassRegisterLogsWhereInput[]
@@ -313682,6 +314982,89 @@ export namespace Prisma {
         project?: BoolFieldUpdateOperationsInput | boolean
         print?: BoolFieldUpdateOperationsInput | boolean
     };
+    export type ClassRegisterSessionCreditCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        minCredit?: number
+        maxCredit?: number
+        classRegisterSession: ClassRegisterSessionCreateNestedOneWithoutCreditLimitInput
+    };
+    export type ClassRegisterSessionCreditUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        classRegisterSessionId: string
+        minCredit?: number
+        maxCredit?: number
+    };
+    export type ClassRegisterSessionCreditUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        minCredit?: IntFieldUpdateOperationsInput | number
+        maxCredit?: IntFieldUpdateOperationsInput | number
+        classRegisterSession?: ClassRegisterSessionUpdateOneRequiredWithoutCreditLimitNestedInput
+    };
+    export type ClassRegisterSessionCreditUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+        minCredit?: IntFieldUpdateOperationsInput | number
+        maxCredit?: IntFieldUpdateOperationsInput | number
+    };
+    export type ClassRegisterSessionCreditCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        classRegisterSessionId: string
+        minCredit?: number
+        maxCredit?: number
+    };
+    export type ClassRegisterSessionCreditUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        minCredit?: IntFieldUpdateOperationsInput | number
+        maxCredit?: IntFieldUpdateOperationsInput | number
+    };
+    export type ClassRegisterSessionCreditUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        classRegisterSessionId?: StringFieldUpdateOperationsInput | string
+        minCredit?: IntFieldUpdateOperationsInput | number
+        maxCredit?: IntFieldUpdateOperationsInput | number
+    };
     export type ClassRegisterSessionCreateInput = {
         id?: string
         code?: string | null
@@ -313693,8 +315076,9 @@ export namespace Prisma {
         name: string
         startDate: Date | string
         endDate: Date | string
-        maxCredit?: number | null
+        tuitionPerCredit?: number
         semester: SemesterCreateNestedOneWithoutClassRegisterSessionInput
+        creditLimit?: ClassRegisterSessionCreditCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput
     };
@@ -313710,7 +315094,8 @@ export namespace Prisma {
         startDate: Date | string
         endDate: Date | string
         semesterId: string
-        maxCredit?: number | null
+        tuitionPerCredit?: number
+        creditLimit?: ClassRegisterSessionCreditUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput
     };
@@ -313725,8 +315110,9 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-        maxCredit?: NullableIntFieldUpdateOperationsInput | number | null
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
         semester?: SemesterUpdateOneRequiredWithoutClassRegisterSessionNestedInput
+        creditLimit?: ClassRegisterSessionCreditUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput
     };
@@ -313742,7 +315128,8 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
         semesterId?: StringFieldUpdateOperationsInput | string
-        maxCredit?: NullableIntFieldUpdateOperationsInput | number | null
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
+        creditLimit?: ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
     };
@@ -313758,7 +315145,7 @@ export namespace Prisma {
         startDate: Date | string
         endDate: Date | string
         semesterId: string
-        maxCredit?: number | null
+        tuitionPerCredit?: number
     };
     export type ClassRegisterSessionUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -313771,7 +315158,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-        maxCredit?: NullableIntFieldUpdateOperationsInput | number | null
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
     };
     export type ClassRegisterSessionUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -313785,7 +315172,7 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
         semesterId?: StringFieldUpdateOperationsInput | string
-        maxCredit?: NullableIntFieldUpdateOperationsInput | number | null
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
     };
     export type ClassRegisterLogsCreateInput = {
         id?: string
@@ -337829,10 +339216,71 @@ export namespace Prisma {
         _min?: NestedEnumSubjectRequirementTypeFilter<$PrismaModel>
         _max?: NestedEnumSubjectRequirementTypeFilter<$PrismaModel>
     };
+    export type ClassRegisterSessionScalarRelationFilter = {
+        is?: ClassRegisterSessionWhereInput
+        isNot?: ClassRegisterSessionWhereInput
+    };
+    export type ClassRegisterSessionCreditOrderByRelevanceInput = {
+        fields: ClassRegisterSessionCreditOrderByRelevanceFieldEnum | ClassRegisterSessionCreditOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type ClassRegisterSessionCreditCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        classRegisterSessionId?: SortOrder
+        minCredit?: SortOrder
+        maxCredit?: SortOrder
+    };
+    export type ClassRegisterSessionCreditAvgOrderByAggregateInput = {
+        minCredit?: SortOrder
+        maxCredit?: SortOrder
+    };
+    export type ClassRegisterSessionCreditMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        classRegisterSessionId?: SortOrder
+        minCredit?: SortOrder
+        maxCredit?: SortOrder
+    };
+    export type ClassRegisterSessionCreditMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        classRegisterSessionId?: SortOrder
+        minCredit?: SortOrder
+        maxCredit?: SortOrder
+    };
+    export type ClassRegisterSessionCreditSumOrderByAggregateInput = {
+        minCredit?: SortOrder
+        maxCredit?: SortOrder
+    };
+    export type ClassRegisterSessionCreditListRelationFilter = {
+        every?: ClassRegisterSessionCreditWhereInput
+        some?: ClassRegisterSessionCreditWhereInput
+        none?: ClassRegisterSessionCreditWhereInput
+    };
     export type ClassRegisterLogsListRelationFilter = {
         every?: ClassRegisterLogsWhereInput
         some?: ClassRegisterLogsWhereInput
         none?: ClassRegisterLogsWhereInput
+    };
+    export type ClassRegisterSessionCreditOrderByRelationAggregateInput = {
+        _count?: SortOrder
     };
     export type ClassRegisterLogsOrderByRelationAggregateInput = {
         _count?: SortOrder
@@ -337854,10 +339302,10 @@ export namespace Prisma {
         startDate?: SortOrder
         endDate?: SortOrder
         semesterId?: SortOrder
-        maxCredit?: SortOrder
+        tuitionPerCredit?: SortOrder
     };
     export type ClassRegisterSessionAvgOrderByAggregateInput = {
-        maxCredit?: SortOrder
+        tuitionPerCredit?: SortOrder
     };
     export type ClassRegisterSessionMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -337871,7 +339319,7 @@ export namespace Prisma {
         startDate?: SortOrder
         endDate?: SortOrder
         semesterId?: SortOrder
-        maxCredit?: SortOrder
+        tuitionPerCredit?: SortOrder
     };
     export type ClassRegisterSessionMinOrderByAggregateInput = {
         id?: SortOrder
@@ -337885,20 +339333,16 @@ export namespace Prisma {
         startDate?: SortOrder
         endDate?: SortOrder
         semesterId?: SortOrder
-        maxCredit?: SortOrder
+        tuitionPerCredit?: SortOrder
     };
     export type ClassRegisterSessionSumOrderByAggregateInput = {
-        maxCredit?: SortOrder
+        tuitionPerCredit?: SortOrder
     };
     export type EnumClassRegisterStatusFilter<$PrismaModel = never> = {
         equals?: $Enums.ClassRegisterStatus | EnumClassRegisterStatusFieldRefInput<$PrismaModel>
         in?: $Enums.ClassRegisterStatus[] | ListEnumClassRegisterStatusFieldRefInput<$PrismaModel>
         notIn?: $Enums.ClassRegisterStatus[] | ListEnumClassRegisterStatusFieldRefInput<$PrismaModel>
         not?: NestedEnumClassRegisterStatusFilter<$PrismaModel> | $Enums.ClassRegisterStatus
-    };
-    export type ClassRegisterSessionScalarRelationFilter = {
-        is?: ClassRegisterSessionWhereInput
-        isNot?: ClassRegisterSessionWhereInput
     };
     export type SubjectClassScalarRelationFilter = {
         is?: SubjectClassWhereInput
@@ -353571,10 +355015,28 @@ export namespace Prisma {
         connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput
         update?: XOR<XOR<TrainingBlockOnCurriculumVersionUpdateToOneWithWhereWithoutSubjectsInput, TrainingBlockOnCurriculumVersionUpdateWithoutSubjectsInput>, TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutSubjectsInput>
     };
+    export type ClassRegisterSessionCreateNestedOneWithoutCreditLimitInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutCreditLimitInput, ClassRegisterSessionUncheckedCreateWithoutCreditLimitInput>
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutCreditLimitInput
+        connect?: ClassRegisterSessionWhereUniqueInput
+    };
+    export type ClassRegisterSessionUpdateOneRequiredWithoutCreditLimitNestedInput = {
+        create?: XOR<ClassRegisterSessionCreateWithoutCreditLimitInput, ClassRegisterSessionUncheckedCreateWithoutCreditLimitInput>
+        connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutCreditLimitInput
+        upsert?: ClassRegisterSessionUpsertWithoutCreditLimitInput
+        connect?: ClassRegisterSessionWhereUniqueInput
+        update?: XOR<XOR<ClassRegisterSessionUpdateToOneWithWhereWithoutCreditLimitInput, ClassRegisterSessionUpdateWithoutCreditLimitInput>, ClassRegisterSessionUncheckedUpdateWithoutCreditLimitInput>
+    };
     export type SemesterCreateNestedOneWithoutClassRegisterSessionInput = {
         create?: XOR<SemesterCreateWithoutClassRegisterSessionInput, SemesterUncheckedCreateWithoutClassRegisterSessionInput>
         connectOrCreate?: SemesterCreateOrConnectWithoutClassRegisterSessionInput
         connect?: SemesterWhereUniqueInput
+    };
+    export type ClassRegisterSessionCreditCreateNestedManyWithoutClassRegisterSessionInput = {
+        create?: XOR<ClassRegisterSessionCreditCreateWithoutClassRegisterSessionInput, ClassRegisterSessionCreditUncheckedCreateWithoutClassRegisterSessionInput> | ClassRegisterSessionCreditCreateWithoutClassRegisterSessionInput[] | ClassRegisterSessionCreditUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: ClassRegisterSessionCreditCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterSessionCreditCreateOrConnectWithoutClassRegisterSessionInput[]
+        createMany?: ClassRegisterSessionCreditCreateManyClassRegisterSessionInputEnvelope
+        connect?: ClassRegisterSessionCreditWhereUniqueInput | ClassRegisterSessionCreditWhereUniqueInput[]
     };
     export type TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput = {
         create?: XOR<TrainingCourseCreateWithoutClassRegisterSessionInput, TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput> | TrainingCourseCreateWithoutClassRegisterSessionInput[] | TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput[]
@@ -353586,6 +355048,12 @@ export namespace Prisma {
         connectOrCreate?: ClassRegisterLogsCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterLogsCreateOrConnectWithoutClassRegisterSessionInput[]
         createMany?: ClassRegisterLogsCreateManyClassRegisterSessionInputEnvelope
         connect?: ClassRegisterLogsWhereUniqueInput | ClassRegisterLogsWhereUniqueInput[]
+    };
+    export type ClassRegisterSessionCreditUncheckedCreateNestedManyWithoutClassRegisterSessionInput = {
+        create?: XOR<ClassRegisterSessionCreditCreateWithoutClassRegisterSessionInput, ClassRegisterSessionCreditUncheckedCreateWithoutClassRegisterSessionInput> | ClassRegisterSessionCreditCreateWithoutClassRegisterSessionInput[] | ClassRegisterSessionCreditUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: ClassRegisterSessionCreditCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterSessionCreditCreateOrConnectWithoutClassRegisterSessionInput[]
+        createMany?: ClassRegisterSessionCreditCreateManyClassRegisterSessionInputEnvelope
+        connect?: ClassRegisterSessionCreditWhereUniqueInput | ClassRegisterSessionCreditWhereUniqueInput[]
     };
     export type TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput = {
         create?: XOR<TrainingCourseCreateWithoutClassRegisterSessionInput, TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput> | TrainingCourseCreateWithoutClassRegisterSessionInput[] | TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput[]
@@ -353604,6 +355072,19 @@ export namespace Prisma {
         upsert?: SemesterUpsertWithoutClassRegisterSessionInput
         connect?: SemesterWhereUniqueInput
         update?: XOR<XOR<SemesterUpdateToOneWithWhereWithoutClassRegisterSessionInput, SemesterUpdateWithoutClassRegisterSessionInput>, SemesterUncheckedUpdateWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterSessionCreditUpdateManyWithoutClassRegisterSessionNestedInput = {
+        create?: XOR<ClassRegisterSessionCreditCreateWithoutClassRegisterSessionInput, ClassRegisterSessionCreditUncheckedCreateWithoutClassRegisterSessionInput> | ClassRegisterSessionCreditCreateWithoutClassRegisterSessionInput[] | ClassRegisterSessionCreditUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: ClassRegisterSessionCreditCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterSessionCreditCreateOrConnectWithoutClassRegisterSessionInput[]
+        upsert?: ClassRegisterSessionCreditUpsertWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterSessionCreditUpsertWithWhereUniqueWithoutClassRegisterSessionInput[]
+        createMany?: ClassRegisterSessionCreditCreateManyClassRegisterSessionInputEnvelope
+        set?: ClassRegisterSessionCreditWhereUniqueInput | ClassRegisterSessionCreditWhereUniqueInput[]
+        disconnect?: ClassRegisterSessionCreditWhereUniqueInput | ClassRegisterSessionCreditWhereUniqueInput[]
+        delete?: ClassRegisterSessionCreditWhereUniqueInput | ClassRegisterSessionCreditWhereUniqueInput[]
+        connect?: ClassRegisterSessionCreditWhereUniqueInput | ClassRegisterSessionCreditWhereUniqueInput[]
+        update?: ClassRegisterSessionCreditUpdateWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterSessionCreditUpdateWithWhereUniqueWithoutClassRegisterSessionInput[]
+        updateMany?: ClassRegisterSessionCreditUpdateManyWithWhereWithoutClassRegisterSessionInput | ClassRegisterSessionCreditUpdateManyWithWhereWithoutClassRegisterSessionInput[]
+        deleteMany?: ClassRegisterSessionCreditScalarWhereInput | ClassRegisterSessionCreditScalarWhereInput[]
     };
     export type TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput = {
         create?: XOR<TrainingCourseCreateWithoutClassRegisterSessionInput, TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput> | TrainingCourseCreateWithoutClassRegisterSessionInput[] | TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput[]
@@ -353629,6 +355110,19 @@ export namespace Prisma {
         update?: ClassRegisterLogsUpdateWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterLogsUpdateWithWhereUniqueWithoutClassRegisterSessionInput[]
         updateMany?: ClassRegisterLogsUpdateManyWithWhereWithoutClassRegisterSessionInput | ClassRegisterLogsUpdateManyWithWhereWithoutClassRegisterSessionInput[]
         deleteMany?: ClassRegisterLogsScalarWhereInput | ClassRegisterLogsScalarWhereInput[]
+    };
+    export type ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionNestedInput = {
+        create?: XOR<ClassRegisterSessionCreditCreateWithoutClassRegisterSessionInput, ClassRegisterSessionCreditUncheckedCreateWithoutClassRegisterSessionInput> | ClassRegisterSessionCreditCreateWithoutClassRegisterSessionInput[] | ClassRegisterSessionCreditUncheckedCreateWithoutClassRegisterSessionInput[]
+        connectOrCreate?: ClassRegisterSessionCreditCreateOrConnectWithoutClassRegisterSessionInput | ClassRegisterSessionCreditCreateOrConnectWithoutClassRegisterSessionInput[]
+        upsert?: ClassRegisterSessionCreditUpsertWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterSessionCreditUpsertWithWhereUniqueWithoutClassRegisterSessionInput[]
+        createMany?: ClassRegisterSessionCreditCreateManyClassRegisterSessionInputEnvelope
+        set?: ClassRegisterSessionCreditWhereUniqueInput | ClassRegisterSessionCreditWhereUniqueInput[]
+        disconnect?: ClassRegisterSessionCreditWhereUniqueInput | ClassRegisterSessionCreditWhereUniqueInput[]
+        delete?: ClassRegisterSessionCreditWhereUniqueInput | ClassRegisterSessionCreditWhereUniqueInput[]
+        connect?: ClassRegisterSessionCreditWhereUniqueInput | ClassRegisterSessionCreditWhereUniqueInput[]
+        update?: ClassRegisterSessionCreditUpdateWithWhereUniqueWithoutClassRegisterSessionInput | ClassRegisterSessionCreditUpdateWithWhereUniqueWithoutClassRegisterSessionInput[]
+        updateMany?: ClassRegisterSessionCreditUpdateManyWithWhereWithoutClassRegisterSessionInput | ClassRegisterSessionCreditUpdateManyWithWhereWithoutClassRegisterSessionInput[]
+        deleteMany?: ClassRegisterSessionCreditScalarWhereInput | ClassRegisterSessionCreditScalarWhereInput[]
     };
     export type TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput = {
         create?: XOR<TrainingCourseCreateWithoutClassRegisterSessionInput, TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput> | TrainingCourseCreateWithoutClassRegisterSessionInput[] | TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput[]
@@ -374273,7 +375767,8 @@ export namespace Prisma {
         name: string
         startDate: Date | string
         endDate: Date | string
-        maxCredit?: number | null
+        tuitionPerCredit?: number
+        creditLimit?: ClassRegisterSessionCreditCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput
     };
@@ -374288,7 +375783,8 @@ export namespace Prisma {
         name: string
         startDate: Date | string
         endDate: Date | string
-        maxCredit?: number | null
+        tuitionPerCredit?: number
+        creditLimit?: ClassRegisterSessionCreditUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput
     };
@@ -374612,7 +376108,7 @@ export namespace Prisma {
         startDate?: DateTimeFilter<"ClassRegisterSession"> | Date | string
         endDate?: DateTimeFilter<"ClassRegisterSession"> | Date | string
         semesterId?: StringFilter<"ClassRegisterSession"> | string
-        maxCredit?: IntNullableFilter<"ClassRegisterSession"> | number | null
+        tuitionPerCredit?: FloatFilter<"ClassRegisterSession"> | number
     };
     export type SchoolYearCreateWithoutMilestoneInput = {
         id?: string
@@ -375166,8 +376662,9 @@ export namespace Prisma {
         name: string
         startDate: Date | string
         endDate: Date | string
-        maxCredit?: number | null
+        tuitionPerCredit?: number
         semester: SemesterCreateNestedOneWithoutClassRegisterSessionInput
+        creditLimit?: ClassRegisterSessionCreditCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionUncheckedCreateWithoutTrainingCoursesInput = {
@@ -375182,7 +376679,8 @@ export namespace Prisma {
         startDate: Date | string
         endDate: Date | string
         semesterId: string
-        maxCredit?: number | null
+        tuitionPerCredit?: number
+        creditLimit?: ClassRegisterSessionCreditUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionCreateOrConnectWithoutTrainingCoursesInput = {
@@ -380304,6 +381802,83 @@ export namespace Prisma {
         priority?: IntFieldUpdateOperationsInput | number
         electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
     };
+    export type ClassRegisterSessionCreateWithoutCreditLimitInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        tuitionPerCredit?: number
+        semester: SemesterCreateNestedOneWithoutClassRegisterSessionInput
+        trainingCourses?: TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutClassRegisterSessionInput
+    };
+    export type ClassRegisterSessionUncheckedCreateWithoutCreditLimitInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        semesterId: string
+        tuitionPerCredit?: number
+        trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutClassRegisterSessionInput
+    };
+    export type ClassRegisterSessionCreateOrConnectWithoutCreditLimitInput = {
+        where: ClassRegisterSessionWhereUniqueInput
+        create: XOR<ClassRegisterSessionCreateWithoutCreditLimitInput, ClassRegisterSessionUncheckedCreateWithoutCreditLimitInput>
+    };
+    export type ClassRegisterSessionUpsertWithoutCreditLimitInput = {
+        update: XOR<ClassRegisterSessionUpdateWithoutCreditLimitInput, ClassRegisterSessionUncheckedUpdateWithoutCreditLimitInput>
+        create: XOR<ClassRegisterSessionCreateWithoutCreditLimitInput, ClassRegisterSessionUncheckedCreateWithoutCreditLimitInput>
+        where?: ClassRegisterSessionWhereInput
+    };
+    export type ClassRegisterSessionUpdateToOneWithWhereWithoutCreditLimitInput = {
+        where?: ClassRegisterSessionWhereInput
+        data: XOR<ClassRegisterSessionUpdateWithoutCreditLimitInput, ClassRegisterSessionUncheckedUpdateWithoutCreditLimitInput>
+    };
+    export type ClassRegisterSessionUpdateWithoutCreditLimitInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
+        semester?: SemesterUpdateOneRequiredWithoutClassRegisterSessionNestedInput
+        trainingCourses?: TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput
+    };
+    export type ClassRegisterSessionUncheckedUpdateWithoutCreditLimitInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        semesterId?: StringFieldUpdateOperationsInput | string
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
+        trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
+    };
     export type SemesterCreateWithoutClassRegisterSessionInput = {
         id?: string
         code?: string | null
@@ -380353,6 +381928,36 @@ export namespace Prisma {
     export type SemesterCreateOrConnectWithoutClassRegisterSessionInput = {
         where: SemesterWhereUniqueInput
         create: XOR<SemesterCreateWithoutClassRegisterSessionInput, SemesterUncheckedCreateWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterSessionCreditCreateWithoutClassRegisterSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        minCredit?: number
+        maxCredit?: number
+    };
+    export type ClassRegisterSessionCreditUncheckedCreateWithoutClassRegisterSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        minCredit?: number
+        maxCredit?: number
+    };
+    export type ClassRegisterSessionCreditCreateOrConnectWithoutClassRegisterSessionInput = {
+        where: ClassRegisterSessionCreditWhereUniqueInput
+        create: XOR<ClassRegisterSessionCreditCreateWithoutClassRegisterSessionInput, ClassRegisterSessionCreditUncheckedCreateWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterSessionCreditCreateManyClassRegisterSessionInputEnvelope = {
+        data: ClassRegisterSessionCreditCreateManyClassRegisterSessionInput | ClassRegisterSessionCreditCreateManyClassRegisterSessionInput[]
+        skipDuplicates?: boolean
     };
     export type TrainingCourseCreateWithoutClassRegisterSessionInput = {
         id?: string
@@ -380519,6 +382124,34 @@ export namespace Prisma {
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
     };
+    export type ClassRegisterSessionCreditUpsertWithWhereUniqueWithoutClassRegisterSessionInput = {
+        where: ClassRegisterSessionCreditWhereUniqueInput
+        update: XOR<ClassRegisterSessionCreditUpdateWithoutClassRegisterSessionInput, ClassRegisterSessionCreditUncheckedUpdateWithoutClassRegisterSessionInput>
+        create: XOR<ClassRegisterSessionCreditCreateWithoutClassRegisterSessionInput, ClassRegisterSessionCreditUncheckedCreateWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterSessionCreditUpdateWithWhereUniqueWithoutClassRegisterSessionInput = {
+        where: ClassRegisterSessionCreditWhereUniqueInput
+        data: XOR<ClassRegisterSessionCreditUpdateWithoutClassRegisterSessionInput, ClassRegisterSessionCreditUncheckedUpdateWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterSessionCreditUpdateManyWithWhereWithoutClassRegisterSessionInput = {
+        where: ClassRegisterSessionCreditScalarWhereInput
+        data: XOR<ClassRegisterSessionCreditUpdateManyMutationInput, ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionInput>
+    };
+    export type ClassRegisterSessionCreditScalarWhereInput = {
+        AND?: ClassRegisterSessionCreditScalarWhereInput | ClassRegisterSessionCreditScalarWhereInput[]
+        OR?: ClassRegisterSessionCreditScalarWhereInput[]
+        NOT?: ClassRegisterSessionCreditScalarWhereInput | ClassRegisterSessionCreditScalarWhereInput[]
+        id?: StringFilter<"ClassRegisterSessionCredit"> | string
+        code?: StringNullableFilter<"ClassRegisterSessionCredit"> | string | null
+        active?: BoolFilter<"ClassRegisterSessionCredit"> | boolean
+        description?: StringNullableFilter<"ClassRegisterSessionCredit"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ClassRegisterSessionCredit"> | Date | string | null
+        createdAt?: DateTimeFilter<"ClassRegisterSessionCredit"> | Date | string
+        updatedAt?: DateTimeFilter<"ClassRegisterSessionCredit"> | Date | string
+        classRegisterSessionId?: StringFilter<"ClassRegisterSessionCredit"> | string
+        minCredit?: IntFilter<"ClassRegisterSessionCredit"> | number
+        maxCredit?: IntFilter<"ClassRegisterSessionCredit"> | number
+    };
     export type TrainingCourseUpsertWithWhereUniqueWithoutClassRegisterSessionInput = {
         where: TrainingCourseWhereUniqueInput
         update: XOR<TrainingCourseUpdateWithoutClassRegisterSessionInput, TrainingCourseUncheckedUpdateWithoutClassRegisterSessionInput>
@@ -380573,8 +382206,9 @@ export namespace Prisma {
         name: string
         startDate: Date | string
         endDate: Date | string
-        maxCredit?: number | null
+        tuitionPerCredit?: number
         semester: SemesterCreateNestedOneWithoutClassRegisterSessionInput
+        creditLimit?: ClassRegisterSessionCreditCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionUncheckedCreateWithoutClassRegisterLogsInput = {
@@ -380589,7 +382223,8 @@ export namespace Prisma {
         startDate: Date | string
         endDate: Date | string
         semesterId: string
-        maxCredit?: number | null
+        tuitionPerCredit?: number
+        creditLimit?: ClassRegisterSessionCreditUncheckedCreateNestedManyWithoutClassRegisterSessionInput
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutClassRegisterSessionInput
     };
     export type ClassRegisterSessionCreateOrConnectWithoutClassRegisterLogsInput = {
@@ -380808,8 +382443,9 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-        maxCredit?: NullableIntFieldUpdateOperationsInput | number | null
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
         semester?: SemesterUpdateOneRequiredWithoutClassRegisterSessionNestedInput
+        creditLimit?: ClassRegisterSessionCreditUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type ClassRegisterSessionUncheckedUpdateWithoutClassRegisterLogsInput = {
@@ -380824,7 +382460,8 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
         semesterId?: StringFieldUpdateOperationsInput | string
-        maxCredit?: NullableIntFieldUpdateOperationsInput | number | null
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
+        creditLimit?: ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type SubjectClassUpsertWithoutClassRegisterLogsInput = {
@@ -453646,7 +455283,7 @@ export namespace Prisma {
         name: string
         startDate: Date | string
         endDate: Date | string
-        maxCredit?: number | null
+        tuitionPerCredit?: number
     };
     export type SubjectClassUpdateWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -454197,7 +455834,8 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-        maxCredit?: NullableIntFieldUpdateOperationsInput | number | null
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
+        creditLimit?: ClassRegisterSessionCreditUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput
     };
@@ -454212,7 +455850,8 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-        maxCredit?: NullableIntFieldUpdateOperationsInput | number | null
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
+        creditLimit?: ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
     };
@@ -454227,7 +455866,7 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-        maxCredit?: NullableIntFieldUpdateOperationsInput | number | null
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
     };
     export type TrainingCourseRegulationCreateManyTrainingCourseInput = {
         id?: string
@@ -454798,8 +456437,9 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-        maxCredit?: NullableIntFieldUpdateOperationsInput | number | null
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
         semester?: SemesterUpdateOneRequiredWithoutClassRegisterSessionNestedInput
+        creditLimit?: ClassRegisterSessionCreditUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type ClassRegisterSessionUncheckedUpdateWithoutTrainingCoursesInput = {
@@ -454814,7 +456454,8 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
         semesterId?: StringFieldUpdateOperationsInput | string
-        maxCredit?: NullableIntFieldUpdateOperationsInput | number | null
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
+        creditLimit?: ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutClassRegisterSessionNestedInput
     };
     export type ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesInput = {
@@ -454829,7 +456470,7 @@ export namespace Prisma {
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: DateTimeFieldUpdateOperationsInput | Date | string
         semesterId?: StringFieldUpdateOperationsInput | string
-        maxCredit?: NullableIntFieldUpdateOperationsInput | number | null
+        tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
     };
     export type StudentCreateManyFixedClassInput = {
         id?: string
@@ -457062,6 +458703,17 @@ export namespace Prisma {
         subjectId?: StringFieldUpdateOperationsInput | string
         side?: EnumEquivalencySideFieldUpdateOperationsInput | $Enums.EquivalencySide
     };
+    export type ClassRegisterSessionCreditCreateManyClassRegisterSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        minCredit?: number
+        maxCredit?: number
+    };
     export type ClassRegisterLogsCreateManyClassRegisterSessionInput = {
         id?: string
         code?: string | null
@@ -457074,6 +458726,39 @@ export namespace Prisma {
         studentId: string
         status?: $Enums.ClassRegisterStatus
         reason?: string | null
+    };
+    export type ClassRegisterSessionCreditUpdateWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        minCredit?: IntFieldUpdateOperationsInput | number
+        maxCredit?: IntFieldUpdateOperationsInput | number
+    };
+    export type ClassRegisterSessionCreditUncheckedUpdateWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        minCredit?: IntFieldUpdateOperationsInput | number
+        maxCredit?: IntFieldUpdateOperationsInput | number
+    };
+    export type ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        minCredit?: IntFieldUpdateOperationsInput | number
+        maxCredit?: IntFieldUpdateOperationsInput | number
     };
     export type TrainingCourseUpdateWithoutClassRegisterSessionInput = {
         id?: StringFieldUpdateOperationsInput | string

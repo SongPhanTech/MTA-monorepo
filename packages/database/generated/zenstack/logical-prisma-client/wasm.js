@@ -614,6 +614,19 @@ exports.Prisma.TrainingBlockSubjectScalarFieldEnum = {
   print: 'print'
 };
 
+exports.Prisma.ClassRegisterSessionCreditScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  classRegisterSessionId: 'classRegisterSessionId',
+  minCredit: 'minCredit',
+  maxCredit: 'maxCredit'
+};
+
 exports.Prisma.ClassRegisterSessionScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -626,7 +639,7 @@ exports.Prisma.ClassRegisterSessionScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   semesterId: 'semesterId',
-  maxCredit: 'maxCredit'
+  tuitionPerCredit: 'tuitionPerCredit'
 };
 
 exports.Prisma.ClassRegisterLogsScalarFieldEnum = {
@@ -4039,6 +4052,13 @@ exports.Prisma.TrainingBlockSubjectOrderByRelevanceFieldEnum = {
   trainingBlockOnCurriculumVersionId: 'trainingBlockOnCurriculumVersionId'
 };
 
+exports.Prisma.ClassRegisterSessionCreditOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  classRegisterSessionId: 'classRegisterSessionId'
+};
+
 exports.Prisma.ClassRegisterSessionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6363,6 +6383,7 @@ exports.Prisma.ModelName = {
   EquivalencyGroup: 'EquivalencyGroup',
   SubjectInGroup: 'SubjectInGroup',
   TrainingBlockSubject: 'TrainingBlockSubject',
+  ClassRegisterSessionCredit: 'ClassRegisterSessionCredit',
   ClassRegisterSession: 'ClassRegisterSession',
   ClassRegisterLogs: 'ClassRegisterLogs',
   SubjectClass: 'SubjectClass',

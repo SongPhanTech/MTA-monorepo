@@ -491,14 +491,26 @@ model TrainingBlockSubject extends Base {
   @@schema("ql-dao-tao")
 }
 
+// Giới hạn tín chỉ đăng ký
+model ClassRegisterSessionCredit extends Base {
+  classRegisterSession   ClassRegisterSession @relation(fields: [classRegisterSessionId], references: [id])
+  classRegisterSessionId String
+  minCredit              Int                  @default(0) // tối thiểu số tín chỉ phải đăng ký
+  maxCredit              Int                  @default(25)        // tối đa số tín chỉ được đăng ký
+
+  @@schema("ql-dao-tao")
+}
+
+
 model ClassRegisterSession extends Base {
   name              String
   startDate         DateTime
   endDate           DateTime
-  semester          Semester            @relation(fields: [semesterId], references: [id])
+  semester          Semester                     @relation(fields: [semesterId], references: [id])
   semesterId        String
-  maxCredit         Int?             // tối đa số tín chỉ được đăng ký
+  tuitionPerCredit  Float                        @default(0) // học phí/tín chỉ
 
+  creditLimit       ClassRegisterSessionCredit[] // giới hạn tín chỉ
   trainingCourses   TrainingCourse[]
   classRegisterLogs ClassRegisterLogs[]
   @@schema("ql-dao-tao")

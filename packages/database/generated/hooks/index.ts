@@ -35,6 +35,7 @@ export * from './subject-version';
 export * from './equivalency-group';
 export * from './subject-in-group';
 export * from './training-block-subject';
+export * from './class-register-session-credit';
 export * from './class-register-session';
 export * from './class-register-logs';
 export * from './subject-class';
