@@ -409,17 +409,17 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 align: 'center',
                                 render: (value) => value?.toString(),
                             },
-                            {
-                                title: 'Xếp loại rèn luyện',
-                                dataIndex: ['studentSemesterResult', '0', 'studentTrainingType'],
-                                width: 140,
-                                align: 'center',
-                                render: (value) => (
-                                    <Tag color={getStudentTrainingTypeColor(value)}>
-                                        {getStudentTrainingTypeLabel(value)}
-                                    </Tag>
-                                ),
-                            },
+                            // {
+                            //     title: 'Xếp loại rèn luyện',
+                            //     dataIndex: ['studentSemesterResult', '0', 'studentTrainingType'],
+                            //     width: 140,
+                            //     align: 'center',
+                            //     render: (value) => (
+                            //         <Tag color={getStudentTrainingTypeColor(value)}>
+                            //             {getStudentTrainingTypeLabel(value)}
+                            //         </Tag>
+                            //     ),
+                            // },
                             {
                                 title: 'Điểm học phần thấp nhất',
                                 dataIndex: ['studentSemesterResult', '0', 'lowestFinalScore'],

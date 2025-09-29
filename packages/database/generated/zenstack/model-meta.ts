@@ -5527,11 +5527,6 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -5553,6 +5548,9 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -5686,9 +5684,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, studentId_semesterId: {
                     name: "studentId_semesterId",
                     fields: ["studentId", "semesterId"]
@@ -5703,11 +5698,6 @@ const metadata = {
                     type: "String",
                     isId: true,
                     attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                    attributes: [{ "name": "@unique", "args": [] }],
                 }, active: {
                     name: "active",
                     type: "Boolean",
@@ -5729,6 +5719,9 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -5820,9 +5813,6 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
                 }, studentId_schoolYearId: {
                     name: "studentId_schoolYearId",
                     fields: ["studentId", "schoolYearId"]

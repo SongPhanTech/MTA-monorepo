@@ -12,12 +12,12 @@ import { DecimalSchema } from '../common';
 import { Decimal } from 'decimal.js';
 const baseSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    code: z.string(),
     studyYear: z.number(),
     semesterIndexInCourse: z.number(),
     isLastSemester: z.boolean(),
@@ -86,12 +86,12 @@ export const StudentSemesterResultPrismaCreateSchema = baseSchema.partial().pass
  */
 export const StudentSemesterResultPrismaUpdateSchema = z.object({
     id: z.string(),
-    code: z.string().nullish(),
     active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    code: z.string(),
     studyYear: z.union([z.number(), z.record(z.unknown())]),
     semesterIndexInCourse: z.union([z.number(), z.record(z.unknown())]),
     isLastSemester: z.boolean(),

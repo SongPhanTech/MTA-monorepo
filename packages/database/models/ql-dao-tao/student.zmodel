@@ -99,7 +99,8 @@ model Student extends Base {
   @@schema("ql-dao-tao")
 }
 
-model StudentSemesterResult extends Base {
+model StudentSemesterResult extends BaseNoCode {
+  code                     String
   student                  Student                 @relation(fields: [studentId], references: [id])
   studentId                String
   semester                 Semester                @relation(fields: [semesterId], references: [id])
@@ -150,7 +151,8 @@ model StudentSemesterResult extends Base {
   @@schema("ql-dao-tao")
 }
 
-model StudentYearResult extends Base {
+model StudentYearResult extends BaseNoCode {
+  code                     String
   student                  Student                 @relation(fields: [studentId], references: [id])
   studentId                String
 

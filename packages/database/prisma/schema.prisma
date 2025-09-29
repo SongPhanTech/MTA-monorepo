@@ -1804,12 +1804,12 @@ model Student {
 
 model StudentSemesterResult {
   id                       String                  @id() @default(cuid())
-  code                     String?                 @unique()
   active                   Boolean                 @default(true)
   description              String?                 @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime                @default(now())
   updatedAt                DateTime                @default(now()) @updatedAt()
+  code                     String
   student                  Student                 @relation(fields: [studentId], references: [id])
   studentId                String
   semester                 Semester                @relation(fields: [semesterId], references: [id])
@@ -1851,12 +1851,12 @@ model StudentSemesterResult {
 
 model StudentYearResult {
   id                       String                  @id() @default(cuid())
-  code                     String?                 @unique()
   active                   Boolean                 @default(true)
   description              String?                 @db.Text()
   deletedAt                DateTime?
   createdAt                DateTime                @default(now())
   updatedAt                DateTime                @default(now()) @updatedAt()
+  code                     String
   student                  Student                 @relation(fields: [studentId], references: [id])
   studentId                String
   schoolYear               SchoolYear              @relation(fields: [schoolYearId], references: [id])

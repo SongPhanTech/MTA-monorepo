@@ -44,8 +44,6 @@ const checkStudentSemesterResult = async (
     } catch (error) {
         console.error('Error checking student semester result:', error)
         return null
-    } finally {
-        await prisma.$disconnect()
     }
 }
 
@@ -723,7 +721,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
             // lấy khóa học
             const trainingCourseId = student.fixedClass?.trainingCourseId
             if (!trainingCourseId) {
-                throw new Error(`Không tìm thấy khóa học cho sinh viên ${student.id}`)
+                console.log(`Không tìm thấy khóa học cho sinh viên ${student.id}`)
+                return
             }
             // Lấy thông tin tích lũy của sinh viên
             const thongTinTichLuy = await ThongTinTichLuy(
@@ -733,7 +732,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 hocKyDauVao?.startDate || new Date() // Sử dụng ngày bắt đầu của học kỳ check
             )
             if (!thongTinTichLuy) {
-                throw new Error(`Không tìm thấy thông tin học kỳ cho sinh viên ${student.id}`)
+                console.log(`Không tìm thấy thông tin học kỳ cho sinh viên ${student.id}`)
+                return
             }
 
             // Lấy thông tin điểm học viên
@@ -807,11 +807,10 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     retakingCredits: 0, // Số tín chỉ phải thi lại (hiện tại chưa có thông tin này)
                     isImproving: false, // Đang cải thiện (hiện tại chưa có thông tin này)
                     postponeWithReason: false, // tạm ngưng có lý do
-                    code: student.code || null, // Mã sinh viên
+                    code: student.code || '', // Mã sinh viên
                     active: true,
                     description: null,
                     deletedAt: null,
-                    computerSkillPass: student.ITCertificationPass, // Đạt trình độ tin học theo quy định
                 }
                 // Lưu kết quả học kỳ mới
                 results.push(newResult)
@@ -874,12 +873,10 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     disciplinaryWarningLevel: existingResult?.disciplinaryWarningLevel || 0, // mức cảnh cáo học đường
                     suspended: existingResult?.suspended || false, // đình chỉ học
                     expelled: existingResult?.expelled || false, // đuổi học.
-                    code: existingResult?.code || null,
+                    code: existingResult?.code || '',
                     active: existingResult?.active || true, // Trạng thái hoạt động
                     description: existingResult?.description || null,
                     deletedAt: existingResult?.deletedAt || null,
-
-                    computerSkillPass: existingResult?.computerSkillPass || true, // Đạt trình độ tin học theo quy định
                 }
                 // Cập nhật kết quả học kỳ
                 results.push(updatedResult)
@@ -1224,8 +1221,6 @@ const checkAcademicActionRule = async (
     } catch (error) {
         console.error('Error fetching action criteria:', error)
         throw new Error('Failed to fetch action checkStudentEligible')
-    } finally {
-        await prisma.$disconnect()
     }
 }
 const checkAcademicActionConfig = async (
@@ -1261,8 +1256,6 @@ const checkAcademicActionConfig = async (
     } catch (error) {
         console.error('Error fetching action criteria:', error)
         throw new Error('Failed to fetch action checkStudentEligible')
-    } finally {
-        await prisma.$disconnect()
     }
 }
 const getAcademicAction = async (
@@ -1380,9 +1373,6 @@ const checkAcademicWarning = async (
     } catch (error) {
         console.error('Error checking student eligibility:', error)
         return [] // Trả về false nếu có lỗi xảy ra
-    } finally {
-        // Đóng kết nối Prisma nếu cần thiết
-        await prisma.$disconnect()
     }
 }
 const checkScholarshipRecived = async (
@@ -1560,9 +1550,6 @@ const checkScholarship = async (
     } catch (error) {
         console.error('Error checking student eligibility:', error)
         return false // Trả về false nếu có lỗi xảy ra
-    } finally {
-        // Đóng kết nối Prisma nếu cần thiết
-        await prisma.$disconnect()
     }
 }
 const getScholarship = async (
@@ -1753,8 +1740,6 @@ const getStudentResult = async (
     } catch (error) {
         console.error('Error fetching student result:', error)
         throw new Error(`${error instanceof Error ? error.message : 'Unknown error'}`)
-    } finally {
-        await prisma.$disconnect()
     }
 }
 
@@ -2033,8 +2018,6 @@ const checkStudentResultForRepeatGrade = async (
     } catch (error) {
         console.error('Error fetching student result for repeat grade:', error)
         throw new Error(`${error instanceof Error ? error.message : 'Unknown error'}`)
-    } finally {
-        await prisma.$disconnect()
     }
 }
 const SaveStudentRepeatGrade = async (
@@ -2207,8 +2190,6 @@ const SaveStudentRepeatGrade = async (
     } catch (error) {
         console.error('Error in SaveStudentRepeatGrade function:', error)
         throw new Error(`${error instanceof Error ? error.message : 'Unknown error'}`)
-    } finally {
-        await prisma.$disconnect()
     }
 }
 
@@ -2222,8 +2203,6 @@ export const StudentRepeatGradeService = async (
     } catch (error) {
         console.error('Error in RepeatGrade function:', error)
         throw new Error(`${error instanceof Error ? error.message : 'Unknown error'}`)
-    } finally {
-        await prisma.$disconnect()
     }
 }
 export type { StudentRepeatGrade }
