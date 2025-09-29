@@ -126,7 +126,7 @@ export default function AcademicRankingConvertPage() {
         },
     })
 
-    const { data: count } = useCountTrainingCourse({ where })
+    const { data: count } = useCountTrainingCourse({ where: { ...where, deletedAt: null } })
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {

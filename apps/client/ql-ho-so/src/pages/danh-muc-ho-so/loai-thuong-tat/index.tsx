@@ -24,7 +24,7 @@ export default function InjuryType() {
     })
 
     const { data = [], refetch } = useFindManyDM_LoaiThuongTat()
-    const { data: count } = useCountDM_LoaiThuongTat()
+    const { data: count } = useCountDM_LoaiThuongTat({ where: { deletedAt: null } })
     const { mutateAsync: updateLoaiThuongTat } = useUpdateDM_LoaiThuongTat()
 
     const handleModal = () => {

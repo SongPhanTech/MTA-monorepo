@@ -24,7 +24,9 @@ export default function PartyMemberQualityEvaluation() {
     })
 
     const { data = [], refetch } = useFindManyDM_XepLoaiDanhGiaChatLuongDangVien()
-    const { data: count } = useCountDM_XepLoaiDanhGiaChatLuongDangVien()
+    const { data: count } = useCountDM_XepLoaiDanhGiaChatLuongDangVien({
+        where: { deletedAt: null },
+    })
     const { mutateAsync: updateXepLoaiDanhGiaDV } = useUpdateDM_XepLoaiDanhGiaChatLuongDangVien()
 
     const handleModal = () => {

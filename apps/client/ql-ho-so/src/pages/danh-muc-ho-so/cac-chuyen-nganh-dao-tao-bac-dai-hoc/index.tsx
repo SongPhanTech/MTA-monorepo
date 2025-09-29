@@ -43,6 +43,7 @@ export default function UndergraduateTrainingMajors() {
                 contains: filters.search,
                 mode: 'insensitive',
             },
+            deletedAt: null,
         },
     })
     const { mutateAsync: updateChuyenNganhDaoTao } = useUpdateDM_ChuyenNganhDaoTaoBacDH()

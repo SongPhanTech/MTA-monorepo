@@ -29,7 +29,7 @@ export default function WorkingStatus() {
     })
 
     const { data = [], refetch } = useFindManyDM_TrangThaiLamViec()
-    const { data: count } = useCountDM_TrangThaiLamViec()
+    const { data: count } = useCountDM_TrangThaiLamViec({ where: { deletedAt: null } })
     const { mutateAsync: updateTrangThaiLamViec } = useUpdateDM_TrangThaiLamViec()
 
     const handleModal = () => {

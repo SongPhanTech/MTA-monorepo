@@ -24,7 +24,7 @@ export default function FormsOfPartyCommendation() {
     })
 
     const { data = [], refetch } = useFindManyDM_HinhThucKhenThuongDang()
-    const { data: count } = useCountDM_HinhThucKhenThuongDang()
+    const { data: count } = useCountDM_HinhThucKhenThuongDang({ where: { deletedAt: null } })
     const { mutateAsync: updateHinhThucKhenThuong } = useUpdateDM_HinhThucKhenThuongDang()
 
     const handleModal = () => {

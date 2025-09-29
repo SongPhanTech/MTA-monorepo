@@ -24,7 +24,7 @@ export default function StateManagementLevel() {
     })
 
     const { data = [], refetch } = useFindManyDM_TrinhDoQuanLyNhaNuoc()
-    const { data: count } = useCountDM_TrinhDoQuanLyNhaNuoc()
+    const { data: count } = useCountDM_TrinhDoQuanLyNhaNuoc({ where: { deletedAt: null } })
     const { mutateAsync: updateTrinhDoQuanLy } = useUpdateDM_TrinhDoQuanLyNhaNuoc()
 
     const handleModal = () => {

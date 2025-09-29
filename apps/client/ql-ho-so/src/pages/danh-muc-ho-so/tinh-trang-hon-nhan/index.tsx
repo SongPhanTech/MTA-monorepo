@@ -29,7 +29,7 @@ export default function MaritalStatus() {
     })
 
     const { data = [], refetch } = useFindManyDM_TinhTrangHonNhan()
-    const { data: count } = useCountDM_TinhTrangHonNhan()
+    const { data: count } = useCountDM_TinhTrangHonNhan({ where: { deletedAt: null } })
     const { mutateAsync: updateTinhTrangHonNhan } = useUpdateDM_TinhTrangHonNhan()
 
     const handleModal = () => {

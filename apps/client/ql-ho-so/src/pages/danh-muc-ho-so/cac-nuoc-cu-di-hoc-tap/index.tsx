@@ -26,7 +26,7 @@ export default function CountriesSendingForStudy() {
 
     const { data = [], refetch } = useFindManyDM_NuocCuDiHocTap()
     const { mutateAsync: updateNuocCuDiHocTap } = useUpdateDM_NuocCuDiHocTap()
-    const { data: count } = useCountDM_NuocCuDiHocTap()
+    const { data: count } = useCountDM_NuocCuDiHocTap({ where: { deletedAt: null } })
 
     const handleModal = () => {
         onOpen()

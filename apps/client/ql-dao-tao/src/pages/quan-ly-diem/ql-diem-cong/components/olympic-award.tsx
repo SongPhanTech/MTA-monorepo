@@ -102,6 +102,7 @@ export default function OlympicAwards() {
     const { data: count } = useCountArchivedAward({
         where: {
             name: { contains: filters.name, mode: 'insensitive' },
+            deletedAt: null,
         },
     })
 

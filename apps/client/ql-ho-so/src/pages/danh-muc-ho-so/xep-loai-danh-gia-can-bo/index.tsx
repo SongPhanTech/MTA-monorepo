@@ -24,7 +24,7 @@ export default function CadreEvaluation() {
     })
 
     const { data = [], refetch } = useFindManyDM_XepLoaiDanhGiaCanBo()
-    const { data: count } = useCountDM_XepLoaiDanhGiaCanBo()
+    const { data: count } = useCountDM_XepLoaiDanhGiaCanBo({ where: { deletedAt: null } })
     const { mutateAsync: updateXepLoaiDanhGiaCanBo } = useUpdateDM_XepLoaiDanhGiaCanBo()
 
     const handleModal = () => {

@@ -43,6 +43,7 @@ export default function Universities() {
                 contains: filters.search,
                 mode: 'insensitive',
             },
+            deletedAt: null,
         },
     })
     const { mutateAsync: updateTruongDaoTao } = useUpdateDM_TruongDaoTaoBacDH()

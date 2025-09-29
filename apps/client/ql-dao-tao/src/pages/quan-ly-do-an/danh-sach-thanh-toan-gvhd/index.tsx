@@ -99,6 +99,7 @@ export default function SupervisorPaymentRecordPage() {
     const { data: count } = useCountSupervisorPaymentRecord({
         where: {
             ...where,
+            deletedAt: null,
         },
     })
 

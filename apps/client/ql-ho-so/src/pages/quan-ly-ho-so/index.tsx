@@ -147,7 +147,10 @@ export default function UserProfilePageDs() {
     })
 
     const { data: count } = useCountUserProfile({
-        where,
+        where: {
+            ...where,
+            deletedAt: null,
+        },
         orderBy: {
             firstName: 'asc',
         },

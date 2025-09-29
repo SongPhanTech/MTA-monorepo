@@ -238,11 +238,11 @@ export default function TeachingAssignment() {
                 [
                     {
                         subjectClassStudent: {
-                            _count: filters.maxStudent,
+                            _count: filters.subjectClassStudent,
                         },
                     },
                 ],
-                !!filters.maxStudent
+                !!filters.subjectClassStudent
             ),
             {
                 createdAt: 'desc',
@@ -852,7 +852,7 @@ export default function TeachingAssignment() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                hidden: !canSome(
+                                hidden: canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
                                     'SUA',
                                     'XOA'

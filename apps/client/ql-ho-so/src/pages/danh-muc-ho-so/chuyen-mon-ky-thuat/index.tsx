@@ -24,7 +24,7 @@ export default function TechnicalExpertise() {
     })
 
     const { data = [], refetch } = useFindManyDM_ChuyenMonKyThuat()
-    const { data: count } = useCountDM_ChuyenMonKyThuat()
+    const { data: count } = useCountDM_ChuyenMonKyThuat({ where: { deletedAt: null } })
     const { mutateAsync: updateChuyenMonKyThuat } = useUpdateDM_ChuyenMonKyThuat()
 
     const handleModal = () => {

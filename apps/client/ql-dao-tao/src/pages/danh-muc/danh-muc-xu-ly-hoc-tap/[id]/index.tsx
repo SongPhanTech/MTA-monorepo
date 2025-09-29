@@ -94,6 +94,7 @@ export default function AcademicActionCondition() {
                           },
                       }
                     : {}),
+                deletedAt: null,
             },
         },
         { enabled: !!configId }

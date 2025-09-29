@@ -24,7 +24,7 @@ export default function TypeOfStudy() {
     })
 
     const { data = [], refetch } = useFindManyDM_LoaiHinhDiHocTap()
-    const { data: count } = useCountDM_LoaiHinhDiHocTap()
+    const { data: count } = useCountDM_LoaiHinhDiHocTap({ where: { deletedAt: null } })
     const { mutateAsync: updateLoaiHinhDiHocTap } = useUpdateDM_LoaiHinhDiHocTap()
 
     const handleModal = () => {

@@ -24,7 +24,11 @@ export default function ProfessionalTitleOfLecturer() {
     })
 
     const { data = [], refetch } = useFindManyDM_ChucDanhCMNVGiangVien()
-    const { data: count } = useCountDM_ChucDanhCMNVGiangVien()
+    const { data: count } = useCountDM_ChucDanhCMNVGiangVien({
+        where: {
+            deletedAt: null,
+        },
+    })
     const { mutateAsync: updateChucDanh } = useUpdateDM_ChucDanhCMNVGiangVien()
 
     const handleModal = () => {

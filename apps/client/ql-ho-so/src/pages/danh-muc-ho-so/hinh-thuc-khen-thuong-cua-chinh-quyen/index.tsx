@@ -29,7 +29,7 @@ export default function FormsOfGovernmentCommendation() {
     })
 
     const { data = [], refetch } = useFindManyDM_HinhThucKhenThuongChinhQuyen()
-    const { data: count } = useCountDM_HinhThucKhenThuongChinhQuyen()
+    const { data: count } = useCountDM_HinhThucKhenThuongChinhQuyen({ where: { deletedAt: null } })
     const { mutateAsync: updateHinhThucKhenThuong } = useUpdateDM_HinhThucKhenThuongChinhQuyen()
 
     const handleModal = () => {

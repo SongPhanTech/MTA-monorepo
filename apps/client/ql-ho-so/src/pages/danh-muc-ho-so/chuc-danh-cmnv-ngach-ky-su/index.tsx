@@ -25,7 +25,11 @@ export default function ProfessionalTitleOfEngineer() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data = [], refetch } = useFindManyDM_ChucDanhCMNVKySu()
-    const { data: count } = useCountDM_ChucDanhCMNVKySu()
+    const { data: count } = useCountDM_ChucDanhCMNVKySu({
+        where: {
+            deletedAt: null,
+        },
+    })
     const { mutateAsync: updateChucDanhCMNVKySu } = useUpdateDM_ChucDanhCMNVKySu()
 
     const handleModal = () => {

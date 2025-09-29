@@ -108,6 +108,7 @@ export default function ArchivedCertificate() {
     const { data: count } = useCountArchivedCertificate({
         where: {
             name: { contains: filters.name, mode: 'insensitive' },
+            deletedAt: null,
         },
     })
 

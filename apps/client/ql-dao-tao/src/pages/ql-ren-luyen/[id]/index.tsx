@@ -44,7 +44,7 @@ export default function SubjectClassScore() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: initialValue } = useFindUniqueTrainingScoreSession(
+    const { data: initialValue, refetch: refetchSession } = useFindUniqueTrainingScoreSession(
         {
             where: { id },
             include: { semester: { include: { schoolYear: true } }, trainingObjectType: true },
@@ -109,6 +109,7 @@ export default function SubjectClassScore() {
 
     const mergedData = useMemo(() => {
         if (!data) return []
+        console.log(data)
 
         return data.map((student) => {
             const scoreInfo = studentTrainingScoreData.find((s) => s.studentId === student.id)
@@ -170,9 +171,10 @@ export default function SubjectClassScore() {
             await sqlTransaction(commands)
             await refetchStudentTrainingScore()
 
-            setEditableData(new Map())
-
             message.success('Lưu điểm rèn luyện thành công')
+
+            refetch()
+            // setEditableData(new Map())
         } catch (error) {
             message.error('Đã xảy ra lỗi khi lưu điểm rèn luyện')
         } finally {

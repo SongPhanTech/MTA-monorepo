@@ -8,7 +8,6 @@ import {
     useFindManyRoom,
     useFindManySchoolYear,
     useFindManySubjectVersion,
-    useFindManyTrainingLocation,
 } from '@workspace/db/hooks'
 import { Button, Col, DatePicker, Flex, Form, InputNumber, message } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
@@ -167,9 +166,6 @@ const PutOpenSubjectClassModal = () => {
     }
 
     const handleChangeLocation = (value: string, key: string) => {}
-
-    const { data: trainingLocationData = [], refetch: refetchTrainingLocationData } =
-        useFindManyTrainingLocation()
 
     const { data: schoolYears = [] } = useFindManySchoolYear({
         include: { semesters: { orderBy: { createdAt: 'asc' } } },

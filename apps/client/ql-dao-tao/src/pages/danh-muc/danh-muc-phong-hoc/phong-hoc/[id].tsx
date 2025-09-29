@@ -88,6 +88,7 @@ export default function BuildingPage() {
                       },
                   }
                 : {}),
+            deletedAt: null,
         },
     })
 

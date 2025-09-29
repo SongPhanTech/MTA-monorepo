@@ -15,7 +15,7 @@ import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function Difficulty() {
-    const { can } = useAbility()
+    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -180,7 +180,7 @@ export default function Difficulty() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                hidden: !can(
+                                hidden: !canSome(
                                     KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_MUC_DO_KHO,
                                     'SUA',
                                     'XOA'
