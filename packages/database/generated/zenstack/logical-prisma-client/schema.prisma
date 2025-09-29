@@ -2223,10 +2223,10 @@ model Document {
   fileSize     Int?
   type         DocumentType
   reason       String?
-  uploadedBy   DM_NhanVien    @relation("DocumentUploaded", fields: [uploadedById], references: [Id])
-  uploadedById String         @default("") @db.Uuid()
-  approvedBy   DM_NhanVien?   @relation("DocumentApproved", fields: [approvedById], references: [Id])
-  approvedById String?        @db.Uuid()
+  uploadedBy   UserProfile    @relation("DocumentUploaded", fields: [uploadedById], references: [id])
+  uploadedById String         @default("")
+  approvedBy   UserProfile?   @relation("DocumentApproved", fields: [approvedById], references: [id])
+  approvedById String?
 
   @@schema("tro-ly-ao")
 }
@@ -2247,10 +2247,10 @@ model FAQ {
   status       DocumentStatus @default(PENDING)
   type         DocumentType
   reason       String?
-  uploadedBy   DM_NhanVien    @relation("FAQUploaded", fields: [uploadedById], references: [Id])
-  uploadedById String         @default("") @db.Uuid()
-  approvedBy   DM_NhanVien?   @relation("FAQApproved", fields: [approvedById], references: [Id])
-  approvedById String?        @db.Uuid()
+  uploadedBy   UserProfile    @relation("FAQUploaded", fields: [uploadedById], references: [id])
+  uploadedById String         @default("")
+  approvedBy   UserProfile?   @relation("FAQApproved", fields: [approvedById], references: [id])
+  approvedById String?
 
   @@schema("tro-ly-ao")
 }
@@ -2286,8 +2286,8 @@ model Conversation {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @default(now()) @updatedAt()
   name        String?
-  user        DM_NhanVien?  @relation(fields: [userId], references: [Id])
-  userId      String?       @db.Uuid()
+  user        UserProfile?  @relation(fields: [userId], references: [id])
+  userId      String?
   session     UserSession?  @relation(fields: [sessionId], references: [id])
   sessionId   String?
   type        DocumentType?
@@ -2752,11 +2752,6 @@ model DM_NhanVien {
   groupId             String?
   notification        Notification[]
   feedback            Feedback[]
-  conversation        Conversation[]
-  documentUploaded    Document[]     @relation("DocumentUploaded")
-  documentApproved    Document[]     @relation("DocumentApproved")
-  fAQUploaded         FAQ[]          @relation("FAQUploaded")
-  fAQApproved         FAQ[]          @relation("FAQApproved")
 
   @@index([sDM_DonViId], map: "IX_DM_NhanVien_sDM_DonViId")
   @@index([sDM_ViTriCongViecId], map: "IX_DM_NhanVien_sDM_ViTriCongViecId")
@@ -3254,6 +3249,11 @@ model UserProfile {
   staffs                        Staff?
   staffHistory                  StaffHistory[]
   evidenceFiles                 EvidenceFile[]
+  documentsUploaded             Document[]                @relation("DocumentUploaded")
+  documentsApproved             Document[]                @relation("DocumentApproved")
+  faqsUploaded                  FAQ[]                     @relation("FAQUploaded")
+  faqsApproved                  FAQ[]                     @relation("FAQApproved")
+  conversations                 Conversation[]
 
   @@schema("ql-nguoi-dung")
 }

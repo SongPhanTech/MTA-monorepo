@@ -185,11 +185,6 @@ model DM_NhanVien extends CoreBase {
 
   notification        Notification[]
   feedback            Feedback[]
-  conversation        Conversation[]
-  documentUploaded    Document[]     @relation("DocumentUploaded")
-  documentApproved    Document[]     @relation("DocumentApproved")
-  fAQUploaded         FAQ[]          @relation("FAQUploaded")
-  fAQApproved         FAQ[]          @relation("FAQApproved")
 
   @@index([sDM_DonViId], map: "IX_DM_NhanVien_sDM_DonViId")
   @@index([sDM_ViTriCongViecId], map: "IX_DM_NhanVien_sDM_ViTriCongViecId")

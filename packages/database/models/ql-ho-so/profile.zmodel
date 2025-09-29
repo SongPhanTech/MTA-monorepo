@@ -8,6 +8,7 @@ import '../ql-dao-tao/student'
 import '../ql-dao-tao/lecturer'
 import '../ql-dao-tao/staff'
 import '../khao-thi/survey'
+import '../tro-ly-ao/chat-bot'
 import '../ql-ho-so/categories'
 import '../khao-thi/evaluate'
 
@@ -235,6 +236,13 @@ model UserProfile extends Base {
   staffHistory                  StaffHistory[]
 
   evidenceFiles                 EvidenceFile[]
+
+  // Chatbot relations
+  documentsUploaded             Document[]                @relation("DocumentUploaded")
+  documentsApproved             Document[]                @relation("DocumentApproved")
+  faqsUploaded                  FAQ[]                     @relation("FAQUploaded")
+  faqsApproved                  FAQ[]                     @relation("FAQApproved")
+  conversations                 Conversation[]
 
   @@auth()
   @@schema("ql-nguoi-dung")

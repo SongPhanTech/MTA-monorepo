@@ -33,8 +33,8 @@ const relationSchema = z.object({
 }
 );
 const fkSchema = z.object({
-    uploadedById: z.string().uuid().optional(),
-    approvedById: z.string().uuid().nullish(),
+    uploadedById: z.string().optional(),
+    approvedById: z.string().nullish(),
 }
 );
 
