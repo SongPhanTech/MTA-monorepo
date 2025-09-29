@@ -55,6 +55,7 @@ export default function TeachingAssignment() {
         enterGradeLecturer: undefined,
         examType: undefined,
         organization: undefined,
+        room: undefined,
     })
 
     const [isEdit, setIsEdit] = useState(false)
@@ -64,8 +65,17 @@ export default function TeachingAssignment() {
 
     const where = useMemo(
         () => ({
-            name: { contains: filters.name, mode: 'insensitive' as const },
-            code: { contains: filters.code, mode: 'insensitive' as const },
+            ...(filters.name
+                ? {
+                      name: { contains: filters.name, mode: 'insensitive' as const },
+                  }
+                : {}),
+            ...(filters.code
+                ? {
+                      code: { contains: filters.code, mode: 'insensitive' as const },
+                  }
+                : {}),
+
             ...(filters.examType
                 ? {
                       examType: {
@@ -80,16 +90,20 @@ export default function TeachingAssignment() {
                       },
                   }
                 : {}),
-            semester: {
-                ...(filters.semesterStartId ? { id: filters.semesterStartId } : {}),
-                ...(filters.trainingCourseId
-                    ? {
-                          trainingCoursesStart: {
-                              some: { id: filters.trainingCourseId },
-                          },
-                      }
-                    : {}),
-            },
+            ...(filters.semesterStartId || filters.trainingCourseId
+                ? {
+                      semester: {
+                          ...(filters.semesterStartId ? { id: filters.semesterStartId } : {}),
+                          ...(filters.trainingCourseId
+                              ? {
+                                    trainingCoursesStart: {
+                                        some: { id: filters.trainingCourseId },
+                                    },
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
             ...(filters.trainingMajorId
                 ? {
                       subject: {
@@ -161,20 +175,22 @@ export default function TeachingAssignment() {
                       },
                   }
                 : {}),
+            ...(filters.room
+                ? {
+                      room: {
+                          building: {
+                              trainingLocation: {
+                                  name: {
+                                      contains: filters.room,
+                                      mode: 'insensitive' as const,
+                                  },
+                              },
+                          },
+                      },
+                  }
+                : {}),
         }),
-        [
-            filters.name,
-            filters.code,
-            filters.examType,
-            filters.schedule,
-            filters.semesterStartId,
-            filters.trainingCourseId,
-            filters.trainingMajorId,
-            filters.organization,
-            filters.lecturerId,
-            filters.mainLecturer,
-            filters.extraLecturer,
-        ]
+        [filters]
     )
 
     const { data = [], refetch } = useFindManySubjectClass({
