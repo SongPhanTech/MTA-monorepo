@@ -1,13 +1,3 @@
-declare global {
-    interface Number {
-        toFixedSmart(fractionDigits: number): string
-    }
-}
-
-Number.prototype.toFixedSmart = function (fractionDigits: number): string {
-    const fixed = this.toFixed(fractionDigits)
-    return fixed.includes('.') ? fixed.replace(/\.?0+$/, '') : fixed
-}
 const lightThemeCustom = {
     token: {
         colorPrimary: '#028850',

@@ -1,6 +1,13 @@
 import type { Prisma, ScoreConvert, StudentSubjectScore } from '@workspace/db'
 import Decimal from 'decimal.js'
 
+declare global {
+    interface Number {
+        toFixedSmart(fractionDigits: number): string
+        formatVND(): string
+    }
+}
+
 type StudentSubjectScoreRelation = StudentSubjectScore & {
     finalScore: Decimal | null
     student?: {
@@ -13,6 +20,16 @@ type StudentSubjectScoreRelation = StudentSubjectScore & {
 }
 
 type ScoreStats = { count: number; percentage: number }
+
+Number.prototype.toFixedSmart = function (fractionDigits: number): string {
+    const fixed = this.toFixed(fractionDigits)
+    return fixed.includes('.') ? fixed.replace(/\.?0+$/, '') : fixed
+}
+Number.prototype.formatVND = function (): string {
+    return this.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+        .replace('₫', 'VNĐ')
+        .trim()
+}
 
 export function splitFullName(fullName?: string): {
     firstName: string

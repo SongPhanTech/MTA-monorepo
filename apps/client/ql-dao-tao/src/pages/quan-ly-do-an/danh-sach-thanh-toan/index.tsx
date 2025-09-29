@@ -248,7 +248,8 @@ export default function PaymentRecordPage() {
                                 dataIndex: 'amount',
                                 width: 150,
                                 align: 'center',
-                                render: (record) => record && `${record?.toString()} VND`,
+                                render: (record) =>
+                                    record ? `${Number(record).formatVND()}` : '-',
                             },
                             {
                                 title: 'Thời gian TT',

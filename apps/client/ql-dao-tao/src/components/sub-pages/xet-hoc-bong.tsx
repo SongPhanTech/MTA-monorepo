@@ -498,7 +498,9 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                                 dataIndex: ['amount'],
                                                 width: 150,
                                                 render: (__, record) =>
-                                                    record?.amount && `${record?.amount} VNĐ`,
+                                                    record?.amount
+                                                        ? `${Number(record?.amount).formatVND()}`
+                                                        : '-',
                                             },
                                             {
                                                 title: 'Học bổng',
@@ -657,14 +659,7 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                                                             }
                                                                         />
                                                                         <span className="text-gray-800">
-                                                                            {scholarship.name}{' '}
-                                                                            <span className="text-gray-500">
-                                                                                (Order:{' '}
-                                                                                {
-                                                                                    scholarship.rankOrder
-                                                                                }
-                                                                                )
-                                                                            </span>
+                                                                            {scholarship.name}
                                                                         </span>
                                                                     </div>
                                                                 )

@@ -159,7 +159,7 @@ const PutUpdatePaymentStatus = () => {
                             width: 250,
                             align: 'center',
                             render: (_, record) =>
-                                record?.amount && `${record?.amount?.toString()} VND`,
+                                record?.amount ? `${Number(record?.amount).formatVND()}` : '-',
                         },
                     ]}
                     pagination={{
@@ -198,7 +198,7 @@ const PutUpdatePaymentStatus = () => {
                             width: 250,
                             align: 'center',
                             render: (_, record) =>
-                                record?.amount && `${record?.amount?.toString()} VND`,
+                                record?.amount ? `${Number(record?.amount).formatVND()}` : '-',
                         },
                     ]}
                     pagination={{
