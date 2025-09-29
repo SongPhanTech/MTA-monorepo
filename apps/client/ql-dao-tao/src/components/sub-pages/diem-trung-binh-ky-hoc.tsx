@@ -1,6 +1,3 @@
-import { Button, Checkbox, Col, Flex, Form, message, Row, Select, Tag } from 'antd'
-import dayjs from 'dayjs'
-import 'dayjs/locale/vi'
 import TableCollapse from '@components/commons/tableCollapse'
 import { DEFAULT_PAGINATE_SIZE, TRANG_THAI_HOC_VIEN } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
@@ -9,19 +6,21 @@ import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import { buildOrgTree } from '@lib/utils'
-import type { Prisma, TrainingCourse, TrainingObjectType } from '@workspace/db'
+import type { Prisma, TrainingCourse } from '@workspace/db'
 import {
     useCountFixedClass,
     useFindManyDM_DonVi,
     useFindManyFixedClass,
     useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
 } from '@workspace/db/hooks'
 import { useCalculateStudentSemesterResultJson } from '@workspace/libs/api/training'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Checkbox, Col, Flex, Form, message, Row, Select, Tag } from 'antd'
+import dayjs from 'dayjs'
+import TreeSelect from '@/components/commons/tree-select'
+import 'dayjs/locale/vi'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
-import TreeSelect from '@/components/commons/tree-select'
 
 dayjs.locale('vi')
 
@@ -181,12 +180,11 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
         { enabled: !!semesterId }
     )
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
-        orderBy: { name: 'asc' },
-    })
-
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
+        where: {
+            trainingObjectTypeId,
+        },
     })
 
     const { data: managementOrganizationData = [] } = useFindManyDM_DonVi({
@@ -265,7 +263,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                         />
                                     </Form.Item>
                                 </Col> */}
-                                <Col span={10}>
+                                {/* <Col span={10}>
                                     <Form.Item className="mb-0" name="trainingObjectId">
                                         <Select
                                             placeholder="Chọn đối tượng đào tạo"
@@ -281,8 +279,8 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                             allowClear
                                         />
                                     </Form.Item>
-                                </Col>
-                                <Col span={6}>
+                                </Col> */}
+                                <Col span={10}>
                                     <Form.Item className="mb-0" name="trainingCourseId">
                                         <Select
                                             placeholder="Khoá đào tạo"

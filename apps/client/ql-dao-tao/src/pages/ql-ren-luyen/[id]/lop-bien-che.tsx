@@ -1,4 +1,5 @@
 import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Tree } from 'antd'
 import type React from 'react'
 
@@ -13,9 +14,12 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
     className,
     objectTrainingTypeId,
 }) => {
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourses = [] } = useFindManyTrainingCourse({
         where: {
-            trainingObjectTypeId: { not: undefined },
+            trainingObjectTypeId,
+            deletedAt: null,
+            active: true,
         },
         orderBy: { name: 'asc' },
     })

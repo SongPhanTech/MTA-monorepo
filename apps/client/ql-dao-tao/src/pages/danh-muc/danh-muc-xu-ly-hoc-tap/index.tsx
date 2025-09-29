@@ -81,6 +81,7 @@ export default function AcademicActionConfig() {
             : {}),
         trainingObjectTypeId,
         deletedAt: null,
+        active: true,
     }
 
     const { data = [], refetch } = useFindManyTrainingCourse({
@@ -172,7 +173,7 @@ export default function AcademicActionConfig() {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
-        where: { trainingObjectTypeId },
+        where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 
     return (

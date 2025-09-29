@@ -200,6 +200,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
+        where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
     const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
         orderBy: { name: 'asc' },

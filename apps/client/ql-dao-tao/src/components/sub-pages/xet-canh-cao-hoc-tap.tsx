@@ -23,6 +23,7 @@ import {
     useUpsertAcademicWarning,
 } from '@workspace/db/hooks'
 import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -147,9 +148,15 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
         }))
     }, [studentData, academicWarningData])
 
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: {
             name: 'asc',
+        },
+        where: {
+            trainingObjectTypeId,
+            active: true,
+            deletedAt: null,
         },
     })
 

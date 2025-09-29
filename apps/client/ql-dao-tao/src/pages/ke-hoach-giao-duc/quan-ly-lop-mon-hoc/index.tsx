@@ -285,6 +285,7 @@ export default function TeachingAssignment() {
     })
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
+        where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 
     const { data: lecturerData = [] } = useFindManyLecturer({

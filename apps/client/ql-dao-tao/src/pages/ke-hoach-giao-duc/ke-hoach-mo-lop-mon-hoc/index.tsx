@@ -83,6 +83,7 @@ export default function SubjectOpeningPlan() {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
+        where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 
     return (

@@ -58,6 +58,7 @@ interface LopMonHocItemProps {
         name: string
         mainLecturer: { userProfile: { firstName: string; lastName: string } }
         lecture?: string
+        count?: number
     }>
     onChangeSelected?: (selected: string) => void
     selectedItem?: string
@@ -68,16 +69,15 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
     onChangeSelected,
     selectedItem,
 }) => {
-    const data: Item[] = dataTable.map(
-        (item: { mainLecturer: any; code?: any; name: any; id: any }) => ({
-            code: item.code === null ? undefined : item.code,
-            name: item.name,
-            lecture: item.mainLecturer?.userProfile
-                ? `${item.mainLecturer.userProfile.lastName} ${item.mainLecturer.userProfile.firstName}`
-                : 'Chưa có giảng viên',
-            id: item.id,
-        })
-    )
+    const data: Item[] = dataTable.map((item) => ({
+        code: item.code === null ? undefined : item.code,
+        name: item.name,
+        lecture: item.mainLecturer?.userProfile
+            ? `${item.mainLecturer.userProfile.lastName} ${item.mainLecturer.userProfile.firstName}`
+            : 'Chưa có giảng viên',
+        id: item.id,
+        count: item.count,
+    }))
 
     const renderItem = (item: Item) => (
         <div
@@ -98,7 +98,11 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
             </h3>
             <p>{item.code}</p>
             <p>{item.lecture}</p>
-            {!!item.count && <p>Số SV/HV: {item.count}</p>}
+            {item.count ? (
+                <p>Số SV/HV: {item.count}</p>
+            ) : (
+                <p className="text-red-500">Không có SV/HV</p>
+            )}
         </div>
     )
 

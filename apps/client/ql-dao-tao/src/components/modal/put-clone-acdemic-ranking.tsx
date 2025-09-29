@@ -9,6 +9,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import Select from '@components/commons/select'
 import type { AcademicRankingConvert, TrainingCourse } from '@workspace/db'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutCloneAcademicRankingFormType = { trainingCourseId: string }
 dayjs.locale('vi')
 
@@ -23,12 +24,14 @@ const PutCloneAcademicRanking = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: createManyAcademicRanking } = useCreateManyAcademicRankingConvert()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourses } = useFindManyTrainingCourse({
         where: {
             active: true,
             academicRankingConvert: {
                 none: {},
             },
+            trainingObjectTypeId,
         },
         orderBy: { name: 'asc' },
     })

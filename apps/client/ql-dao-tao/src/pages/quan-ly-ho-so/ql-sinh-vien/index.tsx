@@ -222,6 +222,7 @@ export default function UserProfilePageDs() {
             fixedClass: true,
         },
         orderBy: { name: 'asc' },
+        where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 
     const { data: fixedClassData = [] } = useFindManyFixedClass({

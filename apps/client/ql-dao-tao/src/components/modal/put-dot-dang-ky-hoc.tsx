@@ -1,21 +1,22 @@
 import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
-import useSpinner from '@hooks/spinner'
-import { type ClassRegisterSession, type TrainingCourse, TrainingObjectTypes } from '@workspace/db'
-import { Col, Form, Input, message, Radio, Select } from 'antd'
-import dayjs from 'dayjs'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
-import DatePicker from '@components/commons/date-picker'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
+import useSpinner from '@hooks/spinner'
+import type { ClassRegisterSession, TrainingCourse } from '@workspace/db'
 import {
     useCreateClassRegisterSession,
     useFindManyTrainingCourse,
     useFindUniqueClassRegisterSession,
     useUpdateClassRegisterSession,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { Col, Form, Input, message, Radio, Select } from 'antd'
+import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
 import { useEffect } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export type PutClassRegisterSession = ClassRegisterSession & {
     trainingCourses: string[]
@@ -115,8 +116,12 @@ const PutClassRegisterSession = () => {
         }
     }
 
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourses = [] } = useFindManyTrainingCourse({
-        where: { active: true, trainingObjectType: { type: TrainingObjectTypes.CIVILIAN } },
+        where: {
+            active: true,
+            trainingObjectTypeId,
+        },
         orderBy: { createdAt: 'desc' },
     })
 

@@ -185,6 +185,11 @@ export default function Scholarship() {
 
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
+        where: {
+            trainingObjectTypeId,
+            active: true,
+            deletedAt: null,
+        },
     })
 
     return (

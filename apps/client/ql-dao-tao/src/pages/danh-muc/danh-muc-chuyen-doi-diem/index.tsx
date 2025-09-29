@@ -81,6 +81,8 @@ export default function TrainingFieldPage() {
                     : {},
                 {
                     trainingObjectTypeId,
+                    deletedAt: null,
+                    active: true,
                 }
             ),
         [filters, isFiltering, trainingObjectTypeId]

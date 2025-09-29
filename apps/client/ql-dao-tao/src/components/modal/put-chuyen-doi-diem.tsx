@@ -15,6 +15,7 @@ import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import Select from '@components/commons/select'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutConvertScoreFormType = ScoreConvert
 dayjs.locale('vi')
 const PutConvertScore = () => {
@@ -31,8 +32,9 @@ const PutConvertScore = () => {
 
     const { mutateAsync: createScoreConvert } = useCreateScoreConvert()
     const { mutateAsync: updateScoreConvert } = useUpdateScoreConvert()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourses } = useFindManyTrainingCourse({
-        where: { active: true },
+        where: { active: true, trainingObjectTypeId },
         orderBy: { name: 'asc' },
     })
 

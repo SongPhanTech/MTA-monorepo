@@ -59,6 +59,7 @@ export default function TrainingCoursePage() {
                 : {}),
             trainingObjectTypeId,
             deletedAt: null,
+            active: true,
         }),
         [filters.code, filters.name, filters.semesterStart, trainingObjectTypeId]
     )

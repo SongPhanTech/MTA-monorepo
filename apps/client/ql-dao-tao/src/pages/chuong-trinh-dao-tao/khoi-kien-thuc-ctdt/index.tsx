@@ -100,15 +100,6 @@ export default function TrainingBlock() {
         }
     }
 
-    // const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
-
-    // const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-    //     orderBy: { name: 'asc' },
-    // })
-    // const { data: curriculumData = [] } = useFindManyCurriculum({
-    //     orderBy: { name: 'asc' },
-    // })
-
     return (
         <div>
             <Row gutter={[16, 0]}>

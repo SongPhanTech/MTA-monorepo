@@ -13,6 +13,7 @@ import {
     useFindManyTrainingCourse,
     useUpdateStudentGraduationApplication,
 } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookCheckIcon } from 'lucide-react'
@@ -40,6 +41,7 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
     const isFiltering = useMemo(() => {
         return Object.values(filters).some((value) => !!value)
     }, [filters])
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const where: Prisma.TrainingCourseWhereInput = useMemo(
         () =>
@@ -119,7 +121,12 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
     )
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
     const { data = [] } = useFindManyTrainingCourse({
-        where,
+        where: {
+            ...where,
+            trainingObjectTypeId,
+            deletedAt: null,
+            active: true,
+        },
         include: {
             academicRankingConvert: {
                 where: {
@@ -207,7 +214,9 @@ export default function GraduationDecision({ sessionId }: GraduationDecisionProp
     const { data: count } = useCountTrainingCourse({
         where: {
             ...where,
+            trainingObjectTypeId,
             deletedAt: null,
+            active: true,
         },
     })
 

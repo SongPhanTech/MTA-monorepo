@@ -5,6 +5,7 @@ import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { TrainingCourse } from '@workspace/db'
 import { useFindManyTrainingCourse } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Form, message, Upload } from 'antd'
 import type { UploadFile } from 'antd/es/upload/interface'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -25,13 +26,16 @@ const PutUploadFixedClassModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
-    const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
-        useFindManyTrainingCourse({
-            orderBy: {
-                name: 'asc',
-            },
-        })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: {
+            name: 'asc',
+        },
+        where: {
+            active: true,
+            trainingObjectTypeId,
+        },
+    })
 
     async function onOk(output?: PutUploadFixedClass) {
         if (!output) return

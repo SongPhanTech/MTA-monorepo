@@ -28,6 +28,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -282,8 +283,10 @@ export default function GraduationDecisionDiploma() {
     const { data: trainingFieldData = [] } = useFindManyTrainingField({
         orderBy: { name: 'asc' },
     })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
+        where: { id: trainingObjectTypeId, deletedAt: null, active: true },
     })
     const { data: fixedClassData = [] } = useFindManyFixedClass({
         orderBy: { name: 'asc' },

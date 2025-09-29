@@ -7,7 +7,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { type TrainingCourse, TrainingObjectTypes } from '@workspace/db'
+import type { TrainingCourse } from '@workspace/db'
 import {
     useCountClassRegisterSession,
     useDeleteClassRegisterSession,
@@ -16,6 +16,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Select, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
@@ -106,8 +107,9 @@ export default function ClassRegisterSession() {
         where,
     })
 
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        where: { active: true, trainingObjectType: { type: TrainingObjectTypes.CIVILIAN } },
+        where: { active: true, trainingObjectTypeId, deletedAt: null },
         orderBy: { createdAt: 'desc' },
     })
 

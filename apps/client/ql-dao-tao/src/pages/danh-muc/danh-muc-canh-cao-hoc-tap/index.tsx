@@ -91,6 +91,7 @@ export default function AcademicWarningRule() {
                 },
             }),
             trainingObjectTypeId,
+            active: true,
         }
     }, [
         filters.trainingCourseId,

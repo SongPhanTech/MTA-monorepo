@@ -219,9 +219,15 @@ export default function TrainingProgramCatalog() {
     })
 
     const { data: count } = useCountCurriculum({ where: { ...where, deletedAt: null } })
-
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
+        orderBy: {
+            name: 'asc',
+        },
+        where: {
+            trainingObjectTypeId,
+            active: true,
+            deletedAt: null,
+        },
     })
 
     const { data: trainingTimeData = [] } = useFindManyTrainingTime({
