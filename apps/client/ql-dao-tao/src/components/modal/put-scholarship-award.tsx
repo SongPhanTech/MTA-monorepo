@@ -18,7 +18,6 @@ import 'dayjs/locale/vi'
 import './index.css'
 import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
-import { formatter } from '@/utils/formatterInputNumber'
 export type PutScholarshipAward = ScholarshipAward
 dayjs.locale('vi')
 
@@ -213,13 +212,6 @@ const PutScholarshipAward = () => {
                         className="w-full"
                         step={1}
                         suffix="VNĐ"
-                        formatter={formatter}
-                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
-                        onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                                e.preventDefault()
-                            }
-                        }}
                     />
                 </FormItem>
             </Col>

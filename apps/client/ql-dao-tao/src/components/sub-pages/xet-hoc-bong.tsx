@@ -442,7 +442,10 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                 <Col span={24}>
                                     <Row gutter={[16, 16]} align="top" justify="space-between">
                                         <Col span={24}>
-                                            <Flex justify="end">
+                                            <Flex justify="space-between">
+                                                <div className="text-xl font-bold">
+                                                    Danh sách sinh viên nhận học bổng
+                                                </div>
                                                 <Button
                                                     type="primary"
                                                     onClick={() =>
@@ -577,7 +580,10 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                 <Col span={24}>
                                     <Row gutter={[16, 16]} align="top" justify="space-between">
                                         <Col span={24}>
-                                            <Flex justify="end">
+                                            <Flex justify="space-between">
+                                                <div className="text-xl font-bold">
+                                                    Danh sách sinh viên thoả mãn học bổng
+                                                </div>
                                                 <Button
                                                     type="primary"
                                                     className="h-[32px] px-4"

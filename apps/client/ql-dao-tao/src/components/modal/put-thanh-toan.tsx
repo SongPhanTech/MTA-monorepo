@@ -15,7 +15,6 @@ import {
 import { Col, Form, InputNumber, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { formatter } from '@/utils/formatterInputNumber'
 export type PaymentRecord = DefaultCouncilRolePayAmount & {
     chairman: number
     secretary: number
@@ -270,13 +269,6 @@ const PutPaymentRecord = () => {
                         min={0}
                         placeholder="Nhập giá trị"
                         suffix="VNĐ"
-                        formatter={formatter}
-                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
-                        onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                                e.preventDefault()
-                            }
-                        }}
                     />
                 </FormItem>
             </Col>
@@ -287,13 +279,6 @@ const PutPaymentRecord = () => {
                         min={0}
                         placeholder="Nhập giá trị"
                         suffix="VNĐ"
-                        formatter={formatter}
-                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
-                        onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                                e.preventDefault()
-                            }
-                        }}
                     />
                 </FormItem>
             </Col>
@@ -304,13 +289,6 @@ const PutPaymentRecord = () => {
                         min={0}
                         placeholder="Nhập giá trị"
                         suffix="VNĐ"
-                        formatter={formatter}
-                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
-                        onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                                e.preventDefault()
-                            }
-                        }}
                     />
                 </FormItem>
             </Col>
@@ -321,13 +299,6 @@ const PutPaymentRecord = () => {
                         min={0}
                         placeholder="Nhập giá trị"
                         suffix="VNĐ"
-                        formatter={formatter}
-                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
-                        onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                                e.preventDefault()
-                            }
-                        }}
                     />
                 </FormItem>
             </Col>
@@ -338,13 +309,6 @@ const PutPaymentRecord = () => {
                         min={0}
                         placeholder="Nhập giá trị"
                         suffix="VNĐ"
-                        formatter={formatter}
-                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
-                        onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                                e.preventDefault()
-                            }
-                        }}
                     />
                 </FormItem>
             </Col>
@@ -355,13 +319,6 @@ const PutPaymentRecord = () => {
                         min={0}
                         placeholder="Nhập giá trị"
                         suffix="VNĐ"
-                        formatter={formatter}
-                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
-                        onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                                e.preventDefault()
-                            }
-                        }}
                     />
                 </FormItem>
             </Col>
