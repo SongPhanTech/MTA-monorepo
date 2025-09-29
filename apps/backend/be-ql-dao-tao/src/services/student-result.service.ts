@@ -22,6 +22,7 @@ import {
     CourseStudentResult,
     type ListAcademicAction,
     type StudentInfoCheck,
+    type StudentRepeatGrade,
     StudentResult,
 } from '../dto/student-info.dto'
 import type { StudentCondition, StudentDataContext } from '../types/student-context'
@@ -35,6 +36,8 @@ const checkStudentSemesterResult = async (
             where: {
                 semesterId,
                 studentId,
+                deletedAt: null,
+                active: true,
             },
         })
         return result
@@ -94,6 +97,8 @@ const ThongTinTichLuy = async (
         const hocKyBatDau = await prisma.trainingCourse.findFirst({
             where: {
                 id: trainingCourseId,
+                deletedAt: null,
+                active: true,
             },
             select: {
                 semesterStartId: true,
@@ -107,7 +112,11 @@ const ThongTinTichLuy = async (
 
         // Đếm xem giữa học kỳ bắt đầu và học kỳ đầu vào (semesterId) có bao nhiêu học kỳ
         const startSemester = await prisma.semester.findUnique({
-            where: { id: hocKyBatDau?.semesterStartId },
+            where: {
+                id: hocKyBatDau?.semesterStartId,
+                deletedAt: null,
+                active: true,
+            },
             select: { id: true, startDate: true, semesterType: true },
         })
 
@@ -125,6 +134,8 @@ const ThongTinTichLuy = async (
                     lte: semesterStartDate,
                 },
                 semesterType: { in: [SemesterType.FIRST, SemesterType.SECOND] }, // Chỉ lấy học kỳ chính
+                deletedAt: null,
+                active: true,
             },
             select: {
                 id: true,
@@ -148,6 +159,8 @@ const ThongTinTichLuy = async (
                 trainingBlockOnCurriculumVersion: {
                     curriculumVersionId,
                 },
+                deletedAt: null,
+                active: true,
             },
             select: {
                 subjectId: true,
@@ -168,6 +181,8 @@ const ThongTinTichLuy = async (
                     // Chỉ lấy các môn trong chương trình đào tạo
                     in: DsCacMonTrongCTDT.map((item) => item.subjectId),
                 },
+                deletedAt: null,
+                active: true,
             },
             select: {
                 subjectVersionId: true,
@@ -213,6 +228,8 @@ const ThongTinTichLuy = async (
         const DsDiemChuyenDoi = await prisma.scoreConvert.findMany({
             where: {
                 trainingCourseId,
+                deletedAt: null,
+                active: true,
             },
             select: {
                 trainingCourseId: true,
@@ -286,6 +303,8 @@ const ThongTinTichLuy = async (
         const phienBanCTDT = await prisma.student.findFirst({
             where: {
                 id: studentId,
+                deletedAt: null,
+                active: true,
             },
             select: {
                 curriculumVersionId: true, // Lấy phiên bản chương trình đào tạo
@@ -305,6 +324,8 @@ const ThongTinTichLuy = async (
                         useForFinalScore: true, // Chỉ lấy các môn có tính điểm
                     },
                 },
+                deletedAt: null,
+                active: true,
             },
             select: {
                 subjects: {
@@ -472,6 +493,8 @@ const ThongTinDiemHocKy = async (
                 trainingBlockOnCurriculumVersion: {
                     curriculumVersionId,
                 },
+                deletedAt: null,
+                active: true,
             },
             select: {
                 subjectId: true,
@@ -485,6 +508,8 @@ const ThongTinDiemHocKy = async (
                     // Chỉ lấy các môn trong chương trình đào tạo
                     in: DsCacMonTrongCTDT.map((item) => item.subjectId),
                 },
+                deletedAt: null,
+                active: true,
             },
             select: {
                 id: true,
@@ -512,7 +537,11 @@ const ThongTinDiemHocKy = async (
 
         // Danh sách chuyển đổi
         const DsDiemChuyenDoi = await prisma.scoreConvert.findMany({
-            where: { trainingCourseId },
+            where: {
+                trainingCourseId,
+                deletedAt: null,
+                active: true,
+            },
             select: {
                 trainingCourseId: true,
                 letter: true,
@@ -622,7 +651,11 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
     try {
         // Thông tin học kỳ
         const hocKyDauVao = await prisma.semester.findUnique({
-            where: { id: semesterId },
+            where: {
+                id: semesterId,
+                deletedAt: null,
+                active: true,
+            },
             select: {
                 id: true,
                 name: true,
@@ -638,6 +671,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 // fixedClassId: 'K25_CĐT',
                 // id: {endsWith: '4'}
                 // id: "cmcvrfn5k0002okmgkp2k2cwp"
+                deletedAt: null,
+                active: true,
             },
             include: {
                 fixedClass: {
@@ -722,6 +757,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 where: {
                     studentId: student.id,
                     trainingScoreSession: { semesterId },
+                    deletedAt: null,
+                    active: true,
                 },
                 orderBy: { createdAt: 'desc' },
             })
@@ -774,6 +811,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     active: true,
                     description: null,
                     deletedAt: null,
+                    computerSkillPass: student.ITCertificationPass, // Đạt trình độ tin học theo quy định
                 }
                 // Lưu kết quả học kỳ mới
                 results.push(newResult)
@@ -840,6 +878,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     active: existingResult?.active || true, // Trạng thái hoạt động
                     description: existingResult?.description || null,
                     deletedAt: existingResult?.deletedAt || null,
+
+                    computerSkillPass: existingResult?.computerSkillPass || true, // Đạt trình độ tin học theo quy định
                 }
                 // Cập nhật kết quả học kỳ
                 results.push(updatedResult)
@@ -847,6 +887,8 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                 await prisma.studentSemesterResult.update({
                     where: {
                         id: existingResult.id,
+                        deletedAt: null,
+                        active: true,
                     },
                     data: updatedResult,
                 })
@@ -877,6 +919,8 @@ export const listStudentResultInfo = async (semesterId: string) => {
                         not: null, // Chỉ lấy sinh viên có lớp học cố định
                     },
                 },
+                deletedAt: null,
+                active: true,
             },
             include: {
                 student: {
@@ -914,6 +958,8 @@ export const listStudentResultInfo = async (semesterId: string) => {
                 trainingCourseId: {
                     in: listTrainingCourseId,
                 },
+                deletedAt: null,
+                active: true,
             },
             select: {
                 trainingCourseId: true,
@@ -1349,6 +1395,8 @@ const checkScholarshipRecived = async (
         where: {
             studentId: student.id,
             semesterId: semesterId,
+            deletedAt: null,
+            active: true,
         },
     })
     return semesterScholarship.filter((scholarship) =>
@@ -1673,7 +1721,11 @@ const getStudentResult = async (
             id: studentSemesterResult.studentId,
             studentSemesterResult: filteredResult,
             userProfile: await prisma.userProfile.findUnique({
-                where: { id: studentSemesterResult.student.userProfileId },
+                where: {
+                    id: studentSemesterResult.student.userProfileId,
+                    deletedAt: null,
+                    active: true,
+                },
             }),
             hasScholarship: !!scholarshipInfo.length,
             hasAcademicAction: !!academicActionInfo.length,
@@ -1748,7 +1800,8 @@ export const resultCourseStudentResult = async (
     const semesterScholarship = await prisma.scholarship.findMany({
         where: {
             trainingCourseId: { in: Array.from(courseIds) }, // Lấy học bổng theo khóa học
-            active: true, // Chỉ lấy học bổng đang hoạt động
+            deletedAt: null,
+            active: true,
         },
         orderBy: {
             rankOrder: 'asc', // Sắp xếp theo thứ tự ưu tiên
@@ -1757,6 +1810,7 @@ export const resultCourseStudentResult = async (
     const scholarshipCriteriaList = await prisma.scholarshipCriteria.findMany({
         where: {
             scholarshipId: { in: semesterScholarship.map((s) => s.id) },
+            deletedAt: null,
             active: true,
         },
         orderBy: {
@@ -1770,6 +1824,8 @@ export const resultCourseStudentResult = async (
     const warningCriteriaList = await prisma.academicWarningRule.findMany({
         where: {
             trainingCourseId: { in: Array.from(courseIds) },
+            deletedAt: null,
+            active: true,
         },
     })
 
@@ -1778,17 +1834,22 @@ export const resultCourseStudentResult = async (
         where: {
             trainingCourseId: { in: Array.from(courseIds) },
             actionType: academicActionType || undefined, // Chỉ lấy theo loại hành động học vụ nếu có
+            deletedAt: null,
             active: true,
         },
     })
     const actionRuleSet = await prisma.academicActionRuleSet.findMany({
         where: {
             configId: { in: academicActionConfig.map((c) => c.id) },
+            deletedAt: null,
+            active: true,
         },
     })
     const actionCriteriaList = await prisma.academicActionCondition.findMany({
         where: {
             ruleSetId: { in: actionRuleSet.map((r) => r.id) },
+            deletedAt: null,
+            active: true,
         },
         include: {
             ruleSet: {
@@ -1807,6 +1868,8 @@ export const resultCourseStudentResult = async (
             semesterId: semesterId,
             status: { not: DecisionStatus.APPROVED },
             actionTaken: academicActionType ? academicActionType : undefined,
+            deletedAt: null,
+            active: true,
         },
     })
     // Process students in parallel
@@ -1869,3 +1932,298 @@ export const resultCourseStudentResult = async (
     console.log(`Found ${result.length} courses with students for semester ${semesterId}`)
     return result.map((course) => CourseStudentResult.parse(course))
 }
+
+const checkStudentResultForRepeatGrade = async (
+    studentIds: string[],
+    semesterId: string
+): Promise<string[]> => {
+    try {
+        const studentSemesterResult = await prisma.studentSemesterResult.findMany({
+            where: {
+                studentId: { in: studentIds },
+                semesterId,
+                deletedAt: null,
+                active: true,
+            },
+            include: {
+                student: {
+                    include: {
+                        userProfile: true,
+                        fixedClass: {
+                            include: {
+                                curriculumVersion: {
+                                    include: {
+                                        curriculum: {
+                                            include: {
+                                                trainingMajor: {
+                                                    include: {
+                                                        trainingField: true, // Bao gồm thông tin ngành
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        trainingObjectType: true,
+                    },
+                },
+            },
+            orderBy: {
+                student: {
+                    userProfile: {
+                        firstName: 'asc',
+                    },
+                },
+            },
+        })
+
+        if (!studentSemesterResult) {
+            throw new Error(
+                `Không tìm thấy kết quả học kỳ cho sinh viên trong học kỳ ${semesterId}`
+            )
+        }
+
+        const scoreToRetainList = await prisma.trainingCourse.findMany({
+            where: {
+                id: {
+                    in: studentSemesterResult.map(
+                        (s) => s.student.fixedClass?.trainingCourseId || ''
+                    ),
+                },
+                deletedAt: null,
+                active: true,
+            },
+        })
+
+        if (!scoreToRetainList) {
+            throw new Error(
+                `Không tìm thấy khóa học nào để xét điểm lưu ban cho sinh viên trong học kỳ ${semesterId}`
+            )
+        }
+
+        const listStudentRepeatGrade: string[] = studentSemesterResult
+            .map((result) => {
+                const scoreToRetain = scoreToRetainList.find(
+                    (course) => course.id === result.student.fixedClass?.trainingCourseId
+                )
+
+                if (
+                    scoreToRetain &&
+                    result.baseScore === 'Base10' &&
+                    result.gpaBase10.toNumber() <= scoreToRetain.scoreToRetain
+                ) {
+                    return result.studentId
+                }
+                if (
+                    scoreToRetain &&
+                    result.baseScore === 'Base4' &&
+                    result.gpaBase4.toNumber() <= scoreToRetain.scoreToRetain
+                ) {
+                    return result.studentId
+                }
+                return null // Ensure a value is always returned
+            })
+            .filter((id): id is string => id !== null)
+
+        console.log('listStudentRepeatGrade', listStudentRepeatGrade)
+
+        return listStudentRepeatGrade
+    } catch (error) {
+        console.error('Error fetching student result for repeat grade:', error)
+        throw new Error(`${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+const SaveStudentRepeatGrade = async (
+    studentIds: string[],
+    semesterId: string
+): Promise<StudentRepeatGrade[]> => {
+    try {
+        const studentSemesterResult = await prisma.studentSemesterResult.findMany({
+            where: {
+                studentId: { in: studentIds },
+                semesterId,
+                deletedAt: null,
+                active: true,
+            },
+            include: {
+                student: {
+                    include: {
+                        userProfile: true,
+                        fixedClass: {
+                            include: {
+                                curriculumVersion: {
+                                    include: {
+                                        curriculum: {
+                                            include: {
+                                                trainingMajor: {
+                                                    include: {
+                                                        trainingField: true, // Bao gồm thông tin ngành
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        trainingObjectType: true,
+                    },
+                },
+            },
+            orderBy: {
+                student: {
+                    userProfile: {
+                        firstName: 'asc',
+                    },
+                },
+            },
+        })
+
+        if (!studentSemesterResult) {
+            throw new Error(
+                `Không tìm thấy kết quả học kỳ cho sinh viên trong học kỳ ${semesterId}`
+            )
+        }
+
+        const scoreToRetainList = await prisma.trainingCourse.findMany({
+            where: {
+                id: {
+                    in: studentSemesterResult.map(
+                        (s) => s.student.fixedClass?.trainingCourseId || ''
+                    ),
+                },
+                deletedAt: null,
+                active: true,
+            },
+        })
+
+        if (!scoreToRetainList) {
+            throw new Error(
+                `Không tìm thấy khóa học nào để xét điểm lưu ban cho sinh viên trong học kỳ ${semesterId}`
+            )
+        }
+
+        const listStudentRepeatGrade: string[] = studentSemesterResult
+            .map((result) => {
+                const scoreToRetain = scoreToRetainList.find(
+                    (course) => course.id === result.student.fixedClass?.trainingCourseId
+                )
+
+                if (
+                    scoreToRetain &&
+                    result.baseScore === 'Base10' &&
+                    result.gpaBase10.toNumber() <= scoreToRetain.scoreToRetain
+                ) {
+                    return result.studentId
+                }
+                if (
+                    scoreToRetain &&
+                    result.baseScore === 'Base4' &&
+                    result.gpaBase4.toNumber() <= scoreToRetain.scoreToRetain
+                ) {
+                    return result.studentId
+                }
+                return null // Ensure a value is always returned
+            })
+            .filter((id): id is string => id !== null)
+
+        console.log('listStudentRepeatGrade', listStudentRepeatGrade)
+
+        if (listStudentRepeatGrade.length === 0) {
+            console.log('No students to mark for repeat grade.')
+            return []
+        }
+
+        const existingDecisions = await prisma.studentAcademicDecision.findMany({
+            where: {
+                studentId: { in: listStudentRepeatGrade },
+                semesterId,
+                actionTaken: 'REPEAT_YEAR',
+                status: { not: DecisionStatus.PENDING },
+                deletedAt: null,
+                active: true,
+            },
+        })
+
+        const existingStudentIds = new Set(existingDecisions.map((decision) => decision.studentId))
+        const newDecisions = listStudentRepeatGrade
+            .filter((studentId) => !existingStudentIds.has(studentId))
+            .map((studentId) => ({
+                studentId,
+                semesterId,
+                actionTaken: 'REPEAT_YEAR' as const,
+                status: DecisionStatus.PENDING,
+                reason: 'Tạo quyết định lưu ban theo yêu cầu',
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                active: true,
+            }))
+        if (newDecisions.length > 0) {
+            await prisma.studentAcademicDecision.createMany({
+                data: newDecisions,
+            })
+            console.log(`Created ${newDecisions.length} new repeat grade decisions.`)
+        } else {
+            console.log('All students already have repeat grade decisions.')
+        }
+        const ListResult: StudentRepeatGrade[] = []
+        for (const studentId of studentIds) {
+            const newResult: StudentRepeatGrade = {
+                id: studentId,
+                studentName:
+                    studentSemesterResult.find((result) => result.studentId === studentId)?.student
+                        .userProfile.fullname || '',
+                studentCode:
+                    studentSemesterResult.find((result) => result.studentId === studentId)?.student
+                        .userProfile.code || '',
+                gpa_semester:
+                    studentSemesterResult
+                        .find((result) => result.studentId === studentId)
+                        ?.gpaBase10.toNumber() || 0,
+                gpa_academic:
+                    studentSemesterResult
+                        .find((result) => result.studentId === studentId)
+                        ?.cumulativeGpaBase10.toNumber() || 0,
+                total_credit:
+                    studentSemesterResult.find((result) => result.studentId === studentId)
+                        ?.totalCreditsByCurriculum || 0,
+                repeatGradeTimes:
+                    existingDecisions.filter((decision) => decision.studentId === studentId)
+                        .length +
+                    (newDecisions.some((decision) => decision.studentId === studentId) ? 1 : 0),
+                statusRepeatGrade: existingStudentIds.has(studentId)
+                    ? 'Đã có quyết định lưu ban'
+                    : newDecisions.some((decision) => decision.studentId === studentId)
+                      ? 'Chờ phê duyệt'
+                      : 'Không lưu ban',
+            }
+            ListResult.push(newResult)
+        }
+        return ListResult
+    } catch (error) {
+        console.error('Error in SaveStudentRepeatGrade function:', error)
+        throw new Error(`${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
+export const StudentRepeatGradeService = async (
+    studentIds: string[],
+    semesterId: string
+): Promise<any[]> => {
+    try {
+        const listStudentRepeatGrade = await SaveStudentRepeatGrade(studentIds, semesterId)
+        return listStudentRepeatGrade
+    } catch (error) {
+        console.error('Error in RepeatGrade function:', error)
+        throw new Error(`${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+export type { StudentRepeatGrade }

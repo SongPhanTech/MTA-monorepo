@@ -85,26 +85,27 @@ export default function SubjectClassScore() {
         }
     )
 
-    const { data: studentTrainingScoreData = [] } = useFindManyStudentTrainingScore(
-        {
-            where: {
-                trainingScoreSessionId: id,
-                student: {
-                    fixedClassId: selectedFixedClass,
+    const { data: studentTrainingScoreData = [], refetch: refetchStudentTrainingScore } =
+        useFindManyStudentTrainingScore(
+            {
+                where: {
+                    trainingScoreSessionId: id,
+                    student: {
+                        fixedClassId: selectedFixedClass,
+                    },
                 },
-            },
-            orderBy: {
-                student: {
-                    userProfile: {
-                        firstName: 'asc',
+                orderBy: {
+                    student: {
+                        userProfile: {
+                            firstName: 'asc',
+                        },
                     },
                 },
             },
-        },
-        {
-            enabled: !!selectedFixedClass,
-        }
-    )
+            {
+                enabled: !!selectedFixedClass,
+            }
+        )
 
     const mergedData = useMemo(() => {
         if (!data) return []
@@ -167,6 +168,7 @@ export default function SubjectClassScore() {
             )
 
             await sqlTransaction(commands)
+            await refetchStudentTrainingScore()
 
             setEditableData(new Map())
 

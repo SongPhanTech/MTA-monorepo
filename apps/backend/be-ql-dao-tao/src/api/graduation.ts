@@ -539,26 +539,26 @@ app.openapi(graduationCheck, async (c) => {
         ] of student.fixedClass.trainingCourse.academicRankingConvert.entries()) {
             const isEligible = rank.rankingCondition.every(async (rule) => {
                 const passed = evaluateCondition(studentDataContext, rule)
-                const actualValue = Number(studentDataContext[rule.field])
-                await prisma.applicationCheckResult
-                    .upsert({
-                        where: {
-                            studentGraduationApplicationId_rankingConditionId: {
-                                studentGraduationApplicationId: application.id,
-                                rankingConditionId: rule.id,
-                            },
-                        },
-                        create: {
-                            studentGraduationApplicationId: application.id,
-                            rankingConditionId: rule.id,
-                            passed,
-                            actualValue,
-                        },
-                        update: { passed, actualValue },
-                    })
-                    .catch((e) => {
-                        console.log(e)
-                    })
+                // const actualValue = Number(studentDataContext[rule.field])
+                // await prisma.applicationCheckResult
+                //     .upsert({
+                //         where: {
+                //             studentGraduationApplicationId_rankingConditionId: {
+                //                 studentGraduationApplicationId: application.id,
+                //                 rankingConditionId: rule.id,
+                //             },
+                //         },
+                //         create: {
+                //             studentGraduationApplicationId: application.id,
+                //             rankingConditionId: rule.id,
+                //             passed,
+                //             actualValue,
+                //         },
+                //         update: { passed, actualValue },
+                //     })
+                //     .catch((e) => {
+                //         console.log(e)
+                //     })
 
                 return passed
             })
