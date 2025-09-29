@@ -415,6 +415,7 @@ const PutTrainingCourseModal = () => {
                 admissionQuota: selectedTrainingCourse.admissionQuota,
                 maxTrainingTime: selectedTrainingCourse.maxTrainingTime,
                 trainingCourseRegulation: selectedTrainingCourse.trainingCourseRegulation,
+                baseScore: selectedTrainingCourse.baseScore,
             })
         } else {
             form.setFieldsValue({
@@ -433,6 +434,18 @@ const PutTrainingCourseModal = () => {
             maskClosable={true}
             title={id ? 'Chỉnh sửa khóa' : 'Thêm mới khóa'}
             className="w-[1000px]"
+            formProps={{
+                onValuesChange(changedValues, values) {
+                    if (changedValues?.semesterStartId && !values.schoolYearId) {
+                        const semester = semesterData.find(
+                            (i) => i.id === changedValues?.semesterStartId
+                        )
+                        form.setFieldsValue({
+                            schoolYearId: semester?.schoolYearId,
+                        })
+                    }
+                },
+            }}
         >
             <Row gutter={16} className="px-6 mt-3">
                 <Col
@@ -471,12 +484,7 @@ const PutTrainingCourseModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem
-                        form={form}
-                        name="schoolYearId"
-                        label="Năm học bắt đầu"
-                        // required
-                    >
+                    <FormItem form={form} name="schoolYearId" label="Năm học bắt đầu">
                         <Select
                             placeholder="Chọn năm học bắt đầu"
                             options={dataSchoolYear.map((i: SchoolYear) => {
@@ -509,7 +517,7 @@ const PutTrainingCourseModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
-                    <FormItem form={form} name="maxTrainingTime" label="Thời gian đào tạo Max">
+                    <FormItem form={form} name="maxTrainingTime" label="Thời gian đào tạo tối đa">
                         <InputNumber
                             type="number"
                             style={{ width: '100%' }}
@@ -547,20 +555,22 @@ const PutTrainingCourseModal = () => {
                 >
                     Thông tin điểm
                 </Col>
-                <Col span={8}>
-                    <FormItem form={form} name="trainingCourseClone" label="Sao chép quy chế">
-                        <Select
-                            placeholder="Chọn khóa để sao chép"
-                            options={trainingCourse.map((i) => {
-                                return {
-                                    value: i.id,
-                                    label: i.name,
-                                }
-                            })}
-                            onChange={handleSelectChange}
-                        />
-                    </FormItem>
-                </Col>
+                {!id && (
+                    <Col span={8}>
+                        <FormItem form={form} name="trainingCourseClone" label="Sao chép quy chế">
+                            <Select
+                                placeholder="Chọn khóa để sao chép"
+                                options={trainingCourse.map((i) => {
+                                    return {
+                                        value: i.id,
+                                        label: i.name,
+                                    }
+                                })}
+                                onChange={handleSelectChange}
+                            />
+                        </FormItem>
+                    </Col>
+                )}
                 <Col span={8}>
                     <FormItem form={form} name="baseScore" label="Hệ số điểm" required>
                         <Select

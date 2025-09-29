@@ -10,7 +10,6 @@ import {
     useCountTrainingCourse,
     useFindManySchoolYear,
     useFindManyTrainingCourse,
-    useFindManyTrainingObjectType,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -59,7 +58,6 @@ export default function TrainingCoursePage() {
                 : {}),
             trainingObjectTypeId,
             deletedAt: null,
-            active: true,
         }),
         [filters.code, filters.name, filters.semesterStart, trainingObjectTypeId]
     )
@@ -117,6 +115,7 @@ export default function TrainingCoursePage() {
                     id,
                 },
                 data: {
+                    code: id,
                     deletedAt: new Date(),
                 },
             })
@@ -135,9 +134,6 @@ export default function TrainingCoursePage() {
             createdAt: 'desc',
         },
     })
-
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-        useFindManyTrainingObjectType()
 
     return (
         <div>
@@ -251,13 +247,6 @@ export default function TrainingCoursePage() {
                                 dataIndex: 'trainingObjectTypes',
                                 align: 'center',
                                 width: 175,
-                                type: 'select',
-                                options: trainingObjectTypeData.map((i) => {
-                                    return {
-                                        value: i.id,
-                                        label: i.name,
-                                    }
-                                }),
                                 render: (__, record) =>
                                     record?.trainingObjectType?.name
                                         ? record?.trainingObjectType?.name
