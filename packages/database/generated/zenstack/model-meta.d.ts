@@ -11443,7 +11443,7 @@ declare const metadata: {
                     backLink: string;
                     isRelationOwner: boolean;
                     foreignKeyMapping: {
-                        Id: string;
+                        id: string;
                     };
                 };
                 uploadedById: {
@@ -11477,17 +11477,13 @@ declare const metadata: {
                     backLink: string;
                     isRelationOwner: boolean;
                     foreignKeyMapping: {
-                        Id: string;
+                        id: string;
                     };
                 };
                 approvedById: {
                     name: string;
                     type: string;
                     isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
                     isForeignKey: boolean;
                     relationField: string;
                 };
@@ -11627,7 +11623,7 @@ declare const metadata: {
                     backLink: string;
                     isRelationOwner: boolean;
                     foreignKeyMapping: {
-                        Id: string;
+                        id: string;
                     };
                 };
                 uploadedById: {
@@ -11661,17 +11657,13 @@ declare const metadata: {
                     backLink: string;
                     isRelationOwner: boolean;
                     foreignKeyMapping: {
-                        Id: string;
+                        id: string;
                     };
                 };
                 approvedById: {
                     name: string;
                     type: string;
                     isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
                     isForeignKey: boolean;
                     relationField: string;
                 };
@@ -11899,17 +11891,13 @@ declare const metadata: {
                     backLink: string;
                     isRelationOwner: boolean;
                     foreignKeyMapping: {
-                        Id: string;
+                        id: string;
                     };
                 };
                 userId: {
                     name: string;
                     type: string;
                     isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
                     isForeignKey: boolean;
                     relationField: string;
                 };
@@ -14764,69 +14752,6 @@ declare const metadata: {
                     type: string;
                     isDataModel: boolean;
                     isArray: boolean;
-                    backLink: string;
-                };
-                conversation: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                documentUploaded: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: string;
-                        }[];
-                    }[];
-                    backLink: string;
-                };
-                documentApproved: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: string;
-                        }[];
-                    }[];
-                    backLink: string;
-                };
-                fAQUploaded: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: string;
-                        }[];
-                    }[];
-                    backLink: string;
-                };
-                fAQApproved: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: string;
-                        }[];
-                    }[];
                     backLink: string;
                 };
             };
@@ -18543,6 +18468,69 @@ declare const metadata: {
                     backLink: string;
                 };
                 evidenceFiles: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                documentsUploaded: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
+                documentsApproved: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
+                faqsUploaded: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
+                faqsApproved: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
+                conversations: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
