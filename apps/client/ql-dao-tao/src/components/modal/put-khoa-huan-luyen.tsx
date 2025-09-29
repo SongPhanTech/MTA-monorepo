@@ -82,6 +82,7 @@ const PutTrainingCourseModal = () => {
                         },
                     },
                 }, // xử lý học tập
+                scoreConverts: true,
             },
         },
         { enabled: !!selectedId }
@@ -193,6 +194,18 @@ const PutTrainingCourseModal = () => {
                                     description: i.description,
                                 })),
                             },
+                        },
+                        scoreConverts: {
+                            create: selectedTrainingCourse?.scoreConverts.map((sc) => ({
+                                classification: sc.classification,
+                                base10Min: sc.base10Min,
+                                base10Max: sc.base10Max,
+                                description: sc.description,
+                                letter: sc.letter,
+                                base4: sc.base4,
+                                pass: sc.pass,
+                                improvementRegister: sc.improvementRegister,
+                            })),
                         },
                         academicRankingConvert: {
                             create: selectedTrainingCourse?.academicRankingConvert.map((e) => ({
