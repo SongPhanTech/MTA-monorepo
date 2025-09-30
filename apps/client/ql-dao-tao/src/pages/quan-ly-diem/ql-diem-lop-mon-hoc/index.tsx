@@ -19,7 +19,19 @@ import { calcFinalScore, getScoreStatistics } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, Form, Input, InputNumber, message, Popover, Row } from 'antd'
+import {
+    Button,
+    Checkbox,
+    Col,
+    Flex,
+    Form,
+    Input,
+    InputNumber,
+    Modal,
+    message,
+    Popover,
+    Row,
+} from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Ellipsis, FileUp, Printer, Save, Search } from 'lucide-react'
@@ -172,6 +184,21 @@ export default function SubjectClassScore() {
     }>({
         tag: 'ModalPrintStudentSubjectScore',
     })
+
+    const handlePrint = async () => {
+        Modal.confirm({
+            title: 'Xác nhận',
+            content: 'Bạn có chắc chắn muốn in phiếu điểm và khoá nhập điểm lại không?',
+            okText: 'Xác nhận',
+            cancelText: 'Hủy',
+            onOk: async () => {
+                onOpen({
+                    dataTable,
+                    type: EnumInPhieuDiem.PHIEU_DIEM_KHOA,
+                })
+            },
+        })
+    }
 
     useEffect(() => {
         if (subjectId) {
@@ -930,12 +957,7 @@ export default function SubjectClassScore() {
                                     <>
                                         <Button
                                             disabled={!selectedFixedClass}
-                                            onClick={() =>
-                                                onOpen({
-                                                    dataTable,
-                                                    type: EnumInPhieuDiem.PHIEU_DIEM_KHOA,
-                                                })
-                                            }
+                                            onClick={() => handlePrint()}
                                         >
                                             <Printer />
                                             In phiếu điểm và khoá
