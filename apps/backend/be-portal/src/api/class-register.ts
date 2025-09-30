@@ -26,6 +26,7 @@ const getClassRegisterSession = createRoute({
                             curriculumVersions: z.array(
                                 models.CurriculumVersionScalarSchema.nullish()
                             ),
+                            creditLimit: z.array(models.ClassRegisterSessionCreditSchema),
                         })
                     ),
                 },
@@ -67,10 +68,11 @@ const GetClassesInfoResponseSchema = z.array(
                 prerequisiteSubject: z
                     .array(models.SubjectVersionScalarSchema.pick({ code: true, name: true }))
                     .nullish(),
-                classSchedules: z.array(models.ClassScheduleScalarSchema),
                 mainLecturer: z
                     .object({
-                        userProfile: models.UserProfileScalarSchema.extend({
+                        userProfile: models.UserProfileScalarSchema.pick({
+                            fullname: true,
+                        }).extend({
                             level: models.DM_ChucDanhScalarSchema.pick({
                                 sMa: true,
                                 sTen: true,
@@ -88,7 +90,9 @@ const GetClassesInfoResponseSchema = z.array(
                     .nullish(),
                 extraLecturer: z
                     .object({
-                        userProfile: models.UserProfileScalarSchema.extend({
+                        userProfile: models.UserProfileScalarSchema.pick({
+                            fullname: true,
+                        }).extend({
                             level: models.DM_ChucDanhScalarSchema.pick({
                                 sMa: true,
                                 sTen: true,
@@ -117,9 +121,9 @@ const GetClassesInfoResponseSchema = z.array(
                     .nullish(),
                 credit: z.number().optional(),
                 _count: z.object({
-                    subjectClassStudent: z.number().optional(),
+                    classRegisterLogs: z.number(),
                 }),
-                subjectClassStudent: z.array(
+                classRegisterLogs: z.array(
                     z.object({
                         student: z.object({
                             userProfileId: z.string().optional(),
@@ -193,35 +197,9 @@ app.openapi(getClassesInfo, async (c) => {
         include: {
             educationAndTraining: {
                 include: {
-                    curriculumVersion: {
-                        include: {
-                            trainingBlocks: {
-                                include: {
-                                    subjects: {
-                                        include: {
-                                            subject: true,
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
                     fixedClass: {
                         include: {
                             trainingCourse: true,
-                            curriculumVersion: {
-                                include: {
-                                    trainingBlocks: {
-                                        include: {
-                                            subjects: {
-                                                include: {
-                                                    subject: true,
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
                         },
                     },
                 },
@@ -269,7 +247,7 @@ app.openapi(getClassesInfo, async (c) => {
                     semesterId: registerSession.semesterId,
                     ...(isRegisteredBool
                         ? {
-                              subjectClassStudent: {
+                              classRegisterLogs: {
                                   some: {
                                       student: {
                                           userProfileId: session.id,
@@ -296,7 +274,7 @@ app.openapi(getClassesInfo, async (c) => {
                     semesterId: registerSession.semesterId,
                 },
                 include: {
-                    subjectClassStudent: {
+                    classRegisterLogs: {
                         select: {
                             student: {
                                 select: {
@@ -317,7 +295,6 @@ app.openapi(getClassesInfo, async (c) => {
                             endPeriod: true,
                         },
                     },
-                    classSchedules: { take: 1, orderBy: { classDate: 'asc' } },
                     mainLecturer: {
                         select: {
                             userProfile: {
@@ -359,7 +336,7 @@ app.openapi(getClassesInfo, async (c) => {
                     },
                     _count: {
                         select: {
-                            subjectClassStudent: true,
+                            classRegisterLogs: true,
                         },
                     },
                 },
@@ -399,6 +376,7 @@ const classRegister = createRoute({
                         subjectClassIds: z
                             .array(z.string())
                             .openapi({ description: 'Danh sách ID lớp học' }),
+                        curriculumVersionId: z.string().optional(),
                     }),
                 },
             },
@@ -422,7 +400,7 @@ const classRegister = createRoute({
 
 app.openapi(classRegister, async (c) => {
     const session = c.get('user')
-    const { sessionId, subjectClassIds } = c.req.valid('json')
+    const { sessionId, subjectClassIds, curriculumVersionId } = c.req.valid('json')
 
     const registerSession = await prisma.classRegisterSession.findUniqueOrThrow({
         where: { id: sessionId },
@@ -456,50 +434,51 @@ app.openapi(classRegister, async (c) => {
         return c.json({ message: 'Bạn không có thông tin học vụ' }, 404)
     }
 
-    // TODO: maybe allow user select student profile
-    const studentId = profile.educationAndTraining[0]?.id as string
+    const studentId =
+        profile.educationAndTraining.find(
+            (item) => curriculumVersionId && item.curriculumVersionId === curriculumVersionId
+        )?.id ?? (profile.educationAndTraining[0]?.id as string)
     // TODO: check session => student trainingCourse
 
     // TODO: check subjectVersionIds, prerequisiteSubjectIds, coRequisiteSubjectIds
 
     // save the register log
-    // const registerLogs = await prisma.classRegisterLogs.createManyAndReturn({
-    //     data: subjectClassIds.map((subjectClassId) => ({
-    //         classRegisterSessionId: sessionId,
-    //         studentId,
-    //         subjectClassId,
-    //     })),
-    //     include: { subjectClass: true },
-    // })
+    await prisma.classRegisterLogs.createMany({
+        data: subjectClassIds.map((subjectClassId) => ({
+            classRegisterSessionId: sessionId,
+            studentId,
+            subjectClassId,
+        })),
+    })
 
     // now directly register here, need to implement a job queue
-    await prisma.$transaction(async (tx) => {
-        for (const subjectClassId of subjectClassIds) {
-            const isExist = await tx.studentSubjectScore.findFirst({
-                where: {
-                    studentId,
-                    subjectClassId,
-                },
-            })
-            if (isExist) {
-                throw new Error('Bạn đã đăng ký học phần này rồi')
-            }
-            const subjectClass = await tx.subjectClass.findUniqueOrThrow({
-                where: { id: subjectClassId },
-                include: { subject: true, _count: { select: { subjectClassStudent: true } } },
-            })
-            if ((subjectClass.maxStudent || 0) <= (subjectClass._count?.subjectClassStudent || 0)) {
-                throw new Error('Lớp học đã đủ số lượng sinh viên')
-            }
-            await tx.studentSubjectScore.create({
-                data: {
-                    subjectClassId,
-                    studentId,
-                    subjectVersionId: subjectClass.subjectId,
-                },
-            })
-        }
-    })
+    // await prisma.$transaction(async (tx) => {
+    //     for (const subjectClassId of subjectClassIds) {
+    //         const isExist = await tx.studentSubjectScore.findFirst({
+    //             where: {
+    //                 studentId,
+    //                 subjectClassId,
+    //             },
+    //         })
+    //         if (isExist) {
+    //             throw new Error('Bạn đã đăng ký học phần này rồi')
+    //         }
+    //         const subjectClass = await tx.subjectClass.findUniqueOrThrow({
+    //             where: { id: subjectClassId },
+    //             include: { subject: true, _count: { select: { subjectClassStudent: true } } },
+    //         })
+    //         if ((subjectClass.maxStudent || 0) <= (subjectClass._count?.subjectClassStudent || 0)) {
+    //             throw new Error('Lớp học đã đủ số lượng sinh viên')
+    //         }
+    //         await tx.studentSubjectScore.create({
+    //             data: {
+    //                 subjectClassId,
+    //                 studentId,
+    //                 subjectVersionId: subjectClass.subjectId,
+    //             },
+    //         })
+    //     }
+    // })
 
     return c.json({ message: 'success' }, 200)
 })
@@ -520,6 +499,7 @@ const classUnregister = createRoute({
                         subjectClassIds: z
                             .array(z.string())
                             .openapi({ description: 'Danh sách ID lớp học' }),
+                        curriculumVersionId: z.string().optional(),
                     }),
                 },
             },
@@ -543,7 +523,7 @@ const classUnregister = createRoute({
 
 app.openapi(classUnregister, async (c) => {
     const session = c.get('user')
-    const { sessionId, subjectClassIds } = c.req.valid('json')
+    const { sessionId, subjectClassIds, curriculumVersionId } = c.req.valid('json')
 
     const registerSession = await prisma.classRegisterSession.findUniqueOrThrow({
         where: { id: sessionId },
@@ -576,13 +556,11 @@ app.openapi(classUnregister, async (c) => {
     if (profile.educationAndTraining.length === 0) {
         return c.json({ message: 'Bạn không có thông tin học vụ' }, 404)
     }
-
     // TODO: maybe allow user select student profile
-    const studentId = profile.educationAndTraining[0]?.id as string
-    // TODO: check session => student trainingCourse
-
-    // TODO: check subjectVersionIds, prerequisiteSubjectIds, coRequisiteSubjectIds
-
+    const studentId =
+        profile.educationAndTraining.find(
+            (item) => curriculumVersionId && item.curriculumVersionId === curriculumVersionId
+        )?.id ?? (profile.educationAndTraining[0]?.id as string) // TODO: check session => student trainingCourse
     // save the register log
     // const registerLogs = await prisma.classRegisterLogs.createManyAndReturn({
     //     data: subjectClassIds.map((subjectClassId) => ({
@@ -592,27 +570,36 @@ app.openapi(classUnregister, async (c) => {
     //     })),
     //     include: { subjectClass: true },
     // })
+    await prisma.classRegisterLogs.deleteMany({
+        where: {
+            classRegisterSessionId: sessionId,
+            studentId,
+            subjectClassId: {
+                in: subjectClassIds,
+            },
+        },
+    })
 
     // now directly register here, need to implement a job queue
-    await prisma.$transaction(async (tx) => {
-        for (const subjectClassId of subjectClassIds) {
-            const isExist = await tx.studentSubjectScore.findFirst({
-                where: {
-                    studentId,
-                    subjectClassId,
-                },
-            })
-            if (!isExist) {
-                throw new Error('Bạn chưa đăng ký học phần này')
-            }
-            await tx.studentSubjectScore.deleteMany({
-                where: {
-                    subjectClassId,
-                    studentId,
-                },
-            })
-        }
-    })
+    // await prisma.$transaction(async (tx) => {
+    //     for (const subjectClassId of subjectClassIds) {
+    //         const isExist = await tx.studentSubjectScore.findFirst({
+    //             where: {
+    //                 studentId,
+    //                 subjectClassId,
+    //             },
+    //         })
+    //         if (!isExist) {
+    //             throw new Error('Bạn chưa đăng ký học phần này')
+    //         }
+    //         await tx.studentSubjectScore.deleteMany({
+    //             where: {
+    //                 subjectClassId,
+    //                 studentId,
+    //             },
+    //         })
+    //     }
+    // })
 
     return c.json({ message: 'success' }, 200)
 })
