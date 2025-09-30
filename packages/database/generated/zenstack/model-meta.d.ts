@@ -27450,6 +27450,17 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                updatedResult: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
             };
             uniqueConstraints: {
                 id: {

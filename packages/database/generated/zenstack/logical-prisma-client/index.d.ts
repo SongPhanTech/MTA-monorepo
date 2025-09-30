@@ -4702,7 +4702,8 @@ export namespace $Enums {
         WITHDRAWN: 'WITHDRAWN',
         TRANSFERRED: 'TRANSFERRED',
         PENDING_GRADUATION_REVIEW: 'PENDING_GRADUATION_REVIEW',
-        ACADEMIC_SUSPENSION: 'ACADEMIC_SUSPENSION'
+        ACADEMIC_SUSPENSION: 'ACADEMIC_SUSPENSION',
+        REPEATED: 'REPEATED'
     };
     export type StudentStatus = (typeof StudentStatus)[keyof typeof StudentStatus];
     export const NotificationType: {
@@ -7795,7 +7796,8 @@ export namespace Prisma {
         decisionDate: 'decisionDate',
         validUntil: 'validUntil',
         reason: 'reason',
-        status: 'status'
+        status: 'status',
+        updatedResult: 'updatedResult'
     };
     export const TrainingScoreSessionScalarFieldEnum: {
         id: 'id',
@@ -67290,6 +67292,7 @@ export namespace Prisma {
         readonly validUntil: FieldRef<"StudentAcademicDecision", 'DateTime'>;
         readonly reason: FieldRef<"StudentAcademicDecision", 'String'>;
         readonly status: FieldRef<"StudentAcademicDecision", 'DecisionStatus'>;
+        readonly updatedResult: FieldRef<"StudentAcademicDecision", 'Boolean'>;
     }
 
     export interface TrainingScoreSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -233487,6 +233490,7 @@ export namespace Prisma {
         validUntil: Date | null
         reason: string | null
         status: $Enums.DecisionStatus | null
+        updatedResult: boolean | null
     };
     export type StudentAcademicDecisionMaxAggregateOutputType = {
         id: string | null
@@ -233505,6 +233509,7 @@ export namespace Prisma {
         validUntil: Date | null
         reason: string | null
         status: $Enums.DecisionStatus | null
+        updatedResult: boolean | null
     };
     export type StudentAcademicDecisionCountAggregateOutputType = {
         id: number
@@ -233523,6 +233528,7 @@ export namespace Prisma {
         validUntil: number
         reason: number
         status: number
+        updatedResult: number
         _all: number
     };
     export type StudentAcademicDecisionMinAggregateInputType = {
@@ -233542,6 +233548,7 @@ export namespace Prisma {
         validUntil?: true
         reason?: true
         status?: true
+        updatedResult?: true
     };
     export type StudentAcademicDecisionMaxAggregateInputType = {
         id?: true
@@ -233560,6 +233567,7 @@ export namespace Prisma {
         validUntil?: true
         reason?: true
         status?: true
+        updatedResult?: true
     };
     export type StudentAcademicDecisionCountAggregateInputType = {
         id?: true
@@ -233578,6 +233586,7 @@ export namespace Prisma {
         validUntil?: true
         reason?: true
         status?: true
+        updatedResult?: true
         _all?: true
     };
     export type StudentAcademicDecisionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -233663,6 +233672,7 @@ export namespace Prisma {
         validUntil: Date | null
         reason: string | null
         status: $Enums.DecisionStatus
+        updatedResult: boolean
         _count: StudentAcademicDecisionCountAggregateOutputType | null
         _min: StudentAcademicDecisionMinAggregateOutputType | null
         _max: StudentAcademicDecisionMaxAggregateOutputType | null
@@ -233696,6 +233706,7 @@ export namespace Prisma {
         validUntil?: boolean
         reason?: boolean
         status?: boolean
+        updatedResult?: boolean
         student?: boolean | StudentDefaultArgs<ExtArgs>
         semester?: boolean | StudentAcademicDecision$semesterArgs<ExtArgs>
         schoolYear?: boolean | StudentAcademicDecision$schoolYearArgs<ExtArgs>
@@ -233720,6 +233731,7 @@ export namespace Prisma {
         validUntil?: boolean
         reason?: boolean
         status?: boolean
+        updatedResult?: boolean
         student?: boolean | StudentDefaultArgs<ExtArgs>
         semester?: boolean | StudentAcademicDecision$semesterArgs<ExtArgs>
         schoolYear?: boolean | StudentAcademicDecision$schoolYearArgs<ExtArgs>
@@ -233742,6 +233754,7 @@ export namespace Prisma {
         validUntil?: boolean
         reason?: boolean
         status?: boolean
+        updatedResult?: boolean
         student?: boolean | StudentDefaultArgs<ExtArgs>
         semester?: boolean | StudentAcademicDecision$semesterArgs<ExtArgs>
         schoolYear?: boolean | StudentAcademicDecision$schoolYearArgs<ExtArgs>
@@ -233764,8 +233777,9 @@ export namespace Prisma {
         validUntil?: boolean
         reason?: boolean
         status?: boolean
+        updatedResult?: boolean
     };
-    export type StudentAcademicDecisionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "studentId" | "semesterId" | "schoolYearId" | "appliedConfigId" | "actionTaken" | "decisionDate" | "validUntil" | "reason" | "status", ExtArgs["result"]["studentAcademicDecision"]>;
+    export type StudentAcademicDecisionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "studentId" | "semesterId" | "schoolYearId" | "appliedConfigId" | "actionTaken" | "decisionDate" | "validUntil" | "reason" | "status" | "updatedResult", ExtArgs["result"]["studentAcademicDecision"]>;
     export type StudentAcademicDecisionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         student?: boolean | StudentDefaultArgs<ExtArgs>
         semester?: boolean | StudentAcademicDecision$semesterArgs<ExtArgs>
@@ -233812,6 +233826,7 @@ export namespace Prisma {
             validUntil: Date | null
             reason: string | null
             status: $Enums.DecisionStatus
+            updatedResult: boolean
         }, ExtArgs["result"]["studentAcademicDecision"]>
         composites: {}
     };
@@ -305003,6 +305018,7 @@ export namespace Prisma {
         validUntil?: DateTimeNullableFilter<"StudentAcademicDecision"> | Date | string | null
         reason?: StringNullableFilter<"StudentAcademicDecision"> | string | null
         status?: EnumDecisionStatusFilter<"StudentAcademicDecision"> | $Enums.DecisionStatus
+        updatedResult?: BoolFilter<"StudentAcademicDecision"> | boolean
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         semester?: XOR<SemesterNullableScalarRelationFilter, SemesterWhereInput> | null
         schoolYear?: XOR<SchoolYearNullableScalarRelationFilter, SchoolYearWhereInput> | null
@@ -305026,6 +305042,7 @@ export namespace Prisma {
         validUntil?: SortOrderInput | SortOrder
         reason?: SortOrderInput | SortOrder
         status?: SortOrder
+        updatedResult?: SortOrder
         student?: StudentOrderByWithRelationInput
         semester?: SemesterOrderByWithRelationInput
         schoolYear?: SchoolYearOrderByWithRelationInput
@@ -305054,6 +305071,7 @@ export namespace Prisma {
         validUntil?: DateTimeNullableFilter<"StudentAcademicDecision"> | Date | string | null
         reason?: StringNullableFilter<"StudentAcademicDecision"> | string | null
         status?: EnumDecisionStatusFilter<"StudentAcademicDecision"> | $Enums.DecisionStatus
+        updatedResult?: BoolFilter<"StudentAcademicDecision"> | boolean
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         semester?: XOR<SemesterNullableScalarRelationFilter, SemesterWhereInput> | null
         schoolYear?: XOR<SchoolYearNullableScalarRelationFilter, SchoolYearWhereInput> | null
@@ -305077,6 +305095,7 @@ export namespace Prisma {
         validUntil?: SortOrderInput | SortOrder
         reason?: SortOrderInput | SortOrder
         status?: SortOrder
+        updatedResult?: SortOrder
         _count?: StudentAcademicDecisionCountOrderByAggregateInput
         _max?: StudentAcademicDecisionMaxOrderByAggregateInput
         _min?: StudentAcademicDecisionMinOrderByAggregateInput
@@ -305101,6 +305120,7 @@ export namespace Prisma {
         validUntil?: DateTimeNullableWithAggregatesFilter<"StudentAcademicDecision"> | Date | string | null
         reason?: StringNullableWithAggregatesFilter<"StudentAcademicDecision"> | string | null
         status?: EnumDecisionStatusWithAggregatesFilter<"StudentAcademicDecision"> | $Enums.DecisionStatus
+        updatedResult?: BoolWithAggregatesFilter<"StudentAcademicDecision"> | boolean
     };
     export type TrainingScoreSessionWhereInput = {
         AND?: TrainingScoreSessionWhereInput | TrainingScoreSessionWhereInput[]
@@ -329328,6 +329348,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
         student: StudentCreateNestedOneWithoutStudentAcademicDecisionInput
         semester?: SemesterCreateNestedOneWithoutStudentAcademicDecisionInput
         schoolYear?: SchoolYearCreateNestedOneWithoutStudentAcademicDecisionInput
@@ -329351,6 +329372,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
         documentEvidence?: DocumentFileUncheckedCreateNestedManyWithoutStudentAcademicDecisionInput
     };
     export type StudentAcademicDecisionUpdateInput = {
@@ -329366,6 +329388,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
         student?: StudentUpdateOneRequiredWithoutStudentAcademicDecisionNestedInput
         semester?: SemesterUpdateOneWithoutStudentAcademicDecisionNestedInput
         schoolYear?: SchoolYearUpdateOneWithoutStudentAcademicDecisionNestedInput
@@ -329389,6 +329412,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
         documentEvidence?: DocumentFileUncheckedUpdateManyWithoutStudentAcademicDecisionNestedInput
     };
     export type StudentAcademicDecisionCreateManyInput = {
@@ -329408,6 +329432,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
     };
     export type StudentAcademicDecisionUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -329422,6 +329447,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
     };
     export type StudentAcademicDecisionUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -329440,6 +329466,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
     };
     export type TrainingScoreSessionCreateInput = {
         id?: string
@@ -347670,6 +347697,7 @@ export namespace Prisma {
         validUntil?: SortOrder
         reason?: SortOrder
         status?: SortOrder
+        updatedResult?: SortOrder
     };
     export type StudentAcademicDecisionMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -347688,6 +347716,7 @@ export namespace Prisma {
         validUntil?: SortOrder
         reason?: SortOrder
         status?: SortOrder
+        updatedResult?: SortOrder
     };
     export type StudentAcademicDecisionMinOrderByAggregateInput = {
         id?: SortOrder
@@ -347706,6 +347735,7 @@ export namespace Prisma {
         validUntil?: SortOrder
         reason?: SortOrder
         status?: SortOrder
+        updatedResult?: SortOrder
     };
     export type EnumDecisionStatusWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.DecisionStatus | EnumDecisionStatusFieldRefInput<$PrismaModel>
@@ -375253,6 +375283,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
         student: StudentCreateNestedOneWithoutStudentAcademicDecisionInput
         semester?: SemesterCreateNestedOneWithoutStudentAcademicDecisionInput
         appliedConfig?: AcademicActionConfigCreateNestedOneWithoutDecisionsInput
@@ -375274,6 +375305,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
         documentEvidence?: DocumentFileUncheckedCreateNestedManyWithoutStudentAcademicDecisionInput
     };
     export type StudentAcademicDecisionCreateOrConnectWithoutSchoolYearInput = {
@@ -375423,6 +375455,7 @@ export namespace Prisma {
         validUntil?: DateTimeNullableFilter<"StudentAcademicDecision"> | Date | string | null
         reason?: StringNullableFilter<"StudentAcademicDecision"> | string | null
         status?: EnumDecisionStatusFilter<"StudentAcademicDecision"> | $Enums.DecisionStatus
+        updatedResult?: BoolFilter<"StudentAcademicDecision"> | boolean
     };
     export type SchoolYearCreateWithoutSemestersInput = {
         id?: string
@@ -375873,6 +375906,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
         student: StudentCreateNestedOneWithoutStudentAcademicDecisionInput
         schoolYear?: SchoolYearCreateNestedOneWithoutStudentAcademicDecisionInput
         appliedConfig?: AcademicActionConfigCreateNestedOneWithoutDecisionsInput
@@ -375894,6 +375928,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
         documentEvidence?: DocumentFileUncheckedCreateNestedManyWithoutStudentAcademicDecisionInput
     };
     export type StudentAcademicDecisionCreateOrConnectWithoutSemesterInput = {
@@ -390527,6 +390562,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
         semester?: SemesterCreateNestedOneWithoutStudentAcademicDecisionInput
         schoolYear?: SchoolYearCreateNestedOneWithoutStudentAcademicDecisionInput
         appliedConfig?: AcademicActionConfigCreateNestedOneWithoutDecisionsInput
@@ -390548,6 +390584,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
         documentEvidence?: DocumentFileUncheckedCreateNestedManyWithoutStudentAcademicDecisionInput
     };
     export type StudentAcademicDecisionCreateOrConnectWithoutStudentInput = {
@@ -439189,6 +439226,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
         student: StudentCreateNestedOneWithoutStudentAcademicDecisionInput
         semester?: SemesterCreateNestedOneWithoutStudentAcademicDecisionInput
         schoolYear?: SchoolYearCreateNestedOneWithoutStudentAcademicDecisionInput
@@ -439211,6 +439249,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
     };
     export type StudentAcademicDecisionCreateOrConnectWithoutDocumentEvidenceInput = {
         where: StudentAcademicDecisionWhereUniqueInput
@@ -439937,6 +439976,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
         student?: StudentUpdateOneRequiredWithoutStudentAcademicDecisionNestedInput
         semester?: SemesterUpdateOneWithoutStudentAcademicDecisionNestedInput
         schoolYear?: SchoolYearUpdateOneWithoutStudentAcademicDecisionNestedInput
@@ -439959,6 +439999,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
     };
     export type NotificationUpsertWithoutAttachmentsInput = {
         update: XOR<NotificationUpdateWithoutAttachmentsInput, NotificationUncheckedUpdateWithoutAttachmentsInput>
@@ -440534,6 +440575,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
         student: StudentCreateNestedOneWithoutStudentAcademicDecisionInput
         semester?: SemesterCreateNestedOneWithoutStudentAcademicDecisionInput
         schoolYear?: SchoolYearCreateNestedOneWithoutStudentAcademicDecisionInput
@@ -440555,6 +440597,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
         documentEvidence?: DocumentFileUncheckedCreateNestedManyWithoutStudentAcademicDecisionInput
     };
     export type StudentAcademicDecisionCreateOrConnectWithoutAppliedConfigInput = {
@@ -458259,6 +458302,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
     };
     export type SemesterUpdateWithoutSchoolYearInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -458456,6 +458500,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
         student?: StudentUpdateOneRequiredWithoutStudentAcademicDecisionNestedInput
         semester?: SemesterUpdateOneWithoutStudentAcademicDecisionNestedInput
         appliedConfig?: AcademicActionConfigUpdateOneWithoutDecisionsNestedInput
@@ -458477,6 +458522,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
         documentEvidence?: DocumentFileUncheckedUpdateManyWithoutStudentAcademicDecisionNestedInput
     };
     export type StudentAcademicDecisionUncheckedUpdateManyWithoutSchoolYearInput = {
@@ -458495,6 +458541,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
     };
     export type SubjectClassCreateManySemesterInput = {
         id?: string
@@ -458663,6 +458710,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
     };
     export type ClassRegisterSessionCreateManySemesterInput = {
         id?: string
@@ -459187,6 +459235,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
         student?: StudentUpdateOneRequiredWithoutStudentAcademicDecisionNestedInput
         schoolYear?: SchoolYearUpdateOneWithoutStudentAcademicDecisionNestedInput
         appliedConfig?: AcademicActionConfigUpdateOneWithoutDecisionsNestedInput
@@ -459208,6 +459257,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
         documentEvidence?: DocumentFileUncheckedUpdateManyWithoutStudentAcademicDecisionNestedInput
     };
     export type StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterInput = {
@@ -459226,6 +459276,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
     };
     export type ClassRegisterSessionUpdateWithoutSemesterInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -466564,6 +466615,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
     };
     export type StudentGraduationApplicationCreateManyStudentInput = {
         id?: string
@@ -467178,6 +467230,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
         semester?: SemesterUpdateOneWithoutStudentAcademicDecisionNestedInput
         schoolYear?: SchoolYearUpdateOneWithoutStudentAcademicDecisionNestedInput
         appliedConfig?: AcademicActionConfigUpdateOneWithoutDecisionsNestedInput
@@ -467199,6 +467252,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
         documentEvidence?: DocumentFileUncheckedUpdateManyWithoutStudentAcademicDecisionNestedInput
     };
     export type StudentAcademicDecisionUncheckedUpdateManyWithoutStudentInput = {
@@ -467217,6 +467271,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
     };
     export type StudentGraduationApplicationUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -491593,6 +491648,7 @@ export namespace Prisma {
         validUntil?: Date | string | null
         reason?: string | null
         status?: $Enums.DecisionStatus
+        updatedResult?: boolean
     };
     export type AcademicActionRuleSetUpdateWithoutConfigInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -491636,6 +491692,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
         student?: StudentUpdateOneRequiredWithoutStudentAcademicDecisionNestedInput
         semester?: SemesterUpdateOneWithoutStudentAcademicDecisionNestedInput
         schoolYear?: SchoolYearUpdateOneWithoutStudentAcademicDecisionNestedInput
@@ -491657,6 +491714,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
         documentEvidence?: DocumentFileUncheckedUpdateManyWithoutStudentAcademicDecisionNestedInput
     };
     export type StudentAcademicDecisionUncheckedUpdateManyWithoutAppliedConfigInput = {
@@ -491675,6 +491733,7 @@ export namespace Prisma {
         validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+        updatedResult?: BoolFieldUpdateOperationsInput | boolean
     };
     export type AcademicActionConditionCreateManyRuleSetInput = {
         id?: string

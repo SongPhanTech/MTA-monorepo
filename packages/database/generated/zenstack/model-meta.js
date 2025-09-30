@@ -15364,6 +15364,10 @@ const metadata = {
                     name: "status",
                     type: "DecisionStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedResult: {
+                    name: "updatedResult",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 },
             }, uniqueConstraints: {
                 id: {

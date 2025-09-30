@@ -1,5 +1,5 @@
 import DeleteIcon from '@components/icons/delete'
-import { Button, Checkbox, Col, Flex, message, Row, Tag } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Row, type TableProps, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
@@ -12,13 +12,7 @@ import { useAcademicActionTypeOption } from '@hooks/academicActionType'
 import { useDecisionStatusOptions } from '@hooks/decisionStatus'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
-import {
-    type AcademicActionType,
-    DecisionStatus,
-    type FixedClass,
-    type Prisma,
-    type TrainingCourse,
-} from '@workspace/db'
+import { AcademicActionType, DecisionStatus, type Prisma } from '@workspace/db'
 import {
     useDeleteStudentAcademicDecision,
     useFindManyDM_DonVi,
@@ -55,6 +49,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedStudents, setSelectedStudents] = useState<SelectedStudent[]>([])
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [selectedDecision, setSelectedDecision] = useState<React.Key[]>([])
     const { getAcademicActionTypeLabel } = useAcademicActionTypeOption()
     const {
         options: decisionStatusOption,
@@ -177,9 +172,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         try {
             showSpinner()
             await deleteStudentAcademicDecision({
-                where: {
-                    id,
-                },
+                where: { id },
             })
         } catch (error: any) {
             if (error?.info?.message) {
@@ -275,6 +268,17 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
             return selected
         }
     }, [studentData])
+
+    const decisionSelection: TableProps<NonNullable<typeof data>[number]>['rowSelection'] = {
+        selectedRowKeys: selectedDecision,
+        onChange: (selectedRowKeys: React.Key[], selectedRows) => {
+            setSelectedDecision(selectedRowKeys)
+            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
+        },
+        getCheckboxProps: (record) => ({
+            disabled: record?.updatedResult,
+        }),
+    }
 
     const onSelectChange = (id: string, selected: boolean) => {
         const newSelectedKeys = selected
@@ -386,9 +390,14 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                     </Col>
                     <Col span={24}>
                         <Table
-                            rowKey="key"
+                            rowKey="id"
                             data={data}
                             filters={filters}
+                            rowSelection={
+                                actionTaken === AcademicActionType.REPEAT_YEAR
+                                    ? decisionSelection
+                                    : undefined
+                            }
                             setFilters={(value) => {
                                 setFilters(value)
                                 setCurrentPage(1)
@@ -408,7 +417,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     width: 120,
                                     align: 'center',
                                     fixed: 'left',
-                                    type: 'input',
+                                    // type: 'input',
                                     render: (__, record) => record?.student?.code,
                                 },
                                 {
@@ -416,7 +425,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     dataIndex: 'name',
                                     width: 200,
                                     fixed: 'left',
-                                    type: 'input',
+                                    // type: 'input',
                                     render: (__, record) => record?.student?.userProfile?.fullname,
                                 },
                                 {
@@ -424,11 +433,11 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     dataIndex: 'fixedClass',
                                     width: 150,
                                     align: 'center',
-                                    type: 'select',
-                                    options: fixedClassData.map((i: FixedClass) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    })),
+                                    // type: 'select',
+                                    // options: fixedClassData.map((i: FixedClass) => ({
+                                    //     value: i.id,
+                                    //     label: i.name,
+                                    // })),
                                     render: (__, record) => record?.student?.fixedClass?.name,
                                 },
                                 {
@@ -436,11 +445,11 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     dataIndex: 'trainingCourse',
                                     width: 100,
                                     align: 'center',
-                                    type: 'select',
-                                    options: trainingCourseData.map((i: TrainingCourse) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    })),
+                                    // type: 'select',
+                                    // options: trainingCourseData.map((i: TrainingCourse) => ({
+                                    //     value: i.id,
+                                    //     label: i.name,
+                                    // })),
                                     render: (__, record) =>
                                         record?.student?.fixedClass?.trainingCourse?.name,
                                 },
@@ -449,8 +458,8 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     dataIndex: 'organization',
                                     width: 150,
                                     align: 'center',
-                                    type: 'tree_select',
-                                    options: treeData,
+                                    // type: 'tree_select',
+                                    // options: treeData,
                                     render: (__, record) =>
                                         record?.student?.fixedClass?.managementOrganization?.sTen,
                                 },
@@ -469,7 +478,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     dataIndex: 'decisionDate',
                                     width: 150,
                                     align: 'center',
-                                    type: 'date',
+                                    // type: 'date',
                                     render: (__, record) =>
                                         record.decisionDate
                                             ? dayjs(record.decisionDate).format('DD/MM/YYYY')
@@ -489,8 +498,8 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     width: 150,
                                     align: 'center',
                                     fixed: 'right',
-                                    type: 'select',
-                                    options: decisionStatusOption,
+                                    // type: 'select',
+                                    // options: decisionStatusOption,
                                     render: (status) => (
                                         <Tag color={getDecisionStatusColor(status)}>
                                             {getDecisionStatusLabel(status)}

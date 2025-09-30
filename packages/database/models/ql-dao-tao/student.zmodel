@@ -195,5 +195,6 @@ enum StudentStatus {
   TRANSFERRED // Chuyển trường: Sinh viên đã chuyển sang trường khác.
   PENDING_GRADUATION_REVIEW // Chờ xét tốt nghiệp: Sinh viên đã hoàn thành chương trình đào tạo nhưng chưa được công nhận tốt nghiệp.
   ACADEMIC_SUSPENSION // Đình chỉ học: Sinh viên bị đình chỉ học do lý do kỷ luật hoặc lý do khác.
+  REPEATED // Lưu ban
   @@schema("ql-dao-tao")
 }

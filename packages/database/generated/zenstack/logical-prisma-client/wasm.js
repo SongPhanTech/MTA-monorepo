@@ -2684,7 +2684,8 @@ exports.Prisma.StudentAcademicDecisionScalarFieldEnum = {
   decisionDate: 'decisionDate',
   validUntil: 'validUntil',
   reason: 'reason',
-  status: 'status'
+  status: 'status',
+  updatedResult: 'updatedResult'
 };
 
 exports.Prisma.TrainingScoreSessionScalarFieldEnum = {
@@ -6081,7 +6082,8 @@ exports.StudentStatus = exports.$Enums.StudentStatus = {
   WITHDRAWN: 'WITHDRAWN',
   TRANSFERRED: 'TRANSFERRED',
   PENDING_GRADUATION_REVIEW: 'PENDING_GRADUATION_REVIEW',
-  ACADEMIC_SUSPENSION: 'ACADEMIC_SUSPENSION'
+  ACADEMIC_SUSPENSION: 'ACADEMIC_SUSPENSION',
+  REPEATED: 'REPEATED'
 };
 
 exports.StudentTrainingType = exports.$Enums.StudentTrainingType = {

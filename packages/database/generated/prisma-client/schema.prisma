@@ -167,6 +167,7 @@ enum StudentStatus {
   TRANSFERRED
   PENDING_GRADUATION_REVIEW
   ACADEMIC_SUSPENSION
+  REPEATED
 
   @@schema("ql-dao-tao")
 }
@@ -4035,6 +4036,7 @@ model StudentAcademicDecision {
   reason           String?
   documentEvidence DocumentFile[]
   status           DecisionStatus        @default(PENDING)
+  updatedResult    Boolean               @default(false)
 
   @@unique([studentId, semesterId, schoolYearId, appliedConfigId])
   @@schema("ql-dao-tao")
