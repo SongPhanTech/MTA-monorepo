@@ -5,7 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface GenExamFaxResult {
-    success: boolean
+export type UpdateStudentStatus200 = {
     message: string
+    count: number
 }

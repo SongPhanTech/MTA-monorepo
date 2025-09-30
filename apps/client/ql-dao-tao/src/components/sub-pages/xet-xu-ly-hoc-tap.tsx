@@ -1,5 +1,5 @@
 import DeleteIcon from '@components/icons/delete'
-import { Button, Checkbox, Col, Flex, message, Row, type TableProps, Tag } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Popconfirm, Row, type TableProps, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
@@ -12,7 +12,7 @@ import { useAcademicActionTypeOption } from '@hooks/academicActionType'
 import { useDecisionStatusOptions } from '@hooks/decisionStatus'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
-import { AcademicActionType, DecisionStatus, type Prisma } from '@workspace/db'
+import { type AcademicActionType, DecisionStatus, type Prisma } from '@workspace/db'
 import {
     useDeleteStudentAcademicDecision,
     useFindManyDM_DonVi,
@@ -21,7 +21,10 @@ import {
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
+import {
+    updateStudentStatus,
+    useExportStudentResultSemesterJson,
+} from '@workspace/libs/api/training'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -269,11 +272,10 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         }
     }, [studentData])
 
-    const decisionSelection: TableProps<NonNullable<typeof data>[number]>['rowSelection'] = {
+    const decisionSelection: TableProps['rowSelection'] = {
         selectedRowKeys: selectedDecision,
         onChange: (selectedRowKeys: React.Key[], selectedRows) => {
             setSelectedDecision(selectedRowKeys)
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
         },
         getCheckboxProps: (record) => ({
             disabled: record?.updatedResult,
@@ -370,21 +372,50 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                     <Col span={24}>
                         <Row gutter={[16, 16]} align="top" justify="space-between">
                             <Col span={24}>
-                                <Flex justify="end">
-                                    <Button
-                                        type="primary"
-                                        onClick={() =>
-                                            onOpen({
-                                                id: '',
-                                                semesterId,
-                                                actionTaken,
-                                            })
-                                        }
-                                    >
-                                        <BookPlus />
-                                        Thêm học viên
-                                    </Button>
-                                </Flex>
+                                <Row justify={'space-between'}>
+                                    <h3 className="text-xl font-bold">Quyết định</h3>
+                                    <Flex justify="end" gap={4}>
+                                        <Popconfirm
+                                            placement="topLeft"
+                                            title="Xác nhận cập nhật trạng thái SV?"
+                                            description={`Trạng thái SV và kết quả học tập sẽ được đánh dấu là ${getAcademicActionTypeLabel(
+                                                actionTaken
+                                            )}`}
+                                            okText="Đồng ý"
+                                            cancelText="Hủy"
+                                            onConfirm={async () => {
+                                                await updateStudentStatus({
+                                                    decisionIds: selectedDecision as string[],
+                                                    academicActionType: actionTaken,
+                                                })
+                                                await refetch()
+                                                setSelectedDecision([])
+                                            }}
+                                        >
+                                            <Button
+                                                type="primary"
+                                                disabled={!selectedDecision.length}
+                                            >
+                                                <BookPlus />
+                                                Cập nhật trạng thái SV
+                                            </Button>
+                                        </Popconfirm>
+
+                                        <Button
+                                            type="primary"
+                                            onClick={() =>
+                                                onOpen({
+                                                    id: '',
+                                                    semesterId,
+                                                    actionTaken,
+                                                })
+                                            }
+                                        >
+                                            <BookPlus />
+                                            Thêm học viên
+                                        </Button>
+                                    </Flex>
+                                </Row>
                             </Col>
                         </Row>
                     </Col>
@@ -393,11 +424,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                             rowKey="id"
                             data={data}
                             filters={filters}
-                            rowSelection={
-                                actionTaken === AcademicActionType.REPEAT_YEAR
-                                    ? decisionSelection
-                                    : undefined
-                            }
+                            rowSelection={decisionSelection}
                             setFilters={(value) => {
                                 setFilters(value)
                                 setCurrentPage(1)
@@ -412,9 +439,9 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                         index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                                 },
                                 {
-                                    title: 'Mã sinh viên',
+                                    title: 'Mã SV',
                                     dataIndex: 'code',
-                                    width: 120,
+                                    width: 100,
                                     align: 'center',
                                     fixed: 'left',
                                     // type: 'input',
@@ -485,17 +512,9 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                             : '',
                                 },
                                 {
-                                    title: 'Hành động đã thực hiện',
-                                    dataIndex: 'actionTaken',
-                                    width: 150,
-                                    align: 'center',
-                                    fixed: 'right',
-                                    render: (value) => getAcademicActionTypeLabel(value),
-                                },
-                                {
-                                    title: 'Trạng thái của quyết định',
+                                    title: 'Trạng thái',
                                     dataIndex: 'status',
-                                    width: 150,
+                                    width: 120,
                                     align: 'center',
                                     fixed: 'right',
                                     // type: 'select',
@@ -514,16 +533,18 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     render: (_, record) => {
                                         return record?.id ? (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={() =>
-                                                        onOpen({
-                                                            id: record?.id,
-                                                            semesterId,
-                                                            actionTaken,
-                                                        })
-                                                    }
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
+                                                <Button ghost disabled>
+                                                    <EditIcon
+                                                        onClick={() =>
+                                                            onOpen({
+                                                                id: record?.id,
+                                                                semesterId,
+                                                                actionTaken,
+                                                            })
+                                                        }
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                </Button>
                                                 <DeleteIcon
                                                     popConfirm={{
                                                         onConfirm: () =>
@@ -560,16 +581,19 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                     <Col span={24}>
                         <Row gutter={[16, 16]} align="top" justify="space-between">
                             <Col span={24}>
-                                <Flex justify="end">
-                                    <Button
-                                        type="primary"
-                                        onClick={handleApprove}
-                                        disabled={selectedStudents.length === 0}
-                                    >
-                                        <BookPlus />
-                                        Duyệt
-                                    </Button>
-                                </Flex>
+                                <Row justify={'space-between'}>
+                                    <h3 className="text-xl font-bold">Xét</h3>
+                                    <Flex justify="end">
+                                        <Button
+                                            type="primary"
+                                            onClick={handleApprove}
+                                            disabled={selectedStudents.length === 0}
+                                        >
+                                            <BookPlus />
+                                            Duyệt
+                                        </Button>
+                                    </Flex>
+                                </Row>
                             </Col>
                         </Row>
                     </Col>
@@ -582,9 +606,9 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                             rowSelection={rowSelection}
                             columns={[
                                 {
-                                    title: 'Mã sinh viên',
+                                    title: 'Mã SV',
                                     dataIndex: ['code'],
-                                    width: 120,
+                                    width: 100,
                                     align: 'center',
                                 },
                                 {

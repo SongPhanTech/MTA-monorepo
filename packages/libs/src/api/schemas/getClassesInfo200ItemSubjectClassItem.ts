@@ -42,15 +42,19 @@ export type GetClassesInfo200ItemSubjectClassItem = {
     /** @nullable */
     examDate?: string | null
     /** @nullable */
+    examType?: GetClassesInfo200ItemSubjectClassItemExamType
+    /** @nullable */
     scoreDeadline?: string | null
     /** @nullable */
     examScoreDeadline?: string | null
-    /** @nullable */
-    examType?: GetClassesInfo200ItemSubjectClassItemExamType
-    isLockScore?: boolean
-    isLockExamScore?: boolean
+    enteredScore?: boolean
+    enteredExamScore?: boolean
     /** @nullable */
     issuedScoreAt?: string | null
+    isLockScore?: boolean
+    isLockExamScore?: boolean
+    scoreSubmitted?: boolean
+    scoreChecked?: boolean
     /** @nullable */
     prerequisiteSubject?: GetClassesInfo200ItemSubjectClassItemPrerequisiteSubjectItem[] | null
     classSchedules: GetClassesInfo200ItemSubjectClassItemClassSchedulesItem[]

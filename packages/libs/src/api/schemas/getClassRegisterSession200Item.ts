@@ -27,8 +27,7 @@ export type GetClassRegisterSession200Item = {
     startDate: string | null
     /** @nullable */
     endDate: string | null
-    /** @nullable */
-    maxCredit?: number | null
+    tuitionPerCredit?: number
     semester: GetClassRegisterSession200ItemSemester
     trainingCourses: GetClassRegisterSession200ItemTrainingCoursesItem[]
     curriculumVersions: GetClassRegisterSession200ItemCurriculumVersionsItem[]
