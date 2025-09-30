@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
+import type { GetClassRegisterSession200ItemCreditLimitItem } from './getClassRegisterSession200ItemCreditLimitItem'
 import type { GetClassRegisterSession200ItemCurriculumVersionsItem } from './getClassRegisterSession200ItemCurriculumVersionsItem'
 import type { GetClassRegisterSession200ItemSemester } from './getClassRegisterSession200ItemSemester'
 import type { GetClassRegisterSession200ItemTrainingCoursesItem } from './getClassRegisterSession200ItemTrainingCoursesItem'
@@ -27,9 +28,9 @@ export type GetClassRegisterSession200Item = {
     startDate: string | null
     /** @nullable */
     endDate: string | null
-    /** @nullable */
-    maxCredit?: number | null
+    tuitionPerCredit?: number
     semester: GetClassRegisterSession200ItemSemester
     trainingCourses: GetClassRegisterSession200ItemTrainingCoursesItem[]
     curriculumVersions: GetClassRegisterSession200ItemCurriculumVersionsItem[]
+    creditLimit: GetClassRegisterSession200ItemCreditLimitItem[]
 }

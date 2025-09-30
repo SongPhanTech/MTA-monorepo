@@ -33,15 +33,19 @@ export interface SubjectClasses {
     /** @nullable */
     examDate?: string | null
     /** @nullable */
+    examType?: SubjectClassesExamType
+    /** @nullable */
     scoreDeadline?: string | null
     /** @nullable */
     examScoreDeadline?: string | null
-    /** @nullable */
-    examType?: SubjectClassesExamType
-    isLockScore?: boolean
-    isLockExamScore?: boolean
+    enteredScore?: boolean
+    enteredExamScore?: boolean
     /** @nullable */
     issuedScoreAt?: string | null
+    isLockScore?: boolean
+    isLockExamScore?: boolean
+    scoreSubmitted?: boolean
+    scoreChecked?: boolean
     /** @nullable */
     roomId?: string | null
     /** @nullable */

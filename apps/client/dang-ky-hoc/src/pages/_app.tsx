@@ -27,7 +27,7 @@ import LoadingBar from 'react-top-loading-bar'
 import '@assets/css/custom.css'
 import { lightThemeCustom, WidgetChatbot } from '@workspace/ui'
 import { env } from '@/env'
-
+import '@workspace/libs'
 dayjs.locale('vi')
 dayjs.extend(weekOfYear)
 dayjs.extend(isoWeeksInYear)

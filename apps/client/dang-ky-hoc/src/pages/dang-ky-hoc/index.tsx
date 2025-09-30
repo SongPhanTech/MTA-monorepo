@@ -1,3 +1,4 @@
+import Loading from '@components/commons/loading'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
@@ -22,7 +23,12 @@ export default function DangKyHocPage() {
     const [_filters, _setFilters] = useState({
         searchText: '',
     })
-    const { data: classRegisterSession } = useGetClassRegisterSession()
+    const { data: classRegisterSession, isFetching } = useGetClassRegisterSession()
+
+    if (isFetching) {
+        return <Loading />
+    }
+
     return (
         <div>
             {classRegisterSession?.status !== 200 ? (
@@ -184,7 +190,7 @@ const DanhSachMonDangKy = ({
                             align: 'center',
                             width: 80,
                             render: (_, record) =>
-                                `${record._count?.subjectClassStudent || 0}/${record.maxStudent}`,
+                                `${record._count?.classRegisterLogs || 0}/${record.maxStudent}`,
                         },
                         {
                             title: 'Thời khoá biểu',
@@ -209,7 +215,7 @@ const DanhSachMonDangKy = ({
                             render: (_, record) => {
                                 const isMaxed =
                                     (record.maxStudent || 0) <=
-                                    (record._count?.subjectClassStudent || 0)
+                                    (record._count?.classRegisterLogs || 0)
                                 const isRegisteredBool = record.subjectClassStudent?.length > 0
                                 const isDisabled = isMaxed || isRegisteredBool
                                 return (
@@ -221,6 +227,7 @@ const DanhSachMonDangKy = ({
                                                 const res = await classRegister({
                                                     sessionId,
                                                     subjectClassIds: [record.id],
+                                                    curriculumVersionId,
                                                 })
                                                 if (res.status !== 200) {
                                                     throw new Error(res.data.message)
@@ -249,8 +256,8 @@ const DanhSachMonDangKy = ({
                         const r = record as unknown as GetClassesInfo200ItemSubjectClassItem
                         return {
                             className:
-                                r.subjectClassStudent?.map?.((e) => e.student.userProfileId)
-                                    .length > 0
+                                r.classRegisterLogs?.map?.((e) => e.student.userProfileId).length >
+                                0
                                     ? 'bg-green-200'
                                     : '',
                         }

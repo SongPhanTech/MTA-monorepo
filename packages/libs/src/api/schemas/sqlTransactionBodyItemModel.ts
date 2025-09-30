@@ -40,6 +40,7 @@ export const SqlTransactionBodyItemModel = {
     EquivalencyGroup: 'EquivalencyGroup',
     SubjectInGroup: 'SubjectInGroup',
     TrainingBlockSubject: 'TrainingBlockSubject',
+    ClassRegisterSessionCredit: 'ClassRegisterSessionCredit',
     ClassRegisterSession: 'ClassRegisterSession',
     ClassRegisterLogs: 'ClassRegisterLogs',
     SubjectClass: 'SubjectClass',
