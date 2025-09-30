@@ -148,16 +148,16 @@ const ModalNhapTKB = () => {
                     <TreeSelectSemester defaultValue={id || undefined} />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem form={form} name="fileType" label="Mẫu" required>
                     <Radio.Group
                         options={[
                             {
-                                label: 'Mẫu 1: Thống kê các giáo viên đang có giờ dạy',
+                                label: 'Mẫu 1: Thống kê các giáo viên đang có giờ dạy (Quân sự)',
                                 value: 'THONG_KE_GIAO_VIEN_GIANG_DAY',
                             },
                             {
-                                label: 'Mẫu 2: TKB dự kiến theo lớp học phần',
+                                label: 'Mẫu 2: TKB dự kiến theo lớp học phần (Dân sự)',
                                 value: 'TKB_THEO_LOP_HOC_PHAN',
                             },
                         ]}
@@ -166,6 +166,28 @@ const ModalNhapTKB = () => {
                         buttonStyle="solid"
                     />
                 </FormItem>
+                <p className="text-sm text-gray-500">
+                    Lưu ý: Mẫu 1 đã chứa nội dung các lớp quản lý được đăng ký vào lớp môn học từ
+                    phần mềm TKBU
+                </p>
+                <p className="text-sm text-gray-500">
+                    Lưu ý: Mẫu 2 chứa kế hoạch lớp môn học dự kiến cho các lớp Dân sự, sinh viên cần
+                    đăng ký học phần theo kế hoạch này
+                </p>
+            </Col>
+            <Col span={12}>
+                <Button
+                    onClick={() => {
+                        const fileType = form.getFieldValue('fileType')
+                        const link =
+                            fileType === 'THONG_KE_GIAO_VIEN_GIANG_DAY'
+                                ? 'https://minio.swantech.vn/mta/template/MAU1.TKB.GIAO-VIEN-DANH-CHO-QUAN-SU.xls'
+                                : 'https://minio.swantech.vn/mta/template/MAU2.TKB.LOP-HOC-PHAN-DU-KIEN-DANH-CHO-DAN-SU.xls'
+                        window.open(link, '_blank')
+                    }}
+                >
+                    Xem mẫu file Excel
+                </Button>
             </Col>
         </PutFormModal>
     )
