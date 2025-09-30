@@ -22,6 +22,7 @@ const baseSchema = z.object({
     validUntil: z.coerce.date().nullish(),
     reason: z.string().nullish(),
     status: DecisionStatusSchema,
+    updatedResult: z.boolean().default(false),
 }
 ).strict();
 const relationSchema = z.object({
@@ -75,7 +76,8 @@ export const StudentAcademicDecisionPrismaUpdateSchema = z.object({
     decisionDate: z.coerce.date().default(() => new Date()),
     validUntil: z.coerce.date().nullish(),
     reason: z.string().nullish(),
-    status: DecisionStatusSchema
+    status: DecisionStatusSchema,
+    updatedResult: z.boolean().default(false)
 }).partial().passthrough();
 
 
@@ -83,7 +85,7 @@ export const StudentAcademicDecisionPrismaUpdateSchema = z.object({
  * `StudentAcademicDecision` schema for create operations excluding foreign keys and relations.
  */
 export const StudentAcademicDecisionCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, decisionDate: true, status: true
+    id: true, active: true, createdAt: true, updatedAt: true, decisionDate: true, status: true, updatedResult: true
 });
 
 
