@@ -175,7 +175,7 @@ const ModalNhapTKB = () => {
                     đăng ký học phần theo kế hoạch này
                 </p>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <Button
                     onClick={() => {
                         const fileType = form.getFieldValue('fileType')
