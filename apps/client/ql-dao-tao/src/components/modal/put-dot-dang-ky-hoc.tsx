@@ -15,7 +15,6 @@ import {
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, InputNumber, message, Radio, Select } from 'antd'
 import dayjs from 'dayjs'
-import { formatter } from '@/utils/formatterInputNumber'
 import 'dayjs/locale/vi'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -156,6 +155,14 @@ const PutClassRegisterSession = () => {
             maskClosable={true}
             title={id ? 'Chỉnh sửa đợt đăng ký học' : 'Thêm mới đợt đăng ký học'}
             className="w-[50vw]"
+            formProps={{
+                initialValues: {
+                    minCredit: 0,
+                    maxCredit: 25,
+                    tuitionPerCredit: 350000,
+                    active: true,
+                },
+            }}
         >
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên đợt đăng ký" required>
@@ -203,7 +210,7 @@ const PutClassRegisterSession = () => {
                     <Select
                         mode="multiple"
                         maxTagCount={'responsive'}
-                        placeholder="Chọn ngành"
+                        placeholder="Chọn khoá"
                         options={trainingCourses.map((i: TrainingCourse) => ({
                             value: i.id,
                             label: i.name,
@@ -213,49 +220,51 @@ const PutClassRegisterSession = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="minCredit" label="Tín chỉ tối thiểu">
+                <FormItem form={form} required name="minCredit" label="Tín chỉ tối thiểu">
                     <InputNumber
                         type="number"
                         className="w-full"
                         min={0}
+                        defaultValue={0}
                         placeholder="Nhập tín chỉ tối thiểu"
                         step={1}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="maxCredit" label="Tín chỉ tối đa">
+                <FormItem form={form} required name="maxCredit" label="Tín chỉ tối đa">
                     <InputNumber
                         type="number"
                         className="w-full"
                         min={0}
+                        defaultValue={25}
                         placeholder="Nhập tín chỉ tối đa"
                         step={1}
                     />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="tuitionPerCredit" label="Học phí (theo tín chỉ)">
+                <FormItem
+                    form={form}
+                    required
+                    name="tuitionPerCredit"
+                    label="Học phí (theo tín chỉ)"
+                >
                     <InputNumber
                         type="number"
                         className="w-full"
                         min={0}
+                        defaultValue={350000}
                         placeholder="Nhập học phí (theo tín chỉ)"
-                        step={1}
                         suffix="VNĐ"
-                        formatter={formatter}
-                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
-                        onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                                e.preventDefault()
-                            }
-                        }}
+                        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        parser={(value) => value?.replace(/(,*)/g, '') as unknown as number as any}
                     />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="description" label="Mô tả">
+                    <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
             {id && (

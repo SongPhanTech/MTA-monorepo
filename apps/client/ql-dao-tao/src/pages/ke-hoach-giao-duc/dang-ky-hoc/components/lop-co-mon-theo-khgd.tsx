@@ -11,7 +11,7 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Checkbox, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
@@ -29,6 +29,7 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [isShowAllFixedClass, setIsShowAllFixedClass] = useState(true)
 
     const { getScheduleLabel } = useScheduleOptions()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -143,6 +144,16 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
                                     }
                                     allowClear
                                 />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="isShowAllFixedClass">
+                                <Checkbox
+                                    checked={isShowAllFixedClass}
+                                    onChange={(e) => setIsShowAllFixedClass(e.target.checked)}
+                                >
+                                    Hiển thị lớp quản lý có môn theo kì học dự kiến
+                                </Checkbox>
                             </Form.Item>
                         </Col>
                     </Flex>
