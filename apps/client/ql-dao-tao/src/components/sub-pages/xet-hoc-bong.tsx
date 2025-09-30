@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Flex, Modal, message, Row, Tag } from 'antd'
+import { Button, Checkbox, Col, Flex, Modal, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
@@ -616,20 +616,20 @@ const XetHocBong = ({ semesterId }: XetHocBongProps) => {
                                                 dataIndex: ['userProfile', 'fullname'],
                                                 width: 150,
                                             },
-                                            {
-                                                title: 'Xếp loại rèn luyện',
-                                                dataIndex: [
-                                                    'studentSemesterResult',
-                                                    'studentTrainingType',
-                                                ],
-                                                width: 120,
-                                                align: 'center',
-                                                render: (value) => (
-                                                    <Tag color={getStudentTrainingTypeColor(value)}>
-                                                        {getStudentTrainingTypeLabel(value)}
-                                                    </Tag>
-                                                ),
-                                            },
+                                            // {
+                                            //     title: 'Xếp loại rèn luyện',
+                                            //     dataIndex: [
+                                            //         'studentSemesterResult',
+                                            //         'studentTrainingType',
+                                            //     ],
+                                            //     width: 120,
+                                            //     align: 'center',
+                                            //     render: (value) => (
+                                            //         <Tag color={getStudentTrainingTypeColor(value)}>
+                                            //             {getStudentTrainingTypeLabel(value)}
+                                            //         </Tag>
+                                            //     ),
+                                            // },
                                             {
                                                 title: 'Học bổng',
                                                 dataIndex: ['scholarship'],

@@ -3458,14 +3458,6 @@ const metadata = {
                     name: "examDate",
                     type: "DateTime",
                     isOptional: true,
-                }, scoreDeadline: {
-                    name: "scoreDeadline",
-                    type: "DateTime",
-                    isOptional: true,
-                }, examScoreDeadline: {
-                    name: "examScoreDeadline",
-                    type: "DateTime",
-                    isOptional: true,
                 }, examType: {
                     name: "examType",
                     type: "ExamType",
@@ -3485,6 +3477,26 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'exam',
+                }, scoreDeadline: {
+                    name: "scoreDeadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, examScoreDeadline: {
+                    name: "examScoreDeadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, enteredScore: {
+                    name: "enteredScore",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, enteredExamScore: {
+                    name: "enteredExamScore",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, issuedScoreAt: {
+                    name: "issuedScoreAt",
+                    type: "DateTime",
+                    isOptional: true,
                 }, isLockScore: {
                     name: "isLockScore",
                     type: "Boolean",
@@ -3493,10 +3505,14 @@ const metadata = {
                     name: "isLockExamScore",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, issuedScoreAt: {
-                    name: "issuedScoreAt",
-                    type: "DateTime",
-                    isOptional: true,
+                }, scoreSubmitted: {
+                    name: "scoreSubmitted",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, scoreChecked: {
+                    name: "scoreChecked",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, room: {
                     name: "room",
                     type: "Room",

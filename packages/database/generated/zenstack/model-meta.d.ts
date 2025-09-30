@@ -6271,16 +6271,6 @@ declare const metadata: {
                     type: string;
                     isOptional: boolean;
                 };
-                scoreDeadline: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                examScoreDeadline: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
                 examType: {
                     name: string;
                     type: string;
@@ -6311,6 +6301,43 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
+                scoreDeadline: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                examScoreDeadline: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                enteredScore: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                enteredExamScore: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                issuedScoreAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
                 isLockScore: {
                     name: string;
                     type: string;
@@ -6333,10 +6360,27 @@ declare const metadata: {
                         }[];
                     }[];
                 };
-                issuedScoreAt: {
+                scoreSubmitted: {
                     name: string;
                     type: string;
-                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                scoreChecked: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
                 };
                 room: {
                     name: string;

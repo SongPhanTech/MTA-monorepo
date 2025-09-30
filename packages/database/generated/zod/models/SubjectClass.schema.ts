@@ -24,12 +24,16 @@ const baseSchema = z.object({
     cancelled: z.boolean().default(false),
     lecturerAssignmentDeadline: z.coerce.date().nullish(),
     examDate: z.coerce.date().nullish(),
+    examType: ExamTypeSchema.nullish(),
     scoreDeadline: z.coerce.date().nullish(),
     examScoreDeadline: z.coerce.date().nullish(),
-    examType: ExamTypeSchema.nullish(),
+    enteredScore: z.boolean().default(false),
+    enteredExamScore: z.boolean().default(false),
+    issuedScoreAt: z.coerce.date().nullish(),
     isLockScore: z.boolean().default(false),
     isLockExamScore: z.boolean().default(true),
-    issuedScoreAt: z.coerce.date().nullish(),
+    scoreSubmitted: z.boolean().default(false),
+    scoreChecked: z.boolean().default(false),
 }
 ).strict();
 const relationSchema = z.object({
@@ -103,12 +107,16 @@ export const SubjectClassPrismaUpdateSchema = z.object({
     cancelled: z.boolean().default(false),
     lecturerAssignmentDeadline: z.coerce.date().nullish(),
     examDate: z.coerce.date().nullish(),
+    examType: ExamTypeSchema.nullish(),
     scoreDeadline: z.coerce.date().nullish(),
     examScoreDeadline: z.coerce.date().nullish(),
-    examType: ExamTypeSchema.nullish(),
+    enteredScore: z.boolean().default(false),
+    enteredExamScore: z.boolean().default(false),
+    issuedScoreAt: z.coerce.date().nullish(),
     isLockScore: z.boolean().default(false),
     isLockExamScore: z.boolean().default(true),
-    issuedScoreAt: z.coerce.date().nullish()
+    scoreSubmitted: z.boolean().default(false),
+    scoreChecked: z.boolean().default(false)
 }).partial().passthrough();
 
 
@@ -116,7 +124,7 @@ export const SubjectClassPrismaUpdateSchema = z.object({
  * `SubjectClass` schema for create operations excluding foreign keys and relations.
  */
 export const SubjectClassCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, cancelled: true, isLockScore: true, isLockExamScore: true
+    id: true, active: true, createdAt: true, updatedAt: true, cancelled: true, enteredScore: true, enteredExamScore: true, isLockScore: true, isLockExamScore: true, scoreSubmitted: true, scoreChecked: true
 });
 
 

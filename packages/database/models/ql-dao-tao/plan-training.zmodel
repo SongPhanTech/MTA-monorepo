@@ -581,22 +581,30 @@ model SubjectClass extends BaseNoCode {
   lecturerAssignmentDeadline DateTime? // hạn phân công giảng dạy
   examDate                   DateTime? // ngày thi
 
-  scoreDeadline              DateTime? // hạn nhập điểm CC/TX: default 10 ngày trước ngày thi
-  examScoreDeadline          DateTime? // hạn nhập điểm thi: default 10 ngày sau ngày thi
-
   // hình thức thi copy từ phiên bản môn học; hình thức thi của lớp có thể thay đổi giữa kỳ học
   examType                   ExamType?
 
   exam                       Exam?                 @relation(fields: [examId], references: [id])
   examId                     String?
-  
-  // cần khoá khi: hạn nhập điểm
-  isLockScore                Boolean               @default(false) // khoá điểm CC/TX
-  // cần khoá khi:  GV xuất phiếu điểm
-  isLockExamScore            Boolean               @default(true) // khoá điểm thi
+
+  scoreDeadline              DateTime? // hạn nhập điểm CC/TX: default 10 ngày trước ngày thi
+  examScoreDeadline          DateTime? // hạn nhập điểm thi: default 10 ngày sau ngày thi
+
+  enteredScore               Boolean               @default(false)
+  enteredExamScore           Boolean               @default(false)
 
   // khi xuất phiếu điểm cuối cùng
   issuedScoreAt              DateTime? // ngày xuất phiếu điểm
+  
+  // khoá khi xuất phiếu điểm, P13 có thể mở khoá
+  isLockScore                Boolean               @default(false) // khoá điểm CC/TX
+  isLockExamScore            Boolean               @default(true) // khoá điểm thi
+
+  // P13 kiểm tra phiếu điểm và gửi
+  scoreSubmitted             Boolean               @default(false)
+
+  // P2/P7 kiểm tra lại phiếu điểm và dữ liệu phần mềm
+  scoreChecked               Boolean               @default(false)
 
   room                       Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
   roomId                     String?
