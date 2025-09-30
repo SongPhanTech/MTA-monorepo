@@ -8,13 +8,16 @@ import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { formatDate } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import type { ArchivedAward, StudentSubjectScore } from '@workspace/db'
 import {
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
+    useFindUniqueSubjectClass,
     useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { calcFinalScore, getScoreStatistics } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
@@ -154,13 +157,20 @@ type FilterTable = FilterProps & {
     examScore?: 'asc' | 'desc'
 }
 
+type FormType = {
+    isLockScore: boolean
+    isLockExamScore: boolean
+    scoreSubmitted: boolean
+    scoreChecked: boolean
+}
+
 export default function SubjectClassScore() {
     const { can } = useAbility()
     const canReadAll = can(
         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
         'XEM_TAT_CA'
     )
-
+    const [form] = Form.useForm<FormType>()
     const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId || ''
     const router = useRouter()
@@ -480,6 +490,15 @@ export default function SubjectClassScore() {
         },
         { refetchOnWindowFocus: false }
     )
+    const { data: dataDetailSubjectClass, refetch: refetchSubjectClass } =
+        useFindUniqueSubjectClass(
+            {
+                where: {
+                    id: selectedFixedClass,
+                },
+            },
+            { refetchOnWindowFocus: false, enabled: !!selectedFixedClass }
+        )
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -559,6 +578,23 @@ export default function SubjectClassScore() {
     const handleSaveScores = async () => {
         try {
             showSpinner()
+            const dataSubmit = form.getFieldsValue()
+            let listSqlTransaction: any = []
+            if (selectedFixedClass) {
+                listSqlTransaction = [
+                    ...listSqlTransaction,
+                    {
+                        model: 'SubjectClass',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: selectedFixedClass,
+                            },
+                            data: { ...dataSubmit },
+                        },
+                    },
+                ]
+            }
 
             const scoresToUpdate = dataTable
                 .map((record) => {
@@ -624,15 +660,25 @@ export default function SubjectClassScore() {
                 })
 
             if (scoresToUpdate.length > 0) {
-                await Promise.all(
-                    scoresToUpdate.map(({ id, newData }) =>
-                        updateStudentSubjectScore({
-                            where: { id },
-                            data: newData,
-                        })
-                    )
-                )
-                message.success(`Đã cập nhật ${scoresToUpdate.length} bản ghi thành công!`)
+                listSqlTransaction = [
+                    ...listSqlTransaction,
+                    ...scoresToUpdate.map(({ id, newData }) => {
+                        return {
+                            model: 'StudentSubjectScore',
+                            operation: 'update',
+                            data: {
+                                where: {
+                                    id,
+                                },
+                                data: newData,
+                            },
+                        }
+                    }),
+                ]
+                if (listSqlTransaction?.length > 0) {
+                    await sqlTransaction(listSqlTransaction)
+                    message.success(`Đã cập nhật ${scoresToUpdate.length} bản ghi thành công!`)
+                }
                 setHasUnsavedChanges(false)
             } else {
                 message.info('Không có thay đổi nào để cập nhật')
@@ -779,6 +825,10 @@ export default function SubjectClassScore() {
         }
     }
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    useEffect(() => {
+        form.setFieldsValue({ ...dataDetailSubjectClass })
+    }, [dataDetailSubjectClass])
     useEffect(() => {
         if (!hasUnsavedChanges) return
 
@@ -838,8 +888,8 @@ export default function SubjectClassScore() {
                 className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4"
             >
                 <Col span={24}>
-                    <Row gutter={[0, 16]} align="top" justify="space-between">
-                        <Col>
+                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                        <Col span={24}>
                             <Flex gap={4}>
                                 <Col span={10}>
                                     <Form.Item name="searchText">
@@ -870,6 +920,7 @@ export default function SubjectClassScore() {
                                         onChange={(val) => setSelectedSemesterId(val || '')}
                                     />
                                 </Col>
+
                                 <Col span={4} className="flex">
                                     <FilterSubjectClass
                                         onFilterChange={handleFilterChange}
@@ -938,7 +989,6 @@ export default function SubjectClassScore() {
                                         </Button>
                                     </Popover>
                                 )}
-
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                     'IN_DS_THI'
@@ -988,6 +1038,97 @@ export default function SubjectClassScore() {
                                 )}
                             </Flex>
                         </Col>
+                        {dataDetailSubjectClass && (
+                            <Col span={24} className="">
+                                <Flex align="center" justify="space-between">
+                                    <Col span={18}>
+                                        <Form
+                                            className="flex gap-0 lg:gap-3"
+                                            form={form}
+                                            layout="horizontal"
+                                        >
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="isLockScore"
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox
+                                                    disabled={
+                                                        profileId !==
+                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+                                                    }
+                                                >
+                                                    Khóa điểm CC/TX
+                                                </Checkbox>
+                                            </Form.Item>
+
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="isLockExamScore"
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox
+                                                    disabled={
+                                                        profileId !==
+                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+                                                    }
+                                                >
+                                                    Khóa điểm thi
+                                                </Checkbox>
+                                            </Form.Item>
+
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="scoreSubmitted"
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox
+                                                    disabled={
+                                                        profileId ===
+                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+                                                    }
+                                                >
+                                                    Đã nhận Phiếu điểm
+                                                </Checkbox>
+                                            </Form.Item>
+
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="scoreChecked"
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox
+                                                    disabled={
+                                                        profileId ===
+                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+                                                    }
+                                                >
+                                                    P2/P7 đã kiểm tra
+                                                </Checkbox>
+                                            </Form.Item>
+                                        </Form>
+                                    </Col>
+
+                                    <Col span={6}>
+                                        <Flex justify="end" align="center">
+                                            {/* <div>
+                                    Hạn nhập điểm TX/CC:
+                                    <span>{dataDetailSubjectClass?.scoreDeadline &&formatDate(dataDetailSubjectClass?.scoreDeadline)}</span>
+                                </div> */}
+                                            <div>
+                                                Hạn nhập điểm thi:
+                                                <span>
+                                                    {dataDetailSubjectClass?.examScoreDeadline &&
+                                                        formatDate(
+                                                            dataDetailSubjectClass?.examScoreDeadline
+                                                        )}
+                                                </span>
+                                            </div>
+                                        </Flex>
+                                    </Col>
+                                </Flex>
+                            </Col>
+                        )}
                     </Row>
                 </Col>
                 <Col span={24}>
@@ -1024,7 +1165,7 @@ export default function SubjectClassScore() {
                             {
                                 title: 'Ngày sinh',
                                 dataIndex: 'dateOfBirth',
-                                width: 150,
+                                width: 125,
                                 type: 'date',
                                 render: (_, record) =>
                                     record?.student?.userProfile.dateOfBirth
@@ -1036,7 +1177,7 @@ export default function SubjectClassScore() {
                             {
                                 title: 'Tên lớp',
                                 dataIndex: 'fixedClassName',
-                                width: 150,
+                                width: 200,
                                 align: 'center',
                                 type: 'input',
                                 render: (_, record) =>

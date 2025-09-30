@@ -7,6 +7,7 @@ import HanNhapDiem from './modal-han-nhap-diem'
 import ModalNhapTKB from './modal-import-tkb'
 import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
 import ModalLearningResult from './modal-ket-qua-hoc-tap-ctdt'
+import MoKhoaNhapDiem from './modal-mo-khoa-nhap-diem'
 import ModalPhuLucThacSi from './modal-phu-luc-thac-si'
 import ModalPrintToDSHV from './modal-print-ds-sinh-vien-lop'
 import ModalPrintInvitation from './modal-print-giay-moi'
@@ -179,4 +180,5 @@ export {
     ModalPrintSupervisorGuide,
     NhapDiemThuCong,
     PutChuanDauRaModal,
+    MoKhoaNhapDiem,
 }
