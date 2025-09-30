@@ -7,8 +7,8 @@ export type AcademicActionTypeOption = {
 
 export const useAcademicActionTypeOption = () => {
     const options: AcademicActionTypeOption[] = [
-        { value: AcademicActionType.REPEAT_YEAR, label: 'Lưu ban (Học lại năm) - cho hệ quân sự' },
-        { value: AcademicActionType.SUSPENSION, label: 'Đình chỉ học tập' },
+        { value: AcademicActionType.REPEAT_YEAR, label: 'Lưu ban' },
+        { value: AcademicActionType.SUSPENSION, label: 'Đình chỉ' },
         { value: AcademicActionType.EXPULSION, label: 'Buộc thôi học' },
     ]
 

@@ -60,7 +60,8 @@ const FilterSubjectClass = (props: Props) => {
     const { options: ExamType } = useExamTypeOptions()
 
     const options = [
-        { label: 'P13 đã khóa', value: 'locked_P13' },
+        { label: 'P13 đã khóa điểm TX/CC', value: 'locked_P13' },
+        { label: 'P13 đã khóa điểm thi', value: 'locked_P13' },
         { label: 'P13 đã nhận Phiếu điểm', value: 'received_score_P13' },
         { label: 'P2/P7 đã kiểm tra', value: 'checked_P2_P7' },
     ]

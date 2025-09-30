@@ -1,9 +1,10 @@
-import { CalendarOutlined } from '@ant-design/icons'
+import { CalendarOutlined, UnlockFilled } from '@ant-design/icons'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
+import { useSession } from '@workspace/auth/react'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
@@ -14,14 +15,14 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-
 export default function SubjectClassScore() {
     const { canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [form] = Form.useForm()
-
+    const { data: session } = useSession()
+    const profileId = session?.sDM_NhanVienId || ''
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
@@ -37,6 +38,9 @@ export default function SubjectClassScore() {
 
     const { onOpen } = useDisclosure<string>({
         tag: 'HanNhapDiem',
+    })
+    const { onOpen: onOpenMoKhoa } = useDisclosure<string>({
+        tag: 'MoKhoaNhapDiem',
     })
 
     const handleFilterChange = (key: string, value: string) => {
@@ -478,7 +482,7 @@ export default function SubjectClassScore() {
                                 },
                                 {
                                     title: 'Thao tác',
-                                    width: 100,
+                                    width: 150,
                                     align: 'center',
                                     fixed: 'right',
                                     hidden: !canSome(
@@ -490,15 +494,42 @@ export default function SubjectClassScore() {
                                             return (
                                                 <div className="flex justify-center items-center gap-2">
                                                     <Row className="flex justify-center items-center gap-2 text-primary">
-                                                        <Button
-                                                            icon={<CalendarOutlined />}
-                                                            onClick={() => onOpen(record.id)}
-                                                            style={{
-                                                                height: '40px',
-                                                                width: '40px',
-                                                            }}
-                                                        />
-                                                        Đặt lại lịch nhập điểm
+                                                        {profileId ===
+                                                            '9ed6bb0e-eaf5-4110-8fd3-ef37f13619bc' && (
+                                                            <Tooltip
+                                                                title="Đặt lại lịch nhập điểm"
+                                                                placement="top"
+                                                            >
+                                                                <Button
+                                                                    icon={<CalendarOutlined />}
+                                                                    onClick={() =>
+                                                                        onOpen(record.id)
+                                                                    }
+                                                                    style={{
+                                                                        height: '40px',
+                                                                        width: '40px',
+                                                                    }}
+                                                                />
+                                                            </Tooltip>
+                                                        )}
+                                                        {profileId ===
+                                                            'e0bf913a-7b9c-40ac-9a52-266a4326e02f' && (
+                                                            <Tooltip
+                                                                title="Mở khoá nhập điểm"
+                                                                placement="top"
+                                                            >
+                                                                <Button
+                                                                    icon={<UnlockFilled />}
+                                                                    onClick={() =>
+                                                                        onOpenMoKhoa(record.id)
+                                                                    }
+                                                                    style={{
+                                                                        height: '40px',
+                                                                        width: '40px',
+                                                                    }}
+                                                                />
+                                                            </Tooltip>
+                                                        )}
                                                     </Row>
                                                 </div>
                                             )

@@ -157,11 +157,11 @@ const dsKetQuaHocKySinhVienJson = createRoute({
 })
 
 const PheDuyetLuuBan = createRoute({
-    operationId: 'updateStudentsRepeatGrade',
-    path: '/update-students-repeat-grade',
+    operationId: 'updateStudentStatus',
+    path: '/update-students-status',
     tags: ['Student'],
-    summary: 'Cập nhật trạng thái, điểm học viên lưu ban',
-    description: 'Cập nhật trạng thái, điểm học viên lưu ban',
+    summary: 'Cập nhật trạng thái, điểm học viên theo xử lý học tập',
+    description: 'Cập nhật trạng thái, điểm học viên theo xử lý học tập',
     method: 'post',
     request: {
         body: {
@@ -177,7 +177,7 @@ const PheDuyetLuuBan = createRoute({
     },
     responses: {
         200: {
-            description: 'Cập nhật trạng thái, điểm học viên lưu ban',
+            description: 'Cập nhật trạng thái, điểm học viên theo xử lý học tập',
             content: {
                 'application/json': {
                     schema: z.object({
@@ -211,6 +211,11 @@ app.openapi(PheDuyetLuuBan, async (c) => {
     }
 
     const { count } = await prisma.$transaction(async (tx) => {
+        await tx.studentAcademicDecision.updateMany({
+            where: { id: { in: decisionIds } },
+            data: { updatedResult: true },
+        })
+
         const { count } = await tx.student.updateMany({
             where: {
                 id: { in: studentIds },
