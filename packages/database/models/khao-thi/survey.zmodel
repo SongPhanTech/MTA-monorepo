@@ -34,6 +34,9 @@ model SurveyObjectType extends Base {
   trainingCourses TrainingCourse[]
   fixedClasses    FixedClass[]
   subjectClasses  SubjectClass[]
+
+  surveySessions  SurveySession[]
+
   @@schema("khao-thi")
 }
 
@@ -117,19 +120,22 @@ model SurveyChoice extends Base {
   @@schema("khao-thi")
 }
 
-/// Bảng lưu phiên khảo sát của từng học viên
+/// Bảng lưu phiên khảo sát
 model SurveySession extends Base {
-  survey               Survey           @relation(fields: [surveyId], references: [id])
+  survey               Survey            @relation(fields: [surveyId], references: [id])
   surveyId             String
 
   additionalSuggestion String?
 
-  student              Student?         @relation(fields: [studentId], references: [id])
+  student              Student?          @relation(fields: [studentId], references: [id])
   studentId            String?
 
-  startedAt            DateTime         @default(now())
+  startedAt            DateTime          @default(now())
   completedAt          DateTime?
-  isCompleted          Boolean          @default(false)
+  isCompleted          Boolean           @default(false)
+
+  surveyObjectType     SurveyObjectType? @relation(fields: [surveyObjectTypeId], references: [id])
+  surveyObjectTypeId   String?
 
   responses            SurveyResponse[]
 

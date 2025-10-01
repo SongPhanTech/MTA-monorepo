@@ -2293,6 +2293,34 @@ declare const metadata: {
                     type: string;
                     isOptional: boolean;
                 };
+                graduationGpaScores: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
+                graduationSupplementaryScore: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
                 certificates: {
                     name: string;
                     type: string;
@@ -28629,6 +28657,34 @@ declare const metadata: {
                     isArray: boolean;
                     backLink: string;
                 };
+                gpaScore: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
+                supplementaryScore: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
                 decision: {
                     name: string;
                     type: string;
@@ -33097,6 +33153,13 @@ declare const metadata: {
                     backLink: string;
                     isRelationOwner: boolean;
                 };
+                surveySessions: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
             };
             uniqueConstraints: {
                 id: {
@@ -33986,6 +34049,31 @@ declare const metadata: {
                             value: boolean;
                         }[];
                     }[];
+                };
+                surveyObjectType: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                surveyObjectTypeId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
                 };
                 responses: {
                     name: string;

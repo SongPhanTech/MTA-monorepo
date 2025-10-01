@@ -1953,7 +1953,7 @@ export type SurveyQuestion = $Result.DefaultSelection<Prisma.$SurveyQuestionPayl
 export type SurveyChoice = $Result.DefaultSelection<Prisma.$SurveyChoicePayload>;
 /**
  * Model SurveySession
- * Bảng lưu phiên khảo sát của từng học viên
+ * Bảng lưu phiên khảo sát
  * @
  * @allow ('all', auth() != null)
  * @
@@ -8370,7 +8370,8 @@ export namespace Prisma {
         studentId: 'studentId',
         startedAt: 'startedAt',
         completedAt: 'completedAt',
-        isCompleted: 'isCompleted'
+        isCompleted: 'isCompleted',
+        surveyObjectTypeId: 'surveyObjectTypeId'
     };
     export const SurveyResponseScalarFieldEnum: {
         id: 'id',
@@ -10534,7 +10535,8 @@ export namespace Prisma {
         description: 'description',
         surveyId: 'surveyId',
         additionalSuggestion: 'additionalSuggestion',
-        studentId: 'studentId'
+        studentId: 'studentId',
+        surveyObjectTypeId: 'surveyObjectTypeId'
     };
     export const SurveyResponseOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -15816,6 +15818,8 @@ export namespace Prisma {
         subjectClass<T extends StudentSubjectScore$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$subjectClassArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         subjectVersion<T extends SubjectVersionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersionDefaultArgs<ExtArgs>>): Prisma__SubjectVersionClient<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        graduationGpaScores<T extends StudentSubjectScore$graduationGpaScoresArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$graduationGpaScoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentGraduationApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        graduationSupplementaryScore<T extends StudentSubjectScore$graduationSupplementaryScoreArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$graduationSupplementaryScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentGraduationApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         certificates<T extends StudentSubjectScore$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedCertificateOnStudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         awards<T extends StudentSubjectScore$awardsArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$awardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedAwardOnStudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         studentThesisRegistration<T extends StudentSubjectScore$studentThesisRegistrationArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$studentThesisRegistrationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentThesisRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -69969,6 +69973,8 @@ export namespace Prisma {
         student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         session<T extends GraduationSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GraduationSessionDefaultArgs<ExtArgs>>): Prisma__GraduationSessionClient<$Result.GetResult<Prisma.$GraduationSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         applicationCheckResult<T extends StudentGraduationApplication$applicationCheckResultArgs<ExtArgs> = {}>(args?: Subset<T, StudentGraduationApplication$applicationCheckResultArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationCheckResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        gpaScore<T extends StudentGraduationApplication$gpaScoreArgs<ExtArgs> = {}>(args?: Subset<T, StudentGraduationApplication$gpaScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        supplementaryScore<T extends StudentGraduationApplication$supplementaryScoreArgs<ExtArgs> = {}>(args?: Subset<T, StudentGraduationApplication$supplementaryScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         decision<T extends StudentGraduationApplication$decisionArgs<ExtArgs> = {}>(args?: Subset<T, StudentGraduationApplication$decisionArgs<ExtArgs>>): Prisma__GraduationDecisionClient<$Result.GetResult<Prisma.$GraduationDecisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -80769,6 +80775,7 @@ export namespace Prisma {
         trainingCourses<T extends SurveyObjectType$trainingCoursesArgs<ExtArgs> = {}>(args?: Subset<T, SurveyObjectType$trainingCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingCoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         fixedClasses<T extends SurveyObjectType$fixedClassesArgs<ExtArgs> = {}>(args?: Subset<T, SurveyObjectType$fixedClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FixedClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         subjectClasses<T extends SurveyObjectType$subjectClassesArgs<ExtArgs> = {}>(args?: Subset<T, SurveyObjectType$subjectClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        surveySessions<T extends SurveyObjectType$surveySessionsArgs<ExtArgs> = {}>(args?: Subset<T, SurveyObjectType$surveySessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveySessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -83074,6 +83081,7 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         survey<T extends SurveyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SurveyDefaultArgs<ExtArgs>>): Prisma__SurveyClient<$Result.GetResult<Prisma.$SurveyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         student<T extends SurveySession$studentArgs<ExtArgs> = {}>(args?: Subset<T, SurveySession$studentArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        surveyObjectType<T extends SurveySession$surveyObjectTypeArgs<ExtArgs> = {}>(args?: Subset<T, SurveySession$surveyObjectTypeArgs<ExtArgs>>): Prisma__SurveyObjectTypeClient<$Result.GetResult<Prisma.$SurveyObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         responses<T extends SurveySession$responsesArgs<ExtArgs> = {}>(args?: Subset<T, SurveySession$responsesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyResponsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -83114,6 +83122,7 @@ export namespace Prisma {
         readonly startedAt: FieldRef<"SurveySession", 'DateTime'>;
         readonly completedAt: FieldRef<"SurveySession", 'DateTime'>;
         readonly isCompleted: FieldRef<"SurveySession", 'Boolean'>;
+        readonly surveyObjectTypeId: FieldRef<"SurveySession", 'String'>;
     }
 
     export interface SurveyResponseDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -114986,11 +114995,15 @@ export namespace Prisma {
      * Count Type StudentSubjectScoreCountOutputType
      */
     export type StudentSubjectScoreCountOutputType = {
+        graduationGpaScores: number
+        graduationSupplementaryScore: number
         certificates: number
         awards: number
         studentThesisRegistration: number
     };
     export type StudentSubjectScoreCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        graduationGpaScores?: boolean | StudentSubjectScoreCountOutputTypeCountGraduationGpaScoresArgs
+        graduationSupplementaryScore?: boolean | StudentSubjectScoreCountOutputTypeCountGraduationSupplementaryScoreArgs
         certificates?: boolean | StudentSubjectScoreCountOutputTypeCountCertificatesArgs
         awards?: boolean | StudentSubjectScoreCountOutputTypeCountAwardsArgs
         studentThesisRegistration?: boolean | StudentSubjectScoreCountOutputTypeCountStudentThesisRegistrationArgs
@@ -115003,6 +115016,18 @@ export namespace Prisma {
          * Select specific fields to fetch from the StudentSubjectScoreCountOutputType
          */
         select?: StudentSubjectScoreCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * StudentSubjectScoreCountOutputType without action
+     */
+    export type StudentSubjectScoreCountOutputTypeCountGraduationGpaScoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: StudentGraduationApplicationWhereInput
+    };
+    /**
+     * StudentSubjectScoreCountOutputType without action
+     */
+    export type StudentSubjectScoreCountOutputTypeCountGraduationSupplementaryScoreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: StudentGraduationApplicationWhereInput
     };
     /**
      * StudentSubjectScoreCountOutputType without action
@@ -118259,9 +118284,13 @@ export namespace Prisma {
      */
     export type StudentGraduationApplicationCountOutputType = {
         applicationCheckResult: number
+        gpaScore: number
+        supplementaryScore: number
     };
     export type StudentGraduationApplicationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         applicationCheckResult?: boolean | StudentGraduationApplicationCountOutputTypeCountApplicationCheckResultArgs
+        gpaScore?: boolean | StudentGraduationApplicationCountOutputTypeCountGpaScoreArgs
+        supplementaryScore?: boolean | StudentGraduationApplicationCountOutputTypeCountSupplementaryScoreArgs
     };
     /**
      * StudentGraduationApplicationCountOutputType without action
@@ -118277,6 +118306,18 @@ export namespace Prisma {
      */
     export type StudentGraduationApplicationCountOutputTypeCountApplicationCheckResultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: ApplicationCheckResultWhereInput
+    };
+    /**
+     * StudentGraduationApplicationCountOutputType without action
+     */
+    export type StudentGraduationApplicationCountOutputTypeCountGpaScoreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: StudentSubjectScoreWhereInput
+    };
+    /**
+     * StudentGraduationApplicationCountOutputType without action
+     */
+    export type StudentGraduationApplicationCountOutputTypeCountSupplementaryScoreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: StudentSubjectScoreWhereInput
     };
     /**
      * Count Type AcademicRankingConvertCountOutputType
@@ -118793,6 +118834,7 @@ export namespace Prisma {
         trainingCourses: number
         fixedClasses: number
         subjectClasses: number
+        surveySessions: number
     };
     export type SurveyObjectTypeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         survey?: boolean | SurveyObjectTypeCountOutputTypeCountSurveyArgs
@@ -118802,6 +118844,7 @@ export namespace Prisma {
         trainingCourses?: boolean | SurveyObjectTypeCountOutputTypeCountTrainingCoursesArgs
         fixedClasses?: boolean | SurveyObjectTypeCountOutputTypeCountFixedClassesArgs
         subjectClasses?: boolean | SurveyObjectTypeCountOutputTypeCountSubjectClassesArgs
+        surveySessions?: boolean | SurveyObjectTypeCountOutputTypeCountSurveySessionsArgs
     };
     /**
      * SurveyObjectTypeCountOutputType without action
@@ -118853,6 +118896,12 @@ export namespace Prisma {
      */
     export type SurveyObjectTypeCountOutputTypeCountSubjectClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: SubjectClassWhereInput
+    };
+    /**
+     * SurveyObjectTypeCountOutputType without action
+     */
+    export type SurveyObjectTypeCountOutputTypeCountSurveySessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SurveySessionWhereInput
     };
     /**
      * Count Type SurveyTopicCountOutputType
@@ -128708,6 +128757,8 @@ export namespace Prisma {
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
+        graduationGpaScores?: boolean | StudentSubjectScore$graduationGpaScoresArgs<ExtArgs>
+        graduationSupplementaryScore?: boolean | StudentSubjectScore$graduationSupplementaryScoreArgs<ExtArgs>
         certificates?: boolean | StudentSubjectScore$certificatesArgs<ExtArgs>
         awards?: boolean | StudentSubjectScore$awardsArgs<ExtArgs>
         studentThesisRegistration?: boolean | StudentSubjectScore$studentThesisRegistrationArgs<ExtArgs>
@@ -128805,6 +128856,8 @@ export namespace Prisma {
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
+        graduationGpaScores?: boolean | StudentSubjectScore$graduationGpaScoresArgs<ExtArgs>
+        graduationSupplementaryScore?: boolean | StudentSubjectScore$graduationSupplementaryScoreArgs<ExtArgs>
         certificates?: boolean | StudentSubjectScore$certificatesArgs<ExtArgs>
         awards?: boolean | StudentSubjectScore$awardsArgs<ExtArgs>
         studentThesisRegistration?: boolean | StudentSubjectScore$studentThesisRegistrationArgs<ExtArgs>
@@ -128826,6 +128879,8 @@ export namespace Prisma {
             subjectClass: Prisma.$SubjectClassPayload<ExtArgs> | null
             subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs>
             student: Prisma.$StudentPayload<ExtArgs>
+            graduationGpaScores: Prisma.$StudentGraduationApplicationPayload<ExtArgs>[]
+            graduationSupplementaryScore: Prisma.$StudentGraduationApplicationPayload<ExtArgs>[]
             certificates: Prisma.$ArchivedCertificateOnStudentSubjectScorePayload<ExtArgs>[]
             awards: Prisma.$ArchivedAwardOnStudentSubjectScorePayload<ExtArgs>[]
             studentThesisRegistration: Prisma.$StudentThesisRegistrationPayload<ExtArgs>[]
@@ -129286,6 +129341,52 @@ export namespace Prisma {
          */
         include?: SubjectClassInclude<ExtArgs> | null
         where?: SubjectClassWhereInput
+    };
+    /**
+     * StudentSubjectScore.graduationGpaScores
+     */
+    export type StudentSubjectScore$graduationGpaScoresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentGraduationApplication
+         */
+        select?: StudentGraduationApplicationSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentGraduationApplication
+         */
+        omit?: StudentGraduationApplicationOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentGraduationApplicationInclude<ExtArgs> | null
+        where?: StudentGraduationApplicationWhereInput
+        orderBy?: StudentGraduationApplicationOrderByWithRelationInput | StudentGraduationApplicationOrderByWithRelationInput[]
+        cursor?: StudentGraduationApplicationWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: StudentGraduationApplicationScalarFieldEnum | StudentGraduationApplicationScalarFieldEnum[]
+    };
+    /**
+     * StudentSubjectScore.graduationSupplementaryScore
+     */
+    export type StudentSubjectScore$graduationSupplementaryScoreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentGraduationApplication
+         */
+        select?: StudentGraduationApplicationSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentGraduationApplication
+         */
+        omit?: StudentGraduationApplicationOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentGraduationApplicationInclude<ExtArgs> | null
+        where?: StudentGraduationApplicationWhereInput
+        orderBy?: StudentGraduationApplicationOrderByWithRelationInput | StudentGraduationApplicationOrderByWithRelationInput[]
+        cursor?: StudentGraduationApplicationWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: StudentGraduationApplicationScalarFieldEnum | StudentGraduationApplicationScalarFieldEnum[]
     };
     /**
      * StudentSubjectScore.certificates
@@ -238946,6 +239047,8 @@ export namespace Prisma {
         student?: boolean | StudentDefaultArgs<ExtArgs>
         session?: boolean | GraduationSessionDefaultArgs<ExtArgs>
         applicationCheckResult?: boolean | StudentGraduationApplication$applicationCheckResultArgs<ExtArgs>
+        gpaScore?: boolean | StudentGraduationApplication$gpaScoreArgs<ExtArgs>
+        supplementaryScore?: boolean | StudentGraduationApplication$supplementaryScoreArgs<ExtArgs>
         decision?: boolean | StudentGraduationApplication$decisionArgs<ExtArgs>
         _count?: boolean | StudentGraduationApplicationCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["studentGraduationApplication"]>;
@@ -238997,6 +239100,8 @@ export namespace Prisma {
         student?: boolean | StudentDefaultArgs<ExtArgs>
         session?: boolean | GraduationSessionDefaultArgs<ExtArgs>
         applicationCheckResult?: boolean | StudentGraduationApplication$applicationCheckResultArgs<ExtArgs>
+        gpaScore?: boolean | StudentGraduationApplication$gpaScoreArgs<ExtArgs>
+        supplementaryScore?: boolean | StudentGraduationApplication$supplementaryScoreArgs<ExtArgs>
         decision?: boolean | StudentGraduationApplication$decisionArgs<ExtArgs>
         _count?: boolean | StudentGraduationApplicationCountOutputTypeDefaultArgs<ExtArgs>
     };
@@ -239014,6 +239119,8 @@ export namespace Prisma {
             student: Prisma.$StudentPayload<ExtArgs>
             session: Prisma.$GraduationSessionPayload<ExtArgs>
             applicationCheckResult: Prisma.$ApplicationCheckResultPayload<ExtArgs>[]
+            gpaScore: Prisma.$StudentSubjectScorePayload<ExtArgs>[]
+            supplementaryScore: Prisma.$StudentSubjectScorePayload<ExtArgs>[]
             decision: Prisma.$GraduationDecisionPayload<ExtArgs> | null
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -239434,6 +239541,52 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: ApplicationCheckResultScalarFieldEnum | ApplicationCheckResultScalarFieldEnum[]
+    };
+    /**
+     * StudentGraduationApplication.gpaScore
+     */
+    export type StudentGraduationApplication$gpaScoreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScore
+         */
+        select?: StudentSubjectScoreSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScore
+         */
+        omit?: StudentSubjectScoreOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreInclude<ExtArgs> | null
+        where?: StudentSubjectScoreWhereInput
+        orderBy?: StudentSubjectScoreOrderByWithRelationInput | StudentSubjectScoreOrderByWithRelationInput[]
+        cursor?: StudentSubjectScoreWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: StudentSubjectScoreScalarFieldEnum | StudentSubjectScoreScalarFieldEnum[]
+    };
+    /**
+     * StudentGraduationApplication.supplementaryScore
+     */
+    export type StudentGraduationApplication$supplementaryScoreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScore
+         */
+        select?: StudentSubjectScoreSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScore
+         */
+        omit?: StudentSubjectScoreOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreInclude<ExtArgs> | null
+        where?: StudentSubjectScoreWhereInput
+        orderBy?: StudentSubjectScoreOrderByWithRelationInput | StudentSubjectScoreOrderByWithRelationInput[]
+        cursor?: StudentSubjectScoreWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: StudentSubjectScoreScalarFieldEnum | StudentSubjectScoreScalarFieldEnum[]
     };
     /**
      * StudentGraduationApplication.decision
@@ -259462,6 +259615,7 @@ export namespace Prisma {
         trainingCourses?: boolean | SurveyObjectType$trainingCoursesArgs<ExtArgs>
         fixedClasses?: boolean | SurveyObjectType$fixedClassesArgs<ExtArgs>
         subjectClasses?: boolean | SurveyObjectType$subjectClassesArgs<ExtArgs>
+        surveySessions?: boolean | SurveyObjectType$surveySessionsArgs<ExtArgs>
         _count?: boolean | SurveyObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["surveyObjectType"]>;
     export type SurveyObjectTypeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -259506,6 +259660,7 @@ export namespace Prisma {
         trainingCourses?: boolean | SurveyObjectType$trainingCoursesArgs<ExtArgs>
         fixedClasses?: boolean | SurveyObjectType$fixedClassesArgs<ExtArgs>
         subjectClasses?: boolean | SurveyObjectType$subjectClassesArgs<ExtArgs>
+        surveySessions?: boolean | SurveyObjectType$surveySessionsArgs<ExtArgs>
         _count?: boolean | SurveyObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type SurveyObjectTypeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
@@ -259520,6 +259675,7 @@ export namespace Prisma {
             trainingCourses: Prisma.$TrainingCoursePayload<ExtArgs>[]
             fixedClasses: Prisma.$FixedClassPayload<ExtArgs>[]
             subjectClasses: Prisma.$SubjectClassPayload<ExtArgs>[]
+            surveySessions: Prisma.$SurveySessionPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -260067,6 +260223,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: SubjectClassScalarFieldEnum | SubjectClassScalarFieldEnum[]
+    };
+    /**
+     * SurveyObjectType.surveySessions
+     */
+    export type SurveyObjectType$surveySessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SurveySession
+         */
+        select?: SurveySessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SurveySession
+         */
+        omit?: SurveySessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SurveySessionInclude<ExtArgs> | null
+        where?: SurveySessionWhereInput
+        orderBy?: SurveySessionOrderByWithRelationInput | SurveySessionOrderByWithRelationInput[]
+        cursor?: SurveySessionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: SurveySessionScalarFieldEnum | SurveySessionScalarFieldEnum[]
     };
     /**
      * SurveyObjectType without action
@@ -263703,6 +263882,7 @@ export namespace Prisma {
         startedAt: Date | null
         completedAt: Date | null
         isCompleted: boolean | null
+        surveyObjectTypeId: string | null
     };
     export type SurveySessionMaxAggregateOutputType = {
         id: string | null
@@ -263718,6 +263898,7 @@ export namespace Prisma {
         startedAt: Date | null
         completedAt: Date | null
         isCompleted: boolean | null
+        surveyObjectTypeId: string | null
     };
     export type SurveySessionCountAggregateOutputType = {
         id: number
@@ -263733,6 +263914,7 @@ export namespace Prisma {
         startedAt: number
         completedAt: number
         isCompleted: number
+        surveyObjectTypeId: number
         _all: number
     };
     export type SurveySessionMinAggregateInputType = {
@@ -263749,6 +263931,7 @@ export namespace Prisma {
         startedAt?: true
         completedAt?: true
         isCompleted?: true
+        surveyObjectTypeId?: true
     };
     export type SurveySessionMaxAggregateInputType = {
         id?: true
@@ -263764,6 +263947,7 @@ export namespace Prisma {
         startedAt?: true
         completedAt?: true
         isCompleted?: true
+        surveyObjectTypeId?: true
     };
     export type SurveySessionCountAggregateInputType = {
         id?: true
@@ -263779,6 +263963,7 @@ export namespace Prisma {
         startedAt?: true
         completedAt?: true
         isCompleted?: true
+        surveyObjectTypeId?: true
         _all?: true
     };
     export type SurveySessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -263861,6 +264046,7 @@ export namespace Prisma {
         startedAt: Date
         completedAt: Date | null
         isCompleted: boolean
+        surveyObjectTypeId: string | null
         _count: SurveySessionCountAggregateOutputType | null
         _min: SurveySessionMinAggregateOutputType | null
         _max: SurveySessionMaxAggregateOutputType | null
@@ -263891,8 +264077,10 @@ export namespace Prisma {
         startedAt?: boolean
         completedAt?: boolean
         isCompleted?: boolean
+        surveyObjectTypeId?: boolean
         survey?: boolean | SurveyDefaultArgs<ExtArgs>
         student?: boolean | SurveySession$studentArgs<ExtArgs>
+        surveyObjectType?: boolean | SurveySession$surveyObjectTypeArgs<ExtArgs>
         responses?: boolean | SurveySession$responsesArgs<ExtArgs>
         _count?: boolean | SurveySessionCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["surveySession"]>;
@@ -263910,8 +264098,10 @@ export namespace Prisma {
         startedAt?: boolean
         completedAt?: boolean
         isCompleted?: boolean
+        surveyObjectTypeId?: boolean
         survey?: boolean | SurveyDefaultArgs<ExtArgs>
         student?: boolean | SurveySession$studentArgs<ExtArgs>
+        surveyObjectType?: boolean | SurveySession$surveyObjectTypeArgs<ExtArgs>
     }, ExtArgs["result"]["surveySession"]>;
     export type SurveySessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -263927,8 +264117,10 @@ export namespace Prisma {
         startedAt?: boolean
         completedAt?: boolean
         isCompleted?: boolean
+        surveyObjectTypeId?: boolean
         survey?: boolean | SurveyDefaultArgs<ExtArgs>
         student?: boolean | SurveySession$studentArgs<ExtArgs>
+        surveyObjectType?: boolean | SurveySession$surveyObjectTypeArgs<ExtArgs>
     }, ExtArgs["result"]["surveySession"]>;
     export type SurveySessionSelectScalar = {
         id?: boolean
@@ -263944,27 +264136,32 @@ export namespace Prisma {
         startedAt?: boolean
         completedAt?: boolean
         isCompleted?: boolean
+        surveyObjectTypeId?: boolean
     };
-    export type SurveySessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "surveyId" | "additionalSuggestion" | "studentId" | "startedAt" | "completedAt" | "isCompleted", ExtArgs["result"]["surveySession"]>;
+    export type SurveySessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "surveyId" | "additionalSuggestion" | "studentId" | "startedAt" | "completedAt" | "isCompleted" | "surveyObjectTypeId", ExtArgs["result"]["surveySession"]>;
     export type SurveySessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         survey?: boolean | SurveyDefaultArgs<ExtArgs>
         student?: boolean | SurveySession$studentArgs<ExtArgs>
+        surveyObjectType?: boolean | SurveySession$surveyObjectTypeArgs<ExtArgs>
         responses?: boolean | SurveySession$responsesArgs<ExtArgs>
         _count?: boolean | SurveySessionCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type SurveySessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         survey?: boolean | SurveyDefaultArgs<ExtArgs>
         student?: boolean | SurveySession$studentArgs<ExtArgs>
+        surveyObjectType?: boolean | SurveySession$surveyObjectTypeArgs<ExtArgs>
     };
     export type SurveySessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         survey?: boolean | SurveyDefaultArgs<ExtArgs>
         student?: boolean | SurveySession$studentArgs<ExtArgs>
+        surveyObjectType?: boolean | SurveySession$surveyObjectTypeArgs<ExtArgs>
     };
     export type $SurveySessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "SurveySession"
         objects: {
             survey: Prisma.$SurveyPayload<ExtArgs>
             student: Prisma.$StudentPayload<ExtArgs> | null
+            surveyObjectType: Prisma.$SurveyObjectTypePayload<ExtArgs> | null
             responses: Prisma.$SurveyResponsePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -263981,6 +264178,7 @@ export namespace Prisma {
             startedAt: Date
             completedAt: Date | null
             isCompleted: boolean
+            surveyObjectTypeId: string | null
         }, ExtArgs["result"]["surveySession"]>
         composites: {}
     };
@@ -264382,6 +264580,24 @@ export namespace Prisma {
          */
         include?: StudentInclude<ExtArgs> | null
         where?: StudentWhereInput
+    };
+    /**
+     * SurveySession.surveyObjectType
+     */
+    export type SurveySession$surveyObjectTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SurveyObjectType
+         */
+        select?: SurveyObjectTypeSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SurveyObjectType
+         */
+        omit?: SurveyObjectTypeOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SurveyObjectTypeInclude<ExtArgs> | null
+        where?: SurveyObjectTypeWhereInput
     };
     /**
      * SurveySession.responses
@@ -290547,6 +290763,8 @@ export namespace Prisma {
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+        graduationGpaScores?: StudentGraduationApplicationListRelationFilter
+        graduationSupplementaryScore?: StudentGraduationApplicationListRelationFilter
         certificates?: ArchivedCertificateOnStudentSubjectScoreListRelationFilter
         awards?: ArchivedAwardOnStudentSubjectScoreListRelationFilter
         studentThesisRegistration?: StudentThesisRegistrationListRelationFilter
@@ -290580,6 +290798,8 @@ export namespace Prisma {
         subjectClass?: SubjectClassOrderByWithRelationInput
         subjectVersion?: SubjectVersionOrderByWithRelationInput
         student?: StudentOrderByWithRelationInput
+        graduationGpaScores?: StudentGraduationApplicationOrderByRelationAggregateInput
+        graduationSupplementaryScore?: StudentGraduationApplicationOrderByRelationAggregateInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreOrderByRelationAggregateInput
         awards?: ArchivedAwardOnStudentSubjectScoreOrderByRelationAggregateInput
         studentThesisRegistration?: StudentThesisRegistrationOrderByRelationAggregateInput
@@ -290618,6 +290838,8 @@ export namespace Prisma {
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+        graduationGpaScores?: StudentGraduationApplicationListRelationFilter
+        graduationSupplementaryScore?: StudentGraduationApplicationListRelationFilter
         certificates?: ArchivedCertificateOnStudentSubjectScoreListRelationFilter
         awards?: ArchivedAwardOnStudentSubjectScoreListRelationFilter
         studentThesisRegistration?: StudentThesisRegistrationListRelationFilter
@@ -305791,6 +306013,8 @@ export namespace Prisma {
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         session?: XOR<GraduationSessionScalarRelationFilter, GraduationSessionWhereInput>
         applicationCheckResult?: ApplicationCheckResultListRelationFilter
+        gpaScore?: StudentSubjectScoreListRelationFilter
+        supplementaryScore?: StudentSubjectScoreListRelationFilter
         decision?: XOR<GraduationDecisionNullableScalarRelationFilter, GraduationDecisionWhereInput> | null
     };
     export type StudentGraduationApplicationOrderByWithRelationInput = {
@@ -305808,6 +306032,8 @@ export namespace Prisma {
         student?: StudentOrderByWithRelationInput
         session?: GraduationSessionOrderByWithRelationInput
         applicationCheckResult?: ApplicationCheckResultOrderByRelationAggregateInput
+        gpaScore?: StudentSubjectScoreOrderByRelationAggregateInput
+        supplementaryScore?: StudentSubjectScoreOrderByRelationAggregateInput
         decision?: GraduationDecisionOrderByWithRelationInput
         _relevance?: StudentGraduationApplicationOrderByRelevanceInput
     };
@@ -305830,6 +306056,8 @@ export namespace Prisma {
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         session?: XOR<GraduationSessionScalarRelationFilter, GraduationSessionWhereInput>
         applicationCheckResult?: ApplicationCheckResultListRelationFilter
+        gpaScore?: StudentSubjectScoreListRelationFilter
+        supplementaryScore?: StudentSubjectScoreListRelationFilter
         decision?: XOR<GraduationDecisionNullableScalarRelationFilter, GraduationDecisionWhereInput> | null
     }, "id" | "code" | "studentId_sessionId">;
     export type StudentGraduationApplicationOrderByWithAggregationInput = {
@@ -308373,6 +308601,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseListRelationFilter
         fixedClasses?: FixedClassListRelationFilter
         subjectClasses?: SubjectClassListRelationFilter
+        surveySessions?: SurveySessionListRelationFilter
     };
     export type SurveyObjectTypeOrderByWithRelationInput = {
         id?: SortOrder
@@ -308391,6 +308620,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseOrderByRelationAggregateInput
         fixedClasses?: FixedClassOrderByRelationAggregateInput
         subjectClasses?: SubjectClassOrderByRelationAggregateInput
+        surveySessions?: SurveySessionOrderByRelationAggregateInput
         _relevance?: SurveyObjectTypeOrderByRelevanceInput
     };
     export type SurveyObjectTypeWhereUniqueInput = Prisma.AtLeast<{
@@ -308413,6 +308643,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseListRelationFilter
         fixedClasses?: FixedClassListRelationFilter
         subjectClasses?: SubjectClassListRelationFilter
+        surveySessions?: SurveySessionListRelationFilter
     }, "id" | "code">;
     export type SurveyObjectTypeOrderByWithAggregationInput = {
         id?: SortOrder
@@ -308884,8 +309115,10 @@ export namespace Prisma {
         startedAt?: DateTimeFilter<"SurveySession"> | Date | string
         completedAt?: DateTimeNullableFilter<"SurveySession"> | Date | string | null
         isCompleted?: BoolFilter<"SurveySession"> | boolean
+        surveyObjectTypeId?: StringNullableFilter<"SurveySession"> | string | null
         survey?: XOR<SurveyScalarRelationFilter, SurveyWhereInput>
         student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
+        surveyObjectType?: XOR<SurveyObjectTypeNullableScalarRelationFilter, SurveyObjectTypeWhereInput> | null
         responses?: SurveyResponseListRelationFilter
     };
     export type SurveySessionOrderByWithRelationInput = {
@@ -308902,8 +309135,10 @@ export namespace Prisma {
         startedAt?: SortOrder
         completedAt?: SortOrderInput | SortOrder
         isCompleted?: SortOrder
+        surveyObjectTypeId?: SortOrderInput | SortOrder
         survey?: SurveyOrderByWithRelationInput
         student?: StudentOrderByWithRelationInput
+        surveyObjectType?: SurveyObjectTypeOrderByWithRelationInput
         responses?: SurveyResponseOrderByRelationAggregateInput
         _relevance?: SurveySessionOrderByRelevanceInput
     };
@@ -308925,8 +309160,10 @@ export namespace Prisma {
         startedAt?: DateTimeFilter<"SurveySession"> | Date | string
         completedAt?: DateTimeNullableFilter<"SurveySession"> | Date | string | null
         isCompleted?: BoolFilter<"SurveySession"> | boolean
+        surveyObjectTypeId?: StringNullableFilter<"SurveySession"> | string | null
         survey?: XOR<SurveyScalarRelationFilter, SurveyWhereInput>
         student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
+        surveyObjectType?: XOR<SurveyObjectTypeNullableScalarRelationFilter, SurveyObjectTypeWhereInput> | null
         responses?: SurveyResponseListRelationFilter
     }, "id" | "code" | "surveyId_studentId">;
     export type SurveySessionOrderByWithAggregationInput = {
@@ -308943,6 +309180,7 @@ export namespace Prisma {
         startedAt?: SortOrder
         completedAt?: SortOrderInput | SortOrder
         isCompleted?: SortOrder
+        surveyObjectTypeId?: SortOrderInput | SortOrder
         _count?: SurveySessionCountOrderByAggregateInput
         _max?: SurveySessionMaxOrderByAggregateInput
         _min?: SurveySessionMinOrderByAggregateInput
@@ -308964,6 +309202,7 @@ export namespace Prisma {
         startedAt?: DateTimeWithAggregatesFilter<"SurveySession"> | Date | string
         completedAt?: DateTimeNullableWithAggregatesFilter<"SurveySession"> | Date | string | null
         isCompleted?: BoolWithAggregatesFilter<"SurveySession"> | boolean
+        surveyObjectTypeId?: StringNullableWithAggregatesFilter<"SurveySession"> | string | null
     };
     export type SurveyResponseWhereInput = {
         AND?: SurveyResponseWhereInput | SurveyResponseWhereInput[]
@@ -312884,6 +313123,8 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
@@ -312914,6 +313155,8 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -312944,6 +313187,8 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -312974,6 +313219,8 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -330211,6 +330458,8 @@ export namespace Prisma {
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
         applicationCheckResult?: ApplicationCheckResultCreateNestedManyWithoutStudentGraduationApplicationInput
+        gpaScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationGpaScoresInput
+        supplementaryScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationSupplementaryScoreInput
         decision?: GraduationDecisionCreateNestedOneWithoutApplicationInput
     };
     export type StudentGraduationApplicationUncheckedCreateInput = {
@@ -330226,6 +330475,8 @@ export namespace Prisma {
         applicationDate?: Date | string
         status?: $Enums.ApplicationStatus
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
+        gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
+        supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
         decision?: GraduationDecisionUncheckedCreateNestedOneWithoutApplicationInput
     };
     export type StudentGraduationApplicationUpdateInput = {
@@ -330241,6 +330492,8 @@ export namespace Prisma {
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
         applicationCheckResult?: ApplicationCheckResultUpdateManyWithoutStudentGraduationApplicationNestedInput
+        gpaScore?: StudentSubjectScoreUpdateManyWithoutGraduationGpaScoresNestedInput
+        supplementaryScore?: StudentSubjectScoreUpdateManyWithoutGraduationSupplementaryScoreNestedInput
         decision?: GraduationDecisionUpdateOneWithoutApplicationNestedInput
     };
     export type StudentGraduationApplicationUncheckedUpdateInput = {
@@ -330256,6 +330509,8 @@ export namespace Prisma {
         applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
+        gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
+        supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
         decision?: GraduationDecisionUncheckedUpdateOneWithoutApplicationNestedInput
     };
     export type StudentGraduationApplicationCreateManyInput = {
@@ -333057,6 +333312,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeUncheckedCreateInput = {
         id?: string
@@ -333075,6 +333331,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -333093,6 +333350,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -333111,6 +333369,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeCreateManyInput = {
         id?: string
@@ -333630,6 +333889,7 @@ export namespace Prisma {
         isCompleted?: boolean
         survey: SurveyCreateNestedOneWithoutSurveySessionsInput
         student?: StudentCreateNestedOneWithoutSurveySessionsInput
+        surveyObjectType?: SurveyObjectTypeCreateNestedOneWithoutSurveySessionsInput
         responses?: SurveyResponseCreateNestedManyWithoutSurveySessionInput
     };
     export type SurveySessionUncheckedCreateInput = {
@@ -333646,6 +333906,7 @@ export namespace Prisma {
         startedAt?: Date | string
         completedAt?: Date | string | null
         isCompleted?: boolean
+        surveyObjectTypeId?: string | null
         responses?: SurveyResponseUncheckedCreateNestedManyWithoutSurveySessionInput
     };
     export type SurveySessionUpdateInput = {
@@ -333662,6 +333923,7 @@ export namespace Prisma {
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
         survey?: SurveyUpdateOneRequiredWithoutSurveySessionsNestedInput
         student?: StudentUpdateOneWithoutSurveySessionsNestedInput
+        surveyObjectType?: SurveyObjectTypeUpdateOneWithoutSurveySessionsNestedInput
         responses?: SurveyResponseUpdateManyWithoutSurveySessionNestedInput
     };
     export type SurveySessionUncheckedUpdateInput = {
@@ -333678,6 +333940,7 @@ export namespace Prisma {
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
+        surveyObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         responses?: SurveyResponseUncheckedUpdateManyWithoutSurveySessionNestedInput
     };
     export type SurveySessionCreateManyInput = {
@@ -333694,6 +333957,7 @@ export namespace Prisma {
         startedAt?: Date | string
         completedAt?: Date | string | null
         isCompleted?: boolean
+        surveyObjectTypeId?: string | null
     };
     export type SurveySessionUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -333722,6 +333986,7 @@ export namespace Prisma {
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
+        surveyObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SurveyResponseCreateInput = {
         id?: string
@@ -337808,6 +338073,11 @@ export namespace Prisma {
         is?: StudentWhereInput
         isNot?: StudentWhereInput
     };
+    export type StudentGraduationApplicationListRelationFilter = {
+        every?: StudentGraduationApplicationWhereInput
+        some?: StudentGraduationApplicationWhereInput
+        none?: StudentGraduationApplicationWhereInput
+    };
     export type ArchivedCertificateOnStudentSubjectScoreListRelationFilter = {
         every?: ArchivedCertificateOnStudentSubjectScoreWhereInput
         some?: ArchivedCertificateOnStudentSubjectScoreWhereInput
@@ -337822,6 +338092,9 @@ export namespace Prisma {
         every?: StudentThesisRegistrationWhereInput
         some?: StudentThesisRegistrationWhereInput
         none?: StudentThesisRegistrationWhereInput
+    };
+    export type StudentGraduationApplicationOrderByRelationAggregateInput = {
+        _count?: SortOrder
     };
     export type ArchivedCertificateOnStudentSubjectScoreOrderByRelationAggregateInput = {
         _count?: SortOrder
@@ -340935,11 +341208,6 @@ export namespace Prisma {
         some?: StudentTrainingScoreWhereInput
         none?: StudentTrainingScoreWhereInput
     };
-    export type StudentGraduationApplicationListRelationFilter = {
-        every?: StudentGraduationApplicationWhereInput
-        some?: StudentGraduationApplicationWhereInput
-        none?: StudentGraduationApplicationWhereInput
-    };
     export type GraduationDecisionNullableScalarRelationFilter = {
         is?: GraduationDecisionWhereInput | null
         isNot?: GraduationDecisionWhereInput | null
@@ -340973,9 +341241,6 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type StudentTrainingScoreOrderByRelationAggregateInput = {
-        _count?: SortOrder
-    };
-    export type StudentGraduationApplicationOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type SurveySessionOrderByRelationAggregateInput = {
@@ -350314,6 +350579,10 @@ export namespace Prisma {
         requireExplanation?: SortOrder
         surveyId?: SortOrder
     };
+    export type SurveyObjectTypeNullableScalarRelationFilter = {
+        is?: SurveyObjectTypeWhereInput | null
+        isNot?: SurveyObjectTypeWhereInput | null
+    };
     export type SurveySessionOrderByRelevanceInput = {
         fields: SurveySessionOrderByRelevanceFieldEnum | SurveySessionOrderByRelevanceFieldEnum[]
         sort: SortOrder
@@ -350337,6 +350606,7 @@ export namespace Prisma {
         startedAt?: SortOrder
         completedAt?: SortOrder
         isCompleted?: SortOrder
+        surveyObjectTypeId?: SortOrder
     };
     export type SurveySessionMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -350352,6 +350622,7 @@ export namespace Prisma {
         startedAt?: SortOrder
         completedAt?: SortOrder
         isCompleted?: SortOrder
+        surveyObjectTypeId?: SortOrder
     };
     export type SurveySessionMinOrderByAggregateInput = {
         id?: SortOrder
@@ -350367,6 +350638,7 @@ export namespace Prisma {
         startedAt?: SortOrder
         completedAt?: SortOrder
         isCompleted?: SortOrder
+        surveyObjectTypeId?: SortOrder
     };
     export type SurveySessionScalarRelationFilter = {
         is?: SurveySessionWhereInput
@@ -352881,6 +353153,16 @@ export namespace Prisma {
         connectOrCreate?: StudentCreateOrConnectWithoutSubjectClassStudentInput
         connect?: StudentWhereUniqueInput
     };
+    export type StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput = {
+        create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
+        connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput | StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput[]
+        connect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+    };
+    export type StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput = {
+        create?: XOR<StudentGraduationApplicationCreateWithoutSupplementaryScoreInput, StudentGraduationApplicationUncheckedCreateWithoutSupplementaryScoreInput> | StudentGraduationApplicationCreateWithoutSupplementaryScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutSupplementaryScoreInput[]
+        connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutSupplementaryScoreInput | StudentGraduationApplicationCreateOrConnectWithoutSupplementaryScoreInput[]
+        connect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+    };
     export type ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput = {
         create?: XOR<ArchivedCertificateOnStudentSubjectScoreCreateWithoutStudentSubjectScoreInput, ArchivedCertificateOnStudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreInput> | ArchivedCertificateOnStudentSubjectScoreCreateWithoutStudentSubjectScoreInput[] | ArchivedCertificateOnStudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreInput[]
         connectOrCreate?: ArchivedCertificateOnStudentSubjectScoreCreateOrConnectWithoutStudentSubjectScoreInput | ArchivedCertificateOnStudentSubjectScoreCreateOrConnectWithoutStudentSubjectScoreInput[]
@@ -352898,6 +353180,16 @@ export namespace Prisma {
         connectOrCreate?: StudentThesisRegistrationCreateOrConnectWithoutStudentSubjectScoreInput | StudentThesisRegistrationCreateOrConnectWithoutStudentSubjectScoreInput[]
         createMany?: StudentThesisRegistrationCreateManyStudentSubjectScoreInputEnvelope
         connect?: StudentThesisRegistrationWhereUniqueInput | StudentThesisRegistrationWhereUniqueInput[]
+    };
+    export type StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput = {
+        create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
+        connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput | StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput[]
+        connect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+    };
+    export type StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput = {
+        create?: XOR<StudentGraduationApplicationCreateWithoutSupplementaryScoreInput, StudentGraduationApplicationUncheckedCreateWithoutSupplementaryScoreInput> | StudentGraduationApplicationCreateWithoutSupplementaryScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutSupplementaryScoreInput[]
+        connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutSupplementaryScoreInput | StudentGraduationApplicationCreateOrConnectWithoutSupplementaryScoreInput[]
+        connect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
     };
     export type ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput = {
         create?: XOR<ArchivedCertificateOnStudentSubjectScoreCreateWithoutStudentSubjectScoreInput, ArchivedCertificateOnStudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreInput> | ArchivedCertificateOnStudentSubjectScoreCreateWithoutStudentSubjectScoreInput[] | ArchivedCertificateOnStudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreInput[]
@@ -352940,6 +353232,30 @@ export namespace Prisma {
         connect?: StudentWhereUniqueInput
         update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutSubjectClassStudentInput, StudentUpdateWithoutSubjectClassStudentInput>, StudentUncheckedUpdateWithoutSubjectClassStudentInput>
     };
+    export type StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput = {
+        create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
+        connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput | StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput[]
+        upsert?: StudentGraduationApplicationUpsertWithWhereUniqueWithoutGpaScoreInput | StudentGraduationApplicationUpsertWithWhereUniqueWithoutGpaScoreInput[]
+        set?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        disconnect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        delete?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        connect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        update?: StudentGraduationApplicationUpdateWithWhereUniqueWithoutGpaScoreInput | StudentGraduationApplicationUpdateWithWhereUniqueWithoutGpaScoreInput[]
+        updateMany?: StudentGraduationApplicationUpdateManyWithWhereWithoutGpaScoreInput | StudentGraduationApplicationUpdateManyWithWhereWithoutGpaScoreInput[]
+        deleteMany?: StudentGraduationApplicationScalarWhereInput | StudentGraduationApplicationScalarWhereInput[]
+    };
+    export type StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput = {
+        create?: XOR<StudentGraduationApplicationCreateWithoutSupplementaryScoreInput, StudentGraduationApplicationUncheckedCreateWithoutSupplementaryScoreInput> | StudentGraduationApplicationCreateWithoutSupplementaryScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutSupplementaryScoreInput[]
+        connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutSupplementaryScoreInput | StudentGraduationApplicationCreateOrConnectWithoutSupplementaryScoreInput[]
+        upsert?: StudentGraduationApplicationUpsertWithWhereUniqueWithoutSupplementaryScoreInput | StudentGraduationApplicationUpsertWithWhereUniqueWithoutSupplementaryScoreInput[]
+        set?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        disconnect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        delete?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        connect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        update?: StudentGraduationApplicationUpdateWithWhereUniqueWithoutSupplementaryScoreInput | StudentGraduationApplicationUpdateWithWhereUniqueWithoutSupplementaryScoreInput[]
+        updateMany?: StudentGraduationApplicationUpdateManyWithWhereWithoutSupplementaryScoreInput | StudentGraduationApplicationUpdateManyWithWhereWithoutSupplementaryScoreInput[]
+        deleteMany?: StudentGraduationApplicationScalarWhereInput | StudentGraduationApplicationScalarWhereInput[]
+    };
     export type ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput = {
         create?: XOR<ArchivedCertificateOnStudentSubjectScoreCreateWithoutStudentSubjectScoreInput, ArchivedCertificateOnStudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreInput> | ArchivedCertificateOnStudentSubjectScoreCreateWithoutStudentSubjectScoreInput[] | ArchivedCertificateOnStudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreInput[]
         connectOrCreate?: ArchivedCertificateOnStudentSubjectScoreCreateOrConnectWithoutStudentSubjectScoreInput | ArchivedCertificateOnStudentSubjectScoreCreateOrConnectWithoutStudentSubjectScoreInput[]
@@ -352978,6 +353294,30 @@ export namespace Prisma {
         update?: StudentThesisRegistrationUpdateWithWhereUniqueWithoutStudentSubjectScoreInput | StudentThesisRegistrationUpdateWithWhereUniqueWithoutStudentSubjectScoreInput[]
         updateMany?: StudentThesisRegistrationUpdateManyWithWhereWithoutStudentSubjectScoreInput | StudentThesisRegistrationUpdateManyWithWhereWithoutStudentSubjectScoreInput[]
         deleteMany?: StudentThesisRegistrationScalarWhereInput | StudentThesisRegistrationScalarWhereInput[]
+    };
+    export type StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput = {
+        create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
+        connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput | StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput[]
+        upsert?: StudentGraduationApplicationUpsertWithWhereUniqueWithoutGpaScoreInput | StudentGraduationApplicationUpsertWithWhereUniqueWithoutGpaScoreInput[]
+        set?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        disconnect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        delete?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        connect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        update?: StudentGraduationApplicationUpdateWithWhereUniqueWithoutGpaScoreInput | StudentGraduationApplicationUpdateWithWhereUniqueWithoutGpaScoreInput[]
+        updateMany?: StudentGraduationApplicationUpdateManyWithWhereWithoutGpaScoreInput | StudentGraduationApplicationUpdateManyWithWhereWithoutGpaScoreInput[]
+        deleteMany?: StudentGraduationApplicationScalarWhereInput | StudentGraduationApplicationScalarWhereInput[]
+    };
+    export type StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput = {
+        create?: XOR<StudentGraduationApplicationCreateWithoutSupplementaryScoreInput, StudentGraduationApplicationUncheckedCreateWithoutSupplementaryScoreInput> | StudentGraduationApplicationCreateWithoutSupplementaryScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutSupplementaryScoreInput[]
+        connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutSupplementaryScoreInput | StudentGraduationApplicationCreateOrConnectWithoutSupplementaryScoreInput[]
+        upsert?: StudentGraduationApplicationUpsertWithWhereUniqueWithoutSupplementaryScoreInput | StudentGraduationApplicationUpsertWithWhereUniqueWithoutSupplementaryScoreInput[]
+        set?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        disconnect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        delete?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        connect?: StudentGraduationApplicationWhereUniqueInput | StudentGraduationApplicationWhereUniqueInput[]
+        update?: StudentGraduationApplicationUpdateWithWhereUniqueWithoutSupplementaryScoreInput | StudentGraduationApplicationUpdateWithWhereUniqueWithoutSupplementaryScoreInput[]
+        updateMany?: StudentGraduationApplicationUpdateManyWithWhereWithoutSupplementaryScoreInput | StudentGraduationApplicationUpdateManyWithWhereWithoutSupplementaryScoreInput[]
+        deleteMany?: StudentGraduationApplicationScalarWhereInput | StudentGraduationApplicationScalarWhereInput[]
     };
     export type ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput = {
         create?: XOR<ArchivedCertificateOnStudentSubjectScoreCreateWithoutStudentSubjectScoreInput, ArchivedCertificateOnStudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreInput> | ArchivedCertificateOnStudentSubjectScoreCreateWithoutStudentSubjectScoreInput[] | ArchivedCertificateOnStudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreInput[]
@@ -366213,6 +366553,16 @@ export namespace Prisma {
         createMany?: ApplicationCheckResultCreateManyStudentGraduationApplicationInputEnvelope
         connect?: ApplicationCheckResultWhereUniqueInput | ApplicationCheckResultWhereUniqueInput[]
     };
+    export type StudentSubjectScoreCreateNestedManyWithoutGraduationGpaScoresInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutGraduationGpaScoresInput, StudentSubjectScoreUncheckedCreateWithoutGraduationGpaScoresInput> | StudentSubjectScoreCreateWithoutGraduationGpaScoresInput[] | StudentSubjectScoreUncheckedCreateWithoutGraduationGpaScoresInput[]
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutGraduationGpaScoresInput | StudentSubjectScoreCreateOrConnectWithoutGraduationGpaScoresInput[]
+        connect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+    };
+    export type StudentSubjectScoreCreateNestedManyWithoutGraduationSupplementaryScoreInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutGraduationSupplementaryScoreInput, StudentSubjectScoreUncheckedCreateWithoutGraduationSupplementaryScoreInput> | StudentSubjectScoreCreateWithoutGraduationSupplementaryScoreInput[] | StudentSubjectScoreUncheckedCreateWithoutGraduationSupplementaryScoreInput[]
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutGraduationSupplementaryScoreInput | StudentSubjectScoreCreateOrConnectWithoutGraduationSupplementaryScoreInput[]
+        connect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+    };
     export type GraduationDecisionCreateNestedOneWithoutApplicationInput = {
         create?: XOR<GraduationDecisionCreateWithoutApplicationInput, GraduationDecisionUncheckedCreateWithoutApplicationInput>
         connectOrCreate?: GraduationDecisionCreateOrConnectWithoutApplicationInput
@@ -366223,6 +366573,16 @@ export namespace Prisma {
         connectOrCreate?: ApplicationCheckResultCreateOrConnectWithoutStudentGraduationApplicationInput | ApplicationCheckResultCreateOrConnectWithoutStudentGraduationApplicationInput[]
         createMany?: ApplicationCheckResultCreateManyStudentGraduationApplicationInputEnvelope
         connect?: ApplicationCheckResultWhereUniqueInput | ApplicationCheckResultWhereUniqueInput[]
+    };
+    export type StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutGraduationGpaScoresInput, StudentSubjectScoreUncheckedCreateWithoutGraduationGpaScoresInput> | StudentSubjectScoreCreateWithoutGraduationGpaScoresInput[] | StudentSubjectScoreUncheckedCreateWithoutGraduationGpaScoresInput[]
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutGraduationGpaScoresInput | StudentSubjectScoreCreateOrConnectWithoutGraduationGpaScoresInput[]
+        connect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+    };
+    export type StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutGraduationSupplementaryScoreInput, StudentSubjectScoreUncheckedCreateWithoutGraduationSupplementaryScoreInput> | StudentSubjectScoreCreateWithoutGraduationSupplementaryScoreInput[] | StudentSubjectScoreUncheckedCreateWithoutGraduationSupplementaryScoreInput[]
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutGraduationSupplementaryScoreInput | StudentSubjectScoreCreateOrConnectWithoutGraduationSupplementaryScoreInput[]
+        connect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
     };
     export type GraduationDecisionUncheckedCreateNestedOneWithoutApplicationInput = {
         create?: XOR<GraduationDecisionCreateWithoutApplicationInput, GraduationDecisionUncheckedCreateWithoutApplicationInput>
@@ -366259,6 +366619,30 @@ export namespace Prisma {
         updateMany?: ApplicationCheckResultUpdateManyWithWhereWithoutStudentGraduationApplicationInput | ApplicationCheckResultUpdateManyWithWhereWithoutStudentGraduationApplicationInput[]
         deleteMany?: ApplicationCheckResultScalarWhereInput | ApplicationCheckResultScalarWhereInput[]
     };
+    export type StudentSubjectScoreUpdateManyWithoutGraduationGpaScoresNestedInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutGraduationGpaScoresInput, StudentSubjectScoreUncheckedCreateWithoutGraduationGpaScoresInput> | StudentSubjectScoreCreateWithoutGraduationGpaScoresInput[] | StudentSubjectScoreUncheckedCreateWithoutGraduationGpaScoresInput[]
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutGraduationGpaScoresInput | StudentSubjectScoreCreateOrConnectWithoutGraduationGpaScoresInput[]
+        upsert?: StudentSubjectScoreUpsertWithWhereUniqueWithoutGraduationGpaScoresInput | StudentSubjectScoreUpsertWithWhereUniqueWithoutGraduationGpaScoresInput[]
+        set?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        disconnect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        delete?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        connect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        update?: StudentSubjectScoreUpdateWithWhereUniqueWithoutGraduationGpaScoresInput | StudentSubjectScoreUpdateWithWhereUniqueWithoutGraduationGpaScoresInput[]
+        updateMany?: StudentSubjectScoreUpdateManyWithWhereWithoutGraduationGpaScoresInput | StudentSubjectScoreUpdateManyWithWhereWithoutGraduationGpaScoresInput[]
+        deleteMany?: StudentSubjectScoreScalarWhereInput | StudentSubjectScoreScalarWhereInput[]
+    };
+    export type StudentSubjectScoreUpdateManyWithoutGraduationSupplementaryScoreNestedInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutGraduationSupplementaryScoreInput, StudentSubjectScoreUncheckedCreateWithoutGraduationSupplementaryScoreInput> | StudentSubjectScoreCreateWithoutGraduationSupplementaryScoreInput[] | StudentSubjectScoreUncheckedCreateWithoutGraduationSupplementaryScoreInput[]
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutGraduationSupplementaryScoreInput | StudentSubjectScoreCreateOrConnectWithoutGraduationSupplementaryScoreInput[]
+        upsert?: StudentSubjectScoreUpsertWithWhereUniqueWithoutGraduationSupplementaryScoreInput | StudentSubjectScoreUpsertWithWhereUniqueWithoutGraduationSupplementaryScoreInput[]
+        set?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        disconnect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        delete?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        connect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        update?: StudentSubjectScoreUpdateWithWhereUniqueWithoutGraduationSupplementaryScoreInput | StudentSubjectScoreUpdateWithWhereUniqueWithoutGraduationSupplementaryScoreInput[]
+        updateMany?: StudentSubjectScoreUpdateManyWithWhereWithoutGraduationSupplementaryScoreInput | StudentSubjectScoreUpdateManyWithWhereWithoutGraduationSupplementaryScoreInput[]
+        deleteMany?: StudentSubjectScoreScalarWhereInput | StudentSubjectScoreScalarWhereInput[]
+    };
     export type GraduationDecisionUpdateOneWithoutApplicationNestedInput = {
         create?: XOR<GraduationDecisionCreateWithoutApplicationInput, GraduationDecisionUncheckedCreateWithoutApplicationInput>
         connectOrCreate?: GraduationDecisionCreateOrConnectWithoutApplicationInput
@@ -366280,6 +366664,30 @@ export namespace Prisma {
         update?: ApplicationCheckResultUpdateWithWhereUniqueWithoutStudentGraduationApplicationInput | ApplicationCheckResultUpdateWithWhereUniqueWithoutStudentGraduationApplicationInput[]
         updateMany?: ApplicationCheckResultUpdateManyWithWhereWithoutStudentGraduationApplicationInput | ApplicationCheckResultUpdateManyWithWhereWithoutStudentGraduationApplicationInput[]
         deleteMany?: ApplicationCheckResultScalarWhereInput | ApplicationCheckResultScalarWhereInput[]
+    };
+    export type StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutGraduationGpaScoresInput, StudentSubjectScoreUncheckedCreateWithoutGraduationGpaScoresInput> | StudentSubjectScoreCreateWithoutGraduationGpaScoresInput[] | StudentSubjectScoreUncheckedCreateWithoutGraduationGpaScoresInput[]
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutGraduationGpaScoresInput | StudentSubjectScoreCreateOrConnectWithoutGraduationGpaScoresInput[]
+        upsert?: StudentSubjectScoreUpsertWithWhereUniqueWithoutGraduationGpaScoresInput | StudentSubjectScoreUpsertWithWhereUniqueWithoutGraduationGpaScoresInput[]
+        set?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        disconnect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        delete?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        connect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        update?: StudentSubjectScoreUpdateWithWhereUniqueWithoutGraduationGpaScoresInput | StudentSubjectScoreUpdateWithWhereUniqueWithoutGraduationGpaScoresInput[]
+        updateMany?: StudentSubjectScoreUpdateManyWithWhereWithoutGraduationGpaScoresInput | StudentSubjectScoreUpdateManyWithWhereWithoutGraduationGpaScoresInput[]
+        deleteMany?: StudentSubjectScoreScalarWhereInput | StudentSubjectScoreScalarWhereInput[]
+    };
+    export type StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutGraduationSupplementaryScoreInput, StudentSubjectScoreUncheckedCreateWithoutGraduationSupplementaryScoreInput> | StudentSubjectScoreCreateWithoutGraduationSupplementaryScoreInput[] | StudentSubjectScoreUncheckedCreateWithoutGraduationSupplementaryScoreInput[]
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutGraduationSupplementaryScoreInput | StudentSubjectScoreCreateOrConnectWithoutGraduationSupplementaryScoreInput[]
+        upsert?: StudentSubjectScoreUpsertWithWhereUniqueWithoutGraduationSupplementaryScoreInput | StudentSubjectScoreUpsertWithWhereUniqueWithoutGraduationSupplementaryScoreInput[]
+        set?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        disconnect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        delete?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        connect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        update?: StudentSubjectScoreUpdateWithWhereUniqueWithoutGraduationSupplementaryScoreInput | StudentSubjectScoreUpdateWithWhereUniqueWithoutGraduationSupplementaryScoreInput[]
+        updateMany?: StudentSubjectScoreUpdateManyWithWhereWithoutGraduationSupplementaryScoreInput | StudentSubjectScoreUpdateManyWithWhereWithoutGraduationSupplementaryScoreInput[]
+        deleteMany?: StudentSubjectScoreScalarWhereInput | StudentSubjectScoreScalarWhereInput[]
     };
     export type GraduationDecisionUncheckedUpdateOneWithoutApplicationNestedInput = {
         create?: XOR<GraduationDecisionCreateWithoutApplicationInput, GraduationDecisionUncheckedCreateWithoutApplicationInput>
@@ -367979,6 +368387,12 @@ export namespace Prisma {
         connectOrCreate?: SubjectClassCreateOrConnectWithoutSurveyObjectTypesInput | SubjectClassCreateOrConnectWithoutSurveyObjectTypesInput[]
         connect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
     };
+    export type SurveySessionCreateNestedManyWithoutSurveyObjectTypeInput = {
+        create?: XOR<SurveySessionCreateWithoutSurveyObjectTypeInput, SurveySessionUncheckedCreateWithoutSurveyObjectTypeInput> | SurveySessionCreateWithoutSurveyObjectTypeInput[] | SurveySessionUncheckedCreateWithoutSurveyObjectTypeInput[]
+        connectOrCreate?: SurveySessionCreateOrConnectWithoutSurveyObjectTypeInput | SurveySessionCreateOrConnectWithoutSurveyObjectTypeInput[]
+        createMany?: SurveySessionCreateManySurveyObjectTypeInputEnvelope
+        connect?: SurveySessionWhereUniqueInput | SurveySessionWhereUniqueInput[]
+    };
     export type SurveyUncheckedCreateNestedManyWithoutSurveyObjectTypeInput = {
         create?: XOR<SurveyCreateWithoutSurveyObjectTypeInput, SurveyUncheckedCreateWithoutSurveyObjectTypeInput> | SurveyCreateWithoutSurveyObjectTypeInput[] | SurveyUncheckedCreateWithoutSurveyObjectTypeInput[]
         connectOrCreate?: SurveyCreateOrConnectWithoutSurveyObjectTypeInput | SurveyCreateOrConnectWithoutSurveyObjectTypeInput[]
@@ -368013,6 +368427,12 @@ export namespace Prisma {
         create?: XOR<SubjectClassCreateWithoutSurveyObjectTypesInput, SubjectClassUncheckedCreateWithoutSurveyObjectTypesInput> | SubjectClassCreateWithoutSurveyObjectTypesInput[] | SubjectClassUncheckedCreateWithoutSurveyObjectTypesInput[]
         connectOrCreate?: SubjectClassCreateOrConnectWithoutSurveyObjectTypesInput | SubjectClassCreateOrConnectWithoutSurveyObjectTypesInput[]
         connect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+    };
+    export type SurveySessionUncheckedCreateNestedManyWithoutSurveyObjectTypeInput = {
+        create?: XOR<SurveySessionCreateWithoutSurveyObjectTypeInput, SurveySessionUncheckedCreateWithoutSurveyObjectTypeInput> | SurveySessionCreateWithoutSurveyObjectTypeInput[] | SurveySessionUncheckedCreateWithoutSurveyObjectTypeInput[]
+        connectOrCreate?: SurveySessionCreateOrConnectWithoutSurveyObjectTypeInput | SurveySessionCreateOrConnectWithoutSurveyObjectTypeInput[]
+        createMany?: SurveySessionCreateManySurveyObjectTypeInputEnvelope
+        connect?: SurveySessionWhereUniqueInput | SurveySessionWhereUniqueInput[]
     };
     export type SurveyObjectTypeUpdatetypeInput = {
         set?: $Enums.SurveyObject[]
@@ -368102,6 +368522,19 @@ export namespace Prisma {
         updateMany?: SubjectClassUpdateManyWithWhereWithoutSurveyObjectTypesInput | SubjectClassUpdateManyWithWhereWithoutSurveyObjectTypesInput[]
         deleteMany?: SubjectClassScalarWhereInput | SubjectClassScalarWhereInput[]
     };
+    export type SurveySessionUpdateManyWithoutSurveyObjectTypeNestedInput = {
+        create?: XOR<SurveySessionCreateWithoutSurveyObjectTypeInput, SurveySessionUncheckedCreateWithoutSurveyObjectTypeInput> | SurveySessionCreateWithoutSurveyObjectTypeInput[] | SurveySessionUncheckedCreateWithoutSurveyObjectTypeInput[]
+        connectOrCreate?: SurveySessionCreateOrConnectWithoutSurveyObjectTypeInput | SurveySessionCreateOrConnectWithoutSurveyObjectTypeInput[]
+        upsert?: SurveySessionUpsertWithWhereUniqueWithoutSurveyObjectTypeInput | SurveySessionUpsertWithWhereUniqueWithoutSurveyObjectTypeInput[]
+        createMany?: SurveySessionCreateManySurveyObjectTypeInputEnvelope
+        set?: SurveySessionWhereUniqueInput | SurveySessionWhereUniqueInput[]
+        disconnect?: SurveySessionWhereUniqueInput | SurveySessionWhereUniqueInput[]
+        delete?: SurveySessionWhereUniqueInput | SurveySessionWhereUniqueInput[]
+        connect?: SurveySessionWhereUniqueInput | SurveySessionWhereUniqueInput[]
+        update?: SurveySessionUpdateWithWhereUniqueWithoutSurveyObjectTypeInput | SurveySessionUpdateWithWhereUniqueWithoutSurveyObjectTypeInput[]
+        updateMany?: SurveySessionUpdateManyWithWhereWithoutSurveyObjectTypeInput | SurveySessionUpdateManyWithWhereWithoutSurveyObjectTypeInput[]
+        deleteMany?: SurveySessionScalarWhereInput | SurveySessionScalarWhereInput[]
+    };
     export type SurveyUncheckedUpdateManyWithoutSurveyObjectTypeNestedInput = {
         create?: XOR<SurveyCreateWithoutSurveyObjectTypeInput, SurveyUncheckedCreateWithoutSurveyObjectTypeInput> | SurveyCreateWithoutSurveyObjectTypeInput[] | SurveyUncheckedCreateWithoutSurveyObjectTypeInput[]
         connectOrCreate?: SurveyCreateOrConnectWithoutSurveyObjectTypeInput | SurveyCreateOrConnectWithoutSurveyObjectTypeInput[]
@@ -368185,6 +368618,19 @@ export namespace Prisma {
         update?: SubjectClassUpdateWithWhereUniqueWithoutSurveyObjectTypesInput | SubjectClassUpdateWithWhereUniqueWithoutSurveyObjectTypesInput[]
         updateMany?: SubjectClassUpdateManyWithWhereWithoutSurveyObjectTypesInput | SubjectClassUpdateManyWithWhereWithoutSurveyObjectTypesInput[]
         deleteMany?: SubjectClassScalarWhereInput | SubjectClassScalarWhereInput[]
+    };
+    export type SurveySessionUncheckedUpdateManyWithoutSurveyObjectTypeNestedInput = {
+        create?: XOR<SurveySessionCreateWithoutSurveyObjectTypeInput, SurveySessionUncheckedCreateWithoutSurveyObjectTypeInput> | SurveySessionCreateWithoutSurveyObjectTypeInput[] | SurveySessionUncheckedCreateWithoutSurveyObjectTypeInput[]
+        connectOrCreate?: SurveySessionCreateOrConnectWithoutSurveyObjectTypeInput | SurveySessionCreateOrConnectWithoutSurveyObjectTypeInput[]
+        upsert?: SurveySessionUpsertWithWhereUniqueWithoutSurveyObjectTypeInput | SurveySessionUpsertWithWhereUniqueWithoutSurveyObjectTypeInput[]
+        createMany?: SurveySessionCreateManySurveyObjectTypeInputEnvelope
+        set?: SurveySessionWhereUniqueInput | SurveySessionWhereUniqueInput[]
+        disconnect?: SurveySessionWhereUniqueInput | SurveySessionWhereUniqueInput[]
+        delete?: SurveySessionWhereUniqueInput | SurveySessionWhereUniqueInput[]
+        connect?: SurveySessionWhereUniqueInput | SurveySessionWhereUniqueInput[]
+        update?: SurveySessionUpdateWithWhereUniqueWithoutSurveyObjectTypeInput | SurveySessionUpdateWithWhereUniqueWithoutSurveyObjectTypeInput[]
+        updateMany?: SurveySessionUpdateManyWithWhereWithoutSurveyObjectTypeInput | SurveySessionUpdateManyWithWhereWithoutSurveyObjectTypeInput[]
+        deleteMany?: SurveySessionScalarWhereInput | SurveySessionScalarWhereInput[]
     };
     export type SurveyCreateNestedManyWithoutSurveyTopicInput = {
         create?: XOR<SurveyCreateWithoutSurveyTopicInput, SurveyUncheckedCreateWithoutSurveyTopicInput> | SurveyCreateWithoutSurveyTopicInput[] | SurveyUncheckedCreateWithoutSurveyTopicInput[]
@@ -368615,6 +369061,11 @@ export namespace Prisma {
         connectOrCreate?: StudentCreateOrConnectWithoutSurveySessionsInput
         connect?: StudentWhereUniqueInput
     };
+    export type SurveyObjectTypeCreateNestedOneWithoutSurveySessionsInput = {
+        create?: XOR<SurveyObjectTypeCreateWithoutSurveySessionsInput, SurveyObjectTypeUncheckedCreateWithoutSurveySessionsInput>
+        connectOrCreate?: SurveyObjectTypeCreateOrConnectWithoutSurveySessionsInput
+        connect?: SurveyObjectTypeWhereUniqueInput
+    };
     export type SurveyResponseCreateNestedManyWithoutSurveySessionInput = {
         create?: XOR<SurveyResponseCreateWithoutSurveySessionInput, SurveyResponseUncheckedCreateWithoutSurveySessionInput> | SurveyResponseCreateWithoutSurveySessionInput[] | SurveyResponseUncheckedCreateWithoutSurveySessionInput[]
         connectOrCreate?: SurveyResponseCreateOrConnectWithoutSurveySessionInput | SurveyResponseCreateOrConnectWithoutSurveySessionInput[]
@@ -368642,6 +369093,15 @@ export namespace Prisma {
         delete?: StudentWhereInput | boolean
         connect?: StudentWhereUniqueInput
         update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutSurveySessionsInput, StudentUpdateWithoutSurveySessionsInput>, StudentUncheckedUpdateWithoutSurveySessionsInput>
+    };
+    export type SurveyObjectTypeUpdateOneWithoutSurveySessionsNestedInput = {
+        create?: XOR<SurveyObjectTypeCreateWithoutSurveySessionsInput, SurveyObjectTypeUncheckedCreateWithoutSurveySessionsInput>
+        connectOrCreate?: SurveyObjectTypeCreateOrConnectWithoutSurveySessionsInput
+        upsert?: SurveyObjectTypeUpsertWithoutSurveySessionsInput
+        disconnect?: SurveyObjectTypeWhereInput | boolean
+        delete?: SurveyObjectTypeWhereInput | boolean
+        connect?: SurveyObjectTypeWhereUniqueInput
+        update?: XOR<XOR<SurveyObjectTypeUpdateToOneWithWhereWithoutSurveySessionsInput, SurveyObjectTypeUpdateWithoutSurveySessionsInput>, SurveyObjectTypeUncheckedUpdateWithoutSurveySessionsInput>
     };
     export type SurveyResponseUpdateManyWithoutSurveySessionNestedInput = {
         create?: XOR<SurveyResponseCreateWithoutSurveySessionInput, SurveyResponseUncheckedCreateWithoutSurveySessionInput> | SurveyResponseCreateWithoutSurveySessionInput[] | SurveyResponseUncheckedCreateWithoutSurveySessionInput[]
@@ -374122,6 +374582,78 @@ export namespace Prisma {
         where: StudentWhereUniqueInput
         create: XOR<StudentCreateWithoutSubjectClassStudentInput, StudentUncheckedCreateWithoutSubjectClassStudentInput>
     };
+    export type StudentGraduationApplicationCreateWithoutGpaScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        applicationDate?: Date | string
+        status?: $Enums.ApplicationStatus
+        student: StudentCreateNestedOneWithoutGraduationApplicationsInput
+        session: GraduationSessionCreateNestedOneWithoutApplicationsInput
+        applicationCheckResult?: ApplicationCheckResultCreateNestedManyWithoutStudentGraduationApplicationInput
+        supplementaryScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationSupplementaryScoreInput
+        decision?: GraduationDecisionCreateNestedOneWithoutApplicationInput
+    };
+    export type StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentId: string
+        sessionId: string
+        applicationDate?: Date | string
+        status?: $Enums.ApplicationStatus
+        applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
+        supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
+        decision?: GraduationDecisionUncheckedCreateNestedOneWithoutApplicationInput
+    };
+    export type StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput = {
+        where: StudentGraduationApplicationWhereUniqueInput
+        create: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput>
+    };
+    export type StudentGraduationApplicationCreateWithoutSupplementaryScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        applicationDate?: Date | string
+        status?: $Enums.ApplicationStatus
+        student: StudentCreateNestedOneWithoutGraduationApplicationsInput
+        session: GraduationSessionCreateNestedOneWithoutApplicationsInput
+        applicationCheckResult?: ApplicationCheckResultCreateNestedManyWithoutStudentGraduationApplicationInput
+        gpaScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationGpaScoresInput
+        decision?: GraduationDecisionCreateNestedOneWithoutApplicationInput
+    };
+    export type StudentGraduationApplicationUncheckedCreateWithoutSupplementaryScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentId: string
+        sessionId: string
+        applicationDate?: Date | string
+        status?: $Enums.ApplicationStatus
+        applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
+        gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
+        decision?: GraduationDecisionUncheckedCreateNestedOneWithoutApplicationInput
+    };
+    export type StudentGraduationApplicationCreateOrConnectWithoutSupplementaryScoreInput = {
+        where: StudentGraduationApplicationWhereUniqueInput
+        create: XOR<StudentGraduationApplicationCreateWithoutSupplementaryScoreInput, StudentGraduationApplicationUncheckedCreateWithoutSupplementaryScoreInput>
+    };
     export type ArchivedCertificateOnStudentSubjectScoreCreateWithoutStudentSubjectScoreInput = {
         id?: string
         code?: string | null
@@ -374529,6 +375061,48 @@ export namespace Prisma {
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
+    export type StudentGraduationApplicationUpsertWithWhereUniqueWithoutGpaScoreInput = {
+        where: StudentGraduationApplicationWhereUniqueInput
+        update: XOR<StudentGraduationApplicationUpdateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedUpdateWithoutGpaScoreInput>
+        create: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput>
+    };
+    export type StudentGraduationApplicationUpdateWithWhereUniqueWithoutGpaScoreInput = {
+        where: StudentGraduationApplicationWhereUniqueInput
+        data: XOR<StudentGraduationApplicationUpdateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedUpdateWithoutGpaScoreInput>
+    };
+    export type StudentGraduationApplicationUpdateManyWithWhereWithoutGpaScoreInput = {
+        where: StudentGraduationApplicationScalarWhereInput
+        data: XOR<StudentGraduationApplicationUpdateManyMutationInput, StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreInput>
+    };
+    export type StudentGraduationApplicationScalarWhereInput = {
+        AND?: StudentGraduationApplicationScalarWhereInput | StudentGraduationApplicationScalarWhereInput[]
+        OR?: StudentGraduationApplicationScalarWhereInput[]
+        NOT?: StudentGraduationApplicationScalarWhereInput | StudentGraduationApplicationScalarWhereInput[]
+        id?: StringFilter<"StudentGraduationApplication"> | string
+        code?: StringNullableFilter<"StudentGraduationApplication"> | string | null
+        active?: BoolFilter<"StudentGraduationApplication"> | boolean
+        description?: StringNullableFilter<"StudentGraduationApplication"> | string | null
+        deletedAt?: DateTimeNullableFilter<"StudentGraduationApplication"> | Date | string | null
+        createdAt?: DateTimeFilter<"StudentGraduationApplication"> | Date | string
+        updatedAt?: DateTimeFilter<"StudentGraduationApplication"> | Date | string
+        studentId?: StringFilter<"StudentGraduationApplication"> | string
+        sessionId?: StringFilter<"StudentGraduationApplication"> | string
+        applicationDate?: DateTimeFilter<"StudentGraduationApplication"> | Date | string
+        status?: EnumApplicationStatusFilter<"StudentGraduationApplication"> | $Enums.ApplicationStatus
+    };
+    export type StudentGraduationApplicationUpsertWithWhereUniqueWithoutSupplementaryScoreInput = {
+        where: StudentGraduationApplicationWhereUniqueInput
+        update: XOR<StudentGraduationApplicationUpdateWithoutSupplementaryScoreInput, StudentGraduationApplicationUncheckedUpdateWithoutSupplementaryScoreInput>
+        create: XOR<StudentGraduationApplicationCreateWithoutSupplementaryScoreInput, StudentGraduationApplicationUncheckedCreateWithoutSupplementaryScoreInput>
+    };
+    export type StudentGraduationApplicationUpdateWithWhereUniqueWithoutSupplementaryScoreInput = {
+        where: StudentGraduationApplicationWhereUniqueInput
+        data: XOR<StudentGraduationApplicationUpdateWithoutSupplementaryScoreInput, StudentGraduationApplicationUncheckedUpdateWithoutSupplementaryScoreInput>
+    };
+    export type StudentGraduationApplicationUpdateManyWithWhereWithoutSupplementaryScoreInput = {
+        where: StudentGraduationApplicationScalarWhereInput
+        data: XOR<StudentGraduationApplicationUpdateManyMutationInput, StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreInput>
+    };
     export type ArchivedCertificateOnStudentSubjectScoreUpsertWithWhereUniqueWithoutStudentSubjectScoreInput = {
         where: ArchivedCertificateOnStudentSubjectScoreWhereUniqueInput
         update: XOR<ArchivedCertificateOnStudentSubjectScoreUpdateWithoutStudentSubjectScoreInput, ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateWithoutStudentSubjectScoreInput>
@@ -374645,6 +375219,8 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
     };
@@ -374674,6 +375250,8 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
@@ -374746,6 +375324,8 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
     };
@@ -374775,6 +375355,8 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
@@ -374986,6 +375568,8 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
     };
@@ -375015,6 +375599,8 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
@@ -375087,6 +375673,8 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
     };
@@ -375116,6 +375704,8 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
@@ -376964,6 +377554,7 @@ export namespace Prisma {
         trainingMajors?: TrainingMajorCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeUncheckedCreateWithoutTrainingCoursesInput = {
         id?: string
@@ -376981,6 +377572,7 @@ export namespace Prisma {
         trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeCreateOrConnectWithoutTrainingCoursesInput = {
         where: SurveyObjectTypeWhereUniqueInput
@@ -378381,6 +378973,7 @@ export namespace Prisma {
         trainingMajors?: TrainingMajorCreateNestedManyWithoutSurveyObjectTypesInput
         trainingCourses?: TrainingCourseCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeUncheckedCreateWithoutFixedClassesInput = {
         id?: string
@@ -378398,6 +378991,7 @@ export namespace Prisma {
         trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeCreateOrConnectWithoutFixedClassesInput = {
         where: SurveyObjectTypeWhereUniqueInput
@@ -381161,6 +381755,8 @@ export namespace Prisma {
         repeatedReason?: string | null
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
@@ -381190,6 +381786,8 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -383524,6 +384122,8 @@ export namespace Prisma {
         repeatedReason?: string | null
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
@@ -383553,6 +384153,8 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -383871,6 +384473,7 @@ export namespace Prisma {
         trainingMajors?: TrainingMajorCreateNestedManyWithoutSurveyObjectTypesInput
         trainingCourses?: TrainingCourseCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeUncheckedCreateWithoutSubjectClassesInput = {
         id?: string
@@ -383888,6 +384491,7 @@ export namespace Prisma {
         trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeCreateOrConnectWithoutSubjectClassesInput = {
         where: SurveyObjectTypeWhereUniqueInput
@@ -387850,6 +388454,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeUncheckedCreateWithoutTrainingFieldsInput = {
         id?: string
@@ -387867,6 +388472,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeCreateOrConnectWithoutTrainingFieldsInput = {
         where: SurveyObjectTypeWhereUniqueInput
@@ -388470,6 +389076,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeUncheckedCreateWithoutTrainingMajorsInput = {
         id?: string
@@ -388487,6 +389094,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeCreateOrConnectWithoutTrainingMajorsInput = {
         where: SurveyObjectTypeWhereUniqueInput
@@ -389860,6 +390468,8 @@ export namespace Prisma {
         repeatedReason?: string | null
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
+        graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
@@ -389889,6 +390499,8 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -390787,6 +391399,8 @@ export namespace Prisma {
         status?: $Enums.ApplicationStatus
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
         applicationCheckResult?: ApplicationCheckResultCreateNestedManyWithoutStudentGraduationApplicationInput
+        gpaScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationGpaScoresInput
+        supplementaryScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationSupplementaryScoreInput
         decision?: GraduationDecisionCreateNestedOneWithoutApplicationInput
     };
     export type StudentGraduationApplicationUncheckedCreateWithoutStudentInput = {
@@ -390801,6 +391415,8 @@ export namespace Prisma {
         applicationDate?: Date | string
         status?: $Enums.ApplicationStatus
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
+        gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
+        supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
         decision?: GraduationDecisionUncheckedCreateNestedOneWithoutApplicationInput
     };
     export type StudentGraduationApplicationCreateOrConnectWithoutStudentInput = {
@@ -390872,6 +391488,7 @@ export namespace Prisma {
         completedAt?: Date | string | null
         isCompleted?: boolean
         survey: SurveyCreateNestedOneWithoutSurveySessionsInput
+        surveyObjectType?: SurveyObjectTypeCreateNestedOneWithoutSurveySessionsInput
         responses?: SurveyResponseCreateNestedManyWithoutSurveySessionInput
     };
     export type SurveySessionUncheckedCreateWithoutStudentInput = {
@@ -390887,6 +391504,7 @@ export namespace Prisma {
         startedAt?: Date | string
         completedAt?: Date | string | null
         isCompleted?: boolean
+        surveyObjectTypeId?: string | null
         responses?: SurveyResponseUncheckedCreateNestedManyWithoutSurveySessionInput
     };
     export type SurveySessionCreateOrConnectWithoutStudentInput = {
@@ -392181,22 +392799,6 @@ export namespace Prisma {
         where: StudentGraduationApplicationScalarWhereInput
         data: XOR<StudentGraduationApplicationUpdateManyMutationInput, StudentGraduationApplicationUncheckedUpdateManyWithoutStudentInput>
     };
-    export type StudentGraduationApplicationScalarWhereInput = {
-        AND?: StudentGraduationApplicationScalarWhereInput | StudentGraduationApplicationScalarWhereInput[]
-        OR?: StudentGraduationApplicationScalarWhereInput[]
-        NOT?: StudentGraduationApplicationScalarWhereInput | StudentGraduationApplicationScalarWhereInput[]
-        id?: StringFilter<"StudentGraduationApplication"> | string
-        code?: StringNullableFilter<"StudentGraduationApplication"> | string | null
-        active?: BoolFilter<"StudentGraduationApplication"> | boolean
-        description?: StringNullableFilter<"StudentGraduationApplication"> | string | null
-        deletedAt?: DateTimeNullableFilter<"StudentGraduationApplication"> | Date | string | null
-        createdAt?: DateTimeFilter<"StudentGraduationApplication"> | Date | string
-        updatedAt?: DateTimeFilter<"StudentGraduationApplication"> | Date | string
-        studentId?: StringFilter<"StudentGraduationApplication"> | string
-        sessionId?: StringFilter<"StudentGraduationApplication"> | string
-        applicationDate?: DateTimeFilter<"StudentGraduationApplication"> | Date | string
-        status?: EnumApplicationStatusFilter<"StudentGraduationApplication"> | $Enums.ApplicationStatus
-    };
     export type GraduationDecisionUpsertWithoutStudentInput = {
         update: XOR<GraduationDecisionUpdateWithoutStudentInput, GraduationDecisionUncheckedUpdateWithoutStudentInput>
         create: XOR<GraduationDecisionCreateWithoutStudentInput, GraduationDecisionUncheckedCreateWithoutStudentInput>
@@ -392280,6 +392882,7 @@ export namespace Prisma {
         startedAt?: DateTimeFilter<"SurveySession"> | Date | string
         completedAt?: DateTimeNullableFilter<"SurveySession"> | Date | string | null
         isCompleted?: BoolFilter<"SurveySession"> | boolean
+        surveyObjectTypeId?: StringNullableFilter<"SurveySession"> | string | null
     };
     export type NotificationUpsertWithWhereUniqueWithoutTargetStudentsInput = {
         where: NotificationWhereUniqueInput
@@ -400742,6 +401345,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeUncheckedCreateWithoutOrganizationsInput = {
         id?: string
@@ -400759,6 +401363,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeCreateOrConnectWithoutOrganizationsInput = {
         where: SurveyObjectTypeWhereUniqueInput
@@ -436218,6 +436823,8 @@ export namespace Prisma {
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
     };
@@ -436247,6 +436854,8 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
@@ -436570,6 +437179,8 @@ export namespace Prisma {
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
     };
@@ -436599,6 +437210,8 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
@@ -443003,6 +443616,8 @@ export namespace Prisma {
         status?: $Enums.ApplicationStatus
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         applicationCheckResult?: ApplicationCheckResultCreateNestedManyWithoutStudentGraduationApplicationInput
+        gpaScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationGpaScoresInput
+        supplementaryScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationSupplementaryScoreInput
         decision?: GraduationDecisionCreateNestedOneWithoutApplicationInput
     };
     export type StudentGraduationApplicationUncheckedCreateWithoutSessionInput = {
@@ -443017,6 +443632,8 @@ export namespace Prisma {
         applicationDate?: Date | string
         status?: $Enums.ApplicationStatus
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
+        gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
+        supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
         decision?: GraduationDecisionUncheckedCreateNestedOneWithoutApplicationInput
     };
     export type StudentGraduationApplicationCreateOrConnectWithoutSessionInput = {
@@ -443261,6 +443878,138 @@ export namespace Prisma {
         data: ApplicationCheckResultCreateManyStudentGraduationApplicationInput | ApplicationCheckResultCreateManyStudentGraduationApplicationInput[]
         skipDuplicates?: boolean
     };
+    export type StudentSubjectScoreCreateWithoutGraduationGpaScoresInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
+        subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
+        student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+    };
+    export type StudentSubjectScoreUncheckedCreateWithoutGraduationGpaScoresInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        subjectClassId?: string | null
+        subjectVersionId: string
+        studentId: string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+    };
+    export type StudentSubjectScoreCreateOrConnectWithoutGraduationGpaScoresInput = {
+        where: StudentSubjectScoreWhereUniqueInput
+        create: XOR<StudentSubjectScoreCreateWithoutGraduationGpaScoresInput, StudentSubjectScoreUncheckedCreateWithoutGraduationGpaScoresInput>
+    };
+    export type StudentSubjectScoreCreateWithoutGraduationSupplementaryScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
+        subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
+        student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+    };
+    export type StudentSubjectScoreUncheckedCreateWithoutGraduationSupplementaryScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        subjectClassId?: string | null
+        subjectVersionId: string
+        studentId: string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+    };
+    export type StudentSubjectScoreCreateOrConnectWithoutGraduationSupplementaryScoreInput = {
+        where: StudentSubjectScoreWhereUniqueInput
+        create: XOR<StudentSubjectScoreCreateWithoutGraduationSupplementaryScoreInput, StudentSubjectScoreUncheckedCreateWithoutGraduationSupplementaryScoreInput>
+    };
     export type GraduationDecisionCreateWithoutApplicationInput = {
         id?: string
         code?: string | null
@@ -443492,6 +444241,32 @@ export namespace Prisma {
         passed?: BoolFilter<"ApplicationCheckResult"> | boolean
         actualValue?: FloatNullableFilter<"ApplicationCheckResult"> | number | null
     };
+    export type StudentSubjectScoreUpsertWithWhereUniqueWithoutGraduationGpaScoresInput = {
+        where: StudentSubjectScoreWhereUniqueInput
+        update: XOR<StudentSubjectScoreUpdateWithoutGraduationGpaScoresInput, StudentSubjectScoreUncheckedUpdateWithoutGraduationGpaScoresInput>
+        create: XOR<StudentSubjectScoreCreateWithoutGraduationGpaScoresInput, StudentSubjectScoreUncheckedCreateWithoutGraduationGpaScoresInput>
+    };
+    export type StudentSubjectScoreUpdateWithWhereUniqueWithoutGraduationGpaScoresInput = {
+        where: StudentSubjectScoreWhereUniqueInput
+        data: XOR<StudentSubjectScoreUpdateWithoutGraduationGpaScoresInput, StudentSubjectScoreUncheckedUpdateWithoutGraduationGpaScoresInput>
+    };
+    export type StudentSubjectScoreUpdateManyWithWhereWithoutGraduationGpaScoresInput = {
+        where: StudentSubjectScoreScalarWhereInput
+        data: XOR<StudentSubjectScoreUpdateManyMutationInput, StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresInput>
+    };
+    export type StudentSubjectScoreUpsertWithWhereUniqueWithoutGraduationSupplementaryScoreInput = {
+        where: StudentSubjectScoreWhereUniqueInput
+        update: XOR<StudentSubjectScoreUpdateWithoutGraduationSupplementaryScoreInput, StudentSubjectScoreUncheckedUpdateWithoutGraduationSupplementaryScoreInput>
+        create: XOR<StudentSubjectScoreCreateWithoutGraduationSupplementaryScoreInput, StudentSubjectScoreUncheckedCreateWithoutGraduationSupplementaryScoreInput>
+    };
+    export type StudentSubjectScoreUpdateWithWhereUniqueWithoutGraduationSupplementaryScoreInput = {
+        where: StudentSubjectScoreWhereUniqueInput
+        data: XOR<StudentSubjectScoreUpdateWithoutGraduationSupplementaryScoreInput, StudentSubjectScoreUncheckedUpdateWithoutGraduationSupplementaryScoreInput>
+    };
+    export type StudentSubjectScoreUpdateManyWithWhereWithoutGraduationSupplementaryScoreInput = {
+        where: StudentSubjectScoreScalarWhereInput
+        data: XOR<StudentSubjectScoreUpdateManyMutationInput, StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreInput>
+    };
     export type GraduationDecisionUpsertWithoutApplicationInput = {
         update: XOR<GraduationDecisionUpdateWithoutApplicationInput, GraduationDecisionUncheckedUpdateWithoutApplicationInput>
         create: XOR<GraduationDecisionCreateWithoutApplicationInput, GraduationDecisionUncheckedCreateWithoutApplicationInput>
@@ -443557,6 +444332,8 @@ export namespace Prisma {
         status?: $Enums.ApplicationStatus
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
+        gpaScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationGpaScoresInput
+        supplementaryScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationSupplementaryScoreInput
         decision?: GraduationDecisionCreateNestedOneWithoutApplicationInput
     };
     export type StudentGraduationApplicationUncheckedCreateWithoutApplicationCheckResultInput = {
@@ -443571,6 +444348,8 @@ export namespace Prisma {
         sessionId: string
         applicationDate?: Date | string
         status?: $Enums.ApplicationStatus
+        gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
+        supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
         decision?: GraduationDecisionUncheckedCreateNestedOneWithoutApplicationInput
     };
     export type StudentGraduationApplicationCreateOrConnectWithoutApplicationCheckResultInput = {
@@ -443632,6 +444411,8 @@ export namespace Prisma {
         status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
+        gpaScore?: StudentSubjectScoreUpdateManyWithoutGraduationGpaScoresNestedInput
+        supplementaryScore?: StudentSubjectScoreUpdateManyWithoutGraduationSupplementaryScoreNestedInput
         decision?: GraduationDecisionUpdateOneWithoutApplicationNestedInput
     };
     export type StudentGraduationApplicationUncheckedUpdateWithoutApplicationCheckResultInput = {
@@ -443646,6 +444427,8 @@ export namespace Prisma {
         sessionId?: StringFieldUpdateOperationsInput | string
         applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+        gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
+        supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
         decision?: GraduationDecisionUncheckedUpdateOneWithoutApplicationNestedInput
     };
     export type RankingConditionUpsertWithoutApplicationCheckResultInput = {
@@ -443700,6 +444483,8 @@ export namespace Prisma {
         student: StudentCreateNestedOneWithoutGraduationApplicationsInput
         session: GraduationSessionCreateNestedOneWithoutApplicationsInput
         applicationCheckResult?: ApplicationCheckResultCreateNestedManyWithoutStudentGraduationApplicationInput
+        gpaScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationGpaScoresInput
+        supplementaryScore?: StudentSubjectScoreCreateNestedManyWithoutGraduationSupplementaryScoreInput
     };
     export type StudentGraduationApplicationUncheckedCreateWithoutDecisionInput = {
         id?: string
@@ -443714,6 +444499,8 @@ export namespace Prisma {
         applicationDate?: Date | string
         status?: $Enums.ApplicationStatus
         applicationCheckResult?: ApplicationCheckResultUncheckedCreateNestedManyWithoutStudentGraduationApplicationInput
+        gpaScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationGpaScoresInput
+        supplementaryScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutGraduationSupplementaryScoreInput
     };
     export type StudentGraduationApplicationCreateOrConnectWithoutDecisionInput = {
         where: StudentGraduationApplicationWhereUniqueInput
@@ -444089,6 +444876,8 @@ export namespace Prisma {
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
         applicationCheckResult?: ApplicationCheckResultUpdateManyWithoutStudentGraduationApplicationNestedInput
+        gpaScore?: StudentSubjectScoreUpdateManyWithoutGraduationGpaScoresNestedInput
+        supplementaryScore?: StudentSubjectScoreUpdateManyWithoutGraduationSupplementaryScoreNestedInput
     };
     export type StudentGraduationApplicationUncheckedUpdateWithoutDecisionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -444103,6 +444892,8 @@ export namespace Prisma {
         applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
+        gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
+        supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
     };
     export type StudentUpsertWithoutGraduationDecisionInput = {
         update: XOR<StudentUpdateWithoutGraduationDecisionInput, StudentUncheckedUpdateWithoutGraduationDecisionInput>
@@ -450013,6 +450804,46 @@ export namespace Prisma {
         where: SubjectClassWhereUniqueInput
         create: XOR<SubjectClassCreateWithoutSurveyObjectTypesInput, SubjectClassUncheckedCreateWithoutSurveyObjectTypesInput>
     };
+    export type SurveySessionCreateWithoutSurveyObjectTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        additionalSuggestion?: string | null
+        startedAt?: Date | string
+        completedAt?: Date | string | null
+        isCompleted?: boolean
+        survey: SurveyCreateNestedOneWithoutSurveySessionsInput
+        student?: StudentCreateNestedOneWithoutSurveySessionsInput
+        responses?: SurveyResponseCreateNestedManyWithoutSurveySessionInput
+    };
+    export type SurveySessionUncheckedCreateWithoutSurveyObjectTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        surveyId: string
+        additionalSuggestion?: string | null
+        studentId?: string | null
+        startedAt?: Date | string
+        completedAt?: Date | string | null
+        isCompleted?: boolean
+        responses?: SurveyResponseUncheckedCreateNestedManyWithoutSurveySessionInput
+    };
+    export type SurveySessionCreateOrConnectWithoutSurveyObjectTypeInput = {
+        where: SurveySessionWhereUniqueInput
+        create: XOR<SurveySessionCreateWithoutSurveyObjectTypeInput, SurveySessionUncheckedCreateWithoutSurveyObjectTypeInput>
+    };
+    export type SurveySessionCreateManySurveyObjectTypeInputEnvelope = {
+        data: SurveySessionCreateManySurveyObjectTypeInput | SurveySessionCreateManySurveyObjectTypeInput[]
+        skipDuplicates?: boolean
+    };
     export type SurveyUpsertWithWhereUniqueWithoutSurveyObjectTypeInput = {
         where: SurveyWhereUniqueInput
         update: XOR<SurveyUpdateWithoutSurveyObjectTypeInput, SurveyUncheckedUpdateWithoutSurveyObjectTypeInput>
@@ -450129,6 +450960,19 @@ export namespace Prisma {
     export type SubjectClassUpdateManyWithWhereWithoutSurveyObjectTypesInput = {
         where: SubjectClassScalarWhereInput
         data: XOR<SubjectClassUpdateManyMutationInput, SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesInput>
+    };
+    export type SurveySessionUpsertWithWhereUniqueWithoutSurveyObjectTypeInput = {
+        where: SurveySessionWhereUniqueInput
+        update: XOR<SurveySessionUpdateWithoutSurveyObjectTypeInput, SurveySessionUncheckedUpdateWithoutSurveyObjectTypeInput>
+        create: XOR<SurveySessionCreateWithoutSurveyObjectTypeInput, SurveySessionUncheckedCreateWithoutSurveyObjectTypeInput>
+    };
+    export type SurveySessionUpdateWithWhereUniqueWithoutSurveyObjectTypeInput = {
+        where: SurveySessionWhereUniqueInput
+        data: XOR<SurveySessionUpdateWithoutSurveyObjectTypeInput, SurveySessionUncheckedUpdateWithoutSurveyObjectTypeInput>
+    };
+    export type SurveySessionUpdateManyWithWhereWithoutSurveyObjectTypeInput = {
+        where: SurveySessionScalarWhereInput
+        data: XOR<SurveySessionUpdateManyMutationInput, SurveySessionUncheckedUpdateManyWithoutSurveyObjectTypeInput>
     };
     export type SurveyCreateWithoutSurveyTopicInput = {
         id?: string
@@ -450384,6 +451228,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeUncheckedCreateWithoutSurveyInput = {
         id?: string
@@ -450401,6 +451246,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutSurveyObjectTypeInput
     };
     export type SurveyObjectTypeCreateOrConnectWithoutSurveyInput = {
         where: SurveyObjectTypeWhereUniqueInput
@@ -450569,6 +451415,7 @@ export namespace Prisma {
         completedAt?: Date | string | null
         isCompleted?: boolean
         student?: StudentCreateNestedOneWithoutSurveySessionsInput
+        surveyObjectType?: SurveyObjectTypeCreateNestedOneWithoutSurveySessionsInput
         responses?: SurveyResponseCreateNestedManyWithoutSurveySessionInput
     };
     export type SurveySessionUncheckedCreateWithoutSurveyInput = {
@@ -450584,6 +451431,7 @@ export namespace Prisma {
         startedAt?: Date | string
         completedAt?: Date | string | null
         isCompleted?: boolean
+        surveyObjectTypeId?: string | null
         responses?: SurveyResponseUncheckedCreateNestedManyWithoutSurveySessionInput
     };
     export type SurveySessionCreateOrConnectWithoutSurveyInput = {
@@ -451268,6 +452116,46 @@ export namespace Prisma {
         where: StudentWhereUniqueInput
         create: XOR<StudentCreateWithoutSurveySessionsInput, StudentUncheckedCreateWithoutSurveySessionsInput>
     };
+    export type SurveyObjectTypeCreateWithoutSurveySessionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type?: SurveyObjectTypeCreatetypeInput | $Enums.SurveyObject[]
+        survey?: SurveyCreateNestedManyWithoutSurveyObjectTypeInput
+        organizations?: DM_DonViCreateNestedManyWithoutSurveyObjectTypesInput
+        trainingFields?: TrainingFieldCreateNestedManyWithoutSurveyObjectTypesInput
+        trainingMajors?: TrainingMajorCreateNestedManyWithoutSurveyObjectTypesInput
+        trainingCourses?: TrainingCourseCreateNestedManyWithoutSurveyObjectTypesInput
+        fixedClasses?: FixedClassCreateNestedManyWithoutSurveyObjectTypesInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutSurveyObjectTypesInput
+    };
+    export type SurveyObjectTypeUncheckedCreateWithoutSurveySessionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type?: SurveyObjectTypeCreatetypeInput | $Enums.SurveyObject[]
+        survey?: SurveyUncheckedCreateNestedManyWithoutSurveyObjectTypeInput
+        organizations?: DM_DonViUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+        trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+        trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+        trainingCourses?: TrainingCourseUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+        fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSurveyObjectTypesInput
+    };
+    export type SurveyObjectTypeCreateOrConnectWithoutSurveySessionsInput = {
+        where: SurveyObjectTypeWhereUniqueInput
+        create: XOR<SurveyObjectTypeCreateWithoutSurveySessionsInput, SurveyObjectTypeUncheckedCreateWithoutSurveySessionsInput>
+    };
     export type SurveyResponseCreateWithoutSurveySessionInput = {
         id?: string
         code?: string | null
@@ -451468,6 +452356,51 @@ export namespace Prisma {
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
+    export type SurveyObjectTypeUpsertWithoutSurveySessionsInput = {
+        update: XOR<SurveyObjectTypeUpdateWithoutSurveySessionsInput, SurveyObjectTypeUncheckedUpdateWithoutSurveySessionsInput>
+        create: XOR<SurveyObjectTypeCreateWithoutSurveySessionsInput, SurveyObjectTypeUncheckedCreateWithoutSurveySessionsInput>
+        where?: SurveyObjectTypeWhereInput
+    };
+    export type SurveyObjectTypeUpdateToOneWithWhereWithoutSurveySessionsInput = {
+        where?: SurveyObjectTypeWhereInput
+        data: XOR<SurveyObjectTypeUpdateWithoutSurveySessionsInput, SurveyObjectTypeUncheckedUpdateWithoutSurveySessionsInput>
+    };
+    export type SurveyObjectTypeUpdateWithoutSurveySessionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: SurveyObjectTypeUpdatetypeInput | $Enums.SurveyObject[]
+        survey?: SurveyUpdateManyWithoutSurveyObjectTypeNestedInput
+        organizations?: DM_DonViUpdateManyWithoutSurveyObjectTypesNestedInput
+        trainingFields?: TrainingFieldUpdateManyWithoutSurveyObjectTypesNestedInput
+        trainingMajors?: TrainingMajorUpdateManyWithoutSurveyObjectTypesNestedInput
+        trainingCourses?: TrainingCourseUpdateManyWithoutSurveyObjectTypesNestedInput
+        fixedClasses?: FixedClassUpdateManyWithoutSurveyObjectTypesNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutSurveyObjectTypesNestedInput
+    };
+    export type SurveyObjectTypeUncheckedUpdateWithoutSurveySessionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: SurveyObjectTypeUpdatetypeInput | $Enums.SurveyObject[]
+        survey?: SurveyUncheckedUpdateManyWithoutSurveyObjectTypeNestedInput
+        organizations?: DM_DonViUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+        trainingFields?: TrainingFieldUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+        trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+        trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+        fixedClasses?: FixedClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+    };
     export type SurveyResponseUpsertWithWhereUniqueWithoutSurveySessionInput = {
         where: SurveyResponseWhereUniqueInput
         update: XOR<SurveyResponseUpdateWithoutSurveySessionInput, SurveyResponseUncheckedUpdateWithoutSurveySessionInput>
@@ -451495,6 +452428,7 @@ export namespace Prisma {
         isCompleted?: boolean
         survey: SurveyCreateNestedOneWithoutSurveySessionsInput
         student?: StudentCreateNestedOneWithoutSurveySessionsInput
+        surveyObjectType?: SurveyObjectTypeCreateNestedOneWithoutSurveySessionsInput
     };
     export type SurveySessionUncheckedCreateWithoutResponsesInput = {
         id?: string
@@ -451510,6 +452444,7 @@ export namespace Prisma {
         startedAt?: Date | string
         completedAt?: Date | string | null
         isCompleted?: boolean
+        surveyObjectTypeId?: string | null
     };
     export type SurveySessionCreateOrConnectWithoutResponsesInput = {
         where: SurveySessionWhereUniqueInput
@@ -451596,6 +452531,7 @@ export namespace Prisma {
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
         survey?: SurveyUpdateOneRequiredWithoutSurveySessionsNestedInput
         student?: StudentUpdateOneWithoutSurveySessionsNestedInput
+        surveyObjectType?: SurveyObjectTypeUpdateOneWithoutSurveySessionsNestedInput
     };
     export type SurveySessionUncheckedUpdateWithoutResponsesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -451611,6 +452547,7 @@ export namespace Prisma {
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
+        surveyObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SurveyQuestionUpsertWithoutSurveyResponsesInput = {
         update: XOR<SurveyQuestionUpdateWithoutSurveyResponsesInput, SurveyQuestionUncheckedUpdateWithoutSurveyResponsesInput>
@@ -458012,6 +458949,96 @@ export namespace Prisma {
         reviewedById?: string | null
         reviewNote?: string | null
     };
+    export type StudentGraduationApplicationUpdateWithoutGpaScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+        student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
+        session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
+        applicationCheckResult?: ApplicationCheckResultUpdateManyWithoutStudentGraduationApplicationNestedInput
+        supplementaryScore?: StudentSubjectScoreUpdateManyWithoutGraduationSupplementaryScoreNestedInput
+        decision?: GraduationDecisionUpdateOneWithoutApplicationNestedInput
+    };
+    export type StudentGraduationApplicationUncheckedUpdateWithoutGpaScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        sessionId?: StringFieldUpdateOperationsInput | string
+        applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+        applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
+        supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
+        decision?: GraduationDecisionUncheckedUpdateOneWithoutApplicationNestedInput
+    };
+    export type StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        sessionId?: StringFieldUpdateOperationsInput | string
+        applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+    };
+    export type StudentGraduationApplicationUpdateWithoutSupplementaryScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+        student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
+        session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
+        applicationCheckResult?: ApplicationCheckResultUpdateManyWithoutStudentGraduationApplicationNestedInput
+        gpaScore?: StudentSubjectScoreUpdateManyWithoutGraduationGpaScoresNestedInput
+        decision?: GraduationDecisionUpdateOneWithoutApplicationNestedInput
+    };
+    export type StudentGraduationApplicationUncheckedUpdateWithoutSupplementaryScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        sessionId?: StringFieldUpdateOperationsInput | string
+        applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+        applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
+        gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
+        decision?: GraduationDecisionUncheckedUpdateOneWithoutApplicationNestedInput
+    };
+    export type StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        sessionId?: StringFieldUpdateOperationsInput | string
+        applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+    };
     export type ArchivedCertificateOnStudentSubjectScoreUpdateWithoutStudentSubjectScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -460048,6 +461075,7 @@ export namespace Prisma {
         trainingMajors?: TrainingMajorUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateWithoutTrainingCoursesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -460065,6 +461093,7 @@ export namespace Prisma {
         trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -460485,6 +461514,7 @@ export namespace Prisma {
         trainingMajors?: TrainingMajorUpdateManyWithoutSurveyObjectTypesNestedInput
         trainingCourses?: TrainingCourseUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateWithoutFixedClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -460502,6 +461532,7 @@ export namespace Prisma {
         trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateManyWithoutFixedClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -462180,6 +463211,8 @@ export namespace Prisma {
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -462209,6 +463242,8 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -462721,6 +463756,8 @@ export namespace Prisma {
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -462750,6 +463787,8 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -463169,6 +464208,7 @@ export namespace Prisma {
         trainingMajors?: TrainingMajorUpdateManyWithoutSurveyObjectTypesNestedInput
         trainingCourses?: TrainingCourseUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateWithoutSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -463186,6 +464226,7 @@ export namespace Prisma {
         trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -465876,6 +466917,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateWithoutTrainingFieldsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -465893,6 +466935,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateManyWithoutTrainingFieldsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -466180,6 +467223,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateWithoutTrainingMajorsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -466197,6 +467241,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateManyWithoutTrainingMajorsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -466874,6 +467919,7 @@ export namespace Prisma {
         startedAt?: Date | string
         completedAt?: Date | string | null
         isCompleted?: boolean
+        surveyObjectTypeId?: string | null
     };
     export type StudentResearchRegistrationCreateManyStudentInput = {
         id?: string
@@ -467044,6 +468090,8 @@ export namespace Prisma {
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -467073,6 +468121,8 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -467529,6 +468579,8 @@ export namespace Prisma {
         status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
         session?: GraduationSessionUpdateOneRequiredWithoutApplicationsNestedInput
         applicationCheckResult?: ApplicationCheckResultUpdateManyWithoutStudentGraduationApplicationNestedInput
+        gpaScore?: StudentSubjectScoreUpdateManyWithoutGraduationGpaScoresNestedInput
+        supplementaryScore?: StudentSubjectScoreUpdateManyWithoutGraduationSupplementaryScoreNestedInput
         decision?: GraduationDecisionUpdateOneWithoutApplicationNestedInput
     };
     export type StudentGraduationApplicationUncheckedUpdateWithoutStudentInput = {
@@ -467543,6 +468595,8 @@ export namespace Prisma {
         applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
+        gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
+        supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
         decision?: GraduationDecisionUncheckedUpdateOneWithoutApplicationNestedInput
     };
     export type StudentGraduationApplicationUncheckedUpdateManyWithoutStudentInput = {
@@ -467570,6 +468624,7 @@ export namespace Prisma {
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
         survey?: SurveyUpdateOneRequiredWithoutSurveySessionsNestedInput
+        surveyObjectType?: SurveyObjectTypeUpdateOneWithoutSurveySessionsNestedInput
         responses?: SurveyResponseUpdateManyWithoutSurveySessionNestedInput
     };
     export type SurveySessionUncheckedUpdateWithoutStudentInput = {
@@ -467585,6 +468640,7 @@ export namespace Prisma {
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
+        surveyObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         responses?: SurveyResponseUncheckedUpdateManyWithoutSurveySessionNestedInput
     };
     export type SurveySessionUncheckedUpdateManyWithoutStudentInput = {
@@ -467600,6 +468656,7 @@ export namespace Prisma {
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
+        surveyObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type NotificationUpdateWithoutTargetStudentsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -473892,6 +474949,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateWithoutOrganizationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -473909,6 +474967,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -492339,6 +493398,8 @@ export namespace Prisma {
         status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
         student?: StudentUpdateOneRequiredWithoutGraduationApplicationsNestedInput
         applicationCheckResult?: ApplicationCheckResultUpdateManyWithoutStudentGraduationApplicationNestedInput
+        gpaScore?: StudentSubjectScoreUpdateManyWithoutGraduationGpaScoresNestedInput
+        supplementaryScore?: StudentSubjectScoreUpdateManyWithoutGraduationSupplementaryScoreNestedInput
         decision?: GraduationDecisionUpdateOneWithoutApplicationNestedInput
     };
     export type StudentGraduationApplicationUncheckedUpdateWithoutSessionInput = {
@@ -492353,6 +493414,8 @@ export namespace Prisma {
         applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
         applicationCheckResult?: ApplicationCheckResultUncheckedUpdateManyWithoutStudentGraduationApplicationNestedInput
+        gpaScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresNestedInput
+        supplementaryScore?: StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreNestedInput
         decision?: GraduationDecisionUncheckedUpdateOneWithoutApplicationNestedInput
     };
     export type StudentGraduationApplicationUncheckedUpdateManyWithoutSessionInput = {
@@ -492414,6 +493477,184 @@ export namespace Prisma {
         rankingConditionId?: StringFieldUpdateOperationsInput | string
         passed?: BoolFieldUpdateOperationsInput | boolean
         actualValue?: NullableFloatFieldUpdateOperationsInput | number | null
+    };
+    export type StudentSubjectScoreUpdateWithoutGraduationGpaScoresInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
+        subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
+        student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+    };
+    export type StudentSubjectScoreUncheckedUpdateWithoutGraduationGpaScoresInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+    };
+    export type StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type StudentSubjectScoreUpdateWithoutGraduationSupplementaryScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
+        subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
+        student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+    };
+    export type StudentSubjectScoreUncheckedUpdateWithoutGraduationSupplementaryScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+    };
+    export type StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type RankingConditionCreateManyRankingInput = {
         id?: string
@@ -493971,6 +495212,21 @@ export namespace Prisma {
         lecturerId?: StringFieldUpdateOperationsInput | string
         role?: EnumEvaluationSecretaryMemberRoleFieldUpdateOperationsInput | $Enums.EvaluationSecretaryMemberRole
     };
+    export type SurveySessionCreateManySurveyObjectTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        surveyId: string
+        additionalSuggestion?: string | null
+        studentId?: string | null
+        startedAt?: Date | string
+        completedAt?: Date | string | null
+        isCompleted?: boolean
+    };
     export type SurveyUpdateWithoutSurveyObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -494512,6 +495768,53 @@ export namespace Prisma {
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
     };
+    export type SurveySessionUpdateWithoutSurveyObjectTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
+        startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isCompleted?: BoolFieldUpdateOperationsInput | boolean
+        survey?: SurveyUpdateOneRequiredWithoutSurveySessionsNestedInput
+        student?: StudentUpdateOneWithoutSurveySessionsNestedInput
+        responses?: SurveyResponseUpdateManyWithoutSurveySessionNestedInput
+    };
+    export type SurveySessionUncheckedUpdateWithoutSurveyObjectTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        surveyId?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
+        studentId?: NullableStringFieldUpdateOperationsInput | string | null
+        startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isCompleted?: BoolFieldUpdateOperationsInput | boolean
+        responses?: SurveyResponseUncheckedUpdateManyWithoutSurveySessionNestedInput
+    };
+    export type SurveySessionUncheckedUpdateManyWithoutSurveyObjectTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        surveyId?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: NullableStringFieldUpdateOperationsInput | string | null
+        studentId?: NullableStringFieldUpdateOperationsInput | string | null
+        startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isCompleted?: BoolFieldUpdateOperationsInput | boolean
+    };
     export type SurveyCreateManySurveyTopicInput = {
         id?: string
         code?: string | null
@@ -494712,6 +496015,7 @@ export namespace Prisma {
         startedAt?: Date | string
         completedAt?: Date | string | null
         isCompleted?: boolean
+        surveyObjectTypeId?: string | null
     };
     export type SurveyObjectTypeUpdateWithoutSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -494729,6 +496033,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateWithoutSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -494746,6 +496051,7 @@ export namespace Prisma {
         trainingCourses?: TrainingCourseUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         fixedClasses?: FixedClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSurveyObjectTypesNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutSurveyObjectTypeNestedInput
     };
     export type SurveyObjectTypeUncheckedUpdateManyWithoutSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -494844,6 +496150,7 @@ export namespace Prisma {
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
         student?: StudentUpdateOneWithoutSurveySessionsNestedInput
+        surveyObjectType?: SurveyObjectTypeUpdateOneWithoutSurveySessionsNestedInput
         responses?: SurveyResponseUpdateManyWithoutSurveySessionNestedInput
     };
     export type SurveySessionUncheckedUpdateWithoutSurveyInput = {
@@ -494859,6 +496166,7 @@ export namespace Prisma {
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
+        surveyObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
         responses?: SurveyResponseUncheckedUpdateManyWithoutSurveySessionNestedInput
     };
     export type SurveySessionUncheckedUpdateManyWithoutSurveyInput = {
@@ -494874,6 +496182,7 @@ export namespace Prisma {
         startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isCompleted?: BoolFieldUpdateOperationsInput | boolean
+        surveyObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type SurveyResponseCreateManySurveyQuestionInput = {
         id?: string

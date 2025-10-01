@@ -24,6 +24,8 @@ const relationSchema = z.object({
     student: z.record(z.unknown()),
     session: z.record(z.unknown()),
     applicationCheckResult: z.array(z.unknown()).optional(),
+    gpaScore: z.array(z.unknown()).optional(),
+    supplementaryScore: z.array(z.unknown()).optional(),
     decision: z.record(z.unknown()).optional(),
 }
 );
