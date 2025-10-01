@@ -15,7 +15,6 @@ import {
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
     useFindUniqueSubjectClass,
-    useUpdateStudentSubjectScore,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { calcFinalScore, getScoreStatistics } from '@workspace/libs/utils'
@@ -169,6 +168,8 @@ type FormType = {
     enteredExamScore?: boolean
 }
 
+type PutStudentSubjectScore = StudentSubjectScore
+
 export default function SubjectClassScore() {
     const { can } = useAbility()
     const canReadAll = can(
@@ -176,6 +177,7 @@ export default function SubjectClassScore() {
         'XEM_TAT_CA'
     )
     const [form] = Form.useForm<FormType>()
+    const [formTable] = Form.useForm<PutStudentSubjectScore>()
     const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId || ''
     const router = useRouter()
@@ -244,8 +246,6 @@ export default function SubjectClassScore() {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-
-    const { mutateAsync: updateStudentSubjectScore } = useUpdateStudentSubjectScore()
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -561,6 +561,9 @@ export default function SubjectClassScore() {
     const [scoreHoanThi, setScoreHoanThi] = useState<{ id: string; value: boolean }[]>([])
     const [scoreDinhChi, setscoreDinhChi] = useState<{ id: string; value: boolean }[]>([])
     const [scoreLyDo, setScoreLyDo] = useState<{ id: string; value: string }[]>([])
+    const [lyDoDinhChi, setLyDoDinhChi] = useState<{ id: string; value: string }[]>([])
+    const [lyDoHoanThi, setLyDoHoanThi] = useState<{ id: string; value: string }[]>([])
+    const [lyDoCamThi, setLyDoCamThi] = useState<{ id: string; value: string }[]>([])
     const statistics = getScoreStatistics(dataTable)
 
     const renderFinalScore = (record: any) => {
@@ -630,6 +633,9 @@ export default function SubjectClassScore() {
                     const hoanThiScore = scoreHoanThi.find((s) => s.id === record.id)
                     const dinhChiScore = scoreDinhChi.find((s) => s.id === record.id)
                     const lyDoScore = scoreLyDo.find((s) => s.id === record.id)
+                    const LyDoHoanThi = lyDoHoanThi.find((s) => s.id === record.id)
+                    const LyDoCamThi = lyDoCamThi.find((s) => s.id === record.id)
+                    const LyDoDinhChi = lyDoDinhChi.find((s) => s.id === record.id)
                     const finalScore = Number(renderFinalScore(record).finalScore)
 
                     const parseScoreValue = (value: number | string) => {
@@ -663,6 +669,8 @@ export default function SubjectClassScore() {
                         suspended: dinhChiScore ? dinhChiScore.value : false,
                         description: lyDoScore ? lyDoScore.value : '',
                         finalScore: finalScore ? finalScore : null,
+                        examBannedReason: LyDoCamThi ? LyDoCamThi.value : '',
+                        suspendedReason: LyDoDinhChi ? LyDoDinhChi.value : '',
                     }
 
                     return {
@@ -750,6 +758,18 @@ export default function SubjectClassScore() {
                 id: item.id,
                 value: item.description || '',
             }))
+            const newLyDoHoanThi = dataTable.map((item) => ({
+                id: item.id,
+                value: item.examBannedReason || '',
+            }))
+            const newLyDoDinhChi = dataTable.map((item) => ({
+                id: item.id,
+                value: item.suspendedReason || '',
+            }))
+            const newLyDoCamThi = dataTable.map((item) => ({
+                id: item.id,
+                value: item.examBannedReason || '',
+            }))
             setScoreCC(newScoreCC)
             setScoreTX(newScoreTX)
             setScoreThi(newScoreThi)
@@ -757,6 +777,9 @@ export default function SubjectClassScore() {
             setScoreHoanThi(newScoreHoanThi)
             setscoreDinhChi(newscoreDinhChi)
             setScoreLyDo(newScoreLyDo)
+            setLyDoHoanThi(newLyDoHoanThi)
+            setLyDoDinhChi(newLyDoDinhChi)
+            setLyDoCamThi(newLyDoCamThi)
         }
     }, [dataTable, selectedFixedClass])
 
@@ -863,6 +886,7 @@ export default function SubjectClassScore() {
     useEffect(() => {
         form.setFieldsValue({ ...dataDetailSubjectClass })
     }, [dataDetailSubjectClass])
+
     useEffect(() => {
         if (!hasUnsavedChanges) return
 
@@ -1109,7 +1133,7 @@ export default function SubjectClassScore() {
                                 <Col span={24} className="">
                                     <Flex align="center" justify="space-between">
                                         <Form
-                                            className="flex gap-0 lg:gap-3"
+                                            className="flex gap-0 lg:gap-[2px] 2xl:gap-3"
                                             form={form}
                                             layout="horizontal"
                                         >
@@ -1551,8 +1575,43 @@ export default function SubjectClassScore() {
                                 // #region Cấm thi/Hoãn thi/Đình chỉ
                                 {
                                     title: 'Lý do cấm thi',
-                                    dataIndex: '',
+                                    dataIndex: 'examBannedReason',
                                     width: 150,
+                                    render: (value, record) => {
+                                        return (
+                                            <Input
+                                                placeholder="Nhập lý do cấm thi"
+                                                style={{
+                                                    width: '100%',
+                                                }}
+                                                defaultValue={value || ''}
+                                                onChange={(e) => {
+                                                    // Handle input change for bonus score
+                                                    const newNote = e.target.value
+                                                    setLyDoCamThi((prevScores) => {
+                                                        const index = prevScores.findIndex(
+                                                            (item) => item.id === record.id
+                                                        )
+                                                        if (index > -1) {
+                                                            const updated = [...prevScores]
+                                                            updated[index] = {
+                                                                id: record.id,
+                                                                value: newNote,
+                                                            }
+                                                            return updated
+                                                        }
+                                                        return [
+                                                            ...prevScores,
+                                                            {
+                                                                id: record.id,
+                                                                value: newNote,
+                                                            },
+                                                        ]
+                                                    })
+                                                }}
+                                            />
+                                        )
+                                    },
                                 },
                                 {
                                     title: 'Cấm thi',
@@ -1593,8 +1652,43 @@ export default function SubjectClassScore() {
                                 },
                                 {
                                     title: 'Lý do hoãn thi',
-                                    dataIndex: '',
-                                    width: 150,
+                                    dataIndex: 'examBannedReason',
+                                    width: 200,
+                                    render: (value, record) => {
+                                        return (
+                                            <Input
+                                                placeholder="Nhập lý do hoãn thi"
+                                                style={{
+                                                    width: '100%',
+                                                }}
+                                                defaultValue={value || ''}
+                                                onChange={(e) => {
+                                                    // Handle input change for bonus score
+                                                    const newNote = e.target.value
+                                                    setLyDoHoanThi((prevScores) => {
+                                                        const index = prevScores.findIndex(
+                                                            (item) => item.id === record.id
+                                                        )
+                                                        if (index > -1) {
+                                                            const updated = [...prevScores]
+                                                            updated[index] = {
+                                                                id: record.id,
+                                                                value: newNote,
+                                                            }
+                                                            return updated
+                                                        }
+                                                        return [
+                                                            ...prevScores,
+                                                            {
+                                                                id: record.id,
+                                                                value: newNote,
+                                                            },
+                                                        ]
+                                                    })
+                                                }}
+                                            />
+                                        )
+                                    },
                                 },
                                 {
                                     title: 'Hoãn thi',
@@ -1635,8 +1729,43 @@ export default function SubjectClassScore() {
                                 },
                                 {
                                     title: 'Lý do đình chỉ',
-                                    dataIndex: '',
-                                    width: 150,
+                                    dataIndex: 'suspendedReason',
+                                    width: 200,
+                                    render: (value, record) => {
+                                        return (
+                                            <Input
+                                                placeholder="Nhập lý do đình chỉ"
+                                                style={{
+                                                    width: '100%',
+                                                }}
+                                                defaultValue={value || ''}
+                                                onChange={(e) => {
+                                                    // Handle input change for bonus score
+                                                    const newNote = e.target.value
+                                                    setLyDoDinhChi((prevScores) => {
+                                                        const index = prevScores.findIndex(
+                                                            (item) => item.id === record.id
+                                                        )
+                                                        if (index > -1) {
+                                                            const updated = [...prevScores]
+                                                            updated[index] = {
+                                                                id: record.id,
+                                                                value: newNote,
+                                                            }
+                                                            return updated
+                                                        }
+                                                        return [
+                                                            ...prevScores,
+                                                            {
+                                                                id: record.id,
+                                                                value: newNote,
+                                                            },
+                                                        ]
+                                                    })
+                                                }}
+                                            />
+                                        )
+                                    },
                                 },
                                 {
                                     title: 'Đình chỉ',
