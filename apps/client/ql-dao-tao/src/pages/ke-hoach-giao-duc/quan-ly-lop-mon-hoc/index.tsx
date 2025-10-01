@@ -13,6 +13,7 @@ import { emptyObjectIf } from '@workspace/constant'
 import type {
     SubjectClass,
     SubjectClassSchedule,
+    SubjectClassTime,
     SubjectVersion,
     TrainingCourse,
     TrainingMajor,
@@ -230,6 +231,7 @@ export default function TeachingAssignment() {
                 },
             },
             subjectClassStudent: true,
+            subjectClassTimes: true,
         },
         orderBy: [
             ...emptyObjectIf(
@@ -847,6 +849,22 @@ export default function TeachingAssignment() {
                                 type: 'tree_select',
                                 options: treeData,
                                 render: (value) => value?.managementOrganization?.sTen || '',
+                            },
+                            {
+                                title: 'Thời khoá biểu',
+                                width: 300,
+                                align: 'center',
+                                dataIndex: 'subjectClassTimes',
+                                render: (subjectClassTimes: SubjectClassTime[]) => {
+                                    return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
+                                        return (
+                                            <p>
+                                                {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
+                                                {tkb.startPeriod} - {tkb.endPeriod}
+                                            </p>
+                                        )
+                                    })
+                                },
                             },
                             // {
                             //     title: 'Điểm bằng nhau',
