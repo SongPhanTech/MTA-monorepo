@@ -254,11 +254,12 @@ const PutClassRegisterSession = () => {
                         type="number"
                         className="w-full"
                         min={0}
-                        defaultValue={350000}
                         placeholder="Nhập học phí (theo tín chỉ)"
                         suffix="VNĐ"
                         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        parser={(value) => value?.replace(/(,*)/g, '') as unknown as number as any}
+                        parser={(value) =>
+                            (value ? Number(value?.replace(/(,*)/g, '')) : 0) as unknown as 0
+                        }
                     />
                 </FormItem>
             </Col>
