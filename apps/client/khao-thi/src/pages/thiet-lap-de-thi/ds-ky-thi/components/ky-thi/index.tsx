@@ -13,6 +13,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus, Pencil } from 'lucide-react'
@@ -29,12 +30,12 @@ function Exam() {
         getExamStatusLabel,
         getExamStatusColor,
     } = useExamStatusOptions()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [filters, setFilters] = useState<FilterProps>({
         title: '',
         startTime: undefined,
         endTime: undefined,
         duration: undefined,
-        passScore: undefined,
         examStatus: undefined,
         questionBankId: undefined,
     })
@@ -77,6 +78,11 @@ function Exam() {
                           : filters.questionBankId,
                   }
                 : {}),
+            subjectClass: {
+                some: {
+                    trainingObjectTypeId,
+                },
+            },
         }),
         [
             filters.title,
@@ -84,6 +90,7 @@ function Exam() {
             filters.endTime,
             filters.examStatus,
             filters.questionBankId,
+            trainingObjectTypeId,
         ]
     )
 
@@ -91,6 +98,12 @@ function Exam() {
         where,
         include: {
             questionBank: true,
+            subjectClass: {
+                select: {},
+                where: {
+                    trainingObjectTypeId,
+                },
+            },
         },
         orderBy: [
             ...emptyObjectIf(
@@ -100,14 +113,6 @@ function Exam() {
                     },
                 ],
                 !!filters.duration
-            ),
-            ...emptyObjectIf(
-                [
-                    {
-                        passScore: filters.passScore,
-                    },
-                ],
-                !!filters.passScore
             ),
             { duration: 'desc' },
         ],
@@ -246,13 +251,6 @@ function Exam() {
                                 render: (value) => {
                                     return <span>{value ? `${value} phút` : ''}</span>
                                 },
-                            },
-                            {
-                                title: 'Điểm đạt',
-                                dataIndex: 'passScore',
-                                align: 'center',
-                                width: 100,
-                                type: 'order',
                             },
                             {
                                 title: 'Xáo trộn câu hỏi',

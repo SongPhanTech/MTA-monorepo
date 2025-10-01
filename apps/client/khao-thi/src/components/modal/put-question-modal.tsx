@@ -54,7 +54,6 @@ const PutQuestionModal = () => {
                 isAutoGraded: output.isAutoGraded,
                 questionBankId: input?.questionBankId,
                 knowledgeBlockId: output.knowledgeBlockId,
-                difficultyId: output.difficultyId,
             }
             if (input?.id) {
                 await updateQuestion({
@@ -156,18 +155,6 @@ const PutQuestionModal = () => {
                                         maxTagCount={'responsive'}
                                         placeholder="Chọn chương mục"
                                         options={knowledgeBlockData?.map(({ id, name }) => ({
-                                            value: id,
-                                            label: name,
-                                        }))}
-                                    />
-                                </FormItem>
-                            </Col>
-                            <Col span={12}>
-                                <FormItem form={form} name="difficultyId" label="Độ khó">
-                                    <Select
-                                        maxTagCount={'responsive'}
-                                        placeholder="Chọn độ khó"
-                                        options={difficultyData?.map(({ id, name }) => ({
                                             value: id,
                                             label: name,
                                         }))}

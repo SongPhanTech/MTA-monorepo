@@ -102,7 +102,6 @@ const PutExamBankQuestion = () => {
         questionType: undefined,
         content: '',
         point: undefined,
-        difficultyId: undefined,
         knowledgeBlockId: undefined,
     })
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -123,11 +122,6 @@ const PutExamBankQuestion = () => {
                       },
                   }
                 : {}),
-            ...(filters.difficultyId
-                ? Array.isArray(filters.difficultyId)
-                    ? { difficultyId: { in: filters.difficultyId } }
-                    : { difficultyId: filters.difficultyId }
-                : {}),
             ...(filters.knowledgeBlockId
                 ? Array.isArray(filters.knowledgeBlockId)
                     ? { knowledgeBlockId: { in: filters.knowledgeBlockId } }
@@ -145,7 +139,6 @@ const PutExamBankQuestion = () => {
             input?.questionBankId,
             filters.questionType,
             filters.content,
-            filters.difficultyId,
             filters.knowledgeBlockId,
             input?.examBankId,
         ]
@@ -263,29 +256,6 @@ const PutExamBankQuestion = () => {
                                 })),
                                 render: (__, record) => {
                                     return record?.knowledgeBlock?.name || 'Chưa xác định'
-                                },
-                            },
-                            {
-                                title: 'Độ khó',
-                                dataIndex: 'difficultyId',
-                                width: 100,
-                                align: 'center',
-                                type: 'select',
-                                options: difficultyData?.map(({ id, name, level }) => ({
-                                    value: id,
-                                    label: `${name} (level ${level})`,
-                                })),
-                                render: (__, record) => {
-                                    if (!record?.difficulty) {
-                                        return 'Chưa xác định'
-                                    }
-                                    if (!record.difficulty.name) {
-                                        return `Level ${record.difficulty.level || '-'}`
-                                    }
-                                    if (!record.difficulty.level) {
-                                        return record.difficulty.name
-                                    }
-                                    return `${record.difficulty.name} (level ${record.difficulty.level})`
                                 },
                             },
                             {

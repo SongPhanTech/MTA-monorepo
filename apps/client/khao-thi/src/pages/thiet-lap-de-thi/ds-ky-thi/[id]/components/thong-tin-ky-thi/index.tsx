@@ -98,7 +98,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
         } else {
             form.setFieldsValue({
                 status: ExamStatus.DRAFT,
-                passScore: 5,
                 shuffleQuestions: true,
                 shuffleAnswers: true,
                 showResult: false,
@@ -124,7 +123,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 startTime: output.startTime,
                 endTime: output.endTime,
                 duration: output.duration,
-                passScore: output.passScore,
                 shuffleQuestions: output.shuffleQuestions,
                 shuffleAnswers: output.shuffleAnswers,
                 showResult: output.showResult,
@@ -330,19 +328,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
                                 if (!startTime) return false
                                 return current && current < dayjs(startTime).startOf('day')
                             }}
-                            disabled={!isDraft}
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem form={form} name="passScore" label="Điểm đạt" required>
-                        <InputNumber
-                            min={0}
-                            type="number"
-                            className="w-full"
-                            step={0.1}
-                            defaultValue={5}
-                            placeholder="Nhập điểm đạt"
                             disabled={!isDraft}
                         />
                     </FormItem>

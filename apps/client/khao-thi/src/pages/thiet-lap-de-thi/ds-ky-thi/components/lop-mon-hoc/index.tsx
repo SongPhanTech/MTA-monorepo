@@ -6,6 +6,7 @@ import { useExamTypeOptions } from '@hooks/examType'
 import { useCountSubjectVersion, useFindManySubjectVersion } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Input, Row, Tag } from 'antd'
 import { BookOpenCheck, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -20,7 +21,7 @@ function SubjectVersion() {
     const { options: examTypeOption, getExamTypeLabel } = useExamTypeOptions()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [uiSelectedKeys, setUiSelectedKeys] = useState<React.Key[]>([])
-
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         code: '',
@@ -127,6 +128,7 @@ function SubjectVersion() {
                     : undefined,
                 where: {
                     cancelled: false,
+                    trainingObjectTypeId,
                     ...(selectedSemesterId && {
                         semesterId: selectedSemesterId,
                     }),
