@@ -213,7 +213,7 @@ const DanhSachMonDangKy = ({
                         },
                         {
                             title: 'Thời khoá biểu',
-                            width: 300,
+                            width: 150,
                             align: 'center',
                             render: (_, record) => {
                                 return record.subjectClassTimes?.map?.((tkb) => {
@@ -395,7 +395,7 @@ const DanhSachMonDangKy = ({
                         },
                         {
                             title: 'Thời khoá biểu',
-                            width: 300,
+                            width: 150,
                             align: 'center',
                             render: (_, record) => {
                                 return record.subjectClassTimes?.map?.(

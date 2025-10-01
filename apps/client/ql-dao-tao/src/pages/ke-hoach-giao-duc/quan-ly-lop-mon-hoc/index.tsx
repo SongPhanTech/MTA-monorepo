@@ -651,6 +651,22 @@ export default function TeachingAssignment() {
                                 render: (value) => (value?.length ? value?.length : ''),
                             },
                             {
+                                title: 'Thời khoá biểu',
+                                width: 150,
+                                align: 'center',
+                                dataIndex: 'subjectClassTimes',
+                                render: (subjectClassTimes: SubjectClassTime[]) => {
+                                    return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
+                                        return (
+                                            <p>
+                                                {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
+                                                {tkb.startPeriod} - {tkb.endPeriod}
+                                            </p>
+                                        )
+                                    })
+                                },
+                            },
+                            {
                                 title: 'Giảng viên 1',
                                 width: 300,
                                 align: 'center',
@@ -850,22 +866,7 @@ export default function TeachingAssignment() {
                                 options: treeData,
                                 render: (value) => value?.managementOrganization?.sTen || '',
                             },
-                            {
-                                title: 'Thời khoá biểu',
-                                width: 300,
-                                align: 'center',
-                                dataIndex: 'subjectClassTimes',
-                                render: (subjectClassTimes: SubjectClassTime[]) => {
-                                    return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
-                                        return (
-                                            <p>
-                                                {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
-                                                {tkb.startPeriod} - {tkb.endPeriod}
-                                            </p>
-                                        )
-                                    })
-                                },
-                            },
+
                             // {
                             //     title: 'Điểm bằng nhau',
                             //     dataIndex: 'subject',
