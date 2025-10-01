@@ -2,19 +2,21 @@ import ImportScoreModal from '@components/commons/print/nhap-diem-tu-file'
 import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
-import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
+// import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { formatDate } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import type { ArchivedAward, StudentSubjectScore } from '@workspace/db'
 import {
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
-    useUpdateStudentSubjectScore,
+    useFindUniqueSubjectClass,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { calcFinalScore, getScoreStatistics } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
@@ -31,6 +33,7 @@ import {
     message,
     Popover,
     Row,
+    Skeleton,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -74,12 +77,14 @@ interface LopMonHocItemProps {
     }>
     onChangeSelected?: (selected: string) => void
     selectedItem?: string
+    isFetching: boolean
 }
 
 const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
     dataTable,
     onChangeSelected,
     selectedItem,
+    isFetching,
 }) => {
     const data: Item[] = dataTable.map((item) => ({
         code: item.code === null ? undefined : item.code,
@@ -129,7 +134,7 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
             <h2 className="text-lg font-semibold px-[6]" style={{ marginBottom: '12px' }}>
                 Danh sách lớp
             </h2>
-            <FlatList data={data} renderItem={renderItem} />
+            {isFetching ? <Skeleton /> : <FlatList data={data} renderItem={renderItem} />}
         </div>
     )
 }
@@ -154,13 +159,25 @@ type FilterTable = FilterProps & {
     examScore?: 'asc' | 'desc'
 }
 
+type FormType = {
+    isLockScore?: boolean
+    isLockExamScore?: boolean
+    scoreSubmitted?: boolean
+    scoreChecked?: boolean
+    enteredScore?: boolean
+    enteredExamScore?: boolean
+}
+
+type PutStudentSubjectScore = StudentSubjectScore
+
 export default function SubjectClassScore() {
     const { can } = useAbility()
     const canReadAll = can(
         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
         'XEM_TAT_CA'
     )
-
+    const [form] = Form.useForm<FormType>()
+    const [formTable] = Form.useForm<PutStudentSubjectScore>()
     const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId || ''
     const router = useRouter()
@@ -230,8 +247,6 @@ export default function SubjectClassScore() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: updateStudentSubjectScore } = useUpdateStudentSubjectScore()
-
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
@@ -242,108 +257,116 @@ export default function SubjectClassScore() {
 
     //#region Mới
     /* Mới */
-    const { data: subjectClassData = [] } = useFindManySubjectClass({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
+    const { data: subjectClassData = [], isFetching } = useFindManySubjectClass(
+        {
+            where: {
+                ...(filters.searchText && filters.searchText !== ''
+                    ? {
+                          OR: [
+                              {
+                                  name: {
+                                      contains: filters.searchText,
+                                      mode: 'insensitive',
+                                  },
                               },
-                          },
-                          {
-                              code: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
+                              {
+                                  code: {
+                                      contains: filters.searchText,
+                                      mode: 'insensitive',
+                                  },
                               },
+                          ],
+                      }
+                    : {}),
+                ...(selectedSemesterId ? { semesterId: selectedSemesterId } : {}),
+                ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
+                trainingObjectTypeId,
+                ...(filters.LectureIds.length > 0
+                    ? {
+                          OR: filters.LectureIds.map((id) => ({
+                              mainLecturer: { id },
+                          })),
+                      }
+                    : {}),
+                ...(filters.BoMonId
+                    ? {
+                          subject: {
+                              managementOrganizationId: filters.BoMonId,
                           },
-                      ],
-                  }
-                : {}),
-            ...(selectedSemesterId ? { semesterId: selectedSemesterId } : {}),
-            ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
-            trainingObjectTypeId,
-            ...(filters.LectureIds.length > 0
-                ? {
-                      OR: filters.LectureIds.map((id) => ({
-                          mainLecturer: { id },
-                      })),
-                  }
-                : {}),
-            ...(filters.BoMonId
-                ? {
-                      subject: {
-                          managementOrganizationId: filters.BoMonId,
-                      },
-                  }
-                : {}),
-            ...(filters.examDateRange
-                ? {
-                      examDate: {
-                          gte: filters.examDateRange[0],
-                          lte: filters.examDateRange[1],
-                      },
-                  }
-                : {}),
-            ...(!canReadAll
-                ? {
-                      mainLecturer: {
-                          userProfileId: profileId,
-                      },
-                  } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
-                : {}),
-            deletedAt: null,
-            active: true,
-        },
-        include: {
-            subject: {
-                include: {
-                    managementOrganization: true,
+                      }
+                    : {}),
+                ...(filters.examDateRange
+                    ? {
+                          examDate: {
+                              gte: filters.examDateRange[0],
+                              lte: filters.examDateRange[1],
+                          },
+                      }
+                    : {}),
+                ...(!canReadAll
+                    ? {
+                          mainLecturer: {
+                              userProfileId: profileId,
+                          },
+                      } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
+                    : {}),
+                deletedAt: null,
+                active: true,
+                cancelled: false,
+            },
+            include: {
+                subject: {
+                    include: {
+                        managementOrganization: true,
+                    },
                 },
-            },
-            semester: {
-                include: {
-                    schoolYear: true,
+                semester: {
+                    include: {
+                        schoolYear: true,
+                    },
                 },
-            },
-            mainLecturer: {
-                include: { userProfile: true },
-            },
-            extraLecturer: {
-                include: { userProfile: true },
-            },
-            subjectClassStudent: {
-                include: {
-                    student: {
-                        include: {
-                            userProfile: true,
-                            fixedClass: {
-                                include: {
-                                    trainingCourse: true,
+                mainLecturer: {
+                    include: { userProfile: true },
+                },
+                extraLecturer: {
+                    include: { userProfile: true },
+                },
+                subjectClassStudent: {
+                    include: {
+                        student: {
+                            include: {
+                                userProfile: true,
+                                fixedClass: {
+                                    include: {
+                                        trainingCourse: true,
+                                    },
                                 },
                             },
                         },
                     },
                 },
-            },
-            _count: {
-                select: {
-                    subjectClassStudent: {
-                        where: {
-                            deletedAt: null,
+                _count: {
+                    select: {
+                        subjectClassStudent: {
+                            where: {
+                                deletedAt: null,
+                            },
                         },
                     },
                 },
             },
+            orderBy: {
+                createdAt: 'desc',
+            },
         },
-        orderBy: {
-            createdAt: 'desc',
-        },
-    })
+        { refetchOnWindowFocus: false }
+    )
 
-    const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore(
+    const {
+        data: dataTable = [],
+        refetch,
+        isFetching: loadingTable,
+    } = useFindManyStudentSubjectScore(
         {
             where: {
                 subjectClassId: selectedFixedClass || '',
@@ -480,6 +503,15 @@ export default function SubjectClassScore() {
         },
         { refetchOnWindowFocus: false }
     )
+    const { data: dataDetailSubjectClass, refetch: refetchSubjectClass } =
+        useFindUniqueSubjectClass(
+            {
+                where: {
+                    id: selectedFixedClass,
+                },
+            },
+            { refetchOnWindowFocus: false, enabled: !!selectedFixedClass }
+        )
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -529,6 +561,9 @@ export default function SubjectClassScore() {
     const [scoreHoanThi, setScoreHoanThi] = useState<{ id: string; value: boolean }[]>([])
     const [scoreDinhChi, setscoreDinhChi] = useState<{ id: string; value: boolean }[]>([])
     const [scoreLyDo, setScoreLyDo] = useState<{ id: string; value: string }[]>([])
+    const [lyDoDinhChi, setLyDoDinhChi] = useState<{ id: string; value: string }[]>([])
+    const [lyDoHoanThi, setLyDoHoanThi] = useState<{ id: string; value: string }[]>([])
+    const [lyDoCamThi, setLyDoCamThi] = useState<{ id: string; value: string }[]>([])
     const statistics = getScoreStatistics(dataTable)
 
     const renderFinalScore = (record: any) => {
@@ -556,10 +591,50 @@ export default function SubjectClassScore() {
         }
     }
 
+    const hanldeSave = () => {
+        Modal.confirm({
+            title: 'Xác nhận',
+            content: 'Bạn có chắc chắn muốn nhập điểm không?',
+            okText: 'Xác nhận',
+            cancelText: 'Hủy',
+            onOk: async () => {
+                handleSaveScores()
+            },
+        })
+    }
+
     const handleSaveScores = async () => {
         try {
             showSpinner()
+            const dataSubmit = form.getFieldsValue()
+            let listSqlTransaction: any = []
+            if (selectedFixedClass) {
+                listSqlTransaction = [
+                    ...listSqlTransaction,
+                    {
+                        model: 'SubjectClass',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: selectedFixedClass,
+                            },
+                            data: { ...dataSubmit },
+                        },
+                    },
+                ]
+            }
 
+            const error = [...scoreCC, ...scoreTX, ...scoreThi].find((i) => i?.value > 10)
+            if (error) {
+                message.error('Bạn chưa nhập đúng điểm số')
+                return
+            }
+            const parseScoreValue = (value: number | string) => {
+                if (value === undefined || value === null || value === '' || Number.isNaN(value)) {
+                    return null
+                }
+                return Number(value)
+            }
             const scoresToUpdate = dataTable
                 .map((record) => {
                     const ccScore = scoreCC.find((s) => s.id === record.id)
@@ -569,19 +644,10 @@ export default function SubjectClassScore() {
                     const hoanThiScore = scoreHoanThi.find((s) => s.id === record.id)
                     const dinhChiScore = scoreDinhChi.find((s) => s.id === record.id)
                     const lyDoScore = scoreLyDo.find((s) => s.id === record.id)
+                    const LyDoHoanThi = lyDoHoanThi.find((s) => s.id === record.id)
+                    const LyDoCamThi = lyDoCamThi.find((s) => s.id === record.id)
+                    const LyDoDinhChi = lyDoDinhChi.find((s) => s.id === record.id)
                     const finalScore = Number(renderFinalScore(record).finalScore)
-
-                    const parseScoreValue = (value: number | string) => {
-                        if (
-                            value === undefined ||
-                            value === null ||
-                            value === '' ||
-                            Number.isNaN(value)
-                        ) {
-                            return null
-                        }
-                        return Number(value)
-                    }
 
                     const attendanceScore = ccScore ? parseScoreValue(ccScore.value) : null
                     const midtermScore = txScore ? parseScoreValue(txScore.value) : null
@@ -602,6 +668,9 @@ export default function SubjectClassScore() {
                         suspended: dinhChiScore ? dinhChiScore.value : false,
                         description: lyDoScore ? lyDoScore.value : '',
                         finalScore: finalScore ? finalScore : null,
+                        examBannedReason: LyDoCamThi ? LyDoCamThi.value : '',
+                        suspendedReason: LyDoDinhChi ? LyDoDinhChi.value : '',
+                        repeatedReason: LyDoHoanThi ? LyDoHoanThi.value : '',
                     }
 
                     return {
@@ -619,20 +688,34 @@ export default function SubjectClassScore() {
                         originalData.examPostponed !== newData.examPostponed ||
                         originalData.suspended !== newData.suspended ||
                         originalData.description !== newData.description ||
-                        originalData.finalScore !== newData.finalScore
+                        originalData.finalScore !== newData.finalScore ||
+                        originalData.examBannedReason !== newData.examBannedReason ||
+                        originalData.suspendedReason !== newData.suspendedReason ||
+                        originalData.repeatedReason !== newData.repeatedReason
                     )
                 })
 
             if (scoresToUpdate.length > 0) {
-                await Promise.all(
-                    scoresToUpdate.map(({ id, newData }) =>
-                        updateStudentSubjectScore({
-                            where: { id },
-                            data: newData,
-                        })
-                    )
-                )
-                message.success(`Đã cập nhật ${scoresToUpdate.length} bản ghi thành công!`)
+                listSqlTransaction = [
+                    ...listSqlTransaction,
+                    ...scoresToUpdate.map(({ id, newData }) => {
+                        return {
+                            model: 'StudentSubjectScore',
+                            operation: 'update',
+                            data: {
+                                where: {
+                                    id,
+                                },
+                                data: newData,
+                            },
+                        }
+                    }),
+                ]
+                if (listSqlTransaction?.length > 0) {
+                    await sqlTransaction(listSqlTransaction)
+                    message.success(`Đã cập nhật ${scoresToUpdate.length} bản ghi thành công!`)
+                    debouncedRefetch()
+                }
                 setHasUnsavedChanges(false)
             } else {
                 message.info('Không có thay đổi nào để cập nhật')
@@ -678,6 +761,18 @@ export default function SubjectClassScore() {
                 id: item.id,
                 value: item.description || '',
             }))
+            const newLyDoHoanThi = dataTable.map((item) => ({
+                id: item.id,
+                value: item.repeatedReason || '',
+            }))
+            const newLyDoDinhChi = dataTable.map((item) => ({
+                id: item.id,
+                value: item.suspendedReason || '',
+            }))
+            const newLyDoCamThi = dataTable.map((item) => ({
+                id: item.id,
+                value: item.examBannedReason || '',
+            }))
             setScoreCC(newScoreCC)
             setScoreTX(newScoreTX)
             setScoreThi(newScoreThi)
@@ -685,6 +780,9 @@ export default function SubjectClassScore() {
             setScoreHoanThi(newScoreHoanThi)
             setscoreDinhChi(newscoreDinhChi)
             setScoreLyDo(newScoreLyDo)
+            setLyDoHoanThi(newLyDoHoanThi)
+            setLyDoDinhChi(newLyDoDinhChi)
+            setLyDoCamThi(newLyDoCamThi)
         }
     }, [dataTable, selectedFixedClass])
 
@@ -779,6 +877,19 @@ export default function SubjectClassScore() {
         }
     }
 
+    const roundToNearestHalf = (num: number) => {
+        return Math.round(num * 2) / 2
+    }
+
+    const roundToNearestTenth = (num: number) => {
+        return Math.round(num * 10) / 10
+    }
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    useEffect(() => {
+        form.setFieldsValue({ ...dataDetailSubjectClass })
+    }, [dataDetailSubjectClass])
+
     useEffect(() => {
         if (!hasUnsavedChanges) return
 
@@ -830,6 +941,7 @@ export default function SubjectClassScore() {
                     }))}
                     onChangeSelected={handleChangeFixedClass}
                     selectedItem={selectedFixedClass}
+                    isFetching={isFetching}
                 />
             </Col>
 
@@ -838,10 +950,10 @@ export default function SubjectClassScore() {
                 className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4"
             >
                 <Col span={24}>
-                    <Row gutter={[0, 16]} align="top" justify="space-between">
-                        <Col>
+                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                        <Col span={24}>
                             <Flex gap={4}>
-                                <Col span={10}>
+                                <Col span={8}>
                                     <Form.Item name="searchText">
                                         <Input
                                             id="search"
@@ -863,20 +975,21 @@ export default function SubjectClassScore() {
                                     </Form.Item>
                                 </Col>
 
-                                <Col span={10}>
+                                <Col span={8}>
                                     <TreeSelectSemester
                                         style={{ width: '100%' }}
                                         filterTimeNow={true}
                                         onChange={(val) => setSelectedSemesterId(val || '')}
                                     />
                                 </Col>
-                                <Col span={4} className="flex">
+
+                                {/* <Col span={4} className="flex">
                                     <FilterSubjectClass
                                         onFilterChange={handleFilterChange}
                                         filters={filters}
                                         onApply={handleFilterApply}
                                     />
-                                </Col>
+                                </Col> */}
                             </Flex>
                         </Col>
                     </Row>
@@ -938,30 +1051,33 @@ export default function SubjectClassScore() {
                                         </Button>
                                     </Popover>
                                 )}
-
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                     'IN_DS_THI'
-                                ) && (
-                                    <ExportTemplateExam
-                                        selectedFixedClass={selectedFixedClass}
-                                        dataClass={selectedClassInfo}
-                                        dataTable={dataTable}
-                                    />
-                                )}
+                                ) &&
+                                    !!dataDetailSubjectClass?.enteredScore && (
+                                        <ExportTemplateExam
+                                            selectedFixedClass={selectedFixedClass}
+                                            dataClass={selectedClassInfo}
+                                            dataTable={dataTable}
+                                        />
+                                    )}
 
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                     'IN_PHIEU_DIEM'
                                 ) && (
                                     <>
-                                        <Button
-                                            disabled={!selectedFixedClass}
-                                            onClick={() => handlePrint()}
-                                        >
-                                            <Printer />
-                                            In phiếu điểm và khoá
-                                        </Button>
+                                        {!!dataDetailSubjectClass?.enteredExamScore && (
+                                            <Button
+                                                disabled={!selectedFixedClass}
+                                                onClick={() => handlePrint()}
+                                            >
+                                                <Printer />
+                                                In phiếu điểm và khoá
+                                            </Button>
+                                        )}
+
                                         <Button
                                             disabled={!selectedFixedClass}
                                             onClick={() =>
@@ -981,119 +1097,509 @@ export default function SubjectClassScore() {
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                     'NHAP_DIEM'
                                 ) && (
-                                    <Button type="primary" onClick={handleSaveScores}>
+                                    <Button type="primary" onClick={hanldeSave}>
                                         <Save stroke="white" />
                                         Lưu
                                     </Button>
                                 )}
                             </Flex>
                         </Col>
+
+                        {dataDetailSubjectClass && (
+                            <>
+                                <Col span={24}>
+                                    <Flex justify="" align="center">
+                                        <div className="mr-6">
+                                            Hạn nhập điểm TX/CC:
+                                            <span
+                                                className={`ml-1 ${dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) ? '' : 'text-red-500'}`}
+                                            >
+                                                {dataDetailSubjectClass?.scoreDeadline &&
+                                                    formatDate(
+                                                        dataDetailSubjectClass?.scoreDeadline
+                                                    )}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            Hạn nhập điểm thi:
+                                            <span
+                                                className={`ml-1 ${dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) ? '' : 'text-red-500'}`}
+                                            >
+                                                {dataDetailSubjectClass?.examScoreDeadline &&
+                                                    formatDate(
+                                                        dataDetailSubjectClass?.examScoreDeadline
+                                                    )}
+                                            </span>
+                                        </div>
+                                    </Flex>
+                                </Col>
+                                <Col span={24} className="">
+                                    <Flex align="center" justify="space-between">
+                                        <Form
+                                            className="flex gap-0 lg:gap-[2px] 2xl:gap-3"
+                                            form={form}
+                                            layout="horizontal"
+                                        >
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="enteredScore"
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox
+                                                    disabled={
+                                                        profileId !==
+                                                        '5317ce3a-62ef-4ad2-be10-a0f110a55243'
+                                                    }
+                                                >
+                                                    Đã nhập điểm CC/TX
+                                                </Checkbox>
+                                            </Form.Item>
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="enteredExamScore"
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox
+                                                    disabled={
+                                                        profileId !==
+                                                        '5317ce3a-62ef-4ad2-be10-a0f110a55243'
+                                                    }
+                                                >
+                                                    Đã nhập điểm thi điểm thi
+                                                </Checkbox>
+                                            </Form.Item>
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="isLockScore"
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox
+                                                    disabled={
+                                                        profileId !==
+                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+                                                    }
+                                                >
+                                                    Khóa điểm CC/TX
+                                                </Checkbox>
+                                            </Form.Item>
+
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="isLockExamScore"
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox
+                                                    disabled={
+                                                        profileId !==
+                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+                                                    }
+                                                >
+                                                    Khóa điểm thi
+                                                </Checkbox>
+                                            </Form.Item>
+
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="scoreSubmitted"
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox
+                                                    disabled={
+                                                        profileId !==
+                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+                                                    }
+                                                >
+                                                    Đã nhận Phiếu điểm
+                                                </Checkbox>
+                                            </Form.Item>
+
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="scoreChecked"
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox
+                                                    disabled={
+                                                        profileId !==
+                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
+                                                    }
+                                                >
+                                                    P2/P7 đã kiểm tra
+                                                </Checkbox>
+                                            </Form.Item>
+                                        </Form>
+                                    </Flex>
+                                </Col>
+                            </>
+                        )}
                     </Row>
                 </Col>
-                <Col span={24}>
-                    <Table
-                        rowKey="id"
-                        id="student-subject-score"
-                        filters={filterTable}
-                        setFilters={setFilterTable}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 60,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) => index + 1,
-                            },
-                            {
-                                title: 'Mã sinh viên',
-                                dataIndex: 'code',
-                                align: 'center',
-                                width: 150,
-                                fixed: 'left',
-                                type: 'input',
-                                render: (_, record) => record.student?.code || '',
-                            },
-                            {
-                                title: 'Họ và tên',
-                                dataIndex: 'fullname',
-                                width: 150,
-                                fixed: 'left',
-                                type: 'input',
-                                render: (_, record) => record?.student?.userProfile?.fullname || '',
-                            },
-                            {
-                                title: 'Ngày sinh',
-                                dataIndex: 'dateOfBirth',
-                                width: 150,
-                                type: 'date',
-                                render: (_, record) =>
-                                    record?.student?.userProfile.dateOfBirth
-                                        ? dayjs(record?.student?.userProfile.dateOfBirth).format(
-                                              'DD/MM/YYYY'
-                                          )
-                                        : '',
-                            },
-                            {
-                                title: 'Tên lớp',
-                                dataIndex: 'fixedClassName',
-                                width: 150,
-                                align: 'center',
-                                type: 'input',
-                                render: (_, record) =>
-                                    record.student?.fixedClass?.name || 'Chưa có lớp',
-                            },
-                            // #region Điểm CC
-                            {
-                                title: 'Điểm CC',
-                                dataIndex: 'attendanceScore',
-                                width: 100,
-                                align: 'center',
-                                type: 'order',
-                                render: (_, record) => {
-                                    const isEditable =
-                                        can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                            'NHAP_DIEM'
-                                        ) && record.subjectClass?.scoreDeadline
-                                            ? dayjs().isBefore(record.subjectClass.scoreDeadline)
-                                            : false
-                                    const openClock = record.subjectClass?.isLockScore
-                                    const Score =
-                                        scoreCC.find((item) => item.id === record.id)?.value ??
-                                        (record.attendanceScore !== undefined
-                                            ? Number(record.attendanceScore)
-                                            : null)
+                {loadingTable ? (
+                    <Col span={24}>
+                        <Skeleton />
+                    </Col>
+                ) : (
+                    <Col span={24}>
+                        <Table
+                            rowKey="id"
+                            id="student-subject-score"
+                            filters={filterTable}
+                            setFilters={setFilterTable}
+                            columns={[
+                                {
+                                    title: 'STT',
+                                    width: 60,
+                                    align: 'center',
+                                    fixed: 'left',
+                                    render: (_, __, index) => index + 1,
+                                },
+                                {
+                                    title: 'Mã sinh viên',
+                                    dataIndex: 'code',
+                                    align: 'center',
+                                    width: 150,
+                                    fixed: 'left',
+                                    type: 'input',
+                                    render: (_, record) => record.student?.code || '',
+                                },
+                                {
+                                    title: 'Họ và tên',
+                                    dataIndex: 'fullname',
+                                    width: 150,
+                                    fixed: 'left',
+                                    type: 'input',
+                                    render: (_, record) =>
+                                        record?.student?.userProfile?.fullname || '',
+                                },
+                                {
+                                    title: 'Ngày sinh',
+                                    dataIndex: 'dateOfBirth',
+                                    width: 125,
+                                    type: 'date',
+                                    render: (_, record) =>
+                                        record?.student?.userProfile.dateOfBirth
+                                            ? dayjs(
+                                                  record?.student?.userProfile.dateOfBirth
+                                              ).format('DD/MM/YYYY')
+                                            : '',
+                                },
+                                {
+                                    title: 'Tên lớp',
+                                    dataIndex: 'fixedClassName',
+                                    width: 200,
+                                    align: 'center',
+                                    type: 'input',
+                                    render: (_, record) =>
+                                        record.student?.fixedClass?.name || 'Chưa có lớp',
+                                },
+                                // #region Điểm CC
+                                {
+                                    title: 'Điểm CC',
+                                    dataIndex: 'attendanceScore',
+                                    width: 100,
+                                    align: 'center',
+                                    type: 'order',
+                                    render: (_, record) => {
+                                        const isEditable =
+                                            can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                'NHAP_DIEM'
+                                            ) && record.subjectClass?.scoreDeadline
+                                                ? dayjs().isBefore(
+                                                      record.subjectClass.scoreDeadline
+                                                  )
+                                                : false
+                                        const openClock = record.subjectClass?.isLockScore
+                                        const Score =
+                                            scoreCC.find((item) => item.id === record.id)?.value ??
+                                            (record.attendanceScore !== undefined
+                                                ? Number(record.attendanceScore)
+                                                : null)
 
-                                    if (isEditable && !openClock) {
-                                        const currentScore =
-                                            Score !== null && Score !== undefined ? Score : ''
-                                        const isInvalid =
-                                            typeof currentScore === 'number' &&
-                                            (currentScore < 0 || currentScore > 10)
+                                        if (isEditable && !openClock) {
+                                            const currentScore =
+                                                Score !== null && Score !== undefined ? Score : ''
+                                            const isInvalid =
+                                                typeof currentScore === 'number' &&
+                                                (currentScore < 0 || currentScore > 10)
+                                            return (
+                                                <InputNumber
+                                                    min={0}
+                                                    type="number"
+                                                    id={`score-cc-${record.id}`}
+                                                    style={{ width: '100%' }}
+                                                    step={0.5}
+                                                    value={currentScore}
+                                                    status={isInvalid ? 'error' : undefined}
+                                                    onChange={(value) => {
+                                                        if (!value) return
+                                                        let newScore = +value
+                                                        if (newScore > 99) newScore = 99
+                                                        if (newScore < 0) newScore = 0
+
+                                                        setScoreCC((prevScores) => {
+                                                            const index = prevScores.findIndex(
+                                                                (item) => item.id === record.id
+                                                            )
+                                                            if (index > -1) {
+                                                                const updated = [...prevScores]
+                                                                updated[index] = {
+                                                                    ...updated[index],
+                                                                    value: roundToNearestHalf(
+                                                                        newScore
+                                                                    ),
+                                                                }
+                                                                return updated
+                                                            }
+                                                            return [
+                                                                ...prevScores,
+                                                                {
+                                                                    id: record.id,
+                                                                    value: roundToNearestHalf(
+                                                                        newScore
+                                                                    ),
+                                                                },
+                                                            ]
+                                                        })
+                                                        setHasUnsavedChanges(true)
+                                                    }}
+                                                    onKeyDown={(e) =>
+                                                        handleScoreInputKeyDown(
+                                                            e,
+                                                            record.id,
+                                                            'cc',
+                                                            dataTable
+                                                        )
+                                                    }
+                                                />
+                                            )
+                                        }
+                                        return Score !== null ? <span>{Score}</span> : null
+                                    },
+                                },
+                                // #region Điểm TX
+                                {
+                                    title: 'Điểm TX',
+                                    dataIndex: 'midtermScore',
+                                    width: 100,
+                                    align: 'center',
+                                    type: 'order',
+                                    render: (_, record) => {
+                                        const isEditable =
+                                            can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                'NHAP_DIEM'
+                                            ) && record.subjectClass?.scoreDeadline
+                                                ? dayjs().isBefore(
+                                                      record.subjectClass.scoreDeadline
+                                                  )
+                                                : false
+                                        const openClock = record.subjectClass?.isLockScore
+                                        const Score =
+                                            scoreTX.find((item) => item.id === record.id)?.value ??
+                                            (record.midtermScore !== undefined
+                                                ? Number(record.midtermScore)
+                                                : null)
+
+                                        if (isEditable && !openClock) {
+                                            const currentScore =
+                                                Score !== null && Score !== undefined ? Score : ''
+                                            const isInvalid =
+                                                typeof currentScore === 'number' &&
+                                                (currentScore < 0 || currentScore > 10)
+                                            return (
+                                                <InputNumber
+                                                    min={0}
+                                                    type="number"
+                                                    id={`score-tx-${record.id}`}
+                                                    style={{ width: '100%' }}
+                                                    step={0.5}
+                                                    value={currentScore}
+                                                    status={isInvalid ? 'error' : undefined}
+                                                    onChange={(value) => {
+                                                        if (!value) return
+                                                        let newScore = +value
+                                                        if (newScore > 99) newScore = 99
+                                                        if (newScore < 0) newScore = 0
+
+                                                        setScoreTX((prevScores) => {
+                                                            const index = prevScores.findIndex(
+                                                                (item) => item.id === record.id
+                                                            )
+                                                            if (index > -1) {
+                                                                const updated = [...prevScores]
+                                                                updated[index] = {
+                                                                    ...updated[index],
+                                                                    value: roundToNearestHalf(
+                                                                        newScore
+                                                                    ),
+                                                                }
+                                                                return updated
+                                                            }
+                                                            return [
+                                                                ...prevScores,
+                                                                {
+                                                                    id: record.id,
+                                                                    value: roundToNearestHalf(
+                                                                        newScore
+                                                                    ),
+                                                                },
+                                                            ]
+                                                        })
+                                                        setHasUnsavedChanges(true)
+                                                    }}
+                                                    onKeyDown={(e) =>
+                                                        handleScoreInputKeyDown(
+                                                            e,
+                                                            record.id,
+                                                            'tx',
+                                                            dataTable
+                                                        )
+                                                    }
+                                                />
+                                            )
+                                        }
+                                        return Score !== null ? <span>{Score}</span> : null
+                                    },
+                                },
+                                // #region Điểm Thi
+                                {
+                                    title: 'Điểm thi',
+                                    dataIndex: 'examScore',
+                                    width: 100,
+                                    type: 'order',
+                                    align: 'center',
+                                    render: (_, record) => {
+                                        const isEditable =
+                                            can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                'NHAP_DIEM'
+                                            ) && record.subjectClass?.examScoreDeadline
+                                                ? dayjs().isBefore(
+                                                      record.subjectClass.examScoreDeadline
+                                                  )
+                                                : false
+                                        const Score =
+                                            scoreThi.find((item) => item.id === record.id)?.value ??
+                                            (record.examScore !== undefined
+                                                ? Number(record.examScore)
+                                                : null)
+
+                                        if (
+                                            isEditable &&
+                                            record.attendanceScore &&
+                                            record.midtermScore &&
+                                            !record.subjectClass.isLockExamScore
+                                        ) {
+                                            const currentScore =
+                                                Score !== null && Score !== undefined ? Score : ''
+                                            const isInvalid =
+                                                typeof currentScore === 'number' &&
+                                                (currentScore < 0 || currentScore > 10)
+                                            return (
+                                                <InputNumber
+                                                    min={0}
+                                                    type="number"
+                                                    id={`score-thi-${record.id}`}
+                                                    style={{ width: '100%' }}
+                                                    step={0.1}
+                                                    value={currentScore}
+                                                    status={isInvalid ? 'error' : undefined}
+                                                    onChange={(value) => {
+                                                        if (!value) return
+                                                        let newScore = +value
+                                                        if (newScore > 99) newScore = 99
+                                                        if (newScore < 0) newScore = 0
+
+                                                        setScoreThi((prevScores) => {
+                                                            const index = prevScores.findIndex(
+                                                                (item) => item.id === record.id
+                                                            )
+                                                            if (index > -1) {
+                                                                const updated = [...prevScores]
+                                                                updated[index] = {
+                                                                    ...updated[index],
+                                                                    value: roundToNearestTenth(
+                                                                        newScore
+                                                                    ),
+                                                                }
+                                                                return updated
+                                                            }
+                                                            return [
+                                                                ...prevScores,
+                                                                {
+                                                                    id: record.id,
+                                                                    value: roundToNearestTenth(
+                                                                        newScore
+                                                                    ),
+                                                                },
+                                                            ]
+                                                        })
+                                                        setHasUnsavedChanges(true)
+                                                    }}
+                                                    onKeyDown={(e) =>
+                                                        handleScoreInputKeyDown(
+                                                            e,
+                                                            record.id,
+                                                            'thi',
+                                                            dataTable
+                                                        )
+                                                    }
+                                                />
+                                            )
+                                        }
+                                        return Score !== null ? <span>{Score}</span> : null
+                                    },
+                                },
+                                {
+                                    title: 'Điểm cộng',
+                                    align: 'center',
+                                    width: 120,
+                                    render: (_, record) =>
+                                        record.awards.reduce(
+                                            (
+                                                acc: number,
+                                                curr: {
+                                                    archivedAward: ArchivedAward
+                                                }
+                                            ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
+                                            0
+                                        ),
+                                },
+                                {
+                                    title: 'Điểm HP',
+                                    width: 80,
+                                    align: 'center',
+                                    render: (record) => {
+                                        const { finalScore } = renderFinalScore(record)
+                                        return finalScore
+                                    },
+                                },
+                                // #region Cấm thi/Hoãn thi/Đình chỉ
+                                {
+                                    title: 'Lý do cấm thi',
+                                    dataIndex: 'examBannedReason',
+                                    width: 150,
+                                    render: (value, record) => {
                                         return (
-                                            <InputNumber
-                                                min={0}
-                                                type="number"
-                                                id={`score-cc-${record.id}`}
-                                                style={{ width: '100%' }}
-                                                step={0.5}
-                                                value={currentScore}
-                                                status={isInvalid ? 'error' : undefined}
-                                                onChange={(value) => {
-                                                    if (!value) return
-                                                    let newScore = +value
-                                                    if (newScore > 99) newScore = 99
-                                                    if (newScore < 0) newScore = 0
-
-                                                    setScoreCC((prevScores) => {
+                                            <Input
+                                                placeholder="Nhập lý do cấm thi"
+                                                style={{
+                                                    width: '100%',
+                                                }}
+                                                defaultValue={value || ''}
+                                                onChange={(e) => {
+                                                    // Handle input change for bonus score
+                                                    const newNote = e.target.value
+                                                    setLyDoCamThi((prevScores) => {
                                                         const index = prevScores.findIndex(
                                                             (item) => item.id === record.id
                                                         )
                                                         if (index > -1) {
                                                             const updated = [...prevScores]
                                                             updated[index] = {
-                                                                ...updated[index],
-                                                                value: newScore,
+                                                                id: record.id,
+                                                                value: newNote,
                                                             }
                                                             return updated
                                                         }
@@ -1101,78 +1607,35 @@ export default function SubjectClassScore() {
                                                             ...prevScores,
                                                             {
                                                                 id: record.id,
-                                                                value: newScore,
+                                                                value: newNote,
                                                             },
                                                         ]
                                                     })
-                                                    setHasUnsavedChanges(true)
                                                 }}
-                                                onKeyDown={(e) =>
-                                                    handleScoreInputKeyDown(
-                                                        e,
-                                                        record.id,
-                                                        'cc',
-                                                        dataTable
-                                                    )
-                                                }
                                             />
                                         )
-                                    }
-                                    return Score !== null ? <span>{Score}</span> : null
+                                    },
                                 },
-                            },
-                            // #region Điểm TX
-                            {
-                                title: 'Điểm TX',
-                                dataIndex: 'midtermScore',
-                                width: 100,
-                                align: 'center',
-                                type: 'order',
-                                render: (_, record) => {
-                                    const isEditable =
-                                        can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                            'NHAP_DIEM'
-                                        ) && record.subjectClass?.scoreDeadline
-                                            ? dayjs().isBefore(record.subjectClass.scoreDeadline)
-                                            : false
-                                    const openClock = record.subjectClass?.isLockScore
-                                    const Score =
-                                        scoreTX.find((item) => item.id === record.id)?.value ??
-                                        (record.midtermScore !== undefined
-                                            ? Number(record.midtermScore)
-                                            : null)
-
-                                    if (isEditable && !openClock) {
-                                        const currentScore =
-                                            Score !== null && Score !== undefined ? Score : ''
-                                        const isInvalid =
-                                            typeof currentScore === 'number' &&
-                                            (currentScore < 0 || currentScore > 10)
+                                {
+                                    title: 'Cấm thi',
+                                    dataIndex: 'examBanned',
+                                    width: 80,
+                                    align: 'center',
+                                    render: (value, record) => {
                                         return (
-                                            <InputNumber
-                                                min={0}
-                                                type="number"
-                                                id={`score-tx-${record.id}`}
-                                                style={{ width: '100%' }}
-                                                step={0.5}
-                                                value={currentScore}
-                                                status={isInvalid ? 'error' : undefined}
-                                                onChange={(value) => {
-                                                    if (!value) return
-                                                    let newScore = +value
-                                                    if (newScore > 99) newScore = 99
-                                                    if (newScore < 0) newScore = 0
-
-                                                    setScoreTX((prevScores) => {
+                                            <Checkbox
+                                                defaultChecked={value}
+                                                onChange={(e) => {
+                                                    const newValue = e.target.checked
+                                                    setScoreCamThi((prevScores) => {
                                                         const index = prevScores.findIndex(
                                                             (item) => item.id === record.id
                                                         )
                                                         if (index > -1) {
                                                             const updated = [...prevScores]
                                                             updated[index] = {
-                                                                ...updated[index],
-                                                                value: newScore,
+                                                                id: record.id,
+                                                                value: newValue,
                                                             }
                                                             return updated
                                                         }
@@ -1180,84 +1643,40 @@ export default function SubjectClassScore() {
                                                             ...prevScores,
                                                             {
                                                                 id: record.id,
-                                                                value: newScore,
+                                                                value: newValue,
                                                             },
                                                         ]
                                                     })
-                                                    setHasUnsavedChanges(true)
+                                                    // Handle checkbox change for exam prohibition reason
                                                 }}
-                                                onKeyDown={(e) =>
-                                                    handleScoreInputKeyDown(
-                                                        e,
-                                                        record.id,
-                                                        'tx',
-                                                        dataTable
-                                                    )
-                                                }
                                             />
                                         )
-                                    }
-                                    return Score !== null ? <span>{Score}</span> : null
+                                    },
                                 },
-                            },
-                            // #region Điểm Thi
-                            {
-                                title: 'Điểm thi',
-                                dataIndex: 'examScore',
-                                width: 100,
-                                type: 'order',
-                                align: 'center',
-                                render: (_, record) => {
-                                    const isEditable =
-                                        can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                            'NHAP_DIEM'
-                                        ) && record.subjectClass?.examScoreDeadline
-                                            ? dayjs().isBefore(
-                                                  record.subjectClass.examScoreDeadline
-                                              )
-                                            : false
-                                    const Score =
-                                        scoreThi.find((item) => item.id === record.id)?.value ??
-                                        (record.examScore !== undefined
-                                            ? Number(record.examScore)
-                                            : null)
-
-                                    if (
-                                        isEditable &&
-                                        record.attendanceScore &&
-                                        record.midtermScore &&
-                                        !record.subjectClass.isLockExamScore
-                                    ) {
-                                        const currentScore =
-                                            Score !== null && Score !== undefined ? Score : ''
-                                        const isInvalid =
-                                            typeof currentScore === 'number' &&
-                                            (currentScore < 0 || currentScore > 10)
+                                {
+                                    title: 'Lý do hoãn thi',
+                                    dataIndex: 'repeatedReason',
+                                    width: 200,
+                                    render: (value, record) => {
                                         return (
-                                            <InputNumber
-                                                min={0}
-                                                type="number"
-                                                id={`score-thi-${record.id}`}
-                                                style={{ width: '100%' }}
-                                                step={0.1}
-                                                value={currentScore}
-                                                status={isInvalid ? 'error' : undefined}
-                                                onChange={(value) => {
-                                                    if (!value) return
-                                                    let newScore = +value
-                                                    if (newScore > 99) newScore = 99
-                                                    if (newScore < 0) newScore = 0
-
-                                                    setScoreThi((prevScores) => {
+                                            <Input
+                                                placeholder="Nhập lý do hoãn thi"
+                                                style={{
+                                                    width: '100%',
+                                                }}
+                                                defaultValue={value || ''}
+                                                onChange={(e) => {
+                                                    // Handle input change for bonus score
+                                                    const newNote = e.target.value
+                                                    setLyDoHoanThi((prevScores) => {
                                                         const index = prevScores.findIndex(
                                                             (item) => item.id === record.id
                                                         )
                                                         if (index > -1) {
                                                             const updated = [...prevScores]
                                                             updated[index] = {
-                                                                ...updated[index],
-                                                                value: newScore,
+                                                                id: record.id,
+                                                                value: newNote,
                                                             }
                                                             return updated
                                                         }
@@ -1265,236 +1684,189 @@ export default function SubjectClassScore() {
                                                             ...prevScores,
                                                             {
                                                                 id: record.id,
-                                                                value: newScore,
+                                                                value: newNote,
                                                             },
                                                         ]
                                                     })
-                                                    setHasUnsavedChanges(true)
                                                 }}
-                                                onKeyDown={(e) =>
-                                                    handleScoreInputKeyDown(
-                                                        e,
-                                                        record.id,
-                                                        'thi',
-                                                        dataTable
-                                                    )
-                                                }
                                             />
                                         )
-                                    }
-                                    return Score !== null ? <span>{Score}</span> : null
+                                    },
                                 },
-                            },
-                            {
-                                title: 'Điểm cộng',
-                                align: 'center',
-                                width: 120,
-                                render: (_, record) =>
-                                    record.awards.reduce(
-                                        (
-                                            acc: number,
-                                            curr: {
-                                                archivedAward: ArchivedAward
-                                            }
-                                        ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
-                                        0
-                                    ),
-                            },
-                            {
-                                title: 'Điểm HP',
-                                width: 80,
-                                align: 'center',
-                                render: (record) => {
-                                    const { finalScore } = renderFinalScore(record)
-                                    return finalScore
-                                },
-                            },
-                            // #region Cấm thi/Hoãn thi/Đình chỉ
-                            {
-                                title: 'Lý do cấm thi',
-                                dataIndex: '',
-                                width: 150,
-                            },
-                            {
-                                title: 'Cấm thi',
-                                dataIndex: 'examBanned',
-                                width: 80,
-                                align: 'center',
-                                render: (value, record) => {
-                                    return (
-                                        <Checkbox
-                                            defaultChecked={value}
-                                            onChange={(e) => {
-                                                const newValue = e.target.checked
-                                                setScoreCamThi((prevScores) => {
-                                                    const index = prevScores.findIndex(
-                                                        (item) => item.id === record.id
-                                                    )
-                                                    if (index > -1) {
-                                                        const updated = [...prevScores]
-                                                        updated[index] = {
-                                                            id: record.id,
-                                                            value: newValue,
+                                {
+                                    title: 'Hoãn thi',
+                                    dataIndex: 'examPostponed',
+                                    width: 80,
+                                    align: 'center',
+                                    render: (value, record) => {
+                                        return (
+                                            <Checkbox
+                                                defaultChecked={value}
+                                                onChange={(e) => {
+                                                    const newValue = e.target.checked
+                                                    setScoreHoanThi((prevScores) => {
+                                                        const index = prevScores.findIndex(
+                                                            (item) => item.id === record.id
+                                                        )
+                                                        if (index > -1) {
+                                                            const updated = [...prevScores]
+                                                            updated[index] = {
+                                                                id: record.id,
+                                                                value: newValue,
+                                                            }
+                                                            return updated
                                                         }
-                                                        return updated
-                                                    }
-                                                    return [
-                                                        ...prevScores,
-                                                        {
-                                                            id: record.id,
-                                                            value: newValue,
-                                                        },
-                                                    ]
-                                                })
-                                                // Handle checkbox change for exam prohibition reason
-                                            }}
-                                        />
-                                    )
+                                                        return [
+                                                            ...prevScores,
+                                                            {
+                                                                id: record.id,
+                                                                value: newValue,
+                                                            },
+                                                        ]
+                                                    })
+                                                    // Handle checkbox change for exam prohibition reason
+                                                }}
+                                            />
+                                        )
+                                    },
                                 },
-                            },
-                            {
-                                title: 'Lý do hoãn thi',
-                                dataIndex: '',
-                                width: 150,
-                            },
-                            {
-                                title: 'Hoãn thi',
-                                dataIndex: 'examPostponed',
-                                width: 80,
-                                align: 'center',
-                                render: (value, record) => {
-                                    return (
-                                        <Checkbox
-                                            defaultChecked={value}
-                                            onChange={(e) => {
-                                                const newValue = e.target.checked
-                                                setScoreHoanThi((prevScores) => {
-                                                    const index = prevScores.findIndex(
-                                                        (item) => item.id === record.id
-                                                    )
-                                                    if (index > -1) {
-                                                        const updated = [...prevScores]
-                                                        updated[index] = {
-                                                            id: record.id,
-                                                            value: newValue,
+                                {
+                                    title: 'Lý do đình chỉ',
+                                    dataIndex: 'suspendedReason',
+                                    width: 200,
+                                    render: (value, record) => {
+                                        return (
+                                            <Input
+                                                placeholder="Nhập lý do đình chỉ"
+                                                style={{
+                                                    width: '100%',
+                                                }}
+                                                defaultValue={value || ''}
+                                                onChange={(e) => {
+                                                    // Handle input change for bonus score
+                                                    const newNote = e.target.value
+                                                    setLyDoDinhChi((prevScores) => {
+                                                        const index = prevScores.findIndex(
+                                                            (item) => item.id === record.id
+                                                        )
+                                                        if (index > -1) {
+                                                            const updated = [...prevScores]
+                                                            updated[index] = {
+                                                                id: record.id,
+                                                                value: newNote,
+                                                            }
+                                                            return updated
                                                         }
-                                                        return updated
-                                                    }
-                                                    return [
-                                                        ...prevScores,
-                                                        {
-                                                            id: record.id,
-                                                            value: newValue,
-                                                        },
-                                                    ]
-                                                })
-                                                // Handle checkbox change for exam prohibition reason
-                                            }}
-                                        />
-                                    )
+                                                        return [
+                                                            ...prevScores,
+                                                            {
+                                                                id: record.id,
+                                                                value: newNote,
+                                                            },
+                                                        ]
+                                                    })
+                                                }}
+                                            />
+                                        )
+                                    },
                                 },
-                            },
-                            {
-                                title: 'Lý do đình chỉ',
-                                dataIndex: '',
-                                width: 150,
-                            },
-                            {
-                                title: 'Đình chỉ',
-                                dataIndex: 'suspended',
-                                width: 80,
-                                align: 'center',
-                                render: (value, record) => {
-                                    return (
-                                        <Checkbox
-                                            defaultChecked={value}
-                                            onChange={(e) => {
-                                                const newValue = e.target.checked
-                                                setscoreDinhChi((prevScores) => {
-                                                    const index = prevScores.findIndex(
-                                                        (item) => item.id === record.id
-                                                    )
-                                                    if (index > -1) {
-                                                        const updated = [...prevScores]
-                                                        updated[index] = {
-                                                            id: record.id,
-                                                            value: newValue,
+                                {
+                                    title: 'Đình chỉ',
+                                    dataIndex: 'suspended',
+                                    width: 80,
+                                    align: 'center',
+                                    render: (value, record) => {
+                                        return (
+                                            <Checkbox
+                                                defaultChecked={value}
+                                                onChange={(e) => {
+                                                    const newValue = e.target.checked
+                                                    setscoreDinhChi((prevScores) => {
+                                                        const index = prevScores.findIndex(
+                                                            (item) => item.id === record.id
+                                                        )
+                                                        if (index > -1) {
+                                                            const updated = [...prevScores]
+                                                            updated[index] = {
+                                                                id: record.id,
+                                                                value: newValue,
+                                                            }
+                                                            return updated
                                                         }
-                                                        return updated
-                                                    }
-                                                    return [
-                                                        ...prevScores,
-                                                        {
-                                                            id: record.id,
-                                                            value: newValue,
-                                                        },
-                                                    ]
-                                                })
-                                                // Handle checkbox change for exam prohibition reason
-                                            }}
-                                        />
-                                    )
+                                                        return [
+                                                            ...prevScores,
+                                                            {
+                                                                id: record.id,
+                                                                value: newValue,
+                                                            },
+                                                        ]
+                                                    })
+                                                    // Handle checkbox change for exam prohibition reason
+                                                }}
+                                            />
+                                        )
+                                    },
                                 },
-                            },
-                            {
-                                title: 'Ghi chú',
-                                dataIndex: 'description',
-                                width: 150,
-                                align: 'center',
-                                render: (value, record) => {
-                                    return (
-                                        <Input
-                                            placeholder="Nhập ghi chú lý do"
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                            defaultValue={value || ''}
-                                            onChange={(e) => {
-                                                // Handle input change for bonus score
-                                                const newNote = e.target.value
-                                                setScoreLyDo((prevScores) => {
-                                                    const index = prevScores.findIndex(
-                                                        (item) => item.id === record.id
-                                                    )
-                                                    if (index > -1) {
-                                                        const updated = [...prevScores]
-                                                        updated[index] = {
-                                                            id: record.id,
-                                                            value: newNote,
+                                {
+                                    title: 'Ghi chú',
+                                    dataIndex: 'description',
+                                    width: 150,
+                                    align: 'center',
+                                    render: (value, record) => {
+                                        return (
+                                            <Input
+                                                placeholder="Nhập ghi chú lý do"
+                                                style={{
+                                                    width: '100%',
+                                                }}
+                                                defaultValue={value || ''}
+                                                onChange={(e) => {
+                                                    // Handle input change for bonus score
+                                                    const newNote = e.target.value
+                                                    setScoreLyDo((prevScores) => {
+                                                        const index = prevScores.findIndex(
+                                                            (item) => item.id === record.id
+                                                        )
+                                                        if (index > -1) {
+                                                            const updated = [...prevScores]
+                                                            updated[index] = {
+                                                                id: record.id,
+                                                                value: newNote,
+                                                            }
+                                                            return updated
                                                         }
-                                                        return updated
-                                                    }
-                                                    return [
-                                                        ...prevScores,
-                                                        {
-                                                            id: record.id,
-                                                            value: newNote,
-                                                        },
-                                                    ]
-                                                })
-                                            }}
-                                        />
-                                    )
+                                                        return [
+                                                            ...prevScores,
+                                                            {
+                                                                id: record.id,
+                                                                value: newNote,
+                                                            },
+                                                        ]
+                                                    })
+                                                }}
+                                            />
+                                        )
+                                    },
                                 },
-                            },
-                        ]}
-                        data={dataTable}
-                        pagination={{
-                            pageSize: dataTable.length,
-                            hideOnSinglePage: true,
-                        }}
-                    />
-                    {selectedFixedClass && (
-                        <div className="flex flex-row gap-2">
-                            <div className="font-bold">Tổng hợp kết quả thi:</div>
-                            {Object.entries(statistics).map(([type, { count, percentage }]) => (
-                                <p key={type}>
-                                    {type}: {count}= {percentage}%
-                                </p>
-                            ))}
-                        </div>
-                    )}
-                </Col>
+                            ]}
+                            data={dataTable}
+                            pagination={{
+                                pageSize: dataTable.length,
+                                hideOnSinglePage: true,
+                            }}
+                        />
+                        {selectedFixedClass && (
+                            <div className="flex flex-row gap-2">
+                                <div className="font-bold">Tổng hợp kết quả thi:</div>
+                                {Object.entries(statistics).map(([type, { count, percentage }]) => (
+                                    <p key={type}>
+                                        {type}: {count}= {percentage}%
+                                    </p>
+                                ))}
+                            </div>
+                        )}
+                    </Col>
+                )}
             </Col>
         </div>
     )

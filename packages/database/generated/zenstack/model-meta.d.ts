@@ -2218,6 +2218,11 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                examPostponedReason: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
                 exempted: {
                     name: string;
                     type: string;
@@ -2251,6 +2256,11 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                examBannedReason: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
                 suspended: {
                     name: string;
                     type: string;
@@ -2262,6 +2272,11 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                suspendedReason: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
                 repeated: {
                     name: string;
                     type: string;
@@ -2272,6 +2287,11 @@ declare const metadata: {
                             value: boolean;
                         }[];
                     }[];
+                };
+                repeatedReason: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
                 };
                 certificates: {
                     name: string;
@@ -27447,6 +27467,17 @@ declare const metadata: {
                         name: string;
                         args: {
                             name: string;
+                        }[];
+                    }[];
+                };
+                updatedResult: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
                         }[];
                     }[];
                 };

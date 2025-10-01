@@ -43,7 +43,7 @@ export default function TrainingObjectTypePage() {
             ...(filters.type
                 ? {
                       type: {
-                          equals: filters.type,
+                          in: filters.type,
                       },
                   }
                 : {}),
@@ -68,7 +68,7 @@ export default function TrainingObjectTypePage() {
             ...(filters.type
                 ? {
                       type: {
-                          equals: filters.type,
+                          in: filters.type,
                       },
                   }
                 : {}),

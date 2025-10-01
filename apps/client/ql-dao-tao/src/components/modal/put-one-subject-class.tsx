@@ -412,7 +412,7 @@ const PutOneSubjectClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="dayOfWeeks" label="Ngày trong tuần">
+                <FormItem form={form} name="dayOfWeeks" label="Ngày học trong tuần">
                     <Select
                         placeholder="Chọn ngày trong tuần"
                         mode="multiple"

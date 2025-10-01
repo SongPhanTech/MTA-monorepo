@@ -1109,6 +1109,10 @@ const metadata = {
                     name: "examPostponed",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, examPostponedReason: {
+                    name: "examPostponedReason",
+                    type: "String",
+                    isOptional: true,
                 }, exempted: {
                     name: "exempted",
                     type: "Boolean",
@@ -1121,14 +1125,26 @@ const metadata = {
                     name: "examBanned",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, examBannedReason: {
+                    name: "examBannedReason",
+                    type: "String",
+                    isOptional: true,
                 }, suspended: {
                     name: "suspended",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, suspendedReason: {
+                    name: "suspendedReason",
+                    type: "String",
+                    isOptional: true,
                 }, repeated: {
                     name: "repeated",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, repeatedReason: {
+                    name: "repeatedReason",
+                    type: "String",
+                    isOptional: true,
                 }, certificates: {
                     name: "certificates",
                     type: "ArchivedCertificateOnStudentSubjectScore",
@@ -14549,6 +14565,10 @@ const metadata = {
                     name: "status",
                     type: "DecisionStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedResult: {
+                    name: "updatedResult",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 },
             }, uniqueConstraints: {
                 id: {

@@ -34,11 +34,15 @@ const baseSchema = z.object({
     }, { message: "Điểm tối đa là 10" }).nullish(),
     manualFinalScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
     examPostponed: z.boolean().default(false),
+    examPostponedReason: z.string().nullish(),
     exempted: z.boolean().default(false),
     withdrew: z.boolean().default(false),
     examBanned: z.boolean().default(false),
+    examBannedReason: z.string().nullish(),
     suspended: z.boolean().default(false),
+    suspendedReason: z.string().nullish(),
     repeated: z.boolean().default(false),
+    repeatedReason: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -106,11 +110,15 @@ export const StudentSubjectScorePrismaUpdateSchema = z.object({
     }, { message: "Điểm tối đa là 10" }).nullish(),
     manualFinalScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.unknown())]),
     examPostponed: z.boolean().default(false),
+    examPostponedReason: z.string().nullish(),
     exempted: z.boolean().default(false),
     withdrew: z.boolean().default(false),
     examBanned: z.boolean().default(false),
+    examBannedReason: z.string().nullish(),
     suspended: z.boolean().default(false),
-    repeated: z.boolean().default(false)
+    suspendedReason: z.string().nullish(),
+    repeated: z.boolean().default(false),
+    repeatedReason: z.string().nullish()
 }).partial().passthrough();
 
 

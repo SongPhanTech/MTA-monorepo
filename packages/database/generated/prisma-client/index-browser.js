@@ -310,11 +310,15 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   finalScore: 'finalScore',
   manualFinalScore: 'manualFinalScore',
   examPostponed: 'examPostponed',
+  examPostponedReason: 'examPostponedReason',
   exempted: 'exempted',
   withdrew: 'withdrew',
   examBanned: 'examBanned',
+  examBannedReason: 'examBannedReason',
   suspended: 'suspended',
-  repeated: 'repeated'
+  suspendedReason: 'suspendedReason',
+  repeated: 'repeated',
+  repeatedReason: 'repeatedReason'
 };
 
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum = {
@@ -2684,7 +2688,8 @@ exports.Prisma.StudentAcademicDecisionScalarFieldEnum = {
   decisionDate: 'decisionDate',
   validUntil: 'validUntil',
   reason: 'reason',
-  status: 'status'
+  status: 'status',
+  updatedResult: 'updatedResult'
 };
 
 exports.Prisma.TrainingScoreSessionScalarFieldEnum = {
@@ -3877,7 +3882,11 @@ exports.Prisma.StudentSubjectScoreOrderByRelevanceFieldEnum = {
   description: 'description',
   subjectClassId: 'subjectClassId',
   subjectVersionId: 'subjectVersionId',
-  studentId: 'studentId'
+  studentId: 'studentId',
+  examPostponedReason: 'examPostponedReason',
+  examBannedReason: 'examBannedReason',
+  suspendedReason: 'suspendedReason',
+  repeatedReason: 'repeatedReason'
 };
 
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum = {
@@ -6081,7 +6090,8 @@ exports.StudentStatus = exports.$Enums.StudentStatus = {
   WITHDRAWN: 'WITHDRAWN',
   TRANSFERRED: 'TRANSFERRED',
   PENDING_GRADUATION_REVIEW: 'PENDING_GRADUATION_REVIEW',
-  ACADEMIC_SUSPENSION: 'ACADEMIC_SUSPENSION'
+  ACADEMIC_SUSPENSION: 'ACADEMIC_SUSPENSION',
+  REPEATED: 'REPEATED'
 };
 
 exports.StudentTrainingType = exports.$Enums.StudentTrainingType = {

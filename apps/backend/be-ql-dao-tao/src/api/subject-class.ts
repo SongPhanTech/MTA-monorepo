@@ -117,6 +117,10 @@ const fixedClassBySubjectClassSemester = createRoute({
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
             }),
+            isShowAllFixedClass: z.string().openapi('isShowAllFixedClass', {
+                description: 'Hiển thị tất cả lớp quản lý',
+                default: 'true',
+            }),
         }),
     },
     responses: {
@@ -165,6 +169,10 @@ const studentBySubjectClassSemester = createRoute({
             }),
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
+            }),
+            isShowAllStudents: z.string().openapi('isShowAllStudents', {
+                description: 'Hiển thị tất cả học sinh',
+                default: 'true',
             }),
         }),
     },
@@ -419,7 +427,12 @@ app.openapi(openSubjectClass, async (c) => {
     }
     const semesterYear = semester?.schoolYear.startDate.getFullYear()
 
-    const semesterType = semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
+    const semesterType =
+        semester?.semesterType === $Enums.SemesterType.FIRST
+            ? 1
+            : semester?.semesterType === $Enums.SemesterType.SECOND
+              ? 2
+              : 0
 
     const res = (await prisma.$queryRawTyped(
         getSubjectClassBySemester(
@@ -488,8 +501,15 @@ app.openapi(openSubjectClass, async (c) => {
 })
 
 app.openapi(fixedClassBySubjectClassSemester, async (c) => {
-    const { semesterId, search, page, pageSize, subjectClassId, trainingObjectTypeId } =
-        c.req.valid('query')
+    const {
+        semesterId,
+        search,
+        page,
+        pageSize,
+        subjectClassId,
+        trainingObjectTypeId,
+        isShowAllFixedClass,
+    } = c.req.valid('query')
 
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
@@ -523,7 +543,14 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
     }
     const semesterYear = semester?.schoolYear.startDate.getFullYear()
 
-    const semesterType = semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
+    const semesterType =
+        isShowAllFixedClass === 'true'
+            ? 0
+            : semester?.semesterType === $Enums.SemesterType.FIRST
+              ? 1
+              : semester?.semesterType === $Enums.SemesterType.SECOND
+                ? 2
+                : 0
 
     const res = await prisma.$queryRawTyped<{
         full_count: number
@@ -600,8 +627,15 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
 })
 
 app.openapi(studentBySubjectClassSemester, async (c) => {
-    const { semesterId, search, page, pageSize, subjectClassId, trainingObjectTypeId } =
-        c.req.valid('query')
+    const {
+        semesterId,
+        search,
+        page,
+        pageSize,
+        subjectClassId,
+        trainingObjectTypeId,
+        isShowAllStudents,
+    } = c.req.valid('query')
 
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
@@ -635,8 +669,14 @@ app.openapi(studentBySubjectClassSemester, async (c) => {
     }
     const semesterYear = semester?.schoolYear.startDate.getFullYear()
 
-    const semesterType = semester?.semesterType === $Enums.SemesterType.FIRST ? 1 : 2
-
+    const semesterType =
+        isShowAllStudents === 'true'
+            ? 0
+            : semester?.semesterType === $Enums.SemesterType.FIRST
+              ? 1
+              : semester?.semesterType === $Enums.SemesterType.SECOND
+                ? 2
+                : 0
     const res = await prisma.$queryRawTyped<{
         fixedClassId: string
         full_count: number

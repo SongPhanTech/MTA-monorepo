@@ -410,6 +410,32 @@ async function main() {
         ],
     })
 
+    await prisma.diplomaType.createMany({
+        skipDuplicates: true,
+        data: [
+            {
+                name: 'Bằng kỹ sư',
+                code: 'BS',
+                type: $Enums.DiplomaTypeEnum.ENGINEER,
+            },
+            {
+                name: 'Bằng cử nhân',
+                code: 'BC',
+                type: $Enums.DiplomaTypeEnum.BACHELOR,
+            },
+            {
+                name: 'Bằng thạc sĩ',
+                code: 'BTS',
+                type: $Enums.DiplomaTypeEnum.MASTER,
+            },
+            {
+                name: 'Bằng tiến sĩ',
+                code: 'BTS',
+                type: $Enums.DiplomaTypeEnum.DOCTORATE,
+            },
+        ],
+    })
+
     const firstOrg = await prisma.dM_DonVi.findFirstOrThrow()
     await prisma.trainingField.createMany({
         data: trainingData.map(({ id, trainingField }) => ({
@@ -524,32 +550,6 @@ async function main() {
                 },
             },
         },
-    })
-
-    await prisma.diplomaType.createMany({
-        skipDuplicates: true,
-        data: [
-            {
-                name: 'Bằng kỹ sư',
-                code: 'BS',
-                type: $Enums.DiplomaTypeEnum.ENGINEER,
-            },
-            {
-                name: 'Bằng cử nhân',
-                code: 'BC',
-                type: $Enums.DiplomaTypeEnum.BACHELOR,
-            },
-            {
-                name: 'Bằng thạc sĩ',
-                code: 'BTS',
-                type: $Enums.DiplomaTypeEnum.MASTER,
-            },
-            {
-                name: 'Bằng tiến sĩ',
-                code: 'BTS',
-                type: $Enums.DiplomaTypeEnum.DOCTORATE,
-            },
-        ],
     })
 }
 

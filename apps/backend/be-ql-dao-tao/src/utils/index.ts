@@ -315,7 +315,7 @@ export const buildSubjectMapOrThrow = async (
         ([name]) => !existing.some((version) => version.name === name)
     )
 
-    // const orgMap = await buildOrganizationMapOrThrow(
+    // const orgMap = await buildOrgCodeMapOrThrow(
     //     prisma,
     //     subjects.map((s) => s.organizationCode || null)
     // )
@@ -329,7 +329,7 @@ export const buildSubjectMapOrThrow = async (
         //     const a = await prisma.subjectVersion.create({
         //         data: {
         //             name: subject[0],
-        //             examType: ExamType.OfflineWritten,
+        //             examType: $Enums.ExamType.OfflineWritten,
         //             credit: subject[2] as number,
         //             ...(managementOrganizationId
         //                 ? {

@@ -5,7 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface GenExamFaxResult {
-    success: boolean
-    message: string
-}
+/**
+ * Hiển thị tất cả lớp quản lý
+ */
+export type IsShowAllFixedClass = string

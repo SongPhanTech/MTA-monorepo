@@ -1300,7 +1300,8 @@ export const StudentStatus: {
   WITHDRAWN: 'WITHDRAWN',
   TRANSFERRED: 'TRANSFERRED',
   PENDING_GRADUATION_REVIEW: 'PENDING_GRADUATION_REVIEW',
-  ACADEMIC_SUSPENSION: 'ACADEMIC_SUSPENSION'
+  ACADEMIC_SUSPENSION: 'ACADEMIC_SUSPENSION',
+  REPEATED: 'REPEATED'
 };
 
 export type StudentStatus = (typeof StudentStatus)[keyof typeof StudentStatus]
@@ -42430,11 +42431,15 @@ export namespace Prisma {
     finalScore: Decimal | null
     manualFinalScore: number | null
     examPostponed: boolean | null
+    examPostponedReason: string | null
     exempted: boolean | null
     withdrew: boolean | null
     examBanned: boolean | null
+    examBannedReason: string | null
     suspended: boolean | null
+    suspendedReason: string | null
     repeated: boolean | null
+    repeatedReason: string | null
   }
 
   export type StudentSubjectScoreMaxAggregateOutputType = {
@@ -42454,11 +42459,15 @@ export namespace Prisma {
     finalScore: Decimal | null
     manualFinalScore: number | null
     examPostponed: boolean | null
+    examPostponedReason: string | null
     exempted: boolean | null
     withdrew: boolean | null
     examBanned: boolean | null
+    examBannedReason: string | null
     suspended: boolean | null
+    suspendedReason: string | null
     repeated: boolean | null
+    repeatedReason: string | null
   }
 
   export type StudentSubjectScoreCountAggregateOutputType = {
@@ -42478,11 +42487,15 @@ export namespace Prisma {
     finalScore: number
     manualFinalScore: number
     examPostponed: number
+    examPostponedReason: number
     exempted: number
     withdrew: number
     examBanned: number
+    examBannedReason: number
     suspended: number
+    suspendedReason: number
     repeated: number
+    repeatedReason: number
     _all: number
   }
 
@@ -42520,11 +42533,15 @@ export namespace Prisma {
     finalScore?: true
     manualFinalScore?: true
     examPostponed?: true
+    examPostponedReason?: true
     exempted?: true
     withdrew?: true
     examBanned?: true
+    examBannedReason?: true
     suspended?: true
+    suspendedReason?: true
     repeated?: true
+    repeatedReason?: true
   }
 
   export type StudentSubjectScoreMaxAggregateInputType = {
@@ -42544,11 +42561,15 @@ export namespace Prisma {
     finalScore?: true
     manualFinalScore?: true
     examPostponed?: true
+    examPostponedReason?: true
     exempted?: true
     withdrew?: true
     examBanned?: true
+    examBannedReason?: true
     suspended?: true
+    suspendedReason?: true
     repeated?: true
+    repeatedReason?: true
   }
 
   export type StudentSubjectScoreCountAggregateInputType = {
@@ -42568,11 +42589,15 @@ export namespace Prisma {
     finalScore?: true
     manualFinalScore?: true
     examPostponed?: true
+    examPostponedReason?: true
     exempted?: true
     withdrew?: true
     examBanned?: true
+    examBannedReason?: true
     suspended?: true
+    suspendedReason?: true
     repeated?: true
+    repeatedReason?: true
     _all?: true
   }
 
@@ -42679,11 +42704,15 @@ export namespace Prisma {
     finalScore: Decimal | null
     manualFinalScore: number | null
     examPostponed: boolean
+    examPostponedReason: string | null
     exempted: boolean
     withdrew: boolean
     examBanned: boolean
+    examBannedReason: string | null
     suspended: boolean
+    suspendedReason: string | null
     repeated: boolean
+    repeatedReason: string | null
     _count: StudentSubjectScoreCountAggregateOutputType | null
     _avg: StudentSubjectScoreAvgAggregateOutputType | null
     _sum: StudentSubjectScoreSumAggregateOutputType | null
@@ -42722,11 +42751,15 @@ export namespace Prisma {
     finalScore?: boolean
     manualFinalScore?: boolean
     examPostponed?: boolean
+    examPostponedReason?: boolean
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: boolean
     suspended?: boolean
+    suspendedReason?: boolean
     repeated?: boolean
+    repeatedReason?: boolean
     subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -42753,11 +42786,15 @@ export namespace Prisma {
     finalScore?: boolean
     manualFinalScore?: boolean
     examPostponed?: boolean
+    examPostponedReason?: boolean
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: boolean
     suspended?: boolean
+    suspendedReason?: boolean
     repeated?: boolean
+    repeatedReason?: boolean
     subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -42780,11 +42817,15 @@ export namespace Prisma {
     finalScore?: boolean
     manualFinalScore?: boolean
     examPostponed?: boolean
+    examPostponedReason?: boolean
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: boolean
     suspended?: boolean
+    suspendedReason?: boolean
     repeated?: boolean
+    repeatedReason?: boolean
     subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -42807,14 +42848,18 @@ export namespace Prisma {
     finalScore?: boolean
     manualFinalScore?: boolean
     examPostponed?: boolean
+    examPostponedReason?: boolean
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: boolean
     suspended?: boolean
+    suspendedReason?: boolean
     repeated?: boolean
+    repeatedReason?: boolean
   }
 
-  export type StudentSubjectScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "subjectClassId" | "subjectVersionId" | "studentId" | "attendanceScore" | "midtermScore" | "examScore" | "finalScore" | "manualFinalScore" | "examPostponed" | "exempted" | "withdrew" | "examBanned" | "suspended" | "repeated", ExtArgs["result"]["studentSubjectScore"]>
+  export type StudentSubjectScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "subjectClassId" | "subjectVersionId" | "studentId" | "attendanceScore" | "midtermScore" | "examScore" | "finalScore" | "manualFinalScore" | "examPostponed" | "examPostponedReason" | "exempted" | "withdrew" | "examBanned" | "examBannedReason" | "suspended" | "suspendedReason" | "repeated" | "repeatedReason", ExtArgs["result"]["studentSubjectScore"]>
   export type StudentSubjectScoreInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
@@ -42862,20 +42907,24 @@ export namespace Prisma {
       finalScore: Prisma.Decimal | null
       manualFinalScore: number | null
       examPostponed: boolean
+      examPostponedReason: string | null
       exempted: boolean
       withdrew: boolean
       /**
        * cấm thi
        */
       examBanned: boolean
+      examBannedReason: string | null
       /**
        * đình chỉ
        */
       suspended: boolean
+      suspendedReason: string | null
       /**
        * lưu ban
        */
       repeated: boolean
+      repeatedReason: string | null
     }, ExtArgs["result"]["studentSubjectScore"]>
     composites: {}
   }
@@ -43321,11 +43370,15 @@ export namespace Prisma {
     readonly finalScore: FieldRef<"StudentSubjectScore", 'Decimal'>
     readonly manualFinalScore: FieldRef<"StudentSubjectScore", 'Float'>
     readonly examPostponed: FieldRef<"StudentSubjectScore", 'Boolean'>
+    readonly examPostponedReason: FieldRef<"StudentSubjectScore", 'String'>
     readonly exempted: FieldRef<"StudentSubjectScore", 'Boolean'>
     readonly withdrew: FieldRef<"StudentSubjectScore", 'Boolean'>
     readonly examBanned: FieldRef<"StudentSubjectScore", 'Boolean'>
+    readonly examBannedReason: FieldRef<"StudentSubjectScore", 'String'>
     readonly suspended: FieldRef<"StudentSubjectScore", 'Boolean'>
+    readonly suspendedReason: FieldRef<"StudentSubjectScore", 'String'>
     readonly repeated: FieldRef<"StudentSubjectScore", 'Boolean'>
+    readonly repeatedReason: FieldRef<"StudentSubjectScore", 'String'>
   }
     
 
@@ -211194,6 +211247,7 @@ export namespace Prisma {
     validUntil: Date | null
     reason: string | null
     status: $Enums.DecisionStatus | null
+    updatedResult: boolean | null
   }
 
   export type StudentAcademicDecisionMaxAggregateOutputType = {
@@ -211213,6 +211267,7 @@ export namespace Prisma {
     validUntil: Date | null
     reason: string | null
     status: $Enums.DecisionStatus | null
+    updatedResult: boolean | null
   }
 
   export type StudentAcademicDecisionCountAggregateOutputType = {
@@ -211232,6 +211287,7 @@ export namespace Prisma {
     validUntil: number
     reason: number
     status: number
+    updatedResult: number
     _all: number
   }
 
@@ -211253,6 +211309,7 @@ export namespace Prisma {
     validUntil?: true
     reason?: true
     status?: true
+    updatedResult?: true
   }
 
   export type StudentAcademicDecisionMaxAggregateInputType = {
@@ -211272,6 +211329,7 @@ export namespace Prisma {
     validUntil?: true
     reason?: true
     status?: true
+    updatedResult?: true
   }
 
   export type StudentAcademicDecisionCountAggregateInputType = {
@@ -211291,6 +211349,7 @@ export namespace Prisma {
     validUntil?: true
     reason?: true
     status?: true
+    updatedResult?: true
     _all?: true
   }
 
@@ -211383,6 +211442,7 @@ export namespace Prisma {
     validUntil: Date | null
     reason: string | null
     status: $Enums.DecisionStatus
+    updatedResult: boolean
     _count: StudentAcademicDecisionCountAggregateOutputType | null
     _min: StudentAcademicDecisionMinAggregateOutputType | null
     _max: StudentAcademicDecisionMaxAggregateOutputType | null
@@ -211419,6 +211479,7 @@ export namespace Prisma {
     validUntil?: boolean
     reason?: boolean
     status?: boolean
+    updatedResult?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
     semester?: boolean | StudentAcademicDecision$semesterArgs<ExtArgs>
     schoolYear?: boolean | StudentAcademicDecision$schoolYearArgs<ExtArgs>
@@ -211444,6 +211505,7 @@ export namespace Prisma {
     validUntil?: boolean
     reason?: boolean
     status?: boolean
+    updatedResult?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
     semester?: boolean | StudentAcademicDecision$semesterArgs<ExtArgs>
     schoolYear?: boolean | StudentAcademicDecision$schoolYearArgs<ExtArgs>
@@ -211467,6 +211529,7 @@ export namespace Prisma {
     validUntil?: boolean
     reason?: boolean
     status?: boolean
+    updatedResult?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
     semester?: boolean | StudentAcademicDecision$semesterArgs<ExtArgs>
     schoolYear?: boolean | StudentAcademicDecision$schoolYearArgs<ExtArgs>
@@ -211490,9 +211553,10 @@ export namespace Prisma {
     validUntil?: boolean
     reason?: boolean
     status?: boolean
+    updatedResult?: boolean
   }
 
-  export type StudentAcademicDecisionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "studentId" | "semesterId" | "schoolYearId" | "appliedConfigId" | "actionTaken" | "decisionDate" | "validUntil" | "reason" | "status", ExtArgs["result"]["studentAcademicDecision"]>
+  export type StudentAcademicDecisionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "studentId" | "semesterId" | "schoolYearId" | "appliedConfigId" | "actionTaken" | "decisionDate" | "validUntil" | "reason" | "status" | "updatedResult", ExtArgs["result"]["studentAcademicDecision"]>
   export type StudentAcademicDecisionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
     semester?: boolean | StudentAcademicDecision$semesterArgs<ExtArgs>
@@ -211540,6 +211604,7 @@ export namespace Prisma {
       validUntil: Date | null
       reason: string | null
       status: $Enums.DecisionStatus
+      updatedResult: boolean
     }, ExtArgs["result"]["studentAcademicDecision"]>
     composites: {}
   }
@@ -211984,6 +212049,7 @@ export namespace Prisma {
     readonly validUntil: FieldRef<"StudentAcademicDecision", 'DateTime'>
     readonly reason: FieldRef<"StudentAcademicDecision", 'String'>
     readonly status: FieldRef<"StudentAcademicDecision", 'DecisionStatus'>
+    readonly updatedResult: FieldRef<"StudentAcademicDecision", 'Boolean'>
   }
     
 
@@ -304311,11 +304377,15 @@ export namespace Prisma {
     finalScore: 'finalScore',
     manualFinalScore: 'manualFinalScore',
     examPostponed: 'examPostponed',
+    examPostponedReason: 'examPostponedReason',
     exempted: 'exempted',
     withdrew: 'withdrew',
     examBanned: 'examBanned',
+    examBannedReason: 'examBannedReason',
     suspended: 'suspended',
-    repeated: 'repeated'
+    suspendedReason: 'suspendedReason',
+    repeated: 'repeated',
+    repeatedReason: 'repeatedReason'
   };
 
   export type StudentSubjectScoreScalarFieldEnum = (typeof StudentSubjectScoreScalarFieldEnum)[keyof typeof StudentSubjectScoreScalarFieldEnum]
@@ -307081,7 +307151,8 @@ export namespace Prisma {
     decisionDate: 'decisionDate',
     validUntil: 'validUntil',
     reason: 'reason',
-    status: 'status'
+    status: 'status',
+    updatedResult: 'updatedResult'
   };
 
   export type StudentAcademicDecisionScalarFieldEnum = (typeof StudentAcademicDecisionScalarFieldEnum)[keyof typeof StudentAcademicDecisionScalarFieldEnum]
@@ -308559,7 +308630,11 @@ export namespace Prisma {
     description: 'description',
     subjectClassId: 'subjectClassId',
     subjectVersionId: 'subjectVersionId',
-    studentId: 'studentId'
+    studentId: 'studentId',
+    examPostponedReason: 'examPostponedReason',
+    examBannedReason: 'examBannedReason',
+    suspendedReason: 'suspendedReason',
+    repeatedReason: 'repeatedReason'
   };
 
   export type StudentSubjectScoreOrderByRelevanceFieldEnum = (typeof StudentSubjectScoreOrderByRelevanceFieldEnum)[keyof typeof StudentSubjectScoreOrderByRelevanceFieldEnum]
@@ -313228,11 +313303,15 @@ export namespace Prisma {
     finalScore?: DecimalNullableFilter<"StudentSubjectScore"> | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: FloatNullableFilter<"StudentSubjectScore"> | number | null
     examPostponed?: BoolFilter<"StudentSubjectScore"> | boolean
+    examPostponedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
     exempted?: BoolFilter<"StudentSubjectScore"> | boolean
     withdrew?: BoolFilter<"StudentSubjectScore"> | boolean
     examBanned?: BoolFilter<"StudentSubjectScore"> | boolean
+    examBannedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
     suspended?: BoolFilter<"StudentSubjectScore"> | boolean
+    suspendedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
     repeated?: BoolFilter<"StudentSubjectScore"> | boolean
+    repeatedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
     subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
     subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -313258,11 +313337,15 @@ export namespace Prisma {
     finalScore?: SortOrderInput | SortOrder
     manualFinalScore?: SortOrderInput | SortOrder
     examPostponed?: SortOrder
+    examPostponedReason?: SortOrderInput | SortOrder
     exempted?: SortOrder
     withdrew?: SortOrder
     examBanned?: SortOrder
+    examBannedReason?: SortOrderInput | SortOrder
     suspended?: SortOrder
+    suspendedReason?: SortOrderInput | SortOrder
     repeated?: SortOrder
+    repeatedReason?: SortOrderInput | SortOrder
     subjectClass?: SubjectClassOrderByWithRelationInput
     subjectVersion?: SubjectVersionOrderByWithRelationInput
     student?: StudentOrderByWithRelationInput
@@ -313293,11 +313376,15 @@ export namespace Prisma {
     finalScore?: DecimalNullableFilter<"StudentSubjectScore"> | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: FloatNullableFilter<"StudentSubjectScore"> | number | null
     examPostponed?: BoolFilter<"StudentSubjectScore"> | boolean
+    examPostponedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
     exempted?: BoolFilter<"StudentSubjectScore"> | boolean
     withdrew?: BoolFilter<"StudentSubjectScore"> | boolean
     examBanned?: BoolFilter<"StudentSubjectScore"> | boolean
+    examBannedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
     suspended?: BoolFilter<"StudentSubjectScore"> | boolean
+    suspendedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
     repeated?: BoolFilter<"StudentSubjectScore"> | boolean
+    repeatedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
     subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
     subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -313323,11 +313410,15 @@ export namespace Prisma {
     finalScore?: SortOrderInput | SortOrder
     manualFinalScore?: SortOrderInput | SortOrder
     examPostponed?: SortOrder
+    examPostponedReason?: SortOrderInput | SortOrder
     exempted?: SortOrder
     withdrew?: SortOrder
     examBanned?: SortOrder
+    examBannedReason?: SortOrderInput | SortOrder
     suspended?: SortOrder
+    suspendedReason?: SortOrderInput | SortOrder
     repeated?: SortOrder
+    repeatedReason?: SortOrderInput | SortOrder
     _count?: StudentSubjectScoreCountOrderByAggregateInput
     _avg?: StudentSubjectScoreAvgOrderByAggregateInput
     _max?: StudentSubjectScoreMaxOrderByAggregateInput
@@ -313355,11 +313446,15 @@ export namespace Prisma {
     finalScore?: DecimalNullableWithAggregatesFilter<"StudentSubjectScore"> | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: FloatNullableWithAggregatesFilter<"StudentSubjectScore"> | number | null
     examPostponed?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
+    examPostponedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScore"> | string | null
     exempted?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
     withdrew?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
     examBanned?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
+    examBannedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScore"> | string | null
     suspended?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
+    suspendedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScore"> | string | null
     repeated?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
+    repeatedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScore"> | string | null
   }
 
   export type ArchivedCertificateOnStudentSubjectScoreWhereInput = {
@@ -328431,6 +328526,7 @@ export namespace Prisma {
     validUntil?: DateTimeNullableFilter<"StudentAcademicDecision"> | Date | string | null
     reason?: StringNullableFilter<"StudentAcademicDecision"> | string | null
     status?: EnumDecisionStatusFilter<"StudentAcademicDecision"> | $Enums.DecisionStatus
+    updatedResult?: BoolFilter<"StudentAcademicDecision"> | boolean
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     semester?: XOR<SemesterNullableScalarRelationFilter, SemesterWhereInput> | null
     schoolYear?: XOR<SchoolYearNullableScalarRelationFilter, SchoolYearWhereInput> | null
@@ -328455,6 +328551,7 @@ export namespace Prisma {
     validUntil?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
     status?: SortOrder
+    updatedResult?: SortOrder
     student?: StudentOrderByWithRelationInput
     semester?: SemesterOrderByWithRelationInput
     schoolYear?: SchoolYearOrderByWithRelationInput
@@ -328484,6 +328581,7 @@ export namespace Prisma {
     validUntil?: DateTimeNullableFilter<"StudentAcademicDecision"> | Date | string | null
     reason?: StringNullableFilter<"StudentAcademicDecision"> | string | null
     status?: EnumDecisionStatusFilter<"StudentAcademicDecision"> | $Enums.DecisionStatus
+    updatedResult?: BoolFilter<"StudentAcademicDecision"> | boolean
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     semester?: XOR<SemesterNullableScalarRelationFilter, SemesterWhereInput> | null
     schoolYear?: XOR<SchoolYearNullableScalarRelationFilter, SchoolYearWhereInput> | null
@@ -328508,6 +328606,7 @@ export namespace Prisma {
     validUntil?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
     status?: SortOrder
+    updatedResult?: SortOrder
     _count?: StudentAcademicDecisionCountOrderByAggregateInput
     _max?: StudentAcademicDecisionMaxOrderByAggregateInput
     _min?: StudentAcademicDecisionMinOrderByAggregateInput
@@ -328533,6 +328632,7 @@ export namespace Prisma {
     validUntil?: DateTimeNullableWithAggregatesFilter<"StudentAcademicDecision"> | Date | string | null
     reason?: StringNullableWithAggregatesFilter<"StudentAcademicDecision"> | string | null
     status?: EnumDecisionStatusWithAggregatesFilter<"StudentAcademicDecision"> | $Enums.DecisionStatus
+    updatedResult?: BoolWithAggregatesFilter<"StudentAcademicDecision"> | boolean
   }
 
   export type TrainingScoreSessionWhereInput = {
@@ -336684,11 +336784,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
     subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
     student: StudentCreateNestedOneWithoutSubjectClassStudentInput
@@ -336714,11 +336818,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -336738,11 +336846,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
     student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
@@ -336768,11 +336880,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -336795,11 +336911,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
   }
 
   export type StudentSubjectScoreUpdateManyMutationInput = {
@@ -336816,11 +336936,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentSubjectScoreUncheckedUpdateManyInput = {
@@ -336840,11 +336964,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ArchivedCertificateOnStudentSubjectScoreCreateInput = {
@@ -354164,6 +354292,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
     student: StudentCreateNestedOneWithoutStudentAcademicDecisionInput
     semester?: SemesterCreateNestedOneWithoutStudentAcademicDecisionInput
     schoolYear?: SchoolYearCreateNestedOneWithoutStudentAcademicDecisionInput
@@ -354188,6 +354317,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
     documentEvidence?: DocumentFileUncheckedCreateNestedManyWithoutStudentAcademicDecisionInput
   }
 
@@ -354204,6 +354334,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
     student?: StudentUpdateOneRequiredWithoutStudentAcademicDecisionNestedInput
     semester?: SemesterUpdateOneWithoutStudentAcademicDecisionNestedInput
     schoolYear?: SchoolYearUpdateOneWithoutStudentAcademicDecisionNestedInput
@@ -354228,6 +354359,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
     documentEvidence?: DocumentFileUncheckedUpdateManyWithoutStudentAcademicDecisionNestedInput
   }
 
@@ -354248,6 +354380,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
   }
 
   export type StudentAcademicDecisionUpdateManyMutationInput = {
@@ -354263,6 +354396,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StudentAcademicDecisionUncheckedUpdateManyInput = {
@@ -354282,6 +354416,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type TrainingScoreSessionCreateInput = {
@@ -363263,11 +363398,15 @@ export namespace Prisma {
     finalScore?: SortOrder
     manualFinalScore?: SortOrder
     examPostponed?: SortOrder
+    examPostponedReason?: SortOrder
     exempted?: SortOrder
     withdrew?: SortOrder
     examBanned?: SortOrder
+    examBannedReason?: SortOrder
     suspended?: SortOrder
+    suspendedReason?: SortOrder
     repeated?: SortOrder
+    repeatedReason?: SortOrder
   }
 
   export type StudentSubjectScoreAvgOrderByAggregateInput = {
@@ -363295,11 +363434,15 @@ export namespace Prisma {
     finalScore?: SortOrder
     manualFinalScore?: SortOrder
     examPostponed?: SortOrder
+    examPostponedReason?: SortOrder
     exempted?: SortOrder
     withdrew?: SortOrder
     examBanned?: SortOrder
+    examBannedReason?: SortOrder
     suspended?: SortOrder
+    suspendedReason?: SortOrder
     repeated?: SortOrder
+    repeatedReason?: SortOrder
   }
 
   export type StudentSubjectScoreMinOrderByAggregateInput = {
@@ -363319,11 +363462,15 @@ export namespace Prisma {
     finalScore?: SortOrder
     manualFinalScore?: SortOrder
     examPostponed?: SortOrder
+    examPostponedReason?: SortOrder
     exempted?: SortOrder
     withdrew?: SortOrder
     examBanned?: SortOrder
+    examBannedReason?: SortOrder
     suspended?: SortOrder
+    suspendedReason?: SortOrder
     repeated?: SortOrder
+    repeatedReason?: SortOrder
   }
 
   export type StudentSubjectScoreSumOrderByAggregateInput = {
@@ -374274,6 +374421,7 @@ export namespace Prisma {
     validUntil?: SortOrder
     reason?: SortOrder
     status?: SortOrder
+    updatedResult?: SortOrder
   }
 
   export type StudentAcademicDecisionMaxOrderByAggregateInput = {
@@ -374293,6 +374441,7 @@ export namespace Prisma {
     validUntil?: SortOrder
     reason?: SortOrder
     status?: SortOrder
+    updatedResult?: SortOrder
   }
 
   export type StudentAcademicDecisionMinOrderByAggregateInput = {
@@ -374312,6 +374461,7 @@ export namespace Prisma {
     validUntil?: SortOrder
     reason?: SortOrder
     status?: SortOrder
+    updatedResult?: SortOrder
   }
 
   export type EnumDecisionStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -404171,11 +404321,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
     subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
     student: StudentCreateNestedOneWithoutSubjectClassStudentInput
@@ -404200,11 +404354,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
   }
@@ -404272,11 +404430,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
     student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
@@ -404301,11 +404463,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
   }
@@ -404525,11 +404691,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
     subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
     student: StudentCreateNestedOneWithoutSubjectClassStudentInput
@@ -404554,11 +404724,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
   }
@@ -404626,11 +404800,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
     student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
@@ -404655,11 +404833,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
   }
@@ -405010,6 +405192,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
     student: StudentCreateNestedOneWithoutStudentAcademicDecisionInput
     semester?: SemesterCreateNestedOneWithoutStudentAcademicDecisionInput
     appliedConfig?: AcademicActionConfigCreateNestedOneWithoutDecisionsInput
@@ -405032,6 +405215,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
     documentEvidence?: DocumentFileUncheckedCreateNestedManyWithoutStudentAcademicDecisionInput
   }
 
@@ -405199,6 +405383,7 @@ export namespace Prisma {
     validUntil?: DateTimeNullableFilter<"StudentAcademicDecision"> | Date | string | null
     reason?: StringNullableFilter<"StudentAcademicDecision"> | string | null
     status?: EnumDecisionStatusFilter<"StudentAcademicDecision"> | $Enums.DecisionStatus
+    updatedResult?: BoolFilter<"StudentAcademicDecision"> | boolean
   }
 
   export type SchoolYearCreateWithoutSemestersInput = {
@@ -405681,6 +405866,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
     student: StudentCreateNestedOneWithoutStudentAcademicDecisionInput
     schoolYear?: SchoolYearCreateNestedOneWithoutStudentAcademicDecisionInput
     appliedConfig?: AcademicActionConfigCreateNestedOneWithoutDecisionsInput
@@ -405703,6 +405889,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
     documentEvidence?: DocumentFileUncheckedCreateNestedManyWithoutStudentAcademicDecisionInput
   }
 
@@ -411138,11 +411325,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
     student: StudentCreateNestedOneWithoutSubjectClassStudentInput
     certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -411166,11 +411357,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -411626,11 +411821,15 @@ export namespace Prisma {
     finalScore?: DecimalNullableFilter<"StudentSubjectScore"> | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: FloatNullableFilter<"StudentSubjectScore"> | number | null
     examPostponed?: BoolFilter<"StudentSubjectScore"> | boolean
+    examPostponedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
     exempted?: BoolFilter<"StudentSubjectScore"> | boolean
     withdrew?: BoolFilter<"StudentSubjectScore"> | boolean
     examBanned?: BoolFilter<"StudentSubjectScore"> | boolean
+    examBannedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
     suspended?: BoolFilter<"StudentSubjectScore"> | boolean
+    suspendedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
     repeated?: BoolFilter<"StudentSubjectScore"> | boolean
+    repeatedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
   }
 
   export type DocumentFileUpsertWithWhereUniqueWithoutSubjectVersionInput = {
@@ -413663,11 +413862,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
     student: StudentCreateNestedOneWithoutSubjectClassStudentInput
     certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -413691,11 +413894,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -420480,11 +420687,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
     subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
     certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -420508,11 +420719,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -421414,6 +421629,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
     semester?: SemesterCreateNestedOneWithoutStudentAcademicDecisionInput
     schoolYear?: SchoolYearCreateNestedOneWithoutStudentAcademicDecisionInput
     appliedConfig?: AcademicActionConfigCreateNestedOneWithoutDecisionsInput
@@ -421436,6 +421652,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
     documentEvidence?: DocumentFileUncheckedCreateNestedManyWithoutStudentAcademicDecisionInput
   }
 
@@ -468771,11 +468988,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
     subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
     student: StudentCreateNestedOneWithoutSubjectClassStudentInput
@@ -468800,11 +469021,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
     certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
   }
@@ -469133,11 +469358,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
     student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
@@ -469162,11 +469391,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
   }
@@ -472193,6 +472426,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
     student: StudentCreateNestedOneWithoutStudentAcademicDecisionInput
     semester?: SemesterCreateNestedOneWithoutStudentAcademicDecisionInput
     schoolYear?: SchoolYearCreateNestedOneWithoutStudentAcademicDecisionInput
@@ -472216,6 +472450,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
   }
 
   export type StudentAcademicDecisionCreateOrConnectWithoutDocumentEvidenceInput = {
@@ -472993,6 +473228,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
     student?: StudentUpdateOneRequiredWithoutStudentAcademicDecisionNestedInput
     semester?: SemesterUpdateOneWithoutStudentAcademicDecisionNestedInput
     schoolYear?: SchoolYearUpdateOneWithoutStudentAcademicDecisionNestedInput
@@ -473016,6 +473252,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type NotificationUpsertWithoutAttachmentsInput = {
@@ -473635,6 +473872,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
     student: StudentCreateNestedOneWithoutStudentAcademicDecisionInput
     semester?: SemesterCreateNestedOneWithoutStudentAcademicDecisionInput
     schoolYear?: SchoolYearCreateNestedOneWithoutStudentAcademicDecisionInput
@@ -473657,6 +473895,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
     documentEvidence?: DocumentFileUncheckedCreateNestedManyWithoutStudentAcademicDecisionInput
   }
 
@@ -492583,6 +492822,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
   }
 
   export type SemesterUpdateWithoutSchoolYearInput = {
@@ -492790,6 +493030,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
     student?: StudentUpdateOneRequiredWithoutStudentAcademicDecisionNestedInput
     semester?: SemesterUpdateOneWithoutStudentAcademicDecisionNestedInput
     appliedConfig?: AcademicActionConfigUpdateOneWithoutDecisionsNestedInput
@@ -492812,6 +493053,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
     documentEvidence?: DocumentFileUncheckedUpdateManyWithoutStudentAcademicDecisionNestedInput
   }
 
@@ -492831,6 +493073,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type SubjectClassCreateManySemesterInput = {
@@ -493007,6 +493250,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
   }
 
   export type ClassRegisterSessionCreateManySemesterInput = {
@@ -493554,6 +493798,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
     student?: StudentUpdateOneRequiredWithoutStudentAcademicDecisionNestedInput
     schoolYear?: SchoolYearUpdateOneWithoutStudentAcademicDecisionNestedInput
     appliedConfig?: AcademicActionConfigUpdateOneWithoutDecisionsNestedInput
@@ -493576,6 +493821,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
     documentEvidence?: DocumentFileUncheckedUpdateManyWithoutStudentAcademicDecisionNestedInput
   }
 
@@ -493595,6 +493841,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ClassRegisterSessionUpdateWithoutSemesterInput = {
@@ -495617,11 +495864,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
   }
 
   export type DocumentFileCreateManySubjectVersionInput = {
@@ -496400,11 +496651,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
     student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
     certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -496428,11 +496683,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -496454,11 +496713,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DocumentFileUpdateWithoutSubjectVersionInput = {
@@ -496852,11 +497115,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
   }
 
   export type ClassScheduleCreateManySubjectClassInput = {
@@ -496954,11 +497221,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
     student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
     certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -496982,11 +497253,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -497008,11 +497283,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FixedClassUpdateWithoutSubjectClassesInput = {
@@ -501096,11 +501375,15 @@ export namespace Prisma {
     finalScore?: Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: number | null
     examPostponed?: boolean
+    examPostponedReason?: string | null
     exempted?: boolean
     withdrew?: boolean
     examBanned?: boolean
+    examBannedReason?: string | null
     suspended?: boolean
+    suspendedReason?: string | null
     repeated?: boolean
+    repeatedReason?: string | null
   }
 
   export type StudentTrainingScoreCreateManyStudentInput = {
@@ -501243,6 +501526,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
   }
 
   export type StudentGraduationApplicationCreateManyStudentInput = {
@@ -501441,11 +501725,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
     certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -501469,11 +501757,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -501495,11 +501787,15 @@ export namespace Prisma {
     finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
     examPostponed?: BoolFieldUpdateOperationsInput | boolean
+    examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
     exempted?: BoolFieldUpdateOperationsInput | boolean
     withdrew?: BoolFieldUpdateOperationsInput | boolean
     examBanned?: BoolFieldUpdateOperationsInput | boolean
+    examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
     suspended?: BoolFieldUpdateOperationsInput | boolean
+    suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     repeated?: BoolFieldUpdateOperationsInput | boolean
+    repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StudentTrainingScoreUpdateWithoutStudentInput = {
@@ -501891,6 +502187,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
     semester?: SemesterUpdateOneWithoutStudentAcademicDecisionNestedInput
     schoolYear?: SchoolYearUpdateOneWithoutStudentAcademicDecisionNestedInput
     appliedConfig?: AcademicActionConfigUpdateOneWithoutDecisionsNestedInput
@@ -501913,6 +502210,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
     documentEvidence?: DocumentFileUncheckedUpdateManyWithoutStudentAcademicDecisionNestedInput
   }
 
@@ -501932,6 +502230,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StudentGraduationApplicationUpdateWithoutStudentInput = {
@@ -526874,6 +527173,7 @@ export namespace Prisma {
     validUntil?: Date | string | null
     reason?: string | null
     status?: $Enums.DecisionStatus
+    updatedResult?: boolean
   }
 
   export type AcademicActionRuleSetUpdateWithoutConfigInput = {
@@ -526921,6 +527221,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
     student?: StudentUpdateOneRequiredWithoutStudentAcademicDecisionNestedInput
     semester?: SemesterUpdateOneWithoutStudentAcademicDecisionNestedInput
     schoolYear?: SchoolYearUpdateOneWithoutStudentAcademicDecisionNestedInput
@@ -526943,6 +527244,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
     documentEvidence?: DocumentFileUncheckedUpdateManyWithoutStudentAcademicDecisionNestedInput
   }
 
@@ -526962,6 +527264,7 @@ export namespace Prisma {
     validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDecisionStatusFieldUpdateOperationsInput | $Enums.DecisionStatus
+    updatedResult?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type AcademicActionConditionCreateManyRuleSetInput = {

@@ -167,6 +167,7 @@ enum StudentStatus {
   TRANSFERRED
   PENDING_GRADUATION_REVIEW
   ACADEMIC_SUSPENSION
+  REPEATED
 
   @@schema("ql-dao-tao")
 }
@@ -857,14 +858,18 @@ model StudentSubjectScore {
   /// @lte(10, 'Điểm tối đa là 10')
   manualFinalScore          Float?
   examPostponed             Boolean                                    @default(false)
+  examPostponedReason       String?
   exempted                  Boolean                                    @default(false)
   withdrew                  Boolean                                    @default(false)
   /// cấm thi
   examBanned                Boolean                                    @default(false)
+  examBannedReason          String?
   /// đình chỉ
   suspended                 Boolean                                    @default(false)
+  suspendedReason           String?
   /// lưu ban
   repeated                  Boolean                                    @default(false)
+  repeatedReason            String?
   certificates              ArchivedCertificateOnStudentSubjectScore[]
   awards                    ArchivedAwardOnStudentSubjectScore[]
   studentThesisRegistration StudentThesisRegistration[]                @relation("ScoreToRegistration")
@@ -4484,6 +4489,7 @@ model StudentAcademicDecision {
   reason           String?
   documentEvidence DocumentFile[]
   status           DecisionStatus        @default(PENDING)
+  updatedResult    Boolean               @default(false)
 
   @@unique([studentId, semesterId, schoolYearId, appliedConfigId])
   @@schema("ql-dao-tao")

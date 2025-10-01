@@ -1,5 +1,5 @@
 import type { SubjectClass } from '@workspace/db'
-import { Col, DatePicker, Form, message, Radio } from 'antd'
+import { Col, DatePicker, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
@@ -17,8 +17,6 @@ dayjs.extend(customParseFormat)
 
 const HanNhapDiem = () => {
     const [form] = Form.useForm<PutSubjectClass>()
-    const isLockScore = useWatch('isLockScore', form)
-    const isLockExamScore = useWatch('isLockExamScore', form)
     const scoreDeadline = useWatch('scoreDeadline', form)
     const examScoreDeadline = useWatch('examScoreDeadline', form)
 
@@ -51,8 +49,6 @@ const HanNhapDiem = () => {
                 examScoreDeadline: initialValue.examScoreDeadline
                     ? dayjs(initialValue.examScoreDeadline)
                     : undefined,
-                isLockScore: initialValue.isLockScore,
-                isLockExamScore: initialValue.isLockExamScore,
             })
         }
     }, [initialValue])
@@ -64,8 +60,6 @@ const HanNhapDiem = () => {
         try {
             showSpinner()
             const data = {
-                isLockScore: output?.isLockScore,
-                isLockExamScore: output?.isLockExamScore,
                 scoreDeadline: output?.scoreDeadline,
                 examScoreDeadline: output?.examScoreDeadline,
             }
@@ -101,44 +95,9 @@ const HanNhapDiem = () => {
             onCancel={onClose}
             maskClosable={true}
             title={'Điều chỉnh hạn nhập điểm'}
-            width={900}
+            width={600}
         >
-            <Col span={12}>
-                <FormItem form={form} label="Khóa điểm ĐQT" labelAlign="left" name="isLockScore">
-                    <Radio.Group
-                        onChange={(e) => {
-                            form.setFieldsValue({
-                                isLockScore: e.target.value,
-                            })
-                        }}
-                    >
-                        <Radio value={true}>Đã khóa</Radio>
-                        <Radio value={false}>Chưa khóa</Radio>
-                    </Radio.Group>
-                </FormItem>
-            </Col>
-
-            <Col span={12}>
-                <FormItem
-                    form={form}
-                    label="Khóa điểm thi"
-                    name="isLockExamScore"
-                    labelAlign="left"
-                >
-                    <Radio.Group
-                        onChange={(e) => {
-                            form.setFieldsValue({
-                                isLockExamScore: e.target.value,
-                            })
-                        }}
-                    >
-                        <Radio value={true}>Đã khóa</Radio>
-                        <Radio value={false}>Chưa khóa</Radio>
-                    </Radio.Group>
-                </FormItem>
-            </Col>
-
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem
                     form={form}
                     label="Hạn nhập điểm ĐQT"
@@ -149,7 +108,6 @@ const HanNhapDiem = () => {
                         style={{ width: '100%' }}
                         placeholder="Chọn ngày"
                         format="DD/MM/YYYY"
-                        disabled={isLockScore}
                         value={scoreDeadline}
                         onChange={(date) => {
                             form.setFieldsValue({
@@ -159,7 +117,7 @@ const HanNhapDiem = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem
                     form={form}
                     label="Hạn nhập điểm thi "
@@ -170,7 +128,6 @@ const HanNhapDiem = () => {
                         style={{ width: '100%' }}
                         placeholder="Chọn ngày"
                         format="DD/MM/YYYY"
-                        disabled={isLockExamScore}
                         value={examScoreDeadline}
                         onChange={(date) => {
                             form.setFieldsValue({

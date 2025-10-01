@@ -9,7 +9,8 @@
     "./constants": "./src/constants.ts",
     "./parseExcel": "./src/parseExcel.ts",
     "./utils": "./src/utils.ts",
-    "./docxjs": "./src/docxjs.ts"
+    "./docxjs": "./src/docxjs.ts",
+    ".": "./src/index.ts"
   },
   "scripts": {
     "generate:api": "orval"

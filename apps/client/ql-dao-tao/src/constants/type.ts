@@ -108,7 +108,7 @@ export type FilterProps = {
     finalGpa?: 'asc' | 'desc'
     diplomaNumber?: string
     diplomaIssueDate?: Date[]
-    type?: TrainingObjectTypes
+    type?: TrainingObjectTypes[]
     baseScore?: 'Base10' | 'Base4'
     trainingFieldId?: string
     title?: string

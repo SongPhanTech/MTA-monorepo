@@ -1,4 +1,3 @@
-import { FileDoneOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
@@ -12,7 +11,7 @@ import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, Row } from 'antd'
+import { Col, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { CalendarPlus } from 'lucide-react'
 import type React from 'react'
@@ -163,7 +162,7 @@ export default function SubjectOpeningPlan() {
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 {/* <Button type="primary">Thêm mới</Button> */}
-                                {can(
+                                {/* {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
                                     'XUAT_EXCEL'
                                 ) && (
@@ -174,7 +173,7 @@ export default function SubjectOpeningPlan() {
                                         <FileDoneOutlined />
                                         Xuất file mẫu
                                     </Button>
-                                )}
+                                )} */}
                                 {/* {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
                                     'NHAP_EXCEL'

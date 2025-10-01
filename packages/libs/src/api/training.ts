@@ -141,6 +141,8 @@ import type {
     SubjectClasses,
     TrainingField200Item,
     TrainingField400,
+    UpdateStudentStatus200,
+    UpdateStudentStatusBody,
     UploadExcelCreateFixedClass,
     UploadExcelCreateFixedClass200,
     UploadExcelCreateFixedClass400,
@@ -2371,6 +2373,104 @@ export const useUploadExcelImportScore = <TError = UploadExcelImportScore400, TC
     TContext
 > => {
     const mutationOptions = getUploadExcelImportScoreMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Cập nhật trạng thái, điểm học viên theo xử lý học tập
+ * @summary Cập nhật trạng thái, điểm học viên theo xử lý học tập
+ */
+export type updateStudentStatusResponse200 = {
+    data: UpdateStudentStatus200
+    status: 200
+}
+
+export type updateStudentStatusResponseComposite = updateStudentStatusResponse200
+
+export type updateStudentStatusResponse = updateStudentStatusResponseComposite & {
+    headers: Headers
+}
+
+export const getUpdateStudentStatusUrl = () => {
+    return '/api/student/update-students-status'
+}
+
+export const updateStudentStatus = async (
+    updateStudentStatusBody: UpdateStudentStatusBody,
+    options?: RequestInit
+): Promise<updateStudentStatusResponse> => {
+    return customTrainingFetch<updateStudentStatusResponse>(getUpdateStudentStatusUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(updateStudentStatusBody),
+    })
+}
+
+export const getUpdateStudentStatusMutationOptions = <
+    TError = unknown,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof updateStudentStatus>>,
+        TError,
+        { data: UpdateStudentStatusBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof updateStudentStatus>>,
+    TError,
+    { data: UpdateStudentStatusBody },
+    TContext
+> => {
+    const mutationKey = ['updateStudentStatus']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof updateStudentStatus>>,
+        { data: UpdateStudentStatusBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return updateStudentStatus(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UpdateStudentStatusMutationResult = NonNullable<
+    Awaited<ReturnType<typeof updateStudentStatus>>
+>
+export type UpdateStudentStatusMutationBody = UpdateStudentStatusBody
+export type UpdateStudentStatusMutationError = unknown
+
+/**
+ * @summary Cập nhật trạng thái, điểm học viên theo xử lý học tập
+ */
+export const useUpdateStudentStatus = <TError = unknown, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof updateStudentStatus>>,
+            TError,
+            { data: UpdateStudentStatusBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof updateStudentStatus>>,
+    TError,
+    { data: UpdateStudentStatusBody },
+    TContext
+> => {
+    const mutationOptions = getUpdateStudentStatusMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

@@ -1,7 +1,6 @@
 import { prisma } from '..'
 
 export const findClassRegisterSession = async (userId: string) => {
-    const currentYear = new Date().getFullYear()
     const profile = await prisma.userProfile.findUniqueOrThrow({
         where: { id: userId },
         include: {
@@ -12,11 +11,6 @@ export const findClassRegisterSession = async (userId: string) => {
                         include: {
                             trainingCourse: true,
                             curriculumVersion: true,
-                        },
-                        where: {
-                            trainingCourse: {
-                                OR: [{ endYear: { lte: currentYear } }, { endYear: null }],
-                            },
                         },
                     },
                 },
@@ -51,14 +45,13 @@ export const findClassRegisterSession = async (userId: string) => {
         include: {
             semester: { include: { schoolYear: true } },
             trainingCourses: { select: { id: true } },
+            creditLimit: true,
         },
     })
 
-    classRegisterSession[0]?.semester.schoolYear.active
-
     const sessions = classRegisterSession.map((session) => {
         const curriculumVersions = [...map]
-            .filter(([trainingCourseId, curriculumVersion]) =>
+            .filter(([trainingCourseId]) =>
                 session.trainingCourses.some(({ id }) => id === trainingCourseId)
             )
             .map(([_, curriculumVersion]) => curriculumVersion)

@@ -13,6 +13,7 @@ import { emptyObjectIf } from '@workspace/constant'
 import type {
     SubjectClass,
     SubjectClassSchedule,
+    SubjectClassTime,
     SubjectVersion,
     TrainingCourse,
     TrainingMajor,
@@ -230,6 +231,7 @@ export default function TeachingAssignment() {
                 },
             },
             subjectClassStudent: true,
+            subjectClassTimes: true,
         },
         orderBy: [
             ...emptyObjectIf(
@@ -649,6 +651,22 @@ export default function TeachingAssignment() {
                                 render: (value) => (value?.length ? value?.length : ''),
                             },
                             {
+                                title: 'Thời khoá biểu',
+                                width: 150,
+                                align: 'center',
+                                dataIndex: 'subjectClassTimes',
+                                render: (subjectClassTimes: SubjectClassTime[]) => {
+                                    return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
+                                        return (
+                                            <p>
+                                                {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
+                                                {tkb.startPeriod} - {tkb.endPeriod}
+                                            </p>
+                                        )
+                                    })
+                                },
+                            },
+                            {
                                 title: 'Giảng viên 1',
                                 width: 300,
                                 align: 'center',
@@ -767,25 +785,25 @@ export default function TeachingAssignment() {
                                             record?.mainLecturer && record?.extraLecturer
                                                 ? [
                                                       {
-                                                          label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.firstName} ${record?.mainLecturer?.userProfile?.lastName}`,
+                                                          label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
                                                           value: record?.lecturerId,
                                                       },
                                                       {
-                                                          label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.firstName} ${record?.extraLecturer?.userProfile?.lastName}`,
+                                                          label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
                                                           value: record?.extraLecturerId,
                                                       },
                                                   ]
                                                 : record?.mainLecturer
                                                   ? [
                                                         {
-                                                            label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.firstName} ${record?.mainLecturer?.userProfile?.lastName}`,
+                                                            label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
                                                             value: record?.lecturerId,
                                                         },
                                                     ]
                                                   : record?.extraLecturer
                                                     ? [
                                                           {
-                                                              label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.firstName} ${record?.extraLecturer?.userProfile?.lastName}`,
+                                                              label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
                                                               value: record?.extraLecturerId,
                                                           },
                                                       ]
@@ -848,6 +866,7 @@ export default function TeachingAssignment() {
                                 options: treeData,
                                 render: (value) => value?.managementOrganization?.sTen || '',
                             },
+
                             // {
                             //     title: 'Điểm bằng nhau',
                             //     dataIndex: 'subject',
@@ -868,7 +887,7 @@ export default function TeachingAssignment() {
                                 width: 100,
                                 align: 'center',
                                 fixed: 'right',
-                                hidden: canSome(
+                                hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
                                     'SUA',
                                     'XOA'

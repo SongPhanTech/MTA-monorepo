@@ -141,12 +141,16 @@ const STUDENT_STATUS_OPTIONS = [
         value: $Enums.StudentStatus.ACADEMIC_SUSPENSION,
         label: 'Đình chỉ học',
     },
+    {
+        value: $Enums.StudentStatus.REPEATED,
+        label: 'Lưu ban',
+    },
 ]
 
 const SUBJECT_CLASS_SCHEDULE_TYPE = {
     MORNING: 'Sáng',
     AFTERNOON: 'Chiều',
-    EVENINGE: 'Tối',
+    EVENING: 'Tối',
 }
 
 const CUSTOM_VI_LOCALE = {

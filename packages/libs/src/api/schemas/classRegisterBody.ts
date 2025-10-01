@@ -10,4 +10,5 @@ export type ClassRegisterBody = {
     sessionId: string
     /** Danh sách ID lớp học */
     subjectClassIds: string[]
+    curriculumVersionId?: string
 }

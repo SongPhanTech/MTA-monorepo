@@ -228,29 +228,31 @@ const PutOpenClassModal = () => {
         },
     })
 
-    const { data: subjectClassData = [], refetch: refetchSubjectClassData } =
-        useFindManySubjectClass(
-            {
-                where: {
-                    subjectId: dataClass?.subjectVersionId,
-                },
-                include: {
-                    subject: true,
-                    room: {
-                        include: {
-                            building: {
-                                include: {
-                                    trainingLocation: true,
-                                },
+    const { data: subjectClassData = [] } = useFindManySubjectClass(
+        {
+            where: {
+                subjectId: dataClass?.subjectVersionId,
+                cancelled: false,
+                active: true,
+                deletedAt: null,
+            },
+            include: {
+                subject: true,
+                room: {
+                    include: {
+                        building: {
+                            include: {
+                                trainingLocation: true,
                             },
                         },
                     },
                 },
             },
-            {
-                enabled: !!dataClass?.subjectVersionId,
-            }
-        )
+        },
+        {
+            enabled: !!dataClass?.subjectVersionId,
+        }
+    )
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {

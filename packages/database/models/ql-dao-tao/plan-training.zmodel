@@ -49,6 +49,7 @@ model StudentSubjectScore extends Base {
   // Điểm I là điểm sử dụng trong trường hợp học viên không thể dự thi kết thúc học phần do bị ốm,
   // gặp tai nạn hoặc vì những lý do khách quan khác (Điều 26).
   examPostponed             Boolean                                    @default(false) // hoãn thi
+  examPostponedReason       String?                      
 
   // Điểm R là điểm áp dụng cho học phần mà học viên được phép miễn học và
   // bảo lưu kết quả khi học viên chuyển từ trường khác đến hoặc chuyển đổi giữa các CTĐT. 
@@ -64,10 +65,13 @@ model StudentSubjectScore extends Base {
 
   /// cấm thi
   examBanned                Boolean                                    @default(false)
+  examBannedReason          String?
   /// đình chỉ
   suspended                 Boolean                                    @default(false)
+  suspendedReason           String?
   /// lưu ban
   repeated                  Boolean                                    @default(false)
+  repeatedReason           String?                                  
 
   certificates              ArchivedCertificateOnStudentSubjectScore[]
   awards                    ArchivedAwardOnStudentSubjectScore[]

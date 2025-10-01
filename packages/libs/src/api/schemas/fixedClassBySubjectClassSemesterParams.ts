@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
+import type { IsShowAllFixedClass } from './isShowAllFixedClass'
 import type { Page } from './page'
 import type { PageSize } from './pageSize'
 import type { Search } from './search'
@@ -19,4 +20,5 @@ export type FixedClassBySubjectClassSemesterParams = {
     page: Page
     pageSize: PageSize
     trainingObjectTypeId: TrainingObjectTypeId
+    isShowAllFixedClass: IsShowAllFixedClass
 }

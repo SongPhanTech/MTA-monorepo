@@ -1,5 +1,5 @@
 import DeleteIcon from '@components/icons/delete'
-import { Button, Checkbox, Col, Flex, message, Row, Tag } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Popconfirm, Row, type TableProps, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
@@ -12,13 +12,7 @@ import { useAcademicActionTypeOption } from '@hooks/academicActionType'
 import { useDecisionStatusOptions } from '@hooks/decisionStatus'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
-import {
-    type AcademicActionType,
-    DecisionStatus,
-    type FixedClass,
-    type Prisma,
-    type TrainingCourse,
-} from '@workspace/db'
+import { type AcademicActionType, DecisionStatus, type Prisma } from '@workspace/db'
 import {
     useDeleteStudentAcademicDecision,
     useFindManyDM_DonVi,
@@ -27,7 +21,10 @@ import {
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
+import {
+    updateStudentStatus,
+    useExportStudentResultSemesterJson,
+} from '@workspace/libs/api/training'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -55,6 +52,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedStudents, setSelectedStudents] = useState<SelectedStudent[]>([])
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [selectedDecision, setSelectedDecision] = useState<React.Key[]>([])
     const { getAcademicActionTypeLabel } = useAcademicActionTypeOption()
     const {
         options: decisionStatusOption,
@@ -177,9 +175,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         try {
             showSpinner()
             await deleteStudentAcademicDecision({
-                where: {
-                    id,
-                },
+                where: { id },
             })
         } catch (error: any) {
             if (error?.info?.message) {
@@ -276,6 +272,16 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         }
     }, [studentData])
 
+    const decisionSelection: TableProps['rowSelection'] = {
+        selectedRowKeys: selectedDecision,
+        onChange: (selectedRowKeys: React.Key[], selectedRows) => {
+            setSelectedDecision(selectedRowKeys)
+        },
+        getCheckboxProps: (record) => ({
+            disabled: record?.updatedResult,
+        }),
+    }
+
     const onSelectChange = (id: string, selected: boolean) => {
         const newSelectedKeys = selected
             ? [...selectedRowKeys, id]
@@ -366,29 +372,59 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                     <Col span={24}>
                         <Row gutter={[16, 16]} align="top" justify="space-between">
                             <Col span={24}>
-                                <Flex justify="end">
-                                    <Button
-                                        type="primary"
-                                        onClick={() =>
-                                            onOpen({
-                                                id: '',
-                                                semesterId,
-                                                actionTaken,
-                                            })
-                                        }
-                                    >
-                                        <BookPlus />
-                                        Thêm học viên
-                                    </Button>
-                                </Flex>
+                                <Row justify={'space-between'}>
+                                    <h3 className="text-xl font-bold">Quyết định</h3>
+                                    <Flex justify="end" gap={4}>
+                                        <Popconfirm
+                                            placement="topLeft"
+                                            title="Xác nhận cập nhật trạng thái SV?"
+                                            description={`Trạng thái SV và kết quả học tập sẽ được đánh dấu là ${getAcademicActionTypeLabel(
+                                                actionTaken
+                                            )}`}
+                                            okText="Đồng ý"
+                                            cancelText="Hủy"
+                                            onConfirm={async () => {
+                                                await updateStudentStatus({
+                                                    decisionIds: selectedDecision as string[],
+                                                    academicActionType: actionTaken,
+                                                })
+                                                await refetch()
+                                                setSelectedDecision([])
+                                            }}
+                                        >
+                                            <Button
+                                                type="primary"
+                                                disabled={!selectedDecision.length}
+                                            >
+                                                <BookPlus />
+                                                Cập nhật trạng thái SV
+                                            </Button>
+                                        </Popconfirm>
+
+                                        <Button
+                                            type="primary"
+                                            onClick={() =>
+                                                onOpen({
+                                                    id: '',
+                                                    semesterId,
+                                                    actionTaken,
+                                                })
+                                            }
+                                        >
+                                            <BookPlus />
+                                            Thêm học viên
+                                        </Button>
+                                    </Flex>
+                                </Row>
                             </Col>
                         </Row>
                     </Col>
                     <Col span={24}>
                         <Table
-                            rowKey="key"
+                            rowKey="id"
                             data={data}
                             filters={filters}
+                            rowSelection={decisionSelection}
                             setFilters={(value) => {
                                 setFilters(value)
                                 setCurrentPage(1)
@@ -403,12 +439,12 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                         index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                                 },
                                 {
-                                    title: 'Mã sinh viên',
+                                    title: 'Mã SV',
                                     dataIndex: 'code',
-                                    width: 120,
+                                    width: 100,
                                     align: 'center',
                                     fixed: 'left',
-                                    type: 'input',
+                                    // type: 'input',
                                     render: (__, record) => record?.student?.code,
                                 },
                                 {
@@ -416,7 +452,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     dataIndex: 'name',
                                     width: 200,
                                     fixed: 'left',
-                                    type: 'input',
+                                    // type: 'input',
                                     render: (__, record) => record?.student?.userProfile?.fullname,
                                 },
                                 {
@@ -424,11 +460,11 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     dataIndex: 'fixedClass',
                                     width: 150,
                                     align: 'center',
-                                    type: 'select',
-                                    options: fixedClassData.map((i: FixedClass) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    })),
+                                    // type: 'select',
+                                    // options: fixedClassData.map((i: FixedClass) => ({
+                                    //     value: i.id,
+                                    //     label: i.name,
+                                    // })),
                                     render: (__, record) => record?.student?.fixedClass?.name,
                                 },
                                 {
@@ -436,11 +472,11 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     dataIndex: 'trainingCourse',
                                     width: 100,
                                     align: 'center',
-                                    type: 'select',
-                                    options: trainingCourseData.map((i: TrainingCourse) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    })),
+                                    // type: 'select',
+                                    // options: trainingCourseData.map((i: TrainingCourse) => ({
+                                    //     value: i.id,
+                                    //     label: i.name,
+                                    // })),
                                     render: (__, record) =>
                                         record?.student?.fixedClass?.trainingCourse?.name,
                                 },
@@ -449,8 +485,8 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     dataIndex: 'organization',
                                     width: 150,
                                     align: 'center',
-                                    type: 'tree_select',
-                                    options: treeData,
+                                    // type: 'tree_select',
+                                    // options: treeData,
                                     render: (__, record) =>
                                         record?.student?.fixedClass?.managementOrganization?.sTen,
                                 },
@@ -469,28 +505,20 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     dataIndex: 'decisionDate',
                                     width: 150,
                                     align: 'center',
-                                    type: 'date',
+                                    // type: 'date',
                                     render: (__, record) =>
                                         record.decisionDate
                                             ? dayjs(record.decisionDate).format('DD/MM/YYYY')
                                             : '',
                                 },
                                 {
-                                    title: 'Hành động đã thực hiện',
-                                    dataIndex: 'actionTaken',
-                                    width: 150,
-                                    align: 'center',
-                                    fixed: 'right',
-                                    render: (value) => getAcademicActionTypeLabel(value),
-                                },
-                                {
-                                    title: 'Trạng thái của quyết định',
+                                    title: 'Trạng thái',
                                     dataIndex: 'status',
-                                    width: 150,
+                                    width: 120,
                                     align: 'center',
                                     fixed: 'right',
-                                    type: 'select',
-                                    options: decisionStatusOption,
+                                    // type: 'select',
+                                    // options: decisionStatusOption,
                                     render: (status) => (
                                         <Tag color={getDecisionStatusColor(status)}>
                                             {getDecisionStatusLabel(status)}
@@ -505,16 +533,18 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     render: (_, record) => {
                                         return record?.id ? (
                                             <Row className="justify-center gap-2">
-                                                <EditIcon
-                                                    onClick={() =>
-                                                        onOpen({
-                                                            id: record?.id,
-                                                            semesterId,
-                                                            actionTaken,
-                                                        })
-                                                    }
-                                                    className="text-sm text-blue-700 cursor-pointer"
-                                                />
+                                                <Button ghost disabled>
+                                                    <EditIcon
+                                                        onClick={() =>
+                                                            onOpen({
+                                                                id: record?.id,
+                                                                semesterId,
+                                                                actionTaken,
+                                                            })
+                                                        }
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                </Button>
                                                 <DeleteIcon
                                                     popConfirm={{
                                                         onConfirm: () =>
@@ -551,16 +581,19 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                     <Col span={24}>
                         <Row gutter={[16, 16]} align="top" justify="space-between">
                             <Col span={24}>
-                                <Flex justify="end">
-                                    <Button
-                                        type="primary"
-                                        onClick={handleApprove}
-                                        disabled={selectedStudents.length === 0}
-                                    >
-                                        <BookPlus />
-                                        Duyệt
-                                    </Button>
-                                </Flex>
+                                <Row justify={'space-between'}>
+                                    <h3 className="text-xl font-bold">Xét</h3>
+                                    <Flex justify="end">
+                                        <Button
+                                            type="primary"
+                                            onClick={handleApprove}
+                                            disabled={selectedStudents.length === 0}
+                                        >
+                                            <BookPlus />
+                                            Duyệt
+                                        </Button>
+                                    </Flex>
+                                </Row>
                             </Col>
                         </Row>
                     </Col>
@@ -573,9 +606,9 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                             rowSelection={rowSelection}
                             columns={[
                                 {
-                                    title: 'Mã sinh viên',
+                                    title: 'Mã SV',
                                     dataIndex: ['code'],
-                                    width: 120,
+                                    width: 100,
                                     align: 'center',
                                 },
                                 {

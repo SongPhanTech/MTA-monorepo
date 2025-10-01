@@ -7,12 +7,13 @@ import useSpinner from '@hooks/spinner'
 import type { ClassRegisterSession, TrainingCourse } from '@workspace/db'
 import {
     useCreateClassRegisterSession,
+    useDeleteManyClassRegisterSessionCredit,
     useFindManyTrainingCourse,
     useFindUniqueClassRegisterSession,
     useUpdateClassRegisterSession,
 } from '@workspace/db/hooks'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Form, Input, message, Radio, Select } from 'antd'
+import { Col, Form, Input, InputNumber, message, Radio, Select } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { useEffect } from 'react'
@@ -20,6 +21,8 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export type PutClassRegisterSession = ClassRegisterSession & {
     trainingCourses: string[]
+    minCredit: number | null
+    maxCredit: number | null
 }
 dayjs.locale('vi')
 
@@ -58,6 +61,8 @@ const PutClassRegisterSession = () => {
 
     const { mutateAsync: createClassRegisterSession } = useCreateClassRegisterSession()
     const { mutateAsync: updateClassRegisterSession } = useUpdateClassRegisterSession()
+    const { mutateAsync: deleteManyClassRegisterSessionCredit } =
+        useDeleteManyClassRegisterSessionCredit()
     async function onOk(output?: PutClassRegisterSession) {
         if (!output) return
 
@@ -70,8 +75,12 @@ const PutClassRegisterSession = () => {
                 semesterId: output.semesterId,
                 active: output.active,
                 description: output.description,
+                tuitionPerCredit: output.tuitionPerCredit || 0,
             }
             if (id) {
+                await deleteManyClassRegisterSessionCredit({
+                    where: { classRegisterSessionId: id },
+                })
                 await updateClassRegisterSession({
                     data: {
                         ...data,
@@ -80,6 +89,12 @@ const PutClassRegisterSession = () => {
                                 output.trainingCourses?.length > 0
                                     ? output.trainingCourses.map((item) => ({ id: item }))
                                     : [],
+                        },
+                        creditLimit: {
+                            create: {
+                                minCredit: output.minCredit || 0,
+                                maxCredit: output.maxCredit || 0,
+                            },
                         },
                     },
                     where: {
@@ -96,6 +111,12 @@ const PutClassRegisterSession = () => {
                                 output.trainingCourses?.length > 0
                                     ? output.trainingCourses.map((item) => ({ id: item }))
                                     : [],
+                        },
+                        creditLimit: {
+                            create: {
+                                minCredit: output.minCredit || 0,
+                                maxCredit: output.maxCredit || 0,
+                            },
                         },
                     },
                 })
@@ -134,6 +155,14 @@ const PutClassRegisterSession = () => {
             maskClosable={true}
             title={id ? 'Chỉnh sửa đợt đăng ký học' : 'Thêm mới đợt đăng ký học'}
             className="w-[50vw]"
+            formProps={{
+                initialValues: {
+                    minCredit: 0,
+                    maxCredit: 25,
+                    tuitionPerCredit: 350000,
+                    active: true,
+                },
+            }}
         >
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên đợt đăng ký" required>
@@ -181,12 +210,56 @@ const PutClassRegisterSession = () => {
                     <Select
                         mode="multiple"
                         maxTagCount={'responsive'}
-                        placeholder="Chọn ngành"
+                        placeholder="Chọn khoá"
                         options={trainingCourses.map((i: TrainingCourse) => ({
                             value: i.id,
                             label: i.name,
                         }))}
                         allowClear
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} required name="minCredit" label="Tín chỉ tối thiểu">
+                    <InputNumber
+                        type="number"
+                        className="w-full"
+                        min={0}
+                        defaultValue={0}
+                        placeholder="Nhập tín chỉ tối thiểu"
+                        step={1}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} required name="maxCredit" label="Tín chỉ tối đa">
+                    <InputNumber
+                        type="number"
+                        className="w-full"
+                        min={0}
+                        defaultValue={25}
+                        placeholder="Nhập tín chỉ tối đa"
+                        step={1}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    required
+                    name="tuitionPerCredit"
+                    label="Học phí (theo tín chỉ)"
+                >
+                    <InputNumber
+                        type="number"
+                        className="w-full"
+                        min={0}
+                        placeholder="Nhập học phí (theo tín chỉ)"
+                        suffix="VNĐ"
+                        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        parser={(value) =>
+                            (value ? Number(value?.replace(/(,*)/g, '')) : 0) as unknown as 0
+                        }
                     />
                 </FormItem>
             </Col>

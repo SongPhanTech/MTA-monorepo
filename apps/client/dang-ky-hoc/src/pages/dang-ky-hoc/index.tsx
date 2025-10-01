@@ -1,3 +1,4 @@
+import Loading from '@components/commons/loading'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
@@ -12,6 +13,7 @@ import {
 } from '@workspace/libs/api/portal'
 import type { GetClassesInfo200ItemSubjectClassItem } from '@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItem'
 import type { GetClassesInfo200ItemSubjectClassItemSubjectClassTimesItem } from '@workspace/libs/api/schemas/getClassesInfo200ItemSubjectClassItemSubjectClassTimesItem'
+import type { GetClassRegisterSession200ItemCreditLimitItem } from '@workspace/libs/api/schemas/getClassRegisterSession200ItemCreditLimitItem'
 import { Button, Checkbox, message, Popconfirm, Tabs } from 'antd'
 import dayjs from 'dayjs'
 import { CircleXIcon, LogOutIcon } from 'lucide-react'
@@ -22,10 +24,15 @@ export default function DangKyHocPage() {
     const [_filters, _setFilters] = useState({
         searchText: '',
     })
-    const { data: classRegisterSession } = useGetClassRegisterSession()
+    const { data: classRegisterSession, isFetching } = useGetClassRegisterSession()
+
+    if (isFetching) {
+        return <Loading />
+    }
+
     return (
         <div>
-            {classRegisterSession?.status !== 200 ? (
+            {classRegisterSession?.status !== 200 || classRegisterSession.data.length === 0 ? (
                 <center>
                     <b className="text-lg">{'Tạm ngừng đăng ký học. Vui lòng quay lại sau!'}</b>
                 </center>
@@ -50,6 +57,8 @@ export default function DangKyHocPage() {
                                         code: cv?.code ?? '',
                                     }))}
                                     endDate={session.endDate}
+                                    creditLimit={session.creditLimit}
+                                    tuitionPerCredit={session.tuitionPerCredit}
                                 />
                             ),
                         })) || []
@@ -64,10 +73,14 @@ const DanhSachMonDangKy = ({
     sessionId,
     curriculumVersions = [],
     endDate,
+    creditLimit,
+    tuitionPerCredit,
 }: {
     sessionId: string
     curriculumVersions: { id: string; name: string; code: string }[]
     endDate: string | null
+    creditLimit: GetClassRegisterSession200ItemCreditLimitItem[]
+    tuitionPerCredit?: number
 }) => {
     const [curriculumVersionId, setCurriculumVersionId] = useState(
         curriculumVersions.length > 0 ? curriculumVersions[0].id : ''
@@ -99,6 +112,18 @@ const DanhSachMonDangKy = ({
                     đăng ký trước thời gian này!
                 </p>
             )}
+            {creditLimit.map((limit) => (
+                <p key={limit.id} className="mb-2">
+                    Giới hạn tín chỉ đăng ký:
+                    <span>
+                        Tối thiểu <b>{limit.minCredit}</b>{' '}
+                    </span>
+                    <span>
+                        Tối đa <b>{limit.maxCredit}</b>
+                    </span>
+                </p>
+            ))}
+            <p className="mb-4">Lưu ý: Môn học đã đăng ký sẽ được tô màu xanh lá</p>
             <div className="flex gap-2">
                 <Select
                     options={curriculumVersions.map((cv) => ({
@@ -184,11 +209,11 @@ const DanhSachMonDangKy = ({
                             align: 'center',
                             width: 80,
                             render: (_, record) =>
-                                `${record._count?.subjectClassStudent || 0}/${record.maxStudent}`,
+                                `${record._count?.classRegisterLogs || 0}/${record.maxStudent}`,
                         },
                         {
                             title: 'Thời khoá biểu',
-                            width: 300,
+                            width: 150,
                             align: 'center',
                             render: (_, record) => {
                                 return record.subjectClassTimes?.map?.((tkb) => {
@@ -202,6 +227,15 @@ const DanhSachMonDangKy = ({
                             },
                         },
                         {
+                            title: 'Học phí',
+                            align: 'center',
+                            width: 120,
+                            render: (_, record) =>
+                                tuitionPerCredit
+                                    ? `${((record.credit || 0) * tuitionPerCredit).formatVND()}`
+                                    : '-',
+                        },
+                        {
                             title: 'Thao tác',
                             align: 'center',
                             width: 120,
@@ -209,7 +243,7 @@ const DanhSachMonDangKy = ({
                             render: (_, record) => {
                                 const isMaxed =
                                     (record.maxStudent || 0) <=
-                                    (record._count?.subjectClassStudent || 0)
+                                    (record._count?.classRegisterLogs || 0)
                                 const isRegisteredBool = record.subjectClassStudent?.length > 0
                                 const isDisabled = isMaxed || isRegisteredBool
                                 return (
@@ -221,6 +255,7 @@ const DanhSachMonDangKy = ({
                                                 const res = await classRegister({
                                                     sessionId,
                                                     subjectClassIds: [record.id],
+                                                    curriculumVersionId,
                                                 })
                                                 if (res.status !== 200) {
                                                     throw new Error(res.data.message)
@@ -249,8 +284,8 @@ const DanhSachMonDangKy = ({
                         const r = record as unknown as GetClassesInfo200ItemSubjectClassItem
                         return {
                             className:
-                                r.subjectClassStudent?.map?.((e) => e.student.userProfileId)
-                                    .length > 0
+                                r.classRegisterLogs?.map?.((e) => e.student.userProfileId).length >
+                                0
                                     ? 'bg-green-200'
                                     : '',
                         }
@@ -278,7 +313,13 @@ const DanhSachMonDangKy = ({
                                 ?.flatMap?.((e) => e?.subjectClass)
                                 .reduce((acc, curr) => acc + (curr.credit || 0), 0)}
                         </b>{' '}
-                        tín chỉ
+                        tín chỉ, học phí{' '}
+                        {(
+                            classesRegisteredInfo?.data
+                                ?.flatMap?.((e) => e?.subjectClass)
+                                .reduce((acc, curr) => acc + (curr.credit || 0), 0) *
+                            (tuitionPerCredit || 0)
+                        ).formatVND()}
                     </p>
                 )}
             </div>
@@ -344,8 +385,17 @@ const DanhSachMonDangKy = ({
                                 `${record._count?.subjectClassStudent || 0}/${record.maxStudent}`,
                         },
                         {
+                            title: 'Học phí',
+                            align: 'center',
+                            width: 120,
+                            render: (_, record) =>
+                                tuitionPerCredit
+                                    ? `${((record.credit || 0) * tuitionPerCredit).formatVND()}`
+                                    : '-',
+                        },
+                        {
                             title: 'Thời khoá biểu',
-                            width: 300,
+                            width: 150,
                             align: 'center',
                             render: (_, record) => {
                                 return record.subjectClassTimes?.map?.(

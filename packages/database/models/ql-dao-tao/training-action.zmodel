@@ -91,6 +91,12 @@ model StudentAcademicDecision extends Base {
   // Trạng thái của quyết định
   status           DecisionStatus        @default(PENDING)
 
+  // Đã cập nhật trạng thái sinh viên chưa:
+  // - Sinh viên đình chỉ học
+  // - Sinh viên buộc thôi học
+  // - Sinh viên lưu ban, điểm lưu ban
+  updatedResult    Boolean               @default(false)
+
   @@unique([studentId, semesterId, schoolYearId, appliedConfigId])
   @@schema("ql-dao-tao")
 }

@@ -135,11 +135,6 @@ const PutSupervisorPaymentRecord = () => {
                         suffix="VNĐ"
                         formatter={formatter}
                         parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
-                        onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                                e.preventDefault()
-                            }
-                        }}
                     />
                 </FormItem>
             </Col>

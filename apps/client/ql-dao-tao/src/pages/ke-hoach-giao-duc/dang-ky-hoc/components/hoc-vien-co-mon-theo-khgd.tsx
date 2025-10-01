@@ -11,7 +11,7 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { App, Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
+import { App, Button, Checkbox, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -34,7 +34,7 @@ export default function StudentCourseByPlan({
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-
+    const [isShowAllStudents, setIsShowAllStudents] = useState(true)
     const { getScheduleLabel } = useScheduleOptions()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [initialSelectedKeys, setInitialSelectedKeys] = useState<React.Key[]>([])
@@ -69,6 +69,7 @@ export default function StudentCourseByPlan({
             page: `${currentPage}`,
             pageSize: `${numberOfPages}`,
             trainingObjectTypeId: trainingObjectTypeId || '',
+            isShowAllStudents: 'true',
         },
         {
             query: {
@@ -166,6 +167,16 @@ export default function StudentCourseByPlan({
                                     className="h-8"
                                     allowClear
                                 />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="isShowAllStudents">
+                                <Checkbox
+                                    checked={isShowAllStudents}
+                                    onChange={(e) => setIsShowAllStudents(e.target.checked)}
+                                >
+                                    Học viên có môn theo kì học dự kiến
+                                </Checkbox>
                             </Form.Item>
                         </Col>
                     </Flex>

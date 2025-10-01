@@ -141,6 +141,7 @@ export default function ClassSubject() {
                 : {}),
             active: true,
             deletedAt: null,
+            cancelled: false,
         },
         include: {
             subject: {
@@ -177,25 +178,58 @@ export default function ClassSubject() {
     const { data: count } = useCountSubjectClass({
         where: {
             ...(filters.searchText && filters.searchText !== ''
-                ? { name: { contains: filters.searchText } }
-                : {}),
-            ...(filters.searchText && filters.searchText !== ''
-                ? { code: { contains: filters.searchText } }
-                : {}),
-            trainingObjectTypeId,
-            ...(!canReadAll
                 ? {
                       OR: [
                           {
-                              mainLecturer: {
-                                  userProfileId: profileId,
+                              name: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          {
+                              code: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
                               },
                           },
                       ],
+                  }
+                : {}),
+            ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
+            ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
+            trainingObjectTypeId,
+            ...(filters.LectureIds.length > 0
+                ? {
+                      OR: filters.LectureIds.map((id) => ({
+                          mainLecturer: { id },
+                      })),
+                  }
+                : {}),
+            ...(filters.BoMonId
+                ? {
+                      subject: {
+                          managementOrganizationId: filters.BoMonId,
+                      },
+                  }
+                : {}),
+            ...(filters.examDateRange
+                ? {
+                      examDate: {
+                          gte: dayjs(filters.examDateRange?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.examDateRange?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(!canReadAll
+                ? {
+                      mainLecturer: {
+                          userProfileId: profileId,
+                      },
                   } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
                 : {}),
             active: true,
             deletedAt: null,
+            cancelled: false,
         },
     })
     const handleFilterApply = (newFilters: Partial<FilterProps>) => {

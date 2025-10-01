@@ -224,8 +224,14 @@ app.openapi(graduationCheck, async (c) => {
         >()
 
         for (const subjectScore of rawSubjectScores) {
+            // actual final score
             const scoreBase10 =
                 subjectScore.manualFinalScore || subjectScore.finalScore?.toNumber() || 0
+
+            if (subjectScore.repeated && scoreBase10 < scoreToRetain) {
+                continue
+            }
+
             const scoreConvert = scoreConverts.find(
                 (s) => s.base10Min <= scoreBase10 && s.base10Max >= scoreBase10
             )
