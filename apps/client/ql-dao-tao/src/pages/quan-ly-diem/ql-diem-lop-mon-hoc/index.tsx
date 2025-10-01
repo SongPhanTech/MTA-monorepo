@@ -34,6 +34,7 @@ import {
     message,
     Popover,
     Row,
+    Skeleton,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -77,12 +78,14 @@ interface LopMonHocItemProps {
     }>
     onChangeSelected?: (selected: string) => void
     selectedItem?: string
+    isFetching: boolean
 }
 
 const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
     dataTable,
     onChangeSelected,
     selectedItem,
+    isFetching,
 }) => {
     const data: Item[] = dataTable.map((item) => ({
         code: item.code === null ? undefined : item.code,
@@ -132,7 +135,7 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
             <h2 className="text-lg font-semibold px-[6]" style={{ marginBottom: '12px' }}>
                 Danh sách lớp
             </h2>
-            <FlatList data={data} renderItem={renderItem} />
+            {isFetching ? <Skeleton /> : <FlatList data={data} renderItem={renderItem} />}
         </div>
     )
 }
@@ -158,10 +161,12 @@ type FilterTable = FilterProps & {
 }
 
 type FormType = {
-    isLockScore: boolean
-    isLockExamScore: boolean
-    scoreSubmitted: boolean
-    scoreChecked: boolean
+    isLockScore?: boolean
+    isLockExamScore?: boolean
+    scoreSubmitted?: boolean
+    scoreChecked?: boolean
+    enteredScore?: boolean
+    enteredExamScore?: boolean
 }
 
 export default function SubjectClassScore() {
@@ -252,7 +257,7 @@ export default function SubjectClassScore() {
 
     //#region Mới
     /* Mới */
-    const { data: subjectClassData = [] } = useFindManySubjectClass({
+    const { data: subjectClassData = [], isFetching } = useFindManySubjectClass({
         where: {
             ...(filters.searchText && filters.searchText !== ''
                 ? {
@@ -297,13 +302,13 @@ export default function SubjectClassScore() {
                       },
                   }
                 : {}),
-            ...(!canReadAll
-                ? {
-                      mainLecturer: {
-                          userProfileId: profileId,
-                      },
-                  } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
-                : {}),
+            // ...(!canReadAll
+            //     ? {
+            //           mainLecturer: {
+            //               userProfileId: profileId,
+            //           },
+            //       } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
+            //     : {}),
             deletedAt: null,
             active: true,
             cancelled: false,
@@ -574,6 +579,18 @@ export default function SubjectClassScore() {
         return {
             finalScore,
         }
+    }
+
+    const hanldeSave = () => {
+        Modal.confirm({
+            title: 'Xác nhận',
+            content: 'Bạn có chắc chắn muốn nhập điểm không?',
+            okText: 'Xác nhận',
+            cancelText: 'Hủy',
+            onOk: async () => {
+                handleSaveScores()
+            },
+        })
     }
 
     const handleSaveScores = async () => {
@@ -881,6 +898,7 @@ export default function SubjectClassScore() {
                     }))}
                     onChangeSelected={handleChangeFixedClass}
                     selectedItem={selectedFixedClass}
+                    isFetching={isFetching}
                 />
             </Col>
 
@@ -993,26 +1011,30 @@ export default function SubjectClassScore() {
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                     'IN_DS_THI'
-                                ) && (
-                                    <ExportTemplateExam
-                                        selectedFixedClass={selectedFixedClass}
-                                        dataClass={selectedClassInfo}
-                                        dataTable={dataTable}
-                                    />
-                                )}
+                                ) &&
+                                    !!dataDetailSubjectClass?.enteredScore && (
+                                        <ExportTemplateExam
+                                            selectedFixedClass={selectedFixedClass}
+                                            dataClass={selectedClassInfo}
+                                            dataTable={dataTable}
+                                        />
+                                    )}
 
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                     'IN_PHIEU_DIEM'
                                 ) && (
                                     <>
-                                        <Button
-                                            disabled={!selectedFixedClass}
-                                            onClick={() => handlePrint()}
-                                        >
-                                            <Printer />
-                                            In phiếu điểm và khoá
-                                        </Button>
+                                        {!!dataDetailSubjectClass?.enteredExamScore && (
+                                            <Button
+                                                disabled={!selectedFixedClass}
+                                                onClick={() => handlePrint()}
+                                            >
+                                                <Printer />
+                                                In phiếu điểm và khoá
+                                            </Button>
+                                        )}
+
                                         <Button
                                             disabled={!selectedFixedClass}
                                             onClick={() =>
@@ -1032,22 +1054,77 @@ export default function SubjectClassScore() {
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                     'NHAP_DIEM'
                                 ) && (
-                                    <Button type="primary" onClick={handleSaveScores}>
+                                    <Button type="primary" onClick={hanldeSave}>
                                         <Save stroke="white" />
                                         Lưu
                                     </Button>
                                 )}
                             </Flex>
                         </Col>
+
                         {dataDetailSubjectClass && (
-                            <Col span={24} className="">
-                                <Flex align="center" justify="space-between">
-                                    <Col span={18}>
+                            <>
+                                <Col span={24}>
+                                    <Flex justify="" align="center">
+                                        <div className="mr-6">
+                                            Hạn nhập điểm TX/CC:
+                                            <span
+                                                className={`ml-1 ${dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) ? '' : 'text-red-500'}`}
+                                            >
+                                                {dataDetailSubjectClass?.scoreDeadline &&
+                                                    formatDate(
+                                                        dataDetailSubjectClass?.scoreDeadline
+                                                    )}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            Hạn nhập điểm thi:
+                                            <span
+                                                className={`ml-1 ${dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) ? '' : 'text-red-500'}`}
+                                            >
+                                                {dataDetailSubjectClass?.examScoreDeadline &&
+                                                    formatDate(
+                                                        dataDetailSubjectClass?.examScoreDeadline
+                                                    )}
+                                            </span>
+                                        </div>
+                                    </Flex>
+                                </Col>
+                                <Col span={24} className="">
+                                    <Flex align="center" justify="space-between">
                                         <Form
                                             className="flex gap-0 lg:gap-3"
                                             form={form}
                                             layout="horizontal"
                                         >
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="enteredScore"
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox
+                                                    disabled={
+                                                        profileId !==
+                                                        '5317ce3a-62ef-4ad2-be10-a0f110a55243'
+                                                    }
+                                                >
+                                                    Đã nhập điểm CC/TX
+                                                </Checkbox>
+                                            </Form.Item>
+                                            <Form.Item
+                                                className="mb-0"
+                                                name="enteredExamScore"
+                                                valuePropName="checked"
+                                            >
+                                                <Checkbox
+                                                    disabled={
+                                                        profileId !==
+                                                        '5317ce3a-62ef-4ad2-be10-a0f110a55243'
+                                                    }
+                                                >
+                                                    Đã nhập điểm thi điểm thi
+                                                </Checkbox>
+                                            </Form.Item>
                                             <Form.Item
                                                 className="mb-0"
                                                 name="isLockScore"
@@ -1085,7 +1162,7 @@ export default function SubjectClassScore() {
                                             >
                                                 <Checkbox
                                                     disabled={
-                                                        profileId ===
+                                                        profileId !==
                                                         'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
                                                     }
                                                 >
@@ -1100,7 +1177,7 @@ export default function SubjectClassScore() {
                                             >
                                                 <Checkbox
                                                     disabled={
-                                                        profileId ===
+                                                        profileId !==
                                                         'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
                                                     }
                                                 >
@@ -1108,27 +1185,9 @@ export default function SubjectClassScore() {
                                                 </Checkbox>
                                             </Form.Item>
                                         </Form>
-                                    </Col>
-
-                                    <Col span={6}>
-                                        <Flex justify="end" align="center">
-                                            {/* <div>
-                                    Hạn nhập điểm TX/CC:
-                                    <span>{dataDetailSubjectClass?.scoreDeadline &&formatDate(dataDetailSubjectClass?.scoreDeadline)}</span>
-                                </div> */}
-                                            <div>
-                                                Hạn nhập điểm thi:
-                                                <span>
-                                                    {dataDetailSubjectClass?.examScoreDeadline &&
-                                                        formatDate(
-                                                            dataDetailSubjectClass?.examScoreDeadline
-                                                        )}
-                                                </span>
-                                            </div>
-                                        </Flex>
-                                    </Col>
-                                </Flex>
-                            </Col>
+                                    </Flex>
+                                </Col>
+                            </>
                         )}
                     </Row>
                 </Col>
