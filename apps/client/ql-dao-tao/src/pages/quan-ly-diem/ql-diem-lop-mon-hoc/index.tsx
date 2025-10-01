@@ -696,6 +696,7 @@ export default function SubjectClassScore() {
                 if (listSqlTransaction?.length > 0) {
                     await sqlTransaction(listSqlTransaction)
                     message.success(`Đã cập nhật ${scoresToUpdate.length} bản ghi thành công!`)
+                    debouncedRefetch()
                 }
                 setHasUnsavedChanges(false)
             } else {
