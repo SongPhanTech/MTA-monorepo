@@ -1396,8 +1396,7 @@ export default function SubjectClassScore() {
                                                     value={currentScore}
                                                     status={isInvalid ? 'error' : undefined}
                                                     onChange={(value) => {
-                                                        if (!value) return
-                                                        let newScore = +value
+                                                        let newScore = +(value || 0)
                                                         if (newScore > 99) newScore = 99
                                                         if (newScore < 0) newScore = 0
 
@@ -1486,8 +1485,7 @@ export default function SubjectClassScore() {
                                                     value={currentScore}
                                                     status={isInvalid ? 'error' : undefined}
                                                     onChange={(value) => {
-                                                        if (!value) return
-                                                        let newScore = +value
+                                                        let newScore = +(value || 0)
                                                         if (newScore > 99) newScore = 99
                                                         if (newScore < 0) newScore = 0
 
