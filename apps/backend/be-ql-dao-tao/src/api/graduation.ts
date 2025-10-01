@@ -449,6 +449,22 @@ app.openapi(graduationCheck, async (c) => {
             totalPassCredit += credit
         }
 
+        await prisma.studentGraduationApplication.update({
+            where: { id: application.id },
+            data: {
+                gpaScore: {
+                    set: Array.from(finalScores.values()).map((score) => ({
+                        id: score.id,
+                    })),
+                },
+                supplementaryScore: {
+                    set: Array.from(markDoneScores.values()).map((score) => ({
+                        id: score.id,
+                    })),
+                },
+            },
+        })
+
         if (
             curriculumVersion.requiredCredits &&
             totalPassCredit < curriculumVersion.requiredCredits
