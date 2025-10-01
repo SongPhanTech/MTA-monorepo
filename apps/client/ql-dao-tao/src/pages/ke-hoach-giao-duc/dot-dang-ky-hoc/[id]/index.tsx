@@ -1,5 +1,4 @@
 import Table from '@components/commons/table'
-import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
@@ -10,9 +9,10 @@ import {
     useCountSubjectClass,
     useFindManySubjectClass,
     useFindUniqueClassRegisterSession,
+    useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Col, Divider, Row } from 'antd'
+import { Button, Col, Divider, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
@@ -151,6 +151,8 @@ export default function ClassRegisterLogs() {
         }
     )
 
+    const { mutate: updateSubjectClass } = useUpdateSubjectClass()
+
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
@@ -166,6 +168,9 @@ export default function ClassRegisterLogs() {
                     .join(' - ')}
             </Divider>
             <Row gutter={[16, 0]}>
+                <Col span={24} className="mb-4 flex items-center justify-end gap-2">
+                    <Button>Xác nhận lớp học phần</Button>
+                </Col>
                 <Col span={24}>
                     <Table
                         filters={filters}
@@ -245,13 +250,24 @@ export default function ClassRegisterLogs() {
                                 },
                             },
                             {
+                                title: 'Trạng thái',
+                                width: 300,
+                                align: 'center',
+                                render: (_, record) => {
+                                    return record.cancelled ? (
+                                        <Tag color="red">Đã huỷ</Tag>
+                                    ) : (
+                                        <Tag color="green">Đang mở</Tag>
+                                    )
+                                },
+                            },
+                            {
                                 title: 'Thao tác',
                                 width: 300,
                                 align: 'center',
                                 render: (_, record) => {
                                     return (
                                         <div className="flex items-center justify-center gap-2">
-                                            <CreateIcon title="Nhập lớp học phần" />
                                             <DeleteIcon
                                                 title="Huỷ lớp học phần"
                                                 popConfirm={{
@@ -259,7 +275,20 @@ export default function ClassRegisterLogs() {
                                                     description:
                                                         'Hành động này sẽ huỷ tất cả các đăng ký học phần của sinh viên trong lớp này.',
                                                     onConfirm: async () => {
-                                                        // await deleteSubjectClass(record.id)
+                                                        try {
+                                                            await updateSubjectClass({
+                                                                where: { id: record.id },
+                                                                data: { cancelled: true },
+                                                            })
+                                                            message.success(
+                                                                'Huỷ lớp học phần thành công!'
+                                                            )
+                                                        } catch (error) {
+                                                            console.log(error)
+                                                            message.error(
+                                                                'Có lỗi xảy ra, vui lòng thử lại sau!'
+                                                            )
+                                                        }
                                                     },
                                                 }}
                                             />

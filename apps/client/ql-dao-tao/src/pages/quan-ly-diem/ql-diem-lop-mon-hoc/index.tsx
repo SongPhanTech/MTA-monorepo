@@ -306,6 +306,7 @@ export default function SubjectClassScore() {
                 : {}),
             deletedAt: null,
             active: true,
+            cancelled: false,
         },
         include: {
             subject: {

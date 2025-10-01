@@ -8,9 +8,13 @@ export default function StudentScoreClassPage() {
         searchText: '',
     })
 
-    return <div>Khảo sát</div>
+    return (
+        <center>
+            <b className="text-lg">{'Chưa có đợt khảo sát nào. Vui lòng quay lại sau!'}</b>
+        </center>
+    )
 }
 
 StudentScoreClassPage.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout breadcrumbList={[{ title: 'Đăng ký học' }]}>{page}</DefaultLayout>
+    return <DefaultLayout breadcrumbList={[{ title: 'Khảo sát' }]}>{page}</DefaultLayout>
 }

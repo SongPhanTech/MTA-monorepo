@@ -53,6 +53,8 @@ export default function RegisterClassManager({
                   }
                 : {}),
             trainingObjectTypeId,
+            cancelled: false,
+            active: true,
         },
         include: {
             mainLecturer: {

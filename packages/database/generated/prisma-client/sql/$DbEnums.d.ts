@@ -17,7 +17,7 @@ export namespace $DbEnums {
   type TrainingObjectTypes = "MILITARY" | "CIVILIAN" | "INTERNATIONAL_MILITARY"
   type DiplomaTypeEnum = "MASTER" | "DOCTORATE" | "ENGINEER" | "BACHELOR"
   type AcademicRankingBaseType = "Base10" | "Base4"
-  type StudentStatus = "ENROLLED" | "GRADUATED" | "DEFERRED_STUDY" | "SUSPENDED_STUDY" | "WITHDRAWN" | "TRANSFERRED" | "PENDING_GRADUATION_REVIEW" | "ACADEMIC_SUSPENSION"
+  type StudentStatus = "ENROLLED" | "GRADUATED" | "DEFERRED_STUDY" | "SUSPENDED_STUDY" | "WITHDRAWN" | "TRANSFERRED" | "PENDING_GRADUATION_REVIEW" | "ACADEMIC_SUSPENSION" | "REPEATED"
   type NotificationType = "GENERAL" | "ACADEMIC" | "EXAM" | "EVENT" | "SCHOLARSHIP" | "TUITION" | "URGENT" | "MAINTENANCE"
   type NotificationPriority = "LOW" | "NORMAL" | "HIGH" | "URGENT"
   type UserRole = "ADMIN" | "USER"

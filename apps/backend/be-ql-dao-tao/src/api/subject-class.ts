@@ -117,9 +117,9 @@ const fixedClassBySubjectClassSemester = createRoute({
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
             }),
-            isShowAllFixedClass: z.boolean().openapi('isShowAllFixedClass', {
+            isShowAllFixedClass: z.string().openapi('isShowAllFixedClass', {
                 description: 'Hiển thị tất cả lớp quản lý',
-                default: false,
+                default: 'true',
             }),
         }),
     },
@@ -170,9 +170,9 @@ const studentBySubjectClassSemester = createRoute({
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
             }),
-            isShowAllStudents: z.boolean().openapi('isShowAllStudents', {
+            isShowAllStudents: z.string().openapi('isShowAllStudents', {
                 description: 'Hiển thị tất cả học sinh',
-                default: false,
+                default: 'true',
             }),
         }),
     },
@@ -543,13 +543,14 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
     }
     const semesterYear = semester?.schoolYear.startDate.getFullYear()
 
-    const semesterType = isShowAllFixedClass
-        ? 0
-        : semester?.semesterType === $Enums.SemesterType.FIRST
-          ? 1
-          : semester?.semesterType === $Enums.SemesterType.SECOND
-            ? 2
-            : 0
+    const semesterType =
+        isShowAllFixedClass === 'true'
+            ? 0
+            : semester?.semesterType === $Enums.SemesterType.FIRST
+              ? 1
+              : semester?.semesterType === $Enums.SemesterType.SECOND
+                ? 2
+                : 0
 
     const res = await prisma.$queryRawTyped<{
         full_count: number
@@ -668,13 +669,14 @@ app.openapi(studentBySubjectClassSemester, async (c) => {
     }
     const semesterYear = semester?.schoolYear.startDate.getFullYear()
 
-    const semesterType = isShowAllStudents
-        ? 0
-        : semester?.semesterType === $Enums.SemesterType.FIRST
-          ? 1
-          : semester?.semesterType === $Enums.SemesterType.SECOND
-            ? 2
-            : 0
+    const semesterType =
+        isShowAllStudents === 'true'
+            ? 0
+            : semester?.semesterType === $Enums.SemesterType.FIRST
+              ? 1
+              : semester?.semesterType === $Enums.SemesterType.SECOND
+                ? 2
+                : 0
     const res = await prisma.$queryRawTyped<{
         fixedClassId: string
         full_count: number

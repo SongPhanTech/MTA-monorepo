@@ -64,6 +64,7 @@ export default function FixedClass({ semesterId, subjectClassId }: FixedClassPro
             page: `${currentPage}`,
             pageSize: '10',
             trainingObjectTypeId: trainingObjectTypeId || '',
+            isShowAllFixedClass: isShowAllFixedClass ? 'false' : 'true',
         },
         {
             query: {

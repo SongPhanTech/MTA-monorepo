@@ -110,6 +110,9 @@ export default function ThongKe() {
                     },
                 },
             },
+            deletedAt: null,
+            active: true,
+            cancelled: false,
         }
     }, [selectedSemesterId, filters.searchText, filters.name, filters.code])
 

@@ -141,6 +141,7 @@ export default function ClassSubject() {
                 : {}),
             active: true,
             deletedAt: null,
+            cancelled: false,
         },
         include: {
             subject: {
@@ -196,6 +197,7 @@ export default function ClassSubject() {
                 : {}),
             active: true,
             deletedAt: null,
+            cancelled: false,
         },
     })
     const handleFilterApply = (newFilters: Partial<FilterProps>) => {

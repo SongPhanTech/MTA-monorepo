@@ -183,6 +183,10 @@ const PutSurveyObjectTypeModal = () => {
 
     const { data: subjectClassData = [] } = useFindManySubjectClass({
         orderBy: { name: 'asc' },
+        where: {
+            cancelled: false,
+            active: true,
+        },
     })
     const treeData = useMemo(() => {
         return buildOrgTree(manageOrgData)

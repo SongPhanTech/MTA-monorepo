@@ -123,6 +123,9 @@ export default function SubjectClassScore() {
                       },
                   }
                 : {}),
+            deletedAt: null,
+            cancelled: false,
+            active: true,
         }),
         [
             filters.code,

@@ -142,6 +142,9 @@ export default function ThesisProject() {
                       },
                   }
                 : {}),
+            deletedAt: null,
+            active: true,
+            cancelled: false,
         }
     }, [
         selectedSemesterId,

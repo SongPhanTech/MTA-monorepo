@@ -69,6 +69,7 @@ export default function StudentCourseByPlan({
             page: `${currentPage}`,
             pageSize: `${numberOfPages}`,
             trainingObjectTypeId: trainingObjectTypeId || '',
+            isShowAllStudents: isShowAllStudents ? 'false' : 'true',
         },
         {
             query: {
