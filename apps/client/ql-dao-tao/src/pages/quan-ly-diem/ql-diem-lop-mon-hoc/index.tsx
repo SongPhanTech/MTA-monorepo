@@ -3,7 +3,7 @@ import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
-import { EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
+import { type DataTable, EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -194,7 +194,7 @@ export default function SubjectClassScore() {
     }
 
     const { onOpen } = useDisclosure<{
-        dataTable: any
+        dataTable: DataTable[]
         type: number // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
     }>({
         tag: 'ModalPrintStudentSubjectScore',
@@ -1213,6 +1213,16 @@ export default function SubjectClassScore() {
                     </Col>
                 ) : (
                     <Col span={24}>
+                        {selectedFixedClass && (
+                            <div className="flex flex-row gap-2">
+                                <div className="font-bold">Tổng hợp kết quả thi:</div>
+                                {Object.entries(statistics).map(([type, { count, percentage }]) => (
+                                    <p key={type}>
+                                        {type}: {count}= {percentage}%
+                                    </p>
+                                ))}
+                            </div>
+                        )}
                         <Table
                             rowKey="id"
                             id="student-subject-score"
@@ -1723,16 +1733,6 @@ export default function SubjectClassScore() {
                                 hideOnSinglePage: true,
                             }}
                         />
-                        {selectedFixedClass && (
-                            <div className="flex flex-row gap-2">
-                                <div className="font-bold">Tổng hợp kết quả thi:</div>
-                                {Object.entries(statistics).map(([type, { count, percentage }]) => (
-                                    <p key={type}>
-                                        {type}: {count}= {percentage}%
-                                    </p>
-                                ))}
-                            </div>
-                        )}
                     </Col>
                 )}
             </Col>
