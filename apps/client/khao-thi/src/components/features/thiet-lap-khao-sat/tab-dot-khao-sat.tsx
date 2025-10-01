@@ -102,6 +102,9 @@ function TabDotKhaoSat() {
     const { onOpen } = useDisclosure<string>({
         tag: 'PutSurveyModal',
     })
+    const { onOpen: onOpenKhaoSat } = useDisclosure<{ dataTable: any[]; id: string }>({
+        tag: 'ThongTinKhaoSatModal',
+    })
 
     const { onOpen: onOpenSurveyExamModal } = useDisclosure<{ id: string; surveyTopicId: string }>({
         tag: 'PutSurveyExamModal',
@@ -228,13 +231,20 @@ function TabDotKhaoSat() {
                                 title: 'Thao tác',
                                 width: 110,
                                 align: 'center',
-                                render: (_, { id, surveyTopicId, surveyQuestion }) => (
+                                render: (
+                                    _,
+                                    { id, surveyTopicId, surveyQuestion, surveyObjectType }
+                                ) => (
                                     <Row className="justify-end gap-2">
                                         {surveyQuestion?.length > 0 && (
                                             <Tooltip title={'Xem đề khảo sát'} placement="top">
                                                 <EyeOutlined
                                                     onClick={() => {
-                                                        router.push(`/lam-khao-sat/${id}`)
+                                                        onOpenKhaoSat({
+                                                            dataTable: surveyObjectType,
+                                                            id: id,
+                                                        })
+                                                        // router.push(`/lam-khao-sat/${id}`)
                                                     }}
                                                     style={{ fontSize: '16px' }}
                                                 />

@@ -109,6 +109,10 @@ function TabDotKhaoSat() {
         tag: 'PutSurveyExamModal',
     })
 
+    const { onOpen: onOpenKhaoSat } = useDisclosure<{ dataTable: any[]; id: string }>({
+        tag: 'ThongTinKhaoSatModal',
+    })
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
@@ -241,7 +245,10 @@ function TabDotKhaoSat() {
                                     'XOA',
                                     'XEM_CHI_TIET'
                                 ),
-                                render: (_, { id, surveyTopicId, surveyQuestion }) => (
+                                render: (
+                                    _,
+                                    { id, surveyTopicId, surveyQuestion, surveyObjectType }
+                                ) => (
                                     <Row className="justify-end gap-2">
                                         {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
@@ -273,7 +280,11 @@ function TabDotKhaoSat() {
                                                 >
                                                     <EyeOutlined
                                                         onClick={() => {
-                                                            router.push(`/lam-khao-sat/${id}`)
+                                                            onOpenKhaoSat({
+                                                                dataTable: surveyObjectType,
+                                                                id: id,
+                                                            })
+                                                            // router.push(`/lam-khao-sat/${id}`)
                                                         }}
                                                         style={{ fontSize: '16px' }}
                                                     />

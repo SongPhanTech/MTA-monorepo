@@ -3,11 +3,13 @@ import PieChart from '@components/dashboard/org-structure'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import {
+    useExportReportSurvey,
     useExportReportSurveyOrganizational,
     useGetParticipationByType,
     useGetSurveyStatistics,
 } from '@workspace/libs/api/exam'
 import { Button, Col, Empty, Flex, message, Row, Typography } from 'antd'
+import { saveAs } from 'file-saver'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
@@ -73,13 +75,33 @@ function Page() {
             </div>
         )
     }
-    const { mutateAsync: exportApi } = useExportReportSurveyOrganizational()
+    const { mutateAsync: exportApiForOrganizational } = useExportReportSurveyOrganizational()
+    const { mutateAsync: exportApi } = useExportReportSurvey()
+    const exportReportForOrganization = async () => {
+        try {
+            const res = await exportApiForOrganizational({
+                data: { surveyId: router.query.id as string, semesterId: '', organizationId: '' },
+            })
+            if (res.status === 200) {
+                saveAs(res.data, 'Bao_cao.xlsx')
+            }
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        }
+    }
 
     const exportReport = async () => {
         try {
-            await exportApi({
-                data: { surveyId: router.query.id as string, semesterId: '', organizationId: '' },
+            const res = await exportApi({
+                data: { surveyId: router.query.id as string },
             })
+            if (res.status === 200) {
+                saveAs(res.data, 'Bao_cao.xlsx')
+            }
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -97,13 +119,14 @@ function Page() {
                         <Title level={3}>
                             {(dataLevel?.status === 200 && dataLevel?.data?.surveyName) || ''}
                         </Title>
-                        <Button type="primary">Xuat bao cao</Button>
+                        {/* <Button type="primary">Xuất báo cáo</Button> */}
                     </Flex>
                 </Col>
                 <Col span={24}>
                     <div className="bg-white h-full flex flex-col">
-                        <div className="px-4 pb-4">
+                        <div className="px-4 pb-4 flex justify-between">
                             <Title level={4}>Thống kê số lượng người tham gia</Title>
+                            {/* <Button type="primary" onClick={exportReportForOrganization}>Xuất báo cáo</Button> */}
                         </div>
                         <div className="flex-1">
                             {data?.status === 200 && data?.data?.statistics?.length > 0 ? (
@@ -127,8 +150,11 @@ function Page() {
 
                 <Col span={24}>
                     <div className="bg-white h-full flex flex-col">
-                        <div className="p-4">
+                        <div className="p-4 flex justify-between">
                             <Title level={4}>Thống kê theo từng câu hỏi</Title>
+                            <Button type="primary" onClick={exportReport}>
+                                Xuất báo cáo
+                            </Button>
                         </div>
                         <div className="flex-1">
                             {dataLevel?.status === 200 && dataLevel?.data?.questions?.length > 0 ? (

@@ -31,6 +31,7 @@ import PutScoreScaleCatalog from './put-thang-diem'
 import PutCriterionCatalog from './put-tieu-chi-danh-gia-ctdt'
 import PutStandardCatalog from './put-tieu-chuan-ctdt'
 import PutRequirementCriterionCatalog from './put-yeu-cau'
+import ThongTinKhaoSatModal from './show-exam'
 export {
     ConfirmModal,
     AddTaiLieu,
@@ -65,4 +66,5 @@ export {
     ModalPrintDotDanhGia,
     PutEvaluationSecretarYCouncil,
     PutEvaluationSecretaryMember,
+    ThongTinKhaoSatModal,
 }

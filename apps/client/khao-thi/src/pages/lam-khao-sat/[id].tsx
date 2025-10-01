@@ -38,6 +38,8 @@ function TakeTestPage() {
     const { showSpinner, hideSpinner } = useSpinner()
     const [startAt, setStartAt] = useState<Date>(new Date())
     const id = router.query.id as string
+    const surveyObjectTypeId = router.query.surveyObjectTypeId as string
+
     const [form] = Form.useForm<PutSurveySession>()
     const [survey, setSurvey] = useState<SurveyType>()
     const [isLoading, setIsLoading] = useState(true)
@@ -164,6 +166,7 @@ function TakeTestPage() {
                     additionalSuggestion: dataSubmit.additionalSuggestion || '',
                     startedAt: new Date(startAt).toISOString(),
                     surveyId: id,
+                    surveyObjectTypeId: surveyObjectTypeId,
                     responses: dataSubmit?.responses?.map((i) => {
                         return {
                             surveyQuestionId: i.surveyQuestionId,
