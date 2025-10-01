@@ -7,7 +7,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { Prisma, TrainingCourse } from '@workspace/db'
 import {
-    useCountScoreConvert,
+    useCountTrainingCourse,
     useDeleteManyScoreConvert,
     useDeleteScoreConvert,
     useFindManyTrainingCourse,
@@ -119,20 +119,10 @@ export default function TrainingFieldPage() {
         },
     })
 
-    const { data: count } = useCountScoreConvert({
+    const { data: count } = useCountTrainingCourse({
         where: {
-            trainingCourse: { trainingObjectTypeId },
+            ...where,
             deletedAt: null,
-            active:
-                filters.active === 'true' ? true : filters.active === 'false' ? false : undefined,
-            ...(filters.searchText && filters.searchText.trim() !== ''
-                ? {
-                      AND: [
-                          { base10Min: { lte: Number(filters.searchText) } },
-                          { base10Max: { gte: Number(filters.searchText) } },
-                      ],
-                  }
-                : {}),
         },
     })
 

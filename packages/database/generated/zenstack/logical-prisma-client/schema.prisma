@@ -869,6 +869,7 @@ model StudentSubjectScore {
   suspendedReason           String?
   /// lưu ban
   repeated                  Boolean                                    @default(false)
+  repeatedReason            String?
   certificates              ArchivedCertificateOnStudentSubjectScore[]
   awards                    ArchivedAwardOnStudentSubjectScore[]
   studentThesisRegistration StudentThesisRegistration[]                @relation("ScoreToRegistration")

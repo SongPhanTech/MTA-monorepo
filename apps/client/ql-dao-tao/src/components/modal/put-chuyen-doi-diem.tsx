@@ -42,6 +42,10 @@ const PutConvertScore = () => {
         if (!output) return
         try {
             showSpinner()
+            if (output?.base10Min >= output?.base10Max) {
+                message.error('Điểm hệ 10 từ phải nhỏ hơn điểm hệ 10 đến')
+                return
+            }
             if (id) {
                 await updateScoreConvert({
                     data: output,
@@ -92,7 +96,7 @@ const PutConvertScore = () => {
             onCancel={onClose}
             maskClosable={true}
             title={id ? 'Chỉnh sửa chuyển đổi điểm' : 'Thêm mới chuyển đổi điểm'}
-            className="w-[30vw]"
+            className="w-[600px]"
         >
             <Col span={12}>
                 <FormItem form={form} name="trainingCourseId" label="Khoá học" required>
@@ -121,18 +125,6 @@ const PutConvertScore = () => {
                             required: true,
                             message: 'Vui lòng nhập điểm hệ 10',
                         },
-                        ({ getFieldValue }) => ({
-                            validator(_, value) {
-                                const base10Max = getFieldValue('base10Max')
-                                if (
-                                    base10Max &&
-                                    Number.parseFloat(value) >= Number.parseFloat(base10Max)
-                                ) {
-                                    message.error('Điểm hệ 10 từ phải nhỏ hơn điểm hệ 10 đến')
-                                }
-                                return Promise.resolve()
-                            },
-                        }),
                     ]}
                 >
                     <InputNumber
@@ -155,18 +147,6 @@ const PutConvertScore = () => {
                             required: true,
                             message: 'Vui lòng nhập điểm hệ 10',
                         },
-                        ({ getFieldValue }) => ({
-                            validator(_, value) {
-                                const base10Min = getFieldValue('base10Min')
-                                if (
-                                    base10Min &&
-                                    Number.parseFloat(value) <= Number.parseFloat(base10Min)
-                                ) {
-                                    message.error('Điểm hệ 10 từ phải nhỏ hơn điểm hệ 10 đến')
-                                }
-                                return Promise.resolve()
-                            },
-                        }),
                     ]}
                 >
                     <InputNumber

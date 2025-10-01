@@ -71,6 +71,7 @@ model StudentSubjectScore extends Base {
   suspendedReason           String?
   /// lưu ban
   repeated                  Boolean                                    @default(false)
+  repeatedReason           String?                                  
 
   certificates              ArchivedCertificateOnStudentSubjectScore[]
   awards                    ArchivedAwardOnStudentSubjectScore[]

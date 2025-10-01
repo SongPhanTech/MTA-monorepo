@@ -2288,6 +2288,11 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                repeatedReason: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
                 certificates: {
                     name: string;
                     type: string;

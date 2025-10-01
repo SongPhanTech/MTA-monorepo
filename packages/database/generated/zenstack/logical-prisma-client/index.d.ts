@@ -5561,7 +5561,8 @@ export namespace Prisma {
         examBannedReason: 'examBannedReason',
         suspended: 'suspended',
         suspendedReason: 'suspendedReason',
-        repeated: 'repeated'
+        repeated: 'repeated',
+        repeatedReason: 'repeatedReason'
     };
     export const ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum: {
         id: 'id',
@@ -8901,7 +8902,8 @@ export namespace Prisma {
         studentId: 'studentId',
         examPostponedReason: 'examPostponedReason',
         examBannedReason: 'examBannedReason',
-        suspendedReason: 'suspendedReason'
+        suspendedReason: 'suspendedReason',
+        repeatedReason: 'repeatedReason'
     };
     export const ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -15867,6 +15869,7 @@ export namespace Prisma {
         readonly suspended: FieldRef<"StudentSubjectScore", 'Boolean'>;
         readonly suspendedReason: FieldRef<"StudentSubjectScore", 'String'>;
         readonly repeated: FieldRef<"StudentSubjectScore", 'Boolean'>;
+        readonly repeatedReason: FieldRef<"StudentSubjectScore", 'String'>;
     }
 
     export interface ArchivedCertificateOnStudentSubjectScoreDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -128399,6 +128402,7 @@ export namespace Prisma {
         suspended: boolean | null
         suspendedReason: string | null
         repeated: boolean | null
+        repeatedReason: string | null
     };
     export type StudentSubjectScoreMaxAggregateOutputType = {
         id: string | null
@@ -128425,6 +128429,7 @@ export namespace Prisma {
         suspended: boolean | null
         suspendedReason: string | null
         repeated: boolean | null
+        repeatedReason: string | null
     };
     export type StudentSubjectScoreCountAggregateOutputType = {
         id: number
@@ -128451,6 +128456,7 @@ export namespace Prisma {
         suspended: number
         suspendedReason: number
         repeated: number
+        repeatedReason: number
         _all: number
     };
     export type StudentSubjectScoreAvgAggregateInputType = {
@@ -128492,6 +128498,7 @@ export namespace Prisma {
         suspended?: true
         suspendedReason?: true
         repeated?: true
+        repeatedReason?: true
     };
     export type StudentSubjectScoreMaxAggregateInputType = {
         id?: true
@@ -128518,6 +128525,7 @@ export namespace Prisma {
         suspended?: true
         suspendedReason?: true
         repeated?: true
+        repeatedReason?: true
     };
     export type StudentSubjectScoreCountAggregateInputType = {
         id?: true
@@ -128544,6 +128552,7 @@ export namespace Prisma {
         suspended?: true
         suspendedReason?: true
         repeated?: true
+        repeatedReason?: true
         _all?: true
     };
     export type StudentSubjectScoreAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -128651,6 +128660,7 @@ export namespace Prisma {
         suspended: boolean
         suspendedReason: string | null
         repeated: boolean
+        repeatedReason: string | null
         _count: StudentSubjectScoreCountAggregateOutputType | null
         _avg: StudentSubjectScoreAvgAggregateOutputType | null
         _sum: StudentSubjectScoreSumAggregateOutputType | null
@@ -128694,6 +128704,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: boolean
         repeated?: boolean
+        repeatedReason?: boolean
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -128727,6 +128738,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: boolean
         repeated?: boolean
+        repeatedReason?: boolean
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -128756,6 +128768,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: boolean
         repeated?: boolean
+        repeatedReason?: boolean
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -128785,8 +128798,9 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: boolean
         repeated?: boolean
+        repeatedReason?: boolean
     };
-    export type StudentSubjectScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "subjectClassId" | "subjectVersionId" | "studentId" | "attendanceScore" | "midtermScore" | "examScore" | "finalScore" | "manualFinalScore" | "examPostponed" | "examPostponedReason" | "exempted" | "withdrew" | "examBanned" | "examBannedReason" | "suspended" | "suspendedReason" | "repeated", ExtArgs["result"]["studentSubjectScore"]>;
+    export type StudentSubjectScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "subjectClassId" | "subjectVersionId" | "studentId" | "attendanceScore" | "midtermScore" | "examScore" | "finalScore" | "manualFinalScore" | "examPostponed" | "examPostponedReason" | "exempted" | "withdrew" | "examBanned" | "examBannedReason" | "suspended" | "suspendedReason" | "repeated" | "repeatedReason", ExtArgs["result"]["studentSubjectScore"]>;
     export type StudentSubjectScoreInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
@@ -128870,6 +128884,7 @@ export namespace Prisma {
              * lưu ban
              */
             repeated: boolean
+            repeatedReason: string | null
         }, ExtArgs["result"]["studentSubjectScore"]>
         composites: {}
     };
@@ -290528,6 +290543,7 @@ export namespace Prisma {
         suspended?: BoolFilter<"StudentSubjectScore"> | boolean
         suspendedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
         repeated?: BoolFilter<"StudentSubjectScore"> | boolean
+        repeatedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -290560,6 +290576,7 @@ export namespace Prisma {
         suspended?: SortOrder
         suspendedReason?: SortOrderInput | SortOrder
         repeated?: SortOrder
+        repeatedReason?: SortOrderInput | SortOrder
         subjectClass?: SubjectClassOrderByWithRelationInput
         subjectVersion?: SubjectVersionOrderByWithRelationInput
         student?: StudentOrderByWithRelationInput
@@ -290597,6 +290614,7 @@ export namespace Prisma {
         suspended?: BoolFilter<"StudentSubjectScore"> | boolean
         suspendedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
         repeated?: BoolFilter<"StudentSubjectScore"> | boolean
+        repeatedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -290629,6 +290647,7 @@ export namespace Prisma {
         suspended?: SortOrder
         suspendedReason?: SortOrderInput | SortOrder
         repeated?: SortOrder
+        repeatedReason?: SortOrderInput | SortOrder
         _count?: StudentSubjectScoreCountOrderByAggregateInput
         _avg?: StudentSubjectScoreAvgOrderByAggregateInput
         _max?: StudentSubjectScoreMaxOrderByAggregateInput
@@ -290663,6 +290682,7 @@ export namespace Prisma {
         suspended?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
         suspendedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScore"> | string | null
         repeated?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
+        repeatedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScore"> | string | null
     };
     export type ArchivedCertificateOnStudentSubjectScoreWhereInput = {
         AND?: ArchivedCertificateOnStudentSubjectScoreWhereInput | ArchivedCertificateOnStudentSubjectScoreWhereInput[]
@@ -312860,6 +312880,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
@@ -312892,6 +312913,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -312918,6 +312940,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
@@ -312950,6 +312973,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -312979,6 +313003,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
     };
     export type StudentSubjectScoreUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -313002,6 +313027,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StudentSubjectScoreUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -313028,6 +313054,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ArchivedCertificateOnStudentSubjectScoreCreateInput = {
         id?: string
@@ -337839,6 +337866,7 @@ export namespace Prisma {
         suspended?: SortOrder
         suspendedReason?: SortOrder
         repeated?: SortOrder
+        repeatedReason?: SortOrder
     };
     export type StudentSubjectScoreAvgOrderByAggregateInput = {
         attendanceScore?: SortOrder
@@ -337872,6 +337900,7 @@ export namespace Prisma {
         suspended?: SortOrder
         suspendedReason?: SortOrder
         repeated?: SortOrder
+        repeatedReason?: SortOrder
     };
     export type StudentSubjectScoreMinOrderByAggregateInput = {
         id?: SortOrder
@@ -337898,6 +337927,7 @@ export namespace Prisma {
         suspended?: SortOrder
         suspendedReason?: SortOrder
         repeated?: SortOrder
+        repeatedReason?: SortOrder
     };
     export type StudentSubjectScoreSumOrderByAggregateInput = {
         attendanceScore?: SortOrder
@@ -374611,6 +374641,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
@@ -374642,6 +374673,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
@@ -374710,6 +374742,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
@@ -374741,6 +374774,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
@@ -374948,6 +374982,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
@@ -374979,6 +375014,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
@@ -375047,6 +375083,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
@@ -375078,6 +375115,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
@@ -381120,6 +381158,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -381150,6 +381189,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -381564,6 +381604,7 @@ export namespace Prisma {
         suspended?: BoolFilter<"StudentSubjectScore"> | boolean
         suspendedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
         repeated?: BoolFilter<"StudentSubjectScore"> | boolean
+        repeatedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
     };
     export type DocumentFileUpsertWithWhereUniqueWithoutSubjectVersionInput = {
         where: DocumentFileWhereUniqueInput
@@ -383480,6 +383521,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -383510,6 +383552,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -389814,6 +389857,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -389844,6 +389888,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -436169,6 +436214,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
@@ -436200,6 +436246,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
@@ -436519,6 +436566,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
@@ -436550,6 +436598,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
@@ -461368,6 +461417,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
     };
     export type DocumentFileCreateManySubjectVersionInput = {
         id?: string
@@ -462127,6 +462177,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -462157,6 +462208,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -462185,6 +462237,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUpdateWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -462564,6 +462617,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
     };
     export type ClassScheduleCreateManySubjectClassInput = {
         id?: string
@@ -462664,6 +462718,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -462694,6 +462749,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -462722,6 +462778,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type FixedClassUpdateWithoutSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -466654,6 +466711,7 @@ export namespace Prisma {
         suspended?: boolean
         suspendedReason?: string | null
         repeated?: boolean
+        repeatedReason?: string | null
     };
     export type StudentTrainingScoreCreateManyStudentInput = {
         id?: string
@@ -466983,6 +467041,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -467013,6 +467072,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -467041,6 +467101,7 @@ export namespace Prisma {
         suspended?: BoolFieldUpdateOperationsInput | boolean
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StudentTrainingScoreUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
