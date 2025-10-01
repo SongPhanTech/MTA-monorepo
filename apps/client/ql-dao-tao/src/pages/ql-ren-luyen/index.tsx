@@ -6,16 +6,14 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingScoreSession,
-    useFindManyTrainingObjectType,
     useFindManyTrainingScoreSession,
     useUpdateTrainingScoreSession,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { useSemesterStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
@@ -31,14 +29,13 @@ export default function SubjectClassScore() {
     const { showSpinner, hideSpinner } = useSpinner()
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
-        trainingObjectTypes: undefined,
         startDate: undefined,
     })
     const { id: semesterId } = useSemesterStore()
     const { onOpen } = useDisclosure<string>({
         tag: 'PutDotRenLuyen',
     })
-
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const where = useMemo(
         () => ({
             ...(filters.name && filters.name !== ''
@@ -57,11 +54,9 @@ export default function SubjectClassScore() {
                       },
                   }
                 : {}),
-            ...(filters.trainingObjectTypes
+            ...(trainingObjectTypeId
                 ? {
-                      trainingObjectTypeId: {
-                          in: filters.trainingObjectTypes,
-                      },
+                      trainingObjectTypeId,
                   }
                 : {}),
             ...(semesterId
@@ -70,7 +65,7 @@ export default function SubjectClassScore() {
                   }
                 : {}),
         }),
-        [filters.startDate, filters.name, filters.trainingObjectTypes, semesterId]
+        [filters.startDate, filters.name, trainingObjectTypeId, semesterId]
     )
 
     const { data = [], refetch } = useFindManyTrainingScoreSession({
@@ -117,10 +112,6 @@ export default function SubjectClassScore() {
             hideSpinner()
         }
     }
-
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
-        orderBy: { createdAt: 'desc' },
-    })
 
     return (
         <div>
@@ -184,22 +175,6 @@ export default function SubjectClassScore() {
                                             ]
                                                 .filter(Boolean)
                                                 .join(' - ')
-                                        },
-                                    },
-                                    {
-                                        title: 'Đối tượng',
-                                        width: 150,
-                                        dataIndex: 'trainingObjectTypes',
-                                        align: 'center',
-                                        type: 'select',
-                                        options: trainingObjectTypeData.map(
-                                            (i: TrainingObjectType) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            })
-                                        ),
-                                        render: (text, record) => {
-                                            return record?.trainingObjectType?.name
                                         },
                                     },
                                     {

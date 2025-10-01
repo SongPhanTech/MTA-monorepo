@@ -5,12 +5,11 @@ import useSpinner from '@hooks/spinner'
 import type { TrainingScoreSession } from '@workspace/db'
 import {
     useCreateTrainingScoreSession,
-    useFindManyTrainingObjectType,
     useFindUniqueTrainingScoreSession,
     useUpdateTrainingScoreSession,
 } from '@workspace/db/hooks'
-import { useSemesterStore } from '@workspace/ui'
-import { Col, DatePicker, Form, Input, message, Select } from 'antd'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Col, DatePicker, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -29,9 +28,7 @@ const PutDotRenLuyen = () => {
 
     const { showSpinner, hideSpinner } = useSpinner()
     const { id: semesterId } = useSemesterStore()
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
-        orderBy: { createdAt: 'desc' },
-    })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { mutateAsync: createTrainingScoreSession } = useCreateTrainingScoreSession()
     const { mutateAsync: updateTrainingScoreSession } = useUpdateTrainingScoreSession()
@@ -45,7 +42,7 @@ const PutDotRenLuyen = () => {
                 name: output.name.trim(),
                 time: output.time,
                 semesterId: semesterId || '',
-                trainingObjectTypeId: output.trainingObjectTypeId,
+                trainingObjectTypeId: trainingObjectTypeId || '',
                 description: output.description,
             }
             if (id) {
@@ -111,17 +108,6 @@ const PutDotRenLuyen = () => {
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên đợt" required>
                     <Input placeholder="Nhập tên đợt" />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="trainingObjectTypeId" label="Đối tượng">
-                    <Select
-                        options={trainingObjectTypeData.map((item) => ({
-                            label: item.name,
-                            value: item.id,
-                        }))}
-                        placeholder="Chọn đối tượng"
-                    />
                 </FormItem>
             </Col>
             <Col span={24}>

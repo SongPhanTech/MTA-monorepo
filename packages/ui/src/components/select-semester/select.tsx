@@ -18,7 +18,7 @@ interface CustomTreeSelectProps {
 
 const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
     placeholder = 'Chọn học kỳ',
-    style = { width: 400 },
+    style = { width: 300 },
     dropdownStyle = { maxHeight: 400, overflow: 'auto' },
 }) => {
     const { id: semesterId, onSelect } = useSemesterStore()
