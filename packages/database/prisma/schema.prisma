@@ -809,12 +809,15 @@ model StudentSubjectScore {
   finalScore                Decimal?                                   @db.Decimal(5, 1)
   manualFinalScore          Float?
   examPostponed             Boolean                                    @default(false)
+  examPostponedReason       String?
   exempted                  Boolean                                    @default(false)
   withdrew                  Boolean                                    @default(false)
   /// cấm thi
   examBanned                Boolean                                    @default(false)
+  examBannedReason          String?
   /// đình chỉ
   suspended                 Boolean                                    @default(false)
+  suspendedReason           String?
   /// lưu ban
   repeated                  Boolean                                    @default(false)
   certificates              ArchivedCertificateOnStudentSubjectScore[]

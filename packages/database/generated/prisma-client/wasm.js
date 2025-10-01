@@ -310,10 +310,13 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   finalScore: 'finalScore',
   manualFinalScore: 'manualFinalScore',
   examPostponed: 'examPostponed',
+  examPostponedReason: 'examPostponedReason',
   exempted: 'exempted',
   withdrew: 'withdrew',
   examBanned: 'examBanned',
+  examBannedReason: 'examBannedReason',
   suspended: 'suspended',
+  suspendedReason: 'suspendedReason',
   repeated: 'repeated'
 };
 
@@ -3878,7 +3881,10 @@ exports.Prisma.StudentSubjectScoreOrderByRelevanceFieldEnum = {
   description: 'description',
   subjectClassId: 'subjectClassId',
   subjectVersionId: 'subjectVersionId',
-  studentId: 'studentId'
+  studentId: 'studentId',
+  examPostponedReason: 'examPostponedReason',
+  examBannedReason: 'examBannedReason',
+  suspendedReason: 'suspendedReason'
 };
 
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum = {

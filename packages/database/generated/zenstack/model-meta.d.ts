@@ -2218,6 +2218,11 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                examPostponedReason: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
                 exempted: {
                     name: string;
                     type: string;
@@ -2251,6 +2256,11 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                examBannedReason: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
                 suspended: {
                     name: string;
                     type: string;
@@ -2261,6 +2271,11 @@ declare const metadata: {
                             value: boolean;
                         }[];
                     }[];
+                };
+                suspendedReason: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
                 };
                 repeated: {
                     name: string;

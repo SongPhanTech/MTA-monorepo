@@ -2,7 +2,7 @@
 REGISTRY := ghcr.io/songphantech
 DEV_TAG := latest
 RELEASE_TAG := release
-SERVER := local
+SERVER := swan1
 COMPOSE_CMD := docker compose up
 IMG_PREFIX := mta-
 
@@ -125,7 +125,7 @@ all-clients: all-$(PKG_CATEGORIES)\
 # Pattern rule: all-<name> = build + push + deploy
 all-%: build-%
 	docker push $(REGISTRY)/$(IMG_PREFIX)$*:$(DEV_TAG)
-	ssh $(SERVER) "cd docker-compose && git pull && $(COMPOSE_CMD) $(IMG_PREFIX)$* -d"
+	ssh $(SERVER) "cd mta-be && $(COMPOSE_CMD) $(IMG_PREFIX)$* -d"
 
 # Internal backend build
 _build-be:
