@@ -1,5 +1,4 @@
 import Select from '@components/commons/select'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -30,7 +29,7 @@ import {
 import { putManySubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
@@ -45,7 +44,6 @@ export default function TeachingAssignment() {
         code: '',
         name: '',
         trainingCourseId: null,
-        semesterStartId: null,
         trainingMajorId: null,
         lecturerId: undefined,
         credit: undefined,
@@ -58,7 +56,7 @@ export default function TeachingAssignment() {
         organization: undefined,
         room: undefined,
     })
-
+    const { id: semesterId } = useSemesterStore()
     const [isEdit, setIsEdit] = useState(false)
     const [dataSubmit, setDataSubmit] = useState<SubjectClass[]>([])
     const { options, getExamTypeLabel } = useExamTypeOptions()
@@ -91,10 +89,10 @@ export default function TeachingAssignment() {
                       },
                   }
                 : {}),
-            ...(filters.semesterStartId || filters.trainingCourseId
+            ...(semesterId || filters.trainingCourseId
                 ? {
                       semester: {
-                          ...(filters.semesterStartId ? { id: filters.semesterStartId } : {}),
+                          ...(semesterId ? { id: semesterId } : {}),
                           ...(filters.trainingCourseId
                               ? {
                                     trainingCoursesStart: {
@@ -191,7 +189,7 @@ export default function TeachingAssignment() {
                   }
                 : {}),
         }),
-        [filters]
+        [filters, semesterId]
     )
 
     const { data = [], refetch } = useFindManySubjectClass({
@@ -468,14 +466,6 @@ export default function TeachingAssignment() {
                         <Col span={12}>
                             <Row gutter={[16, 16]} align="top">
                                 <Col span={8}>
-                                    <TreeSelectSemester
-                                        filterTimeNow={true}
-                                        onChange={(val) =>
-                                            handleFilterChange('semesterStartId', val)
-                                        }
-                                    />
-                                </Col>
-                                <Col span={8}>
                                     <Select
                                         placeholder="Chọn khóa"
                                         options={trainingCourseData.map((i: TrainingCourse) => {
@@ -529,9 +519,7 @@ export default function TeachingAssignment() {
                                 ) && (
                                     <Button
                                         type="primary"
-                                        onClick={() =>
-                                            onOpenModalNhapTKB(filters.semesterStartId || '')
-                                        }
+                                        onClick={() => onOpenModalNhapTKB(semesterId || '')}
                                     >
                                         <EditIcon stroke="white" />
                                         Nhập từ TKB
@@ -540,7 +528,6 @@ export default function TeachingAssignment() {
                                 {isEdit ? (
                                     <>
                                         <Button
-                                            //TODO: handle save
                                             onClick={() => handleChangeData()}
                                             type="primary"
                                             disabled={!dataSubmit.length}
@@ -548,7 +535,6 @@ export default function TeachingAssignment() {
                                             Lưu
                                         </Button>
                                         <Button
-                                            //TODO: handle cancel
                                             onClick={() => handleCancel()}
                                             type="primary"
                                             disabled={!dataSubmit.length}

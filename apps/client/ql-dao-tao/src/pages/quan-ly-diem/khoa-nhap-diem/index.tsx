@@ -1,5 +1,4 @@
 import { CalendarOutlined, UnlockFilled } from '@ant-design/icons'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
@@ -8,8 +7,8 @@ import { useSession } from '@workspace/auth/react'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, Row, Tag, Tooltip } from 'antd'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Form, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
@@ -26,7 +25,6 @@ export default function SubjectClassScore() {
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
-        semesterId: '',
         trainingObjectId: null,
         subjectName: '',
         scoreDeadline: undefined,
@@ -35,7 +33,7 @@ export default function SubjectClassScore() {
         examDate: undefined,
         endDate: undefined,
     })
-
+    const { id: semesterId } = useSemesterStore()
     const { onOpen } = useDisclosure<string>({
         tag: 'HanNhapDiem',
     })
@@ -71,7 +69,7 @@ export default function SubjectClassScore() {
                       },
                   }
                 : {}),
-            ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
+            ...(semesterId ? { semesterId } : {}),
             trainingObjectTypeId,
             ...(filters.subjectName && filters.subjectName !== ''
                 ? {
@@ -130,7 +128,7 @@ export default function SubjectClassScore() {
         [
             filters.code,
             filters.name,
-            filters.semesterId,
+            semesterId,
             trainingObjectTypeId,
             filters.subjectName,
             filters.scoreDeadline,
@@ -200,26 +198,6 @@ export default function SubjectClassScore() {
                 <Row gutter={[16, 0]}>
                     <Col span={24} className="pb-2">
                         <Row gutter={[16, 16]} align="top" justify="space-between">
-                            <Col span={12}>
-                                <Flex>
-                                    <Col span={18}>
-                                        <Form.Item
-                                            className="mb-0"
-                                            labelCol={{ span: 24 }}
-                                            wrapperCol={{ span: 24 }}
-                                            labelAlign="left"
-                                        >
-                                            <TreeSelectSemester
-                                                filterTimeNow={true}
-                                                onChange={(val) =>
-                                                    handleFilterChange('semesterId', val)
-                                                }
-                                            />
-                                        </Form.Item>
-                                    </Col>
-                                </Flex>
-                            </Col>
-
                             {/* <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 <Button type="primary" className="h-[40px]">

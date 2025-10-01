@@ -1,4 +1,3 @@
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -15,6 +14,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { useSemesterStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import type React from 'react'
@@ -28,7 +28,7 @@ export default function SupervisorPaymentRecordPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-    const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
+    const { id: semesterId } = useSemesterStore()
     const [filters, setFilters] = useState<FilterProps>({
         name: undefined,
         transactionCode: undefined,
@@ -63,10 +63,10 @@ export default function SupervisorPaymentRecordPage() {
                       },
                   }
                 : {}),
-            ...(selectedSemesterId
+            ...(semesterId
                 ? {
                       thesisProject: {
-                          subjectClass: { semesterId: selectedSemesterId },
+                          subjectClass: { semesterId },
                       },
                   }
                 : {}),
@@ -76,7 +76,7 @@ export default function SupervisorPaymentRecordPage() {
             filters.transactionCode,
             filters.paymentStatus,
             filters.paymentDate,
-            selectedSemesterId,
+            semesterId,
         ]
     )
 
@@ -148,17 +148,6 @@ export default function SupervisorPaymentRecordPage() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[0, 16]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <Flex>
-                                <Col span={10}>
-                                    <TreeSelectSemester
-                                        style={{ width: '250px' }}
-                                        filterTimeNow={true}
-                                        onChange={(val) => setSelectedSemesterId(val)}
-                                    />
-                                </Col>
-                            </Flex>
-                        </Col>
                         <Col>
                             <Flex justify="end" gap={4}>
                                 {can(

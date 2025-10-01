@@ -1,5 +1,4 @@
 import { EyeOutlined } from '@ant-design/icons'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -16,7 +15,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, message, Row, Select, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
@@ -34,10 +33,11 @@ export default function ClassRegisterSession() {
         name: '',
         startDate: undefined,
         endDate: undefined,
-        semesterId: undefined,
         trainingCourseId: undefined,
         active: undefined,
     })
+
+    const { id: semesterId } = useSemesterStore()
 
     const where = useMemo(
         () => ({
@@ -50,13 +50,9 @@ export default function ClassRegisterSession() {
                       },
                   }
                 : {}),
-            ...(filters.semesterId
+            ...(semesterId
                 ? {
-                      semesterId: {
-                          in: Array.isArray(filters.semesterId)
-                              ? filters.semesterId
-                              : [filters.semesterId],
-                      },
+                      semesterId,
                   }
                 : {}),
             ...(filters.startDate?.length === 2
@@ -92,7 +88,7 @@ export default function ClassRegisterSession() {
                           : undefined,
             }),
         }),
-        [filters]
+        [filters, semesterId]
     )
 
     const { data } = useFindManyClassRegisterSession({
@@ -154,16 +150,6 @@ export default function ClassRegisterSession() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
                             <Row gutter={[16, 16]} align="top">
-                                <Col span={8}>
-                                    <TreeSelectSemester
-                                        onChange={(val) =>
-                                            setFilters((prev) => ({
-                                                ...prev,
-                                                semesterId: val,
-                                            }))
-                                        }
-                                    />
-                                </Col>
                                 <Col span={8}>
                                     <Select
                                         placeholder="Chọn khóa"

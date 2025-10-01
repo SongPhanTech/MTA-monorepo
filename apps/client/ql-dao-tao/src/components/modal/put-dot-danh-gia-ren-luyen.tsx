@@ -1,7 +1,6 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import useSpinner from '@hooks/spinner'
 import type { TrainingScoreSession } from '@workspace/db'
 import {
@@ -10,6 +9,7 @@ import {
     useFindUniqueTrainingScoreSession,
     useUpdateTrainingScoreSession,
 } from '@workspace/db/hooks'
+import { useSemesterStore } from '@workspace/ui'
 import { Col, DatePicker, Form, Input, message, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
@@ -28,7 +28,7 @@ const PutDotRenLuyen = () => {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-
+    const { id: semesterId } = useSemesterStore()
     const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
         orderBy: { createdAt: 'desc' },
     })
@@ -44,7 +44,7 @@ const PutDotRenLuyen = () => {
             const data = {
                 name: output.name.trim(),
                 time: output.time,
-                semesterId: output.semesterId,
+                semesterId: semesterId || '',
                 trainingObjectTypeId: output.trainingObjectTypeId,
                 description: output.description,
             }
@@ -111,11 +111,6 @@ const PutDotRenLuyen = () => {
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên đợt" required>
                     <Input placeholder="Nhập tên đợt" />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="semesterId" label="Học kì" required>
-                    <TreeSelectSemester />
                 </FormItem>
             </Col>
             <Col span={24}>

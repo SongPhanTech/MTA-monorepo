@@ -1,6 +1,5 @@
 import ImportScoreModal from '@components/commons/print/nhap-diem-tu-file'
 import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import { type DataTable, EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
@@ -19,7 +18,7 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { calcFinalScore, getScoreStatistics } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
     Button,
     Checkbox,
@@ -138,8 +137,6 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
     )
 }
 interface FilterPropsClassClass {
-    schoolYearId: string | null //Năm học
-    semesterId: string | null //Học kỳ
     KhoaId: string | null //Khoa
     BoMonId: string | null //Bộ môn
     examTypeId: string | null //Hình thức thi
@@ -187,7 +184,7 @@ export default function SubjectClassScore() {
 
     const [open, setOpen] = useState(false)
     const [importModalVisible, setImportModalVisible] = useState(false)
-    const [selectedSemesterId, setSelectedSemesterId] = useState<string | undefined>()
+    const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const handleOpenChange = (newOpen: boolean) => {
@@ -224,9 +221,7 @@ export default function SubjectClassScore() {
 
     const [filters, setFilters] = useState<FilterPropsClassClass>({
         searchText: '',
-        semesterId: null,
         subjectClassId: null,
-        schoolYearId: null,
         KhoaId: null,
         BoMonId: null,
         examTypeId: null,
@@ -277,7 +272,7 @@ export default function SubjectClassScore() {
                           ],
                       }
                     : {}),
-                ...(selectedSemesterId ? { semesterId: selectedSemesterId } : {}),
+                ...(semesterId ? { semesterId } : {}),
                 ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
                 trainingObjectTypeId,
                 ...(filters.LectureIds.length > 0
@@ -972,14 +967,6 @@ export default function SubjectClassScore() {
                                             allowClear
                                         />
                                     </Form.Item>
-                                </Col>
-
-                                <Col span={8}>
-                                    <TreeSelectSemester
-                                        style={{ width: '100%' }}
-                                        filterTimeNow={true}
-                                        onChange={(val) => setSelectedSemesterId(val || '')}
-                                    />
                                 </Col>
                             </Flex>
                         </Col>

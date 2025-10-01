@@ -1,4 +1,3 @@
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import TableCollapse from '@components/commons/tableCollapse'
 import type { FilterProps } from '@components/commons/typeFilter'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -6,7 +5,7 @@ import { useExamTypeOptions } from '@hooks/examType'
 import { useCountSubjectVersion, useFindManySubjectVersion } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Input, Row, Tag } from 'antd'
 import { BookOpenCheck, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -17,11 +16,11 @@ function SubjectVersion() {
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
     const { options: examTypeOption, getExamTypeLabel } = useExamTypeOptions()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [uiSelectedKeys, setUiSelectedKeys] = useState<React.Key[]>([])
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { id: semesterId } = useSemesterStore()
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         code: '',
@@ -56,8 +55,8 @@ function SubjectVersion() {
                 some: {
                     cancelled: false,
                     trainingObjectTypeId,
-                    ...(selectedSemesterId && {
-                        semesterId: selectedSemesterId,
+                    ...(semesterId && {
+                        semesterId,
                     }),
                     ...(filters.code && {
                         code: {
@@ -89,7 +88,7 @@ function SubjectVersion() {
         }),
         [
             filters.searchText,
-            selectedSemesterId,
+            semesterId,
             trainingObjectTypeId,
             filters.code,
             filters.name,
@@ -103,7 +102,6 @@ function SubjectVersion() {
         include: {
             subjectClass: {
                 include: {
-                    semester: { include: { schoolYear: true } },
                     mainLecturer: {
                         select: {
                             code: true,
@@ -131,8 +129,8 @@ function SubjectVersion() {
                 where: {
                     cancelled: false,
                     trainingObjectTypeId,
-                    ...(selectedSemesterId && {
-                        semesterId: selectedSemesterId,
+                    ...(semesterId && {
+                        semesterId,
                     }),
                     ...(filters.code && {
                         code: {
@@ -295,10 +293,6 @@ function SubjectVersion() {
                                     }
                                     allowClear
                                 />
-                                <TreeSelectSemester
-                                    filterTimeNow={true}
-                                    onChange={(val) => setSelectedSemesterId(val)}
-                                />
                             </Flex>
                         </Col>
                         <Col span={12}>
@@ -356,19 +350,6 @@ function SubjectVersion() {
                                 fixed: 'left',
                                 width: 220,
                                 type: 'input',
-                            },
-                            {
-                                title: 'Học kỳ',
-                                width: 220,
-
-                                render: (_, record) => {
-                                    return [
-                                        record?.semester?.name,
-                                        record?.semester?.schoolYear?.name,
-                                    ]
-                                        .filter(Boolean)
-                                        .join(' - ')
-                                },
                             },
                             {
                                 title: 'Giảng viên',

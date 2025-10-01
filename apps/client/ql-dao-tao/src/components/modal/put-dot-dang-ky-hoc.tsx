@@ -2,7 +2,6 @@ import { queryClient } from '@api/index'
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import useSpinner from '@hooks/spinner'
 import type { ClassRegisterSession, TrainingCourse } from '@workspace/db'
 import {
@@ -12,7 +11,7 @@ import {
     useFindUniqueClassRegisterSession,
     useUpdateClassRegisterSession,
 } from '@workspace/db/hooks'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, InputNumber, message, Radio, Select } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
@@ -38,7 +37,7 @@ const PutClassRegisterSession = () => {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-
+    const { id: semesterId } = useSemesterStore()
     const { data: initialValue } = useFindUniqueClassRegisterSession(
         { where: { id }, include: { trainingCourses: true } },
         { enabled: !!id }
@@ -72,7 +71,7 @@ const PutClassRegisterSession = () => {
                 name: output.name.trim(),
                 startDate: dayjs(output.startDate).toDate(),
                 endDate: dayjs(output.endDate).toDate(),
-                semesterId: output.semesterId,
+                semesterId: semesterId || '',
                 active: output.active,
                 description: output.description,
                 tuitionPerCredit: output.tuitionPerCredit || 0,
@@ -167,11 +166,6 @@ const PutClassRegisterSession = () => {
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên đợt đăng ký" required>
                     <Input placeholder="Nhập tên đợt đăng ký" />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="semesterId" label="Học kỳ" required>
-                    <TreeSelectSemester />
                 </FormItem>
             </Col>
             <Col span={12}>

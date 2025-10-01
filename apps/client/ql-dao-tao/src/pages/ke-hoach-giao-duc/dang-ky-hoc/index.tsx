@@ -15,29 +15,17 @@ interface TabItem {
 
 export default function RegisterClass() {
     const [activeLeftTab, setActiveLeftTab] = useState('1')
-    const [semesterId, setSemesterId] = useState<string | null>(null)
     const [subjectClassId, setSubjectClassId] = useState<string | null>(null)
-
     const leftTabs: TabItem[] = [
         {
             key: '1',
             label: 'Đăng ký học cho lớp quản lý',
-            content: (
-                <RegisterClassManager
-                    setSemesterId={setSemesterId}
-                    setSubjectClassId={setSubjectClassId}
-                />
-            ),
+            content: <RegisterClassManager setSubjectClassId={setSubjectClassId} />,
         },
         {
             key: '2',
             label: 'Đăng ký học cho cá nhân',
-            content: (
-                <RegisterClassManager
-                    setSemesterId={setSemesterId}
-                    setSubjectClassId={setSubjectClassId}
-                />
-            ),
+            content: <RegisterClassManager setSubjectClassId={setSubjectClassId} />,
         },
         {
             key: '3',
@@ -51,16 +39,14 @@ export default function RegisterClass() {
             {
                 key: '1',
                 label: 'Lớp có môn theo KHGD',
-                content: <FixedClass semesterId={semesterId} subjectClassId={subjectClassId} />,
+                content: <FixedClass subjectClassId={subjectClassId} />,
             },
         ],
         '2': [
             {
                 key: '1',
                 label: 'Học viên có môn theo KHGD',
-                content: (
-                    <StudentCourseByPlan semesterId={semesterId} subjectClassId={subjectClassId} />
-                ),
+                content: <StudentCourseByPlan subjectClassId={subjectClassId} />,
             },
         ],
     }

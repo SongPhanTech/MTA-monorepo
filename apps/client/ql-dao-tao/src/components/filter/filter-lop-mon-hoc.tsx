@@ -27,8 +27,6 @@ dayjs.extend(customParseFormat)
 const { Text } = Typography
 
 export type FilterProps = {
-    schoolYearId: string | null //Năm học
-    semesterId: string | null //Học kỳ
     KhoaId: string | null //Khoa
     BoMonId: string | null //Bộ môn
     examTypeId: string | null //Hình thức thi
@@ -60,8 +58,6 @@ const FilterSubjectClass = (props: Props) => {
 
     const handleReset = () => {
         form.setFieldsValue({
-            schoolYearId: null,
-            semesterId: null,
             KhoaId: null,
             BoMonId: null,
             examTypeId: null,
@@ -91,8 +87,6 @@ const FilterSubjectClass = (props: Props) => {
 
     useEffect(() => {
         form.setFieldsValue({
-            schoolYearId: filters.schoolYearId || null,
-            semesterId: filters.semesterId || null,
             KhoaId: filters.KhoaId || null,
             BoMonId: filters.BoMonId || null,
             examTypeId: filters.examTypeId || null,

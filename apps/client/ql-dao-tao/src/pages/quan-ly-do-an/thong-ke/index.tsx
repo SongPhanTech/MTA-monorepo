@@ -1,10 +1,10 @@
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import TableCollapse from '@components/commons/tableCollapse'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
 import { StudentThesisRegistrationStatus, SubjectVersionType } from '@workspace/db'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
+import { useSemesterStore } from '@workspace/ui'
 import { Col, Flex, Input, Row, Segmented, Tabs } from 'antd'
 import {
     BarElement,
@@ -49,7 +49,7 @@ const StatCard = ({
 
 export default function ThongKe() {
     const [activeKey, setActiveKey] = useState('ket-qua')
-    const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
+    const { id: semesterId } = useSemesterStore()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -64,7 +64,7 @@ export default function ThongKe() {
             subject: {
                 type: SubjectVersionType.Project,
             },
-            ...(selectedSemesterId ? { semesterId: selectedSemesterId } : {}),
+            ...(semesterId ? { semesterId } : {}),
             ...(filters.searchText
                 ? {
                       OR: [
@@ -114,7 +114,7 @@ export default function ThongKe() {
             active: true,
             cancelled: false,
         }
-    }, [selectedSemesterId, filters.searchText, filters.name, filters.code])
+    }, [semesterId, filters.searchText, filters.name, filters.code])
 
     const { data } = useFindManySubjectClass({
         where,
@@ -423,10 +423,6 @@ export default function ThongKe() {
                                         />
                                     }
                                     allowClear
-                                />
-                                <TreeSelectSemester
-                                    filterTimeNow={true}
-                                    onChange={(val) => setSelectedSemesterId(val)}
                                 />
                             </Flex>
                         </Col>

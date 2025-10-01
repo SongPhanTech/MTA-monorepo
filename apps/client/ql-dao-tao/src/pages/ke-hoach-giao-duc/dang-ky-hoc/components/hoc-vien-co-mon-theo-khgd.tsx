@@ -10,7 +10,7 @@ import {
 } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { App, Button, Checkbox, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -23,14 +23,10 @@ interface FilterProps {
 }
 
 interface StudentCourseByPlanProps {
-    semesterId?: string | null
     subjectClassId?: string | null
 }
 
-export default function StudentCourseByPlan({
-    semesterId,
-    subjectClassId,
-}: StudentCourseByPlanProps) {
+export default function StudentCourseByPlan({ subjectClassId }: StudentCourseByPlanProps) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -41,6 +37,7 @@ export default function StudentCourseByPlan({
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
+    const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { data: initialValue } = useFindUniqueSubjectClass(

@@ -6,7 +6,7 @@ import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
-import { SelectTrainingObjectType } from '@workspace/ui'
+import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
 import { Breadcrumb, Divider, Layout, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -153,6 +153,11 @@ const DefaultLayout = ({
 
                         <div className="flex items-center">
                             <SelectTrainingObjectType />
+                            <Divider type="vertical" className="bg-primary h-[30px]" />
+                            <div className="flex items-center space-x-2">
+                                <p>Học kỳ</p>
+                                <TreeSelectSemester />
+                            </div>
                             <Divider type="vertical" className="bg-primary h-[30px]" />
                             <Breadcrumb items={listBreadcrumb} />
                         </div>

@@ -2,10 +2,9 @@ import { CloseOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import useSpinner from '@hooks/spinner'
 import { useImportPhanCongGiangDay } from '@workspace/libs/api/training'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Form, message, Radio, Space, Tag } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -31,7 +30,7 @@ const ModalNhapTKB = () => {
 
     const [file, setFile] = useState<File | null>(null)
     const [fileName, setFileName] = useState<string>('')
-
+    const { id: semesterId } = useSemesterStore()
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (!file) return
@@ -58,7 +57,7 @@ const ModalNhapTKB = () => {
             message.warning('Vui lòng chọn đối tượng đào tạo')
             return
         }
-        if (!file || !output?.semesterId) {
+        if (!file || !semesterId) {
             message.warning('Vui lòng chọn đầy đủ file và học kỳ')
             return
         }
@@ -67,9 +66,9 @@ const ModalNhapTKB = () => {
             const res = await ImportPhanCongGiangDay({
                 data: {
                     file: file,
-                    semesterId: output.semesterId || '',
+                    semesterId,
                     trainingObjectTypeId,
-                    fileType: output.fileType,
+                    fileType: output?.fileType,
                 },
             })
             if (res?.status === 200) {
@@ -141,11 +140,6 @@ const ModalNhapTKB = () => {
                         )}
                         <p className="">Chọn file Excel mẫu đã xuất từ hệ thống</p>
                     </div>
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="semesterId" label="Kỳ học" required>
-                    <TreeSelectSemester defaultValue={id || undefined} />
                 </FormItem>
             </Col>
             <Col span={12}>

@@ -1,4 +1,3 @@
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -6,7 +5,7 @@ import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
 import type { ExamType, SubjectClassSchedule } from '@workspace/db'
 import { useFindManySubjectClass } from '@workspace/db/hooks'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -15,21 +14,20 @@ import { useCallback, useState } from 'react'
 
 interface FilterProps {
     searchText: string | null
-    semesterId: string | null
 }
 
 interface RegisterClassProps {
-    setSemesterId?: (id: string | null) => void
     setSubjectClassId?: (id: string | null) => void
 }
 
-export default function RegisterResult({ setSemesterId, setSubjectClassId }: RegisterClassProps) {
+export default function RegisterResult({ setSubjectClassId }: RegisterClassProps) {
     const [currentPage, _setCurrentPage] = useState(1)
     const [selectedRowKey, _setSelectedRowKey] = useState<string | null>(null)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        semesterId: null,
     })
+    const { id: semesterId } = useSemesterStore()
+
     const { getScheduleLabel } = useScheduleOptions()
     const { getExamTypeLabel } = useExamTypeOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -44,9 +42,9 @@ export default function RegisterResult({ setSemesterId, setSubjectClassId }: Reg
                       },
                   }
                 : {}),
-            ...(filters.semesterId
+            ...(semesterId
                 ? {
-                      semesterId: filters.semesterId,
+                      semesterId,
                   }
                 : {}),
             trainingObjectTypeId,
@@ -117,20 +115,6 @@ export default function RegisterResult({ setSemesterId, setSubjectClassId }: Reg
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={8}>
-                            <Form.Item
-                                className="mb-0"
-                                name="semesterId"
-                                labelCol={{ span: 24 }}
-                                wrapperCol={{ span: 24 }}
-                                labelAlign="left"
-                            >
-                                <TreeSelectSemester
-                                    filterTimeNow={true}
-                                    onChange={(val) => handleFilterChange('semesterId', val)}
-                                />
-                            </Form.Item>
-                        </Col>
                     </Flex>
                 </Col>
             </Row>
@@ -140,7 +124,6 @@ export default function RegisterResult({ setSemesterId, setSubjectClassId }: Reg
                 dataSource={subjectClassData}
                 // onRow={(record) => ({
                 //     onClick: () => {
-                //         setSemesterId?.(record.semesterId)
                 //         setSubjectClassId?.(record.id)
                 //         setSelectedRowKey(record.id)
                 //     },

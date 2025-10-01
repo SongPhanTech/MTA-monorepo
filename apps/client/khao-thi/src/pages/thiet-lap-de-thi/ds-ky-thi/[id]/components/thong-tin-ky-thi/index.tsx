@@ -1,7 +1,6 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import TreeSelectRoom from '@components/commons/room-select'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import TreeSelectSubjectVersion from '@components/commons/subject-version-select'
 import { useExamStatusOptions } from '@hooks/exam-status'
 import useSpinner from '@hooks/spinner'
@@ -15,6 +14,7 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { ROUTER_PATH } from '@workspace/router'
+import { useSemesterStore } from '@workspace/ui'
 import {
     Button,
     Checkbox,
@@ -47,9 +47,8 @@ export default function Information({ id, selectedIds }: InformationProps) {
     const [form] = Form.useForm<PutExamType>()
     const { options: examStatusOptions } = useExamStatusOptions()
     const { showSpinner, hideSpinner } = useSpinner()
-    const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
     const [selectedSubjectVersionId, setSelectedSubjectVersionId] = useState<string>('')
-
+    const { id: semesterId } = useSemesterStore()
     const { data: initialValue } = useFindUniqueExam(
         {
             where: { id },
@@ -69,7 +68,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
             subjectVersion: {
                 subjectClass: {
                     some: {
-                        semesterId: selectedSemesterId || undefined,
+                        semesterId,
                         cancelled: false,
                         id: selectedIds?.[0] || undefined,
                     },
@@ -91,7 +90,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 semesterId: initialValue.subjectClass?.[0]?.semesterId || '',
                 room: initialValue.room?.map((r) => r.id),
             })
-            setSelectedSemesterId(initialValue.subjectClass?.[0]?.semesterId || '')
             if (initialValue.questionBank?.subjectVersionId) {
                 setSelectedSubjectVersionId(initialValue.questionBank.subjectVersionId)
             }
@@ -235,14 +233,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
     }, [id, initialValue?.status])
 
     return (
-        <Form
-            form={form}
-            initialValues={{
-                semesterId: selectedSemesterId,
-            }}
-            layout="vertical"
-            onFinish={onOk}
-        >
+        <Form form={form} layout="vertical" onFinish={onOk}>
             <Row gutter={16}>
                 <Col span={12}>
                     <FormItem form={form} name="title" label="Tên kỳ thi" required>
@@ -260,14 +251,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
                             disabled={!isDraft}
                         />
                     </FormItem>
-                </Col>
-                <Col span={12}>
-                    <Form.Item name="semesterId" label="Chọn kỳ học">
-                        <TreeSelectSemester
-                            onChange={(val) => setSelectedSemesterId(val)}
-                            disabled={!isDraft}
-                        />
-                    </Form.Item>
                 </Col>
                 <Col span={12}>
                     <FormItem
@@ -295,7 +278,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 <Col span={12}>
                     <FormItem form={form} name="subjectClass" label="Lớp thi">
                         <TreeSelectSubjectVersion
-                            semesterId={selectedSemesterId}
+                            semesterId={semesterId}
                             subjectVersionId={selectedSubjectVersionId}
                             edit={!!id}
                             defaultValue={selectedIds}

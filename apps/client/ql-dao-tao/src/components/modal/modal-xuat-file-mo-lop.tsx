@@ -1,23 +1,22 @@
-import useSpinner from '@hooks/spinner'
-import { Col, Form, message } from 'antd'
-import dayjs from 'dayjs'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
+import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import { useFindManyDM_DonVi } from '@workspace/db/hooks'
 import { exportPhanCongGiangDay } from '@workspace/libs/api/training'
+import { useSemesterStore } from '@workspace/ui'
+import { Col, Form, message } from 'antd'
+import dayjs from 'dayjs'
+import TreeSelect from '@/components/commons/tree-select'
+import 'dayjs/locale/vi'
 import { saveAs } from 'file-saver'
 import { useEffect } from 'react'
-import TreeSelect from '@/components/commons/tree-select'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 
 interface FilterProps {
     organizationId?: string
-    semesterId?: string
 }
 
 const ModalExportFileSubjectClass = () => {
@@ -34,9 +33,9 @@ const ModalExportFileSubjectClass = () => {
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(manageOrgData)
-
+    const { id: semesterId } = useSemesterStore()
     const handleExport = async (output?: FilterProps) => {
-        if (!output?.organizationId || !output?.semesterId) {
+        if (!output?.organizationId || !semesterId) {
             message.warning('Vui lòng chọn đầy đủ đơn vị và học kỳ')
             return
         }
@@ -45,7 +44,7 @@ const ModalExportFileSubjectClass = () => {
             showSpinner()
             const res = await exportPhanCongGiangDay({
                 organizationId: output.organizationId || '',
-                semesterId: output.semesterId || '',
+                semesterId,
             })
 
             if (!res) {
@@ -98,11 +97,6 @@ const ModalExportFileSubjectClass = () => {
                         treeDefaultExpandAll
                         treeData={treeData}
                     />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="semesterId" label="Kỳ học" required>
-                    <TreeSelectSemester defaultValue={id || undefined} />
                 </FormItem>
             </Col>
         </PutFormModal>

@@ -1,5 +1,4 @@
 import { EyeOutlined } from '@ant-design/icons'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -16,7 +15,8 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Form, message, Row, Tooltip } from 'antd'
+import { useSemesterStore } from '@workspace/ui'
+import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -31,12 +31,11 @@ export default function SubjectClassScore() {
     const { showSpinner, hideSpinner } = useSpinner()
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
-        semesterId: undefined,
         trainingObjectTypes: undefined,
         startDate: undefined,
     })
-
-    const { onOpen, onClose } = useDisclosure<string>({
+    const { id: semesterId } = useSemesterStore()
+    const { onOpen } = useDisclosure<string>({
         tag: 'PutDotRenLuyen',
     })
 
@@ -65,17 +64,13 @@ export default function SubjectClassScore() {
                       },
                   }
                 : {}),
-            ...(filters.semesterId
+            ...(semesterId
                 ? {
-                      semesterId: {
-                          in: Array.isArray(filters.semesterId)
-                              ? filters.semesterId
-                              : [filters.semesterId],
-                      },
+                      semesterId,
                   }
                 : {}),
         }),
-        [filters.startDate, filters.name, filters.trainingObjectTypes, filters.semesterId]
+        [filters.startDate, filters.name, filters.trainingObjectTypes, semesterId]
     )
 
     const { data = [], refetch } = useFindManyTrainingScoreSession({
@@ -132,32 +127,7 @@ export default function SubjectClassScore() {
             <Row>
                 <Col span={24} className="flex justify-end">
                     <Row>
-                        <Col span={20}>
-                            <Row gutter={[16, 16]} align="top" justify="space-between">
-                                <Col span={12}>
-                                    <Flex>
-                                        <Col span={10}>
-                                            <Form.Item
-                                                className="mb-0"
-                                                name="semesterId"
-                                                labelCol={{ span: 24 }}
-                                                wrapperCol={{ span: 24 }}
-                                                labelAlign="left"
-                                            >
-                                                <TreeSelectSemester
-                                                    onChange={(val) =>
-                                                        setFilters({
-                                                            ...filters,
-                                                            semesterId: val,
-                                                        })
-                                                    }
-                                                />
-                                            </Form.Item>
-                                        </Col>
-                                    </Flex>
-                                </Col>
-                            </Row>
-                        </Col>
+                        <Col span={20} />
                         <Col span={4}>
                             <Flex justify="end" gap={10}>
                                 {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN, 'THEM') && (
