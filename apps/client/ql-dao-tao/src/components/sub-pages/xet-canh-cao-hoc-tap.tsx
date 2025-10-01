@@ -331,7 +331,7 @@ const XetCanhCaoHocTap = ({ semesterId }: XetCanhCaoHocTapProps) => {
                                     width: 120,
                                     fixed: 'left',
                                     type: 'input',
-                                    render: (__, record) => record?.student?.code,
+                                    render: (__, record) => record?.student?.userProfile?.code,
                                 },
                                 {
                                     title: 'Tên sinh viên',
