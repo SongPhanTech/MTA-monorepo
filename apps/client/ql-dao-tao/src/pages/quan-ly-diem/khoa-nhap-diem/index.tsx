@@ -202,7 +202,7 @@ export default function SubjectClassScore() {
                         <Row gutter={[16, 16]} align="top" justify="space-between">
                             <Col span={12}>
                                 <Flex>
-                                    <Col span={8}>
+                                    <Col span={18}>
                                         <Form.Item
                                             className="mb-0"
                                             labelCol={{ span: 24 }}
