@@ -851,6 +851,14 @@ export default function SubjectClassScore() {
         }
     }
 
+    const roundToNearestHalf = (num: number) => {
+        return Math.round(num * 2) / 2
+    }
+
+    const roundToNearestTenth = (num: number) => {
+        return Math.round(num * 10) / 10
+    }
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         form.setFieldsValue({ ...dataDetailSubjectClass })
@@ -1310,7 +1318,9 @@ export default function SubjectClassScore() {
                                                                 const updated = [...prevScores]
                                                                 updated[index] = {
                                                                     ...updated[index],
-                                                                    value: newScore,
+                                                                    value: roundToNearestHalf(
+                                                                        newScore
+                                                                    ),
                                                                 }
                                                                 return updated
                                                             }
@@ -1318,7 +1328,9 @@ export default function SubjectClassScore() {
                                                                 ...prevScores,
                                                                 {
                                                                     id: record.id,
-                                                                    value: newScore,
+                                                                    value: roundToNearestHalf(
+                                                                        newScore
+                                                                    ),
                                                                 },
                                                             ]
                                                         })
@@ -1391,7 +1403,9 @@ export default function SubjectClassScore() {
                                                                 const updated = [...prevScores]
                                                                 updated[index] = {
                                                                     ...updated[index],
-                                                                    value: newScore,
+                                                                    value: roundToNearestHalf(
+                                                                        newScore
+                                                                    ),
                                                                 }
                                                                 return updated
                                                             }
@@ -1399,7 +1413,9 @@ export default function SubjectClassScore() {
                                                                 ...prevScores,
                                                                 {
                                                                     id: record.id,
-                                                                    value: newScore,
+                                                                    value: roundToNearestHalf(
+                                                                        newScore
+                                                                    ),
                                                                 },
                                                             ]
                                                         })
@@ -1476,7 +1492,9 @@ export default function SubjectClassScore() {
                                                                 const updated = [...prevScores]
                                                                 updated[index] = {
                                                                     ...updated[index],
-                                                                    value: newScore,
+                                                                    value: roundToNearestTenth(
+                                                                        newScore
+                                                                    ),
                                                                 }
                                                                 return updated
                                                             }
@@ -1484,7 +1502,9 @@ export default function SubjectClassScore() {
                                                                 ...prevScores,
                                                                 {
                                                                     id: record.id,
-                                                                    value: newScore,
+                                                                    value: roundToNearestTenth(
+                                                                        newScore
+                                                                    ),
                                                                 },
                                                             ]
                                                         })
