@@ -785,25 +785,25 @@ export default function TeachingAssignment() {
                                             record?.mainLecturer && record?.extraLecturer
                                                 ? [
                                                       {
-                                                          label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.firstName} ${record?.mainLecturer?.userProfile?.lastName}`,
+                                                          label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
                                                           value: record?.lecturerId,
                                                       },
                                                       {
-                                                          label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.firstName} ${record?.extraLecturer?.userProfile?.lastName}`,
+                                                          label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
                                                           value: record?.extraLecturerId,
                                                       },
                                                   ]
                                                 : record?.mainLecturer
                                                   ? [
                                                         {
-                                                            label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.firstName} ${record?.mainLecturer?.userProfile?.lastName}`,
+                                                            label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
                                                             value: record?.lecturerId,
                                                         },
                                                     ]
                                                   : record?.extraLecturer
                                                     ? [
                                                           {
-                                                              label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.firstName} ${record?.extraLecturer?.userProfile?.lastName}`,
+                                                              label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
                                                               value: record?.extraLecturerId,
                                                           },
                                                       ]
