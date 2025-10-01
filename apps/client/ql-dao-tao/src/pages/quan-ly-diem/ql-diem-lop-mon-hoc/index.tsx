@@ -1185,7 +1185,7 @@ export default function SubjectClassScore() {
                                                 valuePropName="checked"
                                             >
                                                 <Checkbox disabled={profileId !== listUser?.P13}>
-                                                    Đã nhận Phiếu điểm
+                                                    P13 đã nhận Phiếu điểm
                                                 </Checkbox>
                                             </Form.Item>
 
@@ -1194,7 +1194,7 @@ export default function SubjectClassScore() {
                                                 name="scoreChecked"
                                                 valuePropName="checked"
                                             >
-                                                <Checkbox disabled={profileId !== listUser?.P13}>
+                                                <Checkbox disabled={profileId !== listUser?.P2}>
                                                     P2/P7 đã kiểm tra
                                                 </Checkbox>
                                             </Form.Item>
@@ -1455,11 +1455,11 @@ export default function SubjectClassScore() {
                                             can(
                                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                                 'NHAP_DIEM'
-                                            ) && record.subjectClass?.examScoreDeadline
-                                                ? dayjs().isBefore(
-                                                      record.subjectClass.examScoreDeadline
-                                                  )
-                                                : false
+                                            ) &&
+                                            record.subjectClass?.examScoreDeadline &&
+                                            dayjs().isAfter(record.subjectClass.scoreDeadline) &&
+                                            dayjs().isBefore(record.subjectClass.examScoreDeadline)
+
                                         const Score =
                                             scoreThi.find((item) => item.id === record.id)?.value ??
                                             (record.examScore !== undefined
