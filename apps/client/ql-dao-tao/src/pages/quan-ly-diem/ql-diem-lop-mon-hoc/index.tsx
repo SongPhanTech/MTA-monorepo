@@ -586,7 +586,7 @@ export default function SubjectClassScore() {
         }
     }
 
-    const hanldeSave = () => {
+    const handleSave = () => {
         Modal.confirm({
             title: 'Xác nhận',
             content: 'Bạn có chắc chắn muốn nhập điểm không?',
@@ -617,6 +617,12 @@ export default function SubjectClassScore() {
                         },
                     },
                 ]
+                if (profileId !== listUser?.lecturer) {
+                    await sqlTransaction(listSqlTransaction)
+                    message.success('Đã cập nhật trạng thái thành công!')
+                    debouncedRefetch()
+                    return
+                }
             }
 
             const error = [...scoreCC, ...scoreTX, ...scoreThi].find((i) => i?.value > 10)
@@ -913,7 +919,7 @@ export default function SubjectClassScore() {
 
     const disabledEnteredScore = useMemo(() => {
         if (
-            !dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) ||
+            dayjs().isAfter(dataDetailSubjectClass?.scoreDeadline) ||
             !!dataDetailSubjectClass?.isLockScore ||
             profileId !== listUser?.lecturer
         ) {
@@ -924,7 +930,8 @@ export default function SubjectClassScore() {
 
     const disabledEnteredExamScore = useMemo(() => {
         if (
-            !dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) ||
+            dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) ||
+            dayjs().isAfter(dataDetailSubjectClass?.examScoreDeadline) ||
             !!dataDetailSubjectClass?.isLockExamScore ||
             profileId !== listUser?.lecturer
         ) {
@@ -1094,15 +1101,10 @@ export default function SubjectClassScore() {
                                     </>
                                 )}
 
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                    'NHAP_DIEM'
-                                ) && (
-                                    <Button type="primary" onClick={hanldeSave}>
-                                        <Save stroke="white" />
-                                        Lưu
-                                    </Button>
-                                )}
+                                <Button type="primary" onClick={handleSave}>
+                                    <Save stroke="white" />
+                                    Lưu
+                                </Button>
                             </Flex>
                         </Col>
 
@@ -1285,11 +1287,9 @@ export default function SubjectClassScore() {
                                             can(
                                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                                 'NHAP_DIEM'
-                                            ) && record.subjectClass?.scoreDeadline
-                                                ? dayjs().isBefore(
-                                                      record.subjectClass.scoreDeadline
-                                                  )
-                                                : false
+                                            ) &&
+                                            record.subjectClass?.scoreDeadline &&
+                                            dayjs().isBefore(record.subjectClass.scoreDeadline)
                                         const openClock = record.subjectClass?.isLockScore
                                         const Score =
                                             scoreCC.find((item) => item.id === record.id)?.value ??
@@ -1370,11 +1370,9 @@ export default function SubjectClassScore() {
                                             can(
                                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                                 'NHAP_DIEM'
-                                            ) && record.subjectClass?.scoreDeadline
-                                                ? dayjs().isBefore(
-                                                      record.subjectClass.scoreDeadline
-                                                  )
-                                                : false
+                                            ) &&
+                                            record.subjectClass?.scoreDeadline &&
+                                            dayjs().isBefore(record.subjectClass.scoreDeadline)
                                         const openClock = record.subjectClass?.isLockScore
                                         const Score =
                                             scoreTX.find((item) => item.id === record.id)?.value ??
@@ -1457,8 +1455,9 @@ export default function SubjectClassScore() {
                                                 'NHAP_DIEM'
                                             ) &&
                                             record.subjectClass?.examScoreDeadline &&
-                                            dayjs().isAfter(record.subjectClass.scoreDeadline) &&
-                                            dayjs().isBefore(record.subjectClass.examScoreDeadline)
+                                            record.subjectClass?.scoreDeadline &&
+                                            dayjs().isAfter(record.subjectClass?.scoreDeadline) &&
+                                            dayjs().isBefore(record.subjectClass?.examScoreDeadline)
 
                                         const Score =
                                             scoreThi.find((item) => item.id === record.id)?.value ??
