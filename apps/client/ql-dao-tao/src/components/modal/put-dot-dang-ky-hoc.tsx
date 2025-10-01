@@ -245,7 +245,6 @@ const PutClassRegisterSession = () => {
                     label="Học phí (theo tín chỉ)"
                 >
                     <InputNumber
-                        type="number"
                         className="w-full"
                         min={0}
                         placeholder="Nhập học phí (theo tín chỉ)"
