@@ -829,50 +829,52 @@ model ExamSession {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model StudentSubjectScore {
-  id                        String                                     @id() @default(cuid())
-  code                      String?                                    @unique()
-  active                    Boolean                                    @default(true)
-  description               String?                                    @db.Text()
-  deletedAt                 DateTime?
-  createdAt                 DateTime                                   @default(now())
-  updatedAt                 DateTime                                   @default(now()) @updatedAt()
-  subjectClass              SubjectClass?                              @relation(fields: [subjectClassId], references: [id])
-  subjectClassId            String?
-  subjectVersion            SubjectVersion                             @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId          String
-  student                   Student                                    @relation(fields: [studentId], references: [id])
-  studentId                 String
+  id                           String                                     @id() @default(cuid())
+  code                         String?                                    @unique()
+  active                       Boolean                                    @default(true)
+  description                  String?                                    @db.Text()
+  deletedAt                    DateTime?
+  createdAt                    DateTime                                   @default(now())
+  updatedAt                    DateTime                                   @default(now()) @updatedAt()
+  subjectClass                 SubjectClass?                              @relation(fields: [subjectClassId], references: [id])
+  subjectClassId               String?
+  subjectVersion               SubjectVersion                             @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId             String
+  student                      Student                                    @relation(fields: [studentId], references: [id])
+  studentId                    String
   /// @gte(0, 'Điểm tối thiểu là 0')
   /// @lte(10, 'Điểm tối đa là 10')
-  attendanceScore           Float?
+  attendanceScore              Float?
   /// @gte(0, 'Điểm tối thiểu là 0')
   /// @lte(10, 'Điểm tối đa là 10')
-  midtermScore              Float?
+  midtermScore                 Float?
   /// @gte(0, 'Điểm tối thiểu là 0')
   /// @lte(10, 'Điểm tối đa là 10')
-  examScore                 Float?
+  examScore                    Float?
   /// @gte(0, 'Điểm tối thiểu là 0')
   /// @lte(10, 'Điểm tối đa là 10')
-  finalScore                Decimal?                                   @db.Decimal(5, 1)
+  finalScore                   Decimal?                                   @db.Decimal(5, 1)
   /// @gte(0, 'Điểm tối thiểu là 0')
   /// @lte(10, 'Điểm tối đa là 10')
-  manualFinalScore          Float?
-  examPostponed             Boolean                                    @default(false)
-  examPostponedReason       String?
-  exempted                  Boolean                                    @default(false)
-  withdrew                  Boolean                                    @default(false)
+  manualFinalScore             Float?
+  examPostponed                Boolean                                    @default(false)
+  examPostponedReason          String?
+  exempted                     Boolean                                    @default(false)
+  withdrew                     Boolean                                    @default(false)
   /// cấm thi
-  examBanned                Boolean                                    @default(false)
-  examBannedReason          String?
+  examBanned                   Boolean                                    @default(false)
+  examBannedReason             String?
   /// đình chỉ
-  suspended                 Boolean                                    @default(false)
-  suspendedReason           String?
+  suspended                    Boolean                                    @default(false)
+  suspendedReason              String?
   /// lưu ban
-  repeated                  Boolean                                    @default(false)
-  repeatedReason            String?
-  certificates              ArchivedCertificateOnStudentSubjectScore[]
-  awards                    ArchivedAwardOnStudentSubjectScore[]
-  studentThesisRegistration StudentThesisRegistration[]                @relation("ScoreToRegistration")
+  repeated                     Boolean                                    @default(false)
+  repeatedReason               String?
+  graduationGpaScores          StudentGraduationApplication[]             @relation("gpaScore")
+  graduationSupplementaryScore StudentGraduationApplication[]             @relation("supplementaryScore")
+  certificates                 ArchivedCertificateOnStudentSubjectScore[]
+  awards                       ArchivedAwardOnStudentSubjectScore[]
+  studentThesisRegistration    StudentThesisRegistration[]                @relation("ScoreToRegistration")
 
   @@unique([subjectClassId, studentId])
   @@schema("ql-dao-tao")
@@ -4656,6 +4658,8 @@ model StudentGraduationApplication {
   applicationDate        DateTime                 @default(now())
   status                 ApplicationStatus        @default(SUBMITTED)
   applicationCheckResult ApplicationCheckResult[]
+  gpaScore               StudentSubjectScore[]    @relation("gpaScore")
+  supplementaryScore     StudentSubjectScore[]    @relation("supplementaryScore")
   decision               GraduationDecision?
 
   @@unique([studentId, sessionId])
@@ -5338,6 +5342,7 @@ model SurveyObjectType {
   trainingCourses TrainingCourse[]
   fixedClasses    FixedClass[]
   subjectClasses  SubjectClass[]
+  surveySessions  SurveySession[]
 
   @@schema("khao-thi")
 }
@@ -5451,26 +5456,28 @@ model SurveyChoice {
   @@schema("khao-thi")
 }
 
-/// Bảng lưu phiên khảo sát của từng học viên
+/// Bảng lưu phiên khảo sát
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model SurveySession {
-  id                   String           @id() @default(cuid())
-  code                 String?          @unique()
-  active               Boolean          @default(true)
-  description          String?          @db.Text()
+  id                   String            @id() @default(cuid())
+  code                 String?           @unique()
+  active               Boolean           @default(true)
+  description          String?           @db.Text()
   deletedAt            DateTime?
-  createdAt            DateTime         @default(now())
-  updatedAt            DateTime         @default(now()) @updatedAt()
-  survey               Survey           @relation(fields: [surveyId], references: [id])
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @default(now()) @updatedAt()
+  survey               Survey            @relation(fields: [surveyId], references: [id])
   surveyId             String
   additionalSuggestion String?
-  student              Student?         @relation(fields: [studentId], references: [id])
+  student              Student?          @relation(fields: [studentId], references: [id])
   studentId            String?
-  startedAt            DateTime         @default(now())
+  startedAt            DateTime          @default(now())
   completedAt          DateTime?
-  isCompleted          Boolean          @default(false)
+  isCompleted          Boolean           @default(false)
+  surveyObjectType     SurveyObjectType? @relation(fields: [surveyObjectTypeId], references: [id])
+  surveyObjectTypeId   String?
   responses            SurveyResponse[]
 
   @@unique([surveyId, studentId])

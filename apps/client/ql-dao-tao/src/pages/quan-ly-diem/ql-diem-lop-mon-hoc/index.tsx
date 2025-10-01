@@ -15,6 +15,7 @@ import {
     useFindUniqueSubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { listUser } from '@workspace/libs/constants'
 import { calcFinalScore, getScoreStatistics } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
@@ -38,7 +39,7 @@ import _ from 'lodash'
 import { Ellipsis, FileUp, Printer, Save, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface Item {
@@ -297,13 +298,13 @@ export default function SubjectClassScore() {
                           },
                       }
                     : {}),
-                ...(!canReadAll
-                    ? {
-                          mainLecturer: {
-                              userProfileId: profileId,
-                          },
-                      } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
-                    : {}),
+                // ...(!canReadAll
+                //     ? {
+                //           mainLecturer: {
+                //               userProfileId: profileId,
+                //           },
+                //       } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
+                //     : {}),
                 deletedAt: null,
                 active: true,
                 cancelled: false,
@@ -910,6 +911,28 @@ export default function SubjectClassScore() {
         router.pathname,
     ])
 
+    const disabledEnteredScore = useMemo(() => {
+        if (
+            !dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) ||
+            !!dataDetailSubjectClass?.isLockScore ||
+            profileId !== listUser?.lecturer
+        ) {
+            return true
+        }
+        return false
+    }, [profileId, dataDetailSubjectClass])
+
+    const disabledEnteredExamScore = useMemo(() => {
+        if (
+            !dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) ||
+            !!dataDetailSubjectClass?.isLockExamScore ||
+            profileId !== listUser?.lecturer
+        ) {
+            return true
+        }
+        return false
+    }, [profileId, dataDetailSubjectClass])
+
     return (
         <div className="flex gap-2 pr-2">
             <Col span={4} className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm">
@@ -1123,12 +1146,7 @@ export default function SubjectClassScore() {
                                                 name="enteredScore"
                                                 valuePropName="checked"
                                             >
-                                                <Checkbox
-                                                    disabled={
-                                                        profileId !==
-                                                        '5317ce3a-62ef-4ad2-be10-a0f110a55243'
-                                                    }
-                                                >
+                                                <Checkbox disabled={disabledEnteredScore}>
                                                     Đã nhập điểm CC/TX
                                                 </Checkbox>
                                             </Form.Item>
@@ -1137,12 +1155,7 @@ export default function SubjectClassScore() {
                                                 name="enteredExamScore"
                                                 valuePropName="checked"
                                             >
-                                                <Checkbox
-                                                    disabled={
-                                                        profileId !==
-                                                        '5317ce3a-62ef-4ad2-be10-a0f110a55243'
-                                                    }
-                                                >
+                                                <Checkbox disabled={disabledEnteredExamScore}>
                                                     Đã nhập điểm thi điểm thi
                                                 </Checkbox>
                                             </Form.Item>
@@ -1151,12 +1164,7 @@ export default function SubjectClassScore() {
                                                 name="isLockScore"
                                                 valuePropName="checked"
                                             >
-                                                <Checkbox
-                                                    disabled={
-                                                        profileId !==
-                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
-                                                    }
-                                                >
+                                                <Checkbox disabled={profileId !== listUser?.P13}>
                                                     Khóa điểm CC/TX
                                                 </Checkbox>
                                             </Form.Item>
@@ -1166,12 +1174,7 @@ export default function SubjectClassScore() {
                                                 name="isLockExamScore"
                                                 valuePropName="checked"
                                             >
-                                                <Checkbox
-                                                    disabled={
-                                                        profileId !==
-                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
-                                                    }
-                                                >
+                                                <Checkbox disabled={profileId !== listUser?.P13}>
                                                     Khóa điểm thi
                                                 </Checkbox>
                                             </Form.Item>
@@ -1181,12 +1184,7 @@ export default function SubjectClassScore() {
                                                 name="scoreSubmitted"
                                                 valuePropName="checked"
                                             >
-                                                <Checkbox
-                                                    disabled={
-                                                        profileId !==
-                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
-                                                    }
-                                                >
+                                                <Checkbox disabled={profileId !== listUser?.P13}>
                                                     Đã nhận Phiếu điểm
                                                 </Checkbox>
                                             </Form.Item>
@@ -1196,12 +1194,7 @@ export default function SubjectClassScore() {
                                                 name="scoreChecked"
                                                 valuePropName="checked"
                                             >
-                                                <Checkbox
-                                                    disabled={
-                                                        profileId !==
-                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
-                                                    }
-                                                >
+                                                <Checkbox disabled={profileId !== listUser?.P13}>
                                                     P2/P7 đã kiểm tra
                                                 </Checkbox>
                                             </Form.Item>

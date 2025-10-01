@@ -1215,6 +1215,20 @@ const metadata = {
                     name: "repeatedReason",
                     type: "String",
                     isOptional: true,
+                }, graduationGpaScores: {
+                    name: "graduationGpaScores",
+                    type: "StudentGraduationApplication",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "gpaScore" }] }],
+                    backLink: 'gpaScore',
+                }, graduationSupplementaryScore: {
+                    name: "graduationSupplementaryScore",
+                    type: "StudentGraduationApplication",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "supplementaryScore" }] }],
+                    backLink: 'supplementaryScore',
                 }, certificates: {
                     name: "certificates",
                     type: "ArchivedCertificateOnStudentSubjectScore",
@@ -15987,6 +16001,20 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'studentGraduationApplication',
+                }, gpaScore: {
+                    name: "gpaScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "gpaScore" }] }],
+                    backLink: 'graduationGpaScores',
+                }, supplementaryScore: {
+                    name: "supplementaryScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "supplementaryScore" }] }],
+                    backLink: 'graduationSupplementaryScore',
                 }, decision: {
                     name: "decision",
                     type: "GraduationDecision",
@@ -18406,6 +18434,12 @@ const metadata = {
                     isArray: true,
                     backLink: 'surveyObjectTypes',
                     isRelationOwner: true,
+                }, surveySessions: {
+                    name: "surveySessions",
+                    type: "SurveySession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyObjectType',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18898,6 +18932,21 @@ const metadata = {
                     name: "isCompleted",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, surveyObjectType: {
+                    name: "surveyObjectType",
+                    type: "SurveyObjectType",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'surveySessions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyObjectTypeId" },
+                }, surveyObjectTypeId: {
+                    name: "surveyObjectTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'surveyObjectType',
                 }, responses: {
                     name: "responses",
                     type: "SurveyResponse",
