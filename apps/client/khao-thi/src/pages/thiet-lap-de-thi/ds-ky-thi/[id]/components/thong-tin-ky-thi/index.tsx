@@ -235,7 +235,14 @@ export default function Information({ id, selectedIds }: InformationProps) {
     }, [id, initialValue?.status])
 
     return (
-        <Form form={form} layout="vertical" onFinish={onOk}>
+        <Form
+            form={form}
+            initialValues={{
+                semesterId: selectedSemesterId,
+            }}
+            layout="vertical"
+            onFinish={onOk}
+        >
             <Row gutter={16}>
                 <Col span={12}>
                     <FormItem form={form} name="title" label="Tên kỳ thi" required>

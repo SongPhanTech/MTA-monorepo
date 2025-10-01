@@ -99,7 +99,6 @@ function Exam() {
         include: {
             questionBank: true,
             subjectClass: {
-                select: {},
                 where: {
                     trainingObjectTypeId,
                 },

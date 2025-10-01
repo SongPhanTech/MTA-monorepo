@@ -55,6 +55,7 @@ function SubjectVersion() {
             subjectClass: {
                 some: {
                     cancelled: false,
+                    trainingObjectTypeId,
                     ...(selectedSemesterId && {
                         semesterId: selectedSemesterId,
                     }),
@@ -89,6 +90,7 @@ function SubjectVersion() {
         [
             filters.searchText,
             selectedSemesterId,
+            trainingObjectTypeId,
             filters.code,
             filters.name,
             filters.examType,
