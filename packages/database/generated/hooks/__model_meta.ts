@@ -1141,6 +1141,10 @@ const metadata = {
                     name: "repeated",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, repeatedReason: {
+                    name: "repeatedReason",
+                    type: "String",
+                    isOptional: true,
                 }, certificates: {
                     name: "certificates",
                     type: "ArchivedCertificateOnStudentSubjectScore",

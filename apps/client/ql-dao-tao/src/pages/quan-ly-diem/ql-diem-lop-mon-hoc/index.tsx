@@ -2,7 +2,7 @@ import ImportScoreModal from '@components/commons/print/nhap-diem-tu-file'
 import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
-import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
+// import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import type { FilterProps } from '@constants/type'
@@ -624,6 +624,17 @@ export default function SubjectClassScore() {
                 ]
             }
 
+            const error = [...scoreCC, ...scoreTX, ...scoreThi].find((i) => i?.value > 10)
+            if (error) {
+                message.error('Bạn chưa nhập đúng điểm số')
+                return
+            }
+            const parseScoreValue = (value: number | string) => {
+                if (value === undefined || value === null || value === '' || Number.isNaN(value)) {
+                    return null
+                }
+                return Number(value)
+            }
             const scoresToUpdate = dataTable
                 .map((record) => {
                     const ccScore = scoreCC.find((s) => s.id === record.id)
@@ -637,18 +648,6 @@ export default function SubjectClassScore() {
                     const LyDoCamThi = lyDoCamThi.find((s) => s.id === record.id)
                     const LyDoDinhChi = lyDoDinhChi.find((s) => s.id === record.id)
                     const finalScore = Number(renderFinalScore(record).finalScore)
-
-                    const parseScoreValue = (value: number | string) => {
-                        if (
-                            value === undefined ||
-                            value === null ||
-                            value === '' ||
-                            Number.isNaN(value)
-                        ) {
-                            return null
-                        }
-                        return Number(value)
-                    }
 
                     const attendanceScore = ccScore ? parseScoreValue(ccScore.value) : null
                     const midtermScore = txScore ? parseScoreValue(txScore.value) : null
@@ -671,6 +670,7 @@ export default function SubjectClassScore() {
                         finalScore: finalScore ? finalScore : null,
                         examBannedReason: LyDoCamThi ? LyDoCamThi.value : '',
                         suspendedReason: LyDoDinhChi ? LyDoDinhChi.value : '',
+                        repeatedReason: LyDoHoanThi ? LyDoHoanThi.value : '',
                     }
 
                     return {
@@ -688,7 +688,10 @@ export default function SubjectClassScore() {
                         originalData.examPostponed !== newData.examPostponed ||
                         originalData.suspended !== newData.suspended ||
                         originalData.description !== newData.description ||
-                        originalData.finalScore !== newData.finalScore
+                        originalData.finalScore !== newData.finalScore ||
+                        originalData.examBannedReason !== newData.examBannedReason ||
+                        originalData.suspendedReason !== newData.suspendedReason ||
+                        originalData.repeatedReason !== newData.repeatedReason
                     )
                 })
 
@@ -760,7 +763,7 @@ export default function SubjectClassScore() {
             }))
             const newLyDoHoanThi = dataTable.map((item) => ({
                 id: item.id,
-                value: item.examBannedReason || '',
+                value: item.repeatedReason || '',
             }))
             const newLyDoDinhChi = dataTable.map((item) => ({
                 id: item.id,
@@ -950,7 +953,7 @@ export default function SubjectClassScore() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={24}>
                             <Flex gap={4}>
-                                <Col span={10}>
+                                <Col span={8}>
                                     <Form.Item name="searchText">
                                         <Input
                                             id="search"
@@ -972,7 +975,7 @@ export default function SubjectClassScore() {
                                     </Form.Item>
                                 </Col>
 
-                                <Col span={10}>
+                                <Col span={8}>
                                     <TreeSelectSemester
                                         style={{ width: '100%' }}
                                         filterTimeNow={true}
@@ -980,13 +983,13 @@ export default function SubjectClassScore() {
                                     />
                                 </Col>
 
-                                <Col span={4} className="flex">
+                                {/* <Col span={4} className="flex">
                                     <FilterSubjectClass
                                         onFilterChange={handleFilterChange}
                                         filters={filters}
                                         onApply={handleFilterApply}
                                     />
-                                </Col>
+                                </Col> */}
                             </Flex>
                         </Col>
                     </Row>
@@ -1652,7 +1655,7 @@ export default function SubjectClassScore() {
                                 },
                                 {
                                     title: 'Lý do hoãn thi',
-                                    dataIndex: 'examBannedReason',
+                                    dataIndex: 'repeatedReason',
                                     width: 200,
                                     render: (value, record) => {
                                         return (

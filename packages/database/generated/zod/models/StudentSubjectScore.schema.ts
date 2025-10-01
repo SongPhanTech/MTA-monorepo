@@ -42,6 +42,7 @@ const baseSchema = z.object({
     suspended: z.boolean().default(false),
     suspendedReason: z.string().nullish(),
     repeated: z.boolean().default(false),
+    repeatedReason: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -116,7 +117,8 @@ export const StudentSubjectScorePrismaUpdateSchema = z.object({
     examBannedReason: z.string().nullish(),
     suspended: z.boolean().default(false),
     suspendedReason: z.string().nullish(),
-    repeated: z.boolean().default(false)
+    repeated: z.boolean().default(false),
+    repeatedReason: z.string().nullish()
 }).partial().passthrough();
 
 
