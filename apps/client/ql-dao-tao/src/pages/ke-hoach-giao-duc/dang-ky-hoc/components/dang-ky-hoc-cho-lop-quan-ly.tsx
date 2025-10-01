@@ -4,6 +4,7 @@ import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
+import type { SubjectClassTime } from '@workspace/db'
 import { useFindManySubjectClass } from '@workspace/db/hooks'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Checkbox, Col, Flex, Form, Input, Row } from 'antd'
@@ -73,6 +74,7 @@ export default function RegisterClassManager({
                     building: true,
                 },
             },
+            subjectClassTimes: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -188,6 +190,21 @@ export default function RegisterClassManager({
                         width: 150,
                         render: (record: string) =>
                             record ? dayjs(record).format('DD/MM/YYYY') : '',
+                    },
+                    {
+                        title: 'Thời khoá biểu',
+                        width: 150,
+                        align: 'center',
+                        render: (_, record) => {
+                            return record.subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
+                                return (
+                                    <p>
+                                        {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
+                                        {tkb.startPeriod} - {tkb.endPeriod}
+                                    </p>
+                                )
+                            })
+                        },
                     },
                     {
                         title: 'Kíp học',

@@ -69,7 +69,7 @@ export default function StudentCourseByPlan({
             page: `${currentPage}`,
             pageSize: `${numberOfPages}`,
             trainingObjectTypeId: trainingObjectTypeId || '',
-            isShowAllStudents: isShowAllStudents ? 'false' : 'true',
+            isShowAllStudents: 'true',
         },
         {
             query: {
@@ -175,7 +175,7 @@ export default function StudentCourseByPlan({
                                     checked={isShowAllStudents}
                                     onChange={(e) => setIsShowAllStudents(e.target.checked)}
                                 >
-                                    Hiển thị học viên có môn theo kì học dự kiến
+                                    Học viên có môn theo kì học dự kiến
                                 </Checkbox>
                             </Form.Item>
                         </Col>
