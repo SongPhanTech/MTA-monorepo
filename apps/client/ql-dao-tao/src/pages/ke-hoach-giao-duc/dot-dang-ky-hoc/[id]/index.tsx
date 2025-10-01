@@ -12,7 +12,7 @@ import {
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Divider, message, Row, Tag } from 'antd'
+import { Col, Divider, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
@@ -168,9 +168,6 @@ export default function ClassRegisterLogs() {
                     .join(' - ')}
             </Divider>
             <Row gutter={[16, 0]}>
-                <Col span={24} className="mb-4 flex items-center justify-end gap-2">
-                    <Button>Xác nhận lớp học phần</Button>
-                </Col>
                 <Col span={24}>
                     <Table
                         filters={filters}
@@ -209,6 +206,7 @@ export default function ClassRegisterLogs() {
                             },
                             {
                                 title: 'Giảng viên',
+                                width: 300,
                                 render: (_, record) =>
                                     [
                                         record.mainLecturer?.userProfile.fullname,
@@ -263,7 +261,7 @@ export default function ClassRegisterLogs() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 300,
+                                width: 100,
                                 align: 'center',
                                 render: (_, record) => {
                                     return (
