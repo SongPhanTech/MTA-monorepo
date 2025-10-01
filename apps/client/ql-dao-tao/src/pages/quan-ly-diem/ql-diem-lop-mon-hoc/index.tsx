@@ -303,13 +303,13 @@ export default function SubjectClassScore() {
                           },
                       }
                     : {}),
-                // ...(!canReadAll
-                //     ? {
-                //           mainLecturer: {
-                //               userProfileId: profileId,
-                //           },
-                //       } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
-                //     : {}),
+                ...(!canReadAll
+                    ? {
+                          mainLecturer: {
+                              userProfileId: profileId,
+                          },
+                      } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
+                    : {}),
                 deletedAt: null,
                 active: true,
                 cancelled: false,
