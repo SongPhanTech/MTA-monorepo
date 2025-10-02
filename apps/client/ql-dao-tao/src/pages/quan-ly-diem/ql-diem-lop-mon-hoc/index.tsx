@@ -1,9 +1,7 @@
 import ImportScoreModal from '@components/commons/print/nhap-diem-tu-file'
 import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
-// import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
-import { EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
+import { type DataTable, EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -17,10 +15,11 @@ import {
     useFindUniqueSubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { listUser } from '@workspace/libs/constants'
 import { calcFinalScore, getScoreStatistics } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
     Button,
     Checkbox,
@@ -40,7 +39,7 @@ import _ from 'lodash'
 import { Ellipsis, FileUp, Printer, Save, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface Item {
@@ -139,8 +138,6 @@ const LopMonHocItem: React.FC<LopMonHocItemProps> = ({
     )
 }
 interface FilterPropsClassClass {
-    schoolYearId: string | null //Năm học
-    semesterId: string | null //Học kỳ
     KhoaId: string | null //Khoa
     BoMonId: string | null //Bộ môn
     examTypeId: string | null //Hình thức thi
@@ -188,7 +185,7 @@ export default function SubjectClassScore() {
 
     const [open, setOpen] = useState(false)
     const [importModalVisible, setImportModalVisible] = useState(false)
-    const [selectedSemesterId, setSelectedSemesterId] = useState<string | undefined>()
+    const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const handleOpenChange = (newOpen: boolean) => {
@@ -196,7 +193,7 @@ export default function SubjectClassScore() {
     }
 
     const { onOpen } = useDisclosure<{
-        dataTable: any
+        dataTable: DataTable[]
         type: number // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
     }>({
         tag: 'ModalPrintStudentSubjectScore',
@@ -225,9 +222,7 @@ export default function SubjectClassScore() {
 
     const [filters, setFilters] = useState<FilterPropsClassClass>({
         searchText: '',
-        semesterId: null,
         subjectClassId: null,
-        schoolYearId: null,
         KhoaId: null,
         BoMonId: null,
         examTypeId: null,
@@ -278,7 +273,7 @@ export default function SubjectClassScore() {
                           ],
                       }
                     : {}),
-                ...(selectedSemesterId ? { semesterId: selectedSemesterId } : {}),
+                ...(semesterId ? { semesterId } : {}),
                 ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
                 trainingObjectTypeId,
                 ...(filters.LectureIds.length > 0
@@ -303,13 +298,13 @@ export default function SubjectClassScore() {
                           },
                       }
                     : {}),
-                ...(!canReadAll
-                    ? {
-                          mainLecturer: {
-                              userProfileId: profileId,
-                          },
-                      } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
-                    : {}),
+                // ...(!canReadAll
+                //     ? {
+                //           mainLecturer: {
+                //               userProfileId: profileId,
+                //           },
+                //       } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
+                //     : {}),
                 deletedAt: null,
                 active: true,
                 cancelled: false,
@@ -591,7 +586,7 @@ export default function SubjectClassScore() {
         }
     }
 
-    const hanldeSave = () => {
+    const handleSave = () => {
         Modal.confirm({
             title: 'Xác nhận',
             content: 'Bạn có chắc chắn muốn nhập điểm không?',
@@ -622,6 +617,12 @@ export default function SubjectClassScore() {
                         },
                     },
                 ]
+                if (profileId !== listUser?.lecturer) {
+                    await sqlTransaction(listSqlTransaction)
+                    message.success('Đã cập nhật trạng thái thành công!')
+                    debouncedRefetch()
+                    return
+                }
             }
 
             const error = [...scoreCC, ...scoreTX, ...scoreThi].find((i) => i?.value > 10)
@@ -850,6 +851,7 @@ export default function SubjectClassScore() {
 
         if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
             e.preventDefault()
+            e.stopPropagation()
             const direction = e.key === 'ArrowDown' ? 1 : -1
             const targetRow = dataTable[currentRowIndex + direction]
             if (targetRow) {
@@ -863,6 +865,7 @@ export default function SubjectClassScore() {
 
         if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
             e.preventDefault()
+            e.stopPropagation()
             const currentColIndex = fieldOrder.indexOf(type)
             const direction = e.key === 'ArrowRight' ? 1 : -1
             const targetColIndex = currentColIndex + direction
@@ -915,6 +918,29 @@ export default function SubjectClassScore() {
         router.events.on,
         router.pathname,
     ])
+
+    const disabledEnteredScore = useMemo(() => {
+        if (
+            dayjs().isAfter(dataDetailSubjectClass?.scoreDeadline) ||
+            !!dataDetailSubjectClass?.isLockScore ||
+            profileId !== listUser?.lecturer
+        ) {
+            return true
+        }
+        return false
+    }, [profileId, dataDetailSubjectClass])
+
+    const disabledEnteredExamScore = useMemo(() => {
+        if (
+            dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) ||
+            dayjs().isAfter(dataDetailSubjectClass?.examScoreDeadline) ||
+            !!dataDetailSubjectClass?.isLockExamScore ||
+            profileId !== listUser?.lecturer
+        ) {
+            return true
+        }
+        return false
+    }, [profileId, dataDetailSubjectClass])
 
     return (
         <div className="flex gap-2 pr-2">
@@ -974,22 +1000,6 @@ export default function SubjectClassScore() {
                                         />
                                     </Form.Item>
                                 </Col>
-
-                                <Col span={8}>
-                                    <TreeSelectSemester
-                                        style={{ width: '100%' }}
-                                        filterTimeNow={true}
-                                        onChange={(val) => setSelectedSemesterId(val || '')}
-                                    />
-                                </Col>
-
-                                {/* <Col span={4} className="flex">
-                                    <FilterSubjectClass
-                                        onFilterChange={handleFilterChange}
-                                        filters={filters}
-                                        onApply={handleFilterApply}
-                                    />
-                                </Col> */}
                             </Flex>
                         </Col>
                     </Row>
@@ -1093,15 +1103,10 @@ export default function SubjectClassScore() {
                                     </>
                                 )}
 
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                    'NHAP_DIEM'
-                                ) && (
-                                    <Button type="primary" onClick={hanldeSave}>
-                                        <Save stroke="white" />
-                                        Lưu
-                                    </Button>
-                                )}
+                                <Button type="primary" onClick={handleSave}>
+                                    <Save stroke="white" />
+                                    Lưu
+                                </Button>
                             </Flex>
                         </Col>
 
@@ -1145,12 +1150,7 @@ export default function SubjectClassScore() {
                                                 name="enteredScore"
                                                 valuePropName="checked"
                                             >
-                                                <Checkbox
-                                                    disabled={
-                                                        profileId !==
-                                                        '5317ce3a-62ef-4ad2-be10-a0f110a55243'
-                                                    }
-                                                >
+                                                <Checkbox disabled={disabledEnteredScore}>
                                                     Đã nhập điểm CC/TX
                                                 </Checkbox>
                                             </Form.Item>
@@ -1159,12 +1159,7 @@ export default function SubjectClassScore() {
                                                 name="enteredExamScore"
                                                 valuePropName="checked"
                                             >
-                                                <Checkbox
-                                                    disabled={
-                                                        profileId !==
-                                                        '5317ce3a-62ef-4ad2-be10-a0f110a55243'
-                                                    }
-                                                >
+                                                <Checkbox disabled={disabledEnteredExamScore}>
                                                     Đã nhập điểm thi điểm thi
                                                 </Checkbox>
                                             </Form.Item>
@@ -1173,12 +1168,7 @@ export default function SubjectClassScore() {
                                                 name="isLockScore"
                                                 valuePropName="checked"
                                             >
-                                                <Checkbox
-                                                    disabled={
-                                                        profileId !==
-                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
-                                                    }
-                                                >
+                                                <Checkbox disabled={profileId !== listUser?.P13}>
                                                     Khóa điểm CC/TX
                                                 </Checkbox>
                                             </Form.Item>
@@ -1188,12 +1178,7 @@ export default function SubjectClassScore() {
                                                 name="isLockExamScore"
                                                 valuePropName="checked"
                                             >
-                                                <Checkbox
-                                                    disabled={
-                                                        profileId !==
-                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
-                                                    }
-                                                >
+                                                <Checkbox disabled={profileId !== listUser?.P13}>
                                                     Khóa điểm thi
                                                 </Checkbox>
                                             </Form.Item>
@@ -1203,13 +1188,8 @@ export default function SubjectClassScore() {
                                                 name="scoreSubmitted"
                                                 valuePropName="checked"
                                             >
-                                                <Checkbox
-                                                    disabled={
-                                                        profileId !==
-                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
-                                                    }
-                                                >
-                                                    Đã nhận Phiếu điểm
+                                                <Checkbox disabled={profileId !== listUser?.P13}>
+                                                    P13 đã nhận Phiếu điểm
                                                 </Checkbox>
                                             </Form.Item>
 
@@ -1218,12 +1198,7 @@ export default function SubjectClassScore() {
                                                 name="scoreChecked"
                                                 valuePropName="checked"
                                             >
-                                                <Checkbox
-                                                    disabled={
-                                                        profileId !==
-                                                        'e0bf913a-7b9c-40ac-9a52-266a4326e02f'
-                                                    }
-                                                >
+                                                <Checkbox disabled={profileId !== listUser?.P2}>
                                                     P2/P7 đã kiểm tra
                                                 </Checkbox>
                                             </Form.Item>
@@ -1240,6 +1215,16 @@ export default function SubjectClassScore() {
                     </Col>
                 ) : (
                     <Col span={24}>
+                        {selectedFixedClass && (
+                            <div className="flex flex-row gap-2">
+                                <div className="font-bold">Tổng hợp kết quả thi:</div>
+                                {Object.entries(statistics).map(([type, { count, percentage }]) => (
+                                    <p key={type}>
+                                        {type}: {count}= {percentage}%
+                                    </p>
+                                ))}
+                            </div>
+                        )}
                         <Table
                             rowKey="id"
                             id="student-subject-score"
@@ -1304,11 +1289,9 @@ export default function SubjectClassScore() {
                                             can(
                                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                                 'NHAP_DIEM'
-                                            ) && record.subjectClass?.scoreDeadline
-                                                ? dayjs().isBefore(
-                                                      record.subjectClass.scoreDeadline
-                                                  )
-                                                : false
+                                            ) &&
+                                            record.subjectClass?.scoreDeadline &&
+                                            dayjs().isBefore(record.subjectClass.scoreDeadline)
                                         const openClock = record.subjectClass?.isLockScore
                                         const Score =
                                             scoreCC.find((item) => item.id === record.id)?.value ??
@@ -1325,10 +1308,10 @@ export default function SubjectClassScore() {
                                             return (
                                                 <InputNumber
                                                     min={0}
-                                                    type="number"
                                                     id={`score-cc-${record.id}`}
                                                     style={{ width: '100%' }}
                                                     step={0.5}
+                                                    controls={false}
                                                     value={currentScore}
                                                     status={isInvalid ? 'error' : undefined}
                                                     onChange={(value) => {
@@ -1389,11 +1372,9 @@ export default function SubjectClassScore() {
                                             can(
                                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                                 'NHAP_DIEM'
-                                            ) && record.subjectClass?.scoreDeadline
-                                                ? dayjs().isBefore(
-                                                      record.subjectClass.scoreDeadline
-                                                  )
-                                                : false
+                                            ) &&
+                                            record.subjectClass?.scoreDeadline &&
+                                            dayjs().isBefore(record.subjectClass.scoreDeadline)
                                         const openClock = record.subjectClass?.isLockScore
                                         const Score =
                                             scoreTX.find((item) => item.id === record.id)?.value ??
@@ -1410,15 +1391,14 @@ export default function SubjectClassScore() {
                                             return (
                                                 <InputNumber
                                                     min={0}
-                                                    type="number"
                                                     id={`score-tx-${record.id}`}
                                                     style={{ width: '100%' }}
                                                     step={0.5}
+                                                    controls={false}
                                                     value={currentScore}
                                                     status={isInvalid ? 'error' : undefined}
                                                     onChange={(value) => {
-                                                        if (!value) return
-                                                        let newScore = +value
+                                                        let newScore = +(value || 0)
                                                         if (newScore > 99) newScore = 99
                                                         if (newScore < 0) newScore = 0
 
@@ -1474,11 +1454,12 @@ export default function SubjectClassScore() {
                                             can(
                                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                                 'NHAP_DIEM'
-                                            ) && record.subjectClass?.examScoreDeadline
-                                                ? dayjs().isBefore(
-                                                      record.subjectClass.examScoreDeadline
-                                                  )
-                                                : false
+                                            ) &&
+                                            record.subjectClass?.examScoreDeadline &&
+                                            record.subjectClass?.scoreDeadline &&
+                                            dayjs().isAfter(record.subjectClass?.scoreDeadline) &&
+                                            dayjs().isBefore(record.subjectClass?.examScoreDeadline)
+
                                         const Score =
                                             scoreThi.find((item) => item.id === record.id)?.value ??
                                             (record.examScore !== undefined
@@ -1499,15 +1480,14 @@ export default function SubjectClassScore() {
                                             return (
                                                 <InputNumber
                                                     min={0}
-                                                    type="number"
                                                     id={`score-thi-${record.id}`}
                                                     style={{ width: '100%' }}
                                                     step={0.1}
+                                                    controls={false}
                                                     value={currentScore}
                                                     status={isInvalid ? 'error' : undefined}
                                                     onChange={(value) => {
-                                                        if (!value) return
-                                                        let newScore = +value
+                                                        let newScore = +(value || 0)
                                                         if (newScore > 99) newScore = 99
                                                         if (newScore < 0) newScore = 0
 
@@ -1855,16 +1835,6 @@ export default function SubjectClassScore() {
                                 hideOnSinglePage: true,
                             }}
                         />
-                        {selectedFixedClass && (
-                            <div className="flex flex-row gap-2">
-                                <div className="font-bold">Tổng hợp kết quả thi:</div>
-                                {Object.entries(statistics).map(([type, { count, percentage }]) => (
-                                    <p key={type}>
-                                        {type}: {count}= {percentage}%
-                                    </p>
-                                ))}
-                            </div>
-                        )}
                     </Col>
                 )}
             </Col>

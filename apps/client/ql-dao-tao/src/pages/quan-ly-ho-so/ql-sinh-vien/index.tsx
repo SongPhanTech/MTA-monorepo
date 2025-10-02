@@ -29,9 +29,8 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
-import { BookCheckIcon } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -544,7 +543,7 @@ export default function UserProfilePageDs() {
                                 fixed: 'right',
                                 render: (_, record) => (
                                     <Row className="justify-center gap-2">
-                                        <Tooltip title="Phụ lục văn bằng" placement="top">
+                                        {/* <Tooltip title="Phụ lục văn bằng" placement="top">
                                             <BookCheckIcon
                                                 onClick={(e) => {
                                                     e.stopPropagation()
@@ -556,7 +555,7 @@ export default function UserProfilePageDs() {
                                                 }}
                                                 size={16}
                                             />
-                                        </Tooltip>
+                                        </Tooltip> */}
                                         {can(
                                             QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
                                             'SUA'

@@ -84,3 +84,8 @@ export const questionTypeOptions: QuestionTypeOption[] = Object.entries(question
         label,
     })
 )
+export const listUser: { lecturer: string; P13: string; P2: string } = {
+    lecturer: '5317ce3a-62ef-4ad2-be10-a0f110a55243',
+    P13: 'e0bf913a-7b9c-40ac-9a52-266a4326e02f',
+    P2: '9ed6bb0e-eaf5-4110-8fd3-ef37f13619bc',
+}

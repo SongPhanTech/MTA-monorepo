@@ -1,4 +1,5 @@
 import { useFindManySubjectVersion } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import type { TreeSelectProps } from 'antd'
 import { TreeSelect as TreeSelectAnt } from 'antd'
 import type React from 'react'
@@ -34,6 +35,7 @@ const TreeSelectSubjectVersion: React.FC<CustomTreeSelectProps> = ({
 }) => {
     const [internalValue, setInternalValue] = useState<string[] | undefined>(defaultValue)
 
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     useEffect(() => {
         if (propValue !== undefined) {
             setInternalValue(propValue)
@@ -49,6 +51,7 @@ const TreeSelectSubjectVersion: React.FC<CustomTreeSelectProps> = ({
                 subjectClass: {
                     some: {
                         cancelled: false,
+                        trainingObjectTypeId,
                         ...(semesterId && {
                             semesterId,
                         }),

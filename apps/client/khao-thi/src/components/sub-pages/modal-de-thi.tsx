@@ -49,7 +49,6 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
     const [filters, setFilters] = useState<FilterProps>({
         content: '',
         questionType: undefined,
-        difficultyId: undefined,
         knowledgeBlockId: undefined,
         point: undefined,
     })
@@ -72,24 +71,13 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                       },
                   }
                 : {}),
-            ...(filters.difficultyId
-                ? Array.isArray(filters.difficultyId)
-                    ? { question: { difficultyId: { in: filters.difficultyId } } }
-                    : { question: { difficultyId: filters.difficultyId } }
-                : {}),
             ...(filters.knowledgeBlockId
                 ? Array.isArray(filters.knowledgeBlockId)
                     ? { question: { knowledgeBlockId: { in: filters.knowledgeBlockId } } }
                     : { question: { knowledgeBlockId: filters.knowledgeBlockId } }
                 : {}),
         }),
-        [
-            examBankId,
-            filters.questionType,
-            filters.content,
-            filters.difficultyId,
-            filters.knowledgeBlockId,
-        ]
+        [examBankId, filters.questionType, filters.content, filters.knowledgeBlockId]
     )
 
     const { onOpen: onOpenPutExamBankQuestion } = useDisclosure<{
@@ -305,29 +293,6 @@ const ModalExamBank: React.FC<ModalExamBankProps> = ({
                                 })),
                                 render: (__, record) => {
                                     return record?.question?.knowledgeBlock?.name || 'Chưa xác định'
-                                },
-                            },
-                            {
-                                title: 'Độ khó',
-                                dataIndex: 'difficultyId',
-                                width: 100,
-                                align: 'center',
-                                type: 'select',
-                                options: difficultyData?.map(({ id, name, level }) => ({
-                                    value: id,
-                                    label: `${name} (level ${level})`,
-                                })),
-                                render: (__, record) => {
-                                    if (!record?.question?.difficulty) {
-                                        return 'Chưa xác định'
-                                    }
-                                    if (!record.question?.difficulty.name) {
-                                        return `Level ${record.question?.difficulty.level || '-'}`
-                                    }
-                                    if (!record.question?.difficulty.level) {
-                                        return record.question?.difficulty.name
-                                    }
-                                    return `${record.question?.difficulty.name} (level ${record.question?.difficulty.level})`
                                 },
                             },
                             {

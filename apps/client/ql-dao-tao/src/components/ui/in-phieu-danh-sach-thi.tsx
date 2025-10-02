@@ -285,8 +285,8 @@ const ExportTemplateExam = ({
             'Họ tên',
             'Ngày sinh',
             'Lớp',
-            'Điểm chuyên cần',
-            'Điểm thường xuyên',
+            'Điểm C.cần',
+            'Điểm T.xuyên',
             'Điểm thi',
             'Đề',
             'Số tờ',
@@ -317,9 +317,9 @@ const ExportTemplateExam = ({
                 record.student?.userProfile?.dateOfBirth
                     ? new Date(record.student.userProfile.dateOfBirth).toLocaleDateString('vi-VN')
                     : '',
-                record.student?.fixedClass?.name || '',
-                record.attendanceScore || '',
-                record.midtermScore || '',
+                record.student?.fixedClass?.code || '',
+                record.attendanceScore || '0',
+                record.midtermScore || '0',
                 '',
                 '', // Đề
                 '', // Số tờ
@@ -391,7 +391,7 @@ const ExportTemplateExam = ({
     return (
         <Button onClick={exportTemplate} disabled={!selectedFixedClass}>
             <Printer />
-            In phiếu danh sách thi
+            Xuất phiếu danh sách thi
         </Button>
     )
 }

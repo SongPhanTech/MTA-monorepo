@@ -58,6 +58,8 @@ model StudentGraduationApplication extends Base {
   status                 ApplicationStatus        @default(SUBMITTED)
 
   applicationCheckResult ApplicationCheckResult[]
+  gpaScore               StudentSubjectScore[]    @relation("gpaScore")
+  supplementaryScore     StudentSubjectScore[]    @relation("supplementaryScore")
   // Quyết định cuối cùng cho đơn này
   decision               GraduationDecision?
 

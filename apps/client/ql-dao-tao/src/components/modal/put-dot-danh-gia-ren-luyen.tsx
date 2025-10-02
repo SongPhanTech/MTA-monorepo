@@ -1,16 +1,15 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import useSpinner from '@hooks/spinner'
 import type { TrainingScoreSession } from '@workspace/db'
 import {
     useCreateTrainingScoreSession,
-    useFindManyTrainingObjectType,
     useFindUniqueTrainingScoreSession,
     useUpdateTrainingScoreSession,
 } from '@workspace/db/hooks'
-import { Col, DatePicker, Form, Input, message, Select } from 'antd'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Col, DatePicker, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -28,10 +27,8 @@ const PutDotRenLuyen = () => {
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
-
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
-        orderBy: { createdAt: 'desc' },
-    })
+    const { id: semesterId } = useSemesterStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { mutateAsync: createTrainingScoreSession } = useCreateTrainingScoreSession()
     const { mutateAsync: updateTrainingScoreSession } = useUpdateTrainingScoreSession()
@@ -44,8 +41,8 @@ const PutDotRenLuyen = () => {
             const data = {
                 name: output.name.trim(),
                 time: output.time,
-                semesterId: output.semesterId,
-                trainingObjectTypeId: output.trainingObjectTypeId,
+                semesterId: semesterId || '',
+                trainingObjectTypeId: trainingObjectTypeId || '',
                 description: output.description,
             }
             if (id) {
@@ -111,22 +108,6 @@ const PutDotRenLuyen = () => {
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên đợt" required>
                     <Input placeholder="Nhập tên đợt" />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="semesterId" label="Học kì" required>
-                    <TreeSelectSemester />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="trainingObjectTypeId" label="Đối tượng">
-                    <Select
-                        options={trainingObjectTypeData.map((item) => ({
-                            label: item.name,
-                            value: item.id,
-                        }))}
-                        placeholder="Chọn đối tượng"
-                    />
                 </FormItem>
             </Col>
             <Col span={24}>

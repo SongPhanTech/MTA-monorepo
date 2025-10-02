@@ -334,7 +334,7 @@ const DieuHuong = ({
 
 const ModalPrintDotDanhGia = () => {
     const { isOpen, onClose, input } = useDisclosure<{ data: DataPrintDotDanhGia }>({
-        tag: ModalPrintDotDanhGia.name,
+        tag: 'ModalPrintDotDanhGia',
     })
 
     const evidenceTags = useMemo(() => {

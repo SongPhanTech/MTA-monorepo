@@ -145,6 +145,7 @@ const savePublicSurvey = createRoute({
                     schema: z
                         .object({
                             surveyId: z.string(),
+                            surveyObjectTypeId: z.string().nullish(),
                             additionalSuggestion: z.string(),
                             startedAt: z.string().datetime().optional(),
                             responses: z.array(
@@ -200,7 +201,8 @@ const savePublicSurvey = createRoute({
 })
 
 app.openapi(savePublicSurvey, async (c) => {
-    const { surveyId, additionalSuggestion, startedAt, responses } = c.req.valid('json')
+    const { surveyId, surveyObjectTypeId, additionalSuggestion, startedAt, responses } =
+        c.req.valid('json')
     const survey = await prisma.survey.findUnique({
         where: { id: surveyId, deletedAt: null, active: true },
         include: { surveyChoice: true },
@@ -208,6 +210,12 @@ app.openapi(savePublicSurvey, async (c) => {
     if (!survey) {
         return c.json({ message: 'Đợt khảo sát không tồn tại' }, 404)
     }
+
+    const surveyObjectType = surveyObjectTypeId
+        ? await prisma.surveyObjectType.findUnique({
+              where: { id: surveyObjectTypeId, deletedAt: null, active: true },
+          })
+        : null
 
     if (survey.startDate > new Date()) {
         return c.json({ message: 'Khảo sát chưa mở' }, 400)
@@ -227,6 +235,7 @@ app.openapi(savePublicSurvey, async (c) => {
     await prisma.surveySession.create({
         data: {
             survey: { connect: { id: surveyId } },
+            surveyObjectType: { connect: { id: surveyObjectType?.id } },
             startedAt,
             additionalSuggestion,
             completedAt: new Date(),

@@ -6,7 +6,8 @@ import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
-import { Breadcrumb, Layout, theme } from 'antd'
+import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
+import { Breadcrumb, Divider, Layout, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -149,7 +150,17 @@ const DefaultLayout = ({
                         {/* <span className="text-lg font-bold text-primary">
                             {headerChildren ? headerChildren : title}
                         </span> */}
-                        <div>{<Breadcrumb items={listBreadcrumb} />}</div>
+
+                        <div className="flex items-center">
+                            <SelectTrainingObjectType />
+                            <Divider type="vertical" className="bg-primary h-[30px]" />
+                            <div className="flex items-center space-x-2">
+                                <p>Học kỳ</p>
+                                <TreeSelectSemester />
+                            </div>
+                            <Divider type="vertical" className="bg-primary h-[30px]" />
+                            <Breadcrumb items={listBreadcrumb} />
+                        </div>
                         <HeaderApp />
                     </Header>
                     <Content className="mx-2 mt-20">

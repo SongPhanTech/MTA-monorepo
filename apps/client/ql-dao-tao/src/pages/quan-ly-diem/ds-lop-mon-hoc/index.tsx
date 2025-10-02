@@ -1,5 +1,4 @@
 import Select from '@components/commons/select'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -14,7 +13,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Input, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -26,7 +25,6 @@ import { useCallback, useEffect, useState } from 'react'
 // const { Option } = Select;
 interface FilterProps {
     schoolYearId: string | null //Năm học
-    semesterId: string | null //Học kỳ
     KhoaId: string | null //Khoa
     BoMonId: string | null //Bộ môn
     trainingObjectId: string | null //Đối tượng đào tạo
@@ -47,7 +45,6 @@ export default function ClassSubject() {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        semesterId: null,
         trainingObjectTypeId: null,
         subjectClassId: null,
         schoolYearId: null,
@@ -61,7 +58,7 @@ export default function ClassSubject() {
     })
     const { getExamTypeLabel } = useExamTypeOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-
+    const { id: semesterId } = useSemesterStore()
     const handleNavigate = (id: string) => {
         router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC}?subjectId=${id}`)
     }
@@ -107,7 +104,7 @@ export default function ClassSubject() {
                       ],
                   }
                 : {}),
-            ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
+            ...(semesterId ? { semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
             trainingObjectTypeId,
             ...(filters.LectureIds.length > 0
@@ -195,7 +192,7 @@ export default function ClassSubject() {
                       ],
                   }
                 : {}),
-            ...(filters.semesterId ? { semesterId: filters.semesterId } : {}),
+            ...(semesterId ? { semesterId } : {}),
             ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
             trainingObjectTypeId,
             ...(filters.LectureIds.length > 0
@@ -350,21 +347,6 @@ export default function ClassSubject() {
                                                 />
                                             }
                                             allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={8}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <TreeSelectSemester
-                                            filterTimeNow={true}
-                                            onChange={(val) =>
-                                                handleFilterChange('semesterId', val)
-                                            }
                                         />
                                     </Form.Item>
                                 </Col>

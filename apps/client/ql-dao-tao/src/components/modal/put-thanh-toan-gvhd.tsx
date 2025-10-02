@@ -127,7 +127,6 @@ const PutSupervisorPaymentRecord = () => {
             <Col span={12}>
                 <FormItem form={form} name="amount" label="Số tiền thanh toán">
                     <InputNumber
-                        type="number"
                         className="w-full"
                         min={0}
                         placeholder="Nhập số tiền thanh toán"

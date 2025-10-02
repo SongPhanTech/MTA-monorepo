@@ -1,5 +1,4 @@
 import { EyeOutlined } from '@ant-design/icons'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
@@ -22,6 +21,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { useSemesterStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus, Search } from 'lucide-react'
@@ -51,7 +51,7 @@ export default function ThesisProject() {
         currentStudents: undefined,
         summary: undefined,
     })
-    const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
+    const { id: semesterId } = useSemesterStore()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const { mutateAsync: createManyInvitation } = useCreateManyInvitation()
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
@@ -118,7 +118,7 @@ export default function ThesisProject() {
             subject: {
                 type: SubjectVersionType.Project,
             },
-            ...(selectedSemesterId ? { semesterId: selectedSemesterId } : {}),
+            ...(semesterId ? { semesterId } : {}),
             ...(filters.searchText
                 ? {
                       OR: [
@@ -147,7 +147,7 @@ export default function ThesisProject() {
             cancelled: false,
         }
     }, [
-        selectedSemesterId,
+        semesterId,
         filters.searchText,
         filters.code,
         filters.title,
@@ -432,13 +432,6 @@ export default function ThesisProject() {
                                             allowClear
                                         />
                                     </Form.Item>
-                                </Col>
-                                <Col span={10}>
-                                    <TreeSelectSemester
-                                        style={{ width: '250px' }}
-                                        filterTimeNow={true}
-                                        onChange={(val) => setSelectedSemesterId(val)}
-                                    />
                                 </Col>
                             </Flex>
                         </Col>

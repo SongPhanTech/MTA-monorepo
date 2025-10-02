@@ -1,7 +1,6 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import TreeSelectRoom from '@components/commons/room-select'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import TreeSelectSubjectVersion from '@components/commons/subject-version-select'
 import { useExamStatusOptions } from '@hooks/exam-status'
 import useSpinner from '@hooks/spinner'
@@ -15,19 +14,8 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { ROUTER_PATH } from '@workspace/router'
-import {
-    Button,
-    Checkbox,
-    Col,
-    DatePicker,
-    Flex,
-    Form,
-    Input,
-    InputNumber,
-    message,
-    Row,
-    Select,
-} from 'antd'
+import { useSemesterStore } from '@workspace/ui'
+import { Button, Col, DatePicker, Flex, Form, Input, InputNumber, message, Row, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
@@ -47,9 +35,8 @@ export default function Information({ id, selectedIds }: InformationProps) {
     const [form] = Form.useForm<PutExamType>()
     const { options: examStatusOptions } = useExamStatusOptions()
     const { showSpinner, hideSpinner } = useSpinner()
-    const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
     const [selectedSubjectVersionId, setSelectedSubjectVersionId] = useState<string>('')
-
+    const { id: semesterId } = useSemesterStore()
     const { data: initialValue } = useFindUniqueExam(
         {
             where: { id },
@@ -69,7 +56,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
             subjectVersion: {
                 subjectClass: {
                     some: {
-                        semesterId: selectedSemesterId || undefined,
+                        semesterId,
                         cancelled: false,
                         id: selectedIds?.[0] || undefined,
                     },
@@ -91,14 +78,12 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 semesterId: initialValue.subjectClass?.[0]?.semesterId || '',
                 room: initialValue.room?.map((r) => r.id),
             })
-            setSelectedSemesterId(initialValue.subjectClass?.[0]?.semesterId || '')
             if (initialValue.questionBank?.subjectVersionId) {
                 setSelectedSubjectVersionId(initialValue.questionBank.subjectVersionId)
             }
         } else {
             form.setFieldsValue({
                 status: ExamStatus.DRAFT,
-                passScore: 5,
                 shuffleQuestions: true,
                 shuffleAnswers: true,
                 showResult: false,
@@ -124,7 +109,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 startTime: output.startTime,
                 endTime: output.endTime,
                 duration: output.duration,
-                passScore: output.passScore,
                 shuffleQuestions: output.shuffleQuestions,
                 shuffleAnswers: output.shuffleAnswers,
                 showResult: output.showResult,
@@ -257,14 +241,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
                     </FormItem>
                 </Col>
                 <Col span={12}>
-                    <Form.Item name="semesterId" label="Chọn kỳ học">
-                        <TreeSelectSemester
-                            onChange={(val) => setSelectedSemesterId(val)}
-                            disabled={!isDraft}
-                        />
-                    </Form.Item>
-                </Col>
-                <Col span={12}>
                     <FormItem
                         form={form}
                         name="questionBankId"
@@ -290,7 +266,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 <Col span={12}>
                     <FormItem form={form} name="subjectClass" label="Lớp thi">
                         <TreeSelectSubjectVersion
-                            semesterId={selectedSemesterId}
+                            semesterId={semesterId}
                             subjectVersionId={selectedSubjectVersionId}
                             edit={!!id}
                             defaultValue={selectedIds}
@@ -335,19 +311,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
                     </FormItem>
                 </Col>
                 <Col span={12}>
-                    <FormItem form={form} name="passScore" label="Điểm đạt" required>
-                        <InputNumber
-                            min={0}
-                            type="number"
-                            className="w-full"
-                            step={0.1}
-                            defaultValue={5}
-                            placeholder="Nhập điểm đạt"
-                            disabled={!isDraft}
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
                     <FormItem form={form} name="status" label="Trạng thái" required>
                         <Select
                             maxTagCount={'responsive'}
@@ -357,17 +320,17 @@ export default function Information({ id, selectedIds }: InformationProps) {
                         />
                     </FormItem>
                 </Col>
-                <Col span={24}>
+                {/* <Col span={24}>
                     <FormItem form={form} name="shuffleQuestions" valuePropName="checked">
                         <Checkbox disabled={!isDraft}>Trộn thứ tự câu hỏi</Checkbox>
                     </FormItem>
                     <FormItem form={form} name="shuffleAnswers" valuePropName="checked">
                         <Checkbox disabled={!isDraft}>Trộn thứ tự đáp án</Checkbox>
                     </FormItem>
-                    {/* <FormItem form={form} name="showResult" valuePropName="checked">
+                    <FormItem form={form} name="showResult" valuePropName="checked">
                         <Checkbox disabled={!isDraft}>Hiển thị kết quả ngay sau khi thi</Checkbox>
-                    </FormItem> */}
-                </Col>
+                    </FormItem>
+                </Col> */}
                 <Col span={24}>
                     <Flex justify="end" gap={8}>
                         {id ? (

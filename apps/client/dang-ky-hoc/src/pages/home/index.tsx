@@ -86,9 +86,12 @@ function Page() {
     )
     const gpaScore = useMemo(() => {
         const validSubjects =
-            subjectScoreData?.trainingBlocks[0]?.subjects?.filter(
-                (subjectItem) => subjectItem.print === true && subjectItem.useForFinalScore === true
-            ) || []
+            subjectScoreData?.trainingBlocks
+                .flatMap((block) => block.subjects)
+                .filter(
+                    (subjectItem) =>
+                        subjectItem.print === true && subjectItem.useForFinalScore === true
+                ) || []
 
         let totalWeightedScore = 0
         let totalCredits = 0

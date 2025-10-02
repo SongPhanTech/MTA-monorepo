@@ -2,9 +2,9 @@ import { FilterOutlined } from '@ant-design/icons'
 import TreeSelectDepartment from '@components/commons/department-select/TreeSelectDepartment'
 import TreeSelectLecture from '@components/commons/lecture-select-multi/TreeSelectLecture'
 import Select from '@components/commons/select'
+import { useExamTypeOptions } from '@hooks/examType'
 import {
     Button,
-    Checkbox,
     Col,
     DatePicker,
     Divider,
@@ -17,19 +17,16 @@ import {
     Typography,
 } from 'antd'
 import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import 'dayjs/locale/vi'
-import { useExamTypeOptions } from '@hooks/examType'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
 
 dayjs.extend(customParseFormat)
 
 const { Text } = Typography
 
 export type FilterProps = {
-    schoolYearId: string | null //Năm học
-    semesterId: string | null //Học kỳ
     KhoaId: string | null //Khoa
     BoMonId: string | null //Bộ môn
     examTypeId: string | null //Hình thức thi
@@ -59,17 +56,8 @@ const FilterSubjectClass = (props: Props) => {
 
     const { options: ExamType } = useExamTypeOptions()
 
-    const options = [
-        { label: 'P13 đã khóa điểm TX/CC', value: 'locked_P13' },
-        { label: 'P13 đã khóa điểm thi', value: 'locked_P13' },
-        { label: 'P13 đã nhận Phiếu điểm', value: 'received_score_P13' },
-        { label: 'P2/P7 đã kiểm tra', value: 'checked_P2_P7' },
-    ]
-
     const handleReset = () => {
         form.setFieldsValue({
-            schoolYearId: null,
-            semesterId: null,
             KhoaId: null,
             BoMonId: null,
             examTypeId: null,
@@ -99,8 +87,6 @@ const FilterSubjectClass = (props: Props) => {
 
     useEffect(() => {
         form.setFieldsValue({
-            schoolYearId: filters.schoolYearId || null,
-            semesterId: filters.semesterId || null,
             KhoaId: filters.KhoaId || null,
             BoMonId: filters.BoMonId || null,
             examTypeId: filters.examTypeId || null,
@@ -231,17 +217,6 @@ const FilterSubjectClass = (props: Props) => {
                                     />
                                 </Form.Item>
                             </Col>
-                        </Col>
-
-                        <Col>
-                            <Checkbox.Group
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: 12,
-                                }}
-                                options={options}
-                            />
                         </Col>
                     </Row>
                 </Form>

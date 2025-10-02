@@ -181,10 +181,12 @@ const ModalPrintToKQHT = () => {
 
     useEffect(() => {
         const validSubjects =
-            subjectScoreData?.trainingBlocks[0]?.subjects?.filter(
-                (subjectItem: any) =>
-                    subjectItem.print === true && subjectItem.useForFinalScore === true
-            ) || []
+            subjectScoreData?.trainingBlocks
+                .flatMap((block) => block.subjects)
+                .filter(
+                    (subjectItem) =>
+                        subjectItem.print === true && subjectItem.useForFinalScore === true
+                ) || []
 
         let totalWeightedScore = 0
         let totalCredits = 0
@@ -317,21 +319,23 @@ const ModalPrintToKQHT = () => {
                                 const regularSubjects: any[] = []
                                 const graduationSubjects: any[] = []
 
-                                subjectScoreData?.trainingBlocks[0]?.subjects
-                                    ?.filter((subjectItem: any) => subjectItem.print === true)
-                                    ?.forEach((subjectItem: any, index: number) => {
-                                        if (subjectItem.graduation) {
-                                            graduationSubjects.push({
-                                                subjectItem,
-                                                index,
-                                            })
-                                        } else {
-                                            regularSubjects.push({
-                                                subjectItem,
-                                                index,
-                                            })
-                                        }
-                                    })
+                                subjectScoreData?.trainingBlocks.forEach((block) => {
+                                    block.subjects
+                                        ?.filter((subjectItem: any) => subjectItem.print === true)
+                                        ?.forEach((subjectItem: any, index: number) => {
+                                            if (subjectItem.graduation) {
+                                                graduationSubjects.push({
+                                                    subjectItem,
+                                                    index,
+                                                })
+                                            } else {
+                                                regularSubjects.push({
+                                                    subjectItem,
+                                                    index,
+                                                })
+                                            }
+                                        })
+                                })
 
                                 // Render các môn thường trước
                                 const regularRows = regularSubjects?.map(
@@ -442,18 +446,18 @@ const ModalPrintToKQHT = () => {
                                 {(() => {
                                     // Tính tổng số tín chỉ chỉ bao gồm các môn có useForFinalScore = true và print = true
                                     // TODO: Chưa tính các học phần bổ sung kiến thức, in nghiêng
-                                    const totalCredits =
-                                        subjectScoreData?.trainingBlocks[0]?.subjects
-                                            ?.filter(
-                                                (subjectItem: any) =>
-                                                    subjectItem.print === true &&
-                                                    subjectItem.useForFinalScore === true
-                                            )
-                                            ?.reduce(
-                                                (sum: number, subjectItem: any) =>
-                                                    sum + (subjectItem.subject?.credit || 0),
-                                                0
-                                            )
+                                    const totalCredits = subjectScoreData?.trainingBlocks
+                                        .flatMap((block) => block.subjects)
+                                        .filter(
+                                            (subjectItem) =>
+                                                subjectItem.print === true &&
+                                                subjectItem.useForFinalScore === true
+                                        )
+                                        ?.reduce(
+                                            (sum: number, subjectItem) =>
+                                                sum + (subjectItem.subject?.credit || 0),
+                                            0
+                                        )
 
                                     return totalCredits || 0
                                 })()}

@@ -20,7 +20,7 @@ const SelectTrainingObjectType = (props: AntdSelectProps) => {
     // }, [id, doiTuongDaoTao, onSelect])
 
     return (
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center gap-2">
             <p>Đối tượng đào tạo</p>
             <Select
                 placeholder="Chọn đối tượng đào tạo"

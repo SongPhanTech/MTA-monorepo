@@ -1,6 +1,5 @@
 import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
-import TreeSelectSemester from '@components/commons/semester-select/TreeSelectSemester'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -10,7 +9,7 @@ import { useFindManyTrainingCourse, useFindManyTrainingMajor } from '@workspace/
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { CalendarPlus } from 'lucide-react'
@@ -29,7 +28,7 @@ export default function SubjectOpeningPlan() {
     const [form] = Form.useForm<FilterProps>()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedSemesterId, setSelectedSemesterId] = useState<string>('')
+    const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
     const trainingCourseId = Form.useWatch('trainingCourseId', form)
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
@@ -39,13 +38,13 @@ export default function SubjectOpeningPlan() {
         {
             page: `${currentPage}`,
             pageSize: `${numberOfPages}`,
-            semesterId: selectedSemesterId as string,
+            semesterId: semesterId as string,
             search: searchText,
             trainingCourseId,
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
         },
-        { query: { enabled: !!selectedSemesterId } },
+        { query: { enabled: !!semesterId } },
         queryClient
     )
 
@@ -103,19 +102,7 @@ export default function SubjectOpeningPlan() {
                                             <Input id="search" placeholder="Tìm kiếm" allowClear />
                                         </Form.Item>
                                     </Col>
-                                    <Col span={8}>
-                                        <Form.Item
-                                            className="mb-0"
-                                            labelCol={{ span: 24 }}
-                                            wrapperCol={{ span: 24 }}
-                                            labelAlign="left"
-                                        >
-                                            <TreeSelectSemester
-                                                selectLatestCreated={true}
-                                                onChange={(val) => setSelectedSemesterId(val)}
-                                            />
-                                        </Form.Item>
-                                    </Col>
+
                                     <Col span={8}>
                                         <Form.Item
                                             className="mb-0"
@@ -330,7 +317,7 @@ export default function SubjectOpeningPlan() {
                                                 className="flex justify-center items-center gap-2 text-[#028850]"
                                                 onClick={onOpen.bind(null, {
                                                     ...record,
-                                                    semester: selectedSemesterId,
+                                                    semester: semesterId,
                                                 })}
                                             >
                                                 <CalendarPlus size={16} strokeWidth={2} />

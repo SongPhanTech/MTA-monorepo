@@ -14,7 +14,7 @@ import {
 } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import { Search } from 'lucide-react'
 import type React from 'react'
@@ -25,16 +25,15 @@ interface FilterProps {
 }
 
 interface FixedClassProps {
-    semesterId?: string | null
     subjectClassId?: string | null
 }
 
-export default function FixedClass({ semesterId, subjectClassId }: FixedClassProps) {
+export default function FixedClass({ subjectClassId }: FixedClassProps) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [isShowAllFixedClass, setIsShowAllFixedClass] = useState(true)
-
+    const { id: semesterId } = useSemesterStore()
     const { getScheduleLabel } = useScheduleOptions()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({

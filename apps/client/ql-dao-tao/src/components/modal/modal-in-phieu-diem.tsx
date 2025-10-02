@@ -5,6 +5,7 @@ import useSpinner from '@hooks/spinner'
 import useScoreToWords from '@hooks/useScoreToWords'
 import type { Prisma, SubjectClass } from '@workspace/db'
 import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
+import { getScoreStatistics } from '@workspace/libs/utils'
 import { Button, Col, Modal, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo, useRef } from 'react'
@@ -24,7 +25,7 @@ type ModalPrintToKQHTInput = {
     type?: EnumInPhieuDiem // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
 }
 
-type DataTable = Prisma.StudentSubjectScoreGetPayload<{
+export type DataTable = Prisma.StudentSubjectScoreGetPayload<{
     include: {
         student: {
             include: {
@@ -133,7 +134,7 @@ const ModalPrintStudentSubjectScore = () => {
         },
         { enabel: input?.dataTable?.[0]?.subjectClass?.id }
     )
-
+    const statistics = getScoreStatistics(input?.dataTable || [])
     const firstTrainingCourse = useMemo(() => {
         return data?.subjectClassStudent.find(({ student }) =>
             Boolean(student.fixedClass?.trainingCourse)
@@ -514,7 +515,14 @@ const ModalPrintStudentSubjectScore = () => {
                     </table>
                 </div>
                 <div className="mt-6">
-                    <span className="font-semibold">Tổng hợp kết quả thi:</span>
+                    <div className="flex flex-row gap-2">
+                        <div className="font-bold">Tổng hợp kết quả thi:</div>
+                        {Object.entries(statistics).map(([type, { count, percentage }]) => (
+                            <p key={type}>
+                                {type}: {count}= {percentage}%
+                            </p>
+                        ))}
+                    </div>
                 </div>
                 <Row gutter={[16, 0]} className="mt-6 text-center">
                     <Col span={8} className="flex flex-col items-center justify-center">

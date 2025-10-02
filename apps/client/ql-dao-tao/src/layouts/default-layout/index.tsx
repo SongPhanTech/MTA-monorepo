@@ -7,7 +7,7 @@ import { CONFIG_KEY } from '@workspace/constant'
 import { useFindManyTrainingObjectType, useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
 import { ROUTER_PATH } from '@workspace/router'
-import { SelectTrainingObjectType } from '@workspace/ui'
+import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
 import { Breadcrumb, Divider, Layout, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -158,6 +158,11 @@ const DefaultLayout = ({
 
                         <div className="flex items-center">
                             <SelectTrainingObjectType />
+                            <Divider type="vertical" className="bg-primary h-[30px]" />
+                            <div className="flex items-center gap-2">
+                                <div>Học kỳ</div>
+                                <TreeSelectSemester />
+                            </div>
                             <Divider type="vertical" className="bg-primary h-[30px]" />
                             <Breadcrumb items={listBreadcrumb} />
                         </div>
