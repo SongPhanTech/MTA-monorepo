@@ -851,6 +851,7 @@ export default function SubjectClassScore() {
 
         if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
             e.preventDefault()
+            e.stopPropagation()
             const direction = e.key === 'ArrowDown' ? 1 : -1
             const targetRow = dataTable[currentRowIndex + direction]
             if (targetRow) {
@@ -864,6 +865,7 @@ export default function SubjectClassScore() {
 
         if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
             e.preventDefault()
+            e.stopPropagation()
             const currentColIndex = fieldOrder.indexOf(type)
             const direction = e.key === 'ArrowRight' ? 1 : -1
             const targetColIndex = currentColIndex + direction
@@ -1306,7 +1308,6 @@ export default function SubjectClassScore() {
                                             return (
                                                 <InputNumber
                                                     min={0}
-                                                    type="number"
                                                     id={`score-cc-${record.id}`}
                                                     style={{ width: '100%' }}
                                                     step={0.5}
@@ -1390,7 +1391,6 @@ export default function SubjectClassScore() {
                                             return (
                                                 <InputNumber
                                                     min={0}
-                                                    type="number"
                                                     id={`score-tx-${record.id}`}
                                                     style={{ width: '100%' }}
                                                     step={0.5}
@@ -1480,7 +1480,6 @@ export default function SubjectClassScore() {
                                             return (
                                                 <InputNumber
                                                     min={0}
-                                                    type="number"
                                                     id={`score-thi-${record.id}`}
                                                     style={{ width: '100%' }}
                                                     step={0.1}
