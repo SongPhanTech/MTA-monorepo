@@ -270,8 +270,8 @@ function SubjectVersion() {
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 0]} align="top" justify="end">
-                        <Col span={12}>
+                    <Row gutter={[16, 0]} align="top" justify="">
+                        <Col span={8}>
                             <Flex gap={8}>
                                 <Input
                                     id="search"
@@ -295,7 +295,7 @@ function SubjectVersion() {
                                 />
                             </Flex>
                         </Col>
-                        <Col span={12}>
+                        <Col span={16}>
                             <Flex justify="end">
                                 {can(
                                     KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_DE_THI_DS_KY_THI,

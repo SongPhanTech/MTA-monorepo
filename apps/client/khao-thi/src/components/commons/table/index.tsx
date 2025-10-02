@@ -189,9 +189,11 @@ const Table = <T extends Record<string, unknown>>({
                         <ListButton
                             clear={() => {
                                 setFiltersTable({
+                                    ...filtersTable,
                                     [item.dataIndex as keyof FilterProps]: '',
                                 })
                                 setFilters?.({
+                                    ...filters,
                                     [item.dataIndex as keyof FilterProps]: '',
                                 })
                                 props.confirm()
@@ -262,9 +264,11 @@ const Table = <T extends Record<string, unknown>>({
                         <ListButton
                             clear={() => {
                                 setFiltersTable({
+                                    ...filtersTable,
                                     [item.dataIndex as keyof FilterProps]: '',
                                 })
                                 setFilters?.({
+                                    ...filters,
                                     [item.dataIndex as keyof FilterProps]: '',
                                 })
                                 props.confirm()
@@ -344,7 +348,7 @@ const Table = <T extends Record<string, unknown>>({
                                         [item.dataIndex as keyof FilterProps]: undefined,
                                     })
                                     setFilters?.({
-                                        ...filtersTable,
+                                        ...filters,
                                         [item.dataIndex as keyof FilterProps]: undefined,
                                     })
                                     props.confirm()
@@ -424,7 +428,7 @@ const Table = <T extends Record<string, unknown>>({
                                         [item.dataIndex as keyof FilterProps]: undefined,
                                     })
                                     setFilters?.({
-                                        ...filtersTable,
+                                        ...filters,
                                         [item.dataIndex as keyof FilterProps]: undefined,
                                     })
                                     props.confirm()
@@ -557,7 +561,7 @@ const Table = <T extends Record<string, unknown>>({
                                         [item.dataIndex as keyof FilterProps]: undefined,
                                     })
                                     setFilters?.({
-                                        ...filtersTable,
+                                        ...filters,
                                         [item.dataIndex as keyof FilterProps]: undefined,
                                     })
                                     props.confirm()
@@ -627,7 +631,7 @@ const Table = <T extends Record<string, unknown>>({
                                         [item.dataIndex as keyof FilterProps]: undefined,
                                     })
                                     setFilters?.({
-                                        ...filtersTable,
+                                        ...filters,
                                         [item.dataIndex as keyof FilterProps]: undefined,
                                     })
                                     props.confirm()
