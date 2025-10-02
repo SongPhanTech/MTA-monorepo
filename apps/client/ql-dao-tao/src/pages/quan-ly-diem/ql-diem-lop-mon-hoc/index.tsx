@@ -1310,6 +1310,7 @@ export default function SubjectClassScore() {
                                                     id={`score-cc-${record.id}`}
                                                     style={{ width: '100%' }}
                                                     step={0.5}
+                                                    controls={false}
                                                     value={currentScore}
                                                     status={isInvalid ? 'error' : undefined}
                                                     onChange={(value) => {
@@ -1393,6 +1394,7 @@ export default function SubjectClassScore() {
                                                     id={`score-tx-${record.id}`}
                                                     style={{ width: '100%' }}
                                                     step={0.5}
+                                                    controls={false}
                                                     value={currentScore}
                                                     status={isInvalid ? 'error' : undefined}
                                                     onChange={(value) => {
@@ -1482,6 +1484,7 @@ export default function SubjectClassScore() {
                                                     id={`score-thi-${record.id}`}
                                                     style={{ width: '100%' }}
                                                     step={0.1}
+                                                    controls={false}
                                                     value={currentScore}
                                                     status={isInvalid ? 'error' : undefined}
                                                     onChange={(value) => {
