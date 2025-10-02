@@ -15,19 +15,7 @@ import {
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore } from '@workspace/ui'
-import {
-    Button,
-    Checkbox,
-    Col,
-    DatePicker,
-    Flex,
-    Form,
-    Input,
-    InputNumber,
-    message,
-    Row,
-    Select,
-} from 'antd'
+import { Button, Col, DatePicker, Flex, Form, Input, InputNumber, message, Row, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
@@ -332,17 +320,17 @@ export default function Information({ id, selectedIds }: InformationProps) {
                         />
                     </FormItem>
                 </Col>
-                <Col span={24}>
+                {/* <Col span={24}>
                     <FormItem form={form} name="shuffleQuestions" valuePropName="checked">
                         <Checkbox disabled={!isDraft}>Trộn thứ tự câu hỏi</Checkbox>
                     </FormItem>
                     <FormItem form={form} name="shuffleAnswers" valuePropName="checked">
                         <Checkbox disabled={!isDraft}>Trộn thứ tự đáp án</Checkbox>
                     </FormItem>
-                    {/* <FormItem form={form} name="showResult" valuePropName="checked">
+                    <FormItem form={form} name="showResult" valuePropName="checked">
                         <Checkbox disabled={!isDraft}>Hiển thị kết quả ngay sau khi thi</Checkbox>
-                    </FormItem> */}
-                </Col>
+                    </FormItem>
+                </Col> */}
                 <Col span={24}>
                     <Flex justify="end" gap={8}>
                         {id ? (
