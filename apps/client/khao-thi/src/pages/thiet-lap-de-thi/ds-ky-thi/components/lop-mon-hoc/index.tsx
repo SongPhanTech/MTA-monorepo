@@ -270,7 +270,7 @@ function SubjectVersion() {
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 0]} align="top" justify="">
+                    <Row gutter={[16, 0]} align="top">
                         <Col span={8}>
                             <Flex gap={8}>
                                 <Input
