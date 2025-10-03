@@ -15,7 +15,7 @@ import Confetti from 'react-confetti'
 type PutSurveySession = SurveySession & {
     responses: {
         surveyQuestionId: string
-        surveyChoiceId: string
+        surveyChoiceId?: string
         answerText?: string
         explanation?: string
         requireExplanation?: boolean
@@ -47,7 +47,7 @@ function TakeTestPage() {
     const [selected, setSelected] = useState<
         {
             surveyQuestionId: string
-            surveyChoiceId: string
+            surveyChoiceId?: string
             answerText?: string
             explanation?: string
             requireExplanation?: boolean
@@ -131,19 +131,17 @@ function TakeTestPage() {
 
     async function onOk() {
         const dataSubmit = form.getFieldsValue()
-        console.log(dataSubmit)
-
-        const responses = dataSubmit?.responses.filter(
-            (i: { surveyQuestionId?: string; surveyChoiceId?: string }) =>
-                !i.surveyQuestionId || !i.surveyChoiceId
+        const responsesError = dataSubmit?.responses.filter(
+            (i: any) => i?.type === 'SINGLE_CHOICE' && !i.surveyChoiceId
         )
         if (
             (!dataSubmit.additionalSuggestion && survey?.additionalSuggestion === true) ||
-            responses?.length
+            responsesError?.length
         ) {
             message.error('Bạn chưa hoàn thành mẫu khảo sát')
             return
         }
+
         const reason = dataSubmit.responses.filter(
             (i: { requireExplanation?: boolean; explanation?: string; type?: string }) =>
                 i.requireExplanation === true && !i.explanation && i.type === 'SINGLE_CHOICE'
@@ -177,37 +175,6 @@ function TakeTestPage() {
                     }),
                 },
             })
-            // await sqlTransaction([
-            //     {
-            //         model: 'SurveySession',
-            //         operation: 'create',
-            //         data: {
-            //             data: {
-            //                 additionalSuggestion: dataSubmit.additionalSuggestion,
-            //                 isCompleted: true,
-            //                 completedAt: new Date(),
-            //                 responses: {
-            //                     createMany: {
-            //                         data: dataSubmit?.responses?.map(
-            //                             (i: {
-            //                                 surveyQuestionId?: string
-            //                                 surveyChoiceId?: string
-            //                                 explanation?: string
-            //                                 answerText?: string
-            //                             }) => ({
-            //                                 surveyQuestionId: i.surveyQuestionId,
-            //                                 surveyChoiceId: i.surveyChoiceId,
-            //                                 explanation: i.explanation,
-            //                                 answerText: i.answerText,
-            //                             })
-            //                         ),
-            //                     },
-            //                 },
-            //                 surveyId: id,
-            //             },
-            //         },
-            //     },
-            // ])
             if (res?.status === 200) {
                 message.success('Gửi khảo sát thành công')
                 setIsDone(true)
@@ -231,13 +198,21 @@ function TakeTestPage() {
             setSurvey(response?.data)
             setStartAt(new Date())
             const list = response?.data?.surveyQuestion?.map((i) => {
+                if (i?.type === 'SINGLE_CHOICE') {
+                    return {
+                        surveyQuestionId: i.id,
+                        surveyChoiceId: '',
+                        explanation: '',
+                        type: i.type,
+                    }
+                }
                 return {
                     surveyQuestionId: i.id,
-                    surveyChoiceId: '',
-                    explanation: '',
+                    answerText: '',
                     type: i.type,
                 }
             })
+
             form.setFieldsValue({
                 responses: list,
                 additionalSuggestion: '',
@@ -308,83 +283,107 @@ function TakeTestPage() {
                     </Col>
 
                     <Col span={24}>
-                        <FormItem className="block" form={form} name="responses" label="">
-                            {dataTest.map((item, index: number) => {
-                                return (
-                                    <div key={item.id}>
-                                        <div className="font-bold mb-3">{item.name}</div>
-                                        <div className="px-4">
-                                            {item?.children?.map((j, idx: number) => {
-                                                return j?.type === 'SINGLE_CHOICE' ? (
-                                                    <div key={j.id} className="mb-6">
-                                                        <div className="flex justify-between">
-                                                            <div className="mb-3">
-                                                                {index + 1}.{idx + 1}. {j.name}
-                                                            </div>
-                                                            <div className="flex items-center justify-end">
-                                                                {survey?.surveyChoice.map((i) => {
-                                                                    return (
-                                                                        <Button
-                                                                            key={i.id}
-                                                                            onClick={() =>
-                                                                                onChange(
-                                                                                    j?.id,
-                                                                                    i.id,
-                                                                                    i.requireExplanation
+                        <Form.List name="responses">
+                            {(fields) => (
+                                <>
+                                    {dataTest.map((section, sectionIndex) => (
+                                        <div key={section.id} className="mb-2">
+                                            <div className="font-bold mb-1">{section.name}</div>
+
+                                            {section.children?.map((q, qIndex) => {
+                                                return (
+                                                    <div key={q.id} className="px-4">
+                                                        {q.type === 'SINGLE_CHOICE' ? (
+                                                            <>
+                                                                <div className="flex items-center w-full justify-between mb-2">
+                                                                    <div className="mb-2">
+                                                                        {sectionIndex + 1}.
+                                                                        {qIndex + 1}. {q.name}
+                                                                    </div>
+                                                                    <div className="flex items-center justify-end">
+                                                                        {survey?.surveyChoice.map(
+                                                                            (i) => {
+                                                                                return (
+                                                                                    <Button
+                                                                                        key={i.id}
+                                                                                        onClick={() =>
+                                                                                            onChange(
+                                                                                                q?.id,
+                                                                                                i.id,
+                                                                                                i.requireExplanation
+                                                                                            )
+                                                                                        }
+                                                                                        className={`flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px] mr-2  ${checkedQuestion(q?.id, i.id) ? '!bg-[#ea1212] text-white' : 'bg-white text-[#ea1212]'}`}
+                                                                                    >
+                                                                                        {i.answer}
+                                                                                    </Button>
                                                                                 )
                                                                             }
-                                                                            className={`flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px] mr-2  ${checkedQuestion(j?.id, i.id) ? '!bg-[#ea1212] text-white' : 'bg-white text-[#ea1212]'}`}
-                                                                        >
-                                                                            {i.answer}
-                                                                        </Button>
-                                                                    )
-                                                                })}
-                                                            </div>
-                                                        </div>
-                                                        {requireExplanation?.length > 0 &&
-                                                            requireExplanation.includes(j?.id) && (
-                                                                <Col span={24}>
-                                                                    <div className="mb-2">
-                                                                        Lý do :
+                                                                        )}
                                                                     </div>
-                                                                    <Form.Item
-                                                                        name={[
-                                                                            'responses',
-                                                                            idx,
-                                                                            'answerText',
-                                                                        ]}
-                                                                        label=""
-                                                                    >
-                                                                        <Input.TextArea placeholder="Nhập lý do" />
-                                                                    </Form.Item>
-                                                                </Col>
-                                                            )}
-                                                    </div>
-                                                ) : (
-                                                    <div key={j.id} className="mb-6">
-                                                        <Col span={24}>
-                                                            <div className="mb-2">
-                                                                {index + 1}.{idx + 1}. {j.name}
-                                                            </div>
-                                                            <Form.Item
-                                                                name={[
-                                                                    'responses',
-                                                                    idx,
-                                                                    'explanation',
-                                                                ]}
-                                                                label=""
-                                                            >
-                                                                <Input.TextArea placeholder="Nhập câu trả lời" />
-                                                            </Form.Item>
-                                                        </Col>
+                                                                </div>
+
+                                                                {/* Nếu requireExplanation true thì hiển thị input */}
+                                                                {requireExplanation?.length > 0 &&
+                                                                    requireExplanation.includes(
+                                                                        q?.id
+                                                                    ) && (
+                                                                        <Form.Item
+                                                                            className="!mb-0 !mt-2"
+                                                                            shouldUpdate
+                                                                        >
+                                                                            {() => {
+                                                                                return (
+                                                                                    <Form.Item
+                                                                                        name={[
+                                                                                            qIndex,
+                                                                                            'explanation',
+                                                                                        ]}
+                                                                                        label="Lý do"
+                                                                                        rules={[
+                                                                                            {
+                                                                                                required: true,
+                                                                                                message:
+                                                                                                    'Nhập lý do',
+                                                                                            },
+                                                                                        ]}
+                                                                                    >
+                                                                                        <Input.TextArea placeholder="Nhập lý do" />
+                                                                                    </Form.Item>
+                                                                                )
+                                                                            }}
+                                                                        </Form.Item>
+                                                                    )}
+                                                            </>
+                                                        ) : (
+                                                            // ESSAY
+                                                            <>
+                                                                <div className="mb-2">
+                                                                    {sectionIndex + 1}.{qIndex + 1}.{' '}
+                                                                    {q.name}
+                                                                </div>
+                                                                <Form.Item
+                                                                    name={[qIndex, 'answerText']}
+                                                                    rules={[
+                                                                        {
+                                                                            required: true,
+                                                                            message:
+                                                                                'Nhập câu trả lời',
+                                                                        },
+                                                                    ]}
+                                                                >
+                                                                    <Input.TextArea placeholder="Nhập câu trả lời" />
+                                                                </Form.Item>
+                                                            </>
+                                                        )}
                                                     </div>
                                                 )
                                             })}
                                         </div>
-                                    </div>
-                                )
-                            })}
-                        </FormItem>
+                                    ))}
+                                </>
+                            )}
+                        </Form.List>
                     </Col>
                     {survey.additionalSuggestion && (
                         <Col span={24}>
