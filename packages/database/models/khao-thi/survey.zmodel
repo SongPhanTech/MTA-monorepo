@@ -36,6 +36,7 @@ model SurveyObjectType extends Base {
   subjectClasses  SubjectClass[]
 
   surveySessions  SurveySession[]
+  clusterSurvey   ClusterSurvey[]
 
   @@schema("khao-thi")
 }
@@ -57,6 +58,25 @@ model SurveyQuestionGroup extends Base {
   @@schema("khao-thi")
 }
 
+/// Khảo sát cụm
+model ClusterSurvey extends Base {
+  name             String
+
+  // những cấu hình sẽ được copy sang Survey
+  startDate        DateTime
+  endDate          DateTime?
+  isPublic         Boolean            @default(false)
+  anonymous        Boolean            @default(true)
+  surveyObjectType SurveyObjectType[]
+  lecturers        Lecturer[] // DS giảng viên => sinh ra Survey cho từng giảng viên
+  surveyChoice     SurveyChoice[] // lựa chọn
+  surveyQuestion   SurveyQuestion[] // câu hỏi
+
+  surveys          Survey[]
+
+  @@schema("khao-thi")
+}
+
 // đợt khảo sát
 model Survey extends Base {
   name                 String
@@ -68,7 +88,7 @@ model Survey extends Base {
 
   surveyObjectType     SurveyObjectType[]
 
-  lectureId            String?           // ID giảng viên phụ trách khảo sát
+  lectureId            String?            // khảo sát cho GV nào
   lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
 
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
@@ -79,12 +99,16 @@ model Survey extends Base {
 
   // 1. Rất hài lòng
   // 2. Hài lòng
-  // 3. Không hài lòng
-  // 4. Rất không hài lòng
-  // 0. Phân vân
+  // 3. Phân vân
+  // 4. Không hài lòng
+  // 5. Rất không hài lòng
   surveyChoice         SurveyChoice[]
   surveyQuestion       SurveyQuestion[]
   surveySessions       SurveySession[]   // Thêm relation mới
+
+  // thuộc khảo sát cụm
+  clusterSurvey        ClusterSurvey?     @relation(fields: [clusterSurveyId], references: [id])
+  clusterSurveyId      String?
 
   @@schema("khao-thi")
 }
@@ -102,6 +126,9 @@ model SurveyQuestion extends Base {
   survey                Survey?              @relation(fields: [surveyId], references: [id])
   surveyId              String?
 
+  clusterSurvey         ClusterSurvey?       @relation(fields: [clusterSurveyId], references: [id])
+  clusterSurveyId       String?
+
   surveyResponses       SurveyResponse[]  // Thêm relation mới
 
   @@schema("khao-thi")
@@ -112,8 +139,11 @@ model SurveyChoice extends Base {
   answer             String
   requireExplanation Boolean
 
-  survey             Survey           @relation(fields: [surveyId], references: [id])
-  surveyId           String
+  survey             Survey?          @relation(fields: [surveyId], references: [id])
+  surveyId           String?
+
+  clusterSurvey      ClusterSurvey?   @relation(fields: [clusterSurveyId], references: [id])
+  clusterSurveyId    String?
 
   surveyResponses    SurveyResponse[]  // Thêm relation mới
 
