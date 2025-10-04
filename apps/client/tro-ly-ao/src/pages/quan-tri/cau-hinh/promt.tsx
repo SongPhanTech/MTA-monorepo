@@ -185,7 +185,11 @@ function Page() {
     )
 }
 Page.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return (
+        <DefaultLayout breadcrumbList={[{ title: 'Quản trị' }, { title: 'Cấu hình Prompt' }]}>
+            {page}
+        </DefaultLayout>
+    )
 }
 
 export default Page
