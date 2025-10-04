@@ -152,6 +152,7 @@ export default {
     "INDEX": "/",
     "QUAN_TRI_CAU_HINH_PROMT": "/quan-tri/cau-hinh/promt",
     "QUAN_TRI_CAU_HINH_THAM_SO": "/quan-tri/cau-hinh/tham-so",
+    "QUAN_TRI_CHU_DE": "/quan-tri/chu-de",
     "QUAN_TRI_DU_LIEU": "/quan-tri/du-lieu",
     "TIM_KIEM_VAN_BAN": "/tim-kiem-van-ban",
     "TRO_LY_AO": "/tro-ly-ao",
