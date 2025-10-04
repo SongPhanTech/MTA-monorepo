@@ -1,20 +1,28 @@
 import { MessageOutlined } from '@ant-design/icons'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './chatbot.css'
-export const WidgetChatbot = ({ src = 'http://localhost:3000/tro-ly-ao' }) => {
+export const WidgetChatbot = ({ src = 'http://localhost:3000/chatbot/tro-ly-ao' }) => {
     const [open, setOpen] = useState(false)
+
+    useEffect(() => {
+        const handleMessage = (event: MessageEvent) => {
+            if (event.data.type === 'TOGGLE_CHAT_WIDGET') {
+                // console.log('Received TOGGLE_CHAT_WIDGET message from iframe')
+                setOpen(false)
+            }
+        }
+
+        window.addEventListener('message', handleMessage)
+        return () => window.removeEventListener('message', handleMessage)
+    }, [])
 
     return (
         <div>
             <div className={`fixed-chatbox ${open ? 'show' : 'hide'}`}>
                 <iframe src={src} className="fixed-chatbox-iframe" title="Chatbot" />
             </div>
-            {/** biome-ignore lint/a11y/useButtonType: <explanation> */}
-            <button
-                className="chatbox-toggle-btn"
-                onClick={() => setOpen((prev) => !prev)}
-                // aria-label={open ? 'Đóng chatbox' : 'Mở chatbox'}
-            >
+            {/** biome-ignore lint/a11y/useButtonType: Toggle button doesn't need explicit type */}
+            <button className="chatbox-toggle-btn" onClick={() => setOpen((prev) => !prev)}>
                 <MessageOutlined />
             </button>
         </div>

@@ -730,6 +730,16 @@ export type Conversation = $Result.DefaultSelection<Prisma.$ConversationPayload>
  */
 export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>;
 /**
+ * Model Topic
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type Topic = $Result.DefaultSelection<Prisma.$TopicPayload>;
+/**
  * Model DM_CapBac
  * @
  * @allow ('all', auth() != null)
@@ -2381,7 +2391,6 @@ export type UserRole = $Enums.UserRole;
 export type PermissionType = $Enums.PermissionType;
 export type MessageSender = $Enums.MessageSender;
 export type DocumentStatus = $Enums.DocumentStatus;
-export type DocumentType = $Enums.DocumentType;
 export type UserType = $Enums.UserType;
 export type RelativeType = $Enums.RelativeType;
 export type ResearchProjectStatus = $Enums.ResearchProjectStatus;
@@ -3055,6 +3064,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      * ```
      */
     get message(): Prisma.MessageDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.topic`: Exposes CRUD operations for the **Topic** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more Topics
+     * const topics = await prisma.topic.findMany()
+     * ```
+     */
+    get topic(): Prisma.TopicDelegate<ExtArgs, ClientOptions>;
     /**
      * `prisma.dM_CapBac`: Exposes CRUD operations for the **DM_CapBac** model.
      * Example usage:
@@ -4574,7 +4592,6 @@ export const UserRole: typeof $Enums.UserRole;
 export const PermissionType: typeof $Enums.PermissionType;
 export const MessageSender: typeof $Enums.MessageSender;
 export const DocumentStatus: typeof $Enums.DocumentStatus;
-export const DocumentType: typeof $Enums.DocumentType;
 export const UserType: typeof $Enums.UserType;
 export const RelativeType: typeof $Enums.RelativeType;
 export const ResearchProjectStatus: typeof $Enums.ResearchProjectStatus;
@@ -4769,25 +4786,6 @@ export namespace $Enums {
         DENY: 'DENY'
     };
     export type DocumentStatus = (typeof DocumentStatus)[keyof typeof DocumentStatus];
-    export const DocumentType: {
-        GENERAL_ADMISSIONS_INFORMATION: 'GENERAL_ADMISSIONS_INFORMATION',
-        ADMISSIONS_RULES_AND_REGULATIONS: 'ADMISSIONS_RULES_AND_REGULATIONS',
-        TRAINING_RULES_AND_REGULATIONS: 'TRAINING_RULES_AND_REGULATIONS',
-        EXAMINATION_RULES_AND_REGULATIONS: 'EXAMINATION_RULES_AND_REGULATIONS',
-        ACADEMY_INFORMATION: 'ACADEMY_INFORMATION',
-        TRAINING_PROGRAMS_INFORMATION: 'TRAINING_PROGRAMS_INFORMATION',
-        REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS: 'REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS',
-        REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS: 'REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS',
-        FREQUENTLY_ASKED_QUESTIONS: 'FREQUENTLY_ASKED_QUESTIONS',
-        PARTY_WORK_AND_POLITICAL_WORK: 'PARTY_WORK_AND_POLITICAL_WORK',
-        INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY: 'INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY',
-        IN_THE_FACULTY_HANDBOOK: 'IN_THE_FACULTY_HANDBOOK',
-        TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE: 'TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE',
-        DETECTION_AND_CORRECTION_OF_TEXT_ERRORS: 'DETECTION_AND_CORRECTION_OF_TEXT_ERRORS',
-        EXTRACTIVE_TEXT_SUMMARIZATION: 'EXTRACTIVE_TEXT_SUMMARIZATION',
-        ABSTRACTIVE_TEXT_SUMMARIZATION: 'ABSTRACTIVE_TEXT_SUMMARIZATION'
-    };
-    export type DocumentType = (typeof DocumentType)[keyof typeof DocumentType];
     export const UserType: {
         MILITARY_STUDENT: 'MILITARY_STUDENT',
         CIVILIAN_STUDENT: 'CIVILIAN_STUDENT',
@@ -5229,6 +5227,7 @@ export namespace Prisma {
         Prompt: 'Prompt',
         Conversation: 'Conversation',
         Message: 'Message',
+        Topic: 'Topic',
         DM_CapBac: 'DM_CapBac',
         DM_ChucDanh: 'DM_ChucDanh',
         DM_ChucVu: 'DM_ChucVu',
@@ -6376,7 +6375,7 @@ export namespace Prisma {
         uri: 'uri',
         fileType: 'fileType',
         fileSize: 'fileSize',
-        type: 'type',
+        topicId: 'topicId',
         reason: 'reason',
         uploadedById: 'uploadedById',
         approvedById: 'approvedById'
@@ -6392,7 +6391,7 @@ export namespace Prisma {
         question: 'question',
         answer: 'answer',
         status: 'status',
-        type: 'type',
+        topicId: 'topicId',
         reason: 'reason',
         uploadedById: 'uploadedById',
         approvedById: 'approvedById'
@@ -6407,7 +6406,7 @@ export namespace Prisma {
         updatedAt: 'updatedAt',
         prompt: 'prompt',
         status: 'status',
-        type: 'type',
+        topicId: 'topicId',
         reason: 'reason'
     };
     export const ConversationScalarFieldEnum: {
@@ -6421,7 +6420,7 @@ export namespace Prisma {
         name: 'name',
         userId: 'userId',
         sessionId: 'sessionId',
-        type: 'type'
+        topicId: 'topicId'
     };
     export const MessageScalarFieldEnum: {
         id: 'id',
@@ -6434,6 +6433,17 @@ export namespace Prisma {
         conversationId: 'conversationId',
         content: 'content',
         sender: 'sender'
+    };
+    export const TopicScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        name: 'name',
+        type: 'type'
     };
     export const DM_CapBacScalarFieldEnum: {
         Id: 'Id',
@@ -9358,6 +9368,7 @@ export namespace Prisma {
         body: 'body',
         uri: 'uri',
         fileType: 'fileType',
+        topicId: 'topicId',
         reason: 'reason',
         uploadedById: 'uploadedById',
         approvedById: 'approvedById'
@@ -9368,6 +9379,7 @@ export namespace Prisma {
         description: 'description',
         question: 'question',
         answer: 'answer',
+        topicId: 'topicId',
         reason: 'reason',
         uploadedById: 'uploadedById',
         approvedById: 'approvedById'
@@ -9377,6 +9389,7 @@ export namespace Prisma {
         code: 'code',
         description: 'description',
         prompt: 'prompt',
+        topicId: 'topicId',
         reason: 'reason'
     };
     export const ConversationOrderByRelevanceFieldEnum: {
@@ -9385,7 +9398,8 @@ export namespace Prisma {
         description: 'description',
         name: 'name',
         userId: 'userId',
-        sessionId: 'sessionId'
+        sessionId: 'sessionId',
+        topicId: 'topicId'
     };
     export const MessageOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -9393,6 +9407,13 @@ export namespace Prisma {
         description: 'description',
         conversationId: 'conversationId',
         content: 'content'
+    };
+    export const TopicOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        name: 'name',
+        type: 'type'
     };
     export const DM_CapBacOrderByRelevanceFieldEnum: {
         Id: 'Id',
@@ -35699,6 +35720,7 @@ export namespace Prisma {
      */
     export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        topic<T extends Document$topicArgs<ExtArgs> = {}>(args?: Subset<T, Document$topicArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         uploadedBy<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         approvedBy<T extends Document$approvedByArgs<ExtArgs> = {}>(args?: Subset<T, Document$approvedByArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         /**
@@ -35740,7 +35762,7 @@ export namespace Prisma {
         readonly uri: FieldRef<"Document", 'String'>;
         readonly fileType: FieldRef<"Document", 'String'>;
         readonly fileSize: FieldRef<"Document", 'Int'>;
-        readonly type: FieldRef<"Document", 'DocumentType'>;
+        readonly topicId: FieldRef<"Document", 'String'>;
         readonly reason: FieldRef<"Document", 'String'>;
         readonly uploadedById: FieldRef<"Document", 'String'>;
         readonly approvedById: FieldRef<"Document", 'String'>;
@@ -36089,6 +36111,7 @@ export namespace Prisma {
      */
     export interface Prisma__FAQClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        topic<T extends FAQ$topicArgs<ExtArgs> = {}>(args?: Subset<T, FAQ$topicArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         uploadedBy<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         approvedBy<T extends FAQ$approvedByArgs<ExtArgs> = {}>(args?: Subset<T, FAQ$approvedByArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         /**
@@ -36127,7 +36150,7 @@ export namespace Prisma {
         readonly question: FieldRef<"FAQ", 'String'>;
         readonly answer: FieldRef<"FAQ", 'String'>;
         readonly status: FieldRef<"FAQ", 'DocumentStatus'>;
-        readonly type: FieldRef<"FAQ", 'DocumentType'>;
+        readonly topicId: FieldRef<"FAQ", 'String'>;
         readonly reason: FieldRef<"FAQ", 'String'>;
         readonly uploadedById: FieldRef<"FAQ", 'String'>;
         readonly approvedById: FieldRef<"FAQ", 'String'>;
@@ -36476,6 +36499,7 @@ export namespace Prisma {
      */
     export interface Prisma__PromptClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        topic<T extends Prompt$topicArgs<ExtArgs> = {}>(args?: Subset<T, Prompt$topicArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -36511,7 +36535,7 @@ export namespace Prisma {
         readonly updatedAt: FieldRef<"Prompt", 'DateTime'>;
         readonly prompt: FieldRef<"Prompt", 'String'>;
         readonly status: FieldRef<"Prompt", 'DocumentStatus'>;
-        readonly type: FieldRef<"Prompt", 'DocumentType'>;
+        readonly topicId: FieldRef<"Prompt", 'String'>;
         readonly reason: FieldRef<"Prompt", 'String'>;
     }
 
@@ -36860,6 +36884,7 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         user<T extends Conversation$userArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$userArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         session<T extends Conversation$sessionArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$sessionArgs<ExtArgs>>): Prisma__UserSessionClient<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        topic<T extends Conversation$topicArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$topicArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         message<T extends Conversation$messageArgs<ExtArgs> = {}>(args?: Subset<T, Conversation$messageArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -36897,7 +36922,7 @@ export namespace Prisma {
         readonly name: FieldRef<"Conversation", 'String'>;
         readonly userId: FieldRef<"Conversation", 'String'>;
         readonly sessionId: FieldRef<"Conversation", 'String'>;
-        readonly type: FieldRef<"Conversation", 'DocumentType'>;
+        readonly topicId: FieldRef<"Conversation", 'String'>;
     }
 
     export interface MessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -37280,6 +37305,390 @@ export namespace Prisma {
         readonly conversationId: FieldRef<"Message", 'String'>;
         readonly content: FieldRef<"Message", 'String'>;
         readonly sender: FieldRef<"Message", 'MessageSender'>;
+    }
+
+    export interface TopicDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Topic'], meta: { name: 'Topic' } };
+        /**
+         * Fields of the Topic model
+         */
+        readonly fields: TopicFieldRefs;
+        /**
+         * Find zero or one Topic that matches the filter.
+         * @param {TopicFindUniqueArgs} args - Arguments to find a Topic
+         * @example
+         * // Get one Topic
+         * const topic = await prisma.topic.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends TopicFindUniqueArgs>(args: SelectSubset<T, TopicFindUniqueArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one Topic that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {TopicFindUniqueOrThrowArgs} args - Arguments to find a Topic
+         * @example
+         * // Get one Topic
+         * const topic = await prisma.topic.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends TopicFindUniqueOrThrowArgs>(args: SelectSubset<T, TopicFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first Topic that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TopicFindFirstArgs} args - Arguments to find a Topic
+         * @example
+         * // Get one Topic
+         * const topic = await prisma.topic.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends TopicFindFirstArgs>(args?: SelectSubset<T, TopicFindFirstArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first Topic that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TopicFindFirstOrThrowArgs} args - Arguments to find a Topic
+         * @example
+         * // Get one Topic
+         * const topic = await prisma.topic.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends TopicFindFirstOrThrowArgs>(args?: SelectSubset<T, TopicFindFirstOrThrowArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more Topics that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TopicFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all Topics
+         * const topics = await prisma.topic.findMany()
+         *
+         * // Get first 10 Topics
+         * const topics = await prisma.topic.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const topicWithIdOnly = await prisma.topic.findMany({ select: { id: true } })
+         */
+        findMany<T extends TopicFindManyArgs>(args?: SelectSubset<T, TopicFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a Topic.
+         * @param {TopicCreateArgs} args - Arguments to create a Topic.
+         * @example
+         * // Create one Topic
+         * const Topic = await prisma.topic.create({
+         *   data: {
+         *     // ... data to create a Topic
+         *   }
+         * })
+         */
+        create<T extends TopicCreateArgs>(args: SelectSubset<T, TopicCreateArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many Topics.
+         * @param {TopicCreateManyArgs} args - Arguments to create many Topics.
+         * @example
+         * // Create many Topics
+         * const topic = await prisma.topic.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends TopicCreateManyArgs>(args?: SelectSubset<T, TopicCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many Topics and returns the data saved in the database.
+         * @param {TopicCreateManyAndReturnArgs} args - Arguments to create many Topics.
+         * @example
+         * // Create many Topics
+         * const topic = await prisma.topic.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many Topics and only return the `id`
+         * const topicWithIdOnly = await prisma.topic.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends TopicCreateManyAndReturnArgs>(args?: SelectSubset<T, TopicCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a Topic.
+         * @param {TopicDeleteArgs} args - Arguments to delete one Topic.
+         * @example
+         * // Delete one Topic
+         * const Topic = await prisma.topic.delete({
+         *   where: {
+         *     // ... filter to delete one Topic
+         *   }
+         * })
+         */
+        delete<T extends TopicDeleteArgs>(args: SelectSubset<T, TopicDeleteArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one Topic.
+         * @param {TopicUpdateArgs} args - Arguments to update one Topic.
+         * @example
+         * // Update one Topic
+         * const topic = await prisma.topic.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends TopicUpdateArgs>(args: SelectSubset<T, TopicUpdateArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more Topics.
+         * @param {TopicDeleteManyArgs} args - Arguments to filter Topics to delete.
+         * @example
+         * // Delete a few Topics
+         * const { count } = await prisma.topic.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends TopicDeleteManyArgs>(args?: SelectSubset<T, TopicDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more Topics.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TopicUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many Topics
+         * const topic = await prisma.topic.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends TopicUpdateManyArgs>(args: SelectSubset<T, TopicUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more Topics and returns the data updated in the database.
+         * @param {TopicUpdateManyAndReturnArgs} args - Arguments to update many Topics.
+         * @example
+         * // Update many Topics
+         * const topic = await prisma.topic.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more Topics and only return the `id`
+         * const topicWithIdOnly = await prisma.topic.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends TopicUpdateManyAndReturnArgs>(args: SelectSubset<T, TopicUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one Topic.
+         * @param {TopicUpsertArgs} args - Arguments to update or create a Topic.
+         * @example
+         * // Update or create a Topic
+         * const topic = await prisma.topic.upsert({
+         *   create: {
+         *     // ... data to create a Topic
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the Topic we want to update
+         *   }
+         * })
+         */
+        upsert<T extends TopicUpsertArgs>(args: SelectSubset<T, TopicUpsertArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of Topics.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TopicCountArgs} args - Arguments to filter Topics to count.
+         * @example
+         * // Count the number of Topics
+         * const count = await prisma.topic.count({
+         *   where: {
+         *     // ... the filter for the Topics we want to count
+         *   }
+         * })
+         */
+        count<T extends TopicCountArgs>(args?: Subset<T, TopicCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], TopicCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a Topic.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TopicAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends TopicAggregateArgs>(args: Subset<T, TopicAggregateArgs>): Prisma.PrismaPromise<GetTopicAggregateType<T>>;
+        /**
+         * Group by Topic.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {TopicGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends TopicGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TopicGroupByArgs['orderBy'] }
+        : { orderBy?: TopicGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, TopicGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTopicGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for Topic.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__TopicClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        documents<T extends Topic$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Topic$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        faqs<T extends Topic$faqsArgs<ExtArgs> = {}>(args?: Subset<T, Topic$faqsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FAQPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        prompts<T extends Topic$promptsArgs<ExtArgs> = {}>(args?: Subset<T, Topic$promptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PromptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        conversations<T extends Topic$conversationsArgs<ExtArgs> = {}>(args?: Subset<T, Topic$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the Topic model
+     */
+    interface TopicFieldRefs {
+        readonly id: FieldRef<"Topic", 'String'>;
+        readonly code: FieldRef<"Topic", 'String'>;
+        readonly active: FieldRef<"Topic", 'Boolean'>;
+        readonly description: FieldRef<"Topic", 'String'>;
+        readonly deletedAt: FieldRef<"Topic", 'DateTime'>;
+        readonly createdAt: FieldRef<"Topic", 'DateTime'>;
+        readonly updatedAt: FieldRef<"Topic", 'DateTime'>;
+        readonly name: FieldRef<"Topic", 'String'>;
+        readonly type: FieldRef<"Topic", 'String'>;
     }
 
     export interface DM_CapBacDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -98289,7 +98698,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
+            modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -103322,6 +103731,80 @@ export namespace Prisma {
                     count: {
                         args: Prisma.MessageCountArgs<ExtArgs>
                         result: $Utils.Optional<MessageCountAggregateOutputType> | number
+                    }
+                }
+            }
+            Topic: {
+                payload: Prisma.$TopicPayload<ExtArgs>
+                fields: Prisma.TopicFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.TopicFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TopicPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.TopicFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TopicPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.TopicFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TopicPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.TopicFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TopicPayload>
+                    }
+                    findMany: {
+                        args: Prisma.TopicFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TopicPayload>[]
+                    }
+                    create: {
+                        args: Prisma.TopicCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TopicPayload>
+                    }
+                    createMany: {
+                        args: Prisma.TopicCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.TopicCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TopicPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.TopicDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TopicPayload>
+                    }
+                    update: {
+                        args: Prisma.TopicUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TopicPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.TopicDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.TopicUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.TopicUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TopicPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.TopicUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$TopicPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.TopicAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateTopic>
+                    }
+                    groupBy: {
+                        args: Prisma.TopicGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<TopicGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.TopicCountArgs<ExtArgs>
+                        result: $Utils.Optional<TopicCountAggregateOutputType> | number
                     }
                 }
             }
@@ -115042,6 +115525,7 @@ export namespace Prisma {
         prompt?: PromptOmit
         conversation?: ConversationOmit
         message?: MessageOmit
+        topic?: TopicOmit
         dM_CapBac?: DM_CapBacOmit
         dM_ChucDanh?: DM_ChucDanhOmit
         dM_ChucVu?: DM_ChucVuOmit
@@ -117132,6 +117616,54 @@ export namespace Prisma {
      */
     export type ConversationCountOutputTypeCountMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: MessageWhereInput
+    };
+    /**
+     * Count Type TopicCountOutputType
+     */
+    export type TopicCountOutputType = {
+        documents: number
+        faqs: number
+        prompts: number
+        conversations: number
+    };
+    export type TopicCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        documents?: boolean | TopicCountOutputTypeCountDocumentsArgs
+        faqs?: boolean | TopicCountOutputTypeCountFaqsArgs
+        prompts?: boolean | TopicCountOutputTypeCountPromptsArgs
+        conversations?: boolean | TopicCountOutputTypeCountConversationsArgs
+    };
+    /**
+     * TopicCountOutputType without action
+     */
+    export type TopicCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TopicCountOutputType
+         */
+        select?: TopicCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * TopicCountOutputType without action
+     */
+    export type TopicCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: DocumentWhereInput
+    };
+    /**
+     * TopicCountOutputType without action
+     */
+    export type TopicCountOutputTypeCountFaqsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: FAQWhereInput
+    };
+    /**
+     * TopicCountOutputType without action
+     */
+    export type TopicCountOutputTypeCountPromptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: PromptWhereInput
+    };
+    /**
+     * TopicCountOutputType without action
+     */
+    export type TopicCountOutputTypeCountConversationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ConversationWhereInput
     };
     /**
      * Count Type DM_CapBacCountOutputType
@@ -169706,7 +170238,7 @@ export namespace Prisma {
         uri: string | null
         fileType: string | null
         fileSize: number | null
-        type: $Enums.DocumentType | null
+        topicId: string | null
         reason: string | null
         uploadedById: string | null
         approvedById: string | null
@@ -169725,7 +170257,7 @@ export namespace Prisma {
         uri: string | null
         fileType: string | null
         fileSize: number | null
-        type: $Enums.DocumentType | null
+        topicId: string | null
         reason: string | null
         uploadedById: string | null
         approvedById: string | null
@@ -169744,7 +170276,7 @@ export namespace Prisma {
         uri: number
         fileType: number
         fileSize: number
-        type: number
+        topicId: number
         reason: number
         uploadedById: number
         approvedById: number
@@ -169770,7 +170302,7 @@ export namespace Prisma {
         uri?: true
         fileType?: true
         fileSize?: true
-        type?: true
+        topicId?: true
         reason?: true
         uploadedById?: true
         approvedById?: true
@@ -169789,7 +170321,7 @@ export namespace Prisma {
         uri?: true
         fileType?: true
         fileSize?: true
-        type?: true
+        topicId?: true
         reason?: true
         uploadedById?: true
         approvedById?: true
@@ -169808,7 +170340,7 @@ export namespace Prisma {
         uri?: true
         fileType?: true
         fileSize?: true
-        type?: true
+        topicId?: true
         reason?: true
         uploadedById?: true
         approvedById?: true
@@ -169908,7 +170440,7 @@ export namespace Prisma {
         uri: string | null
         fileType: string | null
         fileSize: number | null
-        type: $Enums.DocumentType
+        topicId: string | null
         reason: string | null
         uploadedById: string
         approvedById: string | null
@@ -169944,10 +170476,11 @@ export namespace Prisma {
         uri?: boolean
         fileType?: boolean
         fileSize?: boolean
-        type?: boolean
+        topicId?: boolean
         reason?: boolean
         uploadedById?: boolean
         approvedById?: boolean
+        topic?: boolean | Document$topicArgs<ExtArgs>
         uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
         approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
     }, ExtArgs["result"]["document"]>;
@@ -169965,10 +170498,11 @@ export namespace Prisma {
         uri?: boolean
         fileType?: boolean
         fileSize?: boolean
-        type?: boolean
+        topicId?: boolean
         reason?: boolean
         uploadedById?: boolean
         approvedById?: boolean
+        topic?: boolean | Document$topicArgs<ExtArgs>
         uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
         approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
     }, ExtArgs["result"]["document"]>;
@@ -169986,10 +170520,11 @@ export namespace Prisma {
         uri?: boolean
         fileType?: boolean
         fileSize?: boolean
-        type?: boolean
+        topicId?: boolean
         reason?: boolean
         uploadedById?: boolean
         approvedById?: boolean
+        topic?: boolean | Document$topicArgs<ExtArgs>
         uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
         approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
     }, ExtArgs["result"]["document"]>;
@@ -170007,27 +170542,31 @@ export namespace Prisma {
         uri?: boolean
         fileType?: boolean
         fileSize?: boolean
-        type?: boolean
+        topicId?: boolean
         reason?: boolean
         uploadedById?: boolean
         approvedById?: boolean
     };
-    export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "title" | "body" | "status" | "uri" | "fileType" | "fileSize" | "type" | "reason" | "uploadedById" | "approvedById", ExtArgs["result"]["document"]>;
+    export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "title" | "body" | "status" | "uri" | "fileType" | "fileSize" | "topicId" | "reason" | "uploadedById" | "approvedById", ExtArgs["result"]["document"]>;
     export type DocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        topic?: boolean | Document$topicArgs<ExtArgs>
         uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
         approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
     };
     export type DocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        topic?: boolean | Document$topicArgs<ExtArgs>
         uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
         approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
     };
     export type DocumentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        topic?: boolean | Document$topicArgs<ExtArgs>
         uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
         approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
     };
     export type $DocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "Document"
         objects: {
+            topic: Prisma.$TopicPayload<ExtArgs> | null
             uploadedBy: Prisma.$UserProfilePayload<ExtArgs>
             approvedBy: Prisma.$UserProfilePayload<ExtArgs> | null
         }
@@ -170045,7 +170584,7 @@ export namespace Prisma {
             uri: string | null
             fileType: string | null
             fileSize: number | null
-            type: $Enums.DocumentType
+            topicId: string | null
             reason: string | null
             uploadedById: string
             approvedById: string | null
@@ -170434,6 +170973,24 @@ export namespace Prisma {
         limit?: number
     };
     /**
+     * Document.topic
+     */
+    export type Document$topicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
+        where?: TopicWhereInput
+    };
+    /**
      * Document.approvedBy
      */
     export type Document$approvedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -170487,7 +171044,7 @@ export namespace Prisma {
         question: string | null
         answer: string | null
         status: $Enums.DocumentStatus | null
-        type: $Enums.DocumentType | null
+        topicId: string | null
         reason: string | null
         uploadedById: string | null
         approvedById: string | null
@@ -170503,7 +171060,7 @@ export namespace Prisma {
         question: string | null
         answer: string | null
         status: $Enums.DocumentStatus | null
-        type: $Enums.DocumentType | null
+        topicId: string | null
         reason: string | null
         uploadedById: string | null
         approvedById: string | null
@@ -170519,7 +171076,7 @@ export namespace Prisma {
         question: number
         answer: number
         status: number
-        type: number
+        topicId: number
         reason: number
         uploadedById: number
         approvedById: number
@@ -170536,7 +171093,7 @@ export namespace Prisma {
         question?: true
         answer?: true
         status?: true
-        type?: true
+        topicId?: true
         reason?: true
         uploadedById?: true
         approvedById?: true
@@ -170552,7 +171109,7 @@ export namespace Prisma {
         question?: true
         answer?: true
         status?: true
-        type?: true
+        topicId?: true
         reason?: true
         uploadedById?: true
         approvedById?: true
@@ -170568,7 +171125,7 @@ export namespace Prisma {
         question?: true
         answer?: true
         status?: true
-        type?: true
+        topicId?: true
         reason?: true
         uploadedById?: true
         approvedById?: true
@@ -170651,7 +171208,7 @@ export namespace Prisma {
         question: string | null
         answer: string | null
         status: $Enums.DocumentStatus
-        type: $Enums.DocumentType
+        topicId: string | null
         reason: string | null
         uploadedById: string
         approvedById: string | null
@@ -170682,10 +171239,11 @@ export namespace Prisma {
         question?: boolean
         answer?: boolean
         status?: boolean
-        type?: boolean
+        topicId?: boolean
         reason?: boolean
         uploadedById?: boolean
         approvedById?: boolean
+        topic?: boolean | FAQ$topicArgs<ExtArgs>
         uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
         approvedBy?: boolean | FAQ$approvedByArgs<ExtArgs>
     }, ExtArgs["result"]["fAQ"]>;
@@ -170700,10 +171258,11 @@ export namespace Prisma {
         question?: boolean
         answer?: boolean
         status?: boolean
-        type?: boolean
+        topicId?: boolean
         reason?: boolean
         uploadedById?: boolean
         approvedById?: boolean
+        topic?: boolean | FAQ$topicArgs<ExtArgs>
         uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
         approvedBy?: boolean | FAQ$approvedByArgs<ExtArgs>
     }, ExtArgs["result"]["fAQ"]>;
@@ -170718,10 +171277,11 @@ export namespace Prisma {
         question?: boolean
         answer?: boolean
         status?: boolean
-        type?: boolean
+        topicId?: boolean
         reason?: boolean
         uploadedById?: boolean
         approvedById?: boolean
+        topic?: boolean | FAQ$topicArgs<ExtArgs>
         uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
         approvedBy?: boolean | FAQ$approvedByArgs<ExtArgs>
     }, ExtArgs["result"]["fAQ"]>;
@@ -170736,27 +171296,31 @@ export namespace Prisma {
         question?: boolean
         answer?: boolean
         status?: boolean
-        type?: boolean
+        topicId?: boolean
         reason?: boolean
         uploadedById?: boolean
         approvedById?: boolean
     };
-    export type FAQOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "question" | "answer" | "status" | "type" | "reason" | "uploadedById" | "approvedById", ExtArgs["result"]["fAQ"]>;
+    export type FAQOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "question" | "answer" | "status" | "topicId" | "reason" | "uploadedById" | "approvedById", ExtArgs["result"]["fAQ"]>;
     export type FAQInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        topic?: boolean | FAQ$topicArgs<ExtArgs>
         uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
         approvedBy?: boolean | FAQ$approvedByArgs<ExtArgs>
     };
     export type FAQIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        topic?: boolean | FAQ$topicArgs<ExtArgs>
         uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
         approvedBy?: boolean | FAQ$approvedByArgs<ExtArgs>
     };
     export type FAQIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        topic?: boolean | FAQ$topicArgs<ExtArgs>
         uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
         approvedBy?: boolean | FAQ$approvedByArgs<ExtArgs>
     };
     export type $FAQPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "FAQ"
         objects: {
+            topic: Prisma.$TopicPayload<ExtArgs> | null
             uploadedBy: Prisma.$UserProfilePayload<ExtArgs>
             approvedBy: Prisma.$UserProfilePayload<ExtArgs> | null
         }
@@ -170771,7 +171335,7 @@ export namespace Prisma {
             question: string | null
             answer: string | null
             status: $Enums.DocumentStatus
-            type: $Enums.DocumentType
+            topicId: string | null
             reason: string | null
             uploadedById: string
             approvedById: string | null
@@ -171160,6 +171724,24 @@ export namespace Prisma {
         limit?: number
     };
     /**
+     * FAQ.topic
+     */
+    export type FAQ$topicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
+        where?: TopicWhereInput
+    };
+    /**
      * FAQ.approvedBy
      */
     export type FAQ$approvedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -171212,7 +171794,7 @@ export namespace Prisma {
         updatedAt: Date | null
         prompt: string | null
         status: $Enums.DocumentStatus | null
-        type: $Enums.DocumentType | null
+        topicId: string | null
         reason: string | null
     };
     export type PromptMaxAggregateOutputType = {
@@ -171225,7 +171807,7 @@ export namespace Prisma {
         updatedAt: Date | null
         prompt: string | null
         status: $Enums.DocumentStatus | null
-        type: $Enums.DocumentType | null
+        topicId: string | null
         reason: string | null
     };
     export type PromptCountAggregateOutputType = {
@@ -171238,7 +171820,7 @@ export namespace Prisma {
         updatedAt: number
         prompt: number
         status: number
-        type: number
+        topicId: number
         reason: number
         _all: number
     };
@@ -171252,7 +171834,7 @@ export namespace Prisma {
         updatedAt?: true
         prompt?: true
         status?: true
-        type?: true
+        topicId?: true
         reason?: true
     };
     export type PromptMaxAggregateInputType = {
@@ -171265,7 +171847,7 @@ export namespace Prisma {
         updatedAt?: true
         prompt?: true
         status?: true
-        type?: true
+        topicId?: true
         reason?: true
     };
     export type PromptCountAggregateInputType = {
@@ -171278,7 +171860,7 @@ export namespace Prisma {
         updatedAt?: true
         prompt?: true
         status?: true
-        type?: true
+        topicId?: true
         reason?: true
         _all?: true
     };
@@ -171358,7 +171940,7 @@ export namespace Prisma {
         updatedAt: Date
         prompt: string | null
         status: $Enums.DocumentStatus
-        type: $Enums.DocumentType
+        topicId: string | null
         reason: string | null
         _count: PromptCountAggregateOutputType | null
         _min: PromptMinAggregateOutputType | null
@@ -171386,8 +171968,9 @@ export namespace Prisma {
         updatedAt?: boolean
         prompt?: boolean
         status?: boolean
-        type?: boolean
+        topicId?: boolean
         reason?: boolean
+        topic?: boolean | Prompt$topicArgs<ExtArgs>
     }, ExtArgs["result"]["prompt"]>;
     export type PromptSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -171399,8 +171982,9 @@ export namespace Prisma {
         updatedAt?: boolean
         prompt?: boolean
         status?: boolean
-        type?: boolean
+        topicId?: boolean
         reason?: boolean
+        topic?: boolean | Prompt$topicArgs<ExtArgs>
     }, ExtArgs["result"]["prompt"]>;
     export type PromptSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -171412,8 +171996,9 @@ export namespace Prisma {
         updatedAt?: boolean
         prompt?: boolean
         status?: boolean
-        type?: boolean
+        topicId?: boolean
         reason?: boolean
+        topic?: boolean | Prompt$topicArgs<ExtArgs>
     }, ExtArgs["result"]["prompt"]>;
     export type PromptSelectScalar = {
         id?: boolean
@@ -171425,13 +172010,24 @@ export namespace Prisma {
         updatedAt?: boolean
         prompt?: boolean
         status?: boolean
-        type?: boolean
+        topicId?: boolean
         reason?: boolean
     };
-    export type PromptOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "prompt" | "status" | "type" | "reason", ExtArgs["result"]["prompt"]>;
+    export type PromptOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "prompt" | "status" | "topicId" | "reason", ExtArgs["result"]["prompt"]>;
+    export type PromptInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        topic?: boolean | Prompt$topicArgs<ExtArgs>
+    };
+    export type PromptIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        topic?: boolean | Prompt$topicArgs<ExtArgs>
+    };
+    export type PromptIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        topic?: boolean | Prompt$topicArgs<ExtArgs>
+    };
     export type $PromptPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "Prompt"
-        objects: {}
+        objects: {
+            topic: Prisma.$TopicPayload<ExtArgs> | null
+        }
         scalars: $Extensions.GetPayloadResult<{
             id: string
             code: string | null
@@ -171442,7 +172038,7 @@ export namespace Prisma {
             updatedAt: Date
             prompt: string | null
             status: $Enums.DocumentStatus
-            type: $Enums.DocumentType
+            topicId: string | null
             reason: string | null
         }, ExtArgs["result"]["prompt"]>
         composites: {}
@@ -171464,6 +172060,10 @@ export namespace Prisma {
          */
         omit?: PromptOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: PromptInclude<ExtArgs> | null
+        /**
          * Filter, which Prompt to fetch.
          */
         where: PromptWhereUniqueInput
@@ -171481,6 +172081,10 @@ export namespace Prisma {
          */
         omit?: PromptOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: PromptInclude<ExtArgs> | null
+        /**
          * Filter, which Prompt to fetch.
          */
         where: PromptWhereUniqueInput
@@ -171497,6 +172101,10 @@ export namespace Prisma {
          * Omit specific fields from the Prompt
          */
         omit?: PromptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: PromptInclude<ExtArgs> | null
         /**
          * Filter, which Prompt to fetch.
          */
@@ -171545,6 +172153,10 @@ export namespace Prisma {
          */
         omit?: PromptOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: PromptInclude<ExtArgs> | null
+        /**
          * Filter, which Prompt to fetch.
          */
         where?: PromptWhereInput
@@ -171592,6 +172204,10 @@ export namespace Prisma {
          */
         omit?: PromptOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: PromptInclude<ExtArgs> | null
+        /**
          * Filter, which Prompts to fetch.
          */
         where?: PromptWhereInput
@@ -171634,9 +172250,13 @@ export namespace Prisma {
          */
         omit?: PromptOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: PromptInclude<ExtArgs> | null
+        /**
          * The data needed to create a Prompt.
          */
-        data: XOR<PromptCreateInput, PromptUncheckedCreateInput>
+        data?: XOR<PromptCreateInput, PromptUncheckedCreateInput>
     };
     /**
      * Prompt createMany
@@ -171665,6 +172285,10 @@ export namespace Prisma {
          */
         data: PromptCreateManyInput | PromptCreateManyInput[]
         skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: PromptIncludeCreateManyAndReturn<ExtArgs> | null
     };
     /**
      * Prompt update
@@ -171678,6 +172302,10 @@ export namespace Prisma {
          * Omit specific fields from the Prompt
          */
         omit?: PromptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: PromptInclude<ExtArgs> | null
         /**
          * The data needed to update a Prompt.
          */
@@ -171728,6 +172356,10 @@ export namespace Prisma {
          * Limit how many Prompts to update.
          */
         limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: PromptIncludeUpdateManyAndReturn<ExtArgs> | null
     };
     /**
      * Prompt upsert
@@ -171741,6 +172373,10 @@ export namespace Prisma {
          * Omit specific fields from the Prompt
          */
         omit?: PromptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: PromptInclude<ExtArgs> | null
         /**
          * The filter to search for the Prompt to update in case it exists.
          */
@@ -171767,6 +172403,10 @@ export namespace Prisma {
          */
         omit?: PromptOmit<ExtArgs> | null
         /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: PromptInclude<ExtArgs> | null
+        /**
          * Filter which Prompt to delete.
          */
         where: PromptWhereUniqueInput
@@ -171785,6 +172425,24 @@ export namespace Prisma {
         limit?: number
     };
     /**
+     * Prompt.topic
+     */
+    export type Prompt$topicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
+        where?: TopicWhereInput
+    };
+    /**
      * Prompt without action
      */
     export type PromptDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -171796,6 +172454,10 @@ export namespace Prisma {
          * Omit specific fields from the Prompt
          */
         omit?: PromptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: PromptInclude<ExtArgs> | null
     };
     /**
      * Model Conversation
@@ -171816,7 +172478,7 @@ export namespace Prisma {
         name: string | null
         userId: string | null
         sessionId: string | null
-        type: $Enums.DocumentType | null
+        topicId: string | null
     };
     export type ConversationMaxAggregateOutputType = {
         id: string | null
@@ -171829,7 +172491,7 @@ export namespace Prisma {
         name: string | null
         userId: string | null
         sessionId: string | null
-        type: $Enums.DocumentType | null
+        topicId: string | null
     };
     export type ConversationCountAggregateOutputType = {
         id: number
@@ -171842,7 +172504,7 @@ export namespace Prisma {
         name: number
         userId: number
         sessionId: number
-        type: number
+        topicId: number
         _all: number
     };
     export type ConversationMinAggregateInputType = {
@@ -171856,7 +172518,7 @@ export namespace Prisma {
         name?: true
         userId?: true
         sessionId?: true
-        type?: true
+        topicId?: true
     };
     export type ConversationMaxAggregateInputType = {
         id?: true
@@ -171869,7 +172531,7 @@ export namespace Prisma {
         name?: true
         userId?: true
         sessionId?: true
-        type?: true
+        topicId?: true
     };
     export type ConversationCountAggregateInputType = {
         id?: true
@@ -171882,7 +172544,7 @@ export namespace Prisma {
         name?: true
         userId?: true
         sessionId?: true
-        type?: true
+        topicId?: true
         _all?: true
     };
     export type ConversationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -171962,7 +172624,7 @@ export namespace Prisma {
         name: string | null
         userId: string | null
         sessionId: string | null
-        type: $Enums.DocumentType | null
+        topicId: string | null
         _count: ConversationCountAggregateOutputType | null
         _min: ConversationMinAggregateOutputType | null
         _max: ConversationMaxAggregateOutputType | null
@@ -171990,9 +172652,10 @@ export namespace Prisma {
         name?: boolean
         userId?: boolean
         sessionId?: boolean
-        type?: boolean
+        topicId?: boolean
         user?: boolean | Conversation$userArgs<ExtArgs>
         session?: boolean | Conversation$sessionArgs<ExtArgs>
+        topic?: boolean | Conversation$topicArgs<ExtArgs>
         message?: boolean | Conversation$messageArgs<ExtArgs>
         _count?: boolean | ConversationCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["conversation"]>;
@@ -172007,9 +172670,10 @@ export namespace Prisma {
         name?: boolean
         userId?: boolean
         sessionId?: boolean
-        type?: boolean
+        topicId?: boolean
         user?: boolean | Conversation$userArgs<ExtArgs>
         session?: boolean | Conversation$sessionArgs<ExtArgs>
+        topic?: boolean | Conversation$topicArgs<ExtArgs>
     }, ExtArgs["result"]["conversation"]>;
     export type ConversationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -172022,9 +172686,10 @@ export namespace Prisma {
         name?: boolean
         userId?: boolean
         sessionId?: boolean
-        type?: boolean
+        topicId?: boolean
         user?: boolean | Conversation$userArgs<ExtArgs>
         session?: boolean | Conversation$sessionArgs<ExtArgs>
+        topic?: boolean | Conversation$topicArgs<ExtArgs>
     }, ExtArgs["result"]["conversation"]>;
     export type ConversationSelectScalar = {
         id?: boolean
@@ -172037,28 +172702,32 @@ export namespace Prisma {
         name?: boolean
         userId?: boolean
         sessionId?: boolean
-        type?: boolean
+        topicId?: boolean
     };
-    export type ConversationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "userId" | "sessionId" | "type", ExtArgs["result"]["conversation"]>;
+    export type ConversationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "userId" | "sessionId" | "topicId", ExtArgs["result"]["conversation"]>;
     export type ConversationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         user?: boolean | Conversation$userArgs<ExtArgs>
         session?: boolean | Conversation$sessionArgs<ExtArgs>
+        topic?: boolean | Conversation$topicArgs<ExtArgs>
         message?: boolean | Conversation$messageArgs<ExtArgs>
         _count?: boolean | ConversationCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type ConversationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         user?: boolean | Conversation$userArgs<ExtArgs>
         session?: boolean | Conversation$sessionArgs<ExtArgs>
+        topic?: boolean | Conversation$topicArgs<ExtArgs>
     };
     export type ConversationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         user?: boolean | Conversation$userArgs<ExtArgs>
         session?: boolean | Conversation$sessionArgs<ExtArgs>
+        topic?: boolean | Conversation$topicArgs<ExtArgs>
     };
     export type $ConversationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "Conversation"
         objects: {
             user: Prisma.$UserProfilePayload<ExtArgs> | null
             session: Prisma.$UserSessionPayload<ExtArgs> | null
+            topic: Prisma.$TopicPayload<ExtArgs> | null
             message: Prisma.$MessagePayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -172072,7 +172741,7 @@ export namespace Prisma {
             name: string | null
             userId: string | null
             sessionId: string | null
-            type: $Enums.DocumentType | null
+            topicId: string | null
         }, ExtArgs["result"]["conversation"]>
         composites: {}
     };
@@ -172492,6 +173161,24 @@ export namespace Prisma {
          */
         include?: UserSessionInclude<ExtArgs> | null
         where?: UserSessionWhereInput
+    };
+    /**
+     * Conversation.topic
+     */
+    export type Conversation$topicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
+        where?: TopicWhereInput
     };
     /**
      * Conversation.message
@@ -173203,6 +173890,736 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: MessageInclude<ExtArgs> | null
+    };
+    /**
+     * Model Topic
+     */
+    export type AggregateTopic = {
+        _count: TopicCountAggregateOutputType | null
+        _min: TopicMinAggregateOutputType | null
+        _max: TopicMaxAggregateOutputType | null
+    };
+    export type TopicMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        name: string | null
+        type: string | null
+    };
+    export type TopicMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        name: string | null
+        type: string | null
+    };
+    export type TopicCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        name: number
+        type: number
+        _all: number
+    };
+    export type TopicMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        type?: true
+    };
+    export type TopicMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        type?: true
+    };
+    export type TopicCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        type?: true
+        _all?: true
+    };
+    export type TopicAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which Topic to aggregate.
+         */
+        where?: TopicWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of Topics to fetch.
+         */
+        orderBy?: TopicOrderByWithRelationInput | TopicOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: TopicWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` Topics from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` Topics.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned Topics
+        **/
+        _count?: true | TopicCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: TopicMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: TopicMaxAggregateInputType
+    };
+    export type GetTopicAggregateType<T extends TopicAggregateArgs> = {
+        [P in keyof T & keyof AggregateTopic]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTopic[P]>
+        : GetScalarType<T[P], AggregateTopic[P]>
+    };
+    export type TopicGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: TopicWhereInput
+        orderBy?: TopicOrderByWithAggregationInput | TopicOrderByWithAggregationInput[]
+        by: TopicScalarFieldEnum[] | TopicScalarFieldEnum
+        having?: TopicScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: TopicCountAggregateInputType | true
+        _min?: TopicMinAggregateInputType
+        _max?: TopicMaxAggregateInputType
+    };
+    export type TopicGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        name: string
+        type: string
+        _count: TopicCountAggregateOutputType | null
+        _min: TopicMinAggregateOutputType | null
+        _max: TopicMaxAggregateOutputType | null
+    };
+    type GetTopicGroupByPayload<T extends TopicGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<TopicGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof TopicGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], TopicGroupByOutputType[P]>
+                : GetScalarType<T[P], TopicGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type TopicSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        type?: boolean
+        documents?: boolean | Topic$documentsArgs<ExtArgs>
+        faqs?: boolean | Topic$faqsArgs<ExtArgs>
+        prompts?: boolean | Topic$promptsArgs<ExtArgs>
+        conversations?: boolean | Topic$conversationsArgs<ExtArgs>
+        _count?: boolean | TopicCountOutputTypeDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["topic"]>;
+    export type TopicSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        type?: boolean
+    }, ExtArgs["result"]["topic"]>;
+    export type TopicSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        type?: boolean
+    }, ExtArgs["result"]["topic"]>;
+    export type TopicSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        type?: boolean
+    };
+    export type TopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "type", ExtArgs["result"]["topic"]>;
+    export type TopicInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        documents?: boolean | Topic$documentsArgs<ExtArgs>
+        faqs?: boolean | Topic$faqsArgs<ExtArgs>
+        prompts?: boolean | Topic$promptsArgs<ExtArgs>
+        conversations?: boolean | Topic$conversationsArgs<ExtArgs>
+        _count?: boolean | TopicCountOutputTypeDefaultArgs<ExtArgs>
+    };
+    export type TopicIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type TopicIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type $TopicPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "Topic"
+        objects: {
+            documents: Prisma.$DocumentPayload<ExtArgs>[]
+            faqs: Prisma.$FAQPayload<ExtArgs>[]
+            prompts: Prisma.$PromptPayload<ExtArgs>[]
+            conversations: Prisma.$ConversationPayload<ExtArgs>[]
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            name: string
+            type: string
+        }, ExtArgs["result"]["topic"]>
+        composites: {}
+    };
+    type TopicGetPayload<S extends boolean | null | undefined | TopicDefaultArgs> = $Result.GetResult<Prisma.$TopicPayload, S>;
+    type TopicCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<TopicFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: TopicCountAggregateInputType | true
+    };
+    /**
+     * Topic findUnique
+     */
+    export type TopicFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
+        /**
+         * Filter, which Topic to fetch.
+         */
+        where: TopicWhereUniqueInput
+    };
+    /**
+     * Topic findUniqueOrThrow
+     */
+    export type TopicFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
+        /**
+         * Filter, which Topic to fetch.
+         */
+        where: TopicWhereUniqueInput
+    };
+    /**
+     * Topic findFirst
+     */
+    export type TopicFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
+        /**
+         * Filter, which Topic to fetch.
+         */
+        where?: TopicWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of Topics to fetch.
+         */
+        orderBy?: TopicOrderByWithRelationInput | TopicOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for Topics.
+         */
+        cursor?: TopicWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` Topics from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` Topics.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of Topics.
+         */
+        distinct?: TopicScalarFieldEnum | TopicScalarFieldEnum[]
+    };
+    /**
+     * Topic findFirstOrThrow
+     */
+    export type TopicFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
+        /**
+         * Filter, which Topic to fetch.
+         */
+        where?: TopicWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of Topics to fetch.
+         */
+        orderBy?: TopicOrderByWithRelationInput | TopicOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for Topics.
+         */
+        cursor?: TopicWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` Topics from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` Topics.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of Topics.
+         */
+        distinct?: TopicScalarFieldEnum | TopicScalarFieldEnum[]
+    };
+    /**
+     * Topic findMany
+     */
+    export type TopicFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
+        /**
+         * Filter, which Topics to fetch.
+         */
+        where?: TopicWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of Topics to fetch.
+         */
+        orderBy?: TopicOrderByWithRelationInput | TopicOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing Topics.
+         */
+        cursor?: TopicWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` Topics from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` Topics.
+         */
+        skip?: number
+        distinct?: TopicScalarFieldEnum | TopicScalarFieldEnum[]
+    };
+    /**
+     * Topic create
+     */
+    export type TopicCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
+        /**
+         * The data needed to create a Topic.
+         */
+        data: XOR<TopicCreateInput, TopicUncheckedCreateInput>
+    };
+    /**
+     * Topic createMany
+     */
+    export type TopicCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many Topics.
+         */
+        data: TopicCreateManyInput | TopicCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * Topic createManyAndReturn
+     */
+    export type TopicCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * The data used to create many Topics.
+         */
+        data: TopicCreateManyInput | TopicCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * Topic update
+     */
+    export type TopicUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
+        /**
+         * The data needed to update a Topic.
+         */
+        data: XOR<TopicUpdateInput, TopicUncheckedUpdateInput>
+        /**
+         * Choose, which Topic to update.
+         */
+        where: TopicWhereUniqueInput
+    };
+    /**
+     * Topic updateMany
+     */
+    export type TopicUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update Topics.
+         */
+        data: XOR<TopicUpdateManyMutationInput, TopicUncheckedUpdateManyInput>
+        /**
+         * Filter which Topics to update
+         */
+        where?: TopicWhereInput
+        /**
+         * Limit how many Topics to update.
+         */
+        limit?: number
+    };
+    /**
+     * Topic updateManyAndReturn
+     */
+    export type TopicUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * The data used to update Topics.
+         */
+        data: XOR<TopicUpdateManyMutationInput, TopicUncheckedUpdateManyInput>
+        /**
+         * Filter which Topics to update
+         */
+        where?: TopicWhereInput
+        /**
+         * Limit how many Topics to update.
+         */
+        limit?: number
+    };
+    /**
+     * Topic upsert
+     */
+    export type TopicUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
+        /**
+         * The filter to search for the Topic to update in case it exists.
+         */
+        where: TopicWhereUniqueInput
+        /**
+         * In case the Topic found by the `where` argument doesn't exist, create a new Topic with this data.
+         */
+        create: XOR<TopicCreateInput, TopicUncheckedCreateInput>
+        /**
+         * In case the Topic was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<TopicUpdateInput, TopicUncheckedUpdateInput>
+    };
+    /**
+     * Topic delete
+     */
+    export type TopicDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
+        /**
+         * Filter which Topic to delete.
+         */
+        where: TopicWhereUniqueInput
+    };
+    /**
+     * Topic deleteMany
+     */
+    export type TopicDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which Topics to delete
+         */
+        where?: TopicWhereInput
+        /**
+         * Limit how many Topics to delete.
+         */
+        limit?: number
+    };
+    /**
+     * Topic.documents
+     */
+    export type Topic$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Document
+         */
+        select?: DocumentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Document
+         */
+        omit?: DocumentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: DocumentInclude<ExtArgs> | null
+        where?: DocumentWhereInput
+        orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
+        cursor?: DocumentWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
+    };
+    /**
+     * Topic.faqs
+     */
+    export type Topic$faqsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FAQ
+         */
+        select?: FAQSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FAQ
+         */
+        omit?: FAQOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FAQInclude<ExtArgs> | null
+        where?: FAQWhereInput
+        orderBy?: FAQOrderByWithRelationInput | FAQOrderByWithRelationInput[]
+        cursor?: FAQWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: FAQScalarFieldEnum | FAQScalarFieldEnum[]
+    };
+    /**
+     * Topic.prompts
+     */
+    export type Topic$promptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Prompt
+         */
+        select?: PromptSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Prompt
+         */
+        omit?: PromptOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: PromptInclude<ExtArgs> | null
+        where?: PromptWhereInput
+        orderBy?: PromptOrderByWithRelationInput | PromptOrderByWithRelationInput[]
+        cursor?: PromptWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: PromptScalarFieldEnum | PromptScalarFieldEnum[]
+    };
+    /**
+     * Topic.conversations
+     */
+    export type Topic$conversationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Conversation
+         */
+        select?: ConversationSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Conversation
+         */
+        omit?: ConversationOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ConversationInclude<ExtArgs> | null
+        where?: ConversationWhereInput
+        orderBy?: ConversationOrderByWithRelationInput | ConversationOrderByWithRelationInput[]
+        cursor?: ConversationWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ConversationScalarFieldEnum | ConversationScalarFieldEnum[]
+    };
+    /**
+     * Topic without action
+     */
+    export type TopicDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Topic
+         */
+        select?: TopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Topic
+         */
+        omit?: TopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TopicInclude<ExtArgs> | null
     };
     /**
      * Model DM_CapBac
@@ -290377,6 +291794,7 @@ export namespace Prisma {
     export type PromptScalarFieldEnum = (typeof PromptScalarFieldEnum)[keyof typeof PromptScalarFieldEnum];
     export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum];
     export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum];
+    export type TopicScalarFieldEnum = (typeof TopicScalarFieldEnum)[keyof typeof TopicScalarFieldEnum];
     export type DM_CapBacScalarFieldEnum = (typeof DM_CapBacScalarFieldEnum)[keyof typeof DM_CapBacScalarFieldEnum];
     export type DM_ChucDanhScalarFieldEnum = (typeof DM_ChucDanhScalarFieldEnum)[keyof typeof DM_ChucDanhScalarFieldEnum];
     export type DM_ChucVuScalarFieldEnum = (typeof DM_ChucVuScalarFieldEnum)[keyof typeof DM_ChucVuScalarFieldEnum];
@@ -290605,6 +292023,7 @@ export namespace Prisma {
     export type PromptOrderByRelevanceFieldEnum = (typeof PromptOrderByRelevanceFieldEnum)[keyof typeof PromptOrderByRelevanceFieldEnum];
     export type ConversationOrderByRelevanceFieldEnum = (typeof ConversationOrderByRelevanceFieldEnum)[keyof typeof ConversationOrderByRelevanceFieldEnum];
     export type MessageOrderByRelevanceFieldEnum = (typeof MessageOrderByRelevanceFieldEnum)[keyof typeof MessageOrderByRelevanceFieldEnum];
+    export type TopicOrderByRelevanceFieldEnum = (typeof TopicOrderByRelevanceFieldEnum)[keyof typeof TopicOrderByRelevanceFieldEnum];
     export type DM_CapBacOrderByRelevanceFieldEnum = (typeof DM_CapBacOrderByRelevanceFieldEnum)[keyof typeof DM_CapBacOrderByRelevanceFieldEnum];
     export type DM_ChucDanhOrderByRelevanceFieldEnum = (typeof DM_ChucDanhOrderByRelevanceFieldEnum)[keyof typeof DM_ChucDanhOrderByRelevanceFieldEnum];
     export type DM_ChucVuOrderByRelevanceFieldEnum = (typeof DM_ChucVuOrderByRelevanceFieldEnum)[keyof typeof DM_ChucVuOrderByRelevanceFieldEnum];
@@ -290977,14 +292396,6 @@ export namespace Prisma {
      * Reference to a field of type 'DocumentStatus[]'
      */
     export type ListEnumDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentStatus[]'>;
-    /**
-     * Reference to a field of type 'DocumentType'
-     */
-    export type EnumDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentType'>;
-    /**
-     * Reference to a field of type 'DocumentType[]'
-     */
-    export type ListEnumDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DocumentType[]'>;
     /**
      * Reference to a field of type 'MessageSender'
      */
@@ -297699,10 +299110,11 @@ export namespace Prisma {
         uri?: StringNullableFilter<"Document"> | string | null
         fileType?: StringNullableFilter<"Document"> | string | null
         fileSize?: IntNullableFilter<"Document"> | number | null
-        type?: EnumDocumentTypeFilter<"Document"> | $Enums.DocumentType
+        topicId?: StringNullableFilter<"Document"> | string | null
         reason?: StringNullableFilter<"Document"> | string | null
         uploadedById?: StringFilter<"Document"> | string
         approvedById?: StringNullableFilter<"Document"> | string | null
+        topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
         uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
         approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
     };
@@ -297720,10 +299132,11 @@ export namespace Prisma {
         uri?: SortOrderInput | SortOrder
         fileType?: SortOrderInput | SortOrder
         fileSize?: SortOrderInput | SortOrder
-        type?: SortOrder
+        topicId?: SortOrderInput | SortOrder
         reason?: SortOrderInput | SortOrder
         uploadedById?: SortOrder
         approvedById?: SortOrderInput | SortOrder
+        topic?: TopicOrderByWithRelationInput
         uploadedBy?: UserProfileOrderByWithRelationInput
         approvedBy?: UserProfileOrderByWithRelationInput
         _relevance?: DocumentOrderByRelevanceInput
@@ -297745,10 +299158,11 @@ export namespace Prisma {
         uri?: StringNullableFilter<"Document"> | string | null
         fileType?: StringNullableFilter<"Document"> | string | null
         fileSize?: IntNullableFilter<"Document"> | number | null
-        type?: EnumDocumentTypeFilter<"Document"> | $Enums.DocumentType
+        topicId?: StringNullableFilter<"Document"> | string | null
         reason?: StringNullableFilter<"Document"> | string | null
         uploadedById?: StringFilter<"Document"> | string
         approvedById?: StringNullableFilter<"Document"> | string | null
+        topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
         uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
         approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
     }, "id" | "code">;
@@ -297766,7 +299180,7 @@ export namespace Prisma {
         uri?: SortOrderInput | SortOrder
         fileType?: SortOrderInput | SortOrder
         fileSize?: SortOrderInput | SortOrder
-        type?: SortOrder
+        topicId?: SortOrderInput | SortOrder
         reason?: SortOrderInput | SortOrder
         uploadedById?: SortOrder
         approvedById?: SortOrderInput | SortOrder
@@ -297793,7 +299207,7 @@ export namespace Prisma {
         uri?: StringNullableWithAggregatesFilter<"Document"> | string | null
         fileType?: StringNullableWithAggregatesFilter<"Document"> | string | null
         fileSize?: IntNullableWithAggregatesFilter<"Document"> | number | null
-        type?: EnumDocumentTypeWithAggregatesFilter<"Document"> | $Enums.DocumentType
+        topicId?: StringNullableWithAggregatesFilter<"Document"> | string | null
         reason?: StringNullableWithAggregatesFilter<"Document"> | string | null
         uploadedById?: StringWithAggregatesFilter<"Document"> | string
         approvedById?: StringNullableWithAggregatesFilter<"Document"> | string | null
@@ -297812,10 +299226,11 @@ export namespace Prisma {
         question?: StringNullableFilter<"FAQ"> | string | null
         answer?: StringNullableFilter<"FAQ"> | string | null
         status?: EnumDocumentStatusFilter<"FAQ"> | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFilter<"FAQ"> | $Enums.DocumentType
+        topicId?: StringNullableFilter<"FAQ"> | string | null
         reason?: StringNullableFilter<"FAQ"> | string | null
         uploadedById?: StringFilter<"FAQ"> | string
         approvedById?: StringNullableFilter<"FAQ"> | string | null
+        topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
         uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
         approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
     };
@@ -297830,10 +299245,11 @@ export namespace Prisma {
         question?: SortOrderInput | SortOrder
         answer?: SortOrderInput | SortOrder
         status?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrderInput | SortOrder
         reason?: SortOrderInput | SortOrder
         uploadedById?: SortOrder
         approvedById?: SortOrderInput | SortOrder
+        topic?: TopicOrderByWithRelationInput
         uploadedBy?: UserProfileOrderByWithRelationInput
         approvedBy?: UserProfileOrderByWithRelationInput
         _relevance?: FAQOrderByRelevanceInput
@@ -297852,10 +299268,11 @@ export namespace Prisma {
         question?: StringNullableFilter<"FAQ"> | string | null
         answer?: StringNullableFilter<"FAQ"> | string | null
         status?: EnumDocumentStatusFilter<"FAQ"> | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFilter<"FAQ"> | $Enums.DocumentType
+        topicId?: StringNullableFilter<"FAQ"> | string | null
         reason?: StringNullableFilter<"FAQ"> | string | null
         uploadedById?: StringFilter<"FAQ"> | string
         approvedById?: StringNullableFilter<"FAQ"> | string | null
+        topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
         uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
         approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
     }, "id" | "code">;
@@ -297870,7 +299287,7 @@ export namespace Prisma {
         question?: SortOrderInput | SortOrder
         answer?: SortOrderInput | SortOrder
         status?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrderInput | SortOrder
         reason?: SortOrderInput | SortOrder
         uploadedById?: SortOrder
         approvedById?: SortOrderInput | SortOrder
@@ -297892,7 +299309,7 @@ export namespace Prisma {
         question?: StringNullableWithAggregatesFilter<"FAQ"> | string | null
         answer?: StringNullableWithAggregatesFilter<"FAQ"> | string | null
         status?: EnumDocumentStatusWithAggregatesFilter<"FAQ"> | $Enums.DocumentStatus
-        type?: EnumDocumentTypeWithAggregatesFilter<"FAQ"> | $Enums.DocumentType
+        topicId?: StringNullableWithAggregatesFilter<"FAQ"> | string | null
         reason?: StringNullableWithAggregatesFilter<"FAQ"> | string | null
         uploadedById?: StringWithAggregatesFilter<"FAQ"> | string
         approvedById?: StringNullableWithAggregatesFilter<"FAQ"> | string | null
@@ -297910,8 +299327,9 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"Prompt"> | Date | string
         prompt?: StringNullableFilter<"Prompt"> | string | null
         status?: EnumDocumentStatusFilter<"Prompt"> | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFilter<"Prompt"> | $Enums.DocumentType
+        topicId?: StringNullableFilter<"Prompt"> | string | null
         reason?: StringNullableFilter<"Prompt"> | string | null
+        topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
     };
     export type PromptOrderByWithRelationInput = {
         id?: SortOrder
@@ -297923,8 +299341,9 @@ export namespace Prisma {
         updatedAt?: SortOrder
         prompt?: SortOrderInput | SortOrder
         status?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrderInput | SortOrder
         reason?: SortOrderInput | SortOrder
+        topic?: TopicOrderByWithRelationInput
         _relevance?: PromptOrderByRelevanceInput
     };
     export type PromptWhereUniqueInput = Prisma.AtLeast<{
@@ -297940,8 +299359,9 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"Prompt"> | Date | string
         prompt?: StringNullableFilter<"Prompt"> | string | null
         status?: EnumDocumentStatusFilter<"Prompt"> | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFilter<"Prompt"> | $Enums.DocumentType
+        topicId?: StringNullableFilter<"Prompt"> | string | null
         reason?: StringNullableFilter<"Prompt"> | string | null
+        topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
     }, "id" | "code">;
     export type PromptOrderByWithAggregationInput = {
         id?: SortOrder
@@ -297953,7 +299373,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         prompt?: SortOrderInput | SortOrder
         status?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrderInput | SortOrder
         reason?: SortOrderInput | SortOrder
         _count?: PromptCountOrderByAggregateInput
         _max?: PromptMaxOrderByAggregateInput
@@ -297972,7 +299392,7 @@ export namespace Prisma {
         updatedAt?: DateTimeWithAggregatesFilter<"Prompt"> | Date | string
         prompt?: StringNullableWithAggregatesFilter<"Prompt"> | string | null
         status?: EnumDocumentStatusWithAggregatesFilter<"Prompt"> | $Enums.DocumentStatus
-        type?: EnumDocumentTypeWithAggregatesFilter<"Prompt"> | $Enums.DocumentType
+        topicId?: StringNullableWithAggregatesFilter<"Prompt"> | string | null
         reason?: StringNullableWithAggregatesFilter<"Prompt"> | string | null
     };
     export type ConversationWhereInput = {
@@ -297989,9 +299409,10 @@ export namespace Prisma {
         name?: StringNullableFilter<"Conversation"> | string | null
         userId?: StringNullableFilter<"Conversation"> | string | null
         sessionId?: StringNullableFilter<"Conversation"> | string | null
-        type?: EnumDocumentTypeNullableFilter<"Conversation"> | $Enums.DocumentType | null
+        topicId?: StringNullableFilter<"Conversation"> | string | null
         user?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
         session?: XOR<UserSessionNullableScalarRelationFilter, UserSessionWhereInput> | null
+        topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
         message?: MessageListRelationFilter
     };
     export type ConversationOrderByWithRelationInput = {
@@ -298005,9 +299426,10 @@ export namespace Prisma {
         name?: SortOrderInput | SortOrder
         userId?: SortOrderInput | SortOrder
         sessionId?: SortOrderInput | SortOrder
-        type?: SortOrderInput | SortOrder
+        topicId?: SortOrderInput | SortOrder
         user?: UserProfileOrderByWithRelationInput
         session?: UserSessionOrderByWithRelationInput
+        topic?: TopicOrderByWithRelationInput
         message?: MessageOrderByRelationAggregateInput
         _relevance?: ConversationOrderByRelevanceInput
     };
@@ -298025,9 +299447,10 @@ export namespace Prisma {
         name?: StringNullableFilter<"Conversation"> | string | null
         userId?: StringNullableFilter<"Conversation"> | string | null
         sessionId?: StringNullableFilter<"Conversation"> | string | null
-        type?: EnumDocumentTypeNullableFilter<"Conversation"> | $Enums.DocumentType | null
+        topicId?: StringNullableFilter<"Conversation"> | string | null
         user?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
         session?: XOR<UserSessionNullableScalarRelationFilter, UserSessionWhereInput> | null
+        topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
         message?: MessageListRelationFilter
     }, "id" | "code">;
     export type ConversationOrderByWithAggregationInput = {
@@ -298041,7 +299464,7 @@ export namespace Prisma {
         name?: SortOrderInput | SortOrder
         userId?: SortOrderInput | SortOrder
         sessionId?: SortOrderInput | SortOrder
-        type?: SortOrderInput | SortOrder
+        topicId?: SortOrderInput | SortOrder
         _count?: ConversationCountOrderByAggregateInput
         _max?: ConversationMaxOrderByAggregateInput
         _min?: ConversationMinOrderByAggregateInput
@@ -298060,7 +299483,7 @@ export namespace Prisma {
         name?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
         userId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
         sessionId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
-        type?: EnumDocumentTypeNullableWithAggregatesFilter<"Conversation"> | $Enums.DocumentType | null
+        topicId?: StringNullableWithAggregatesFilter<"Conversation"> | string | null
     };
     export type MessageWhereInput = {
         AND?: MessageWhereInput | MessageWhereInput[]
@@ -298137,6 +299560,86 @@ export namespace Prisma {
         conversationId?: StringNullableWithAggregatesFilter<"Message"> | string | null
         content?: StringNullableWithAggregatesFilter<"Message"> | string | null
         sender?: EnumMessageSenderWithAggregatesFilter<"Message"> | $Enums.MessageSender
+    };
+    export type TopicWhereInput = {
+        AND?: TopicWhereInput | TopicWhereInput[]
+        OR?: TopicWhereInput[]
+        NOT?: TopicWhereInput | TopicWhereInput[]
+        id?: StringFilter<"Topic"> | string
+        code?: StringNullableFilter<"Topic"> | string | null
+        active?: BoolFilter<"Topic"> | boolean
+        description?: StringNullableFilter<"Topic"> | string | null
+        deletedAt?: DateTimeNullableFilter<"Topic"> | Date | string | null
+        createdAt?: DateTimeFilter<"Topic"> | Date | string
+        updatedAt?: DateTimeFilter<"Topic"> | Date | string
+        name?: StringFilter<"Topic"> | string
+        type?: StringFilter<"Topic"> | string
+        documents?: DocumentListRelationFilter
+        faqs?: FAQListRelationFilter
+        prompts?: PromptListRelationFilter
+        conversations?: ConversationListRelationFilter
+    };
+    export type TopicOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        type?: SortOrder
+        documents?: DocumentOrderByRelationAggregateInput
+        faqs?: FAQOrderByRelationAggregateInput
+        prompts?: PromptOrderByRelationAggregateInput
+        conversations?: ConversationOrderByRelationAggregateInput
+        _relevance?: TopicOrderByRelevanceInput
+    };
+    export type TopicWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: TopicWhereInput | TopicWhereInput[]
+        OR?: TopicWhereInput[]
+        NOT?: TopicWhereInput | TopicWhereInput[]
+        active?: BoolFilter<"Topic"> | boolean
+        description?: StringNullableFilter<"Topic"> | string | null
+        deletedAt?: DateTimeNullableFilter<"Topic"> | Date | string | null
+        createdAt?: DateTimeFilter<"Topic"> | Date | string
+        updatedAt?: DateTimeFilter<"Topic"> | Date | string
+        name?: StringFilter<"Topic"> | string
+        type?: StringFilter<"Topic"> | string
+        documents?: DocumentListRelationFilter
+        faqs?: FAQListRelationFilter
+        prompts?: PromptListRelationFilter
+        conversations?: ConversationListRelationFilter
+    }, "id" | "code">;
+    export type TopicOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        type?: SortOrder
+        _count?: TopicCountOrderByAggregateInput
+        _max?: TopicMaxOrderByAggregateInput
+        _min?: TopicMinOrderByAggregateInput
+    };
+    export type TopicScalarWhereWithAggregatesInput = {
+        AND?: TopicScalarWhereWithAggregatesInput | TopicScalarWhereWithAggregatesInput[]
+        OR?: TopicScalarWhereWithAggregatesInput[]
+        NOT?: TopicScalarWhereWithAggregatesInput | TopicScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"Topic"> | string
+        code?: StringNullableWithAggregatesFilter<"Topic"> | string | null
+        active?: BoolWithAggregatesFilter<"Topic"> | boolean
+        description?: StringNullableWithAggregatesFilter<"Topic"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"Topic"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"Topic"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"Topic"> | Date | string
+        name?: StringWithAggregatesFilter<"Topic"> | string
+        type?: StringWithAggregatesFilter<"Topic"> | string
     };
     export type DM_CapBacWhereInput = {
         AND?: DM_CapBacWhereInput | DM_CapBacWhereInput[]
@@ -320898,8 +322401,8 @@ export namespace Prisma {
         uri?: string | null
         fileType?: string | null
         fileSize?: number | null
-        type: $Enums.DocumentType
         reason?: string | null
+        topic?: TopicCreateNestedOneWithoutDocumentsInput
         uploadedBy?: UserProfileCreateNestedOneWithoutDocumentsUploadedInput
         approvedBy?: UserProfileCreateNestedOneWithoutDocumentsApprovedInput
     };
@@ -320917,7 +322420,7 @@ export namespace Prisma {
         uri?: string | null
         fileType?: string | null
         fileSize?: number | null
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
         uploadedById?: string
         approvedById?: string | null
@@ -320936,8 +322439,8 @@ export namespace Prisma {
         uri?: NullableStringFieldUpdateOperationsInput | string | null
         fileType?: NullableStringFieldUpdateOperationsInput | string | null
         fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        topic?: TopicUpdateOneWithoutDocumentsNestedInput
         uploadedBy?: UserProfileUpdateOneRequiredWithoutDocumentsUploadedNestedInput
         approvedBy?: UserProfileUpdateOneWithoutDocumentsApprovedNestedInput
     };
@@ -320955,7 +322458,7 @@ export namespace Prisma {
         uri?: NullableStringFieldUpdateOperationsInput | string | null
         fileType?: NullableStringFieldUpdateOperationsInput | string | null
         fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         uploadedById?: StringFieldUpdateOperationsInput | string
         approvedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -320974,7 +322477,7 @@ export namespace Prisma {
         uri?: string | null
         fileType?: string | null
         fileSize?: number | null
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
         uploadedById?: string
         approvedById?: string | null
@@ -320993,7 +322496,6 @@ export namespace Prisma {
         uri?: NullableStringFieldUpdateOperationsInput | string | null
         fileType?: NullableStringFieldUpdateOperationsInput | string | null
         fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
         reason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentUncheckedUpdateManyInput = {
@@ -321010,7 +322512,7 @@ export namespace Prisma {
         uri?: NullableStringFieldUpdateOperationsInput | string | null
         fileType?: NullableStringFieldUpdateOperationsInput | string | null
         fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         uploadedById?: StringFieldUpdateOperationsInput | string
         approvedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -321026,8 +322528,8 @@ export namespace Prisma {
         question?: string | null
         answer?: string | null
         status?: $Enums.DocumentStatus
-        type: $Enums.DocumentType
         reason?: string | null
+        topic?: TopicCreateNestedOneWithoutFaqsInput
         uploadedBy?: UserProfileCreateNestedOneWithoutFaqsUploadedInput
         approvedBy?: UserProfileCreateNestedOneWithoutFaqsApprovedInput
     };
@@ -321042,7 +322544,7 @@ export namespace Prisma {
         question?: string | null
         answer?: string | null
         status?: $Enums.DocumentStatus
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
         uploadedById?: string
         approvedById?: string | null
@@ -321058,8 +322560,8 @@ export namespace Prisma {
         question?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        topic?: TopicUpdateOneWithoutFaqsNestedInput
         uploadedBy?: UserProfileUpdateOneRequiredWithoutFaqsUploadedNestedInput
         approvedBy?: UserProfileUpdateOneWithoutFaqsApprovedNestedInput
     };
@@ -321074,7 +322576,7 @@ export namespace Prisma {
         question?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         uploadedById?: StringFieldUpdateOperationsInput | string
         approvedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -321090,7 +322592,7 @@ export namespace Prisma {
         question?: string | null
         answer?: string | null
         status?: $Enums.DocumentStatus
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
         uploadedById?: string
         approvedById?: string | null
@@ -321106,7 +322608,6 @@ export namespace Prisma {
         question?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
         reason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type FAQUncheckedUpdateManyInput = {
@@ -321120,7 +322621,7 @@ export namespace Prisma {
         question?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         uploadedById?: StringFieldUpdateOperationsInput | string
         approvedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -321135,8 +322636,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         prompt?: string | null
         status?: $Enums.DocumentStatus
-        type: $Enums.DocumentType
         reason?: string | null
+        topic?: TopicCreateNestedOneWithoutPromptsInput
     };
     export type PromptUncheckedCreateInput = {
         id?: string
@@ -321148,7 +322649,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         prompt?: string | null
         status?: $Enums.DocumentStatus
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
     };
     export type PromptUpdateInput = {
@@ -321161,8 +322662,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         prompt?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        topic?: TopicUpdateOneWithoutPromptsNestedInput
     };
     export type PromptUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -321174,7 +322675,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         prompt?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type PromptCreateManyInput = {
@@ -321187,7 +322688,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         prompt?: string | null
         status?: $Enums.DocumentStatus
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
     };
     export type PromptUpdateManyMutationInput = {
@@ -321200,7 +322701,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         prompt?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
         reason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type PromptUncheckedUpdateManyInput = {
@@ -321213,7 +322713,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         prompt?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ConversationCreateInput = {
@@ -321225,9 +322725,9 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name?: string | null
-        type?: $Enums.DocumentType | null
         user?: UserProfileCreateNestedOneWithoutConversationsInput
         session?: UserSessionCreateNestedOneWithoutConversationInput
+        topic?: TopicCreateNestedOneWithoutConversationsInput
         message?: MessageCreateNestedManyWithoutConversationInput
     };
     export type ConversationUncheckedCreateInput = {
@@ -321241,7 +322741,7 @@ export namespace Prisma {
         name?: string | null
         userId?: string | null
         sessionId?: string | null
-        type?: $Enums.DocumentType | null
+        topicId?: string | null
         message?: MessageUncheckedCreateNestedManyWithoutConversationInput
     };
     export type ConversationUpdateInput = {
@@ -321253,9 +322753,9 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
         user?: UserProfileUpdateOneWithoutConversationsNestedInput
         session?: UserSessionUpdateOneWithoutConversationNestedInput
+        topic?: TopicUpdateOneWithoutConversationsNestedInput
         message?: MessageUpdateManyWithoutConversationNestedInput
     };
     export type ConversationUncheckedUpdateInput = {
@@ -321269,7 +322769,7 @@ export namespace Prisma {
         name?: NullableStringFieldUpdateOperationsInput | string | null
         userId?: NullableStringFieldUpdateOperationsInput | string | null
         sessionId?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         message?: MessageUncheckedUpdateManyWithoutConversationNestedInput
     };
     export type ConversationCreateManyInput = {
@@ -321283,7 +322783,7 @@ export namespace Prisma {
         name?: string | null
         userId?: string | null
         sessionId?: string | null
-        type?: $Enums.DocumentType | null
+        topicId?: string | null
     };
     export type ConversationUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -321294,7 +322794,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
     };
     export type ConversationUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -321307,7 +322806,7 @@ export namespace Prisma {
         name?: NullableStringFieldUpdateOperationsInput | string | null
         userId?: NullableStringFieldUpdateOperationsInput | string | null
         sessionId?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type MessageCreateInput = {
         id?: string
@@ -321391,6 +322890,99 @@ export namespace Prisma {
         conversationId?: NullableStringFieldUpdateOperationsInput | string | null
         content?: NullableStringFieldUpdateOperationsInput | string | null
         sender?: EnumMessageSenderFieldUpdateOperationsInput | $Enums.MessageSender
+    };
+    export type TopicCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type: string
+        documents?: DocumentCreateNestedManyWithoutTopicInput
+        faqs?: FAQCreateNestedManyWithoutTopicInput
+        prompts?: PromptCreateNestedManyWithoutTopicInput
+        conversations?: ConversationCreateNestedManyWithoutTopicInput
+    };
+    export type TopicUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type: string
+        documents?: DocumentUncheckedCreateNestedManyWithoutTopicInput
+        faqs?: FAQUncheckedCreateNestedManyWithoutTopicInput
+        prompts?: PromptUncheckedCreateNestedManyWithoutTopicInput
+        conversations?: ConversationUncheckedCreateNestedManyWithoutTopicInput
+    };
+    export type TopicUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: StringFieldUpdateOperationsInput | string
+        documents?: DocumentUpdateManyWithoutTopicNestedInput
+        faqs?: FAQUpdateManyWithoutTopicNestedInput
+        prompts?: PromptUpdateManyWithoutTopicNestedInput
+        conversations?: ConversationUpdateManyWithoutTopicNestedInput
+    };
+    export type TopicUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: StringFieldUpdateOperationsInput | string
+        documents?: DocumentUncheckedUpdateManyWithoutTopicNestedInput
+        faqs?: FAQUncheckedUpdateManyWithoutTopicNestedInput
+        prompts?: PromptUncheckedUpdateManyWithoutTopicNestedInput
+        conversations?: ConversationUncheckedUpdateManyWithoutTopicNestedInput
+    };
+    export type TopicCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type: string
+    };
+    export type TopicUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: StringFieldUpdateOperationsInput | string
+    };
+    export type TopicUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: StringFieldUpdateOperationsInput | string
     };
     export type DM_CapBacCreateInput = {
         Id?: string
@@ -343901,11 +345493,9 @@ export namespace Prisma {
         notIn?: $Enums.DocumentStatus[] | ListEnumDocumentStatusFieldRefInput<$PrismaModel>
         not?: NestedEnumDocumentStatusFilter<$PrismaModel> | $Enums.DocumentStatus
     };
-    export type EnumDocumentTypeFilter<$PrismaModel = never> = {
-        equals?: $Enums.DocumentType | EnumDocumentTypeFieldRefInput<$PrismaModel>
-        in?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel>
-        notIn?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel>
-        not?: NestedEnumDocumentTypeFilter<$PrismaModel> | $Enums.DocumentType
+    export type TopicNullableScalarRelationFilter = {
+        is?: TopicWhereInput | null
+        isNot?: TopicWhereInput | null
     };
     export type UserProfileNullableScalarRelationFilter = {
         is?: UserProfileWhereInput | null
@@ -343930,7 +345520,7 @@ export namespace Prisma {
         uri?: SortOrder
         fileType?: SortOrder
         fileSize?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrder
         reason?: SortOrder
         uploadedById?: SortOrder
         approvedById?: SortOrder
@@ -343952,7 +345542,7 @@ export namespace Prisma {
         uri?: SortOrder
         fileType?: SortOrder
         fileSize?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrder
         reason?: SortOrder
         uploadedById?: SortOrder
         approvedById?: SortOrder
@@ -343971,7 +345561,7 @@ export namespace Prisma {
         uri?: SortOrder
         fileType?: SortOrder
         fileSize?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrder
         reason?: SortOrder
         uploadedById?: SortOrder
         approvedById?: SortOrder
@@ -343987,15 +345577,6 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumDocumentStatusFilter<$PrismaModel>
         _max?: NestedEnumDocumentStatusFilter<$PrismaModel>
-    };
-    export type EnumDocumentTypeWithAggregatesFilter<$PrismaModel = never> = {
-        equals?: $Enums.DocumentType | EnumDocumentTypeFieldRefInput<$PrismaModel>
-        in?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel>
-        notIn?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel>
-        not?: NestedEnumDocumentTypeWithAggregatesFilter<$PrismaModel> | $Enums.DocumentType
-        _count?: NestedIntFilter<$PrismaModel>
-        _min?: NestedEnumDocumentTypeFilter<$PrismaModel>
-        _max?: NestedEnumDocumentTypeFilter<$PrismaModel>
     };
     export type FAQOrderByRelevanceInput = {
         fields: FAQOrderByRelevanceFieldEnum | FAQOrderByRelevanceFieldEnum[]
@@ -344013,7 +345594,7 @@ export namespace Prisma {
         question?: SortOrder
         answer?: SortOrder
         status?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrder
         reason?: SortOrder
         uploadedById?: SortOrder
         approvedById?: SortOrder
@@ -344029,7 +345610,7 @@ export namespace Prisma {
         question?: SortOrder
         answer?: SortOrder
         status?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrder
         reason?: SortOrder
         uploadedById?: SortOrder
         approvedById?: SortOrder
@@ -344045,7 +345626,7 @@ export namespace Prisma {
         question?: SortOrder
         answer?: SortOrder
         status?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrder
         reason?: SortOrder
         uploadedById?: SortOrder
         approvedById?: SortOrder
@@ -344065,7 +345646,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         prompt?: SortOrder
         status?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrder
         reason?: SortOrder
     };
     export type PromptMaxOrderByAggregateInput = {
@@ -344078,7 +345659,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         prompt?: SortOrder
         status?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrder
         reason?: SortOrder
     };
     export type PromptMinOrderByAggregateInput = {
@@ -344091,14 +345672,8 @@ export namespace Prisma {
         updatedAt?: SortOrder
         prompt?: SortOrder
         status?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrder
         reason?: SortOrder
-    };
-    export type EnumDocumentTypeNullableFilter<$PrismaModel = never> = {
-        equals?: $Enums.DocumentType | EnumDocumentTypeFieldRefInput<$PrismaModel> | null
-        in?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel> | null
-        notIn?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel> | null
-        not?: NestedEnumDocumentTypeNullableFilter<$PrismaModel> | $Enums.DocumentType | null
     };
     export type UserSessionNullableScalarRelationFilter = {
         is?: UserSessionWhereInput | null
@@ -344128,7 +345703,7 @@ export namespace Prisma {
         name?: SortOrder
         userId?: SortOrder
         sessionId?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrder
     };
     export type ConversationMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -344141,7 +345716,7 @@ export namespace Prisma {
         name?: SortOrder
         userId?: SortOrder
         sessionId?: SortOrder
-        type?: SortOrder
+        topicId?: SortOrder
     };
     export type ConversationMinOrderByAggregateInput = {
         id?: SortOrder
@@ -344154,16 +345729,7 @@ export namespace Prisma {
         name?: SortOrder
         userId?: SortOrder
         sessionId?: SortOrder
-        type?: SortOrder
-    };
-    export type EnumDocumentTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
-        equals?: $Enums.DocumentType | EnumDocumentTypeFieldRefInput<$PrismaModel> | null
-        in?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel> | null
-        notIn?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel> | null
-        not?: NestedEnumDocumentTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.DocumentType | null
-        _count?: NestedIntNullableFilter<$PrismaModel>
-        _min?: NestedEnumDocumentTypeNullableFilter<$PrismaModel>
-        _max?: NestedEnumDocumentTypeNullableFilter<$PrismaModel>
+        topicId?: SortOrder
     };
     export type EnumMessageSenderFilter<$PrismaModel = never> = {
         equals?: $Enums.MessageSender | EnumMessageSenderFieldRefInput<$PrismaModel>
@@ -344224,6 +345790,68 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumMessageSenderFilter<$PrismaModel>
         _max?: NestedEnumMessageSenderFilter<$PrismaModel>
+    };
+    export type DocumentListRelationFilter = {
+        every?: DocumentWhereInput
+        some?: DocumentWhereInput
+        none?: DocumentWhereInput
+    };
+    export type FAQListRelationFilter = {
+        every?: FAQWhereInput
+        some?: FAQWhereInput
+        none?: FAQWhereInput
+    };
+    export type PromptListRelationFilter = {
+        every?: PromptWhereInput
+        some?: PromptWhereInput
+        none?: PromptWhereInput
+    };
+    export type DocumentOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type FAQOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type PromptOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type TopicOrderByRelevanceInput = {
+        fields: TopicOrderByRelevanceFieldEnum | TopicOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type TopicCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        type?: SortOrder
+    };
+    export type TopicMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        type?: SortOrder
+    };
+    export type TopicMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        type?: SortOrder
     };
     export type CapBacListRelationFilter = {
         every?: CapBacWhereInput
@@ -346437,16 +348065,6 @@ export namespace Prisma {
         some?: EvidenceFileWhereInput
         none?: EvidenceFileWhereInput
     };
-    export type DocumentListRelationFilter = {
-        every?: DocumentWhereInput
-        some?: DocumentWhereInput
-        none?: DocumentWhereInput
-    };
-    export type FAQListRelationFilter = {
-        every?: FAQWhereInput
-        some?: FAQWhereInput
-        none?: FAQWhereInput
-    };
     export type RelativeOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -346493,12 +348111,6 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type EvidenceFileOrderByRelationAggregateInput = {
-        _count?: SortOrder
-    };
-    export type DocumentOrderByRelationAggregateInput = {
-        _count?: SortOrder
-    };
-    export type FAQOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type UserProfileOrderByRelevanceInput = {
@@ -361098,6 +362710,11 @@ export namespace Prisma {
         updateMany?: ConversationUpdateManyWithWhereWithoutSessionInput | ConversationUpdateManyWithWhereWithoutSessionInput[]
         deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
     };
+    export type TopicCreateNestedOneWithoutDocumentsInput = {
+        create?: XOR<TopicCreateWithoutDocumentsInput, TopicUncheckedCreateWithoutDocumentsInput>
+        connectOrCreate?: TopicCreateOrConnectWithoutDocumentsInput
+        connect?: TopicWhereUniqueInput
+    };
     export type UserProfileCreateNestedOneWithoutDocumentsUploadedInput = {
         create?: XOR<UserProfileCreateWithoutDocumentsUploadedInput, UserProfileUncheckedCreateWithoutDocumentsUploadedInput>
         connectOrCreate?: UserProfileCreateOrConnectWithoutDocumentsUploadedInput
@@ -361111,8 +362728,14 @@ export namespace Prisma {
     export type EnumDocumentStatusFieldUpdateOperationsInput = {
         set?: $Enums.DocumentStatus
     };
-    export type EnumDocumentTypeFieldUpdateOperationsInput = {
-        set?: $Enums.DocumentType
+    export type TopicUpdateOneWithoutDocumentsNestedInput = {
+        create?: XOR<TopicCreateWithoutDocumentsInput, TopicUncheckedCreateWithoutDocumentsInput>
+        connectOrCreate?: TopicCreateOrConnectWithoutDocumentsInput
+        upsert?: TopicUpsertWithoutDocumentsInput
+        disconnect?: TopicWhereInput | boolean
+        delete?: TopicWhereInput | boolean
+        connect?: TopicWhereUniqueInput
+        update?: XOR<XOR<TopicUpdateToOneWithWhereWithoutDocumentsInput, TopicUpdateWithoutDocumentsInput>, TopicUncheckedUpdateWithoutDocumentsInput>
     };
     export type UserProfileUpdateOneRequiredWithoutDocumentsUploadedNestedInput = {
         create?: XOR<UserProfileCreateWithoutDocumentsUploadedInput, UserProfileUncheckedCreateWithoutDocumentsUploadedInput>
@@ -361130,6 +362753,11 @@ export namespace Prisma {
         connect?: UserProfileWhereUniqueInput
         update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutDocumentsApprovedInput, UserProfileUpdateWithoutDocumentsApprovedInput>, UserProfileUncheckedUpdateWithoutDocumentsApprovedInput>
     };
+    export type TopicCreateNestedOneWithoutFaqsInput = {
+        create?: XOR<TopicCreateWithoutFaqsInput, TopicUncheckedCreateWithoutFaqsInput>
+        connectOrCreate?: TopicCreateOrConnectWithoutFaqsInput
+        connect?: TopicWhereUniqueInput
+    };
     export type UserProfileCreateNestedOneWithoutFaqsUploadedInput = {
         create?: XOR<UserProfileCreateWithoutFaqsUploadedInput, UserProfileUncheckedCreateWithoutFaqsUploadedInput>
         connectOrCreate?: UserProfileCreateOrConnectWithoutFaqsUploadedInput
@@ -361139,6 +362767,15 @@ export namespace Prisma {
         create?: XOR<UserProfileCreateWithoutFaqsApprovedInput, UserProfileUncheckedCreateWithoutFaqsApprovedInput>
         connectOrCreate?: UserProfileCreateOrConnectWithoutFaqsApprovedInput
         connect?: UserProfileWhereUniqueInput
+    };
+    export type TopicUpdateOneWithoutFaqsNestedInput = {
+        create?: XOR<TopicCreateWithoutFaqsInput, TopicUncheckedCreateWithoutFaqsInput>
+        connectOrCreate?: TopicCreateOrConnectWithoutFaqsInput
+        upsert?: TopicUpsertWithoutFaqsInput
+        disconnect?: TopicWhereInput | boolean
+        delete?: TopicWhereInput | boolean
+        connect?: TopicWhereUniqueInput
+        update?: XOR<XOR<TopicUpdateToOneWithWhereWithoutFaqsInput, TopicUpdateWithoutFaqsInput>, TopicUncheckedUpdateWithoutFaqsInput>
     };
     export type UserProfileUpdateOneRequiredWithoutFaqsUploadedNestedInput = {
         create?: XOR<UserProfileCreateWithoutFaqsUploadedInput, UserProfileUncheckedCreateWithoutFaqsUploadedInput>
@@ -361156,6 +362793,20 @@ export namespace Prisma {
         connect?: UserProfileWhereUniqueInput
         update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutFaqsApprovedInput, UserProfileUpdateWithoutFaqsApprovedInput>, UserProfileUncheckedUpdateWithoutFaqsApprovedInput>
     };
+    export type TopicCreateNestedOneWithoutPromptsInput = {
+        create?: XOR<TopicCreateWithoutPromptsInput, TopicUncheckedCreateWithoutPromptsInput>
+        connectOrCreate?: TopicCreateOrConnectWithoutPromptsInput
+        connect?: TopicWhereUniqueInput
+    };
+    export type TopicUpdateOneWithoutPromptsNestedInput = {
+        create?: XOR<TopicCreateWithoutPromptsInput, TopicUncheckedCreateWithoutPromptsInput>
+        connectOrCreate?: TopicCreateOrConnectWithoutPromptsInput
+        upsert?: TopicUpsertWithoutPromptsInput
+        disconnect?: TopicWhereInput | boolean
+        delete?: TopicWhereInput | boolean
+        connect?: TopicWhereUniqueInput
+        update?: XOR<XOR<TopicUpdateToOneWithWhereWithoutPromptsInput, TopicUpdateWithoutPromptsInput>, TopicUncheckedUpdateWithoutPromptsInput>
+    };
     export type UserProfileCreateNestedOneWithoutConversationsInput = {
         create?: XOR<UserProfileCreateWithoutConversationsInput, UserProfileUncheckedCreateWithoutConversationsInput>
         connectOrCreate?: UserProfileCreateOrConnectWithoutConversationsInput
@@ -361165,6 +362816,11 @@ export namespace Prisma {
         create?: XOR<UserSessionCreateWithoutConversationInput, UserSessionUncheckedCreateWithoutConversationInput>
         connectOrCreate?: UserSessionCreateOrConnectWithoutConversationInput
         connect?: UserSessionWhereUniqueInput
+    };
+    export type TopicCreateNestedOneWithoutConversationsInput = {
+        create?: XOR<TopicCreateWithoutConversationsInput, TopicUncheckedCreateWithoutConversationsInput>
+        connectOrCreate?: TopicCreateOrConnectWithoutConversationsInput
+        connect?: TopicWhereUniqueInput
     };
     export type MessageCreateNestedManyWithoutConversationInput = {
         create?: XOR<MessageCreateWithoutConversationInput, MessageUncheckedCreateWithoutConversationInput> | MessageCreateWithoutConversationInput[] | MessageUncheckedCreateWithoutConversationInput[]
@@ -361177,9 +362833,6 @@ export namespace Prisma {
         connectOrCreate?: MessageCreateOrConnectWithoutConversationInput | MessageCreateOrConnectWithoutConversationInput[]
         createMany?: MessageCreateManyConversationInputEnvelope
         connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    };
-    export type NullableEnumDocumentTypeFieldUpdateOperationsInput = {
-        set?: $Enums.DocumentType | null
     };
     export type UserProfileUpdateOneWithoutConversationsNestedInput = {
         create?: XOR<UserProfileCreateWithoutConversationsInput, UserProfileUncheckedCreateWithoutConversationsInput>
@@ -361198,6 +362851,15 @@ export namespace Prisma {
         delete?: UserSessionWhereInput | boolean
         connect?: UserSessionWhereUniqueInput
         update?: XOR<XOR<UserSessionUpdateToOneWithWhereWithoutConversationInput, UserSessionUpdateWithoutConversationInput>, UserSessionUncheckedUpdateWithoutConversationInput>
+    };
+    export type TopicUpdateOneWithoutConversationsNestedInput = {
+        create?: XOR<TopicCreateWithoutConversationsInput, TopicUncheckedCreateWithoutConversationsInput>
+        connectOrCreate?: TopicCreateOrConnectWithoutConversationsInput
+        upsert?: TopicUpsertWithoutConversationsInput
+        disconnect?: TopicWhereInput | boolean
+        delete?: TopicWhereInput | boolean
+        connect?: TopicWhereUniqueInput
+        update?: XOR<XOR<TopicUpdateToOneWithWhereWithoutConversationsInput, TopicUpdateWithoutConversationsInput>, TopicUncheckedUpdateWithoutConversationsInput>
     };
     export type MessageUpdateManyWithoutConversationNestedInput = {
         create?: XOR<MessageCreateWithoutConversationInput, MessageUncheckedCreateWithoutConversationInput> | MessageCreateWithoutConversationInput[] | MessageUncheckedCreateWithoutConversationInput[]
@@ -361241,6 +362903,158 @@ export namespace Prisma {
         delete?: ConversationWhereInput | boolean
         connect?: ConversationWhereUniqueInput
         update?: XOR<XOR<ConversationUpdateToOneWithWhereWithoutMessageInput, ConversationUpdateWithoutMessageInput>, ConversationUncheckedUpdateWithoutMessageInput>
+    };
+    export type DocumentCreateNestedManyWithoutTopicInput = {
+        create?: XOR<DocumentCreateWithoutTopicInput, DocumentUncheckedCreateWithoutTopicInput> | DocumentCreateWithoutTopicInput[] | DocumentUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: DocumentCreateOrConnectWithoutTopicInput | DocumentCreateOrConnectWithoutTopicInput[]
+        createMany?: DocumentCreateManyTopicInputEnvelope
+        connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    };
+    export type FAQCreateNestedManyWithoutTopicInput = {
+        create?: XOR<FAQCreateWithoutTopicInput, FAQUncheckedCreateWithoutTopicInput> | FAQCreateWithoutTopicInput[] | FAQUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: FAQCreateOrConnectWithoutTopicInput | FAQCreateOrConnectWithoutTopicInput[]
+        createMany?: FAQCreateManyTopicInputEnvelope
+        connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    };
+    export type PromptCreateNestedManyWithoutTopicInput = {
+        create?: XOR<PromptCreateWithoutTopicInput, PromptUncheckedCreateWithoutTopicInput> | PromptCreateWithoutTopicInput[] | PromptUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: PromptCreateOrConnectWithoutTopicInput | PromptCreateOrConnectWithoutTopicInput[]
+        createMany?: PromptCreateManyTopicInputEnvelope
+        connect?: PromptWhereUniqueInput | PromptWhereUniqueInput[]
+    };
+    export type ConversationCreateNestedManyWithoutTopicInput = {
+        create?: XOR<ConversationCreateWithoutTopicInput, ConversationUncheckedCreateWithoutTopicInput> | ConversationCreateWithoutTopicInput[] | ConversationUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: ConversationCreateOrConnectWithoutTopicInput | ConversationCreateOrConnectWithoutTopicInput[]
+        createMany?: ConversationCreateManyTopicInputEnvelope
+        connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    };
+    export type DocumentUncheckedCreateNestedManyWithoutTopicInput = {
+        create?: XOR<DocumentCreateWithoutTopicInput, DocumentUncheckedCreateWithoutTopicInput> | DocumentCreateWithoutTopicInput[] | DocumentUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: DocumentCreateOrConnectWithoutTopicInput | DocumentCreateOrConnectWithoutTopicInput[]
+        createMany?: DocumentCreateManyTopicInputEnvelope
+        connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    };
+    export type FAQUncheckedCreateNestedManyWithoutTopicInput = {
+        create?: XOR<FAQCreateWithoutTopicInput, FAQUncheckedCreateWithoutTopicInput> | FAQCreateWithoutTopicInput[] | FAQUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: FAQCreateOrConnectWithoutTopicInput | FAQCreateOrConnectWithoutTopicInput[]
+        createMany?: FAQCreateManyTopicInputEnvelope
+        connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+    };
+    export type PromptUncheckedCreateNestedManyWithoutTopicInput = {
+        create?: XOR<PromptCreateWithoutTopicInput, PromptUncheckedCreateWithoutTopicInput> | PromptCreateWithoutTopicInput[] | PromptUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: PromptCreateOrConnectWithoutTopicInput | PromptCreateOrConnectWithoutTopicInput[]
+        createMany?: PromptCreateManyTopicInputEnvelope
+        connect?: PromptWhereUniqueInput | PromptWhereUniqueInput[]
+    };
+    export type ConversationUncheckedCreateNestedManyWithoutTopicInput = {
+        create?: XOR<ConversationCreateWithoutTopicInput, ConversationUncheckedCreateWithoutTopicInput> | ConversationCreateWithoutTopicInput[] | ConversationUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: ConversationCreateOrConnectWithoutTopicInput | ConversationCreateOrConnectWithoutTopicInput[]
+        createMany?: ConversationCreateManyTopicInputEnvelope
+        connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+    };
+    export type DocumentUpdateManyWithoutTopicNestedInput = {
+        create?: XOR<DocumentCreateWithoutTopicInput, DocumentUncheckedCreateWithoutTopicInput> | DocumentCreateWithoutTopicInput[] | DocumentUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: DocumentCreateOrConnectWithoutTopicInput | DocumentCreateOrConnectWithoutTopicInput[]
+        upsert?: DocumentUpsertWithWhereUniqueWithoutTopicInput | DocumentUpsertWithWhereUniqueWithoutTopicInput[]
+        createMany?: DocumentCreateManyTopicInputEnvelope
+        set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+        disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+        delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+        connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+        update?: DocumentUpdateWithWhereUniqueWithoutTopicInput | DocumentUpdateWithWhereUniqueWithoutTopicInput[]
+        updateMany?: DocumentUpdateManyWithWhereWithoutTopicInput | DocumentUpdateManyWithWhereWithoutTopicInput[]
+        deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+    };
+    export type FAQUpdateManyWithoutTopicNestedInput = {
+        create?: XOR<FAQCreateWithoutTopicInput, FAQUncheckedCreateWithoutTopicInput> | FAQCreateWithoutTopicInput[] | FAQUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: FAQCreateOrConnectWithoutTopicInput | FAQCreateOrConnectWithoutTopicInput[]
+        upsert?: FAQUpsertWithWhereUniqueWithoutTopicInput | FAQUpsertWithWhereUniqueWithoutTopicInput[]
+        createMany?: FAQCreateManyTopicInputEnvelope
+        set?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+        disconnect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+        delete?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+        connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+        update?: FAQUpdateWithWhereUniqueWithoutTopicInput | FAQUpdateWithWhereUniqueWithoutTopicInput[]
+        updateMany?: FAQUpdateManyWithWhereWithoutTopicInput | FAQUpdateManyWithWhereWithoutTopicInput[]
+        deleteMany?: FAQScalarWhereInput | FAQScalarWhereInput[]
+    };
+    export type PromptUpdateManyWithoutTopicNestedInput = {
+        create?: XOR<PromptCreateWithoutTopicInput, PromptUncheckedCreateWithoutTopicInput> | PromptCreateWithoutTopicInput[] | PromptUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: PromptCreateOrConnectWithoutTopicInput | PromptCreateOrConnectWithoutTopicInput[]
+        upsert?: PromptUpsertWithWhereUniqueWithoutTopicInput | PromptUpsertWithWhereUniqueWithoutTopicInput[]
+        createMany?: PromptCreateManyTopicInputEnvelope
+        set?: PromptWhereUniqueInput | PromptWhereUniqueInput[]
+        disconnect?: PromptWhereUniqueInput | PromptWhereUniqueInput[]
+        delete?: PromptWhereUniqueInput | PromptWhereUniqueInput[]
+        connect?: PromptWhereUniqueInput | PromptWhereUniqueInput[]
+        update?: PromptUpdateWithWhereUniqueWithoutTopicInput | PromptUpdateWithWhereUniqueWithoutTopicInput[]
+        updateMany?: PromptUpdateManyWithWhereWithoutTopicInput | PromptUpdateManyWithWhereWithoutTopicInput[]
+        deleteMany?: PromptScalarWhereInput | PromptScalarWhereInput[]
+    };
+    export type ConversationUpdateManyWithoutTopicNestedInput = {
+        create?: XOR<ConversationCreateWithoutTopicInput, ConversationUncheckedCreateWithoutTopicInput> | ConversationCreateWithoutTopicInput[] | ConversationUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: ConversationCreateOrConnectWithoutTopicInput | ConversationCreateOrConnectWithoutTopicInput[]
+        upsert?: ConversationUpsertWithWhereUniqueWithoutTopicInput | ConversationUpsertWithWhereUniqueWithoutTopicInput[]
+        createMany?: ConversationCreateManyTopicInputEnvelope
+        set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+        disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+        delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+        connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+        update?: ConversationUpdateWithWhereUniqueWithoutTopicInput | ConversationUpdateWithWhereUniqueWithoutTopicInput[]
+        updateMany?: ConversationUpdateManyWithWhereWithoutTopicInput | ConversationUpdateManyWithWhereWithoutTopicInput[]
+        deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
+    };
+    export type DocumentUncheckedUpdateManyWithoutTopicNestedInput = {
+        create?: XOR<DocumentCreateWithoutTopicInput, DocumentUncheckedCreateWithoutTopicInput> | DocumentCreateWithoutTopicInput[] | DocumentUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: DocumentCreateOrConnectWithoutTopicInput | DocumentCreateOrConnectWithoutTopicInput[]
+        upsert?: DocumentUpsertWithWhereUniqueWithoutTopicInput | DocumentUpsertWithWhereUniqueWithoutTopicInput[]
+        createMany?: DocumentCreateManyTopicInputEnvelope
+        set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+        disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+        delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+        connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+        update?: DocumentUpdateWithWhereUniqueWithoutTopicInput | DocumentUpdateWithWhereUniqueWithoutTopicInput[]
+        updateMany?: DocumentUpdateManyWithWhereWithoutTopicInput | DocumentUpdateManyWithWhereWithoutTopicInput[]
+        deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+    };
+    export type FAQUncheckedUpdateManyWithoutTopicNestedInput = {
+        create?: XOR<FAQCreateWithoutTopicInput, FAQUncheckedCreateWithoutTopicInput> | FAQCreateWithoutTopicInput[] | FAQUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: FAQCreateOrConnectWithoutTopicInput | FAQCreateOrConnectWithoutTopicInput[]
+        upsert?: FAQUpsertWithWhereUniqueWithoutTopicInput | FAQUpsertWithWhereUniqueWithoutTopicInput[]
+        createMany?: FAQCreateManyTopicInputEnvelope
+        set?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+        disconnect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+        delete?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+        connect?: FAQWhereUniqueInput | FAQWhereUniqueInput[]
+        update?: FAQUpdateWithWhereUniqueWithoutTopicInput | FAQUpdateWithWhereUniqueWithoutTopicInput[]
+        updateMany?: FAQUpdateManyWithWhereWithoutTopicInput | FAQUpdateManyWithWhereWithoutTopicInput[]
+        deleteMany?: FAQScalarWhereInput | FAQScalarWhereInput[]
+    };
+    export type PromptUncheckedUpdateManyWithoutTopicNestedInput = {
+        create?: XOR<PromptCreateWithoutTopicInput, PromptUncheckedCreateWithoutTopicInput> | PromptCreateWithoutTopicInput[] | PromptUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: PromptCreateOrConnectWithoutTopicInput | PromptCreateOrConnectWithoutTopicInput[]
+        upsert?: PromptUpsertWithWhereUniqueWithoutTopicInput | PromptUpsertWithWhereUniqueWithoutTopicInput[]
+        createMany?: PromptCreateManyTopicInputEnvelope
+        set?: PromptWhereUniqueInput | PromptWhereUniqueInput[]
+        disconnect?: PromptWhereUniqueInput | PromptWhereUniqueInput[]
+        delete?: PromptWhereUniqueInput | PromptWhereUniqueInput[]
+        connect?: PromptWhereUniqueInput | PromptWhereUniqueInput[]
+        update?: PromptUpdateWithWhereUniqueWithoutTopicInput | PromptUpdateWithWhereUniqueWithoutTopicInput[]
+        updateMany?: PromptUpdateManyWithWhereWithoutTopicInput | PromptUpdateManyWithWhereWithoutTopicInput[]
+        deleteMany?: PromptScalarWhereInput | PromptScalarWhereInput[]
+    };
+    export type ConversationUncheckedUpdateManyWithoutTopicNestedInput = {
+        create?: XOR<ConversationCreateWithoutTopicInput, ConversationUncheckedCreateWithoutTopicInput> | ConversationCreateWithoutTopicInput[] | ConversationUncheckedCreateWithoutTopicInput[]
+        connectOrCreate?: ConversationCreateOrConnectWithoutTopicInput | ConversationCreateOrConnectWithoutTopicInput[]
+        upsert?: ConversationUpsertWithWhereUniqueWithoutTopicInput | ConversationUpsertWithWhereUniqueWithoutTopicInput[]
+        createMany?: ConversationCreateManyTopicInputEnvelope
+        set?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+        disconnect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+        delete?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+        connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
+        update?: ConversationUpdateWithWhereUniqueWithoutTopicInput | ConversationUpdateWithWhereUniqueWithoutTopicInput[]
+        updateMany?: ConversationUpdateManyWithWhereWithoutTopicInput | ConversationUpdateManyWithWhereWithoutTopicInput[]
+        deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
     };
     export type UserProfileCreateNestedManyWithoutRankInput = {
         create?: XOR<UserProfileCreateWithoutRankInput, UserProfileUncheckedCreateWithoutRankInput> | UserProfileCreateWithoutRankInput[] | UserProfileUncheckedCreateWithoutRankInput[]
@@ -373023,12 +374837,6 @@ export namespace Prisma {
         notIn?: $Enums.DocumentStatus[] | ListEnumDocumentStatusFieldRefInput<$PrismaModel>
         not?: NestedEnumDocumentStatusFilter<$PrismaModel> | $Enums.DocumentStatus
     };
-    export type NestedEnumDocumentTypeFilter<$PrismaModel = never> = {
-        equals?: $Enums.DocumentType | EnumDocumentTypeFieldRefInput<$PrismaModel>
-        in?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel>
-        notIn?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel>
-        not?: NestedEnumDocumentTypeFilter<$PrismaModel> | $Enums.DocumentType
-    };
     export type NestedEnumDocumentStatusWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.DocumentStatus | EnumDocumentStatusFieldRefInput<$PrismaModel>
         in?: $Enums.DocumentStatus[] | ListEnumDocumentStatusFieldRefInput<$PrismaModel>
@@ -373037,30 +374845,6 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumDocumentStatusFilter<$PrismaModel>
         _max?: NestedEnumDocumentStatusFilter<$PrismaModel>
-    };
-    export type NestedEnumDocumentTypeWithAggregatesFilter<$PrismaModel = never> = {
-        equals?: $Enums.DocumentType | EnumDocumentTypeFieldRefInput<$PrismaModel>
-        in?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel>
-        notIn?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel>
-        not?: NestedEnumDocumentTypeWithAggregatesFilter<$PrismaModel> | $Enums.DocumentType
-        _count?: NestedIntFilter<$PrismaModel>
-        _min?: NestedEnumDocumentTypeFilter<$PrismaModel>
-        _max?: NestedEnumDocumentTypeFilter<$PrismaModel>
-    };
-    export type NestedEnumDocumentTypeNullableFilter<$PrismaModel = never> = {
-        equals?: $Enums.DocumentType | EnumDocumentTypeFieldRefInput<$PrismaModel> | null
-        in?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel> | null
-        notIn?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel> | null
-        not?: NestedEnumDocumentTypeNullableFilter<$PrismaModel> | $Enums.DocumentType | null
-    };
-    export type NestedEnumDocumentTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
-        equals?: $Enums.DocumentType | EnumDocumentTypeFieldRefInput<$PrismaModel> | null
-        in?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel> | null
-        notIn?: $Enums.DocumentType[] | ListEnumDocumentTypeFieldRefInput<$PrismaModel> | null
-        not?: NestedEnumDocumentTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.DocumentType | null
-        _count?: NestedIntNullableFilter<$PrismaModel>
-        _min?: NestedEnumDocumentTypeNullableFilter<$PrismaModel>
-        _max?: NestedEnumDocumentTypeNullableFilter<$PrismaModel>
     };
     export type NestedEnumMessageSenderFilter<$PrismaModel = never> = {
         equals?: $Enums.MessageSender | EnumMessageSenderFieldRefInput<$PrismaModel>
@@ -397242,8 +399026,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name?: string | null
-        type?: $Enums.DocumentType | null
         user?: UserProfileCreateNestedOneWithoutConversationsInput
+        topic?: TopicCreateNestedOneWithoutConversationsInput
         message?: MessageCreateNestedManyWithoutConversationInput
     };
     export type ConversationUncheckedCreateWithoutSessionInput = {
@@ -397256,7 +399040,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         name?: string | null
         userId?: string | null
-        type?: $Enums.DocumentType | null
+        topicId?: string | null
         message?: MessageUncheckedCreateNestedManyWithoutConversationInput
     };
     export type ConversationCreateOrConnectWithoutSessionInput = {
@@ -397294,7 +399078,39 @@ export namespace Prisma {
         name?: StringNullableFilter<"Conversation"> | string | null
         userId?: StringNullableFilter<"Conversation"> | string | null
         sessionId?: StringNullableFilter<"Conversation"> | string | null
-        type?: EnumDocumentTypeNullableFilter<"Conversation"> | $Enums.DocumentType | null
+        topicId?: StringNullableFilter<"Conversation"> | string | null
+    };
+    export type TopicCreateWithoutDocumentsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type: string
+        faqs?: FAQCreateNestedManyWithoutTopicInput
+        prompts?: PromptCreateNestedManyWithoutTopicInput
+        conversations?: ConversationCreateNestedManyWithoutTopicInput
+    };
+    export type TopicUncheckedCreateWithoutDocumentsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type: string
+        faqs?: FAQUncheckedCreateNestedManyWithoutTopicInput
+        prompts?: PromptUncheckedCreateNestedManyWithoutTopicInput
+        conversations?: ConversationUncheckedCreateNestedManyWithoutTopicInput
+    };
+    export type TopicCreateOrConnectWithoutDocumentsInput = {
+        where: TopicWhereUniqueInput
+        create: XOR<TopicCreateWithoutDocumentsInput, TopicUncheckedCreateWithoutDocumentsInput>
     };
     export type UserProfileCreateWithoutDocumentsUploadedInput = {
         id?: string
@@ -397911,6 +399727,43 @@ export namespace Prisma {
     export type UserProfileCreateOrConnectWithoutDocumentsApprovedInput = {
         where: UserProfileWhereUniqueInput
         create: XOR<UserProfileCreateWithoutDocumentsApprovedInput, UserProfileUncheckedCreateWithoutDocumentsApprovedInput>
+    };
+    export type TopicUpsertWithoutDocumentsInput = {
+        update: XOR<TopicUpdateWithoutDocumentsInput, TopicUncheckedUpdateWithoutDocumentsInput>
+        create: XOR<TopicCreateWithoutDocumentsInput, TopicUncheckedCreateWithoutDocumentsInput>
+        where?: TopicWhereInput
+    };
+    export type TopicUpdateToOneWithWhereWithoutDocumentsInput = {
+        where?: TopicWhereInput
+        data: XOR<TopicUpdateWithoutDocumentsInput, TopicUncheckedUpdateWithoutDocumentsInput>
+    };
+    export type TopicUpdateWithoutDocumentsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: StringFieldUpdateOperationsInput | string
+        faqs?: FAQUpdateManyWithoutTopicNestedInput
+        prompts?: PromptUpdateManyWithoutTopicNestedInput
+        conversations?: ConversationUpdateManyWithoutTopicNestedInput
+    };
+    export type TopicUncheckedUpdateWithoutDocumentsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: StringFieldUpdateOperationsInput | string
+        faqs?: FAQUncheckedUpdateManyWithoutTopicNestedInput
+        prompts?: PromptUncheckedUpdateManyWithoutTopicNestedInput
+        conversations?: ConversationUncheckedUpdateManyWithoutTopicNestedInput
     };
     export type UserProfileUpsertWithoutDocumentsUploadedInput = {
         update: XOR<UserProfileUpdateWithoutDocumentsUploadedInput, UserProfileUncheckedUpdateWithoutDocumentsUploadedInput>
@@ -398538,6 +400391,38 @@ export namespace Prisma {
         faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
         conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
     };
+    export type TopicCreateWithoutFaqsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type: string
+        documents?: DocumentCreateNestedManyWithoutTopicInput
+        prompts?: PromptCreateNestedManyWithoutTopicInput
+        conversations?: ConversationCreateNestedManyWithoutTopicInput
+    };
+    export type TopicUncheckedCreateWithoutFaqsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type: string
+        documents?: DocumentUncheckedCreateNestedManyWithoutTopicInput
+        prompts?: PromptUncheckedCreateNestedManyWithoutTopicInput
+        conversations?: ConversationUncheckedCreateNestedManyWithoutTopicInput
+    };
+    export type TopicCreateOrConnectWithoutFaqsInput = {
+        where: TopicWhereUniqueInput
+        create: XOR<TopicCreateWithoutFaqsInput, TopicUncheckedCreateWithoutFaqsInput>
+    };
     export type UserProfileCreateWithoutFaqsUploadedInput = {
         id?: string
         code?: string | null
@@ -399153,6 +401038,43 @@ export namespace Prisma {
     export type UserProfileCreateOrConnectWithoutFaqsApprovedInput = {
         where: UserProfileWhereUniqueInput
         create: XOR<UserProfileCreateWithoutFaqsApprovedInput, UserProfileUncheckedCreateWithoutFaqsApprovedInput>
+    };
+    export type TopicUpsertWithoutFaqsInput = {
+        update: XOR<TopicUpdateWithoutFaqsInput, TopicUncheckedUpdateWithoutFaqsInput>
+        create: XOR<TopicCreateWithoutFaqsInput, TopicUncheckedCreateWithoutFaqsInput>
+        where?: TopicWhereInput
+    };
+    export type TopicUpdateToOneWithWhereWithoutFaqsInput = {
+        where?: TopicWhereInput
+        data: XOR<TopicUpdateWithoutFaqsInput, TopicUncheckedUpdateWithoutFaqsInput>
+    };
+    export type TopicUpdateWithoutFaqsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: StringFieldUpdateOperationsInput | string
+        documents?: DocumentUpdateManyWithoutTopicNestedInput
+        prompts?: PromptUpdateManyWithoutTopicNestedInput
+        conversations?: ConversationUpdateManyWithoutTopicNestedInput
+    };
+    export type TopicUncheckedUpdateWithoutFaqsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: StringFieldUpdateOperationsInput | string
+        documents?: DocumentUncheckedUpdateManyWithoutTopicNestedInput
+        prompts?: PromptUncheckedUpdateManyWithoutTopicNestedInput
+        conversations?: ConversationUncheckedUpdateManyWithoutTopicNestedInput
     };
     export type UserProfileUpsertWithoutFaqsUploadedInput = {
         update: XOR<UserProfileUpdateWithoutFaqsUploadedInput, UserProfileUncheckedUpdateWithoutFaqsUploadedInput>
@@ -399780,6 +401702,75 @@ export namespace Prisma {
         faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
         conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
     };
+    export type TopicCreateWithoutPromptsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type: string
+        documents?: DocumentCreateNestedManyWithoutTopicInput
+        faqs?: FAQCreateNestedManyWithoutTopicInput
+        conversations?: ConversationCreateNestedManyWithoutTopicInput
+    };
+    export type TopicUncheckedCreateWithoutPromptsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type: string
+        documents?: DocumentUncheckedCreateNestedManyWithoutTopicInput
+        faqs?: FAQUncheckedCreateNestedManyWithoutTopicInput
+        conversations?: ConversationUncheckedCreateNestedManyWithoutTopicInput
+    };
+    export type TopicCreateOrConnectWithoutPromptsInput = {
+        where: TopicWhereUniqueInput
+        create: XOR<TopicCreateWithoutPromptsInput, TopicUncheckedCreateWithoutPromptsInput>
+    };
+    export type TopicUpsertWithoutPromptsInput = {
+        update: XOR<TopicUpdateWithoutPromptsInput, TopicUncheckedUpdateWithoutPromptsInput>
+        create: XOR<TopicCreateWithoutPromptsInput, TopicUncheckedCreateWithoutPromptsInput>
+        where?: TopicWhereInput
+    };
+    export type TopicUpdateToOneWithWhereWithoutPromptsInput = {
+        where?: TopicWhereInput
+        data: XOR<TopicUpdateWithoutPromptsInput, TopicUncheckedUpdateWithoutPromptsInput>
+    };
+    export type TopicUpdateWithoutPromptsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: StringFieldUpdateOperationsInput | string
+        documents?: DocumentUpdateManyWithoutTopicNestedInput
+        faqs?: FAQUpdateManyWithoutTopicNestedInput
+        conversations?: ConversationUpdateManyWithoutTopicNestedInput
+    };
+    export type TopicUncheckedUpdateWithoutPromptsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: StringFieldUpdateOperationsInput | string
+        documents?: DocumentUncheckedUpdateManyWithoutTopicNestedInput
+        faqs?: FAQUncheckedUpdateManyWithoutTopicNestedInput
+        conversations?: ConversationUncheckedUpdateManyWithoutTopicNestedInput
+    };
     export type UserProfileCreateWithoutConversationsInput = {
         id?: string
         code?: string | null
@@ -400115,6 +402106,38 @@ export namespace Prisma {
     export type UserSessionCreateOrConnectWithoutConversationInput = {
         where: UserSessionWhereUniqueInput
         create: XOR<UserSessionCreateWithoutConversationInput, UserSessionUncheckedCreateWithoutConversationInput>
+    };
+    export type TopicCreateWithoutConversationsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type: string
+        documents?: DocumentCreateNestedManyWithoutTopicInput
+        faqs?: FAQCreateNestedManyWithoutTopicInput
+        prompts?: PromptCreateNestedManyWithoutTopicInput
+    };
+    export type TopicUncheckedCreateWithoutConversationsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type: string
+        documents?: DocumentUncheckedCreateNestedManyWithoutTopicInput
+        faqs?: FAQUncheckedCreateNestedManyWithoutTopicInput
+        prompts?: PromptUncheckedCreateNestedManyWithoutTopicInput
+    };
+    export type TopicCreateOrConnectWithoutConversationsInput = {
+        where: TopicWhereUniqueInput
+        create: XOR<TopicCreateWithoutConversationsInput, TopicUncheckedCreateWithoutConversationsInput>
     };
     export type MessageCreateWithoutConversationInput = {
         id?: string
@@ -400492,6 +402515,43 @@ export namespace Prisma {
         email?: NullableStringFieldUpdateOperationsInput | string | null
         phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     };
+    export type TopicUpsertWithoutConversationsInput = {
+        update: XOR<TopicUpdateWithoutConversationsInput, TopicUncheckedUpdateWithoutConversationsInput>
+        create: XOR<TopicCreateWithoutConversationsInput, TopicUncheckedCreateWithoutConversationsInput>
+        where?: TopicWhereInput
+    };
+    export type TopicUpdateToOneWithWhereWithoutConversationsInput = {
+        where?: TopicWhereInput
+        data: XOR<TopicUpdateWithoutConversationsInput, TopicUncheckedUpdateWithoutConversationsInput>
+    };
+    export type TopicUpdateWithoutConversationsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: StringFieldUpdateOperationsInput | string
+        documents?: DocumentUpdateManyWithoutTopicNestedInput
+        faqs?: FAQUpdateManyWithoutTopicNestedInput
+        prompts?: PromptUpdateManyWithoutTopicNestedInput
+    };
+    export type TopicUncheckedUpdateWithoutConversationsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: StringFieldUpdateOperationsInput | string
+        documents?: DocumentUncheckedUpdateManyWithoutTopicNestedInput
+        faqs?: FAQUncheckedUpdateManyWithoutTopicNestedInput
+        prompts?: PromptUncheckedUpdateManyWithoutTopicNestedInput
+    };
     export type MessageUpsertWithWhereUniqueWithoutConversationInput = {
         where: MessageWhereUniqueInput
         update: XOR<MessageUpdateWithoutConversationInput, MessageUncheckedUpdateWithoutConversationInput>
@@ -400529,9 +402589,9 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name?: string | null
-        type?: $Enums.DocumentType | null
         user?: UserProfileCreateNestedOneWithoutConversationsInput
         session?: UserSessionCreateNestedOneWithoutConversationInput
+        topic?: TopicCreateNestedOneWithoutConversationsInput
     };
     export type ConversationUncheckedCreateWithoutMessageInput = {
         id?: string
@@ -400544,7 +402604,7 @@ export namespace Prisma {
         name?: string | null
         userId?: string | null
         sessionId?: string | null
-        type?: $Enums.DocumentType | null
+        topicId?: string | null
     };
     export type ConversationCreateOrConnectWithoutMessageInput = {
         where: ConversationWhereUniqueInput
@@ -400568,9 +402628,9 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
         user?: UserProfileUpdateOneWithoutConversationsNestedInput
         session?: UserSessionUpdateOneWithoutConversationNestedInput
+        topic?: TopicUpdateOneWithoutConversationsNestedInput
     };
     export type ConversationUncheckedUpdateWithoutMessageInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -400583,7 +402643,264 @@ export namespace Prisma {
         name?: NullableStringFieldUpdateOperationsInput | string | null
         userId?: NullableStringFieldUpdateOperationsInput | string | null
         sessionId?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type DocumentCreateWithoutTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        title?: string | null
+        body?: string | null
+        status?: $Enums.DocumentStatus
+        uri?: string | null
+        fileType?: string | null
+        fileSize?: number | null
+        reason?: string | null
+        uploadedBy?: UserProfileCreateNestedOneWithoutDocumentsUploadedInput
+        approvedBy?: UserProfileCreateNestedOneWithoutDocumentsApprovedInput
+    };
+    export type DocumentUncheckedCreateWithoutTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        title?: string | null
+        body?: string | null
+        status?: $Enums.DocumentStatus
+        uri?: string | null
+        fileType?: string | null
+        fileSize?: number | null
+        reason?: string | null
+        uploadedById?: string
+        approvedById?: string | null
+    };
+    export type DocumentCreateOrConnectWithoutTopicInput = {
+        where: DocumentWhereUniqueInput
+        create: XOR<DocumentCreateWithoutTopicInput, DocumentUncheckedCreateWithoutTopicInput>
+    };
+    export type DocumentCreateManyTopicInputEnvelope = {
+        data: DocumentCreateManyTopicInput | DocumentCreateManyTopicInput[]
+        skipDuplicates?: boolean
+    };
+    export type FAQCreateWithoutTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        question?: string | null
+        answer?: string | null
+        status?: $Enums.DocumentStatus
+        reason?: string | null
+        uploadedBy?: UserProfileCreateNestedOneWithoutFaqsUploadedInput
+        approvedBy?: UserProfileCreateNestedOneWithoutFaqsApprovedInput
+    };
+    export type FAQUncheckedCreateWithoutTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        question?: string | null
+        answer?: string | null
+        status?: $Enums.DocumentStatus
+        reason?: string | null
+        uploadedById?: string
+        approvedById?: string | null
+    };
+    export type FAQCreateOrConnectWithoutTopicInput = {
+        where: FAQWhereUniqueInput
+        create: XOR<FAQCreateWithoutTopicInput, FAQUncheckedCreateWithoutTopicInput>
+    };
+    export type FAQCreateManyTopicInputEnvelope = {
+        data: FAQCreateManyTopicInput | FAQCreateManyTopicInput[]
+        skipDuplicates?: boolean
+    };
+    export type PromptCreateWithoutTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        prompt?: string | null
+        status?: $Enums.DocumentStatus
+        reason?: string | null
+    };
+    export type PromptUncheckedCreateWithoutTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        prompt?: string | null
+        status?: $Enums.DocumentStatus
+        reason?: string | null
+    };
+    export type PromptCreateOrConnectWithoutTopicInput = {
+        where: PromptWhereUniqueInput
+        create: XOR<PromptCreateWithoutTopicInput, PromptUncheckedCreateWithoutTopicInput>
+    };
+    export type PromptCreateManyTopicInputEnvelope = {
+        data: PromptCreateManyTopicInput | PromptCreateManyTopicInput[]
+        skipDuplicates?: boolean
+    };
+    export type ConversationCreateWithoutTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name?: string | null
+        user?: UserProfileCreateNestedOneWithoutConversationsInput
+        session?: UserSessionCreateNestedOneWithoutConversationInput
+        message?: MessageCreateNestedManyWithoutConversationInput
+    };
+    export type ConversationUncheckedCreateWithoutTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name?: string | null
+        userId?: string | null
+        sessionId?: string | null
+        message?: MessageUncheckedCreateNestedManyWithoutConversationInput
+    };
+    export type ConversationCreateOrConnectWithoutTopicInput = {
+        where: ConversationWhereUniqueInput
+        create: XOR<ConversationCreateWithoutTopicInput, ConversationUncheckedCreateWithoutTopicInput>
+    };
+    export type ConversationCreateManyTopicInputEnvelope = {
+        data: ConversationCreateManyTopicInput | ConversationCreateManyTopicInput[]
+        skipDuplicates?: boolean
+    };
+    export type DocumentUpsertWithWhereUniqueWithoutTopicInput = {
+        where: DocumentWhereUniqueInput
+        update: XOR<DocumentUpdateWithoutTopicInput, DocumentUncheckedUpdateWithoutTopicInput>
+        create: XOR<DocumentCreateWithoutTopicInput, DocumentUncheckedCreateWithoutTopicInput>
+    };
+    export type DocumentUpdateWithWhereUniqueWithoutTopicInput = {
+        where: DocumentWhereUniqueInput
+        data: XOR<DocumentUpdateWithoutTopicInput, DocumentUncheckedUpdateWithoutTopicInput>
+    };
+    export type DocumentUpdateManyWithWhereWithoutTopicInput = {
+        where: DocumentScalarWhereInput
+        data: XOR<DocumentUpdateManyMutationInput, DocumentUncheckedUpdateManyWithoutTopicInput>
+    };
+    export type DocumentScalarWhereInput = {
+        AND?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+        OR?: DocumentScalarWhereInput[]
+        NOT?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+        id?: StringFilter<"Document"> | string
+        code?: StringNullableFilter<"Document"> | string | null
+        active?: BoolFilter<"Document"> | boolean
+        description?: StringNullableFilter<"Document"> | string | null
+        deletedAt?: DateTimeNullableFilter<"Document"> | Date | string | null
+        createdAt?: DateTimeFilter<"Document"> | Date | string
+        updatedAt?: DateTimeFilter<"Document"> | Date | string
+        title?: StringNullableFilter<"Document"> | string | null
+        body?: StringNullableFilter<"Document"> | string | null
+        status?: EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
+        uri?: StringNullableFilter<"Document"> | string | null
+        fileType?: StringNullableFilter<"Document"> | string | null
+        fileSize?: IntNullableFilter<"Document"> | number | null
+        topicId?: StringNullableFilter<"Document"> | string | null
+        reason?: StringNullableFilter<"Document"> | string | null
+        uploadedById?: StringFilter<"Document"> | string
+        approvedById?: StringNullableFilter<"Document"> | string | null
+    };
+    export type FAQUpsertWithWhereUniqueWithoutTopicInput = {
+        where: FAQWhereUniqueInput
+        update: XOR<FAQUpdateWithoutTopicInput, FAQUncheckedUpdateWithoutTopicInput>
+        create: XOR<FAQCreateWithoutTopicInput, FAQUncheckedCreateWithoutTopicInput>
+    };
+    export type FAQUpdateWithWhereUniqueWithoutTopicInput = {
+        where: FAQWhereUniqueInput
+        data: XOR<FAQUpdateWithoutTopicInput, FAQUncheckedUpdateWithoutTopicInput>
+    };
+    export type FAQUpdateManyWithWhereWithoutTopicInput = {
+        where: FAQScalarWhereInput
+        data: XOR<FAQUpdateManyMutationInput, FAQUncheckedUpdateManyWithoutTopicInput>
+    };
+    export type FAQScalarWhereInput = {
+        AND?: FAQScalarWhereInput | FAQScalarWhereInput[]
+        OR?: FAQScalarWhereInput[]
+        NOT?: FAQScalarWhereInput | FAQScalarWhereInput[]
+        id?: StringFilter<"FAQ"> | string
+        code?: StringNullableFilter<"FAQ"> | string | null
+        active?: BoolFilter<"FAQ"> | boolean
+        description?: StringNullableFilter<"FAQ"> | string | null
+        deletedAt?: DateTimeNullableFilter<"FAQ"> | Date | string | null
+        createdAt?: DateTimeFilter<"FAQ"> | Date | string
+        updatedAt?: DateTimeFilter<"FAQ"> | Date | string
+        question?: StringNullableFilter<"FAQ"> | string | null
+        answer?: StringNullableFilter<"FAQ"> | string | null
+        status?: EnumDocumentStatusFilter<"FAQ"> | $Enums.DocumentStatus
+        topicId?: StringNullableFilter<"FAQ"> | string | null
+        reason?: StringNullableFilter<"FAQ"> | string | null
+        uploadedById?: StringFilter<"FAQ"> | string
+        approvedById?: StringNullableFilter<"FAQ"> | string | null
+    };
+    export type PromptUpsertWithWhereUniqueWithoutTopicInput = {
+        where: PromptWhereUniqueInput
+        update: XOR<PromptUpdateWithoutTopicInput, PromptUncheckedUpdateWithoutTopicInput>
+        create: XOR<PromptCreateWithoutTopicInput, PromptUncheckedCreateWithoutTopicInput>
+    };
+    export type PromptUpdateWithWhereUniqueWithoutTopicInput = {
+        where: PromptWhereUniqueInput
+        data: XOR<PromptUpdateWithoutTopicInput, PromptUncheckedUpdateWithoutTopicInput>
+    };
+    export type PromptUpdateManyWithWhereWithoutTopicInput = {
+        where: PromptScalarWhereInput
+        data: XOR<PromptUpdateManyMutationInput, PromptUncheckedUpdateManyWithoutTopicInput>
+    };
+    export type PromptScalarWhereInput = {
+        AND?: PromptScalarWhereInput | PromptScalarWhereInput[]
+        OR?: PromptScalarWhereInput[]
+        NOT?: PromptScalarWhereInput | PromptScalarWhereInput[]
+        id?: StringFilter<"Prompt"> | string
+        code?: StringNullableFilter<"Prompt"> | string | null
+        active?: BoolFilter<"Prompt"> | boolean
+        description?: StringNullableFilter<"Prompt"> | string | null
+        deletedAt?: DateTimeNullableFilter<"Prompt"> | Date | string | null
+        createdAt?: DateTimeFilter<"Prompt"> | Date | string
+        updatedAt?: DateTimeFilter<"Prompt"> | Date | string
+        prompt?: StringNullableFilter<"Prompt"> | string | null
+        status?: EnumDocumentStatusFilter<"Prompt"> | $Enums.DocumentStatus
+        topicId?: StringNullableFilter<"Prompt"> | string | null
+        reason?: StringNullableFilter<"Prompt"> | string | null
+    };
+    export type ConversationUpsertWithWhereUniqueWithoutTopicInput = {
+        where: ConversationWhereUniqueInput
+        update: XOR<ConversationUpdateWithoutTopicInput, ConversationUncheckedUpdateWithoutTopicInput>
+        create: XOR<ConversationCreateWithoutTopicInput, ConversationUncheckedCreateWithoutTopicInput>
+    };
+    export type ConversationUpdateWithWhereUniqueWithoutTopicInput = {
+        where: ConversationWhereUniqueInput
+        data: XOR<ConversationUpdateWithoutTopicInput, ConversationUncheckedUpdateWithoutTopicInput>
+    };
+    export type ConversationUpdateManyWithWhereWithoutTopicInput = {
+        where: ConversationScalarWhereInput
+        data: XOR<ConversationUpdateManyMutationInput, ConversationUncheckedUpdateManyWithoutTopicInput>
     };
     export type UserProfileCreateWithoutRankInput = {
         id?: string
@@ -414715,8 +417032,8 @@ export namespace Prisma {
         uri?: string | null
         fileType?: string | null
         fileSize?: number | null
-        type: $Enums.DocumentType
         reason?: string | null
+        topic?: TopicCreateNestedOneWithoutDocumentsInput
         approvedBy?: UserProfileCreateNestedOneWithoutDocumentsApprovedInput
     };
     export type DocumentUncheckedCreateWithoutUploadedByInput = {
@@ -414733,7 +417050,7 @@ export namespace Prisma {
         uri?: string | null
         fileType?: string | null
         fileSize?: number | null
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
         approvedById?: string | null
     };
@@ -414759,8 +417076,8 @@ export namespace Prisma {
         uri?: string | null
         fileType?: string | null
         fileSize?: number | null
-        type: $Enums.DocumentType
         reason?: string | null
+        topic?: TopicCreateNestedOneWithoutDocumentsInput
         uploadedBy?: UserProfileCreateNestedOneWithoutDocumentsUploadedInput
     };
     export type DocumentUncheckedCreateWithoutApprovedByInput = {
@@ -414777,7 +417094,7 @@ export namespace Prisma {
         uri?: string | null
         fileType?: string | null
         fileSize?: number | null
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
         uploadedById?: string
     };
@@ -414800,8 +417117,8 @@ export namespace Prisma {
         question?: string | null
         answer?: string | null
         status?: $Enums.DocumentStatus
-        type: $Enums.DocumentType
         reason?: string | null
+        topic?: TopicCreateNestedOneWithoutFaqsInput
         approvedBy?: UserProfileCreateNestedOneWithoutFaqsApprovedInput
     };
     export type FAQUncheckedCreateWithoutUploadedByInput = {
@@ -414815,7 +417132,7 @@ export namespace Prisma {
         question?: string | null
         answer?: string | null
         status?: $Enums.DocumentStatus
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
         approvedById?: string | null
     };
@@ -414838,8 +417155,8 @@ export namespace Prisma {
         question?: string | null
         answer?: string | null
         status?: $Enums.DocumentStatus
-        type: $Enums.DocumentType
         reason?: string | null
+        topic?: TopicCreateNestedOneWithoutFaqsInput
         uploadedBy?: UserProfileCreateNestedOneWithoutFaqsUploadedInput
     };
     export type FAQUncheckedCreateWithoutApprovedByInput = {
@@ -414853,7 +417170,7 @@ export namespace Prisma {
         question?: string | null
         answer?: string | null
         status?: $Enums.DocumentStatus
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
         uploadedById?: string
     };
@@ -414874,8 +417191,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name?: string | null
-        type?: $Enums.DocumentType | null
         session?: UserSessionCreateNestedOneWithoutConversationInput
+        topic?: TopicCreateNestedOneWithoutConversationsInput
         message?: MessageCreateNestedManyWithoutConversationInput
     };
     export type ConversationUncheckedCreateWithoutUserInput = {
@@ -414888,7 +417205,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         name?: string | null
         sessionId?: string | null
-        type?: $Enums.DocumentType | null
+        topicId?: string | null
         message?: MessageUncheckedCreateNestedManyWithoutConversationInput
     };
     export type ConversationCreateOrConnectWithoutUserInput = {
@@ -417361,28 +419678,6 @@ export namespace Prisma {
         where: DocumentScalarWhereInput
         data: XOR<DocumentUpdateManyMutationInput, DocumentUncheckedUpdateManyWithoutUploadedByInput>
     };
-    export type DocumentScalarWhereInput = {
-        AND?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
-        OR?: DocumentScalarWhereInput[]
-        NOT?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
-        id?: StringFilter<"Document"> | string
-        code?: StringNullableFilter<"Document"> | string | null
-        active?: BoolFilter<"Document"> | boolean
-        description?: StringNullableFilter<"Document"> | string | null
-        deletedAt?: DateTimeNullableFilter<"Document"> | Date | string | null
-        createdAt?: DateTimeFilter<"Document"> | Date | string
-        updatedAt?: DateTimeFilter<"Document"> | Date | string
-        title?: StringNullableFilter<"Document"> | string | null
-        body?: StringNullableFilter<"Document"> | string | null
-        status?: EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
-        uri?: StringNullableFilter<"Document"> | string | null
-        fileType?: StringNullableFilter<"Document"> | string | null
-        fileSize?: IntNullableFilter<"Document"> | number | null
-        type?: EnumDocumentTypeFilter<"Document"> | $Enums.DocumentType
-        reason?: StringNullableFilter<"Document"> | string | null
-        uploadedById?: StringFilter<"Document"> | string
-        approvedById?: StringNullableFilter<"Document"> | string | null
-    };
     export type DocumentUpsertWithWhereUniqueWithoutApprovedByInput = {
         where: DocumentWhereUniqueInput
         update: XOR<DocumentUpdateWithoutApprovedByInput, DocumentUncheckedUpdateWithoutApprovedByInput>
@@ -417408,25 +419703,6 @@ export namespace Prisma {
     export type FAQUpdateManyWithWhereWithoutUploadedByInput = {
         where: FAQScalarWhereInput
         data: XOR<FAQUpdateManyMutationInput, FAQUncheckedUpdateManyWithoutUploadedByInput>
-    };
-    export type FAQScalarWhereInput = {
-        AND?: FAQScalarWhereInput | FAQScalarWhereInput[]
-        OR?: FAQScalarWhereInput[]
-        NOT?: FAQScalarWhereInput | FAQScalarWhereInput[]
-        id?: StringFilter<"FAQ"> | string
-        code?: StringNullableFilter<"FAQ"> | string | null
-        active?: BoolFilter<"FAQ"> | boolean
-        description?: StringNullableFilter<"FAQ"> | string | null
-        deletedAt?: DateTimeNullableFilter<"FAQ"> | Date | string | null
-        createdAt?: DateTimeFilter<"FAQ"> | Date | string
-        updatedAt?: DateTimeFilter<"FAQ"> | Date | string
-        question?: StringNullableFilter<"FAQ"> | string | null
-        answer?: StringNullableFilter<"FAQ"> | string | null
-        status?: EnumDocumentStatusFilter<"FAQ"> | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFilter<"FAQ"> | $Enums.DocumentType
-        reason?: StringNullableFilter<"FAQ"> | string | null
-        uploadedById?: StringFilter<"FAQ"> | string
-        approvedById?: StringNullableFilter<"FAQ"> | string | null
     };
     export type FAQUpsertWithWhereUniqueWithoutApprovedByInput = {
         where: FAQWhereUniqueInput
@@ -473308,7 +475584,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         name?: string | null
         userId?: string | null
-        type?: $Enums.DocumentType | null
+        topicId?: string | null
     };
     export type ConversationUpdateWithoutSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -473319,8 +475595,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
         user?: UserProfileUpdateOneWithoutConversationsNestedInput
+        topic?: TopicUpdateOneWithoutConversationsNestedInput
         message?: MessageUpdateManyWithoutConversationNestedInput
     };
     export type ConversationUncheckedUpdateWithoutSessionInput = {
@@ -473333,7 +475609,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
         userId?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         message?: MessageUncheckedUpdateManyWithoutConversationNestedInput
     };
     export type ConversationUncheckedUpdateManyWithoutSessionInput = {
@@ -473346,7 +475622,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
         userId?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type MessageCreateManyConversationInput = {
         id?: string
@@ -473391,6 +475667,236 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         content?: NullableStringFieldUpdateOperationsInput | string | null
         sender?: EnumMessageSenderFieldUpdateOperationsInput | $Enums.MessageSender
+    };
+    export type DocumentCreateManyTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        title?: string | null
+        body?: string | null
+        status?: $Enums.DocumentStatus
+        uri?: string | null
+        fileType?: string | null
+        fileSize?: number | null
+        reason?: string | null
+        uploadedById?: string
+        approvedById?: string | null
+    };
+    export type FAQCreateManyTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        question?: string | null
+        answer?: string | null
+        status?: $Enums.DocumentStatus
+        reason?: string | null
+        uploadedById?: string
+        approvedById?: string | null
+    };
+    export type PromptCreateManyTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        prompt?: string | null
+        status?: $Enums.DocumentStatus
+        reason?: string | null
+    };
+    export type ConversationCreateManyTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name?: string | null
+        userId?: string | null
+        sessionId?: string | null
+    };
+    export type DocumentUpdateWithoutTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        body?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+        uri?: NullableStringFieldUpdateOperationsInput | string | null
+        fileType?: NullableStringFieldUpdateOperationsInput | string | null
+        fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        uploadedBy?: UserProfileUpdateOneRequiredWithoutDocumentsUploadedNestedInput
+        approvedBy?: UserProfileUpdateOneWithoutDocumentsApprovedNestedInput
+    };
+    export type DocumentUncheckedUpdateWithoutTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        body?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+        uri?: NullableStringFieldUpdateOperationsInput | string | null
+        fileType?: NullableStringFieldUpdateOperationsInput | string | null
+        fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        uploadedById?: StringFieldUpdateOperationsInput | string
+        approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type DocumentUncheckedUpdateManyWithoutTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        title?: NullableStringFieldUpdateOperationsInput | string | null
+        body?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+        uri?: NullableStringFieldUpdateOperationsInput | string | null
+        fileType?: NullableStringFieldUpdateOperationsInput | string | null
+        fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        uploadedById?: StringFieldUpdateOperationsInput | string
+        approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type FAQUpdateWithoutTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        question?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        uploadedBy?: UserProfileUpdateOneRequiredWithoutFaqsUploadedNestedInput
+        approvedBy?: UserProfileUpdateOneWithoutFaqsApprovedNestedInput
+    };
+    export type FAQUncheckedUpdateWithoutTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        question?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        uploadedById?: StringFieldUpdateOperationsInput | string
+        approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type FAQUncheckedUpdateManyWithoutTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        question?: NullableStringFieldUpdateOperationsInput | string | null
+        answer?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+        uploadedById?: StringFieldUpdateOperationsInput | string
+        approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type PromptUpdateWithoutTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        prompt?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type PromptUncheckedUpdateWithoutTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        prompt?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type PromptUncheckedUpdateManyWithoutTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        prompt?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+        reason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ConversationUpdateWithoutTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        user?: UserProfileUpdateOneWithoutConversationsNestedInput
+        session?: UserSessionUpdateOneWithoutConversationNestedInput
+        message?: MessageUpdateManyWithoutConversationNestedInput
+    };
+    export type ConversationUncheckedUpdateWithoutTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        userId?: NullableStringFieldUpdateOperationsInput | string | null
+        sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        message?: MessageUncheckedUpdateManyWithoutConversationNestedInput
+    };
+    export type ConversationUncheckedUpdateManyWithoutTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: NullableStringFieldUpdateOperationsInput | string | null
+        userId?: NullableStringFieldUpdateOperationsInput | string | null
+        sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type UserProfileCreateManyRankInput = {
         id?: string
@@ -491347,7 +493853,7 @@ export namespace Prisma {
         uri?: string | null
         fileType?: string | null
         fileSize?: number | null
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
         approvedById?: string | null
     };
@@ -491365,7 +493871,7 @@ export namespace Prisma {
         uri?: string | null
         fileType?: string | null
         fileSize?: number | null
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
         uploadedById?: string
     };
@@ -491380,7 +493886,7 @@ export namespace Prisma {
         question?: string | null
         answer?: string | null
         status?: $Enums.DocumentStatus
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
         approvedById?: string | null
     };
@@ -491395,7 +493901,7 @@ export namespace Prisma {
         question?: string | null
         answer?: string | null
         status?: $Enums.DocumentStatus
-        type: $Enums.DocumentType
+        topicId?: string | null
         reason?: string | null
         uploadedById?: string
     };
@@ -491409,7 +493915,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         name?: string | null
         sessionId?: string | null
-        type?: $Enums.DocumentType | null
+        topicId?: string | null
     };
     export type RelativeUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -492717,8 +495223,8 @@ export namespace Prisma {
         uri?: NullableStringFieldUpdateOperationsInput | string | null
         fileType?: NullableStringFieldUpdateOperationsInput | string | null
         fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        topic?: TopicUpdateOneWithoutDocumentsNestedInput
         approvedBy?: UserProfileUpdateOneWithoutDocumentsApprovedNestedInput
     };
     export type DocumentUncheckedUpdateWithoutUploadedByInput = {
@@ -492735,7 +495241,7 @@ export namespace Prisma {
         uri?: NullableStringFieldUpdateOperationsInput | string | null
         fileType?: NullableStringFieldUpdateOperationsInput | string | null
         fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         approvedById?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -492753,7 +495259,7 @@ export namespace Prisma {
         uri?: NullableStringFieldUpdateOperationsInput | string | null
         fileType?: NullableStringFieldUpdateOperationsInput | string | null
         fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         approvedById?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -492771,8 +495277,8 @@ export namespace Prisma {
         uri?: NullableStringFieldUpdateOperationsInput | string | null
         fileType?: NullableStringFieldUpdateOperationsInput | string | null
         fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        topic?: TopicUpdateOneWithoutDocumentsNestedInput
         uploadedBy?: UserProfileUpdateOneRequiredWithoutDocumentsUploadedNestedInput
     };
     export type DocumentUncheckedUpdateWithoutApprovedByInput = {
@@ -492789,7 +495295,7 @@ export namespace Prisma {
         uri?: NullableStringFieldUpdateOperationsInput | string | null
         fileType?: NullableStringFieldUpdateOperationsInput | string | null
         fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         uploadedById?: StringFieldUpdateOperationsInput | string
     };
@@ -492807,7 +495313,7 @@ export namespace Prisma {
         uri?: NullableStringFieldUpdateOperationsInput | string | null
         fileType?: NullableStringFieldUpdateOperationsInput | string | null
         fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         uploadedById?: StringFieldUpdateOperationsInput | string
     };
@@ -492822,8 +495328,8 @@ export namespace Prisma {
         question?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        topic?: TopicUpdateOneWithoutFaqsNestedInput
         approvedBy?: UserProfileUpdateOneWithoutFaqsApprovedNestedInput
     };
     export type FAQUncheckedUpdateWithoutUploadedByInput = {
@@ -492837,7 +495343,7 @@ export namespace Prisma {
         question?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         approvedById?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -492852,7 +495358,7 @@ export namespace Prisma {
         question?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         approvedById?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -492867,8 +495373,8 @@ export namespace Prisma {
         question?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
         reason?: NullableStringFieldUpdateOperationsInput | string | null
+        topic?: TopicUpdateOneWithoutFaqsNestedInput
         uploadedBy?: UserProfileUpdateOneRequiredWithoutFaqsUploadedNestedInput
     };
     export type FAQUncheckedUpdateWithoutApprovedByInput = {
@@ -492882,7 +495388,7 @@ export namespace Prisma {
         question?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         uploadedById?: StringFieldUpdateOperationsInput | string
     };
@@ -492897,7 +495403,7 @@ export namespace Prisma {
         question?: NullableStringFieldUpdateOperationsInput | string | null
         answer?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-        type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         reason?: NullableStringFieldUpdateOperationsInput | string | null
         uploadedById?: StringFieldUpdateOperationsInput | string
     };
@@ -492910,8 +495416,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
         session?: UserSessionUpdateOneWithoutConversationNestedInput
+        topic?: TopicUpdateOneWithoutConversationsNestedInput
         message?: MessageUpdateManyWithoutConversationNestedInput
     };
     export type ConversationUncheckedUpdateWithoutUserInput = {
@@ -492924,7 +495430,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
         sessionId?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
         message?: MessageUncheckedUpdateManyWithoutConversationNestedInput
     };
     export type ConversationUncheckedUpdateManyWithoutUserInput = {
@@ -492937,7 +495443,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: NullableStringFieldUpdateOperationsInput | string | null
         sessionId?: NullableStringFieldUpdateOperationsInput | string | null
-        type?: NullableEnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType | null
+        topicId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type LecturerCreateManyLecturerTypeInput = {
         id?: string

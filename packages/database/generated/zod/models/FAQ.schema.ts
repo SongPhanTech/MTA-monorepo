@@ -8,7 +8,6 @@
 import { z } from 'zod';
 import { DocumentStatus } from '../../zenstack/models';
 import { DocumentStatusSchema } from '../enums/DocumentStatus.schema';
-import { DocumentTypeSchema } from '../enums/DocumentType.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -20,16 +19,17 @@ const baseSchema = z.object({
     question: z.string().nullish(),
     answer: z.string().nullish(),
     status: DocumentStatusSchema,
-    type: DocumentTypeSchema,
     reason: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
+    topic: z.record(z.unknown()).optional(),
     uploadedBy: z.record(z.unknown()),
     approvedBy: z.record(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
+    topicId: z.string().nullish(),
     uploadedById: z.string().optional(),
     approvedById: z.string().nullish(),
 }
@@ -69,7 +69,6 @@ export const FAQPrismaUpdateSchema = z.object({
     question: z.string().nullish(),
     answer: z.string().nullish(),
     status: DocumentStatusSchema,
-    type: DocumentTypeSchema,
     reason: z.string().nullish()
 }).partial().passthrough();
 

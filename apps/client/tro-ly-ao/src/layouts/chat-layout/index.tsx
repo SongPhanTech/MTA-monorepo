@@ -1,5 +1,6 @@
 import ChatHeader from '@components/layouts/header/chat-header'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
+import ChatIframeLayout from '@layouts/chat-iframe-layout'
 import { cn } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import {
@@ -28,6 +29,7 @@ const ChatLayout = ({
     const router = useRouter()
     const { sessionId } = useUserSession()
     const [isDeleting, setIsDeleting] = useState(false)
+    const [isInIframe, setIsInIframe] = useState(false)
     const [collapsed, setCollapsed] = useState(() => {
         if (typeof window !== 'undefined') {
             const isMobile = window.innerWidth < 768
@@ -38,6 +40,13 @@ const ChatLayout = ({
     })
 
     const { data: userCurrent } = useSession()
+
+    // Check if running in iframe
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setIsInIframe(window.self !== window.top)
+        }
+    }, [])
 
     const handleCollapsed = (value?: boolean) => {
         if (typeof window !== 'undefined') {
@@ -80,7 +89,6 @@ const ChatLayout = ({
 
     const { data: conversation } = useFindManyConversation({
         where: {
-            // userId: userCurrent?.sDM_NhanVienId || '',
             sessionId: sessionId || '',
         },
         include: {
@@ -91,6 +99,42 @@ const ChatLayout = ({
         id: item.id,
         label: item.message?.[0]?.content || 'Đang tải...',
     }))
+
+    // Iframe handlers
+    const handleIframeClose = () => {
+        console.log('handleIframeClose called in ChatLayout')
+        if (typeof window !== 'undefined' && window.parent) {
+            console.log('Sending TOGGLE_CHAT_WIDGET message to parent')
+            window.parent.postMessage({ type: 'TOGGLE_CHAT_WIDGET' }, '*')
+        } else {
+            console.log('window.parent not available')
+        }
+    }
+
+    const handleIframeExpand = () => {
+        if (typeof window !== 'undefined' && window.parent) {
+            window.parent.postMessage({ type: 'EXPAND_CHAT' }, '*')
+        }
+    }
+
+    // If in iframe, use ChatIframeLayout
+    if (isInIframe) {
+        return (
+            <ChatIframeLayout
+                className={className}
+                showSiderChat={showSiderChat}
+                onClose={handleIframeClose}
+                onExpand={handleIframeExpand}
+            >
+                {isDeleting && (
+                    <div className="absolute inset-0 z-50 bg-white/60 backdrop-blur-sm flex items-center justify-center">
+                        <Spin size="large" tip="Đang xoá..." />
+                    </div>
+                )}
+                {children}
+            </ChatIframeLayout>
+        )
+    }
 
     return (
         <Layout className="h-screen p-[10px]">

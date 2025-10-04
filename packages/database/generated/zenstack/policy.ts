@@ -29,7 +29,6 @@ import { NotificationPriority } from "../prisma-client";
 import { PermissionType } from "../prisma-client";
 import { MessageSender } from "../prisma-client";
 import { DocumentStatus } from "../prisma-client";
-import { DocumentType } from "../prisma-client";
 import { RelativeType } from "../prisma-client";
 import { ResearchProjectStatus } from "../prisma-client";
 import { RegistrationStatus } from "../prisma-client";
@@ -1406,6 +1405,26 @@ const policy: PolicyDef = {
                 update: { guard: Message_update, },
                 postUpdate: { guard: Message_postUpdate, },
                 delete: { guard: Message_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        topic: {
+            modelLevel: {
+                read: { guard: Topic_read, },
+                create: { guard: Topic_create, inputChecker: Topic_create_input, },
+                update: { guard: Topic_update, },
+                postUpdate: { guard: Topic_postUpdate, },
+                delete: { guard: Topic_delete, }
             },
             fieldLevel: {
                 read:
@@ -4629,6 +4648,7 @@ const policy: PolicyDef = {
         prompt: { hasValidation: false },
         conversation: { hasValidation: false },
         message: { hasValidation: false },
+        topic: { hasValidation: false },
         dM_CapBac: { hasValidation: false },
         dM_ChucDanh: { hasValidation: false },
         dM_ChucVu: { hasValidation: false },
@@ -9204,6 +9224,71 @@ function Message_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_Message_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Topic_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Topic_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Topic_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Topic_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Topic_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Topic_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Topic_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Topic_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Topic_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Topic_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Topic_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

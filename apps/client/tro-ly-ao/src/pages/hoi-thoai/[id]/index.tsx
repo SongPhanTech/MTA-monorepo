@@ -91,7 +91,6 @@ export default function Page() {
 
                 const response = await (isFaqMode ? fetchHoiDapFaq : fetchHoiDap)({
                     prompt: text,
-                    type_data: conversationCurrent?.type ?? '',
                     conversation_id: id as string,
                     signal: controller.signal,
                 })
@@ -196,7 +195,7 @@ export default function Page() {
                 setAbortController(null)
             }
         },
-        [id, isFaqMode, conversationCurrent?.type, updateConversation]
+        [id, isFaqMode, updateConversation]
     )
 
     const handleStop = () => {

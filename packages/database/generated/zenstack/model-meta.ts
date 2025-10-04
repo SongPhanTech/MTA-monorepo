@@ -6421,9 +6421,21 @@ const metadata = {
                     name: "fileSize",
                     type: "Int",
                     isOptional: true,
-                }, type: {
-                    name: "type",
-                    type: "DocumentType",
+                }, topic: {
+                    name: "topic",
+                    type: "Topic",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documents',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "topicId" },
+                }, topicId: {
+                    name: "topicId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'topic',
                 }, reason: {
                     name: "reason",
                     type: "String",
@@ -6515,9 +6527,21 @@ const metadata = {
                     name: "status",
                     type: "DocumentStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, type: {
-                    name: "type",
-                    type: "DocumentType",
+                }, topic: {
+                    name: "topic",
+                    type: "Topic",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'faqs',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "topicId" },
+                }, topicId: {
+                    name: "topicId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'topic',
                 }, reason: {
                     name: "reason",
                     type: "String",
@@ -6605,9 +6629,21 @@ const metadata = {
                     name: "status",
                     type: "DocumentStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, type: {
-                    name: "type",
-                    type: "DocumentType",
+                }, topic: {
+                    name: "topic",
+                    type: "Topic",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'prompts',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "topicId" },
+                }, topicId: {
+                    name: "topicId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'topic',
                 }, reason: {
                     name: "reason",
                     type: "String",
@@ -6691,10 +6727,21 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'session',
-                }, type: {
-                    name: "type",
-                    type: "DocumentType",
+                }, topic: {
+                    name: "topic",
+                    type: "Topic",
+                    isDataModel: true,
                     isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'conversations',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "topicId" },
+                }, topicId: {
+                    name: "topicId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'topic',
                 }, message: {
                     name: "message",
                     type: "Message",
@@ -6768,6 +6815,81 @@ const metadata = {
                     backLink: 'message',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "conversationId" },
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "tro-ly-ao" }] }],
+        },
+        topic: {
+            name: 'Topic', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, type: {
+                    name: "type",
+                    type: "String",
+                }, documents: {
+                    name: "documents",
+                    type: "Document",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'topic',
+                }, faqs: {
+                    name: "faqs",
+                    type: "FAQ",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'topic',
+                }, prompts: {
+                    name: "prompts",
+                    type: "Prompt",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'topic',
+                }, conversations: {
+                    name: "conversations",
+                    type: "Conversation",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'topic',
                 },
             }, uniqueConstraints: {
                 id: {

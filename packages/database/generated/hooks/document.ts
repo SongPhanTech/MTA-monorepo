@@ -327,9 +327,9 @@ export function useSuspenseCountDocument<TArgs extends Prisma.DocumentCountArgs,
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Document', `${endpoint}/document/count`, args, options, fetch);
 }
-import type { DocumentStatus, DocumentType } from '../zenstack/models';
+import type { DocumentStatus } from '../zenstack/models';
 
-export function useCheckDocument<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; title?: string; body?: string; status?: DocumentStatus; uri?: string; fileType?: string; fileSize?: number; type?: DocumentType; reason?: string; uploadedById?: string; approvedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckDocument<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; title?: string; body?: string; status?: DocumentStatus; uri?: string; fileType?: string; fileSize?: number; topicId?: string; reason?: string; uploadedById?: string; approvedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Document', `${endpoint}/document/check`, args, options, fetch);
 }

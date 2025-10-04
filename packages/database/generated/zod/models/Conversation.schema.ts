@@ -6,7 +6,6 @@
 // @ts-nocheck
 
 import { z } from 'zod';
-import { DocumentTypeSchema } from '../enums/DocumentType.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -16,18 +15,19 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string().nullish(),
-    type: DocumentTypeSchema.nullish(),
 }
 ).strict();
 const relationSchema = z.object({
     user: z.record(z.unknown()).optional(),
     session: z.record(z.unknown()).optional(),
+    topic: z.record(z.unknown()).optional(),
     message: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     userId: z.string().nullish(),
     sessionId: z.string().nullish(),
+    topicId: z.string().nullish(),
 }
 );
 
@@ -62,8 +62,7 @@ export const ConversationPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string().nullish(),
-    type: DocumentTypeSchema.nullish()
+    name: z.string().nullish()
 }).partial().passthrough();
 
 

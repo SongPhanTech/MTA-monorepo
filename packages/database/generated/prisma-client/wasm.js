@@ -1162,7 +1162,7 @@ exports.Prisma.DocumentScalarFieldEnum = {
   uri: 'uri',
   fileType: 'fileType',
   fileSize: 'fileSize',
-  type: 'type',
+  topicId: 'topicId',
   reason: 'reason',
   uploadedById: 'uploadedById',
   approvedById: 'approvedById'
@@ -1179,7 +1179,7 @@ exports.Prisma.FAQScalarFieldEnum = {
   question: 'question',
   answer: 'answer',
   status: 'status',
-  type: 'type',
+  topicId: 'topicId',
   reason: 'reason',
   uploadedById: 'uploadedById',
   approvedById: 'approvedById'
@@ -1195,7 +1195,7 @@ exports.Prisma.PromptScalarFieldEnum = {
   updatedAt: 'updatedAt',
   prompt: 'prompt',
   status: 'status',
-  type: 'type',
+  topicId: 'topicId',
   reason: 'reason'
 };
 
@@ -1210,7 +1210,7 @@ exports.Prisma.ConversationScalarFieldEnum = {
   name: 'name',
   userId: 'userId',
   sessionId: 'sessionId',
-  type: 'type'
+  topicId: 'topicId'
 };
 
 exports.Prisma.MessageScalarFieldEnum = {
@@ -1224,6 +1224,18 @@ exports.Prisma.MessageScalarFieldEnum = {
   conversationId: 'conversationId',
   content: 'content',
   sender: 'sender'
+};
+
+exports.Prisma.TopicScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  type: 'type'
 };
 
 exports.Prisma.DM_CapBacScalarFieldEnum = {
@@ -4372,6 +4384,7 @@ exports.Prisma.DocumentOrderByRelevanceFieldEnum = {
   body: 'body',
   uri: 'uri',
   fileType: 'fileType',
+  topicId: 'topicId',
   reason: 'reason',
   uploadedById: 'uploadedById',
   approvedById: 'approvedById'
@@ -4383,6 +4396,7 @@ exports.Prisma.FAQOrderByRelevanceFieldEnum = {
   description: 'description',
   question: 'question',
   answer: 'answer',
+  topicId: 'topicId',
   reason: 'reason',
   uploadedById: 'uploadedById',
   approvedById: 'approvedById'
@@ -4393,6 +4407,7 @@ exports.Prisma.PromptOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   prompt: 'prompt',
+  topicId: 'topicId',
   reason: 'reason'
 };
 
@@ -4402,7 +4417,8 @@ exports.Prisma.ConversationOrderByRelevanceFieldEnum = {
   description: 'description',
   name: 'name',
   userId: 'userId',
-  sessionId: 'sessionId'
+  sessionId: 'sessionId',
+  topicId: 'topicId'
 };
 
 exports.Prisma.MessageOrderByRelevanceFieldEnum = {
@@ -4411,6 +4427,14 @@ exports.Prisma.MessageOrderByRelevanceFieldEnum = {
   description: 'description',
   conversationId: 'conversationId',
   content: 'content'
+};
+
+exports.Prisma.TopicOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  name: 'name',
+  type: 'type'
 };
 
 exports.Prisma.DM_CapBacOrderByRelevanceFieldEnum = {
@@ -6167,25 +6191,6 @@ exports.DocumentStatus = exports.$Enums.DocumentStatus = {
   DENY: 'DENY'
 };
 
-exports.DocumentType = exports.$Enums.DocumentType = {
-  GENERAL_ADMISSIONS_INFORMATION: 'GENERAL_ADMISSIONS_INFORMATION',
-  ADMISSIONS_RULES_AND_REGULATIONS: 'ADMISSIONS_RULES_AND_REGULATIONS',
-  TRAINING_RULES_AND_REGULATIONS: 'TRAINING_RULES_AND_REGULATIONS',
-  EXAMINATION_RULES_AND_REGULATIONS: 'EXAMINATION_RULES_AND_REGULATIONS',
-  ACADEMY_INFORMATION: 'ACADEMY_INFORMATION',
-  TRAINING_PROGRAMS_INFORMATION: 'TRAINING_PROGRAMS_INFORMATION',
-  REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS: 'REGULATIONS_POLICIES_AND_BENEFITS_FOR_MILITARY_CADETS',
-  REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS: 'REGULATIONS_POLICIES_AND_BENEFITS_FOR_CIVILIAN_STUDENTS',
-  FREQUENTLY_ASKED_QUESTIONS: 'FREQUENTLY_ASKED_QUESTIONS',
-  PARTY_WORK_AND_POLITICAL_WORK: 'PARTY_WORK_AND_POLITICAL_WORK',
-  INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY: 'INTERNAL_GUIDELINES_AND_REGULATIONS_OF_THE_ACADEMY',
-  IN_THE_FACULTY_HANDBOOK: 'IN_THE_FACULTY_HANDBOOK',
-  TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE: 'TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE',
-  DETECTION_AND_CORRECTION_OF_TEXT_ERRORS: 'DETECTION_AND_CORRECTION_OF_TEXT_ERRORS',
-  EXTRACTIVE_TEXT_SUMMARIZATION: 'EXTRACTIVE_TEXT_SUMMARIZATION',
-  ABSTRACTIVE_TEXT_SUMMARIZATION: 'ABSTRACTIVE_TEXT_SUMMARIZATION'
-};
-
 exports.MessageSender = exports.$Enums.MessageSender = {
   USER: 'USER',
   BOT: 'BOT'
@@ -6465,6 +6470,7 @@ exports.Prisma.ModelName = {
   Prompt: 'Prompt',
   Conversation: 'Conversation',
   Message: 'Message',
+  Topic: 'Topic',
   DM_CapBac: 'DM_CapBac',
   DM_ChucDanh: 'DM_ChucDanh',
   DM_ChucVu: 'DM_ChucVu',
