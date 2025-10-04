@@ -8,7 +8,6 @@
 import { z } from 'zod';
 import { DocumentStatus } from '../../zenstack/models';
 import { DocumentStatusSchema } from '../enums/DocumentStatus.schema';
-import { DocumentTypeSchema } from '../enums/DocumentType.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -19,10 +18,17 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     prompt: z.string().nullish(),
     status: DocumentStatusSchema,
-    type: DocumentTypeSchema,
     reason: z.string().nullish(),
 }
 ).strict();
+const relationSchema = z.object({
+    topic: z.record(z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    topicId: z.string().nullish(),
+}
+);
 
 /**
  * `Prompt` schema excluding foreign keys and relations.
@@ -33,7 +39,7 @@ export const PromptScalarSchema = baseSchema;
 /**
  * `Prompt` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const PromptSchema = PromptScalarSchema;
+export const PromptSchema = PromptScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -57,7 +63,6 @@ export const PromptPrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     prompt: z.string().nullish(),
     status: DocumentStatusSchema,
-    type: DocumentTypeSchema,
     reason: z.string().nullish()
 }).partial().passthrough();
 
@@ -73,9 +78,7 @@ export const PromptCreateScalarSchema = baseSchema.partial({
 /**
  * `Prompt` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const PromptCreateSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, status: true
-});
+export const PromptCreateSchema = PromptCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -87,5 +90,5 @@ export const PromptUpdateScalarSchema = baseSchema.partial();
 /**
  * `Prompt` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const PromptUpdateSchema = PromptUpdateScalarSchema;
+export const PromptUpdateSchema = PromptUpdateScalarSchema.merge(fkSchema.partial());
 

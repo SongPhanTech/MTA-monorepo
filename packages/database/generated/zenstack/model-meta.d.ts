@@ -11657,9 +11657,30 @@ declare const metadata: {
                     type: string;
                     isOptional: boolean;
                 };
-                type: {
+                topic: {
                     name: string;
                     type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                topicId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
                 };
                 reason: {
                     name: string;
@@ -11837,9 +11858,30 @@ declare const metadata: {
                         }[];
                     }[];
                 };
-                type: {
+                topic: {
                     name: string;
                     type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                topicId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
                 };
                 reason: {
                     name: string;
@@ -12012,9 +12054,30 @@ declare const metadata: {
                         }[];
                     }[];
                 };
-                type: {
+                topic: {
                     name: string;
                     type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                topicId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
                 };
                 reason: {
                     name: string;
@@ -12166,10 +12229,30 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
-                type: {
+                topic: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                topicId: {
                     name: string;
                     type: string;
                     isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
                 };
                 message: {
                     name: string;
@@ -12301,6 +12384,132 @@ declare const metadata: {
                     foreignKeyMapping: {
                         id: string;
                     };
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
+        };
+        topic: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                name: {
+                    name: string;
+                    type: string;
+                };
+                type: {
+                    name: string;
+                    type: string;
+                };
+                documents: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                faqs: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                prompts: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                conversations: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
                 };
             };
             uniqueConstraints: {

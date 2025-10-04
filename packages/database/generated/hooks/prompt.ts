@@ -327,9 +327,9 @@ export function useSuspenseCountPrompt<TArgs extends Prisma.PromptCountArgs, TQu
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Prompt', `${endpoint}/prompt/count`, args, options, fetch);
 }
-import type { DocumentStatus, DocumentType } from '../zenstack/models';
+import type { DocumentStatus } from '../zenstack/models';
 
-export function useCheckPrompt<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; prompt?: string; status?: DocumentStatus; type?: DocumentType; reason?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckPrompt<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; prompt?: string; status?: DocumentStatus; topicId?: string; reason?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Prompt', `${endpoint}/prompt/check`, args, options, fetch);
 }

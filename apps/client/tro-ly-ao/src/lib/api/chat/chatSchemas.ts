@@ -24,6 +24,11 @@ export type BodyHoiDapHoiDapPost = {
   conversation_id?: string;
 };
 
+export type BodyHoiDapV2HoiDapV2Post = {
+  prompt?: string;
+  conversation_id?: string;
+};
+
 export type BodyTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = {
   prompt?: string;
 };
