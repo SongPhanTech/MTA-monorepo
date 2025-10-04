@@ -192,12 +192,23 @@ const ThemTaiLieu = () => {
                     className={cn('mt-4', selectedFile ? 'w-2/5' : 'w-full')}
                     initialValues={{
                         files: {},
-                        topicId: topicOptions[0]?.value,
+                        topicId: null,
                     }}
                 >
                     <Col span={24}>
-                        <FormItem form={form} name={'topicId'} label="Loại tài liệu">
-                            <Select defaultValue={topicOptions[0]?.value} options={topicOptions} />
+                        <FormItem
+                            form={form}
+                            name={'topicId'}
+                            label="Loại tài liệu"
+                            rules={[{ required: true, message: 'Vui lòng chọn loại tài liệu' }]}
+                        >
+                            <Select
+                                placeholder="Chọn loại tài liệu"
+                                options={topicOptions.map((topic) => ({
+                                    value: topic.id,
+                                    label: topic.name,
+                                }))}
+                            />
                         </FormItem>
                     </Col>
                     <Col span={24}>

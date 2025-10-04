@@ -33,15 +33,22 @@ const PutCauHoi = () => {
     })
 
     const [form] = Form.useForm<FAQFormType>()
+
     useEffect(() => {
-        if (detail) {
+        if (isOpen && !id) {
+            form.resetFields()
+        }
+    }, [isOpen, id, form])
+
+    useEffect(() => {
+        if (id && detail) {
             form.setFieldsValue({
                 topicId: detail.topicId || undefined,
                 question: detail.question || undefined,
                 answer: detail.answer || undefined,
             })
         }
-    }, [detail, form.setFieldsValue])
+    }, [id, detail, form])
 
     const onFinish = async (values: FAQFormType) => {
         try {
@@ -129,26 +136,40 @@ const PutCauHoi = () => {
                 ) : undefined
             }
         >
-            <Form
-                form={form}
-                onFinish={onFinish}
-                layout="vertical"
-                initialValues={{
-                    topicId: topicOptions[0]?.value,
-                }}
-            >
+            <Form form={form} onFinish={onFinish} layout="vertical">
                 <Col span={24}>
-                    <FormItem form={form} name={'topicId'} label="Loại tài liệu">
-                        <Select defaultValue={topicOptions[0]?.value} options={topicOptions} />
+                    <FormItem
+                        form={form}
+                        name={'topicId'}
+                        label="Loại câu hỏi"
+                        rules={[{ required: true, message: 'Vui lòng chọn loại câu hỏi' }]}
+                    >
+                        <Select
+                            options={topicOptions.map((topic) => ({
+                                value: topic.id,
+                                label: topic.name,
+                            }))}
+                            placeholder="Chọn loại câu hỏi"
+                        />
                     </FormItem>
                 </Col>
                 <Col span={24}>
-                    <FormItem form={form} name={'question'} label="Câu hỏi">
+                    <FormItem
+                        form={form}
+                        name={'question'}
+                        label="Câu hỏi"
+                        rules={[{ required: true, message: 'Vui lòng nhập câu hỏi' }]}
+                    >
                         <Input />
                     </FormItem>
                 </Col>
                 <Col span={24}>
-                    <FormItem form={form} name={'answer'} label="Câu trả lời">
+                    <FormItem
+                        form={form}
+                        name={'answer'}
+                        label="Câu trả lời"
+                        rules={[{ required: true, message: 'Vui lòng nhập câu trả lời' }]}
+                    >
                         <Input.TextArea rows={6} />
                     </FormItem>
                 </Col>

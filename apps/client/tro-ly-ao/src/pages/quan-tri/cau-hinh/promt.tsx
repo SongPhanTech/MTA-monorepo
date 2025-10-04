@@ -154,7 +154,7 @@ function Page() {
     const { topicOptions, topics } = useTopics()
     const [searchKeyword, setSearchKeyword] = useState('')
     const filteredList = topicOptions.filter((item) =>
-        item.label.toLowerCase().includes(searchKeyword.toLowerCase())
+        item.name.toLowerCase().includes(searchKeyword.toLowerCase())
     )
 
     return (
@@ -169,13 +169,12 @@ function Page() {
             </div>
             <Row gutter={[16, 16]} className="bg-white rounded-md shadow-sm">
                 {filteredList.map((item) => {
-                    const topic = topics.find((t) => t.type === item.value)
                     return (
-                        <Col span={24} key={item.value}>
+                        <Col span={24} key={item.id}>
                             <PromptQuestionAnswer
-                                topicId={topic?.id || ''}
-                                topicType={item.value}
-                                label={item.label}
+                                topicId={item.id}
+                                topicType={item.type}
+                                label={item.name}
                             />
                         </Col>
                     )
