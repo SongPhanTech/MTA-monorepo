@@ -39,6 +39,7 @@ model Lecturer extends Base {
   evaluationCouncilMember     EvaluationCouncilMember[]
   evaluationSecretaryMember   EvaluationSecretaryMember[]
   survey                      Survey[]
+  clusterSurvey               ClusterSurvey[]
 
   @@schema("ql-dao-tao")
 }

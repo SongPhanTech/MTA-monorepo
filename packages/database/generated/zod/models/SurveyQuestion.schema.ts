@@ -22,12 +22,14 @@ const baseSchema = z.object({
 const relationSchema = z.object({
     surveyQuestionGroup: z.record(z.unknown()).optional(),
     survey: z.record(z.unknown()).optional(),
+    clusterSurvey: z.record(z.unknown()).optional(),
     surveyResponses: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     surveyQuestionGroupId: z.string().nullish(),
     surveyId: z.string().nullish(),
+    clusterSurveyId: z.string().nullish(),
 }
 );
 

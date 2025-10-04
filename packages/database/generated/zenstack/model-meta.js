@@ -13068,6 +13068,13 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'lecture',
+                }, clusterSurvey: {
+                    name: "clusterSurvey",
+                    type: "ClusterSurvey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'lecturers',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18441,6 +18448,13 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'surveyObjectType',
+                }, clusterSurvey: {
+                    name: "clusterSurvey",
+                    type: "ClusterSurvey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyObjectType',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18580,6 +18594,101 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
+        clusterSurvey: {
+            name: 'ClusterSurvey', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, startDate: {
+                    name: "startDate",
+                    type: "DateTime",
+                }, endDate: {
+                    name: "endDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, isPublic: {
+                    name: "isPublic",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, anonymous: {
+                    name: "anonymous",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, surveyObjectType: {
+                    name: "surveyObjectType",
+                    type: "SurveyObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'clusterSurvey',
+                    isRelationOwner: true,
+                }, lecturers: {
+                    name: "lecturers",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'clusterSurvey',
+                    isRelationOwner: true,
+                }, surveyChoice: {
+                    name: "surveyChoice",
+                    type: "SurveyChoice",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'clusterSurvey',
+                }, surveyQuestion: {
+                    name: "surveyQuestion",
+                    type: "SurveyQuestion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'clusterSurvey',
+                }, surveys: {
+                    name: "surveys",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'clusterSurvey',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+        },
         survey: {
             name: 'Survey', fields: {
                 id: {
@@ -18687,6 +18796,21 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'survey',
+                }, clusterSurvey: {
+                    name: "clusterSurvey",
+                    type: "ClusterSurvey",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'surveys',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "clusterSurveyId" },
+                }, clusterSurveyId: {
+                    name: "clusterSurveyId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'clusterSurvey',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18768,6 +18892,21 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'survey',
+                }, clusterSurvey: {
+                    name: "clusterSurvey",
+                    type: "ClusterSurvey",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'surveyQuestion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "clusterSurveyId" },
+                }, clusterSurveyId: {
+                    name: "clusterSurveyId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'clusterSurvey',
                 }, surveyResponses: {
                     name: "surveyResponses",
                     type: "SurveyResponse",
@@ -18829,6 +18968,7 @@ const metadata = {
                     name: "survey",
                     type: "Survey",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'surveyChoice',
                     isRelationOwner: true,
@@ -18836,8 +18976,24 @@ const metadata = {
                 }, surveyId: {
                     name: "surveyId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'survey',
+                }, clusterSurvey: {
+                    name: "clusterSurvey",
+                    type: "ClusterSurvey",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'surveyChoice',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "clusterSurveyId" },
+                }, clusterSurveyId: {
+                    name: "clusterSurveyId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'clusterSurvey',
                 }, surveyResponses: {
                     name: "surveyResponses",
                     type: "SurveyResponse",

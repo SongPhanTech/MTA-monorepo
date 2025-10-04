@@ -2372,6 +2372,19 @@ const policy = {
                 update: {},
             },
         },
+        clusterSurvey: {
+            modelLevel: {
+                read: { guard: ClusterSurvey_read, },
+                create: { guard: ClusterSurvey_create, inputChecker: ClusterSurvey_create_input, },
+                update: { guard: ClusterSurvey_update, },
+                postUpdate: { guard: ClusterSurvey_postUpdate, },
+                delete: { guard: ClusterSurvey_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         survey: {
             modelLevel: {
                 read: { guard: Survey_read, },
@@ -3102,6 +3115,7 @@ const policy = {
         surveyObjectType: { hasValidation: false },
         surveyTopic: { hasValidation: false },
         surveyQuestionGroup: { hasValidation: false },
+        clusterSurvey: { hasValidation: false },
         survey: { hasValidation: false },
         surveyQuestion: { hasValidation: false },
         surveyChoice: { hasValidation: false },
@@ -17335,6 +17349,84 @@ function SurveyQuestionGroup_delete(context, db) {
     return { OR: [] };
 }
 function $check_SurveyQuestionGroup_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClusterSurvey_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ClusterSurvey_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClusterSurvey_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClusterSurvey_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClusterSurvey_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ClusterSurvey_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClusterSurvey_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ClusterSurvey_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ClusterSurvey_postUpdate(input, context) {
+    return true;
+}
+function ClusterSurvey_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ClusterSurvey_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
