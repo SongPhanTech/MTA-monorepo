@@ -3,7 +3,7 @@ import { env } from '@/env'
 export async function fetchHoiDap({
     prompt,
     conversation_id,
-    signal, // Thêm signal ở đây
+    signal,
 }: {
     prompt: string
     conversation_id: string
