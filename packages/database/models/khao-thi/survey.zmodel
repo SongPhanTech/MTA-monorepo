@@ -91,6 +91,7 @@ model Survey extends Base {
   lectureId            String?            // khảo sát cho GV nào
   lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
 
+  // TODO: SurveyTopic[]
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
   surveyTopicId        String
 

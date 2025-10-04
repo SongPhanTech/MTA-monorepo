@@ -29,11 +29,13 @@ const relationSchema = z.object({
     surveyChoice: z.array(z.unknown()).optional(),
     surveyQuestion: z.array(z.unknown()).optional(),
     surveySessions: z.array(z.unknown()).optional(),
+    clusterSurvey: z.record(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     lectureId: z.string().nullish(),
     surveyTopicId: z.string(),
+    clusterSurveyId: z.string().nullish(),
 }
 );
 
