@@ -1,28 +1,30 @@
 import { EditOutlined } from '@ant-design/icons'
 import FormItem from '@components/commons/form-item'
-import { DOCUMENT_TYPE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import { $Enums } from '@workspace/db'
 import { useCreateManyPrompt, useFindFirstPrompt, useUpdateManyPrompt } from '@workspace/db/hooks'
 import { Input as AntdInput, Button, Col, Form, Input, message, Row } from 'antd'
 import { useEffect, useRef, useState } from 'react'
+import { useTopics } from '@/hooks/useTopics'
 
 type PromptFormType = {
     prompt: string
 }
 
 type PromptType = {
-    [key in $Enums.DocumentType]: PromptFormType
+    [key: string]: PromptFormType
 }
 
 type PromptQuestionAnswerType = {
-    type: $Enums.DocumentType
+    topicId: string
+    topicType: string
     label: string
 }
 
 const PromptQuestionAnswer = ({
     label,
-    type,
+    topicId,
+    topicType,
     hideEditButton,
 }: PromptQuestionAnswerType & { hideEditButton?: boolean }) => {
     const [form] = Form.useForm<PromptFormType>()
@@ -34,7 +36,7 @@ const PromptQuestionAnswer = ({
 
     const { data: promptData } = useFindFirstPrompt({
         where: {
-            type: type,
+            topicId: topicId,
         },
     })
 
@@ -64,14 +66,14 @@ const PromptQuestionAnswer = ({
                 await createPrompt({
                     data: {
                         prompt: values.prompt,
-                        type: type,
+                        topicId: topicId,
                         status: $Enums.DocumentStatus.APPROVE,
                     },
                 })
             } else {
                 await updatePrompt({
                     where: {
-                        type: type,
+                        topicId: topicId,
                     },
                     data: {
                         prompt: values.prompt,
@@ -149,10 +151,12 @@ const PromptQuestionAnswer = ({
 }
 
 function Page() {
+    const { topicOptions, topics } = useTopics()
     const [searchKeyword, setSearchKeyword] = useState('')
-    const filteredList = DOCUMENT_TYPE.filter((item) =>
+    const filteredList = topicOptions.filter((item) =>
         item.label.toLowerCase().includes(searchKeyword.toLowerCase())
     )
+
     return (
         <div>
             <span className="text-xl font-semibold text-gray-700">Thiết lập Prompt</span>
@@ -164,11 +168,18 @@ function Page() {
                 />
             </div>
             <Row gutter={[16, 16]} className="bg-white rounded-md shadow-sm">
-                {filteredList.map((item) => (
-                    <Col span={24} key={item.value}>
-                        <PromptQuestionAnswer type={item.value} label={item.label} />
-                    </Col>
-                ))}
+                {filteredList.map((item) => {
+                    const topic = topics.find((t) => t.type === item.value)
+                    return (
+                        <Col span={24} key={item.value}>
+                            <PromptQuestionAnswer
+                                topicId={topic?.id || ''}
+                                topicType={item.value}
+                                label={item.label}
+                            />
+                        </Col>
+                    )
+                })}
             </Row>
         </div>
     )

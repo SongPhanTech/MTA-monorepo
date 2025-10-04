@@ -3,18 +3,17 @@ import { fetchReadDocumentContentDocumentDocumentReaderGet } from '@api/qa/qaCom
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import UploadDragAndDrop, { FileUploadIcon } from '@components/commons/upload'
-import { DOCUMENT_TYPE } from '@constants/constants'
 import { cn, formatNiceBytes } from '@lib/utils'
-import { $Enums } from '@workspace/db'
 import { useCreateManyDocument } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { Col, Form, Input, Modal, message, Progress } from 'antd'
 import axios from 'axios'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useTopics } from '@/hooks/useTopics'
 
 type DocumentFormType = {
-    type: $Enums.DocumentType
+    topicId: string
     files: Record<
         string,
         {
@@ -29,7 +28,12 @@ type DocumentFormType = {
     >
 }
 const ThemTaiLieu = () => {
-    const { isOpen, onClose } = useDisclosure<string>({
+    const { topicOptions } = useTopics()
+    const {
+        isOpen,
+        onClose,
+        input: selectedFiles,
+    } = useDisclosure<{ file: File; progress: number; timeLeft: number }[]>({
         tag: 'ThemTaiLieu',
     })
 
@@ -153,7 +157,7 @@ const ThemTaiLieu = () => {
                     uri: url,
                     title: file.name,
                     fileType: file.type,
-                    type: values.type,
+                    topicId: values.topicId,
                     body,
                     fileSize: file.size,
                 })),
@@ -188,15 +192,12 @@ const ThemTaiLieu = () => {
                     className={cn('mt-4', selectedFile ? 'w-2/5' : 'w-full')}
                     initialValues={{
                         files: {},
-                        type: $Enums.DocumentType.ACADEMY_INFORMATION,
+                        topicId: topicOptions[0]?.value,
                     }}
                 >
                     <Col span={24}>
-                        <FormItem form={form} name={'type'} label="Loại tài liệu">
-                            <Select
-                                defaultValue={$Enums.DocumentType.ACADEMY_INFORMATION}
-                                options={DOCUMENT_TYPE}
-                            />
+                        <FormItem form={form} name={'topicId'} label="Loại tài liệu">
+                            <Select defaultValue={topicOptions[0]?.value} options={topicOptions} />
                         </FormItem>
                     </Col>
                     <Col span={24}>

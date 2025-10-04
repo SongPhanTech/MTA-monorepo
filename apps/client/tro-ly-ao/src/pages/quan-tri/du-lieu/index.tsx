@@ -2,7 +2,6 @@ import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
 import DeleteIcon from '@components/icons/delete'
-import { DOCUMENT_TYPE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import { cn, formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { $Enums } from '@workspace/db'
@@ -18,8 +17,10 @@ import { Button, Input, message, Tabs, type TabsProps, Tag, Tooltip } from 'antd
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { deleteVectorRecordFAQ, deleteVectorRecordHoiDap } from '@/api/chunking_and_vectorize'
+import { useTopics } from '@/hooks/useTopics'
 
 function Page() {
+    const { topicOptions } = useTopics()
     const [filters, setFilters] = useState<{
         title: string
         status: $Enums.DocumentStatus
@@ -68,6 +69,7 @@ function Page() {
     const { data: documents = [] } = useFindManyDocument({
         include: {
             uploadedBy: true,
+            topic: true,
         },
         where: {
             status: filters.status,
@@ -93,7 +95,10 @@ function Page() {
         where: { status: $Enums.DocumentStatus.PENDING },
     })
     const { data: faqs = [] } = useFindManyFAQ({
-        include: { uploadedBy: true },
+        include: {
+            uploadedBy: true,
+            topic: true,
+        },
         where: {
             status: faqFilter.status,
             question: {
@@ -259,9 +264,8 @@ function Page() {
                                 },
                                 {
                                     title: 'Loại tài liệu',
-                                    dataIndex: 'type',
-                                    render: (value) =>
-                                        DOCUMENT_TYPE.find((item) => item.value === value)?.label,
+                                    dataIndex: 'topic',
+                                    render: (topic) => topic?.name || 'Chưa phân loại',
                                 },
                                 {
                                     title: 'Người tải lên',
@@ -474,13 +478,10 @@ function Page() {
                                 },
                                 {
                                     title: 'Loại câu hỏi',
-                                    dataIndex: 'type',
+                                    dataIndex: 'topic',
                                     width: 200,
                                     align: 'center',
-                                    render: (value) => {
-                                        return DOCUMENT_TYPE.find((item) => item.value === value)
-                                            ?.label
-                                    },
+                                    render: (topic) => topic?.name || 'Chưa phân loại',
                                 },
                                 {
                                     title: 'Câu trả lời',

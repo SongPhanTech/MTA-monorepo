@@ -1,19 +1,20 @@
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
-import { DOCUMENT_TYPE } from '@constants/constants'
 import { cn } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import { useCreateFAQ, useDeleteFAQ, useFindFirstFAQ, useUpdateFAQ } from '@workspace/db/hooks'
 import { Button, Col, Form, Input, Modal, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useTopics } from '@/hooks/useTopics'
 
 type FAQFormType = {
-    type: $Enums.DocumentType
+    topicId: string
     question: string
     answer: string
 }
 const PutCauHoi = () => {
+    const { topicOptions } = useTopics()
     const {
         isOpen,
         onClose,
@@ -33,14 +34,14 @@ const PutCauHoi = () => {
 
     const [form] = Form.useForm<FAQFormType>()
     useEffect(() => {
-        if (id && detail) {
+        if (detail) {
             form.setFieldsValue({
-                type: detail.type,
-                question: detail.question ?? '',
-                answer: detail.answer ?? '',
+                topicId: detail.topicId || undefined,
+                question: detail.question || undefined,
+                answer: detail.answer || undefined,
             })
         }
-    }, [detail, id, form.setFieldsValue])
+    }, [detail, form.setFieldsValue])
 
     const onFinish = async (values: FAQFormType) => {
         try {
@@ -50,7 +51,7 @@ const PutCauHoi = () => {
                         id,
                     },
                     data: {
-                        type: values.type,
+                        topicId: values.topicId,
                         question: values.question,
                         answer: values.answer,
                     },
@@ -59,7 +60,7 @@ const PutCauHoi = () => {
             } else {
                 await create({
                     data: {
-                        type: values.type,
+                        topicId: values.topicId,
                         question: values.question,
                         answer: values.answer,
                     },
@@ -133,15 +134,12 @@ const PutCauHoi = () => {
                 onFinish={onFinish}
                 layout="vertical"
                 initialValues={{
-                    type: $Enums.DocumentType.ACADEMY_INFORMATION,
+                    topicId: topicOptions[0]?.value,
                 }}
             >
                 <Col span={24}>
-                    <FormItem form={form} name={'type'} label="Loại tài liệu">
-                        <Select
-                            defaultValue={$Enums.DocumentType.ACADEMY_INFORMATION}
-                            options={DOCUMENT_TYPE}
-                        />
+                    <FormItem form={form} name={'topicId'} label="Loại tài liệu">
+                        <Select defaultValue={topicOptions[0]?.value} options={topicOptions} />
                     </FormItem>
                 </Col>
                 <Col span={24}>
