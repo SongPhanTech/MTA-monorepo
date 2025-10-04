@@ -28,6 +28,7 @@ const relationSchema = z.object({
     fixedClasses: z.array(z.unknown()).optional(),
     subjectClasses: z.array(z.unknown()).optional(),
     surveySessions: z.array(z.unknown()).optional(),
+    clusterSurvey: z.array(z.unknown()).optional(),
 }
 );
 

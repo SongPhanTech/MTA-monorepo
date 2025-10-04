@@ -187,6 +187,7 @@ export * from './evidence-file';
 export * from './survey-object-type';
 export * from './survey-topic';
 export * from './survey-question-group';
+export * from './cluster-survey';
 export * from './survey';
 export * from './survey-question';
 export * from './survey-choice';

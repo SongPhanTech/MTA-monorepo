@@ -3699,6 +3699,26 @@ const policy: PolicyDef = {
             },
 
         },
+        clusterSurvey: {
+            modelLevel: {
+                read: { guard: ClusterSurvey_read, },
+                create: { guard: ClusterSurvey_create, inputChecker: ClusterSurvey_create_input, },
+                update: { guard: ClusterSurvey_update, },
+                postUpdate: { guard: ClusterSurvey_postUpdate, },
+                delete: { guard: ClusterSurvey_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         survey: {
             modelLevel: {
                 read: { guard: Survey_read, },
@@ -4723,6 +4743,7 @@ const policy: PolicyDef = {
         surveyObjectType: { hasValidation: false },
         surveyTopic: { hasValidation: false },
         surveyQuestionGroup: { hasValidation: false },
+        clusterSurvey: { hasValidation: false },
         survey: { hasValidation: false },
         surveyQuestion: { hasValidation: false },
         surveyChoice: { hasValidation: false },
@@ -16593,6 +16614,71 @@ function SurveyQuestionGroup_delete(context: QueryContext, db: CrudContract): an
 }
 
 function $check_SurveyQuestionGroup_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClusterSurvey_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ClusterSurvey_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClusterSurvey_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClusterSurvey_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClusterSurvey_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ClusterSurvey_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClusterSurvey_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClusterSurvey_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ClusterSurvey_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ClusterSurvey_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClusterSurvey_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
