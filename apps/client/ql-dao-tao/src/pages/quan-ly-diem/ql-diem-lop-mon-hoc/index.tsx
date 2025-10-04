@@ -1113,7 +1113,7 @@ export default function SubjectClassScore() {
                         {dataDetailSubjectClass && (
                             <>
                                 <Col span={24}>
-                                    <Flex justify="" align="center">
+                                    <Flex align="center">
                                         <div className="mr-6">
                                             Hạn nhập điểm TX/CC:
                                             <span
