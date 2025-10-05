@@ -4,6 +4,7 @@ import { useCreateTopic, useFindFirstTopic, useUpdateTopic } from '@workspace/db
 import { Col, Form, Input, Modal, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useTopics } from '@/hooks/useTopics'
 
 type TopicFormType = {
     name: string
@@ -12,6 +13,7 @@ type TopicFormType = {
 }
 
 const PutTopic = () => {
+    const { isTopicTypeExists } = useTopics()
     const {
         isOpen,
         onClose,
@@ -110,9 +112,20 @@ const PutTopic = () => {
                                 message:
                                     'Mã định danh phải là chữ in hoa, ngăn cách bằng dấu _ (VD: CHAT_BOT, AI_ASSISTANT)',
                             },
+                            {
+                                validator: (_, value) => {
+                                    if (!id && value && isTopicTypeExists(value)) {
+                                        return Promise.reject(new Error('Mã định danh đã tồn tại'))
+                                    }
+                                    return Promise.resolve()
+                                },
+                            },
                         ]}
                     >
-                        <Input placeholder="Nhập mã định danh (VD: CHAT_BOT, AI_ASSISTANT)" />
+                        <Input
+                            placeholder="Nhập mã định danh (VD: CHAT_BOT, AI_ASSISTANT)"
+                            style={{ textTransform: 'uppercase' }}
+                        />
                     </FormItem>
                 </Col>
                 <Col span={24}>

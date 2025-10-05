@@ -7,8 +7,10 @@ import { useCountTopic, useDeleteTopic, useFindManyTopic } from '@workspace/db/h
 import { Button, Input, message, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useTopics } from '@/hooks/useTopics'
 
 function Page() {
+    const { isSystemTopic } = useTopics()
     const [filters, setFilters] = useState<{
         search: string
     }>({
@@ -165,19 +167,28 @@ function Page() {
                                 fixed: 'right',
                                 render: (_, record) => (
                                     <div className="flex items-center justify-center gap-2">
-                                        <Tooltip title="Chỉnh sửa" placement="leftTop">
-                                            <EditOutlined
-                                                onClick={() => openPutTopic(record.id)}
-                                                className="text-blue-700 cursor-pointer text-lg"
-                                            />
-                                        </Tooltip>
-                                        <DeleteIcon
-                                            popConfirm={{
-                                                title: 'Xác nhận xoá chủ đề?',
-                                                description: 'Hành động này sẽ không thể hoàn tác.',
-                                                onConfirm: () => handleDeleteTopic(record.id),
-                                            }}
-                                        />
+                                        {!isSystemTopic(record.type) && (
+                                            <>
+                                                <Tooltip title="Chỉnh sửa" placement="leftTop">
+                                                    <EditOutlined
+                                                        onClick={() => openPutTopic(record.id)}
+                                                        className="text-blue-700 cursor-pointer text-lg"
+                                                    />
+                                                </Tooltip>
+                                                <DeleteIcon
+                                                    popConfirm={{
+                                                        title: 'Xác nhận xoá chủ đề?',
+                                                        description:
+                                                            'Hành động này sẽ không thể hoàn tác.',
+                                                        onConfirm: () =>
+                                                            handleDeleteTopic(record.id),
+                                                    }}
+                                                />
+                                            </>
+                                        )}
+                                        {isSystemTopic(record.type) && (
+                                            <span className="text-gray-400 text-sm">Hệ thống</span>
+                                        )}
                                     </div>
                                 ),
                             },
