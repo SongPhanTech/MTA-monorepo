@@ -1,6 +1,6 @@
 import { useFindManyTopic } from '@workspace/db/hooks'
 
-// System topic types that cannot be edited or deleted
+// System topic types
 export const SYSTEM_TOPIC_TYPES = [
     'ABSTRACTIVE_TEXT_SUMMARIZATION',
     'EXTRACTIVE_TEXT_SUMMARIZATION',
@@ -21,12 +21,18 @@ export const useTopics = () => {
         type: topic.type, // Topic type
     }))
 
-    // Helper function to check if a topic is system topic
+    const selectableTopicOptions = topics
+        .filter((topic) => !SYSTEM_TOPIC_TYPES.includes(topic.type as any))
+        .map((topic) => ({
+            id: topic.id, // Topic ID
+            name: topic.name, // Topic name
+            type: topic.type, // Topic type
+        }))
+
     const isSystemTopic = (topicType: string) => {
         return SYSTEM_TOPIC_TYPES.includes(topicType as any)
     }
 
-    // Helper function to check if a topic type already exists
     const isTopicTypeExists = (topicType: string) => {
         return topics.some((topic) => topic.type === topicType)
     }
@@ -34,6 +40,7 @@ export const useTopics = () => {
     return {
         topics,
         topicOptions,
+        selectableTopicOptions, // New option for excluding system topics
         isSystemTopic,
         isTopicTypeExists,
         systemTopicTypes: SYSTEM_TOPIC_TYPES,

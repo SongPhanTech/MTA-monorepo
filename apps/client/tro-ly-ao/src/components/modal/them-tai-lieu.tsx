@@ -28,7 +28,7 @@ type DocumentFormType = {
     >
 }
 const ThemTaiLieu = () => {
-    const { topicOptions } = useTopics()
+    const { selectableTopicOptions } = useTopics()
     const {
         isOpen,
         onClose,
@@ -100,7 +100,9 @@ const ThemTaiLieu = () => {
                         },
                     })
                     const selectedTopicId = form.getFieldValue('topicId')
-                    const selectedTopic = topicOptions.find((topic) => topic.id === selectedTopicId)
+                    const selectedTopic = selectableTopicOptions.find(
+                        (topic) => topic.id === selectedTopicId
+                    )
                     const resReaderDocument =
                         await fetchReadDocumentContentDocumentDocumentReaderGet({
                             queryParams: {
@@ -205,7 +207,7 @@ const ThemTaiLieu = () => {
                         >
                             <Select
                                 placeholder="Chọn loại tài liệu"
-                                options={topicOptions.map((topic) => ({
+                                options={selectableTopicOptions.map((topic) => ({
                                     value: topic.id,
                                     label: topic.name,
                                 }))}

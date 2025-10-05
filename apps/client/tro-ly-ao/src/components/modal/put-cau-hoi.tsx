@@ -14,7 +14,7 @@ type FAQFormType = {
     answer: string
 }
 const PutCauHoi = () => {
-    const { topicOptions } = useTopics()
+    const { selectableTopicOptions } = useTopics()
     const {
         isOpen,
         onClose,
@@ -145,7 +145,7 @@ const PutCauHoi = () => {
                         rules={[{ required: true, message: 'Vui lòng chọn loại câu hỏi' }]}
                     >
                         <Select
-                            options={topicOptions.map((topic) => ({
+                            options={selectableTopicOptions.map((topic) => ({
                                 value: topic.id,
                                 label: topic.name,
                             }))}
