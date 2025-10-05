@@ -44,7 +44,6 @@ const ThemTaiLieu = () => {
     const [form] = Form.useForm<DocumentFormType>()
 
     const files = Form.useWatch('files', form) || {}
-    const type = Form.useWatch('type', form) || {}
     const [modalThemTaiLieu, contextConfirmThemTaiLieu] = Modal.useModal()
 
     const onUpload = async (
@@ -100,12 +99,14 @@ const ThemTaiLieu = () => {
                             })
                         },
                     })
+                    const selectedTopicId = form.getFieldValue('topicId')
+                    const selectedTopic = topicOptions.find((topic) => topic.id === selectedTopicId)
                     const resReaderDocument =
                         await fetchReadDocumentContentDocumentDocumentReaderGet({
                             queryParams: {
                                 uri_file: resPresignedUrl.fileName,
-                                type,
-                            },
+                                topic_type: selectedTopic?.type || '',
+                            } as any,
                         })
                     form.setFieldsValue({
                         files: {
