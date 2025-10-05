@@ -26,10 +26,10 @@ function Page() {
     const handleTranslate = async (signal: AbortSignal) => {
         const response = await fetchXuLyVanBan({
             text: inputText,
-            doc_type: 'TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE',
+            topic_type: 'TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE',
             conversationId: 'None',
             signal,
-        })
+        } as any)
         if (!response?.body) throw new Error('Không có nội dung phản hồi')
         return cleanOutputText(await readStreamToText(response.body))
     }
@@ -37,10 +37,10 @@ function Page() {
     const handleSummarize = async (signal: AbortSignal) => {
         const response = await fetchXuLyVanBan({
             text: inputText,
-            doc_type: 'EXTRACTIVE_TEXT_SUMMARIZATION',
+            topic_type: 'EXTRACTIVE_TEXT_SUMMARIZATION',
             conversationId: 'None',
             signal,
-        })
+        } as any)
         if (!response?.body) throw new Error('Không có nội dung phản hồi')
         return cleanOutputText(await readStreamToText(response.body))
     }
@@ -48,10 +48,10 @@ function Page() {
     const handleExtraction = async (signal: AbortSignal) => {
         const response = await fetchXuLyVanBan({
             text: inputText,
-            doc_type: 'ABSTRACTIVE_TEXT_SUMMARIZATION',
+            topic_type: 'ABSTRACTIVE_TEXT_SUMMARIZATION',
             conversationId: 'None',
             signal,
-        })
+        } as any)
         if (!response?.body) throw new Error('Không có nội dung phản hồi')
         return cleanOutputText(await readStreamToText(response.body))
     }
@@ -59,10 +59,10 @@ function Page() {
     const handleFixSpelling = async (signal: AbortSignal) => {
         const response = await fetchXuLyVanBan({
             text: inputText,
-            doc_type: 'DETECTION_AND_CORRECTION_OF_TEXT_ERRORS',
+            topic_type: 'DETECTION_AND_CORRECTION_OF_TEXT_ERRORS',
             conversationId: 'None',
             signal,
-        })
+        } as any)
         if (!response?.body) throw new Error('Không có nội dung phản hồi')
         return cleanOutputText(await readStreamToText(response.body))
     }
