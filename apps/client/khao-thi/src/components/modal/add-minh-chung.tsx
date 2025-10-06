@@ -1,10 +1,11 @@
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { AnalysisFormEvidence, Evidence, RequirementCriterion } from '@workspace/db'
 import { useFindManyEvidence, useFindUniqueRequirementCriterion } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { diffArrays, type ItemProps } from '@workspace/libs/utils'
-import { Col, Form, Input, message, Select } from 'antd'
+import { Col, Form, Input, message } from 'antd'
 import { GripVertical } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
@@ -156,6 +157,7 @@ const AddEvidenceToPeriod = () => {
             },
         },
         {
+            refetchOnWindowFocus: false,
             enabled: !!id,
         }
     )

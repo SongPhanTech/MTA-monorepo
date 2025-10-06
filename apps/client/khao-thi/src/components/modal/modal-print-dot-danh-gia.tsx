@@ -247,7 +247,7 @@ const NavigationSidebar = ({
     onNavigate: (id: string) => void
 }) => {
     return (
-        <div className="fixed left-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg p-4 rounded-lg z-10 hidden print:hidden md:block max-h-max overflow-y-auto">
+        <div className="fixed left-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg p-4 rounded-lg z-10 hidden print:hidden md:block max-h-[100vh] overflow-y-auto">
             <div className="font-bold mb-2 flex items-center gap-2 text-[15px]">
                 <Bookmark size={16} />
                 Điều hướng

@@ -1,5 +1,4 @@
 import AddEvidenceToPeriod from './add-minh-chung'
-import AddTaiLieu from './add-tai-lieu'
 import ConfirmModal from './confirm-dialog'
 import PinEvidenceToPeriod from './ghim-minh-chung'
 import ModalPrintAllExams from './modal-print-all-exam-bank'
@@ -34,7 +33,6 @@ import PutRequirementCriterionCatalog from './put-yeu-cau'
 import ThongTinKhaoSatModal from './show-exam'
 export {
     ConfirmModal,
-    AddTaiLieu,
     PutSurveyObjectTypeModal,
     PutSurveyTopicModal,
     PutSurveyModal,
