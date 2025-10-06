@@ -17,6 +17,7 @@ import {
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import type { FilterDropdownProps, TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
+import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
 
 dayjs.locale('vi')
@@ -130,6 +131,67 @@ const Table = <T extends Record<string, unknown>>({
         return result
     }
 
+    function normalizeVietnamese(str: string): string {
+        return str
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/đ/g, 'd')
+            .replace(/Đ/g, 'D')
+            .toLowerCase()
+    }
+
+    function searchVietnamese(
+        data: { value: string; label: string }[],
+        keyword: string
+    ): { value: string; label: string }[] {
+        const normalizedKeyword = normalizeVietnamese(keyword.trim())
+        if (!normalizedKeyword) return data
+
+        return data.filter((item) => {
+            const normalizedLabel = normalizeVietnamese(item.label)
+            const normalizedValue = normalizeVietnamese(item.value)
+            return (
+                normalizedLabel.includes(normalizedKeyword) ||
+                normalizedValue.includes(normalizedKeyword)
+            )
+        })
+    }
+    function searchVietnameseTree(data: TreeNode[], keyword: string): TreeNode[] {
+        const normalizedKeyword = normalizeVietnamese(keyword.trim())
+        if (!normalizedKeyword) return data
+
+        const searchRecursive = (nodes: TreeNode[]): TreeNode[] => {
+            const result: TreeNode[] = []
+
+            for (const node of nodes) {
+                const normalizedLabel = normalizeVietnamese(node.label)
+                const normalizedValue = normalizeVietnamese(node.value)
+
+                const matchSelf =
+                    normalizedLabel.includes(normalizedKeyword) ||
+                    normalizedValue.includes(normalizedKeyword)
+
+                const matchedChildren = node.children ? searchRecursive(node.children) : []
+
+                // Nếu node hiện tại match hoặc có con match => giữ lại
+                if (matchSelf || matchedChildren.length > 0) {
+                    result.push({
+                        ...node,
+                        children: matchedChildren.length > 0 ? matchedChildren : undefined,
+                    })
+                }
+            }
+
+            return result
+        }
+
+        return searchRecursive(data)
+    }
+    type TreeNode = {
+        value: string
+        label: string
+        children?: TreeNode[]
+    }
     const genFilter = (item: ColumnTypeProps) => {
         const ListButton = useCallback(
             ({ clear, click }: { clear: () => void; click: () => void }) => {
@@ -310,20 +372,57 @@ const Table = <T extends Record<string, unknown>>({
             return {
                 filterDropdown: (props: FilterDropdownProps) => {
                     if (!item.options) return
+                    const [input, setInput] = useState('')
+                    const [optionsSerch, setOptionsSerch] = useState(item?.options || [])
+                    const handleSearch = async (value: string) => {
+                        if (!value.trim()) {
+                            setOptionsSerch(item?.options || [])
+                            return
+                        }
+
+                        try {
+                            const response = searchVietnamese(item?.options || [], value.trim())
+                            setOptionsSerch(response)
+                        } catch (_error: unknown) {
+                            setOptionsSerch(item?.options || [])
+                        }
+                    }
                     return (
-                        <div className="p-4 w-full min-w-[200px] max-w-[300px] ">
+                        <div className="p-4 w-full min-w-[200px] max-w-[300px]">
                             {item.options.length > 0 && (
                                 <div className="max-h-[500px] overflow-y-auto">
-                                    <Checkbox
-                                        onChange={(e: CheckboxChangeEvent) =>
-                                            onCheckAllChange(item, e)
+                                    <div className="mb-2">Tìm kiếm</div>
+                                    <Input
+                                        placeholder="Nhập từ khóa cần tìm kiếm"
+                                        prefix={
+                                            <Search
+                                                size={15}
+                                                style={{
+                                                    color: 'rgba(0, 0, 0, 0.25)',
+                                                }}
+                                            />
                                         }
-                                        indeterminate={indeterminate(item)}
-                                        checked={checkAll(item)}
-                                        className="mb-3"
-                                    >
-                                        Chọn tất cả
-                                    </Checkbox>
+                                        allowClear
+                                        value={input}
+                                        onChange={(e) => {
+                                            setInput(e.target.value)
+                                            handleSearch(e.target.value)
+                                        }}
+                                        style={{ height: 36, width: '100%', marginBottom: 16 }}
+                                    />
+                                    {!input && optionsSerch.length > 0 && (
+                                        <Checkbox
+                                            onChange={(e: CheckboxChangeEvent) =>
+                                                onCheckAllChange(item, e)
+                                            }
+                                            indeterminate={indeterminate(item)}
+                                            checked={checkAll(item)}
+                                            className="mb-3"
+                                        >
+                                            Chọn tất cả
+                                        </Checkbox>
+                                    )}
+
                                     <Checkbox.Group
                                         className="mb-3"
                                         style={{
@@ -337,7 +436,7 @@ const Table = <T extends Record<string, unknown>>({
                                             ] as string[]
                                         }
                                         onChange={(e: string[]) => onCheckChange(item, e)}
-                                        options={item.options}
+                                        options={optionsSerch}
                                     />
                                 </div>
                             )}
@@ -400,15 +499,50 @@ const Table = <T extends Record<string, unknown>>({
             return {
                 filterDropdown: (props: FilterDropdownProps) => {
                     if (!item.options) return
+                    const [input, setInput] = useState('')
+                    const [optionsSerch, setOptionsSerch] = useState(item?.options || [])
+                    const [checkStrictly, setCheckStrictly] = useState(false)
+
+                    const handleSearchTree = async (value: string) => {
+                        if (!value.trim()) {
+                            setOptionsSerch(item?.options || [])
+                            return
+                        }
+
+                        try {
+                            const response = searchVietnameseTree(item?.options || [], value.trim())
+                            setOptionsSerch(response)
+                        } catch (_error: unknown) {
+                            setOptionsSerch(item?.options || [])
+                        }
+                    }
                     return (
                         <div className="p-4 w-full min-w-[200px] max-w-[300px]">
                             <div className="mb-2">Tìm kiếm</div>
+                            <Input
+                                placeholder="Nhập từ khóa cần tìm kiếm"
+                                prefix={
+                                    <Search
+                                        size={15}
+                                        style={{
+                                            color: 'rgba(0, 0, 0, 0.25)',
+                                        }}
+                                    />
+                                }
+                                allowClear
+                                value={input}
+                                onChange={(e) => {
+                                    setInput(e.target.value)
+                                    handleSearchTree(e.target.value)
+                                }}
+                                style={{ height: 36, width: '100%', marginBottom: 16 }}
+                            />
                             <Tree
                                 autoExpandParent={true}
                                 checkable={true}
                                 defaultExpandAll={true}
                                 multiple={true}
-                                treeData={item.options}
+                                treeData={optionsSerch}
                                 checkedKeys={
                                     filtersTable[item.dataIndex as keyof FilterProps] as string[]
                                 }
@@ -418,6 +552,7 @@ const Table = <T extends Record<string, unknown>>({
                                         [item.dataIndex as keyof FilterProps]: checkedKeys,
                                     })
                                 }}
+                                checkStrictly={!!input}
                                 fieldNames={{ title: 'label', key: 'value', children: 'children' }}
                                 className="w-full mb-3 max-h-[500px] overflow-y-auto"
                             />
@@ -609,6 +744,7 @@ const Table = <T extends Record<string, unknown>>({
                     // if (!item.options) return
                     return (
                         <div className="p-4 w-full min-w-[200px] max-w-[300px]">
+                            <div className="mb-2">Tìm kiếm</div>
                             <DatePicker.RangePicker
                                 placeholder={['Từ ngày', 'Đến ngày']}
                                 className="w-full mb-3"
