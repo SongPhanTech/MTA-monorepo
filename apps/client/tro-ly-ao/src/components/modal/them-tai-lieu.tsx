@@ -1,4 +1,4 @@
-import { CloseCircleOutlined } from '@ant-design/icons'
+import { CloseCircleOutlined, InboxOutlined } from '@ant-design/icons'
 import { fetchReadDocumentContentDocumentDocumentReaderGet } from '@api/qa/qaComponents'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
@@ -44,6 +44,7 @@ const ThemTaiLieu = () => {
     const [form] = Form.useForm<DocumentFormType>()
 
     const files = Form.useWatch('files', form) || {}
+    const selectedTopicId = Form.useWatch('topicId', form)
     const [modalThemTaiLieu, contextConfirmThemTaiLieu] = Modal.useModal()
 
     const onUpload = async (
@@ -53,6 +54,13 @@ const ThemTaiLieu = () => {
         }>
     ) => {
         try {
+            // Kiểm tra xem đã chọn topic chưa
+            const currentTopicId = form.getFieldValue('topicId')
+            if (!currentTopicId) {
+                message.error('Vui lòng chọn loại tài liệu trước khi tải lên')
+                return
+            }
+
             const valuesWithId = values.map((item) => ({
                 ...item,
                 id: crypto.randomUUID(),
@@ -216,13 +224,26 @@ const ThemTaiLieu = () => {
                     </Col>
                     <Col span={24}>
                         <FormItem form={form} name={'files'}>
-                            <UploadDragAndDrop
-                                multiple
-                                accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"
-                                className="w-full h-[165px]"
-                                isShowUpload={false}
-                                onUpload={onUpload}
-                            />
+                            {selectedTopicId ? (
+                                <UploadDragAndDrop
+                                    multiple
+                                    accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"
+                                    className="w-full h-[165px]"
+                                    isShowUpload={false}
+                                    onUpload={onUpload}
+                                />
+                            ) : (
+                                <div className="w-full h-[165px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
+                                    <div className="text-center text-gray-500">
+                                        <div className="text-4xl mb-2">
+                                            <InboxOutlined />
+                                        </div>
+                                        <div>
+                                            Vui lòng chọn loại tài liệu trước khi tải lên file
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </FormItem>
                     </Col>
                     <div className="overflow-y-scroll max-h-[300px] mt-4">
