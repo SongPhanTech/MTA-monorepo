@@ -187,7 +187,7 @@ function Page() {
                                             </>
                                         )}
                                         {isSystemTopic(record.type) && (
-                                            <span className="text-gray-400 text-sm">Hệ thống</span>
+                                            <span className="text-gray-400 text-sm">Chức năng</span>
                                         )}
                                     </div>
                                 ),

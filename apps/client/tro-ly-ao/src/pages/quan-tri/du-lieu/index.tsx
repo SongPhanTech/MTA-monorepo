@@ -324,7 +324,7 @@ function Page() {
                                     title: 'Thao tác',
                                     key: 'action',
                                     align: 'center',
-                                    width: 80,
+                                    width: 120,
                                     render: (_, record) => (
                                         <div className="flex items-center justify-center gap-2">
                                             {(record.status === $Enums.DocumentStatus.PENDING ||
@@ -515,7 +515,7 @@ function Page() {
                                     title: 'Trạng thái',
                                     dataIndex: 'status',
                                     align: 'center',
-                                    width: 120,
+                                    width: 100,
                                     render: (value: $Enums.DocumentStatus) => {
                                         const statusMap = {
                                             [$Enums.DocumentStatus.APPROVE]: {
@@ -549,7 +549,7 @@ function Page() {
                                     title: 'Thao tác',
                                     key: 'action',
                                     align: 'center',
-                                    width: 80,
+                                    width: 100,
                                     render: (_, record) => (
                                         <div className="flex items-center justify-center gap-2">
                                             {(record.status === $Enums.DocumentStatus.PENDING ||
