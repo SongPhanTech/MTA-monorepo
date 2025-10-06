@@ -122,10 +122,7 @@ const PutTopic = () => {
                             },
                         ]}
                     >
-                        <Input
-                            placeholder="Nhập mã định danh (VD: CHAT_BOT, AI_ASSISTANT)"
-                            style={{ textTransform: 'uppercase' }}
-                        />
+                        <Input placeholder="Nhập mã định danh (VD: CHAT_BOT, AI_ASSISTANT)" />
                     </FormItem>
                 </Col>
                 <Col span={24}>
