@@ -148,6 +148,7 @@ export default {
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
   "TRO_LY_AO": {
+    "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",
     "INDEX": "/",
     "QUAN_TRI_CAU_HINH_PROMT": "/quan-tri/cau-hinh/promt",

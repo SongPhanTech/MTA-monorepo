@@ -3,6 +3,7 @@ import {
     DatabaseOutlined,
     FileTextOutlined,
     MessageOutlined,
+    QuestionCircleOutlined,
     SearchOutlined,
 } from '@ant-design/icons'
 import { Button, Modal } from 'antd'
@@ -16,6 +17,7 @@ const APP_ICONS: Record<string, React.ComponentType<{ style?: React.CSSPropertie
     TRO_LY_AO: MessageOutlined,
     TIM_KIEM_VAN_BAN: SearchOutlined,
     XU_LY_VAN_BAN: FileTextOutlined,
+    CAU_HOI_THUONG_GAP: QuestionCircleOutlined,
     QUAN_TRI_DU_LIEU: DatabaseOutlined,
 }
 
