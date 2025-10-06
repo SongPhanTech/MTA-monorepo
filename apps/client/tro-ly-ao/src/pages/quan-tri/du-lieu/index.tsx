@@ -1,4 +1,4 @@
-import { EyeOutlined } from '@ant-design/icons'
+import { AuditOutlined, EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
 import DeleteIcon from '@components/icons/delete'
@@ -291,18 +291,6 @@ function Page() {
                                     dataIndex: 'status',
                                     align: 'center',
                                     width: 120,
-                                    onCell: (record) => ({
-                                        className: 'cursor-pointer',
-                                        onClick: (e) => {
-                                            e.stopPropagation()
-                                            if (
-                                                record.status === $Enums.DocumentStatus.PENDING ||
-                                                record.status === $Enums.DocumentStatus.DENY
-                                            ) {
-                                                openPheDuyetTaiLieu(record.id)
-                                            }
-                                        },
-                                    }),
                                     render: (value: $Enums.DocumentStatus) => {
                                         const statusMap = {
                                             [$Enums.DocumentStatus.APPROVE]: {
@@ -339,6 +327,17 @@ function Page() {
                                     width: 80,
                                     render: (_, record) => (
                                         <div className="flex items-center justify-center gap-2">
+                                            {(record.status === $Enums.DocumentStatus.PENDING ||
+                                                record.status === $Enums.DocumentStatus.DENY) && (
+                                                <Tooltip title="Phê duyệt" placement="top">
+                                                    <AuditOutlined
+                                                        onClick={() =>
+                                                            openPheDuyetTaiLieu(record.id)
+                                                        }
+                                                        className="text-green-600 cursor-pointer text-lg"
+                                                    />
+                                                </Tooltip>
+                                            )}
                                             <Tooltip title="Xem chi tiết" placement="leftTop">
                                                 <EyeOutlined
                                                     onClick={() => openPreviewTaiLieu(record.id)}
@@ -517,17 +516,6 @@ function Page() {
                                     dataIndex: 'status',
                                     align: 'center',
                                     width: 120,
-                                    onCell: (record) => ({
-                                        onClick: (e) => {
-                                            e.stopPropagation()
-                                            if (
-                                                record.status === $Enums.DocumentStatus.PENDING ||
-                                                record.status === $Enums.DocumentStatus.DENY
-                                            ) {
-                                                openPheDuyetCauHoiThuongGap(record.id)
-                                            }
-                                        },
-                                    }),
                                     render: (value: $Enums.DocumentStatus) => {
                                         const statusMap = {
                                             [$Enums.DocumentStatus.APPROVE]: {
@@ -550,7 +538,7 @@ function Page() {
                                         return (
                                             <Tag
                                                 color={status.color}
-                                                className="px-3 py-1 text-sm rounded cursor-pointer"
+                                                className="px-3 py-1 text-sm rounded"
                                             >
                                                 {status.label}
                                             </Tag>
@@ -564,6 +552,17 @@ function Page() {
                                     width: 80,
                                     render: (_, record) => (
                                         <div className="flex items-center justify-center gap-2">
+                                            {(record.status === $Enums.DocumentStatus.PENDING ||
+                                                record.status === $Enums.DocumentStatus.DENY) && (
+                                                <Tooltip title="Phê duyệt" placement="top">
+                                                    <AuditOutlined
+                                                        onClick={() =>
+                                                            openPheDuyetCauHoiThuongGap(record.id)
+                                                        }
+                                                        className="text-green-600 cursor-pointer text-lg"
+                                                    />
+                                                </Tooltip>
+                                            )}
                                             <Tooltip title="Xem chi tiết" placement="leftTop">
                                                 <EyeOutlined
                                                     onClick={() => openPutCauHoi(record.id)}
