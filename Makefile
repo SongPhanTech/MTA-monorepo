@@ -69,7 +69,7 @@ tro-ly-ao:
 	pnpm i && \
 	pnpm build && \
 	zip -r out.zip out && \
-	scp out.zip swan1:app && \		
+	scp out.zip swan1:app && \
 	ssh swan1 "cd app && \
 		docker compose -f app-docker-compose.yml down mta-chatbot-cdn router-chatbot-api && \
 		rm -rf chatbot-cdn && \

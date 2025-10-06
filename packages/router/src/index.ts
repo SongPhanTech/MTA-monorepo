@@ -482,7 +482,7 @@ const NAVIGATION: NavigationType = {
                 id: 'tro-ly-ao',
                 label: 'Trợ lý ảo',
                 icon: MessageOutlined,
-                path: ROUTER_PATH.TRO_LY_AO.INDEX,
+                path: ROUTER_PATH.TRO_LY_AO.TRO_LY_AO,
             },
         ],
     },
