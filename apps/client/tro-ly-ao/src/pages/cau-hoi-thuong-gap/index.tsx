@@ -138,6 +138,12 @@ function Page() {
                                 value={searchTerm}
                                 onChange={(e) => handleSearch(e.target.value)}
                                 allowClear
+                                style={
+                                    {
+                                        '--ant-color-primary': '#028850',
+                                    } as any
+                                }
+                                className="[&_.ant-input-search-button]:!bg-[#028850] [&_.ant-input-search-button]:!border-[#028850] [&_.ant-input-search-button_.anticon]:!text-white"
                             />
                         </div>
                         <div className="sm:w-64">
@@ -204,7 +210,7 @@ function Page() {
                                         className="mb-6"
                                     >
                                         {/* Topic Header */}
-                                        <div className="flex items-center gap-2 mb-4">
+                                        <div className="flex items-center gap-2 mb-4 p-3 bg-gray-50 border-l-4 border-[#028850]">
                                             <TagsOutlined style={{ color: '#028850' }} />
                                             <Title
                                                 level={5}
@@ -236,7 +242,7 @@ function Page() {
                                                             className="text-base mt-1 flex-shrink-0"
                                                             style={{ color: '#028850' }}
                                                         />
-                                                        <Text className="text-base font-medium text-gray-800">
+                                                        <Text className="text-base font-semibold text-gray-900">
                                                             {faq.question ||
                                                                 'Câu hỏi không có tiêu đề'}
                                                         </Text>
@@ -261,6 +267,7 @@ function Page() {
                                                     backgroundColor: '#fff',
                                                     border: '1px solid #f0f0f0',
                                                     borderRadius: '8px',
+                                                    boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                                                 },
                                             }))}
                                         />

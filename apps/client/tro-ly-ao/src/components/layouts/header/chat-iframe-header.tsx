@@ -1,7 +1,6 @@
 import {
     AppstoreOutlined,
     CloseOutlined,
-    ExportOutlined,
     MenuOutlined,
     UnorderedListOutlined,
 } from '@ant-design/icons'
@@ -87,21 +86,21 @@ const ChatIframeHeader = ({
             </div>
 
             <div className="flex items-center gap-2">
-                <Button
+                {/* <Button
                     type="text"
                     size="small"
                     icon={<ExportOutlined />}
                     onClick={handleExpandToNewTab}
                     className="flex items-center justify-center hover:bg-white text-gray-600 hover:text-primary transition-all duration-200 w-8 h-8 rounded-lg"
                     title="Mở trong tab mới"
-                />
+                /> */}
 
                 <Button
                     type="text"
                     size="small"
                     icon={<CloseOutlined />}
                     onClick={handleClose}
-                    className="flex items-center justify-center hover:bg-white text-gray-600 hover:text-red-600 transition-all duration-200 w-8 h-8 rounded-lg"
+                    className="flex items-center justify-center hover:bg-gray-100 text-gray-600 hover:text-red-600 transition-all duration-200 w-8 h-8 rounded-lg"
                     title="Đóng chat"
                 />
             </div>
