@@ -40,7 +40,7 @@ export default function TrainingObjectTypePage() {
                       },
                   }
                 : {}),
-            ...(filters.type
+            ...(filters.type?.length
                 ? {
                       type: {
                           in: filters.type,
