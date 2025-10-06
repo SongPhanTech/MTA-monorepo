@@ -1,7 +1,6 @@
 import { SearchOutlined } from '@ant-design/icons'
 import { CardDocument } from '@components/commons/card-document'
 import { FileUploadIcon } from '@components/commons/upload'
-import { DOCUMENT_TYPE } from '@constants/constants'
 import ChatLayout from '@layouts/chat-layout'
 import { formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
@@ -24,6 +23,7 @@ export default function Page() {
     const { data: documents = [] } = useFindManyDocument({
         include: {
             uploadedBy: true,
+            topic: true,
         },
         where: {
             status: $Enums.DocumentStatus.APPROVE,
@@ -124,13 +124,7 @@ export default function Page() {
                             {' '}
                             <div>
                                 <p className="font-semibold text-gray-700">Loại tài liệu</p>
-                                <p>
-                                    {
-                                        DOCUMENT_TYPE.find(
-                                            (item) => item.value === selectedDocument.type
-                                        )?.label
-                                    }
-                                </p>
+                                <p>{selectedDocument.topic?.name || 'Chưa phân loại'}</p>
                             </div>
                             <div>
                                 <p className="font-semibold text-gray-700">Kích thước</p>
@@ -138,7 +132,7 @@ export default function Page() {
                             </div>
                             <div>
                                 <p className="font-semibold text-gray-700">Người đăng</p>
-                                <p>{selectedDocument.uploadedBy.sTen}</p>
+                                <p>{selectedDocument.uploadedBy.code || 'Chưa xác định'}</p>
                             </div>
                             <div>
                                 <p className="font-semibold text-gray-700">Ngày đăng</p>

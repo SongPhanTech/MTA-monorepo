@@ -1,6 +1,6 @@
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
-import { type DocumentType, MessageSender } from '@workspace/db'
+import { MessageSender } from '@workspace/db'
 import { useCreateConversation } from '@workspace/db/hooks'
 import { Card, message } from 'antd'
 import { useRouter } from 'next/router'
@@ -60,7 +60,6 @@ export default function TroLyAo() {
                             },
                         ],
                     },
-                    type: 'ACADEMY_INFORMATION' as DocumentType,
                 },
             })
 
@@ -106,7 +105,6 @@ export default function TroLyAo() {
                             },
                         ],
                     },
-                    type: 'ACADEMY_INFORMATION' as DocumentType,
                 },
             })
 

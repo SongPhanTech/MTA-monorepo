@@ -20,6 +20,12 @@ const APPS_TYPES = [
         path: ROUTER_PATH.TRO_LY_AO.XU_LY_VAN_BAN,
         isShow: true,
     },
+    {
+        key: 'CAU_HOI_THUONG_GAP',
+        label: 'Câu hỏi thường gặp',
+        path: ROUTER_PATH.TRO_LY_AO.CAU_HOI_THUONG_GAP,
+        isShow: true,
+    },
     // {
     //     key: 'QUAN_TRI_DU_LIEU',
     //     label: 'Quản trị dữ liệu',

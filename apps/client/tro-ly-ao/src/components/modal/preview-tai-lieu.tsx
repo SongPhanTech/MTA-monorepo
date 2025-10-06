@@ -1,6 +1,5 @@
 import { ArrowDownOutlined } from '@ant-design/icons'
 import { FileUploadIcon } from '@components/commons/upload'
-import { DOCUMENT_TYPE } from '@constants/constants'
 import { formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 import { useDeleteDocument, useFindFirstDocument } from '@workspace/db/hooks'
@@ -20,6 +19,7 @@ const PreviewTaiLieu = () => {
         where: { id },
         include: {
             uploadedBy: true,
+            topic: true,
         },
     })
 
@@ -63,12 +63,7 @@ const PreviewTaiLieu = () => {
                     <span className="font-semibold text-base">Thông tin về tài liệu</span>
                     <div>
                         <p className="font-semibold">Loại tài liệu</p>
-                        <p>
-                            {
-                                DOCUMENT_TYPE.find((item) => item.value === selectedDocument.type)
-                                    ?.label
-                            }
-                        </p>
+                        <p>{selectedDocument.topic?.name || 'Chưa phân loại'}</p>
                     </div>
                     <div>
                         <p className="font-semibold">Kích thước</p>
@@ -76,7 +71,7 @@ const PreviewTaiLieu = () => {
                     </div>
                     <div>
                         <p className="font-semibold">Người đăng</p>
-                        <p>{selectedDocument.uploadedBy.sTen}</p>
+                        <p>{selectedDocument.uploadedBy.code || 'Chưa xác định'}</p>
                     </div>
                     <div>
                         <p className="font-semibold">Ngày đăng</p>
