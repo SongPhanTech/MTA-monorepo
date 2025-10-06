@@ -75,9 +75,10 @@ export default function EvaluationPeriodPage() {
                 },
             },
         },
-        { enabled: !!id }
+        { efetchOnWindowFocus: false, enabled: !!id }
     )
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const dataTab = useMemo(() => {
         if (data) {
             return data.standards.map((i: DataIndex, index: number) => {
