@@ -103,7 +103,7 @@ export default function EvaluatedPage({
                 conclusion: data?.conclusion,
             })
         }
-    }, [data, activeKey])
+    }, [data.id, activeKey])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <skip function>
     const items = useMemo(() => {

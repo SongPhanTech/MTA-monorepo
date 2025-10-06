@@ -75,9 +75,10 @@ export default function EvaluationPeriodPage() {
                 },
             },
         },
-        { enabled: !!id }
+        { efetchOnWindowFocus: false, enabled: !!id }
     )
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const dataTab = useMemo(() => {
         if (data) {
             return data.standards.map((i: DataIndex, index: number) => {
@@ -99,9 +100,11 @@ export default function EvaluationPeriodPage() {
     return (
         <div className="h-full">
             <Row gutter={[16, 0]}>
-                <Col span={24} className="font-bold text-xl mb-6 px-8">
+                <Col span={24} className="font-bold text-xl mb-6 px-4">
                     <Flex justify="space-between">
-                        <Col span={12}>{data?.name}</Col>
+                        <Col className="text-2xl font-bold" span={12}>
+                            {data?.name}
+                        </Col>
                         <Col span={12} className="text-right">
                             <Button
                                 type="primary"
