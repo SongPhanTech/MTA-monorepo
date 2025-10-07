@@ -28,7 +28,7 @@ app.use(
             'https://daotao.mta.swantech.vn',
             'https://chatbot.mta.swantech.vn',
             'https://khaothi.mta.swantech.vn',
-            'https://danhmuc.mta.swantech.vn',
+            'https://am.swantech.vn',
             'https://*.swantech.vn',
         ],
         credentials: true,
