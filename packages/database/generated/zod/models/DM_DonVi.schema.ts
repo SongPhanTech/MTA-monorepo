@@ -41,6 +41,8 @@ const relationSchema = z.object({
     subjects: z.array(z.unknown()).optional(),
     trainingFields: z.array(z.unknown()).optional(),
     trainingMajors: z.array(z.unknown()).optional(),
+    secondTrainingMajors: z.array(z.unknown()).optional(),
+    thirdTrainingMajors: z.array(z.unknown()).optional(),
     researchProjects: z.array(z.unknown()).optional(),
     thesisProjects: z.array(z.unknown()).optional(),
     surveyObjectTypes: z.array(z.unknown()).optional(),

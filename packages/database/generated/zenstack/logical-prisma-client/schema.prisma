@@ -1707,11 +1707,14 @@ model TrainingField {
   name                String                              @unique()
   englishName         String
   publishDate         DateTime
+  ///  số QĐ mở mã ngành
+  decisionNo          String?
   organization        DM_DonVi                            @relation(fields: [organizationId], references: [Id])
   organizationId      String                              @db.Uuid()
   trainingObjectTypes TrainingFieldOnTrainingObjectType[]
   trainingMajors      TrainingMajor[]
   surveyObjectTypes   SurveyObjectType[]
+  documentFiles       DocumentFile[]
 
   @@schema("ql-dao-tao")
 }
@@ -1757,8 +1760,12 @@ model TrainingMajor {
   numberCreditsRequired Int                                 @default(0)
   /// Số tín chỉ tự chọn
   numberCreditsElective Int                                 @default(0)
-  organization          DM_DonVi                            @relation(fields: [organizationId], references: [Id])
+  organization          DM_DonVi                            @relation("organization", fields: [organizationId], references: [Id])
   organizationId        String                              @db.Uuid()
+  secondOrganization    DM_DonVi?                           @relation("secondOrganization", fields: [secondOrganizationId], references: [Id])
+  secondOrganizationId  String?                             @db.Uuid()
+  thirdOrganization     DM_DonVi?                           @relation("thirdOrganization", fields: [thirdOrganizationId], references: [Id])
+  thirdOrganizationId   String?                             @db.Uuid()
   trainingField         TrainingField                       @relation(fields: [trainingFieldId], references: [id])
   trainingFieldId       String
   trainingObjectTypes   TrainingMajorOnTrainingObjectType[]
@@ -2515,40 +2522,42 @@ model DM_DanToc {
 /// @@deny('read', bDeleted == true)
 /// @@allow('read', auth() != null)
 model DM_DonVi {
-  Id                String             @id() @default(uuid()) @db.Uuid()
-  sMa               String?
-  sTen              String?
-  sGhiChu           String?
-  iSTT              Int?               @default(0)
-  bActive           Boolean?           @default(true)
-  bDeleted          Boolean?           @default(false)
-  bSystem           Boolean?           @default(false)
-  iDictionaryKey    Int?               @default(0)
-  dNgayTao          DateTime?
-  dNgaySua          DateTime?
-  sNguoiTao         String?
-  sNguoiSua         String?
-  sThietBiTao       String?
-  sThietBiSua       String?
-  sCode             String?
-  sTenVietTat       String?
-  sParentId         String?            @db.Uuid()
-  sTruongDonVi      String?            @db.Uuid()
-  sChucNangNhiemVu  String?
-  sDiaChi           String?
-  lecturers         Lecturer[]
-  lecturerHistory   LecturerHistory[]
-  staffs            Staff[]
-  staffHistory      StaffHistory[]
-  curriculum        Curriculum[]
-  fixedClass        FixedClass[]
-  subjectVersions   SubjectVersion[]
-  subjects          Subject[]
-  trainingFields    TrainingField[]
-  trainingMajors    TrainingMajor[]
-  researchProjects  ResearchProject[]
-  thesisProjects    ThesisProject[]
-  surveyObjectTypes SurveyObjectType[]
+  Id                   String             @id() @default(uuid()) @db.Uuid()
+  sMa                  String?
+  sTen                 String?
+  sGhiChu              String?
+  iSTT                 Int?               @default(0)
+  bActive              Boolean?           @default(true)
+  bDeleted             Boolean?           @default(false)
+  bSystem              Boolean?           @default(false)
+  iDictionaryKey       Int?               @default(0)
+  dNgayTao             DateTime?
+  dNgaySua             DateTime?
+  sNguoiTao            String?
+  sNguoiSua            String?
+  sThietBiTao          String?
+  sThietBiSua          String?
+  sCode                String?
+  sTenVietTat          String?
+  sParentId            String?            @db.Uuid()
+  sTruongDonVi         String?            @db.Uuid()
+  sChucNangNhiemVu     String?
+  sDiaChi              String?
+  lecturers            Lecturer[]
+  lecturerHistory      LecturerHistory[]
+  staffs               Staff[]
+  staffHistory         StaffHistory[]
+  curriculum           Curriculum[]
+  fixedClass           FixedClass[]
+  subjectVersions      SubjectVersion[]
+  subjects             Subject[]
+  trainingFields       TrainingField[]
+  trainingMajors       TrainingMajor[]    @relation("organization")
+  secondTrainingMajors TrainingMajor[]    @relation("secondOrganization")
+  thirdTrainingMajors  TrainingMajor[]    @relation("thirdOrganization")
+  researchProjects     ResearchProject[]
+  thesisProjects       ThesisProject[]
+  surveyObjectTypes    SurveyObjectType[]
 
   @@index([sParentId], map: "IX_DM_DonVi_iParentId")
   @@index([sMa], map: "IX_DM_DonVi_sMa")
@@ -4395,6 +4404,8 @@ model DocumentFile {
   diplomaVerificationFrontId String?                         @unique()
   diplomaVerificationBack    DiplomaVerificationApplication? @relation(name: "DiplomaVerificationBack", fields: [diplomaVerificationBackId], references: [id])
   diplomaVerificationBackId  String?                         @unique()
+  trainingField              TrainingField?                  @relation(fields: [trainingFieldId], references: [id])
+  trainingFieldId            String?
   note                       Note?                           @relation(fields: [noteId], references: [id])
   noteId                     String?
 

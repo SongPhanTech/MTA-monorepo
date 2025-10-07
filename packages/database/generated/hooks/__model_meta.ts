@@ -4294,6 +4294,10 @@ const metadata = {
                 }, publishDate: {
                     name: "publishDate",
                     type: "DateTime",
+                }, decisionNo: {
+                    name: "decisionNo",
+                    type: "String",
+                    isOptional: true,
                 }, organization: {
                     name: "organization",
                     type: "DM_DonVi",
@@ -4325,6 +4329,12 @@ const metadata = {
                     isArray: true,
                     backLink: 'trainingFields',
                     isRelationOwner: true,
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingField',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -4473,6 +4483,34 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'organization',
+                }, secondOrganization: {
+                    name: "secondOrganization",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'secondTrainingMajors',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "secondOrganizationId" },
+                }, secondOrganizationId: {
+                    name: "secondOrganizationId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'secondOrganization',
+                }, thirdOrganization: {
+                    name: "thirdOrganization",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'thirdTrainingMajors',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "thirdOrganizationId" },
+                }, thirdOrganizationId: {
+                    name: "thirdOrganizationId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'thirdOrganization',
                 }, trainingField: {
                     name: "trainingField",
                     type: "TrainingField",
@@ -7322,6 +7360,18 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'organization',
+                }, secondTrainingMajors: {
+                    name: "secondTrainingMajors",
+                    type: "TrainingMajor",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'secondOrganization',
+                }, thirdTrainingMajors: {
+                    name: "thirdTrainingMajors",
+                    type: "TrainingMajor",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'thirdOrganization',
                 }, researchProjects: {
                     name: "researchProjects",
                     type: "ResearchProject",
@@ -14334,6 +14384,20 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'diplomaVerificationBack',
+                }, trainingField: {
+                    name: "trainingField",
+                    type: "TrainingField",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingFieldId" },
+                }, trainingFieldId: {
+                    name: "trainingFieldId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingField',
                 }, note: {
                     name: "note",
                     type: "Note",

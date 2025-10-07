@@ -8215,6 +8215,11 @@ declare const metadata: {
                     name: string;
                     type: string;
                 };
+                decisionNo: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
                 organization: {
                     name: string;
                     type: string;
@@ -8263,6 +8268,13 @@ declare const metadata: {
                     isArray: boolean;
                     backLink: string;
                     isRelationOwner: boolean;
+                };
+                documentFiles: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
                 };
             };
             uniqueConstraints: {
@@ -8556,10 +8568,13 @@ declare const metadata: {
                     isDataModel: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
+                            value: string;
+                        } | {
                             name: string;
                             value: null[];
-                        }[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -8570,6 +8585,70 @@ declare const metadata: {
                 organizationId: {
                     name: string;
                     type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                secondOrganization: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: string;
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        Id: string;
+                    };
+                };
+                secondOrganizationId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                thirdOrganization: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: string;
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        Id: string;
+                    };
+                };
+                thirdOrganizationId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: never[];
@@ -13855,6 +13934,41 @@ declare const metadata: {
                     type: string;
                     isDataModel: boolean;
                     isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
+                secondTrainingMajors: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
+                thirdTrainingMajors: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
                     backLink: string;
                 };
                 researchProjects: {
@@ -27015,6 +27129,31 @@ declare const metadata: {
                         name: string;
                         args: never[];
                     }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                trainingField: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                trainingFieldId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
                     isForeignKey: boolean;
                     relationField: string;
                 };

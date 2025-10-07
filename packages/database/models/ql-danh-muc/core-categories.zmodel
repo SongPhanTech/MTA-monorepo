@@ -91,27 +91,30 @@ model DM_DanToc extends CoreBase {
 }
 
 model DM_DonVi extends CoreBase {
-  sCode             String?
-  sTenVietTat       String?
-  sParentId         String?            @db.Uuid
-  sTruongDonVi      String?            @db.Uuid
-  sChucNangNhiemVu  String?
-  sDiaChi           String?
+  sCode                String?
+  sTenVietTat          String?
+  sParentId            String?            @db.Uuid
+  sTruongDonVi         String?            @db.Uuid
+  sChucNangNhiemVu     String?
+  sDiaChi              String?
 
-  lecturers         Lecturer[]
-  lecturerHistory   LecturerHistory[]
-  staffs            Staff[]
-  staffHistory      StaffHistory[]
+  lecturers            Lecturer[]
+  lecturerHistory      LecturerHistory[]
+  staffs               Staff[]
+  staffHistory         StaffHistory[]
 
-  curriculum        Curriculum[]
-  fixedClass        FixedClass[]
-  subjectVersions   SubjectVersion[]
-  subjects          Subject[]
-  trainingFields    TrainingField[]
-  trainingMajors    TrainingMajor[]
-  researchProjects  ResearchProject[]         // Đề tài của đơn vị
-  thesisProjects    ThesisProject[]             // Đồ án của đơn vị
-  surveyObjectTypes SurveyObjectType[]
+  curriculum           Curriculum[]
+  fixedClass           FixedClass[]
+  subjectVersions      SubjectVersion[]
+  subjects             Subject[]
+  trainingFields       TrainingField[]
+  trainingMajors       TrainingMajor[]    @relation("organization")
+  secondTrainingMajors TrainingMajor[]    @relation("secondOrganization")
+  thirdTrainingMajors  TrainingMajor[]    @relation("thirdOrganization")
+
+  researchProjects     ResearchProject[]         // Đề tài của đơn vị
+  thesisProjects       ThesisProject[]             // Đồ án của đơn vị
+  surveyObjectTypes    SurveyObjectType[]
 
 
   @@index([sParentId], map: "IX_DM_DonVi_iParentId")

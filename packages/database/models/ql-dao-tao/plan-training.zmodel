@@ -18,6 +18,7 @@ import '../ql-dao-tao/research'
 import '../khao-thi/exam'
 import "../khao-thi/survey"
 
+
 /// Điểm môn học SV - lớp môn học
 // Phòng đào tạo có thể trực tiếp tạo Điểm môn học SV - khi HV/SV chuyển trường, đổi điểm chứng chỉ
 // Lấy bản ghi có finalScore cao nhất làm kết quả cuối cùng

@@ -842,6 +842,7 @@ exports.Prisma.TrainingFieldScalarFieldEnum = {
   name: 'name',
   englishName: 'englishName',
   publishDate: 'publishDate',
+  decisionNo: 'decisionNo',
   organizationId: 'organizationId'
 };
 
@@ -872,6 +873,8 @@ exports.Prisma.TrainingMajorScalarFieldEnum = {
   numberCreditsRequired: 'numberCreditsRequired',
   numberCreditsElective: 'numberCreditsElective',
   organizationId: 'organizationId',
+  secondOrganizationId: 'secondOrganizationId',
+  thirdOrganizationId: 'thirdOrganizationId',
   trainingFieldId: 'trainingFieldId'
 };
 
@@ -2639,6 +2642,7 @@ exports.Prisma.DocumentFileScalarFieldEnum = {
   diplomaVerificationId: 'diplomaVerificationId',
   diplomaVerificationFrontId: 'diplomaVerificationFrontId',
   diplomaVerificationBackId: 'diplomaVerificationBackId',
+  trainingFieldId: 'trainingFieldId',
   noteId: 'noteId'
 };
 
@@ -4220,6 +4224,7 @@ exports.Prisma.TrainingFieldOrderByRelevanceFieldEnum = {
   description: 'description',
   name: 'name',
   englishName: 'englishName',
+  decisionNo: 'decisionNo',
   organizationId: 'organizationId'
 };
 
@@ -4239,6 +4244,8 @@ exports.Prisma.TrainingMajorOrderByRelevanceFieldEnum = {
   englishName: 'englishName',
   summary: 'summary',
   organizationId: 'organizationId',
+  secondOrganizationId: 'secondOrganizationId',
+  thirdOrganizationId: 'thirdOrganizationId',
   trainingFieldId: 'trainingFieldId'
 };
 
@@ -5336,6 +5343,7 @@ exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
   diplomaVerificationId: 'diplomaVerificationId',
   diplomaVerificationFrontId: 'diplomaVerificationFrontId',
   diplomaVerificationBackId: 'diplomaVerificationBackId',
+  trainingFieldId: 'trainingFieldId',
   noteId: 'noteId'
 };
 

@@ -4540,6 +4540,10 @@ const metadata = {
                 }, publishDate: {
                     name: "publishDate",
                     type: "DateTime",
+                }, decisionNo: {
+                    name: "decisionNo",
+                    type: "String",
+                    isOptional: true,
                 }, organization: {
                     name: "organization",
                     type: "DM_DonVi",
@@ -4573,6 +4577,12 @@ const metadata = {
                     isArray: true,
                     backLink: 'trainingFields',
                     isRelationOwner: true,
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingField',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -4721,7 +4731,7 @@ const metadata = {
                     name: "organization",
                     type: "DM_DonVi",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "organization" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'trainingMajors',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "organizationId" },
@@ -4731,6 +4741,38 @@ const metadata = {
                     attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'organization',
+                }, secondOrganization: {
+                    name: "secondOrganization",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "secondOrganization" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'secondTrainingMajors',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "secondOrganizationId" },
+                }, secondOrganizationId: {
+                    name: "secondOrganizationId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'secondOrganization',
+                }, thirdOrganization: {
+                    name: "thirdOrganization",
+                    type: "DM_DonVi",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "thirdOrganization" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'thirdTrainingMajors',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "thirdOrganizationId" },
+                }, thirdOrganizationId: {
+                    name: "thirdOrganizationId",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
+                    isForeignKey: true,
+                    relationField: 'thirdOrganization',
                 }, trainingField: {
                     name: "trainingField",
                     type: "TrainingField",
@@ -7701,7 +7743,22 @@ const metadata = {
                     type: "TrainingMajor",
                     isDataModel: true,
                     isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "organization" }] }],
                     backLink: 'organization',
+                }, secondTrainingMajors: {
+                    name: "secondTrainingMajors",
+                    type: "TrainingMajor",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "secondOrganization" }] }],
+                    backLink: 'secondOrganization',
+                }, thirdTrainingMajors: {
+                    name: "thirdTrainingMajors",
+                    type: "TrainingMajor",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "thirdOrganization" }] }],
+                    backLink: 'thirdOrganization',
                 }, researchProjects: {
                     name: "researchProjects",
                     type: "ResearchProject",
@@ -15138,6 +15195,21 @@ const metadata = {
                     attributes: [{ "name": "@unique", "args": [] }],
                     isForeignKey: true,
                     relationField: 'diplomaVerificationBack',
+                }, trainingField: {
+                    name: "trainingField",
+                    type: "TrainingField",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingFieldId" },
+                }, trainingFieldId: {
+                    name: "trainingFieldId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingField',
                 }, note: {
                     name: "note",
                     type: "Note",

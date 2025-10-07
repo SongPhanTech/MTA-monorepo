@@ -17,6 +17,7 @@ const baseSchema = z.object({
     name: z.string(),
     englishName: z.string(),
     publishDate: z.coerce.date(),
+    decisionNo: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -24,6 +25,7 @@ const relationSchema = z.object({
     trainingObjectTypes: z.array(z.unknown()).optional(),
     trainingMajors: z.array(z.unknown()).optional(),
     surveyObjectTypes: z.array(z.unknown()).optional(),
+    documentFiles: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -64,7 +66,8 @@ export const TrainingFieldPrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     englishName: z.string(),
-    publishDate: z.coerce.date()
+    publishDate: z.coerce.date(),
+    decisionNo: z.string().nullish()
 }).partial().passthrough();
 
 

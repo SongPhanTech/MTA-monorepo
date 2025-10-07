@@ -23681,12 +23681,14 @@ export namespace Prisma {
     trainingObjectTypes: number
     trainingMajors: number
     surveyObjectTypes: number
+    documentFiles: number
   }
 
   export type TrainingFieldCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingObjectTypes?: boolean | TrainingFieldCountOutputTypeCountTrainingObjectTypesArgs
     trainingMajors?: boolean | TrainingFieldCountOutputTypeCountTrainingMajorsArgs
     surveyObjectTypes?: boolean | TrainingFieldCountOutputTypeCountSurveyObjectTypesArgs
+    documentFiles?: boolean | TrainingFieldCountOutputTypeCountDocumentFilesArgs
   }
 
   // Custom InputTypes
@@ -23719,6 +23721,13 @@ export namespace Prisma {
    */
   export type TrainingFieldCountOutputTypeCountSurveyObjectTypesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SurveyObjectTypeWhereInput
+  }
+
+  /**
+   * TrainingFieldCountOutputType without action
+   */
+  export type TrainingFieldCountOutputTypeCountDocumentFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentFileWhereInput
   }
 
 
@@ -24668,6 +24677,8 @@ export namespace Prisma {
     subjects: number
     trainingFields: number
     trainingMajors: number
+    secondTrainingMajors: number
+    thirdTrainingMajors: number
     researchProjects: number
     thesisProjects: number
     surveyObjectTypes: number
@@ -24684,6 +24695,8 @@ export namespace Prisma {
     subjects?: boolean | DM_DonViCountOutputTypeCountSubjectsArgs
     trainingFields?: boolean | DM_DonViCountOutputTypeCountTrainingFieldsArgs
     trainingMajors?: boolean | DM_DonViCountOutputTypeCountTrainingMajorsArgs
+    secondTrainingMajors?: boolean | DM_DonViCountOutputTypeCountSecondTrainingMajorsArgs
+    thirdTrainingMajors?: boolean | DM_DonViCountOutputTypeCountThirdTrainingMajorsArgs
     researchProjects?: boolean | DM_DonViCountOutputTypeCountResearchProjectsArgs
     thesisProjects?: boolean | DM_DonViCountOutputTypeCountThesisProjectsArgs
     surveyObjectTypes?: boolean | DM_DonViCountOutputTypeCountSurveyObjectTypesArgs
@@ -24767,6 +24780,20 @@ export namespace Prisma {
    * DM_DonViCountOutputType without action
    */
   export type DM_DonViCountOutputTypeCountTrainingMajorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TrainingMajorWhereInput
+  }
+
+  /**
+   * DM_DonViCountOutputType without action
+   */
+  export type DM_DonViCountOutputTypeCountSecondTrainingMajorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TrainingMajorWhereInput
+  }
+
+  /**
+   * DM_DonViCountOutputType without action
+   */
+  export type DM_DonViCountOutputTypeCountThirdTrainingMajorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TrainingMajorWhereInput
   }
 
@@ -84045,6 +84072,7 @@ export namespace Prisma {
     name: string | null
     englishName: string | null
     publishDate: Date | null
+    decisionNo: string | null
     organizationId: string | null
   }
 
@@ -84059,6 +84087,7 @@ export namespace Prisma {
     name: string | null
     englishName: string | null
     publishDate: Date | null
+    decisionNo: string | null
     organizationId: string | null
   }
 
@@ -84073,6 +84102,7 @@ export namespace Prisma {
     name: number
     englishName: number
     publishDate: number
+    decisionNo: number
     organizationId: number
     _all: number
   }
@@ -84089,6 +84119,7 @@ export namespace Prisma {
     name?: true
     englishName?: true
     publishDate?: true
+    decisionNo?: true
     organizationId?: true
   }
 
@@ -84103,6 +84134,7 @@ export namespace Prisma {
     name?: true
     englishName?: true
     publishDate?: true
+    decisionNo?: true
     organizationId?: true
   }
 
@@ -84117,6 +84149,7 @@ export namespace Prisma {
     name?: true
     englishName?: true
     publishDate?: true
+    decisionNo?: true
     organizationId?: true
     _all?: true
   }
@@ -84204,6 +84237,7 @@ export namespace Prisma {
     name: string
     englishName: string
     publishDate: Date
+    decisionNo: string | null
     organizationId: string
     _count: TrainingFieldCountAggregateOutputType | null
     _min: TrainingFieldMinAggregateOutputType | null
@@ -84235,11 +84269,13 @@ export namespace Prisma {
     name?: boolean
     englishName?: boolean
     publishDate?: boolean
+    decisionNo?: boolean
     organizationId?: boolean
     organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
     trainingObjectTypes?: boolean | TrainingField$trainingObjectTypesArgs<ExtArgs>
     trainingMajors?: boolean | TrainingField$trainingMajorsArgs<ExtArgs>
     surveyObjectTypes?: boolean | TrainingField$surveyObjectTypesArgs<ExtArgs>
+    documentFiles?: boolean | TrainingField$documentFilesArgs<ExtArgs>
     _count?: boolean | TrainingFieldCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trainingField"]>
 
@@ -84254,6 +84290,7 @@ export namespace Prisma {
     name?: boolean
     englishName?: boolean
     publishDate?: boolean
+    decisionNo?: boolean
     organizationId?: boolean
     organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trainingField"]>
@@ -84269,6 +84306,7 @@ export namespace Prisma {
     name?: boolean
     englishName?: boolean
     publishDate?: boolean
+    decisionNo?: boolean
     organizationId?: boolean
     organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trainingField"]>
@@ -84284,15 +84322,17 @@ export namespace Prisma {
     name?: boolean
     englishName?: boolean
     publishDate?: boolean
+    decisionNo?: boolean
     organizationId?: boolean
   }
 
-  export type TrainingFieldOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "englishName" | "publishDate" | "organizationId", ExtArgs["result"]["trainingField"]>
+  export type TrainingFieldOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "englishName" | "publishDate" | "decisionNo" | "organizationId", ExtArgs["result"]["trainingField"]>
   export type TrainingFieldInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
     trainingObjectTypes?: boolean | TrainingField$trainingObjectTypesArgs<ExtArgs>
     trainingMajors?: boolean | TrainingField$trainingMajorsArgs<ExtArgs>
     surveyObjectTypes?: boolean | TrainingField$surveyObjectTypesArgs<ExtArgs>
+    documentFiles?: boolean | TrainingField$documentFilesArgs<ExtArgs>
     _count?: boolean | TrainingFieldCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TrainingFieldIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -84309,6 +84349,7 @@ export namespace Prisma {
       trainingObjectTypes: Prisma.$TrainingFieldOnTrainingObjectTypePayload<ExtArgs>[]
       trainingMajors: Prisma.$TrainingMajorPayload<ExtArgs>[]
       surveyObjectTypes: Prisma.$SurveyObjectTypePayload<ExtArgs>[]
+      documentFiles: Prisma.$DocumentFilePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -84321,6 +84362,10 @@ export namespace Prisma {
       name: string
       englishName: string
       publishDate: Date
+      /**
+       * số QĐ mở mã ngành
+       */
+      decisionNo: string | null
       organizationId: string
     }, ExtArgs["result"]["trainingField"]>
     composites: {}
@@ -84720,6 +84765,7 @@ export namespace Prisma {
     trainingObjectTypes<T extends TrainingField$trainingObjectTypesArgs<ExtArgs> = {}>(args?: Subset<T, TrainingField$trainingObjectTypesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingFieldOnTrainingObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     trainingMajors<T extends TrainingField$trainingMajorsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingField$trainingMajorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingMajorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     surveyObjectTypes<T extends TrainingField$surveyObjectTypesArgs<ExtArgs> = {}>(args?: Subset<T, TrainingField$surveyObjectTypesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    documentFiles<T extends TrainingField$documentFilesArgs<ExtArgs> = {}>(args?: Subset<T, TrainingField$documentFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -84759,6 +84805,7 @@ export namespace Prisma {
     readonly name: FieldRef<"TrainingField", 'String'>
     readonly englishName: FieldRef<"TrainingField", 'String'>
     readonly publishDate: FieldRef<"TrainingField", 'DateTime'>
+    readonly decisionNo: FieldRef<"TrainingField", 'String'>
     readonly organizationId: FieldRef<"TrainingField", 'String'>
   }
     
@@ -85225,6 +85272,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SurveyObjectTypeScalarFieldEnum | SurveyObjectTypeScalarFieldEnum[]
+  }
+
+  /**
+   * TrainingField.documentFiles
+   */
+  export type TrainingField$documentFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentFile
+     */
+    select?: DocumentFileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentFile
+     */
+    omit?: DocumentFileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentFileInclude<ExtArgs> | null
+    where?: DocumentFileWhereInput
+    orderBy?: DocumentFileOrderByWithRelationInput | DocumentFileOrderByWithRelationInput[]
+    cursor?: DocumentFileWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DocumentFileScalarFieldEnum | DocumentFileScalarFieldEnum[]
   }
 
   /**
@@ -86403,6 +86474,8 @@ export namespace Prisma {
     numberCreditsRequired: number | null
     numberCreditsElective: number | null
     organizationId: string | null
+    secondOrganizationId: string | null
+    thirdOrganizationId: string | null
     trainingFieldId: string | null
   }
 
@@ -86421,6 +86494,8 @@ export namespace Prisma {
     numberCreditsRequired: number | null
     numberCreditsElective: number | null
     organizationId: string | null
+    secondOrganizationId: string | null
+    thirdOrganizationId: string | null
     trainingFieldId: string | null
   }
 
@@ -86439,6 +86514,8 @@ export namespace Prisma {
     numberCreditsRequired: number
     numberCreditsElective: number
     organizationId: number
+    secondOrganizationId: number
+    thirdOrganizationId: number
     trainingFieldId: number
     _all: number
   }
@@ -86471,6 +86548,8 @@ export namespace Prisma {
     numberCreditsRequired?: true
     numberCreditsElective?: true
     organizationId?: true
+    secondOrganizationId?: true
+    thirdOrganizationId?: true
     trainingFieldId?: true
   }
 
@@ -86489,6 +86568,8 @@ export namespace Prisma {
     numberCreditsRequired?: true
     numberCreditsElective?: true
     organizationId?: true
+    secondOrganizationId?: true
+    thirdOrganizationId?: true
     trainingFieldId?: true
   }
 
@@ -86507,6 +86588,8 @@ export namespace Prisma {
     numberCreditsRequired?: true
     numberCreditsElective?: true
     organizationId?: true
+    secondOrganizationId?: true
+    thirdOrganizationId?: true
     trainingFieldId?: true
     _all?: true
   }
@@ -86612,6 +86695,8 @@ export namespace Prisma {
     numberCreditsRequired: number
     numberCreditsElective: number
     organizationId: string
+    secondOrganizationId: string | null
+    thirdOrganizationId: string | null
     trainingFieldId: string
     _count: TrainingMajorCountAggregateOutputType | null
     _avg: TrainingMajorAvgAggregateOutputType | null
@@ -86649,8 +86734,12 @@ export namespace Prisma {
     numberCreditsRequired?: boolean
     numberCreditsElective?: boolean
     organizationId?: boolean
+    secondOrganizationId?: boolean
+    thirdOrganizationId?: boolean
     trainingFieldId?: boolean
     organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
+    secondOrganization?: boolean | TrainingMajor$secondOrganizationArgs<ExtArgs>
+    thirdOrganization?: boolean | TrainingMajor$thirdOrganizationArgs<ExtArgs>
     trainingField?: boolean | TrainingFieldDefaultArgs<ExtArgs>
     trainingObjectTypes?: boolean | TrainingMajor$trainingObjectTypesArgs<ExtArgs>
     curriculum?: boolean | TrainingMajor$curriculumArgs<ExtArgs>
@@ -86675,8 +86764,12 @@ export namespace Prisma {
     numberCreditsRequired?: boolean
     numberCreditsElective?: boolean
     organizationId?: boolean
+    secondOrganizationId?: boolean
+    thirdOrganizationId?: boolean
     trainingFieldId?: boolean
     organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
+    secondOrganization?: boolean | TrainingMajor$secondOrganizationArgs<ExtArgs>
+    thirdOrganization?: boolean | TrainingMajor$thirdOrganizationArgs<ExtArgs>
     trainingField?: boolean | TrainingFieldDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trainingMajor"]>
 
@@ -86695,8 +86788,12 @@ export namespace Prisma {
     numberCreditsRequired?: boolean
     numberCreditsElective?: boolean
     organizationId?: boolean
+    secondOrganizationId?: boolean
+    thirdOrganizationId?: boolean
     trainingFieldId?: boolean
     organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
+    secondOrganization?: boolean | TrainingMajor$secondOrganizationArgs<ExtArgs>
+    thirdOrganization?: boolean | TrainingMajor$thirdOrganizationArgs<ExtArgs>
     trainingField?: boolean | TrainingFieldDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trainingMajor"]>
 
@@ -86715,12 +86812,16 @@ export namespace Prisma {
     numberCreditsRequired?: boolean
     numberCreditsElective?: boolean
     organizationId?: boolean
+    secondOrganizationId?: boolean
+    thirdOrganizationId?: boolean
     trainingFieldId?: boolean
   }
 
-  export type TrainingMajorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "englishName" | "summary" | "numberCreditsMajor" | "numberCreditsRequired" | "numberCreditsElective" | "organizationId" | "trainingFieldId", ExtArgs["result"]["trainingMajor"]>
+  export type TrainingMajorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "englishName" | "summary" | "numberCreditsMajor" | "numberCreditsRequired" | "numberCreditsElective" | "organizationId" | "secondOrganizationId" | "thirdOrganizationId" | "trainingFieldId", ExtArgs["result"]["trainingMajor"]>
   export type TrainingMajorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
+    secondOrganization?: boolean | TrainingMajor$secondOrganizationArgs<ExtArgs>
+    thirdOrganization?: boolean | TrainingMajor$thirdOrganizationArgs<ExtArgs>
     trainingField?: boolean | TrainingFieldDefaultArgs<ExtArgs>
     trainingObjectTypes?: boolean | TrainingMajor$trainingObjectTypesArgs<ExtArgs>
     curriculum?: boolean | TrainingMajor$curriculumArgs<ExtArgs>
@@ -86731,10 +86832,14 @@ export namespace Prisma {
   }
   export type TrainingMajorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
+    secondOrganization?: boolean | TrainingMajor$secondOrganizationArgs<ExtArgs>
+    thirdOrganization?: boolean | TrainingMajor$thirdOrganizationArgs<ExtArgs>
     trainingField?: boolean | TrainingFieldDefaultArgs<ExtArgs>
   }
   export type TrainingMajorIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
+    secondOrganization?: boolean | TrainingMajor$secondOrganizationArgs<ExtArgs>
+    thirdOrganization?: boolean | TrainingMajor$thirdOrganizationArgs<ExtArgs>
     trainingField?: boolean | TrainingFieldDefaultArgs<ExtArgs>
   }
 
@@ -86742,6 +86847,8 @@ export namespace Prisma {
     name: "TrainingMajor"
     objects: {
       organization: Prisma.$DM_DonViPayload<ExtArgs>
+      secondOrganization: Prisma.$DM_DonViPayload<ExtArgs> | null
+      thirdOrganization: Prisma.$DM_DonViPayload<ExtArgs> | null
       trainingField: Prisma.$TrainingFieldPayload<ExtArgs>
       trainingObjectTypes: Prisma.$TrainingMajorOnTrainingObjectTypePayload<ExtArgs>[]
       curriculum: Prisma.$CurriculumPayload<ExtArgs>[]
@@ -86773,6 +86880,8 @@ export namespace Prisma {
        */
       numberCreditsElective: number
       organizationId: string
+      secondOrganizationId: string | null
+      thirdOrganizationId: string | null
       trainingFieldId: string
     }, ExtArgs["result"]["trainingMajor"]>
     composites: {}
@@ -87169,6 +87278,8 @@ export namespace Prisma {
   export interface Prisma__TrainingMajorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organization<T extends DM_DonViDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonViDefaultArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    secondOrganization<T extends TrainingMajor$secondOrganizationArgs<ExtArgs> = {}>(args?: Subset<T, TrainingMajor$secondOrganizationArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    thirdOrganization<T extends TrainingMajor$thirdOrganizationArgs<ExtArgs> = {}>(args?: Subset<T, TrainingMajor$thirdOrganizationArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     trainingField<T extends TrainingFieldDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingFieldDefaultArgs<ExtArgs>>): Prisma__TrainingFieldClient<$Result.GetResult<Prisma.$TrainingFieldPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     trainingObjectTypes<T extends TrainingMajor$trainingObjectTypesArgs<ExtArgs> = {}>(args?: Subset<T, TrainingMajor$trainingObjectTypesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingMajorOnTrainingObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     curriculum<T extends TrainingMajor$curriculumArgs<ExtArgs> = {}>(args?: Subset<T, TrainingMajor$curriculumArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CurriculumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -87218,6 +87329,8 @@ export namespace Prisma {
     readonly numberCreditsRequired: FieldRef<"TrainingMajor", 'Int'>
     readonly numberCreditsElective: FieldRef<"TrainingMajor", 'Int'>
     readonly organizationId: FieldRef<"TrainingMajor", 'String'>
+    readonly secondOrganizationId: FieldRef<"TrainingMajor", 'String'>
+    readonly thirdOrganizationId: FieldRef<"TrainingMajor", 'String'>
     readonly trainingFieldId: FieldRef<"TrainingMajor", 'String'>
   }
     
@@ -87612,6 +87725,44 @@ export namespace Prisma {
      * Limit how many TrainingMajors to delete.
      */
     limit?: number
+  }
+
+  /**
+   * TrainingMajor.secondOrganization
+   */
+  export type TrainingMajor$secondOrganizationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DM_DonVi
+     */
+    select?: DM_DonViSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DM_DonVi
+     */
+    omit?: DM_DonViOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_DonViInclude<ExtArgs> | null
+    where?: DM_DonViWhereInput
+  }
+
+  /**
+   * TrainingMajor.thirdOrganization
+   */
+  export type TrainingMajor$thirdOrganizationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DM_DonVi
+     */
+    select?: DM_DonViSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DM_DonVi
+     */
+    omit?: DM_DonViOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_DonViInclude<ExtArgs> | null
+    where?: DM_DonViWhereInput
   }
 
   /**
@@ -124460,6 +124611,8 @@ export namespace Prisma {
     subjects?: boolean | DM_DonVi$subjectsArgs<ExtArgs>
     trainingFields?: boolean | DM_DonVi$trainingFieldsArgs<ExtArgs>
     trainingMajors?: boolean | DM_DonVi$trainingMajorsArgs<ExtArgs>
+    secondTrainingMajors?: boolean | DM_DonVi$secondTrainingMajorsArgs<ExtArgs>
+    thirdTrainingMajors?: boolean | DM_DonVi$thirdTrainingMajorsArgs<ExtArgs>
     researchProjects?: boolean | DM_DonVi$researchProjectsArgs<ExtArgs>
     thesisProjects?: boolean | DM_DonVi$thesisProjectsArgs<ExtArgs>
     surveyObjectTypes?: boolean | DM_DonVi$surveyObjectTypesArgs<ExtArgs>
@@ -124550,6 +124703,8 @@ export namespace Prisma {
     subjects?: boolean | DM_DonVi$subjectsArgs<ExtArgs>
     trainingFields?: boolean | DM_DonVi$trainingFieldsArgs<ExtArgs>
     trainingMajors?: boolean | DM_DonVi$trainingMajorsArgs<ExtArgs>
+    secondTrainingMajors?: boolean | DM_DonVi$secondTrainingMajorsArgs<ExtArgs>
+    thirdTrainingMajors?: boolean | DM_DonVi$thirdTrainingMajorsArgs<ExtArgs>
     researchProjects?: boolean | DM_DonVi$researchProjectsArgs<ExtArgs>
     thesisProjects?: boolean | DM_DonVi$thesisProjectsArgs<ExtArgs>
     surveyObjectTypes?: boolean | DM_DonVi$surveyObjectTypesArgs<ExtArgs>
@@ -124571,6 +124726,8 @@ export namespace Prisma {
       subjects: Prisma.$SubjectPayload<ExtArgs>[]
       trainingFields: Prisma.$TrainingFieldPayload<ExtArgs>[]
       trainingMajors: Prisma.$TrainingMajorPayload<ExtArgs>[]
+      secondTrainingMajors: Prisma.$TrainingMajorPayload<ExtArgs>[]
+      thirdTrainingMajors: Prisma.$TrainingMajorPayload<ExtArgs>[]
       researchProjects: Prisma.$ResearchProjectPayload<ExtArgs>[]
       thesisProjects: Prisma.$ThesisProjectPayload<ExtArgs>[]
       surveyObjectTypes: Prisma.$SurveyObjectTypePayload<ExtArgs>[]
@@ -125001,6 +125158,8 @@ export namespace Prisma {
     subjects<T extends DM_DonVi$subjectsArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     trainingFields<T extends DM_DonVi$trainingFieldsArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$trainingFieldsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingFieldPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     trainingMajors<T extends DM_DonVi$trainingMajorsArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$trainingMajorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingMajorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    secondTrainingMajors<T extends DM_DonVi$secondTrainingMajorsArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$secondTrainingMajorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingMajorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    thirdTrainingMajors<T extends DM_DonVi$thirdTrainingMajorsArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$thirdTrainingMajorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingMajorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     researchProjects<T extends DM_DonVi$researchProjectsArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$researchProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResearchProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     thesisProjects<T extends DM_DonVi$thesisProjectsArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$thesisProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     surveyObjectTypes<T extends DM_DonVi$surveyObjectTypesArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonVi$surveyObjectTypesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -125661,6 +125820,54 @@ export namespace Prisma {
    * DM_DonVi.trainingMajors
    */
   export type DM_DonVi$trainingMajorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingMajor
+     */
+    select?: TrainingMajorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingMajor
+     */
+    omit?: TrainingMajorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingMajorInclude<ExtArgs> | null
+    where?: TrainingMajorWhereInput
+    orderBy?: TrainingMajorOrderByWithRelationInput | TrainingMajorOrderByWithRelationInput[]
+    cursor?: TrainingMajorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TrainingMajorScalarFieldEnum | TrainingMajorScalarFieldEnum[]
+  }
+
+  /**
+   * DM_DonVi.secondTrainingMajors
+   */
+  export type DM_DonVi$secondTrainingMajorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingMajor
+     */
+    select?: TrainingMajorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingMajor
+     */
+    omit?: TrainingMajorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingMajorInclude<ExtArgs> | null
+    where?: TrainingMajorWhereInput
+    orderBy?: TrainingMajorOrderByWithRelationInput | TrainingMajorOrderByWithRelationInput[]
+    cursor?: TrainingMajorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TrainingMajorScalarFieldEnum | TrainingMajorScalarFieldEnum[]
+  }
+
+  /**
+   * DM_DonVi.thirdTrainingMajors
+   */
+  export type DM_DonVi$thirdTrainingMajorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the TrainingMajor
      */
@@ -207771,6 +207978,7 @@ export namespace Prisma {
     diplomaVerificationId: string | null
     diplomaVerificationFrontId: string | null
     diplomaVerificationBackId: string | null
+    trainingFieldId: string | null
     noteId: string | null
   }
 
@@ -207800,6 +208008,7 @@ export namespace Prisma {
     diplomaVerificationId: string | null
     diplomaVerificationFrontId: string | null
     diplomaVerificationBackId: string | null
+    trainingFieldId: string | null
     noteId: string | null
   }
 
@@ -207829,6 +208038,7 @@ export namespace Prisma {
     diplomaVerificationId: number
     diplomaVerificationFrontId: number
     diplomaVerificationBackId: number
+    trainingFieldId: number
     noteId: number
     _all: number
   }
@@ -207868,6 +208078,7 @@ export namespace Prisma {
     diplomaVerificationId?: true
     diplomaVerificationFrontId?: true
     diplomaVerificationBackId?: true
+    trainingFieldId?: true
     noteId?: true
   }
 
@@ -207897,6 +208108,7 @@ export namespace Prisma {
     diplomaVerificationId?: true
     diplomaVerificationFrontId?: true
     diplomaVerificationBackId?: true
+    trainingFieldId?: true
     noteId?: true
   }
 
@@ -207926,6 +208138,7 @@ export namespace Prisma {
     diplomaVerificationId?: true
     diplomaVerificationFrontId?: true
     diplomaVerificationBackId?: true
+    trainingFieldId?: true
     noteId?: true
     _all?: true
   }
@@ -208042,6 +208255,7 @@ export namespace Prisma {
     diplomaVerificationId: string | null
     diplomaVerificationFrontId: string | null
     diplomaVerificationBackId: string | null
+    trainingFieldId: string | null
     noteId: string | null
     _count: DocumentFileCountAggregateOutputType | null
     _avg: DocumentFileAvgAggregateOutputType | null
@@ -208090,6 +208304,7 @@ export namespace Prisma {
     diplomaVerificationId?: boolean
     diplomaVerificationFrontId?: boolean
     diplomaVerificationBackId?: boolean
+    trainingFieldId?: boolean
     noteId?: boolean
     archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
     archivedAward?: boolean | DocumentFile$archivedAwardArgs<ExtArgs>
@@ -208105,6 +208320,7 @@ export namespace Prisma {
     diplomaVerification?: boolean | DocumentFile$diplomaVerificationArgs<ExtArgs>
     diplomaVerificationFront?: boolean | DocumentFile$diplomaVerificationFrontArgs<ExtArgs>
     diplomaVerificationBack?: boolean | DocumentFile$diplomaVerificationBackArgs<ExtArgs>
+    trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
     note?: boolean | DocumentFile$noteArgs<ExtArgs>
   }, ExtArgs["result"]["documentFile"]>
 
@@ -208134,6 +208350,7 @@ export namespace Prisma {
     diplomaVerificationId?: boolean
     diplomaVerificationFrontId?: boolean
     diplomaVerificationBackId?: boolean
+    trainingFieldId?: boolean
     noteId?: boolean
     archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
     archivedAward?: boolean | DocumentFile$archivedAwardArgs<ExtArgs>
@@ -208149,6 +208366,7 @@ export namespace Prisma {
     diplomaVerification?: boolean | DocumentFile$diplomaVerificationArgs<ExtArgs>
     diplomaVerificationFront?: boolean | DocumentFile$diplomaVerificationFrontArgs<ExtArgs>
     diplomaVerificationBack?: boolean | DocumentFile$diplomaVerificationBackArgs<ExtArgs>
+    trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
     note?: boolean | DocumentFile$noteArgs<ExtArgs>
   }, ExtArgs["result"]["documentFile"]>
 
@@ -208178,6 +208396,7 @@ export namespace Prisma {
     diplomaVerificationId?: boolean
     diplomaVerificationFrontId?: boolean
     diplomaVerificationBackId?: boolean
+    trainingFieldId?: boolean
     noteId?: boolean
     archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
     archivedAward?: boolean | DocumentFile$archivedAwardArgs<ExtArgs>
@@ -208193,6 +208412,7 @@ export namespace Prisma {
     diplomaVerification?: boolean | DocumentFile$diplomaVerificationArgs<ExtArgs>
     diplomaVerificationFront?: boolean | DocumentFile$diplomaVerificationFrontArgs<ExtArgs>
     diplomaVerificationBack?: boolean | DocumentFile$diplomaVerificationBackArgs<ExtArgs>
+    trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
     note?: boolean | DocumentFile$noteArgs<ExtArgs>
   }, ExtArgs["result"]["documentFile"]>
 
@@ -208222,10 +208442,11 @@ export namespace Prisma {
     diplomaVerificationId?: boolean
     diplomaVerificationFrontId?: boolean
     diplomaVerificationBackId?: boolean
+    trainingFieldId?: boolean
     noteId?: boolean
   }
 
-  export type DocumentFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "path" | "size" | "mimeType" | "archivedCertificateId" | "archivedAwardId" | "curriculumId" | "curriculumVersionId" | "subjectVersionId" | "studentAcademicDecisionId" | "notificationId" | "decisionId" | "defenseRecordId" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId" | "noteId", ExtArgs["result"]["documentFile"]>
+  export type DocumentFileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "path" | "size" | "mimeType" | "archivedCertificateId" | "archivedAwardId" | "curriculumId" | "curriculumVersionId" | "subjectVersionId" | "studentAcademicDecisionId" | "notificationId" | "decisionId" | "defenseRecordId" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId" | "trainingFieldId" | "noteId", ExtArgs["result"]["documentFile"]>
   export type DocumentFileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     archivedCertificate?: boolean | DocumentFile$archivedCertificateArgs<ExtArgs>
     archivedAward?: boolean | DocumentFile$archivedAwardArgs<ExtArgs>
@@ -208241,6 +208462,7 @@ export namespace Prisma {
     diplomaVerification?: boolean | DocumentFile$diplomaVerificationArgs<ExtArgs>
     diplomaVerificationFront?: boolean | DocumentFile$diplomaVerificationFrontArgs<ExtArgs>
     diplomaVerificationBack?: boolean | DocumentFile$diplomaVerificationBackArgs<ExtArgs>
+    trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
     note?: boolean | DocumentFile$noteArgs<ExtArgs>
   }
   export type DocumentFileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -208258,6 +208480,7 @@ export namespace Prisma {
     diplomaVerification?: boolean | DocumentFile$diplomaVerificationArgs<ExtArgs>
     diplomaVerificationFront?: boolean | DocumentFile$diplomaVerificationFrontArgs<ExtArgs>
     diplomaVerificationBack?: boolean | DocumentFile$diplomaVerificationBackArgs<ExtArgs>
+    trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
     note?: boolean | DocumentFile$noteArgs<ExtArgs>
   }
   export type DocumentFileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -208275,6 +208498,7 @@ export namespace Prisma {
     diplomaVerification?: boolean | DocumentFile$diplomaVerificationArgs<ExtArgs>
     diplomaVerificationFront?: boolean | DocumentFile$diplomaVerificationFrontArgs<ExtArgs>
     diplomaVerificationBack?: boolean | DocumentFile$diplomaVerificationBackArgs<ExtArgs>
+    trainingField?: boolean | DocumentFile$trainingFieldArgs<ExtArgs>
     note?: boolean | DocumentFile$noteArgs<ExtArgs>
   }
 
@@ -208295,6 +208519,7 @@ export namespace Prisma {
       diplomaVerification: Prisma.$DiplomaVerificationApplicationPayload<ExtArgs> | null
       diplomaVerificationFront: Prisma.$DiplomaVerificationApplicationPayload<ExtArgs> | null
       diplomaVerificationBack: Prisma.$DiplomaVerificationApplicationPayload<ExtArgs> | null
+      trainingField: Prisma.$TrainingFieldPayload<ExtArgs> | null
       note: Prisma.$NotePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -208323,6 +208548,7 @@ export namespace Prisma {
       diplomaVerificationId: string | null
       diplomaVerificationFrontId: string | null
       diplomaVerificationBackId: string | null
+      trainingFieldId: string | null
       noteId: string | null
     }, ExtArgs["result"]["documentFile"]>
     composites: {}
@@ -208732,6 +208958,7 @@ export namespace Prisma {
     diplomaVerification<T extends DocumentFile$diplomaVerificationArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$diplomaVerificationArgs<ExtArgs>>): Prisma__DiplomaVerificationApplicationClient<$Result.GetResult<Prisma.$DiplomaVerificationApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     diplomaVerificationFront<T extends DocumentFile$diplomaVerificationFrontArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$diplomaVerificationFrontArgs<ExtArgs>>): Prisma__DiplomaVerificationApplicationClient<$Result.GetResult<Prisma.$DiplomaVerificationApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     diplomaVerificationBack<T extends DocumentFile$diplomaVerificationBackArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$diplomaVerificationBackArgs<ExtArgs>>): Prisma__DiplomaVerificationApplicationClient<$Result.GetResult<Prisma.$DiplomaVerificationApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    trainingField<T extends DocumentFile$trainingFieldArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$trainingFieldArgs<ExtArgs>>): Prisma__TrainingFieldClient<$Result.GetResult<Prisma.$TrainingFieldPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     note<T extends DocumentFile$noteArgs<ExtArgs> = {}>(args?: Subset<T, DocumentFile$noteArgs<ExtArgs>>): Prisma__NoteClient<$Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -208787,6 +209014,7 @@ export namespace Prisma {
     readonly diplomaVerificationId: FieldRef<"DocumentFile", 'String'>
     readonly diplomaVerificationFrontId: FieldRef<"DocumentFile", 'String'>
     readonly diplomaVerificationBackId: FieldRef<"DocumentFile", 'String'>
+    readonly trainingFieldId: FieldRef<"DocumentFile", 'String'>
     readonly noteId: FieldRef<"DocumentFile", 'String'>
   }
     
@@ -209447,6 +209675,25 @@ export namespace Prisma {
      */
     include?: DiplomaVerificationApplicationInclude<ExtArgs> | null
     where?: DiplomaVerificationApplicationWhereInput
+  }
+
+  /**
+   * DocumentFile.trainingField
+   */
+  export type DocumentFile$trainingFieldArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingField
+     */
+    select?: TrainingFieldSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingField
+     */
+    omit?: TrainingFieldOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingFieldInclude<ExtArgs> | null
+    where?: TrainingFieldWhereInput
   }
 
   /**
@@ -308366,6 +308613,7 @@ export namespace Prisma {
     name: 'name',
     englishName: 'englishName',
     publishDate: 'publishDate',
+    decisionNo: 'decisionNo',
     organizationId: 'organizationId'
   };
 
@@ -308402,6 +308650,8 @@ export namespace Prisma {
     numberCreditsRequired: 'numberCreditsRequired',
     numberCreditsElective: 'numberCreditsElective',
     organizationId: 'organizationId',
+    secondOrganizationId: 'secondOrganizationId',
+    thirdOrganizationId: 'thirdOrganizationId',
     trainingFieldId: 'trainingFieldId'
   };
 
@@ -310454,6 +310704,7 @@ export namespace Prisma {
     diplomaVerificationId: 'diplomaVerificationId',
     diplomaVerificationFrontId: 'diplomaVerificationFrontId',
     diplomaVerificationBackId: 'diplomaVerificationBackId',
+    trainingFieldId: 'trainingFieldId',
     noteId: 'noteId'
   };
 
@@ -312431,6 +312682,7 @@ export namespace Prisma {
     description: 'description',
     name: 'name',
     englishName: 'englishName',
+    decisionNo: 'decisionNo',
     organizationId: 'organizationId'
   };
 
@@ -312456,6 +312708,8 @@ export namespace Prisma {
     englishName: 'englishName',
     summary: 'summary',
     organizationId: 'organizationId',
+    secondOrganizationId: 'secondOrganizationId',
+    thirdOrganizationId: 'thirdOrganizationId',
     trainingFieldId: 'trainingFieldId'
   };
 
@@ -313838,6 +314092,7 @@ export namespace Prisma {
     diplomaVerificationId: 'diplomaVerificationId',
     diplomaVerificationFrontId: 'diplomaVerificationFrontId',
     diplomaVerificationBackId: 'diplomaVerificationBackId',
+    trainingFieldId: 'trainingFieldId',
     noteId: 'noteId'
   };
 
@@ -320288,11 +320543,13 @@ export namespace Prisma {
     name?: StringFilter<"TrainingField"> | string
     englishName?: StringFilter<"TrainingField"> | string
     publishDate?: DateTimeFilter<"TrainingField"> | Date | string
+    decisionNo?: StringNullableFilter<"TrainingField"> | string | null
     organizationId?: UuidFilter<"TrainingField"> | string
     organization?: XOR<DM_DonViScalarRelationFilter, DM_DonViWhereInput>
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeListRelationFilter
     trainingMajors?: TrainingMajorListRelationFilter
     surveyObjectTypes?: SurveyObjectTypeListRelationFilter
+    documentFiles?: DocumentFileListRelationFilter
   }
 
   export type TrainingFieldOrderByWithRelationInput = {
@@ -320306,11 +320563,13 @@ export namespace Prisma {
     name?: SortOrder
     englishName?: SortOrder
     publishDate?: SortOrder
+    decisionNo?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     organization?: DM_DonViOrderByWithRelationInput
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeOrderByRelationAggregateInput
     trainingMajors?: TrainingMajorOrderByRelationAggregateInput
     surveyObjectTypes?: SurveyObjectTypeOrderByRelationAggregateInput
+    documentFiles?: DocumentFileOrderByRelationAggregateInput
     _relevance?: TrainingFieldOrderByRelevanceInput
   }
 
@@ -320328,11 +320587,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"TrainingField"> | Date | string
     englishName?: StringFilter<"TrainingField"> | string
     publishDate?: DateTimeFilter<"TrainingField"> | Date | string
+    decisionNo?: StringNullableFilter<"TrainingField"> | string | null
     organizationId?: UuidFilter<"TrainingField"> | string
     organization?: XOR<DM_DonViScalarRelationFilter, DM_DonViWhereInput>
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeListRelationFilter
     trainingMajors?: TrainingMajorListRelationFilter
     surveyObjectTypes?: SurveyObjectTypeListRelationFilter
+    documentFiles?: DocumentFileListRelationFilter
   }, "id" | "code" | "name">
 
   export type TrainingFieldOrderByWithAggregationInput = {
@@ -320346,6 +320607,7 @@ export namespace Prisma {
     name?: SortOrder
     englishName?: SortOrder
     publishDate?: SortOrder
+    decisionNo?: SortOrderInput | SortOrder
     organizationId?: SortOrder
     _count?: TrainingFieldCountOrderByAggregateInput
     _max?: TrainingFieldMaxOrderByAggregateInput
@@ -320366,6 +320628,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"TrainingField"> | string
     englishName?: StringWithAggregatesFilter<"TrainingField"> | string
     publishDate?: DateTimeWithAggregatesFilter<"TrainingField"> | Date | string
+    decisionNo?: StringNullableWithAggregatesFilter<"TrainingField"> | string | null
     organizationId?: UuidWithAggregatesFilter<"TrainingField"> | string
   }
 
@@ -320467,8 +320730,12 @@ export namespace Prisma {
     numberCreditsRequired?: IntFilter<"TrainingMajor"> | number
     numberCreditsElective?: IntFilter<"TrainingMajor"> | number
     organizationId?: UuidFilter<"TrainingMajor"> | string
+    secondOrganizationId?: UuidNullableFilter<"TrainingMajor"> | string | null
+    thirdOrganizationId?: UuidNullableFilter<"TrainingMajor"> | string | null
     trainingFieldId?: StringFilter<"TrainingMajor"> | string
     organization?: XOR<DM_DonViScalarRelationFilter, DM_DonViWhereInput>
+    secondOrganization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
+    thirdOrganization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
     trainingField?: XOR<TrainingFieldScalarRelationFilter, TrainingFieldWhereInput>
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeListRelationFilter
     curriculum?: CurriculumListRelationFilter
@@ -320492,8 +320759,12 @@ export namespace Prisma {
     numberCreditsRequired?: SortOrder
     numberCreditsElective?: SortOrder
     organizationId?: SortOrder
+    secondOrganizationId?: SortOrderInput | SortOrder
+    thirdOrganizationId?: SortOrderInput | SortOrder
     trainingFieldId?: SortOrder
     organization?: DM_DonViOrderByWithRelationInput
+    secondOrganization?: DM_DonViOrderByWithRelationInput
+    thirdOrganization?: DM_DonViOrderByWithRelationInput
     trainingField?: TrainingFieldOrderByWithRelationInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeOrderByRelationAggregateInput
     curriculum?: CurriculumOrderByRelationAggregateInput
@@ -320522,8 +320793,12 @@ export namespace Prisma {
     numberCreditsRequired?: IntFilter<"TrainingMajor"> | number
     numberCreditsElective?: IntFilter<"TrainingMajor"> | number
     organizationId?: UuidFilter<"TrainingMajor"> | string
+    secondOrganizationId?: UuidNullableFilter<"TrainingMajor"> | string | null
+    thirdOrganizationId?: UuidNullableFilter<"TrainingMajor"> | string | null
     trainingFieldId?: StringFilter<"TrainingMajor"> | string
     organization?: XOR<DM_DonViScalarRelationFilter, DM_DonViWhereInput>
+    secondOrganization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
+    thirdOrganization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
     trainingField?: XOR<TrainingFieldScalarRelationFilter, TrainingFieldWhereInput>
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeListRelationFilter
     curriculum?: CurriculumListRelationFilter
@@ -320547,6 +320822,8 @@ export namespace Prisma {
     numberCreditsRequired?: SortOrder
     numberCreditsElective?: SortOrder
     organizationId?: SortOrder
+    secondOrganizationId?: SortOrderInput | SortOrder
+    thirdOrganizationId?: SortOrderInput | SortOrder
     trainingFieldId?: SortOrder
     _count?: TrainingMajorCountOrderByAggregateInput
     _avg?: TrainingMajorAvgOrderByAggregateInput
@@ -320573,6 +320850,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntWithAggregatesFilter<"TrainingMajor"> | number
     numberCreditsElective?: IntWithAggregatesFilter<"TrainingMajor"> | number
     organizationId?: UuidWithAggregatesFilter<"TrainingMajor"> | string
+    secondOrganizationId?: UuidNullableWithAggregatesFilter<"TrainingMajor"> | string | null
+    thirdOrganizationId?: UuidNullableWithAggregatesFilter<"TrainingMajor"> | string | null
     trainingFieldId?: StringWithAggregatesFilter<"TrainingMajor"> | string
   }
 
@@ -323761,6 +324040,8 @@ export namespace Prisma {
     subjects?: SubjectListRelationFilter
     trainingFields?: TrainingFieldListRelationFilter
     trainingMajors?: TrainingMajorListRelationFilter
+    secondTrainingMajors?: TrainingMajorListRelationFilter
+    thirdTrainingMajors?: TrainingMajorListRelationFilter
     researchProjects?: ResearchProjectListRelationFilter
     thesisProjects?: ThesisProjectListRelationFilter
     surveyObjectTypes?: SurveyObjectTypeListRelationFilter
@@ -323798,6 +324079,8 @@ export namespace Prisma {
     subjects?: SubjectOrderByRelationAggregateInput
     trainingFields?: TrainingFieldOrderByRelationAggregateInput
     trainingMajors?: TrainingMajorOrderByRelationAggregateInput
+    secondTrainingMajors?: TrainingMajorOrderByRelationAggregateInput
+    thirdTrainingMajors?: TrainingMajorOrderByRelationAggregateInput
     researchProjects?: ResearchProjectOrderByRelationAggregateInput
     thesisProjects?: ThesisProjectOrderByRelationAggregateInput
     surveyObjectTypes?: SurveyObjectTypeOrderByRelationAggregateInput
@@ -323839,6 +324122,8 @@ export namespace Prisma {
     subjects?: SubjectListRelationFilter
     trainingFields?: TrainingFieldListRelationFilter
     trainingMajors?: TrainingMajorListRelationFilter
+    secondTrainingMajors?: TrainingMajorListRelationFilter
+    thirdTrainingMajors?: TrainingMajorListRelationFilter
     researchProjects?: ResearchProjectListRelationFilter
     thesisProjects?: ThesisProjectListRelationFilter
     surveyObjectTypes?: SurveyObjectTypeListRelationFilter
@@ -331579,6 +331864,7 @@ export namespace Prisma {
     diplomaVerificationId?: StringNullableFilter<"DocumentFile"> | string | null
     diplomaVerificationFrontId?: StringNullableFilter<"DocumentFile"> | string | null
     diplomaVerificationBackId?: StringNullableFilter<"DocumentFile"> | string | null
+    trainingFieldId?: StringNullableFilter<"DocumentFile"> | string | null
     noteId?: StringNullableFilter<"DocumentFile"> | string | null
     archivedCertificate?: XOR<ArchivedCertificateNullableScalarRelationFilter, ArchivedCertificateWhereInput> | null
     archivedAward?: XOR<ArchivedAwardNullableScalarRelationFilter, ArchivedAwardWhereInput> | null
@@ -331594,6 +331880,7 @@ export namespace Prisma {
     diplomaVerification?: XOR<DiplomaVerificationApplicationNullableScalarRelationFilter, DiplomaVerificationApplicationWhereInput> | null
     diplomaVerificationFront?: XOR<DiplomaVerificationApplicationNullableScalarRelationFilter, DiplomaVerificationApplicationWhereInput> | null
     diplomaVerificationBack?: XOR<DiplomaVerificationApplicationNullableScalarRelationFilter, DiplomaVerificationApplicationWhereInput> | null
+    trainingField?: XOR<TrainingFieldNullableScalarRelationFilter, TrainingFieldWhereInput> | null
     note?: XOR<NoteNullableScalarRelationFilter, NoteWhereInput> | null
   }
 
@@ -331623,6 +331910,7 @@ export namespace Prisma {
     diplomaVerificationId?: SortOrderInput | SortOrder
     diplomaVerificationFrontId?: SortOrderInput | SortOrder
     diplomaVerificationBackId?: SortOrderInput | SortOrder
+    trainingFieldId?: SortOrderInput | SortOrder
     noteId?: SortOrderInput | SortOrder
     archivedCertificate?: ArchivedCertificateOrderByWithRelationInput
     archivedAward?: ArchivedAwardOrderByWithRelationInput
@@ -331638,6 +331926,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationOrderByWithRelationInput
     diplomaVerificationFront?: DiplomaVerificationApplicationOrderByWithRelationInput
     diplomaVerificationBack?: DiplomaVerificationApplicationOrderByWithRelationInput
+    trainingField?: TrainingFieldOrderByWithRelationInput
     note?: NoteOrderByWithRelationInput
     _relevance?: DocumentFileOrderByRelevanceInput
   }
@@ -331671,6 +331960,7 @@ export namespace Prisma {
     notificationId?: StringNullableFilter<"DocumentFile"> | string | null
     decisionId?: StringNullableFilter<"DocumentFile"> | string | null
     defenseRecordId?: StringNullableFilter<"DocumentFile"> | string | null
+    trainingFieldId?: StringNullableFilter<"DocumentFile"> | string | null
     noteId?: StringNullableFilter<"DocumentFile"> | string | null
     archivedCertificate?: XOR<ArchivedCertificateNullableScalarRelationFilter, ArchivedCertificateWhereInput> | null
     archivedAward?: XOR<ArchivedAwardNullableScalarRelationFilter, ArchivedAwardWhereInput> | null
@@ -331686,6 +331976,7 @@ export namespace Prisma {
     diplomaVerification?: XOR<DiplomaVerificationApplicationNullableScalarRelationFilter, DiplomaVerificationApplicationWhereInput> | null
     diplomaVerificationFront?: XOR<DiplomaVerificationApplicationNullableScalarRelationFilter, DiplomaVerificationApplicationWhereInput> | null
     diplomaVerificationBack?: XOR<DiplomaVerificationApplicationNullableScalarRelationFilter, DiplomaVerificationApplicationWhereInput> | null
+    trainingField?: XOR<TrainingFieldNullableScalarRelationFilter, TrainingFieldWhereInput> | null
     note?: XOR<NoteNullableScalarRelationFilter, NoteWhereInput> | null
   }, "id" | "code" | "diplomaFrontId" | "diplomaBackId" | "diplomaVerificationId" | "diplomaVerificationFrontId" | "diplomaVerificationBackId">
 
@@ -331715,6 +332006,7 @@ export namespace Prisma {
     diplomaVerificationId?: SortOrderInput | SortOrder
     diplomaVerificationFrontId?: SortOrderInput | SortOrder
     diplomaVerificationBackId?: SortOrderInput | SortOrder
+    trainingFieldId?: SortOrderInput | SortOrder
     noteId?: SortOrderInput | SortOrder
     _count?: DocumentFileCountOrderByAggregateInput
     _avg?: DocumentFileAvgOrderByAggregateInput
@@ -331752,6 +332044,7 @@ export namespace Prisma {
     diplomaVerificationId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     diplomaVerificationFrontId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     diplomaVerificationBackId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
+    trainingFieldId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
     noteId?: StringNullableWithAggregatesFilter<"DocumentFile"> | string | null
   }
 
@@ -344519,10 +344812,12 @@ export namespace Prisma {
     name: string
     englishName: string
     publishDate: Date | string
+    decisionNo?: string | null
     organization: DM_DonViCreateNestedOneWithoutTrainingFieldsInput
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingFieldInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutTrainingFieldInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingFieldsInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutTrainingFieldInput
   }
 
   export type TrainingFieldUncheckedCreateInput = {
@@ -344536,10 +344831,12 @@ export namespace Prisma {
     name: string
     englishName: string
     publishDate: Date | string
+    decisionNo?: string | null
     organizationId: string
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingFieldInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutTrainingFieldInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingFieldsInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingFieldInput
   }
 
   export type TrainingFieldUpdateInput = {
@@ -344553,10 +344850,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
     organization?: DM_DonViUpdateOneRequiredWithoutTrainingFieldsNestedInput
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingFieldNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutTrainingFieldNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingFieldsNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutTrainingFieldNestedInput
   }
 
   export type TrainingFieldUncheckedUpdateInput = {
@@ -344570,10 +344869,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingFieldNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutTrainingFieldNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingFieldsNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingFieldNestedInput
   }
 
   export type TrainingFieldCreateManyInput = {
@@ -344587,6 +344888,7 @@ export namespace Prisma {
     name: string
     englishName: string
     publishDate: Date | string
+    decisionNo?: string | null
     organizationId: string
   }
 
@@ -344601,6 +344903,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TrainingFieldUncheckedUpdateManyInput = {
@@ -344614,6 +344917,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -344714,6 +345018,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organization: DM_DonViCreateNestedOneWithoutTrainingMajorsInput
+    secondOrganization?: DM_DonViCreateNestedOneWithoutSecondTrainingMajorsInput
+    thirdOrganization?: DM_DonViCreateNestedOneWithoutThirdTrainingMajorsInput
     trainingField: TrainingFieldCreateNestedOneWithoutTrainingMajorsInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingMajorInput
     curriculum?: CurriculumCreateNestedManyWithoutTrainingMajorInput
@@ -344737,6 +345043,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organizationId: string
+    secondOrganizationId?: string | null
+    thirdOrganizationId?: string | null
     trainingFieldId: string
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingMajorInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingMajorInput
@@ -344760,6 +345068,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organization?: DM_DonViUpdateOneRequiredWithoutTrainingMajorsNestedInput
+    secondOrganization?: DM_DonViUpdateOneWithoutSecondTrainingMajorsNestedInput
+    thirdOrganization?: DM_DonViUpdateOneWithoutThirdTrainingMajorsNestedInput
     trainingField?: TrainingFieldUpdateOneRequiredWithoutTrainingMajorsNestedInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingMajorNestedInput
     curriculum?: CurriculumUpdateManyWithoutTrainingMajorNestedInput
@@ -344783,6 +345093,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organizationId?: StringFieldUpdateOperationsInput | string
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingFieldId?: StringFieldUpdateOperationsInput | string
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingMajorNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingMajorNestedInput
@@ -344806,6 +345118,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organizationId: string
+    secondOrganizationId?: string | null
+    thirdOrganizationId?: string | null
     trainingFieldId: string
   }
 
@@ -344840,6 +345154,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organizationId?: StringFieldUpdateOperationsInput | string
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingFieldId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -348544,6 +348860,8 @@ export namespace Prisma {
     subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
@@ -348581,6 +348899,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
@@ -348618,6 +348938,8 @@ export namespace Prisma {
     subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
@@ -348655,6 +348977,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
@@ -357588,6 +357912,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -357617,6 +357942,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -357646,6 +357972,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -357675,6 +358002,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -357704,6 +358032,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -357747,6 +358076,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -370181,6 +370511,7 @@ export namespace Prisma {
     name?: SortOrder
     englishName?: SortOrder
     publishDate?: SortOrder
+    decisionNo?: SortOrder
     organizationId?: SortOrder
   }
 
@@ -370195,6 +370526,7 @@ export namespace Prisma {
     name?: SortOrder
     englishName?: SortOrder
     publishDate?: SortOrder
+    decisionNo?: SortOrder
     organizationId?: SortOrder
   }
 
@@ -370209,6 +370541,7 @@ export namespace Prisma {
     name?: SortOrder
     englishName?: SortOrder
     publishDate?: SortOrder
+    decisionNo?: SortOrder
     organizationId?: SortOrder
   }
 
@@ -370310,6 +370643,8 @@ export namespace Prisma {
     numberCreditsRequired?: SortOrder
     numberCreditsElective?: SortOrder
     organizationId?: SortOrder
+    secondOrganizationId?: SortOrder
+    thirdOrganizationId?: SortOrder
     trainingFieldId?: SortOrder
   }
 
@@ -370334,6 +370669,8 @@ export namespace Prisma {
     numberCreditsRequired?: SortOrder
     numberCreditsElective?: SortOrder
     organizationId?: SortOrder
+    secondOrganizationId?: SortOrder
+    thirdOrganizationId?: SortOrder
     trainingFieldId?: SortOrder
   }
 
@@ -370352,6 +370689,8 @@ export namespace Prisma {
     numberCreditsRequired?: SortOrder
     numberCreditsElective?: SortOrder
     organizationId?: SortOrder
+    secondOrganizationId?: SortOrder
+    thirdOrganizationId?: SortOrder
     trainingFieldId?: SortOrder
   }
 
@@ -377973,6 +378312,11 @@ export namespace Prisma {
     isNot?: DiplomaVerificationApplicationWhereInput | null
   }
 
+  export type TrainingFieldNullableScalarRelationFilter = {
+    is?: TrainingFieldWhereInput | null
+    isNot?: TrainingFieldWhereInput | null
+  }
+
   export type NoteNullableScalarRelationFilter = {
     is?: NoteWhereInput | null
     isNot?: NoteWhereInput | null
@@ -378010,6 +378354,7 @@ export namespace Prisma {
     diplomaVerificationId?: SortOrder
     diplomaVerificationFrontId?: SortOrder
     diplomaVerificationBackId?: SortOrder
+    trainingFieldId?: SortOrder
     noteId?: SortOrder
   }
 
@@ -378043,6 +378388,7 @@ export namespace Prisma {
     diplomaVerificationId?: SortOrder
     diplomaVerificationFrontId?: SortOrder
     diplomaVerificationBackId?: SortOrder
+    trainingFieldId?: SortOrder
     noteId?: SortOrder
   }
 
@@ -378072,6 +378418,7 @@ export namespace Prisma {
     diplomaVerificationId?: SortOrder
     diplomaVerificationFrontId?: SortOrder
     diplomaVerificationBackId?: SortOrder
+    trainingFieldId?: SortOrder
     noteId?: SortOrder
   }
 
@@ -388679,6 +389026,13 @@ export namespace Prisma {
     connect?: SurveyObjectTypeWhereUniqueInput | SurveyObjectTypeWhereUniqueInput[]
   }
 
+  export type DocumentFileCreateNestedManyWithoutTrainingFieldInput = {
+    create?: XOR<DocumentFileCreateWithoutTrainingFieldInput, DocumentFileUncheckedCreateWithoutTrainingFieldInput> | DocumentFileCreateWithoutTrainingFieldInput[] | DocumentFileUncheckedCreateWithoutTrainingFieldInput[]
+    connectOrCreate?: DocumentFileCreateOrConnectWithoutTrainingFieldInput | DocumentFileCreateOrConnectWithoutTrainingFieldInput[]
+    createMany?: DocumentFileCreateManyTrainingFieldInputEnvelope
+    connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+  }
+
   export type TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingFieldInput = {
     create?: XOR<TrainingFieldOnTrainingObjectTypeCreateWithoutTrainingFieldInput, TrainingFieldOnTrainingObjectTypeUncheckedCreateWithoutTrainingFieldInput> | TrainingFieldOnTrainingObjectTypeCreateWithoutTrainingFieldInput[] | TrainingFieldOnTrainingObjectTypeUncheckedCreateWithoutTrainingFieldInput[]
     connectOrCreate?: TrainingFieldOnTrainingObjectTypeCreateOrConnectWithoutTrainingFieldInput | TrainingFieldOnTrainingObjectTypeCreateOrConnectWithoutTrainingFieldInput[]
@@ -388697,6 +389051,13 @@ export namespace Prisma {
     create?: XOR<SurveyObjectTypeCreateWithoutTrainingFieldsInput, SurveyObjectTypeUncheckedCreateWithoutTrainingFieldsInput> | SurveyObjectTypeCreateWithoutTrainingFieldsInput[] | SurveyObjectTypeUncheckedCreateWithoutTrainingFieldsInput[]
     connectOrCreate?: SurveyObjectTypeCreateOrConnectWithoutTrainingFieldsInput | SurveyObjectTypeCreateOrConnectWithoutTrainingFieldsInput[]
     connect?: SurveyObjectTypeWhereUniqueInput | SurveyObjectTypeWhereUniqueInput[]
+  }
+
+  export type DocumentFileUncheckedCreateNestedManyWithoutTrainingFieldInput = {
+    create?: XOR<DocumentFileCreateWithoutTrainingFieldInput, DocumentFileUncheckedCreateWithoutTrainingFieldInput> | DocumentFileCreateWithoutTrainingFieldInput[] | DocumentFileUncheckedCreateWithoutTrainingFieldInput[]
+    connectOrCreate?: DocumentFileCreateOrConnectWithoutTrainingFieldInput | DocumentFileCreateOrConnectWithoutTrainingFieldInput[]
+    createMany?: DocumentFileCreateManyTrainingFieldInputEnvelope
+    connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
   }
 
   export type DM_DonViUpdateOneRequiredWithoutTrainingFieldsNestedInput = {
@@ -388748,6 +389109,20 @@ export namespace Prisma {
     deleteMany?: SurveyObjectTypeScalarWhereInput | SurveyObjectTypeScalarWhereInput[]
   }
 
+  export type DocumentFileUpdateManyWithoutTrainingFieldNestedInput = {
+    create?: XOR<DocumentFileCreateWithoutTrainingFieldInput, DocumentFileUncheckedCreateWithoutTrainingFieldInput> | DocumentFileCreateWithoutTrainingFieldInput[] | DocumentFileUncheckedCreateWithoutTrainingFieldInput[]
+    connectOrCreate?: DocumentFileCreateOrConnectWithoutTrainingFieldInput | DocumentFileCreateOrConnectWithoutTrainingFieldInput[]
+    upsert?: DocumentFileUpsertWithWhereUniqueWithoutTrainingFieldInput | DocumentFileUpsertWithWhereUniqueWithoutTrainingFieldInput[]
+    createMany?: DocumentFileCreateManyTrainingFieldInputEnvelope
+    set?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    disconnect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    delete?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    update?: DocumentFileUpdateWithWhereUniqueWithoutTrainingFieldInput | DocumentFileUpdateWithWhereUniqueWithoutTrainingFieldInput[]
+    updateMany?: DocumentFileUpdateManyWithWhereWithoutTrainingFieldInput | DocumentFileUpdateManyWithWhereWithoutTrainingFieldInput[]
+    deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
+  }
+
   export type TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingFieldNestedInput = {
     create?: XOR<TrainingFieldOnTrainingObjectTypeCreateWithoutTrainingFieldInput, TrainingFieldOnTrainingObjectTypeUncheckedCreateWithoutTrainingFieldInput> | TrainingFieldOnTrainingObjectTypeCreateWithoutTrainingFieldInput[] | TrainingFieldOnTrainingObjectTypeUncheckedCreateWithoutTrainingFieldInput[]
     connectOrCreate?: TrainingFieldOnTrainingObjectTypeCreateOrConnectWithoutTrainingFieldInput | TrainingFieldOnTrainingObjectTypeCreateOrConnectWithoutTrainingFieldInput[]
@@ -388789,6 +389164,20 @@ export namespace Prisma {
     deleteMany?: SurveyObjectTypeScalarWhereInput | SurveyObjectTypeScalarWhereInput[]
   }
 
+  export type DocumentFileUncheckedUpdateManyWithoutTrainingFieldNestedInput = {
+    create?: XOR<DocumentFileCreateWithoutTrainingFieldInput, DocumentFileUncheckedCreateWithoutTrainingFieldInput> | DocumentFileCreateWithoutTrainingFieldInput[] | DocumentFileUncheckedCreateWithoutTrainingFieldInput[]
+    connectOrCreate?: DocumentFileCreateOrConnectWithoutTrainingFieldInput | DocumentFileCreateOrConnectWithoutTrainingFieldInput[]
+    upsert?: DocumentFileUpsertWithWhereUniqueWithoutTrainingFieldInput | DocumentFileUpsertWithWhereUniqueWithoutTrainingFieldInput[]
+    createMany?: DocumentFileCreateManyTrainingFieldInputEnvelope
+    set?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    disconnect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    delete?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    update?: DocumentFileUpdateWithWhereUniqueWithoutTrainingFieldInput | DocumentFileUpdateWithWhereUniqueWithoutTrainingFieldInput[]
+    updateMany?: DocumentFileUpdateManyWithWhereWithoutTrainingFieldInput | DocumentFileUpdateManyWithWhereWithoutTrainingFieldInput[]
+    deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
+  }
+
   export type TrainingFieldCreateNestedOneWithoutTrainingObjectTypesInput = {
     create?: XOR<TrainingFieldCreateWithoutTrainingObjectTypesInput, TrainingFieldUncheckedCreateWithoutTrainingObjectTypesInput>
     connectOrCreate?: TrainingFieldCreateOrConnectWithoutTrainingObjectTypesInput
@@ -388820,6 +389209,18 @@ export namespace Prisma {
   export type DM_DonViCreateNestedOneWithoutTrainingMajorsInput = {
     create?: XOR<DM_DonViCreateWithoutTrainingMajorsInput, DM_DonViUncheckedCreateWithoutTrainingMajorsInput>
     connectOrCreate?: DM_DonViCreateOrConnectWithoutTrainingMajorsInput
+    connect?: DM_DonViWhereUniqueInput
+  }
+
+  export type DM_DonViCreateNestedOneWithoutSecondTrainingMajorsInput = {
+    create?: XOR<DM_DonViCreateWithoutSecondTrainingMajorsInput, DM_DonViUncheckedCreateWithoutSecondTrainingMajorsInput>
+    connectOrCreate?: DM_DonViCreateOrConnectWithoutSecondTrainingMajorsInput
+    connect?: DM_DonViWhereUniqueInput
+  }
+
+  export type DM_DonViCreateNestedOneWithoutThirdTrainingMajorsInput = {
+    create?: XOR<DM_DonViCreateWithoutThirdTrainingMajorsInput, DM_DonViUncheckedCreateWithoutThirdTrainingMajorsInput>
+    connectOrCreate?: DM_DonViCreateOrConnectWithoutThirdTrainingMajorsInput
     connect?: DM_DonViWhereUniqueInput
   }
 
@@ -388901,6 +389302,26 @@ export namespace Prisma {
     upsert?: DM_DonViUpsertWithoutTrainingMajorsInput
     connect?: DM_DonViWhereUniqueInput
     update?: XOR<XOR<DM_DonViUpdateToOneWithWhereWithoutTrainingMajorsInput, DM_DonViUpdateWithoutTrainingMajorsInput>, DM_DonViUncheckedUpdateWithoutTrainingMajorsInput>
+  }
+
+  export type DM_DonViUpdateOneWithoutSecondTrainingMajorsNestedInput = {
+    create?: XOR<DM_DonViCreateWithoutSecondTrainingMajorsInput, DM_DonViUncheckedCreateWithoutSecondTrainingMajorsInput>
+    connectOrCreate?: DM_DonViCreateOrConnectWithoutSecondTrainingMajorsInput
+    upsert?: DM_DonViUpsertWithoutSecondTrainingMajorsInput
+    disconnect?: DM_DonViWhereInput | boolean
+    delete?: DM_DonViWhereInput | boolean
+    connect?: DM_DonViWhereUniqueInput
+    update?: XOR<XOR<DM_DonViUpdateToOneWithWhereWithoutSecondTrainingMajorsInput, DM_DonViUpdateWithoutSecondTrainingMajorsInput>, DM_DonViUncheckedUpdateWithoutSecondTrainingMajorsInput>
+  }
+
+  export type DM_DonViUpdateOneWithoutThirdTrainingMajorsNestedInput = {
+    create?: XOR<DM_DonViCreateWithoutThirdTrainingMajorsInput, DM_DonViUncheckedCreateWithoutThirdTrainingMajorsInput>
+    connectOrCreate?: DM_DonViCreateOrConnectWithoutThirdTrainingMajorsInput
+    upsert?: DM_DonViUpsertWithoutThirdTrainingMajorsInput
+    disconnect?: DM_DonViWhereInput | boolean
+    delete?: DM_DonViWhereInput | boolean
+    connect?: DM_DonViWhereUniqueInput
+    update?: XOR<XOR<DM_DonViUpdateToOneWithWhereWithoutThirdTrainingMajorsInput, DM_DonViUpdateWithoutThirdTrainingMajorsInput>, DM_DonViUncheckedUpdateWithoutThirdTrainingMajorsInput>
   }
 
   export type TrainingFieldUpdateOneRequiredWithoutTrainingMajorsNestedInput = {
@@ -391855,6 +392276,20 @@ export namespace Prisma {
     connect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
   }
 
+  export type TrainingMajorCreateNestedManyWithoutSecondOrganizationInput = {
+    create?: XOR<TrainingMajorCreateWithoutSecondOrganizationInput, TrainingMajorUncheckedCreateWithoutSecondOrganizationInput> | TrainingMajorCreateWithoutSecondOrganizationInput[] | TrainingMajorUncheckedCreateWithoutSecondOrganizationInput[]
+    connectOrCreate?: TrainingMajorCreateOrConnectWithoutSecondOrganizationInput | TrainingMajorCreateOrConnectWithoutSecondOrganizationInput[]
+    createMany?: TrainingMajorCreateManySecondOrganizationInputEnvelope
+    connect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+  }
+
+  export type TrainingMajorCreateNestedManyWithoutThirdOrganizationInput = {
+    create?: XOR<TrainingMajorCreateWithoutThirdOrganizationInput, TrainingMajorUncheckedCreateWithoutThirdOrganizationInput> | TrainingMajorCreateWithoutThirdOrganizationInput[] | TrainingMajorUncheckedCreateWithoutThirdOrganizationInput[]
+    connectOrCreate?: TrainingMajorCreateOrConnectWithoutThirdOrganizationInput | TrainingMajorCreateOrConnectWithoutThirdOrganizationInput[]
+    createMany?: TrainingMajorCreateManyThirdOrganizationInputEnvelope
+    connect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+  }
+
   export type ResearchProjectCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<ResearchProjectCreateWithoutOrganizationInput, ResearchProjectUncheckedCreateWithoutOrganizationInput> | ResearchProjectCreateWithoutOrganizationInput[] | ResearchProjectUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: ResearchProjectCreateOrConnectWithoutOrganizationInput | ResearchProjectCreateOrConnectWithoutOrganizationInput[]
@@ -391942,6 +392377,20 @@ export namespace Prisma {
     create?: XOR<TrainingMajorCreateWithoutOrganizationInput, TrainingMajorUncheckedCreateWithoutOrganizationInput> | TrainingMajorCreateWithoutOrganizationInput[] | TrainingMajorUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: TrainingMajorCreateOrConnectWithoutOrganizationInput | TrainingMajorCreateOrConnectWithoutOrganizationInput[]
     createMany?: TrainingMajorCreateManyOrganizationInputEnvelope
+    connect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+  }
+
+  export type TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput = {
+    create?: XOR<TrainingMajorCreateWithoutSecondOrganizationInput, TrainingMajorUncheckedCreateWithoutSecondOrganizationInput> | TrainingMajorCreateWithoutSecondOrganizationInput[] | TrainingMajorUncheckedCreateWithoutSecondOrganizationInput[]
+    connectOrCreate?: TrainingMajorCreateOrConnectWithoutSecondOrganizationInput | TrainingMajorCreateOrConnectWithoutSecondOrganizationInput[]
+    createMany?: TrainingMajorCreateManySecondOrganizationInputEnvelope
+    connect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+  }
+
+  export type TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput = {
+    create?: XOR<TrainingMajorCreateWithoutThirdOrganizationInput, TrainingMajorUncheckedCreateWithoutThirdOrganizationInput> | TrainingMajorCreateWithoutThirdOrganizationInput[] | TrainingMajorUncheckedCreateWithoutThirdOrganizationInput[]
+    connectOrCreate?: TrainingMajorCreateOrConnectWithoutThirdOrganizationInput | TrainingMajorCreateOrConnectWithoutThirdOrganizationInput[]
+    createMany?: TrainingMajorCreateManyThirdOrganizationInputEnvelope
     connect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
   }
 
@@ -392102,6 +392551,34 @@ export namespace Prisma {
     connect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
     update?: TrainingMajorUpdateWithWhereUniqueWithoutOrganizationInput | TrainingMajorUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: TrainingMajorUpdateManyWithWhereWithoutOrganizationInput | TrainingMajorUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: TrainingMajorScalarWhereInput | TrainingMajorScalarWhereInput[]
+  }
+
+  export type TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput = {
+    create?: XOR<TrainingMajorCreateWithoutSecondOrganizationInput, TrainingMajorUncheckedCreateWithoutSecondOrganizationInput> | TrainingMajorCreateWithoutSecondOrganizationInput[] | TrainingMajorUncheckedCreateWithoutSecondOrganizationInput[]
+    connectOrCreate?: TrainingMajorCreateOrConnectWithoutSecondOrganizationInput | TrainingMajorCreateOrConnectWithoutSecondOrganizationInput[]
+    upsert?: TrainingMajorUpsertWithWhereUniqueWithoutSecondOrganizationInput | TrainingMajorUpsertWithWhereUniqueWithoutSecondOrganizationInput[]
+    createMany?: TrainingMajorCreateManySecondOrganizationInputEnvelope
+    set?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    disconnect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    delete?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    connect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    update?: TrainingMajorUpdateWithWhereUniqueWithoutSecondOrganizationInput | TrainingMajorUpdateWithWhereUniqueWithoutSecondOrganizationInput[]
+    updateMany?: TrainingMajorUpdateManyWithWhereWithoutSecondOrganizationInput | TrainingMajorUpdateManyWithWhereWithoutSecondOrganizationInput[]
+    deleteMany?: TrainingMajorScalarWhereInput | TrainingMajorScalarWhereInput[]
+  }
+
+  export type TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput = {
+    create?: XOR<TrainingMajorCreateWithoutThirdOrganizationInput, TrainingMajorUncheckedCreateWithoutThirdOrganizationInput> | TrainingMajorCreateWithoutThirdOrganizationInput[] | TrainingMajorUncheckedCreateWithoutThirdOrganizationInput[]
+    connectOrCreate?: TrainingMajorCreateOrConnectWithoutThirdOrganizationInput | TrainingMajorCreateOrConnectWithoutThirdOrganizationInput[]
+    upsert?: TrainingMajorUpsertWithWhereUniqueWithoutThirdOrganizationInput | TrainingMajorUpsertWithWhereUniqueWithoutThirdOrganizationInput[]
+    createMany?: TrainingMajorCreateManyThirdOrganizationInputEnvelope
+    set?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    disconnect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    delete?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    connect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    update?: TrainingMajorUpdateWithWhereUniqueWithoutThirdOrganizationInput | TrainingMajorUpdateWithWhereUniqueWithoutThirdOrganizationInput[]
+    updateMany?: TrainingMajorUpdateManyWithWhereWithoutThirdOrganizationInput | TrainingMajorUpdateManyWithWhereWithoutThirdOrganizationInput[]
     deleteMany?: TrainingMajorScalarWhereInput | TrainingMajorScalarWhereInput[]
   }
 
@@ -392283,6 +392760,34 @@ export namespace Prisma {
     connect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
     update?: TrainingMajorUpdateWithWhereUniqueWithoutOrganizationInput | TrainingMajorUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: TrainingMajorUpdateManyWithWhereWithoutOrganizationInput | TrainingMajorUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: TrainingMajorScalarWhereInput | TrainingMajorScalarWhereInput[]
+  }
+
+  export type TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput = {
+    create?: XOR<TrainingMajorCreateWithoutSecondOrganizationInput, TrainingMajorUncheckedCreateWithoutSecondOrganizationInput> | TrainingMajorCreateWithoutSecondOrganizationInput[] | TrainingMajorUncheckedCreateWithoutSecondOrganizationInput[]
+    connectOrCreate?: TrainingMajorCreateOrConnectWithoutSecondOrganizationInput | TrainingMajorCreateOrConnectWithoutSecondOrganizationInput[]
+    upsert?: TrainingMajorUpsertWithWhereUniqueWithoutSecondOrganizationInput | TrainingMajorUpsertWithWhereUniqueWithoutSecondOrganizationInput[]
+    createMany?: TrainingMajorCreateManySecondOrganizationInputEnvelope
+    set?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    disconnect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    delete?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    connect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    update?: TrainingMajorUpdateWithWhereUniqueWithoutSecondOrganizationInput | TrainingMajorUpdateWithWhereUniqueWithoutSecondOrganizationInput[]
+    updateMany?: TrainingMajorUpdateManyWithWhereWithoutSecondOrganizationInput | TrainingMajorUpdateManyWithWhereWithoutSecondOrganizationInput[]
+    deleteMany?: TrainingMajorScalarWhereInput | TrainingMajorScalarWhereInput[]
+  }
+
+  export type TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput = {
+    create?: XOR<TrainingMajorCreateWithoutThirdOrganizationInput, TrainingMajorUncheckedCreateWithoutThirdOrganizationInput> | TrainingMajorCreateWithoutThirdOrganizationInput[] | TrainingMajorUncheckedCreateWithoutThirdOrganizationInput[]
+    connectOrCreate?: TrainingMajorCreateOrConnectWithoutThirdOrganizationInput | TrainingMajorCreateOrConnectWithoutThirdOrganizationInput[]
+    upsert?: TrainingMajorUpsertWithWhereUniqueWithoutThirdOrganizationInput | TrainingMajorUpsertWithWhereUniqueWithoutThirdOrganizationInput[]
+    createMany?: TrainingMajorCreateManyThirdOrganizationInputEnvelope
+    set?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    disconnect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    delete?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    connect?: TrainingMajorWhereUniqueInput | TrainingMajorWhereUniqueInput[]
+    update?: TrainingMajorUpdateWithWhereUniqueWithoutThirdOrganizationInput | TrainingMajorUpdateWithWhereUniqueWithoutThirdOrganizationInput[]
+    updateMany?: TrainingMajorUpdateManyWithWhereWithoutThirdOrganizationInput | TrainingMajorUpdateManyWithWhereWithoutThirdOrganizationInput[]
     deleteMany?: TrainingMajorScalarWhereInput | TrainingMajorScalarWhereInput[]
   }
 
@@ -398607,6 +399112,12 @@ export namespace Prisma {
     connect?: DiplomaVerificationApplicationWhereUniqueInput
   }
 
+  export type TrainingFieldCreateNestedOneWithoutDocumentFilesInput = {
+    create?: XOR<TrainingFieldCreateWithoutDocumentFilesInput, TrainingFieldUncheckedCreateWithoutDocumentFilesInput>
+    connectOrCreate?: TrainingFieldCreateOrConnectWithoutDocumentFilesInput
+    connect?: TrainingFieldWhereUniqueInput
+  }
+
   export type NoteCreateNestedOneWithoutAttachmentsInput = {
     create?: XOR<NoteCreateWithoutAttachmentsInput, NoteUncheckedCreateWithoutAttachmentsInput>
     connectOrCreate?: NoteCreateOrConnectWithoutAttachmentsInput
@@ -398759,6 +399270,16 @@ export namespace Prisma {
     delete?: DiplomaVerificationApplicationWhereInput | boolean
     connect?: DiplomaVerificationApplicationWhereUniqueInput
     update?: XOR<XOR<DiplomaVerificationApplicationUpdateToOneWithWhereWithoutDiplomaBackInput, DiplomaVerificationApplicationUpdateWithoutDiplomaBackInput>, DiplomaVerificationApplicationUncheckedUpdateWithoutDiplomaBackInput>
+  }
+
+  export type TrainingFieldUpdateOneWithoutDocumentFilesNestedInput = {
+    create?: XOR<TrainingFieldCreateWithoutDocumentFilesInput, TrainingFieldUncheckedCreateWithoutDocumentFilesInput>
+    connectOrCreate?: TrainingFieldCreateOrConnectWithoutDocumentFilesInput
+    upsert?: TrainingFieldUpsertWithoutDocumentFilesInput
+    disconnect?: TrainingFieldWhereInput | boolean
+    delete?: TrainingFieldWhereInput | boolean
+    connect?: TrainingFieldWhereUniqueInput
+    update?: XOR<XOR<TrainingFieldUpdateToOneWithWhereWithoutDocumentFilesInput, TrainingFieldUpdateWithoutDocumentFilesInput>, TrainingFieldUncheckedUpdateWithoutDocumentFilesInput>
   }
 
   export type NoteUpdateOneWithoutAttachmentsNestedInput = {
@@ -409448,6 +409969,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -409476,6 +409998,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -409566,6 +410089,7 @@ export namespace Prisma {
     diplomaVerificationId?: StringNullableFilter<"DocumentFile"> | string | null
     diplomaVerificationFrontId?: StringNullableFilter<"DocumentFile"> | string | null
     diplomaVerificationBackId?: StringNullableFilter<"DocumentFile"> | string | null
+    trainingFieldId?: StringNullableFilter<"DocumentFile"> | string | null
     noteId?: StringNullableFilter<"DocumentFile"> | string | null
   }
 
@@ -409826,6 +410350,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -409854,6 +410379,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -412793,6 +413319,8 @@ export namespace Prisma {
     subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
@@ -412829,6 +413357,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
@@ -413686,6 +414216,8 @@ export namespace Prisma {
     subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
@@ -413722,6 +414254,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
@@ -414055,6 +414589,8 @@ export namespace Prisma {
     subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
@@ -414091,6 +414627,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
@@ -414116,6 +414654,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organization: DM_DonViCreateNestedOneWithoutTrainingMajorsInput
+    secondOrganization?: DM_DonViCreateNestedOneWithoutSecondTrainingMajorsInput
+    thirdOrganization?: DM_DonViCreateNestedOneWithoutThirdTrainingMajorsInput
     trainingField: TrainingFieldCreateNestedOneWithoutTrainingMajorsInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingMajorInput
     graduationDecision?: GraduationDecisionCreateNestedManyWithoutTrainingMajorInput
@@ -414138,6 +414678,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organizationId: string
+    secondOrganizationId?: string | null
+    thirdOrganizationId?: string | null
     trainingFieldId: string
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingMajorInput
     graduationDecision?: GraduationDecisionUncheckedCreateNestedManyWithoutTrainingMajorInput
@@ -414175,6 +414717,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -414203,6 +414746,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -414344,6 +414888,8 @@ export namespace Prisma {
     subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
@@ -414380,6 +414926,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
@@ -414411,6 +414959,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organization?: DM_DonViUpdateOneRequiredWithoutTrainingMajorsNestedInput
+    secondOrganization?: DM_DonViUpdateOneWithoutSecondTrainingMajorsNestedInput
+    thirdOrganization?: DM_DonViUpdateOneWithoutThirdTrainingMajorsNestedInput
     trainingField?: TrainingFieldUpdateOneRequiredWithoutTrainingMajorsNestedInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingMajorNestedInput
     graduationDecision?: GraduationDecisionUpdateManyWithoutTrainingMajorNestedInput
@@ -414433,6 +414983,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organizationId?: StringFieldUpdateOperationsInput | string
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingFieldId?: StringFieldUpdateOperationsInput | string
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingMajorNestedInput
     graduationDecision?: GraduationDecisionUncheckedUpdateManyWithoutTrainingMajorNestedInput
@@ -414706,6 +415258,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -414734,6 +415287,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -415276,6 +415830,8 @@ export namespace Prisma {
     subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
@@ -415312,6 +415868,8 @@ export namespace Prisma {
     subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
@@ -415460,6 +416018,8 @@ export namespace Prisma {
     subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
@@ -415496,6 +416056,8 @@ export namespace Prisma {
     subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
@@ -415584,6 +416146,8 @@ export namespace Prisma {
     subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
@@ -415620,6 +416184,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
@@ -416338,6 +416904,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -416366,6 +416933,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -416457,6 +417025,8 @@ export namespace Prisma {
     subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
@@ -416493,6 +417063,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
@@ -423335,6 +423907,8 @@ export namespace Prisma {
     subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
     subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
@@ -423371,6 +423945,8 @@ export namespace Prisma {
     subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
     subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
@@ -423428,6 +424004,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organization: DM_DonViCreateNestedOneWithoutTrainingMajorsInput
+    secondOrganization?: DM_DonViCreateNestedOneWithoutSecondTrainingMajorsInput
+    thirdOrganization?: DM_DonViCreateNestedOneWithoutThirdTrainingMajorsInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingMajorInput
     curriculum?: CurriculumCreateNestedManyWithoutTrainingMajorInput
     graduationDecision?: GraduationDecisionCreateNestedManyWithoutTrainingMajorInput
@@ -423450,6 +424028,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organizationId: string
+    secondOrganizationId?: string | null
+    thirdOrganizationId?: string | null
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingMajorInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingMajorInput
     graduationDecision?: GraduationDecisionUncheckedCreateNestedManyWithoutTrainingMajorInput
@@ -423512,6 +424092,74 @@ export namespace Prisma {
     create: XOR<SurveyObjectTypeCreateWithoutTrainingFieldsInput, SurveyObjectTypeUncheckedCreateWithoutTrainingFieldsInput>
   }
 
+  export type DocumentFileCreateWithoutTrainingFieldInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    path: string
+    size: bigint | number
+    mimeType?: string | null
+    archivedCertificate?: ArchivedCertificateCreateNestedOneWithoutDocumentFilesInput
+    archivedAward?: ArchivedAwardCreateNestedOneWithoutDocumentFilesInput
+    curriculum?: CurriculumCreateNestedOneWithoutDocumentFilesInput
+    curriculumVersion?: CurriculumVersionCreateNestedOneWithoutDocumentFilesInput
+    subjectVersion?: SubjectVersionCreateNestedOneWithoutDocumentFilesInput
+    studentAcademicDecision?: StudentAcademicDecisionCreateNestedOneWithoutDocumentEvidenceInput
+    notification?: NotificationCreateNestedOneWithoutAttachmentsInput
+    decision?: DecisionCreateNestedOneWithoutDocumentFileInput
+    defenseRecord?: DefenseRecordCreateNestedOneWithoutDocumentsInput
+    diplomaFront?: GraduationDecisionCreateNestedOneWithoutDiplomaFrontInput
+    diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
+    diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
+    diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
+    diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    note?: NoteCreateNestedOneWithoutAttachmentsInput
+  }
+
+  export type DocumentFileUncheckedCreateWithoutTrainingFieldInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    path: string
+    size: bigint | number
+    mimeType?: string | null
+    archivedCertificateId?: string | null
+    archivedAwardId?: string | null
+    curriculumId?: string | null
+    curriculumVersionId?: string | null
+    subjectVersionId?: string | null
+    studentAcademicDecisionId?: string | null
+    notificationId?: string | null
+    decisionId?: string | null
+    defenseRecordId?: string | null
+    diplomaFrontId?: string | null
+    diplomaBackId?: string | null
+    diplomaVerificationId?: string | null
+    diplomaVerificationFrontId?: string | null
+    diplomaVerificationBackId?: string | null
+    noteId?: string | null
+  }
+
+  export type DocumentFileCreateOrConnectWithoutTrainingFieldInput = {
+    where: DocumentFileWhereUniqueInput
+    create: XOR<DocumentFileCreateWithoutTrainingFieldInput, DocumentFileUncheckedCreateWithoutTrainingFieldInput>
+  }
+
+  export type DocumentFileCreateManyTrainingFieldInputEnvelope = {
+    data: DocumentFileCreateManyTrainingFieldInput | DocumentFileCreateManyTrainingFieldInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DM_DonViUpsertWithoutTrainingFieldsInput = {
     update: XOR<DM_DonViUpdateWithoutTrainingFieldsInput, DM_DonViUncheckedUpdateWithoutTrainingFieldsInput>
     create: XOR<DM_DonViCreateWithoutTrainingFieldsInput, DM_DonViUncheckedCreateWithoutTrainingFieldsInput>
@@ -423554,6 +424202,8 @@ export namespace Prisma {
     subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
     subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
@@ -423590,6 +424240,8 @@ export namespace Prisma {
     subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
@@ -423645,6 +424297,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFilter<"TrainingMajor"> | number
     numberCreditsElective?: IntFilter<"TrainingMajor"> | number
     organizationId?: UuidFilter<"TrainingMajor"> | string
+    secondOrganizationId?: UuidNullableFilter<"TrainingMajor"> | string | null
+    thirdOrganizationId?: UuidNullableFilter<"TrainingMajor"> | string | null
     trainingFieldId?: StringFilter<"TrainingMajor"> | string
   }
 
@@ -423664,6 +424318,22 @@ export namespace Prisma {
     data: XOR<SurveyObjectTypeUpdateManyMutationInput, SurveyObjectTypeUncheckedUpdateManyWithoutTrainingFieldsInput>
   }
 
+  export type DocumentFileUpsertWithWhereUniqueWithoutTrainingFieldInput = {
+    where: DocumentFileWhereUniqueInput
+    update: XOR<DocumentFileUpdateWithoutTrainingFieldInput, DocumentFileUncheckedUpdateWithoutTrainingFieldInput>
+    create: XOR<DocumentFileCreateWithoutTrainingFieldInput, DocumentFileUncheckedCreateWithoutTrainingFieldInput>
+  }
+
+  export type DocumentFileUpdateWithWhereUniqueWithoutTrainingFieldInput = {
+    where: DocumentFileWhereUniqueInput
+    data: XOR<DocumentFileUpdateWithoutTrainingFieldInput, DocumentFileUncheckedUpdateWithoutTrainingFieldInput>
+  }
+
+  export type DocumentFileUpdateManyWithWhereWithoutTrainingFieldInput = {
+    where: DocumentFileScalarWhereInput
+    data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutTrainingFieldInput>
+  }
+
   export type TrainingFieldCreateWithoutTrainingObjectTypesInput = {
     id?: string
     code?: string | null
@@ -423675,9 +424345,11 @@ export namespace Prisma {
     name: string
     englishName: string
     publishDate: Date | string
+    decisionNo?: string | null
     organization: DM_DonViCreateNestedOneWithoutTrainingFieldsInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutTrainingFieldInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingFieldsInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutTrainingFieldInput
   }
 
   export type TrainingFieldUncheckedCreateWithoutTrainingObjectTypesInput = {
@@ -423691,9 +424363,11 @@ export namespace Prisma {
     name: string
     englishName: string
     publishDate: Date | string
+    decisionNo?: string | null
     organizationId: string
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutTrainingFieldInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingFieldsInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingFieldInput
   }
 
   export type TrainingFieldCreateOrConnectWithoutTrainingObjectTypesInput = {
@@ -423766,9 +424440,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
     organization?: DM_DonViUpdateOneRequiredWithoutTrainingFieldsNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutTrainingFieldNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingFieldsNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutTrainingFieldNestedInput
   }
 
   export type TrainingFieldUncheckedUpdateWithoutTrainingObjectTypesInput = {
@@ -423782,9 +424458,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutTrainingFieldNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingFieldsNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingFieldNestedInput
   }
 
   export type TrainingObjectTypeUpsertWithoutTrainingFieldsInput = {
@@ -423867,6 +424545,8 @@ export namespace Prisma {
     subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
     subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
@@ -423903,6 +424583,8 @@ export namespace Prisma {
     subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
     subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
@@ -423911,6 +424593,168 @@ export namespace Prisma {
   export type DM_DonViCreateOrConnectWithoutTrainingMajorsInput = {
     where: DM_DonViWhereUniqueInput
     create: XOR<DM_DonViCreateWithoutTrainingMajorsInput, DM_DonViUncheckedCreateWithoutTrainingMajorsInput>
+  }
+
+  export type DM_DonViCreateWithoutSecondTrainingMajorsInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    sCode?: string | null
+    sTenVietTat?: string | null
+    sParentId?: string | null
+    sTruongDonVi?: string | null
+    sChucNangNhiemVu?: string | null
+    sDiaChi?: string | null
+    lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
+    lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
+    staffs?: StaffCreateNestedManyWithoutOrganizationInput
+    staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+    curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
+    fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
+    subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
+    subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
+    trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
+    trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
+    researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
+    thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
+    surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+  }
+
+  export type DM_DonViUncheckedCreateWithoutSecondTrainingMajorsInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    sCode?: string | null
+    sTenVietTat?: string | null
+    sParentId?: string | null
+    sTruongDonVi?: string | null
+    sChucNangNhiemVu?: string | null
+    sDiaChi?: string | null
+    lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
+    lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+    staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
+    staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+    curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
+    fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
+    subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
+    subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
+    trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
+    trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
+    researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
+    thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+  }
+
+  export type DM_DonViCreateOrConnectWithoutSecondTrainingMajorsInput = {
+    where: DM_DonViWhereUniqueInput
+    create: XOR<DM_DonViCreateWithoutSecondTrainingMajorsInput, DM_DonViUncheckedCreateWithoutSecondTrainingMajorsInput>
+  }
+
+  export type DM_DonViCreateWithoutThirdTrainingMajorsInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    sCode?: string | null
+    sTenVietTat?: string | null
+    sParentId?: string | null
+    sTruongDonVi?: string | null
+    sChucNangNhiemVu?: string | null
+    sDiaChi?: string | null
+    lecturers?: LecturerCreateNestedManyWithoutOrganizationInput
+    lecturerHistory?: LecturerHistoryCreateNestedManyWithoutOrganizationInput
+    staffs?: StaffCreateNestedManyWithoutOrganizationInput
+    staffHistory?: StaffHistoryCreateNestedManyWithoutOrganizationInput
+    curriculum?: CurriculumCreateNestedManyWithoutManagementOrganizationInput
+    fixedClass?: FixedClassCreateNestedManyWithoutManagementOrganizationInput
+    subjectVersions?: SubjectVersionCreateNestedManyWithoutManagementOrganizationInput
+    subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
+    trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
+    trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
+    thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
+    surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
+  }
+
+  export type DM_DonViUncheckedCreateWithoutThirdTrainingMajorsInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    sCode?: string | null
+    sTenVietTat?: string | null
+    sParentId?: string | null
+    sTruongDonVi?: string | null
+    sChucNangNhiemVu?: string | null
+    sDiaChi?: string | null
+    lecturers?: LecturerUncheckedCreateNestedManyWithoutOrganizationInput
+    lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+    staffs?: StaffUncheckedCreateNestedManyWithoutOrganizationInput
+    staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutOrganizationInput
+    curriculum?: CurriculumUncheckedCreateNestedManyWithoutManagementOrganizationInput
+    fixedClass?: FixedClassUncheckedCreateNestedManyWithoutManagementOrganizationInput
+    subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutManagementOrganizationInput
+    subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
+    trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
+    trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
+    thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
+  }
+
+  export type DM_DonViCreateOrConnectWithoutThirdTrainingMajorsInput = {
+    where: DM_DonViWhereUniqueInput
+    create: XOR<DM_DonViCreateWithoutThirdTrainingMajorsInput, DM_DonViUncheckedCreateWithoutThirdTrainingMajorsInput>
   }
 
   export type TrainingFieldCreateWithoutTrainingMajorsInput = {
@@ -423924,9 +424768,11 @@ export namespace Prisma {
     name: string
     englishName: string
     publishDate: Date | string
+    decisionNo?: string | null
     organization: DM_DonViCreateNestedOneWithoutTrainingFieldsInput
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingFieldInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingFieldsInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutTrainingFieldInput
   }
 
   export type TrainingFieldUncheckedCreateWithoutTrainingMajorsInput = {
@@ -423940,9 +424786,11 @@ export namespace Prisma {
     name: string
     englishName: string
     publishDate: Date | string
+    decisionNo?: string | null
     organizationId: string
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingFieldInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingFieldsInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingFieldInput
   }
 
   export type TrainingFieldCreateOrConnectWithoutTrainingMajorsInput = {
@@ -424230,6 +425078,8 @@ export namespace Prisma {
     subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
     subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
@@ -424266,6 +425116,182 @@ export namespace Prisma {
     subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
+    researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+    thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+  }
+
+  export type DM_DonViUpsertWithoutSecondTrainingMajorsInput = {
+    update: XOR<DM_DonViUpdateWithoutSecondTrainingMajorsInput, DM_DonViUncheckedUpdateWithoutSecondTrainingMajorsInput>
+    create: XOR<DM_DonViCreateWithoutSecondTrainingMajorsInput, DM_DonViUncheckedCreateWithoutSecondTrainingMajorsInput>
+    where?: DM_DonViWhereInput
+  }
+
+  export type DM_DonViUpdateToOneWithWhereWithoutSecondTrainingMajorsInput = {
+    where?: DM_DonViWhereInput
+    data: XOR<DM_DonViUpdateWithoutSecondTrainingMajorsInput, DM_DonViUncheckedUpdateWithoutSecondTrainingMajorsInput>
+  }
+
+  export type DM_DonViUpdateWithoutSecondTrainingMajorsInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
+    sParentId?: NullableStringFieldUpdateOperationsInput | string | null
+    sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
+    sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
+    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
+    lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
+    staffs?: StaffUpdateManyWithoutOrganizationNestedInput
+    staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+    curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
+    fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
+    subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
+    subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
+    trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
+    trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
+    researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
+    thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+  }
+
+  export type DM_DonViUncheckedUpdateWithoutSecondTrainingMajorsInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
+    sParentId?: NullableStringFieldUpdateOperationsInput | string | null
+    sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
+    sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
+    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
+    lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+    staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
+    staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+    curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+    fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+    subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+    subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+    trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+    trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
+    researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+    thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
+  }
+
+  export type DM_DonViUpsertWithoutThirdTrainingMajorsInput = {
+    update: XOR<DM_DonViUpdateWithoutThirdTrainingMajorsInput, DM_DonViUncheckedUpdateWithoutThirdTrainingMajorsInput>
+    create: XOR<DM_DonViCreateWithoutThirdTrainingMajorsInput, DM_DonViUncheckedCreateWithoutThirdTrainingMajorsInput>
+    where?: DM_DonViWhereInput
+  }
+
+  export type DM_DonViUpdateToOneWithWhereWithoutThirdTrainingMajorsInput = {
+    where?: DM_DonViWhereInput
+    data: XOR<DM_DonViUpdateWithoutThirdTrainingMajorsInput, DM_DonViUncheckedUpdateWithoutThirdTrainingMajorsInput>
+  }
+
+  export type DM_DonViUpdateWithoutThirdTrainingMajorsInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
+    sParentId?: NullableStringFieldUpdateOperationsInput | string | null
+    sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
+    sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
+    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturers?: LecturerUpdateManyWithoutOrganizationNestedInput
+    lecturerHistory?: LecturerHistoryUpdateManyWithoutOrganizationNestedInput
+    staffs?: StaffUpdateManyWithoutOrganizationNestedInput
+    staffHistory?: StaffHistoryUpdateManyWithoutOrganizationNestedInput
+    curriculum?: CurriculumUpdateManyWithoutManagementOrganizationNestedInput
+    fixedClass?: FixedClassUpdateManyWithoutManagementOrganizationNestedInput
+    subjectVersions?: SubjectVersionUpdateManyWithoutManagementOrganizationNestedInput
+    subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
+    trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
+    trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
+    thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
+  }
+
+  export type DM_DonViUncheckedUpdateWithoutThirdTrainingMajorsInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sTenVietTat?: NullableStringFieldUpdateOperationsInput | string | null
+    sParentId?: NullableStringFieldUpdateOperationsInput | string | null
+    sTruongDonVi?: NullableStringFieldUpdateOperationsInput | string | null
+    sChucNangNhiemVu?: NullableStringFieldUpdateOperationsInput | string | null
+    sDiaChi?: NullableStringFieldUpdateOperationsInput | string | null
+    lecturers?: LecturerUncheckedUpdateManyWithoutOrganizationNestedInput
+    lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+    staffs?: StaffUncheckedUpdateManyWithoutOrganizationNestedInput
+    staffHistory?: StaffHistoryUncheckedUpdateManyWithoutOrganizationNestedInput
+    curriculum?: CurriculumUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+    fixedClass?: FixedClassUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+    subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+    subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
+    trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
+    trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
@@ -424293,9 +425319,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
     organization?: DM_DonViUpdateOneRequiredWithoutTrainingFieldsNestedInput
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingFieldNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingFieldsNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutTrainingFieldNestedInput
   }
 
   export type TrainingFieldUncheckedUpdateWithoutTrainingMajorsInput = {
@@ -424309,9 +425337,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingFieldNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingFieldsNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingFieldNestedInput
   }
 
   export type TrainingMajorOnTrainingObjectTypeUpsertWithWhereUniqueWithoutTrainingMajorInput = {
@@ -424453,6 +425483,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organization: DM_DonViCreateNestedOneWithoutTrainingMajorsInput
+    secondOrganization?: DM_DonViCreateNestedOneWithoutSecondTrainingMajorsInput
+    thirdOrganization?: DM_DonViCreateNestedOneWithoutThirdTrainingMajorsInput
     trainingField: TrainingFieldCreateNestedOneWithoutTrainingMajorsInput
     curriculum?: CurriculumCreateNestedManyWithoutTrainingMajorInput
     graduationDecision?: GraduationDecisionCreateNestedManyWithoutTrainingMajorInput
@@ -424475,6 +425507,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organizationId: string
+    secondOrganizationId?: string | null
+    thirdOrganizationId?: string | null
     trainingFieldId: string
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingMajorInput
     graduationDecision?: GraduationDecisionUncheckedCreateNestedManyWithoutTrainingMajorInput
@@ -424556,6 +425590,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organization?: DM_DonViUpdateOneRequiredWithoutTrainingMajorsNestedInput
+    secondOrganization?: DM_DonViUpdateOneWithoutSecondTrainingMajorsNestedInput
+    thirdOrganization?: DM_DonViUpdateOneWithoutThirdTrainingMajorsNestedInput
     trainingField?: TrainingFieldUpdateOneRequiredWithoutTrainingMajorsNestedInput
     curriculum?: CurriculumUpdateManyWithoutTrainingMajorNestedInput
     graduationDecision?: GraduationDecisionUpdateManyWithoutTrainingMajorNestedInput
@@ -424578,6 +425614,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organizationId?: StringFieldUpdateOperationsInput | string
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingFieldId?: StringFieldUpdateOperationsInput | string
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingMajorNestedInput
     graduationDecision?: GraduationDecisionUncheckedUpdateManyWithoutTrainingMajorNestedInput
@@ -429487,6 +430525,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -429515,6 +430554,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -437403,9 +438443,11 @@ export namespace Prisma {
     name: string
     englishName: string
     publishDate: Date | string
+    decisionNo?: string | null
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingFieldInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutTrainingFieldInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingFieldsInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutTrainingFieldInput
   }
 
   export type TrainingFieldUncheckedCreateWithoutOrganizationInput = {
@@ -437419,9 +438461,11 @@ export namespace Prisma {
     name: string
     englishName: string
     publishDate: Date | string
+    decisionNo?: string | null
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingFieldInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutTrainingFieldInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingFieldsInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingFieldInput
   }
 
   export type TrainingFieldCreateOrConnectWithoutOrganizationInput = {
@@ -437448,6 +438492,8 @@ export namespace Prisma {
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
+    secondOrganization?: DM_DonViCreateNestedOneWithoutSecondTrainingMajorsInput
+    thirdOrganization?: DM_DonViCreateNestedOneWithoutThirdTrainingMajorsInput
     trainingField: TrainingFieldCreateNestedOneWithoutTrainingMajorsInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingMajorInput
     curriculum?: CurriculumCreateNestedManyWithoutTrainingMajorInput
@@ -437470,6 +438516,8 @@ export namespace Prisma {
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
+    secondOrganizationId?: string | null
+    thirdOrganizationId?: string | null
     trainingFieldId: string
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingMajorInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingMajorInput
@@ -437485,6 +438533,122 @@ export namespace Prisma {
 
   export type TrainingMajorCreateManyOrganizationInputEnvelope = {
     data: TrainingMajorCreateManyOrganizationInput | TrainingMajorCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TrainingMajorCreateWithoutSecondOrganizationInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    englishName?: string | null
+    summary: string
+    numberCreditsMajor?: number
+    numberCreditsRequired?: number
+    numberCreditsElective?: number
+    organization: DM_DonViCreateNestedOneWithoutTrainingMajorsInput
+    thirdOrganization?: DM_DonViCreateNestedOneWithoutThirdTrainingMajorsInput
+    trainingField: TrainingFieldCreateNestedOneWithoutTrainingMajorsInput
+    trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingMajorInput
+    curriculum?: CurriculumCreateNestedManyWithoutTrainingMajorInput
+    graduationDecision?: GraduationDecisionCreateNestedManyWithoutTrainingMajorInput
+    expertProfile?: ExpertProfileCreateNestedManyWithoutMajorInput
+    surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingMajorsInput
+  }
+
+  export type TrainingMajorUncheckedCreateWithoutSecondOrganizationInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    englishName?: string | null
+    summary: string
+    numberCreditsMajor?: number
+    numberCreditsRequired?: number
+    numberCreditsElective?: number
+    organizationId: string
+    thirdOrganizationId?: string | null
+    trainingFieldId: string
+    trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingMajorInput
+    curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingMajorInput
+    graduationDecision?: GraduationDecisionUncheckedCreateNestedManyWithoutTrainingMajorInput
+    expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutMajorInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingMajorsInput
+  }
+
+  export type TrainingMajorCreateOrConnectWithoutSecondOrganizationInput = {
+    where: TrainingMajorWhereUniqueInput
+    create: XOR<TrainingMajorCreateWithoutSecondOrganizationInput, TrainingMajorUncheckedCreateWithoutSecondOrganizationInput>
+  }
+
+  export type TrainingMajorCreateManySecondOrganizationInputEnvelope = {
+    data: TrainingMajorCreateManySecondOrganizationInput | TrainingMajorCreateManySecondOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TrainingMajorCreateWithoutThirdOrganizationInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    englishName?: string | null
+    summary: string
+    numberCreditsMajor?: number
+    numberCreditsRequired?: number
+    numberCreditsElective?: number
+    organization: DM_DonViCreateNestedOneWithoutTrainingMajorsInput
+    secondOrganization?: DM_DonViCreateNestedOneWithoutSecondTrainingMajorsInput
+    trainingField: TrainingFieldCreateNestedOneWithoutTrainingMajorsInput
+    trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingMajorInput
+    curriculum?: CurriculumCreateNestedManyWithoutTrainingMajorInput
+    graduationDecision?: GraduationDecisionCreateNestedManyWithoutTrainingMajorInput
+    expertProfile?: ExpertProfileCreateNestedManyWithoutMajorInput
+    surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingMajorsInput
+  }
+
+  export type TrainingMajorUncheckedCreateWithoutThirdOrganizationInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    englishName?: string | null
+    summary: string
+    numberCreditsMajor?: number
+    numberCreditsRequired?: number
+    numberCreditsElective?: number
+    organizationId: string
+    secondOrganizationId?: string | null
+    trainingFieldId: string
+    trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingMajorInput
+    curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingMajorInput
+    graduationDecision?: GraduationDecisionUncheckedCreateNestedManyWithoutTrainingMajorInput
+    expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutMajorInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingMajorsInput
+  }
+
+  export type TrainingMajorCreateOrConnectWithoutThirdOrganizationInput = {
+    where: TrainingMajorWhereUniqueInput
+    create: XOR<TrainingMajorCreateWithoutThirdOrganizationInput, TrainingMajorUncheckedCreateWithoutThirdOrganizationInput>
+  }
+
+  export type TrainingMajorCreateManyThirdOrganizationInputEnvelope = {
+    data: TrainingMajorCreateManyThirdOrganizationInput | TrainingMajorCreateManyThirdOrganizationInput[]
     skipDuplicates?: boolean
   }
 
@@ -437931,6 +439095,7 @@ export namespace Prisma {
     name?: StringFilter<"TrainingField"> | string
     englishName?: StringFilter<"TrainingField"> | string
     publishDate?: DateTimeFilter<"TrainingField"> | Date | string
+    decisionNo?: StringNullableFilter<"TrainingField"> | string | null
     organizationId?: UuidFilter<"TrainingField"> | string
   }
 
@@ -437948,6 +439113,38 @@ export namespace Prisma {
   export type TrainingMajorUpdateManyWithWhereWithoutOrganizationInput = {
     where: TrainingMajorScalarWhereInput
     data: XOR<TrainingMajorUpdateManyMutationInput, TrainingMajorUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type TrainingMajorUpsertWithWhereUniqueWithoutSecondOrganizationInput = {
+    where: TrainingMajorWhereUniqueInput
+    update: XOR<TrainingMajorUpdateWithoutSecondOrganizationInput, TrainingMajorUncheckedUpdateWithoutSecondOrganizationInput>
+    create: XOR<TrainingMajorCreateWithoutSecondOrganizationInput, TrainingMajorUncheckedCreateWithoutSecondOrganizationInput>
+  }
+
+  export type TrainingMajorUpdateWithWhereUniqueWithoutSecondOrganizationInput = {
+    where: TrainingMajorWhereUniqueInput
+    data: XOR<TrainingMajorUpdateWithoutSecondOrganizationInput, TrainingMajorUncheckedUpdateWithoutSecondOrganizationInput>
+  }
+
+  export type TrainingMajorUpdateManyWithWhereWithoutSecondOrganizationInput = {
+    where: TrainingMajorScalarWhereInput
+    data: XOR<TrainingMajorUpdateManyMutationInput, TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationInput>
+  }
+
+  export type TrainingMajorUpsertWithWhereUniqueWithoutThirdOrganizationInput = {
+    where: TrainingMajorWhereUniqueInput
+    update: XOR<TrainingMajorUpdateWithoutThirdOrganizationInput, TrainingMajorUncheckedUpdateWithoutThirdOrganizationInput>
+    create: XOR<TrainingMajorCreateWithoutThirdOrganizationInput, TrainingMajorUncheckedCreateWithoutThirdOrganizationInput>
+  }
+
+  export type TrainingMajorUpdateWithWhereUniqueWithoutThirdOrganizationInput = {
+    where: TrainingMajorWhereUniqueInput
+    data: XOR<TrainingMajorUpdateWithoutThirdOrganizationInput, TrainingMajorUncheckedUpdateWithoutThirdOrganizationInput>
+  }
+
+  export type TrainingMajorUpdateManyWithWhereWithoutThirdOrganizationInput = {
+    where: TrainingMajorScalarWhereInput
+    data: XOR<TrainingMajorUpdateManyMutationInput, TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationInput>
   }
 
   export type ResearchProjectUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -469820,6 +471017,8 @@ export namespace Prisma {
     subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
@@ -469856,6 +471055,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
@@ -471105,6 +472306,8 @@ export namespace Prisma {
     subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
@@ -471141,6 +472344,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
@@ -471819,6 +473024,8 @@ export namespace Prisma {
     subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
@@ -471855,6 +473062,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
@@ -472253,6 +473462,8 @@ export namespace Prisma {
     subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
@@ -472289,6 +473500,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
@@ -472424,6 +473637,8 @@ export namespace Prisma {
     subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
   }
@@ -472460,6 +473675,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
   }
@@ -472627,6 +473844,8 @@ export namespace Prisma {
     subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
   }
@@ -472663,6 +473882,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
   }
@@ -473410,6 +474631,8 @@ export namespace Prisma {
     subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
   }
@@ -473446,6 +474669,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
   }
@@ -474038,6 +475263,8 @@ export namespace Prisma {
     subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
   }
@@ -474074,6 +475301,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
   }
@@ -475298,6 +476527,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organization: DM_DonViCreateNestedOneWithoutTrainingMajorsInput
+    secondOrganization?: DM_DonViCreateNestedOneWithoutSecondTrainingMajorsInput
+    thirdOrganization?: DM_DonViCreateNestedOneWithoutThirdTrainingMajorsInput
     trainingField: TrainingFieldCreateNestedOneWithoutTrainingMajorsInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingMajorInput
     curriculum?: CurriculumCreateNestedManyWithoutTrainingMajorInput
@@ -475320,6 +476551,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organizationId: string
+    secondOrganizationId?: string | null
+    thirdOrganizationId?: string | null
     trainingFieldId: string
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingMajorInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingMajorInput
@@ -475956,6 +477189,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -475984,6 +477218,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -476955,6 +478190,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -476983,6 +478219,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -478487,6 +479724,47 @@ export namespace Prisma {
     create: XOR<DiplomaVerificationApplicationCreateWithoutDiplomaBackInput, DiplomaVerificationApplicationUncheckedCreateWithoutDiplomaBackInput>
   }
 
+  export type TrainingFieldCreateWithoutDocumentFilesInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    englishName: string
+    publishDate: Date | string
+    decisionNo?: string | null
+    organization: DM_DonViCreateNestedOneWithoutTrainingFieldsInput
+    trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingFieldInput
+    trainingMajors?: TrainingMajorCreateNestedManyWithoutTrainingFieldInput
+    surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingFieldsInput
+  }
+
+  export type TrainingFieldUncheckedCreateWithoutDocumentFilesInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    englishName: string
+    publishDate: Date | string
+    decisionNo?: string | null
+    organizationId: string
+    trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingFieldInput
+    trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutTrainingFieldInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingFieldsInput
+  }
+
+  export type TrainingFieldCreateOrConnectWithoutDocumentFilesInput = {
+    where: TrainingFieldWhereUniqueInput
+    create: XOR<TrainingFieldCreateWithoutDocumentFilesInput, TrainingFieldUncheckedCreateWithoutDocumentFilesInput>
+  }
+
   export type NoteCreateWithoutAttachmentsInput = {
     id?: string
     code?: string | null
@@ -479332,6 +480610,53 @@ export namespace Prisma {
     diplomaFront?: DocumentFileUncheckedUpdateOneWithoutDiplomaVerificationFrontNestedInput
   }
 
+  export type TrainingFieldUpsertWithoutDocumentFilesInput = {
+    update: XOR<TrainingFieldUpdateWithoutDocumentFilesInput, TrainingFieldUncheckedUpdateWithoutDocumentFilesInput>
+    create: XOR<TrainingFieldCreateWithoutDocumentFilesInput, TrainingFieldUncheckedCreateWithoutDocumentFilesInput>
+    where?: TrainingFieldWhereInput
+  }
+
+  export type TrainingFieldUpdateToOneWithWhereWithoutDocumentFilesInput = {
+    where?: TrainingFieldWhereInput
+    data: XOR<TrainingFieldUpdateWithoutDocumentFilesInput, TrainingFieldUncheckedUpdateWithoutDocumentFilesInput>
+  }
+
+  export type TrainingFieldUpdateWithoutDocumentFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    englishName?: StringFieldUpdateOperationsInput | string
+    publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: DM_DonViUpdateOneRequiredWithoutTrainingFieldsNestedInput
+    trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingFieldNestedInput
+    trainingMajors?: TrainingMajorUpdateManyWithoutTrainingFieldNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingFieldsNestedInput
+  }
+
+  export type TrainingFieldUncheckedUpdateWithoutDocumentFilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    englishName?: StringFieldUpdateOperationsInput | string
+    publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: StringFieldUpdateOperationsInput | string
+    trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingFieldNestedInput
+    trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutTrainingFieldNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingFieldsNestedInput
+  }
+
   export type NoteUpsertWithoutAttachmentsInput = {
     update: XOR<NoteUpdateWithoutAttachmentsInput, NoteUncheckedUpdateWithoutAttachmentsInput>
     create: XOR<NoteCreateWithoutAttachmentsInput, NoteUncheckedCreateWithoutAttachmentsInput>
@@ -480141,6 +481466,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -480169,6 +481495,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -482978,6 +484305,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organization: DM_DonViCreateNestedOneWithoutTrainingMajorsInput
+    secondOrganization?: DM_DonViCreateNestedOneWithoutSecondTrainingMajorsInput
+    thirdOrganization?: DM_DonViCreateNestedOneWithoutThirdTrainingMajorsInput
     trainingField: TrainingFieldCreateNestedOneWithoutTrainingMajorsInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingMajorInput
     curriculum?: CurriculumCreateNestedManyWithoutTrainingMajorInput
@@ -483000,6 +484329,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organizationId: string
+    secondOrganizationId?: string | null
+    thirdOrganizationId?: string | null
     trainingFieldId: string
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingMajorInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingMajorInput
@@ -483119,6 +484450,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -483147,6 +484479,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -483180,6 +484513,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -483208,6 +484542,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -483406,6 +484741,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organization?: DM_DonViUpdateOneRequiredWithoutTrainingMajorsNestedInput
+    secondOrganization?: DM_DonViUpdateOneWithoutSecondTrainingMajorsNestedInput
+    thirdOrganization?: DM_DonViUpdateOneWithoutThirdTrainingMajorsNestedInput
     trainingField?: TrainingFieldUpdateOneRequiredWithoutTrainingMajorsNestedInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingMajorNestedInput
     curriculum?: CurriculumUpdateManyWithoutTrainingMajorNestedInput
@@ -483428,6 +484765,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organizationId?: StringFieldUpdateOperationsInput | string
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingFieldId?: StringFieldUpdateOperationsInput | string
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingMajorNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingMajorNestedInput
@@ -483565,6 +484904,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -483593,6 +484933,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -483632,6 +484973,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -483660,6 +485002,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -484458,6 +485801,7 @@ export namespace Prisma {
     diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -484486,6 +485830,7 @@ export namespace Prisma {
     diplomaBackId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -484524,6 +485869,7 @@ export namespace Prisma {
     diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -484552,6 +485898,7 @@ export namespace Prisma {
     diplomaBackId?: string | null
     diplomaVerificationId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -484585,6 +485932,7 @@ export namespace Prisma {
     diplomaBack?: GraduationDecisionCreateNestedOneWithoutDiplomaBackInput
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
     note?: NoteCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -484613,6 +485961,7 @@ export namespace Prisma {
     diplomaBackId?: string | null
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -484786,6 +486135,7 @@ export namespace Prisma {
     diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -484814,6 +486164,7 @@ export namespace Prisma {
     diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -484853,6 +486204,7 @@ export namespace Prisma {
     diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -484881,6 +486233,7 @@ export namespace Prisma {
     diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -485208,6 +486561,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationCreateNestedOneWithoutAttachmentsInput
     diplomaVerificationFront?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaFrontInput
     diplomaVerificationBack?: DiplomaVerificationApplicationCreateNestedOneWithoutDiplomaBackInput
+    trainingField?: TrainingFieldCreateNestedOneWithoutDocumentFilesInput
   }
 
   export type DocumentFileUncheckedCreateWithoutNoteInput = {
@@ -485236,6 +486590,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
   }
 
   export type DocumentFileCreateOrConnectWithoutNoteInput = {
@@ -489291,6 +490646,8 @@ export namespace Prisma {
     subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
   }
@@ -489327,6 +490684,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
   }
@@ -489347,9 +490706,11 @@ export namespace Prisma {
     name: string
     englishName: string
     publishDate: Date | string
+    decisionNo?: string | null
     organization: DM_DonViCreateNestedOneWithoutTrainingFieldsInput
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingFieldInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutTrainingFieldInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutTrainingFieldInput
   }
 
   export type TrainingFieldUncheckedCreateWithoutSurveyObjectTypesInput = {
@@ -489363,9 +490724,11 @@ export namespace Prisma {
     name: string
     englishName: string
     publishDate: Date | string
+    decisionNo?: string | null
     organizationId: string
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingFieldInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutTrainingFieldInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingFieldInput
   }
 
   export type TrainingFieldCreateOrConnectWithoutSurveyObjectTypesInput = {
@@ -489388,6 +490751,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organization: DM_DonViCreateNestedOneWithoutTrainingMajorsInput
+    secondOrganization?: DM_DonViCreateNestedOneWithoutSecondTrainingMajorsInput
+    thirdOrganization?: DM_DonViCreateNestedOneWithoutThirdTrainingMajorsInput
     trainingField: TrainingFieldCreateNestedOneWithoutTrainingMajorsInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingMajorInput
     curriculum?: CurriculumCreateNestedManyWithoutTrainingMajorInput
@@ -489410,6 +490775,8 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organizationId: string
+    secondOrganizationId?: string | null
+    thirdOrganizationId?: string | null
     trainingFieldId: string
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingMajorInput
     curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingMajorInput
@@ -492685,6 +494052,8 @@ export namespace Prisma {
     subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
@@ -492721,6 +494090,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
@@ -493208,6 +494579,8 @@ export namespace Prisma {
     subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
@@ -493244,6 +494617,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
@@ -493677,6 +495052,8 @@ export namespace Prisma {
     subjects?: SubjectCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutOrganizationsInput
@@ -493713,6 +495090,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedCreateNestedManyWithoutManagementOrganizationInput
     trainingFields?: TrainingFieldUncheckedCreateNestedManyWithoutOrganizationInput
     trainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutOrganizationInput
+    secondTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutSecondOrganizationInput
+    thirdTrainingMajors?: TrainingMajorUncheckedCreateNestedManyWithoutThirdOrganizationInput
     researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutOrganizationInput
     thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutOrganizationInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutOrganizationsInput
@@ -494140,6 +495519,8 @@ export namespace Prisma {
     subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutOrganizationsNestedInput
@@ -494176,6 +495557,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutOrganizationsNestedInput
@@ -499239,6 +500622,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -499278,6 +500662,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -499306,6 +500691,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -499334,6 +500720,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -499395,6 +500782,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -499434,6 +500822,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -499462,6 +500851,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -499490,6 +500880,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -501748,6 +503139,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -501810,6 +503202,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -501838,6 +503231,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -501866,6 +503260,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -502004,6 +503399,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -502098,6 +503494,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -502126,6 +503523,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -502154,6 +503552,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -502686,6 +504085,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -503539,6 +504939,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -503567,6 +504968,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -503595,6 +504997,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -507193,6 +508596,37 @@ export namespace Prisma {
     numberCreditsRequired?: number
     numberCreditsElective?: number
     organizationId: string
+    secondOrganizationId?: string | null
+    thirdOrganizationId?: string | null
+  }
+
+  export type DocumentFileCreateManyTrainingFieldInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    path: string
+    size: bigint | number
+    mimeType?: string | null
+    archivedCertificateId?: string | null
+    archivedAwardId?: string | null
+    curriculumId?: string | null
+    curriculumVersionId?: string | null
+    subjectVersionId?: string | null
+    studentAcademicDecisionId?: string | null
+    notificationId?: string | null
+    decisionId?: string | null
+    defenseRecordId?: string | null
+    diplomaFrontId?: string | null
+    diplomaBackId?: string | null
+    diplomaVerificationId?: string | null
+    diplomaVerificationFrontId?: string | null
+    diplomaVerificationBackId?: string | null
+    noteId?: string | null
   }
 
   export type TrainingFieldOnTrainingObjectTypeUpdateWithoutTrainingFieldInput = {
@@ -507243,6 +508677,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organization?: DM_DonViUpdateOneRequiredWithoutTrainingMajorsNestedInput
+    secondOrganization?: DM_DonViUpdateOneWithoutSecondTrainingMajorsNestedInput
+    thirdOrganization?: DM_DonViUpdateOneWithoutThirdTrainingMajorsNestedInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingMajorNestedInput
     curriculum?: CurriculumUpdateManyWithoutTrainingMajorNestedInput
     graduationDecision?: GraduationDecisionUpdateManyWithoutTrainingMajorNestedInput
@@ -507265,6 +508701,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organizationId?: StringFieldUpdateOperationsInput | string
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingMajorNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingMajorNestedInput
     graduationDecision?: GraduationDecisionUncheckedUpdateManyWithoutTrainingMajorNestedInput
@@ -507287,6 +508725,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organizationId?: StringFieldUpdateOperationsInput | string
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SurveyObjectTypeUpdateWithoutTrainingFieldsInput = {
@@ -507339,6 +508779,93 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: SurveyObjectTypeUpdatetypeInput | $Enums.SurveyObject[]
+  }
+
+  export type DocumentFileUpdateWithoutTrainingFieldInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    size?: BigIntFieldUpdateOperationsInput | bigint | number
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedCertificate?: ArchivedCertificateUpdateOneWithoutDocumentFilesNestedInput
+    archivedAward?: ArchivedAwardUpdateOneWithoutDocumentFilesNestedInput
+    curriculum?: CurriculumUpdateOneWithoutDocumentFilesNestedInput
+    curriculumVersion?: CurriculumVersionUpdateOneWithoutDocumentFilesNestedInput
+    subjectVersion?: SubjectVersionUpdateOneWithoutDocumentFilesNestedInput
+    studentAcademicDecision?: StudentAcademicDecisionUpdateOneWithoutDocumentEvidenceNestedInput
+    notification?: NotificationUpdateOneWithoutAttachmentsNestedInput
+    decision?: DecisionUpdateOneWithoutDocumentFileNestedInput
+    defenseRecord?: DefenseRecordUpdateOneWithoutDocumentsNestedInput
+    diplomaFront?: GraduationDecisionUpdateOneWithoutDiplomaFrontNestedInput
+    diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
+    diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
+    diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
+    diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    note?: NoteUpdateOneWithoutAttachmentsNestedInput
+  }
+
+  export type DocumentFileUncheckedUpdateWithoutTrainingFieldInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    size?: BigIntFieldUpdateOperationsInput | bigint | number
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedCertificateId?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
+    notificationId?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    noteId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DocumentFileUncheckedUpdateManyWithoutTrainingFieldInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    size?: BigIntFieldUpdateOperationsInput | bigint | number
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedCertificateId?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAwardId?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculumId?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    studentAcademicDecisionId?: NullableStringFieldUpdateOperationsInput | string | null
+    notificationId?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionId?: NullableStringFieldUpdateOperationsInput | string | null
+    defenseRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
+    diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TrainingMajorOnTrainingObjectTypeCreateManyTrainingMajorInput = {
@@ -509609,6 +511136,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -509952,6 +511480,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -509980,6 +511509,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -510008,6 +511538,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -514968,6 +516499,7 @@ export namespace Prisma {
     name: string
     englishName: string
     publishDate: Date | string
+    decisionNo?: string | null
   }
 
   export type TrainingMajorCreateManyOrganizationInput = {
@@ -514984,6 +516516,46 @@ export namespace Prisma {
     numberCreditsMajor?: number
     numberCreditsRequired?: number
     numberCreditsElective?: number
+    secondOrganizationId?: string | null
+    thirdOrganizationId?: string | null
+    trainingFieldId: string
+  }
+
+  export type TrainingMajorCreateManySecondOrganizationInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    englishName?: string | null
+    summary: string
+    numberCreditsMajor?: number
+    numberCreditsRequired?: number
+    numberCreditsElective?: number
+    organizationId: string
+    thirdOrganizationId?: string | null
+    trainingFieldId: string
+  }
+
+  export type TrainingMajorCreateManyThirdOrganizationInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    englishName?: string | null
+    summary: string
+    numberCreditsMajor?: number
+    numberCreditsRequired?: number
+    numberCreditsElective?: number
+    organizationId: string
+    secondOrganizationId?: string | null
     trainingFieldId: string
   }
 
@@ -515547,9 +517119,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingFieldNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutTrainingFieldNestedInput
     surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingFieldsNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutTrainingFieldNestedInput
   }
 
   export type TrainingFieldUncheckedUpdateWithoutOrganizationInput = {
@@ -515563,9 +517137,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingFieldNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutTrainingFieldNestedInput
     surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingFieldsNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingFieldNestedInput
   }
 
   export type TrainingFieldUncheckedUpdateManyWithoutOrganizationInput = {
@@ -515579,6 +517155,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TrainingMajorUpdateWithoutOrganizationInput = {
@@ -515595,6 +517172,8 @@ export namespace Prisma {
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
+    secondOrganization?: DM_DonViUpdateOneWithoutSecondTrainingMajorsNestedInput
+    thirdOrganization?: DM_DonViUpdateOneWithoutThirdTrainingMajorsNestedInput
     trainingField?: TrainingFieldUpdateOneRequiredWithoutTrainingMajorsNestedInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingMajorNestedInput
     curriculum?: CurriculumUpdateManyWithoutTrainingMajorNestedInput
@@ -515617,6 +517196,8 @@ export namespace Prisma {
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingFieldId?: StringFieldUpdateOperationsInput | string
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingMajorNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingMajorNestedInput
@@ -515639,6 +517220,142 @@ export namespace Prisma {
     numberCreditsMajor?: IntFieldUpdateOperationsInput | number
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TrainingMajorUpdateWithoutSecondOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    englishName?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: StringFieldUpdateOperationsInput | string
+    numberCreditsMajor?: IntFieldUpdateOperationsInput | number
+    numberCreditsRequired?: IntFieldUpdateOperationsInput | number
+    numberCreditsElective?: IntFieldUpdateOperationsInput | number
+    organization?: DM_DonViUpdateOneRequiredWithoutTrainingMajorsNestedInput
+    thirdOrganization?: DM_DonViUpdateOneWithoutThirdTrainingMajorsNestedInput
+    trainingField?: TrainingFieldUpdateOneRequiredWithoutTrainingMajorsNestedInput
+    trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingMajorNestedInput
+    curriculum?: CurriculumUpdateManyWithoutTrainingMajorNestedInput
+    graduationDecision?: GraduationDecisionUpdateManyWithoutTrainingMajorNestedInput
+    expertProfile?: ExpertProfileUpdateManyWithoutMajorNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingMajorsNestedInput
+  }
+
+  export type TrainingMajorUncheckedUpdateWithoutSecondOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    englishName?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: StringFieldUpdateOperationsInput | string
+    numberCreditsMajor?: IntFieldUpdateOperationsInput | number
+    numberCreditsRequired?: IntFieldUpdateOperationsInput | number
+    numberCreditsElective?: IntFieldUpdateOperationsInput | number
+    organizationId?: StringFieldUpdateOperationsInput | string
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: StringFieldUpdateOperationsInput | string
+    trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingMajorNestedInput
+    curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingMajorNestedInput
+    graduationDecision?: GraduationDecisionUncheckedUpdateManyWithoutTrainingMajorNestedInput
+    expertProfile?: ExpertProfileUncheckedUpdateManyWithoutMajorNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingMajorsNestedInput
+  }
+
+  export type TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    englishName?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: StringFieldUpdateOperationsInput | string
+    numberCreditsMajor?: IntFieldUpdateOperationsInput | number
+    numberCreditsRequired?: IntFieldUpdateOperationsInput | number
+    numberCreditsElective?: IntFieldUpdateOperationsInput | number
+    organizationId?: StringFieldUpdateOperationsInput | string
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TrainingMajorUpdateWithoutThirdOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    englishName?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: StringFieldUpdateOperationsInput | string
+    numberCreditsMajor?: IntFieldUpdateOperationsInput | number
+    numberCreditsRequired?: IntFieldUpdateOperationsInput | number
+    numberCreditsElective?: IntFieldUpdateOperationsInput | number
+    organization?: DM_DonViUpdateOneRequiredWithoutTrainingMajorsNestedInput
+    secondOrganization?: DM_DonViUpdateOneWithoutSecondTrainingMajorsNestedInput
+    trainingField?: TrainingFieldUpdateOneRequiredWithoutTrainingMajorsNestedInput
+    trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingMajorNestedInput
+    curriculum?: CurriculumUpdateManyWithoutTrainingMajorNestedInput
+    graduationDecision?: GraduationDecisionUpdateManyWithoutTrainingMajorNestedInput
+    expertProfile?: ExpertProfileUpdateManyWithoutMajorNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingMajorsNestedInput
+  }
+
+  export type TrainingMajorUncheckedUpdateWithoutThirdOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    englishName?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: StringFieldUpdateOperationsInput | string
+    numberCreditsMajor?: IntFieldUpdateOperationsInput | number
+    numberCreditsRequired?: IntFieldUpdateOperationsInput | number
+    numberCreditsElective?: IntFieldUpdateOperationsInput | number
+    organizationId?: StringFieldUpdateOperationsInput | string
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: StringFieldUpdateOperationsInput | string
+    trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingMajorNestedInput
+    curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingMajorNestedInput
+    graduationDecision?: GraduationDecisionUncheckedUpdateManyWithoutTrainingMajorNestedInput
+    expertProfile?: ExpertProfileUncheckedUpdateManyWithoutMajorNestedInput
+    surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingMajorsNestedInput
+  }
+
+  export type TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    englishName?: NullableStringFieldUpdateOperationsInput | string | null
+    summary?: StringFieldUpdateOperationsInput | string
+    numberCreditsMajor?: IntFieldUpdateOperationsInput | number
+    numberCreditsRequired?: IntFieldUpdateOperationsInput | number
+    numberCreditsElective?: IntFieldUpdateOperationsInput | number
+    organizationId?: StringFieldUpdateOperationsInput | string
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingFieldId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -533339,6 +535056,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organization?: DM_DonViUpdateOneRequiredWithoutTrainingMajorsNestedInput
+    secondOrganization?: DM_DonViUpdateOneWithoutSecondTrainingMajorsNestedInput
+    thirdOrganization?: DM_DonViUpdateOneWithoutThirdTrainingMajorsNestedInput
     trainingField?: TrainingFieldUpdateOneRequiredWithoutTrainingMajorsNestedInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingMajorNestedInput
     curriculum?: CurriculumUpdateManyWithoutTrainingMajorNestedInput
@@ -533361,6 +535080,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organizationId?: StringFieldUpdateOperationsInput | string
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingFieldId?: StringFieldUpdateOperationsInput | string
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingMajorNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingMajorNestedInput
@@ -533383,6 +535104,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organizationId?: StringFieldUpdateOperationsInput | string
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingFieldId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -533883,6 +535606,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -533911,6 +535635,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -533939,6 +535664,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -533967,6 +535693,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -534189,6 +535916,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -534217,6 +535945,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -534245,6 +535974,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -534273,6 +536003,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -534489,6 +536220,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -534517,6 +536249,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -534545,6 +536278,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -534573,6 +536307,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -535377,6 +537112,7 @@ export namespace Prisma {
     diplomaBackId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
     noteId?: string | null
   }
 
@@ -535405,6 +537141,7 @@ export namespace Prisma {
     diplomaBack?: GraduationDecisionUpdateOneWithoutDiplomaBackNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
     note?: NoteUpdateOneWithoutAttachmentsNestedInput
   }
 
@@ -535433,6 +537170,7 @@ export namespace Prisma {
     diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -535461,6 +537199,7 @@ export namespace Prisma {
     diplomaBackId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
     noteId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -535490,6 +537229,7 @@ export namespace Prisma {
     diplomaVerificationId?: string | null
     diplomaVerificationFrontId?: string | null
     diplomaVerificationBackId?: string | null
+    trainingFieldId?: string | null
   }
 
   export type NoteReminderCreateManyNoteInput = {
@@ -535570,6 +537310,7 @@ export namespace Prisma {
     diplomaVerification?: DiplomaVerificationApplicationUpdateOneWithoutAttachmentsNestedInput
     diplomaVerificationFront?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaFrontNestedInput
     diplomaVerificationBack?: DiplomaVerificationApplicationUpdateOneWithoutDiplomaBackNestedInput
+    trainingField?: TrainingFieldUpdateOneWithoutDocumentFilesNestedInput
   }
 
   export type DocumentFileUncheckedUpdateWithoutNoteInput = {
@@ -535598,6 +537339,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DocumentFileUncheckedUpdateManyWithoutNoteInput = {
@@ -535626,6 +537368,7 @@ export namespace Prisma {
     diplomaVerificationId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationFrontId?: NullableStringFieldUpdateOperationsInput | string | null
     diplomaVerificationBackId?: NullableStringFieldUpdateOperationsInput | string | null
+    trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type NoteReminderUpdateWithoutNoteInput = {
@@ -536821,6 +538564,8 @@ export namespace Prisma {
     subjects?: SubjectUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUpdateManyWithoutOrganizationNestedInput
   }
@@ -536857,6 +538602,8 @@ export namespace Prisma {
     subjects?: SubjectUncheckedUpdateManyWithoutManagementOrganizationNestedInput
     trainingFields?: TrainingFieldUncheckedUpdateManyWithoutOrganizationNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutOrganizationNestedInput
+    secondTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutSecondOrganizationNestedInput
+    thirdTrainingMajors?: TrainingMajorUncheckedUpdateManyWithoutThirdOrganizationNestedInput
     researchProjects?: ResearchProjectUncheckedUpdateManyWithoutOrganizationNestedInput
     thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutOrganizationNestedInput
   }
@@ -536896,9 +538643,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
     organization?: DM_DonViUpdateOneRequiredWithoutTrainingFieldsNestedInput
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingFieldNestedInput
     trainingMajors?: TrainingMajorUpdateManyWithoutTrainingFieldNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutTrainingFieldNestedInput
   }
 
   export type TrainingFieldUncheckedUpdateWithoutSurveyObjectTypesInput = {
@@ -536912,9 +538661,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
     trainingObjectTypes?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingFieldNestedInput
     trainingMajors?: TrainingMajorUncheckedUpdateManyWithoutTrainingFieldNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingFieldNestedInput
   }
 
   export type TrainingFieldUncheckedUpdateManyWithoutSurveyObjectTypesInput = {
@@ -536928,6 +538679,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     englishName?: StringFieldUpdateOperationsInput | string
     publishDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionNo?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -536946,6 +538698,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organization?: DM_DonViUpdateOneRequiredWithoutTrainingMajorsNestedInput
+    secondOrganization?: DM_DonViUpdateOneWithoutSecondTrainingMajorsNestedInput
+    thirdOrganization?: DM_DonViUpdateOneWithoutThirdTrainingMajorsNestedInput
     trainingField?: TrainingFieldUpdateOneRequiredWithoutTrainingMajorsNestedInput
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingMajorNestedInput
     curriculum?: CurriculumUpdateManyWithoutTrainingMajorNestedInput
@@ -536968,6 +538722,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organizationId?: StringFieldUpdateOperationsInput | string
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingFieldId?: StringFieldUpdateOperationsInput | string
     trainingObjectTypes?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingMajorNestedInput
     curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingMajorNestedInput
@@ -536990,6 +538746,8 @@ export namespace Prisma {
     numberCreditsRequired?: IntFieldUpdateOperationsInput | number
     numberCreditsElective?: IntFieldUpdateOperationsInput | number
     organizationId?: StringFieldUpdateOperationsInput | string
+    secondOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    thirdOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingFieldId?: StringFieldUpdateOperationsInput | string
   }
 
