@@ -29,6 +29,7 @@ app.use(
             'https://chatbot.mta.swantech.vn',
             'https://khaothi.mta.swantech.vn',
             'https://am.swantech.vn',
+            'https://14.224.217.69:8243',
             'https://*.swantech.vn',
         ],
         credentials: true,
