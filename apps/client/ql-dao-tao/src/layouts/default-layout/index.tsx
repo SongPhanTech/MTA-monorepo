@@ -163,8 +163,7 @@ const DefaultLayout = ({
                                 <div>Học kỳ</div>
                                 <TreeSelectSemester />
                             </div>
-                            <Divider type="vertical" className="bg-primary h-[30px]" />
-                            <Breadcrumb items={listBreadcrumb} />
+                            {/* <Divider type="vertical" className="bg-primary h-[30px]" /> */}
                         </div>
                         <HeaderApp />
                     </Header>
@@ -181,6 +180,9 @@ const DefaultLayout = ({
                                     background: colorBgContainer,
                                 }}
                             >
+                                <div className="mt-1 mb-6">
+                                    <Breadcrumb items={listBreadcrumb} />
+                                </div>
                                 {children}
                             </div>
                         )}

@@ -472,7 +472,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                             QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
                                             'XEM_CHI_TIET'
                                         ) && (
-                                            <Tooltip title="Xem chi tiết" placement="top">
+                                            <Tooltip title="Xem danh sách học viên" placement="top">
                                                 <Eye
                                                     size={16}
                                                     strokeWidth={1.5}

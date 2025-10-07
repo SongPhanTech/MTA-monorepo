@@ -1,4 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons'
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -50,6 +51,8 @@ export default function UserProfilePageDs() {
         trainingCourse: undefined,
         trainingMajors: undefined,
         curriculumVersion: undefined,
+        trainingCourseId:undefined,
+        fixedClassId:undefined
     })
 
     const [importModalVisible, setImportModalVisible] = useState(false)
@@ -109,12 +112,24 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
+                 ...(filters.fixedClassId
+                ? {
+                      fixedClassId: filters.fixedClassId,
+                  }
+                : {}),
             ...(filters.trainingCourse
                 ? {
                       fixedClass: {
                           trainingCourseId: {
                               in: filters.trainingCourse,
                           },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingCourseId
+                ? {
+                      fixedClass: {
+                          trainingCourseId: filters.trainingCourseId,
                       },
                   }
                 : {}),
@@ -146,14 +161,7 @@ export default function UserProfilePageDs() {
                 : {}),
         }),
         [
-            filters.code,
-            filters.name,
-            trainingObjectTypeId,
-            filters.trainingMajors,
-            filters.fixedClass,
-            filters.trainingField,
-            filters.curriculumVersion,
-            filters.trainingCourse,
+            filters
         ]
     )
 
@@ -359,8 +367,47 @@ export default function UserProfilePageDs() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
-                    <Row gutter={[8, 8]} align="top" justify="end">
-                        <Col xs={24}>
+                    <Row gutter={[16, 16]} align="top" justify="end">
+                           <Col span={12}>
+                            <Flex>
+                                <Col span={12}>
+                                     <Select
+                                        className="w-full"
+                                        placeholder="Chọn khoá học"
+                                        options={TrainingCourseData.map((i: TrainingCourse) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        }))}
+                                        onChange={(val) =>
+                                            setFilters({
+                                                ...filters,
+                                                trainingCourseId: val,
+                                            })
+                                        }
+                                        allowClear
+                                    />
+                                </Col>
+                    
+                                <Col span={12}>
+                                    <Select
+                                        className="w-full"
+                                        placeholder="Chọn lớp quản lý"
+                                        options={fixedClassData.map((i: FixedClass) => ({
+                                            value: i.id,
+                                            label: i.name,
+                                        }))}
+                                        onChange={(val) =>
+                                            setFilters({
+                                                ...filters,
+                                                fixedClassId: val,
+                                            })
+                                        }
+                                        allowClear
+                                    />
+                                </Col>
+                            </Flex>
+                        </Col>
+                        <Col xs={12}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,

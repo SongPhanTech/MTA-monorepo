@@ -11,6 +11,7 @@ import type {
     GraduationSessionStatus,
     PaymentStatus,
     SemesterType,
+    StudentStatus,
     SubjectClassSchedule,
     ThesisProjectStatus,
     TrainingObjectTypes,
@@ -46,6 +47,7 @@ export type FilterProps = {
     trainingCourse?: string[]
     actionTaken?: AcademicActionType[]
     status?: DecisionStatus[]
+    statusStudent?: StudentStatus[]
     admissionQuota?: 'asc' | 'desc'
     semesterStart?: string
     curriculumVersion?: string[]
@@ -121,6 +123,7 @@ export type FilterProps = {
     specialization?: string
     workplace?: string
     phone?: string
+    rank?: string
     email?: string
     originalDiplomaNumber?: string
     idCardNumber?: string
