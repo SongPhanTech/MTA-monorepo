@@ -290,10 +290,10 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
-                        label: 'Tòa nhà Phòng học',
+                        label: 'Khu vực đào tạo',
                         icon: TeamOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC,
-                        description: 'Danh mục tòa nhà Phòng học',
+                        description: 'Danh mục khu vực đào tạo',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,

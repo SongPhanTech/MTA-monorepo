@@ -37,7 +37,6 @@ const PutTrainingFieldModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
 
@@ -48,7 +47,6 @@ const PutTrainingFieldModal = () => {
     const { mutateAsync: updateTrainingField } = useUpdateTrainingField()
     async function onOk({ trainingObjectTypeIds, ...rest }: PutTrainingField) {
         try {
-            console.log(document)
             showSpinner()
             if (id) {
                 await updateTrainingField({
@@ -56,12 +54,13 @@ const PutTrainingFieldModal = () => {
                         ...rest,
                         documentFiles: {
                             createMany: {
-                                data: document.map((documentFile: DocumentFile) => ({
-                                    name: documentFile.name,
-                                    path: documentFile.path,
-                                    mimeType: documentFile.mimeType,
-                                    size: documentFile.size,
-                                })),
+                                data:
+                                    rest.documentFiles?.map((documentFile: DocumentFile) => ({
+                                        name: documentFile.name,
+                                        path: documentFile.path,
+                                        mimeType: documentFile.mimeType,
+                                        size: documentFile.size,
+                                    })) || [],
                             },
                         },
                         trainingObjectTypes: {
@@ -89,12 +88,13 @@ const PutTrainingFieldModal = () => {
                     data: {
                         ...rest,
                         documentFiles: {
-                            create: (document || []).map((file: DocumentFile) => ({
-                                name: file.name,
-                                path: file.path,
-                                mimeType: file.mimeType,
-                                size: file.size,
-                            })),
+                            create:
+                                (rest.documentFiles || []).map((file: DocumentFile) => ({
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                })) || [],
                         },
                         trainingObjectTypes: {
                             createMany: {
@@ -129,6 +129,7 @@ const PutTrainingFieldModal = () => {
             include: {
                 organization: true,
                 trainingObjectTypes: true,
+                documentFiles: true,
             },
         },
         {
@@ -146,10 +147,12 @@ const PutTrainingFieldModal = () => {
                 ),
                 publishDate: dayjs(level.publishDate),
             })
+            setDocument(level.documentFiles as DocumentFile[])
         } else {
             form.setFieldsValue({
                 active: true,
             })
+            setDocument([])
         }
     }, [level])
 

@@ -6,7 +6,7 @@ import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import type { DM_DonVi, TrainingObjectType } from '@workspace/db'
+import type { DM_DonVi, DocumentFile, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
     useFindManyDM_DonVi,
@@ -270,9 +270,16 @@ export default function TrainingFieldPage() {
                             {
                                 title: 'Tài liệu đính kèm',
                                 width: 200,
+
                                 fixed: 'left',
                                 align: 'center',
                                 type: 'input',
+                                render: (__, record) =>
+                                    record.documentFiles?.length > 0
+                                        ? record.documentFiles
+                                              .map((file: DocumentFile) => file.name)
+                                              .join(', ')
+                                        : '',
                             },
                             {
                                 title: 'Mô tả',
