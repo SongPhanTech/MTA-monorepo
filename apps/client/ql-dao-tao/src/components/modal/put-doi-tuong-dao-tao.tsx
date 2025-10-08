@@ -6,6 +6,8 @@ import useSpinner from '@hooks/spinner'
 import type { TrainingObjectType } from '@workspace/db'
 import {
     useCreateTrainingObjectType,
+    useFindManyTrainingLevel,
+    useFindManyTrainingType,
     useFindUniqueTrainingObjectType,
     useUpdateTrainingObjectType,
 } from '@workspace/db/hooks'
@@ -31,8 +33,15 @@ const PutTrainingObjectTypeModal = () => {
 
     const { mutateAsync: createTrainingObjectType } = useCreateTrainingObjectType()
     const { mutateAsync: updateTrainingObjectType } = useUpdateTrainingObjectType()
-
-    //TODO: add hiển thị thêm bậc đào tạo và hình thức đào tạo và lưu thêm bậc đào tạo và hình thức đào tạo
+    const { data: trainingLevels } = useFindManyTrainingLevel(
+        { select: { id: true, name: true } },
+        { enabled: isOpen }
+    )
+    const { data: trainingTypes } = useFindManyTrainingType(
+        { select: { id: true, name: true } },
+        { enabled: isOpen }
+    )
+    //TODO: lưu thêm bậc đào tạo và hình thức đào tạo
     async function onOk({ ...rest }: TrainingObjectType) {
         try {
             showSpinner()
@@ -119,13 +128,25 @@ const PutTrainingObjectTypeModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="trainingType" label="Hình thức đào tạo" required>
-                    <Input placeholder="Nhập tên hình thức đào tạo" />
+                <FormItem form={form} name="trainingTypeId" label="Hình thức đào tạo" required>
+                    <Select
+                        placeholder="Chọn hình thức đào tạo"
+                        options={trainingTypes?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="trainingLevel" label="Bậc đào tạo" required>
-                    <Input placeholder="Nhập tên bậc đào tạo" />
+                <FormItem form={form} name="trainingLevelId" label="Bậc đào tạo" required>
+                    <Select
+                        placeholder="Chọn bậc đào tạo"
+                        options={trainingLevels?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>
