@@ -144,6 +144,11 @@ export type CurriculumVersion = $Result.DefaultSelection<Prisma.$CurriculumVersi
  */
 export type Subject = $Result.DefaultSelection<Prisma.$SubjectPayload>
 /**
+ * Model SubjectVersionCategory
+ * 
+ */
+export type SubjectVersionCategory = $Result.DefaultSelection<Prisma.$SubjectVersionCategoryPayload>
+/**
  * Model SubjectVersion
  * Phiên bản môn học
  */
@@ -1190,7 +1195,10 @@ export type ExamStatus = (typeof ExamStatus)[keyof typeof ExamStatus]
 
 export const SemesterType: {
   FIRST: 'FIRST',
-  SECOND: 'SECOND'
+  FIRST_SUPPLEMENTARY: 'FIRST_SUPPLEMENTARY',
+  SECOND: 'SECOND',
+  SECOND_SUPPLEMENTARY: 'SECOND_SUPPLEMENTARY',
+  SUMMER: 'SUMMER'
 };
 
 export type SemesterType = (typeof SemesterType)[keyof typeof SemesterType]
@@ -1220,6 +1228,7 @@ export type ExamType = (typeof ExamType)[keyof typeof ExamType]
 
 export const SubjectVersionType: {
   Normal: 'Normal',
+  Research: 'Research',
   Project: 'Project'
 };
 
@@ -2275,6 +2284,16 @@ export class PrismaClient<
     * ```
     */
   get subject(): Prisma.SubjectDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.subjectVersionCategory`: Exposes CRUD operations for the **SubjectVersionCategory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SubjectVersionCategories
+    * const subjectVersionCategories = await prisma.subjectVersionCategory.findMany()
+    * ```
+    */
+  get subjectVersionCategory(): Prisma.SubjectVersionCategoryDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.subjectVersion`: Exposes CRUD operations for the **SubjectVersion** model.
@@ -4741,6 +4760,7 @@ export namespace Prisma {
     Curriculum: 'Curriculum',
     CurriculumVersion: 'CurriculumVersion',
     Subject: 'Subject',
+    SubjectVersionCategory: 'SubjectVersionCategory',
     SubjectVersion: 'SubjectVersion',
     EquivalencyGroup: 'EquivalencyGroup',
     SubjectInGroup: 'SubjectInGroup',
@@ -4959,7 +4979,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
+      modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6884,6 +6904,80 @@ export namespace Prisma {
           count: {
             args: Prisma.SubjectCountArgs<ExtArgs>
             result: $Utils.Optional<SubjectCountAggregateOutputType> | number
+          }
+        }
+      }
+      SubjectVersionCategory: {
+        payload: Prisma.$SubjectVersionCategoryPayload<ExtArgs>
+        fields: Prisma.SubjectVersionCategoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SubjectVersionCategoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubjectVersionCategoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SubjectVersionCategoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubjectVersionCategoryPayload>
+          }
+          findFirst: {
+            args: Prisma.SubjectVersionCategoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubjectVersionCategoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SubjectVersionCategoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubjectVersionCategoryPayload>
+          }
+          findMany: {
+            args: Prisma.SubjectVersionCategoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubjectVersionCategoryPayload>[]
+          }
+          create: {
+            args: Prisma.SubjectVersionCategoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubjectVersionCategoryPayload>
+          }
+          createMany: {
+            args: Prisma.SubjectVersionCategoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SubjectVersionCategoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubjectVersionCategoryPayload>[]
+          }
+          delete: {
+            args: Prisma.SubjectVersionCategoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubjectVersionCategoryPayload>
+          }
+          update: {
+            args: Prisma.SubjectVersionCategoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubjectVersionCategoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.SubjectVersionCategoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SubjectVersionCategoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SubjectVersionCategoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubjectVersionCategoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.SubjectVersionCategoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubjectVersionCategoryPayload>
+          }
+          aggregate: {
+            args: Prisma.SubjectVersionCategoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSubjectVersionCategory>
+          }
+          groupBy: {
+            args: Prisma.SubjectVersionCategoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SubjectVersionCategoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SubjectVersionCategoryCountArgs<ExtArgs>
+            result: $Utils.Optional<SubjectVersionCategoryCountAggregateOutputType> | number
           }
         }
       }
@@ -21801,6 +21895,7 @@ export namespace Prisma {
     curriculum?: CurriculumOmit
     curriculumVersion?: CurriculumVersionOmit
     subject?: SubjectOmit
+    subjectVersionCategory?: SubjectVersionCategoryOmit
     subjectVersion?: SubjectVersionOmit
     equivalencyGroup?: EquivalencyGroupOmit
     subjectInGroup?: SubjectInGroupOmit
@@ -22991,6 +23086,37 @@ export namespace Prisma {
    * SubjectCountOutputType without action
    */
   export type SubjectCountOutputTypeCountSubjectVersionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SubjectVersionWhereInput
+  }
+
+
+  /**
+   * Count Type SubjectVersionCategoryCountOutputType
+   */
+
+  export type SubjectVersionCategoryCountOutputType = {
+    subjectVersions: number
+  }
+
+  export type SubjectVersionCategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subjectVersions?: boolean | SubjectVersionCategoryCountOutputTypeCountSubjectVersionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SubjectVersionCategoryCountOutputType without action
+   */
+  export type SubjectVersionCategoryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategoryCountOutputType
+     */
+    select?: SubjectVersionCategoryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SubjectVersionCategoryCountOutputType without action
+   */
+  export type SubjectVersionCategoryCountOutputTypeCountSubjectVersionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SubjectVersionWhereInput
   }
 
@@ -25103,6 +25229,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth: number
     userProfilePermanentAddress: number
     userProfileCurrentAddress: number
+    trainingLocation: number
   }
 
   export type DM_TinhCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -25110,6 +25237,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: boolean | DM_TinhCountOutputTypeCountUserProfilePlaceOfBirthArgs
     userProfilePermanentAddress?: boolean | DM_TinhCountOutputTypeCountUserProfilePermanentAddressArgs
     userProfileCurrentAddress?: boolean | DM_TinhCountOutputTypeCountUserProfileCurrentAddressArgs
+    trainingLocation?: boolean | DM_TinhCountOutputTypeCountTrainingLocationArgs
   }
 
   // Custom InputTypes
@@ -25151,6 +25279,13 @@ export namespace Prisma {
     where?: UserProfileWhereInput
   }
 
+  /**
+   * DM_TinhCountOutputType without action
+   */
+  export type DM_TinhCountOutputTypeCountTrainingLocationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TrainingLocationWhereInput
+  }
+
 
   /**
    * Count Type DM_Tinh_NewCountOutputType
@@ -25161,6 +25296,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth: number
     userProfilePermanentAddress: number
     userProfileCurrentAddress: number
+    trainingLocation: number
   }
 
   export type DM_Tinh_NewCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -25168,6 +25304,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: boolean | DM_Tinh_NewCountOutputTypeCountUserProfilePlaceOfBirthArgs
     userProfilePermanentAddress?: boolean | DM_Tinh_NewCountOutputTypeCountUserProfilePermanentAddressArgs
     userProfileCurrentAddress?: boolean | DM_Tinh_NewCountOutputTypeCountUserProfileCurrentAddressArgs
+    trainingLocation?: boolean | DM_Tinh_NewCountOutputTypeCountTrainingLocationArgs
   }
 
   // Custom InputTypes
@@ -25207,6 +25344,13 @@ export namespace Prisma {
    */
   export type DM_Tinh_NewCountOutputTypeCountUserProfileCurrentAddressArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserProfileWhereInput
+  }
+
+  /**
+   * DM_Tinh_NewCountOutputType without action
+   */
+  export type DM_Tinh_NewCountOutputTypeCountTrainingLocationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TrainingLocationWhereInput
   }
 
 
@@ -61211,6 +61355,1115 @@ export namespace Prisma {
 
 
   /**
+   * Model SubjectVersionCategory
+   */
+
+  export type AggregateSubjectVersionCategory = {
+    _count: SubjectVersionCategoryCountAggregateOutputType | null
+    _min: SubjectVersionCategoryMinAggregateOutputType | null
+    _max: SubjectVersionCategoryMaxAggregateOutputType | null
+  }
+
+  export type SubjectVersionCategoryMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    name: string | null
+  }
+
+  export type SubjectVersionCategoryMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    name: string | null
+  }
+
+  export type SubjectVersionCategoryCountAggregateOutputType = {
+    id: number
+    code: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    name: number
+    _all: number
+  }
+
+
+  export type SubjectVersionCategoryMinAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    name?: true
+  }
+
+  export type SubjectVersionCategoryMaxAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    name?: true
+  }
+
+  export type SubjectVersionCategoryCountAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    name?: true
+    _all?: true
+  }
+
+  export type SubjectVersionCategoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SubjectVersionCategory to aggregate.
+     */
+    where?: SubjectVersionCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubjectVersionCategories to fetch.
+     */
+    orderBy?: SubjectVersionCategoryOrderByWithRelationInput | SubjectVersionCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SubjectVersionCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubjectVersionCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubjectVersionCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SubjectVersionCategories
+    **/
+    _count?: true | SubjectVersionCategoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SubjectVersionCategoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SubjectVersionCategoryMaxAggregateInputType
+  }
+
+  export type GetSubjectVersionCategoryAggregateType<T extends SubjectVersionCategoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateSubjectVersionCategory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSubjectVersionCategory[P]>
+      : GetScalarType<T[P], AggregateSubjectVersionCategory[P]>
+  }
+
+
+
+
+  export type SubjectVersionCategoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SubjectVersionCategoryWhereInput
+    orderBy?: SubjectVersionCategoryOrderByWithAggregationInput | SubjectVersionCategoryOrderByWithAggregationInput[]
+    by: SubjectVersionCategoryScalarFieldEnum[] | SubjectVersionCategoryScalarFieldEnum
+    having?: SubjectVersionCategoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SubjectVersionCategoryCountAggregateInputType | true
+    _min?: SubjectVersionCategoryMinAggregateInputType
+    _max?: SubjectVersionCategoryMaxAggregateInputType
+  }
+
+  export type SubjectVersionCategoryGroupByOutputType = {
+    id: string
+    code: string | null
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    name: string
+    _count: SubjectVersionCategoryCountAggregateOutputType | null
+    _min: SubjectVersionCategoryMinAggregateOutputType | null
+    _max: SubjectVersionCategoryMaxAggregateOutputType | null
+  }
+
+  type GetSubjectVersionCategoryGroupByPayload<T extends SubjectVersionCategoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SubjectVersionCategoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SubjectVersionCategoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SubjectVersionCategoryGroupByOutputType[P]>
+            : GetScalarType<T[P], SubjectVersionCategoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SubjectVersionCategorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    name?: boolean
+    subjectVersions?: boolean | SubjectVersionCategory$subjectVersionsArgs<ExtArgs>
+    _count?: boolean | SubjectVersionCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["subjectVersionCategory"]>
+
+  export type SubjectVersionCategorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["subjectVersionCategory"]>
+
+  export type SubjectVersionCategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["subjectVersionCategory"]>
+
+  export type SubjectVersionCategorySelectScalar = {
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    name?: boolean
+  }
+
+  export type SubjectVersionCategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name", ExtArgs["result"]["subjectVersionCategory"]>
+  export type SubjectVersionCategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    subjectVersions?: boolean | SubjectVersionCategory$subjectVersionsArgs<ExtArgs>
+    _count?: boolean | SubjectVersionCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SubjectVersionCategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type SubjectVersionCategoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $SubjectVersionCategoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SubjectVersionCategory"
+    objects: {
+      subjectVersions: Prisma.$SubjectVersionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string | null
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      name: string
+    }, ExtArgs["result"]["subjectVersionCategory"]>
+    composites: {}
+  }
+
+  type SubjectVersionCategoryGetPayload<S extends boolean | null | undefined | SubjectVersionCategoryDefaultArgs> = $Result.GetResult<Prisma.$SubjectVersionCategoryPayload, S>
+
+  type SubjectVersionCategoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SubjectVersionCategoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SubjectVersionCategoryCountAggregateInputType | true
+    }
+
+  export interface SubjectVersionCategoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SubjectVersionCategory'], meta: { name: 'SubjectVersionCategory' } }
+    /**
+     * Find zero or one SubjectVersionCategory that matches the filter.
+     * @param {SubjectVersionCategoryFindUniqueArgs} args - Arguments to find a SubjectVersionCategory
+     * @example
+     * // Get one SubjectVersionCategory
+     * const subjectVersionCategory = await prisma.subjectVersionCategory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SubjectVersionCategoryFindUniqueArgs>(args: SelectSubset<T, SubjectVersionCategoryFindUniqueArgs<ExtArgs>>): Prisma__SubjectVersionCategoryClient<$Result.GetResult<Prisma.$SubjectVersionCategoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SubjectVersionCategory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SubjectVersionCategoryFindUniqueOrThrowArgs} args - Arguments to find a SubjectVersionCategory
+     * @example
+     * // Get one SubjectVersionCategory
+     * const subjectVersionCategory = await prisma.subjectVersionCategory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SubjectVersionCategoryFindUniqueOrThrowArgs>(args: SelectSubset<T, SubjectVersionCategoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SubjectVersionCategoryClient<$Result.GetResult<Prisma.$SubjectVersionCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SubjectVersionCategory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubjectVersionCategoryFindFirstArgs} args - Arguments to find a SubjectVersionCategory
+     * @example
+     * // Get one SubjectVersionCategory
+     * const subjectVersionCategory = await prisma.subjectVersionCategory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SubjectVersionCategoryFindFirstArgs>(args?: SelectSubset<T, SubjectVersionCategoryFindFirstArgs<ExtArgs>>): Prisma__SubjectVersionCategoryClient<$Result.GetResult<Prisma.$SubjectVersionCategoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SubjectVersionCategory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubjectVersionCategoryFindFirstOrThrowArgs} args - Arguments to find a SubjectVersionCategory
+     * @example
+     * // Get one SubjectVersionCategory
+     * const subjectVersionCategory = await prisma.subjectVersionCategory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SubjectVersionCategoryFindFirstOrThrowArgs>(args?: SelectSubset<T, SubjectVersionCategoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__SubjectVersionCategoryClient<$Result.GetResult<Prisma.$SubjectVersionCategoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SubjectVersionCategories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubjectVersionCategoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SubjectVersionCategories
+     * const subjectVersionCategories = await prisma.subjectVersionCategory.findMany()
+     * 
+     * // Get first 10 SubjectVersionCategories
+     * const subjectVersionCategories = await prisma.subjectVersionCategory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const subjectVersionCategoryWithIdOnly = await prisma.subjectVersionCategory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SubjectVersionCategoryFindManyArgs>(args?: SelectSubset<T, SubjectVersionCategoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SubjectVersionCategory.
+     * @param {SubjectVersionCategoryCreateArgs} args - Arguments to create a SubjectVersionCategory.
+     * @example
+     * // Create one SubjectVersionCategory
+     * const SubjectVersionCategory = await prisma.subjectVersionCategory.create({
+     *   data: {
+     *     // ... data to create a SubjectVersionCategory
+     *   }
+     * })
+     * 
+     */
+    create<T extends SubjectVersionCategoryCreateArgs>(args: SelectSubset<T, SubjectVersionCategoryCreateArgs<ExtArgs>>): Prisma__SubjectVersionCategoryClient<$Result.GetResult<Prisma.$SubjectVersionCategoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SubjectVersionCategories.
+     * @param {SubjectVersionCategoryCreateManyArgs} args - Arguments to create many SubjectVersionCategories.
+     * @example
+     * // Create many SubjectVersionCategories
+     * const subjectVersionCategory = await prisma.subjectVersionCategory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SubjectVersionCategoryCreateManyArgs>(args?: SelectSubset<T, SubjectVersionCategoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SubjectVersionCategories and returns the data saved in the database.
+     * @param {SubjectVersionCategoryCreateManyAndReturnArgs} args - Arguments to create many SubjectVersionCategories.
+     * @example
+     * // Create many SubjectVersionCategories
+     * const subjectVersionCategory = await prisma.subjectVersionCategory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SubjectVersionCategories and only return the `id`
+     * const subjectVersionCategoryWithIdOnly = await prisma.subjectVersionCategory.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SubjectVersionCategoryCreateManyAndReturnArgs>(args?: SelectSubset<T, SubjectVersionCategoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionCategoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SubjectVersionCategory.
+     * @param {SubjectVersionCategoryDeleteArgs} args - Arguments to delete one SubjectVersionCategory.
+     * @example
+     * // Delete one SubjectVersionCategory
+     * const SubjectVersionCategory = await prisma.subjectVersionCategory.delete({
+     *   where: {
+     *     // ... filter to delete one SubjectVersionCategory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SubjectVersionCategoryDeleteArgs>(args: SelectSubset<T, SubjectVersionCategoryDeleteArgs<ExtArgs>>): Prisma__SubjectVersionCategoryClient<$Result.GetResult<Prisma.$SubjectVersionCategoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SubjectVersionCategory.
+     * @param {SubjectVersionCategoryUpdateArgs} args - Arguments to update one SubjectVersionCategory.
+     * @example
+     * // Update one SubjectVersionCategory
+     * const subjectVersionCategory = await prisma.subjectVersionCategory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SubjectVersionCategoryUpdateArgs>(args: SelectSubset<T, SubjectVersionCategoryUpdateArgs<ExtArgs>>): Prisma__SubjectVersionCategoryClient<$Result.GetResult<Prisma.$SubjectVersionCategoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SubjectVersionCategories.
+     * @param {SubjectVersionCategoryDeleteManyArgs} args - Arguments to filter SubjectVersionCategories to delete.
+     * @example
+     * // Delete a few SubjectVersionCategories
+     * const { count } = await prisma.subjectVersionCategory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SubjectVersionCategoryDeleteManyArgs>(args?: SelectSubset<T, SubjectVersionCategoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SubjectVersionCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubjectVersionCategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SubjectVersionCategories
+     * const subjectVersionCategory = await prisma.subjectVersionCategory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SubjectVersionCategoryUpdateManyArgs>(args: SelectSubset<T, SubjectVersionCategoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SubjectVersionCategories and returns the data updated in the database.
+     * @param {SubjectVersionCategoryUpdateManyAndReturnArgs} args - Arguments to update many SubjectVersionCategories.
+     * @example
+     * // Update many SubjectVersionCategories
+     * const subjectVersionCategory = await prisma.subjectVersionCategory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SubjectVersionCategories and only return the `id`
+     * const subjectVersionCategoryWithIdOnly = await prisma.subjectVersionCategory.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SubjectVersionCategoryUpdateManyAndReturnArgs>(args: SelectSubset<T, SubjectVersionCategoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionCategoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SubjectVersionCategory.
+     * @param {SubjectVersionCategoryUpsertArgs} args - Arguments to update or create a SubjectVersionCategory.
+     * @example
+     * // Update or create a SubjectVersionCategory
+     * const subjectVersionCategory = await prisma.subjectVersionCategory.upsert({
+     *   create: {
+     *     // ... data to create a SubjectVersionCategory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SubjectVersionCategory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SubjectVersionCategoryUpsertArgs>(args: SelectSubset<T, SubjectVersionCategoryUpsertArgs<ExtArgs>>): Prisma__SubjectVersionCategoryClient<$Result.GetResult<Prisma.$SubjectVersionCategoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SubjectVersionCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubjectVersionCategoryCountArgs} args - Arguments to filter SubjectVersionCategories to count.
+     * @example
+     * // Count the number of SubjectVersionCategories
+     * const count = await prisma.subjectVersionCategory.count({
+     *   where: {
+     *     // ... the filter for the SubjectVersionCategories we want to count
+     *   }
+     * })
+    **/
+    count<T extends SubjectVersionCategoryCountArgs>(
+      args?: Subset<T, SubjectVersionCategoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SubjectVersionCategoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SubjectVersionCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubjectVersionCategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SubjectVersionCategoryAggregateArgs>(args: Subset<T, SubjectVersionCategoryAggregateArgs>): Prisma.PrismaPromise<GetSubjectVersionCategoryAggregateType<T>>
+
+    /**
+     * Group by SubjectVersionCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubjectVersionCategoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SubjectVersionCategoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SubjectVersionCategoryGroupByArgs['orderBy'] }
+        : { orderBy?: SubjectVersionCategoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SubjectVersionCategoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSubjectVersionCategoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SubjectVersionCategory model
+   */
+  readonly fields: SubjectVersionCategoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SubjectVersionCategory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SubjectVersionCategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    subjectVersions<T extends SubjectVersionCategory$subjectVersionsArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersionCategory$subjectVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SubjectVersionCategory model
+   */
+  interface SubjectVersionCategoryFieldRefs {
+    readonly id: FieldRef<"SubjectVersionCategory", 'String'>
+    readonly code: FieldRef<"SubjectVersionCategory", 'String'>
+    readonly active: FieldRef<"SubjectVersionCategory", 'Boolean'>
+    readonly description: FieldRef<"SubjectVersionCategory", 'String'>
+    readonly deletedAt: FieldRef<"SubjectVersionCategory", 'DateTime'>
+    readonly createdAt: FieldRef<"SubjectVersionCategory", 'DateTime'>
+    readonly updatedAt: FieldRef<"SubjectVersionCategory", 'DateTime'>
+    readonly name: FieldRef<"SubjectVersionCategory", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SubjectVersionCategory findUnique
+   */
+  export type SubjectVersionCategoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategory
+     */
+    select?: SubjectVersionCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersionCategory
+     */
+    omit?: SubjectVersionCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectVersionCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which SubjectVersionCategory to fetch.
+     */
+    where: SubjectVersionCategoryWhereUniqueInput
+  }
+
+  /**
+   * SubjectVersionCategory findUniqueOrThrow
+   */
+  export type SubjectVersionCategoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategory
+     */
+    select?: SubjectVersionCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersionCategory
+     */
+    omit?: SubjectVersionCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectVersionCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which SubjectVersionCategory to fetch.
+     */
+    where: SubjectVersionCategoryWhereUniqueInput
+  }
+
+  /**
+   * SubjectVersionCategory findFirst
+   */
+  export type SubjectVersionCategoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategory
+     */
+    select?: SubjectVersionCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersionCategory
+     */
+    omit?: SubjectVersionCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectVersionCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which SubjectVersionCategory to fetch.
+     */
+    where?: SubjectVersionCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubjectVersionCategories to fetch.
+     */
+    orderBy?: SubjectVersionCategoryOrderByWithRelationInput | SubjectVersionCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SubjectVersionCategories.
+     */
+    cursor?: SubjectVersionCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubjectVersionCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubjectVersionCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SubjectVersionCategories.
+     */
+    distinct?: SubjectVersionCategoryScalarFieldEnum | SubjectVersionCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * SubjectVersionCategory findFirstOrThrow
+   */
+  export type SubjectVersionCategoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategory
+     */
+    select?: SubjectVersionCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersionCategory
+     */
+    omit?: SubjectVersionCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectVersionCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which SubjectVersionCategory to fetch.
+     */
+    where?: SubjectVersionCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubjectVersionCategories to fetch.
+     */
+    orderBy?: SubjectVersionCategoryOrderByWithRelationInput | SubjectVersionCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SubjectVersionCategories.
+     */
+    cursor?: SubjectVersionCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubjectVersionCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubjectVersionCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SubjectVersionCategories.
+     */
+    distinct?: SubjectVersionCategoryScalarFieldEnum | SubjectVersionCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * SubjectVersionCategory findMany
+   */
+  export type SubjectVersionCategoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategory
+     */
+    select?: SubjectVersionCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersionCategory
+     */
+    omit?: SubjectVersionCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectVersionCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which SubjectVersionCategories to fetch.
+     */
+    where?: SubjectVersionCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubjectVersionCategories to fetch.
+     */
+    orderBy?: SubjectVersionCategoryOrderByWithRelationInput | SubjectVersionCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SubjectVersionCategories.
+     */
+    cursor?: SubjectVersionCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubjectVersionCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubjectVersionCategories.
+     */
+    skip?: number
+    distinct?: SubjectVersionCategoryScalarFieldEnum | SubjectVersionCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * SubjectVersionCategory create
+   */
+  export type SubjectVersionCategoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategory
+     */
+    select?: SubjectVersionCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersionCategory
+     */
+    omit?: SubjectVersionCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectVersionCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SubjectVersionCategory.
+     */
+    data: XOR<SubjectVersionCategoryCreateInput, SubjectVersionCategoryUncheckedCreateInput>
+  }
+
+  /**
+   * SubjectVersionCategory createMany
+   */
+  export type SubjectVersionCategoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SubjectVersionCategories.
+     */
+    data: SubjectVersionCategoryCreateManyInput | SubjectVersionCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SubjectVersionCategory createManyAndReturn
+   */
+  export type SubjectVersionCategoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategory
+     */
+    select?: SubjectVersionCategorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersionCategory
+     */
+    omit?: SubjectVersionCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many SubjectVersionCategories.
+     */
+    data: SubjectVersionCategoryCreateManyInput | SubjectVersionCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SubjectVersionCategory update
+   */
+  export type SubjectVersionCategoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategory
+     */
+    select?: SubjectVersionCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersionCategory
+     */
+    omit?: SubjectVersionCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectVersionCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SubjectVersionCategory.
+     */
+    data: XOR<SubjectVersionCategoryUpdateInput, SubjectVersionCategoryUncheckedUpdateInput>
+    /**
+     * Choose, which SubjectVersionCategory to update.
+     */
+    where: SubjectVersionCategoryWhereUniqueInput
+  }
+
+  /**
+   * SubjectVersionCategory updateMany
+   */
+  export type SubjectVersionCategoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SubjectVersionCategories.
+     */
+    data: XOR<SubjectVersionCategoryUpdateManyMutationInput, SubjectVersionCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which SubjectVersionCategories to update
+     */
+    where?: SubjectVersionCategoryWhereInput
+    /**
+     * Limit how many SubjectVersionCategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SubjectVersionCategory updateManyAndReturn
+   */
+  export type SubjectVersionCategoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategory
+     */
+    select?: SubjectVersionCategorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersionCategory
+     */
+    omit?: SubjectVersionCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to update SubjectVersionCategories.
+     */
+    data: XOR<SubjectVersionCategoryUpdateManyMutationInput, SubjectVersionCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which SubjectVersionCategories to update
+     */
+    where?: SubjectVersionCategoryWhereInput
+    /**
+     * Limit how many SubjectVersionCategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SubjectVersionCategory upsert
+   */
+  export type SubjectVersionCategoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategory
+     */
+    select?: SubjectVersionCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersionCategory
+     */
+    omit?: SubjectVersionCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectVersionCategoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SubjectVersionCategory to update in case it exists.
+     */
+    where: SubjectVersionCategoryWhereUniqueInput
+    /**
+     * In case the SubjectVersionCategory found by the `where` argument doesn't exist, create a new SubjectVersionCategory with this data.
+     */
+    create: XOR<SubjectVersionCategoryCreateInput, SubjectVersionCategoryUncheckedCreateInput>
+    /**
+     * In case the SubjectVersionCategory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SubjectVersionCategoryUpdateInput, SubjectVersionCategoryUncheckedUpdateInput>
+  }
+
+  /**
+   * SubjectVersionCategory delete
+   */
+  export type SubjectVersionCategoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategory
+     */
+    select?: SubjectVersionCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersionCategory
+     */
+    omit?: SubjectVersionCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectVersionCategoryInclude<ExtArgs> | null
+    /**
+     * Filter which SubjectVersionCategory to delete.
+     */
+    where: SubjectVersionCategoryWhereUniqueInput
+  }
+
+  /**
+   * SubjectVersionCategory deleteMany
+   */
+  export type SubjectVersionCategoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SubjectVersionCategories to delete
+     */
+    where?: SubjectVersionCategoryWhereInput
+    /**
+     * Limit how many SubjectVersionCategories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SubjectVersionCategory.subjectVersions
+   */
+  export type SubjectVersionCategory$subjectVersionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersion
+     */
+    select?: SubjectVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersion
+     */
+    omit?: SubjectVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectVersionInclude<ExtArgs> | null
+    where?: SubjectVersionWhereInput
+    orderBy?: SubjectVersionOrderByWithRelationInput | SubjectVersionOrderByWithRelationInput[]
+    cursor?: SubjectVersionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SubjectVersionScalarFieldEnum | SubjectVersionScalarFieldEnum[]
+  }
+
+  /**
+   * SubjectVersionCategory without action
+   */
+  export type SubjectVersionCategoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategory
+     */
+    select?: SubjectVersionCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersionCategory
+     */
+    omit?: SubjectVersionCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectVersionCategoryInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model SubjectVersion
    */
 
@@ -61226,6 +62479,7 @@ export namespace Prisma {
     credit: number | null
     week: number | null
     period: number | null
+    schedulePeriod: number | null
     numberOfTheory: number | null
     numberOfPractical: number | null
     numberOfSelfStudy: number | null
@@ -61239,6 +62493,7 @@ export namespace Prisma {
     credit: number | null
     week: number | null
     period: number | null
+    schedulePeriod: number | null
     numberOfTheory: number | null
     numberOfPractical: number | null
     numberOfSelfStudy: number | null
@@ -61263,6 +62518,7 @@ export namespace Prisma {
     credit: number | null
     week: number | null
     period: number | null
+    schedulePeriod: number | null
     numberOfTheory: number | null
     numberOfPractical: number | null
     numberOfSelfStudy: number | null
@@ -61279,6 +62535,7 @@ export namespace Prisma {
     rules: string | null
     managementOrganizationId: string | null
     subjectId: string | null
+    subjectVersionCategoryId: string | null
   }
 
   export type SubjectVersionMaxAggregateOutputType = {
@@ -61296,6 +62553,7 @@ export namespace Prisma {
     credit: number | null
     week: number | null
     period: number | null
+    schedulePeriod: number | null
     numberOfTheory: number | null
     numberOfPractical: number | null
     numberOfSelfStudy: number | null
@@ -61312,6 +62570,7 @@ export namespace Prisma {
     rules: string | null
     managementOrganizationId: string | null
     subjectId: string | null
+    subjectVersionCategoryId: string | null
   }
 
   export type SubjectVersionCountAggregateOutputType = {
@@ -61329,6 +62588,7 @@ export namespace Prisma {
     credit: number
     week: number
     period: number
+    schedulePeriod: number
     numberOfTheory: number
     numberOfPractical: number
     numberOfSelfStudy: number
@@ -61345,6 +62605,7 @@ export namespace Prisma {
     rules: number
     managementOrganizationId: number
     subjectId: number
+    subjectVersionCategoryId: number
     _all: number
   }
 
@@ -61353,6 +62614,7 @@ export namespace Prisma {
     credit?: true
     week?: true
     period?: true
+    schedulePeriod?: true
     numberOfTheory?: true
     numberOfPractical?: true
     numberOfSelfStudy?: true
@@ -61366,6 +62628,7 @@ export namespace Prisma {
     credit?: true
     week?: true
     period?: true
+    schedulePeriod?: true
     numberOfTheory?: true
     numberOfPractical?: true
     numberOfSelfStudy?: true
@@ -61390,6 +62653,7 @@ export namespace Prisma {
     credit?: true
     week?: true
     period?: true
+    schedulePeriod?: true
     numberOfTheory?: true
     numberOfPractical?: true
     numberOfSelfStudy?: true
@@ -61406,6 +62670,7 @@ export namespace Prisma {
     rules?: true
     managementOrganizationId?: true
     subjectId?: true
+    subjectVersionCategoryId?: true
   }
 
   export type SubjectVersionMaxAggregateInputType = {
@@ -61423,6 +62688,7 @@ export namespace Prisma {
     credit?: true
     week?: true
     period?: true
+    schedulePeriod?: true
     numberOfTheory?: true
     numberOfPractical?: true
     numberOfSelfStudy?: true
@@ -61439,6 +62705,7 @@ export namespace Prisma {
     rules?: true
     managementOrganizationId?: true
     subjectId?: true
+    subjectVersionCategoryId?: true
   }
 
   export type SubjectVersionCountAggregateInputType = {
@@ -61456,6 +62723,7 @@ export namespace Prisma {
     credit?: true
     week?: true
     period?: true
+    schedulePeriod?: true
     numberOfTheory?: true
     numberOfPractical?: true
     numberOfSelfStudy?: true
@@ -61472,6 +62740,7 @@ export namespace Prisma {
     rules?: true
     managementOrganizationId?: true
     subjectId?: true
+    subjectVersionCategoryId?: true
     _all?: true
   }
 
@@ -61576,6 +62845,7 @@ export namespace Prisma {
     credit: number
     week: number | null
     period: number
+    schedulePeriod: number | null
     numberOfTheory: number | null
     numberOfPractical: number | null
     numberOfSelfStudy: number | null
@@ -61592,6 +62862,7 @@ export namespace Prisma {
     rules: string | null
     managementOrganizationId: string | null
     subjectId: string
+    subjectVersionCategoryId: string | null
     _count: SubjectVersionCountAggregateOutputType | null
     _avg: SubjectVersionAvgAggregateOutputType | null
     _sum: SubjectVersionSumAggregateOutputType | null
@@ -61628,6 +62899,7 @@ export namespace Prisma {
     credit?: boolean
     week?: boolean
     period?: boolean
+    schedulePeriod?: boolean
     numberOfTheory?: boolean
     numberOfPractical?: boolean
     numberOfSelfStudy?: boolean
@@ -61644,8 +62916,10 @@ export namespace Prisma {
     rules?: boolean
     managementOrganizationId?: boolean
     subjectId?: boolean
+    subjectVersionCategoryId?: boolean
     managementOrganization?: boolean | SubjectVersion$managementOrganizationArgs<ExtArgs>
     subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    subjectVersionCategory?: boolean | SubjectVersion$subjectVersionCategoryArgs<ExtArgs>
     trainingBlocks?: boolean | SubjectVersion$trainingBlocksArgs<ExtArgs>
     prerequisiteSubject?: boolean | SubjectVersion$prerequisiteSubjectArgs<ExtArgs>
     dependentSubject?: boolean | SubjectVersion$dependentSubjectArgs<ExtArgs>
@@ -61675,6 +62949,7 @@ export namespace Prisma {
     credit?: boolean
     week?: boolean
     period?: boolean
+    schedulePeriod?: boolean
     numberOfTheory?: boolean
     numberOfPractical?: boolean
     numberOfSelfStudy?: boolean
@@ -61691,8 +62966,10 @@ export namespace Prisma {
     rules?: boolean
     managementOrganizationId?: boolean
     subjectId?: boolean
+    subjectVersionCategoryId?: boolean
     managementOrganization?: boolean | SubjectVersion$managementOrganizationArgs<ExtArgs>
     subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    subjectVersionCategory?: boolean | SubjectVersion$subjectVersionCategoryArgs<ExtArgs>
   }, ExtArgs["result"]["subjectVersion"]>
 
   export type SubjectVersionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -61710,6 +62987,7 @@ export namespace Prisma {
     credit?: boolean
     week?: boolean
     period?: boolean
+    schedulePeriod?: boolean
     numberOfTheory?: boolean
     numberOfPractical?: boolean
     numberOfSelfStudy?: boolean
@@ -61726,8 +63004,10 @@ export namespace Prisma {
     rules?: boolean
     managementOrganizationId?: boolean
     subjectId?: boolean
+    subjectVersionCategoryId?: boolean
     managementOrganization?: boolean | SubjectVersion$managementOrganizationArgs<ExtArgs>
     subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    subjectVersionCategory?: boolean | SubjectVersion$subjectVersionCategoryArgs<ExtArgs>
   }, ExtArgs["result"]["subjectVersion"]>
 
   export type SubjectVersionSelectScalar = {
@@ -61745,6 +63025,7 @@ export namespace Prisma {
     credit?: boolean
     week?: boolean
     period?: boolean
+    schedulePeriod?: boolean
     numberOfTheory?: boolean
     numberOfPractical?: boolean
     numberOfSelfStudy?: boolean
@@ -61761,12 +63042,14 @@ export namespace Prisma {
     rules?: boolean
     managementOrganizationId?: boolean
     subjectId?: boolean
+    subjectVersionCategoryId?: boolean
   }
 
-  export type SubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "codeTkb" | "examType" | "type" | "credit" | "week" | "period" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "objectives" | "learningOutcome" | "structure" | "guild" | "academicResults" | "materials" | "rules" | "managementOrganizationId" | "subjectId", ExtArgs["result"]["subjectVersion"]>
+  export type SubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "codeTkb" | "examType" | "type" | "credit" | "week" | "period" | "schedulePeriod" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "objectives" | "learningOutcome" | "structure" | "guild" | "academicResults" | "materials" | "rules" | "managementOrganizationId" | "subjectId" | "subjectVersionCategoryId", ExtArgs["result"]["subjectVersion"]>
   export type SubjectVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     managementOrganization?: boolean | SubjectVersion$managementOrganizationArgs<ExtArgs>
     subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    subjectVersionCategory?: boolean | SubjectVersion$subjectVersionCategoryArgs<ExtArgs>
     trainingBlocks?: boolean | SubjectVersion$trainingBlocksArgs<ExtArgs>
     prerequisiteSubject?: boolean | SubjectVersion$prerequisiteSubjectArgs<ExtArgs>
     dependentSubject?: boolean | SubjectVersion$dependentSubjectArgs<ExtArgs>
@@ -61783,10 +63066,12 @@ export namespace Prisma {
   export type SubjectVersionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     managementOrganization?: boolean | SubjectVersion$managementOrganizationArgs<ExtArgs>
     subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    subjectVersionCategory?: boolean | SubjectVersion$subjectVersionCategoryArgs<ExtArgs>
   }
   export type SubjectVersionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     managementOrganization?: boolean | SubjectVersion$managementOrganizationArgs<ExtArgs>
     subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    subjectVersionCategory?: boolean | SubjectVersion$subjectVersionCategoryArgs<ExtArgs>
   }
 
   export type $SubjectVersionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -61794,6 +63079,7 @@ export namespace Prisma {
     objects: {
       managementOrganization: Prisma.$DM_DonViPayload<ExtArgs> | null
       subject: Prisma.$SubjectPayload<ExtArgs>
+      subjectVersionCategory: Prisma.$SubjectVersionCategoryPayload<ExtArgs> | null
       /**
        * môn học khối kiến thức - CTĐT
        */
@@ -61826,7 +63112,14 @@ export namespace Prisma {
       type: $Enums.SubjectVersionType
       credit: number
       week: number | null
+      /**
+       * số tiết
+       */
       period: number
+      /**
+       * số tiết TKB
+       */
+      schedulePeriod: number | null
       numberOfTheory: number | null
       numberOfPractical: number | null
       numberOfSelfStudy: number | null
@@ -61843,6 +63136,7 @@ export namespace Prisma {
       rules: string | null
       managementOrganizationId: string | null
       subjectId: string
+      subjectVersionCategoryId: string | null
     }, ExtArgs["result"]["subjectVersion"]>
     composites: {}
   }
@@ -62239,6 +63533,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     managementOrganization<T extends SubjectVersion$managementOrganizationArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersion$managementOrganizationArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     subject<T extends SubjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectDefaultArgs<ExtArgs>>): Prisma__SubjectClient<$Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    subjectVersionCategory<T extends SubjectVersion$subjectVersionCategoryArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersion$subjectVersionCategoryArgs<ExtArgs>>): Prisma__SubjectVersionCategoryClient<$Result.GetResult<Prisma.$SubjectVersionCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     trainingBlocks<T extends SubjectVersion$trainingBlocksArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersion$trainingBlocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     prerequisiteSubject<T extends SubjectVersion$prerequisiteSubjectArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersion$prerequisiteSubjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dependentSubject<T extends SubjectVersion$dependentSubjectArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersion$dependentSubjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -62293,6 +63588,7 @@ export namespace Prisma {
     readonly credit: FieldRef<"SubjectVersion", 'Int'>
     readonly week: FieldRef<"SubjectVersion", 'Int'>
     readonly period: FieldRef<"SubjectVersion", 'Int'>
+    readonly schedulePeriod: FieldRef<"SubjectVersion", 'Int'>
     readonly numberOfTheory: FieldRef<"SubjectVersion", 'Int'>
     readonly numberOfPractical: FieldRef<"SubjectVersion", 'Int'>
     readonly numberOfSelfStudy: FieldRef<"SubjectVersion", 'Int'>
@@ -62309,6 +63605,7 @@ export namespace Prisma {
     readonly rules: FieldRef<"SubjectVersion", 'String'>
     readonly managementOrganizationId: FieldRef<"SubjectVersion", 'String'>
     readonly subjectId: FieldRef<"SubjectVersion", 'String'>
+    readonly subjectVersionCategoryId: FieldRef<"SubjectVersion", 'String'>
   }
     
 
@@ -62721,6 +64018,25 @@ export namespace Prisma {
      */
     include?: DM_DonViInclude<ExtArgs> | null
     where?: DM_DonViWhereInput
+  }
+
+  /**
+   * SubjectVersion.subjectVersionCategory
+   */
+  export type SubjectVersion$subjectVersionCategoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubjectVersionCategory
+     */
+    select?: SubjectVersionCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubjectVersionCategory
+     */
+    omit?: SubjectVersionCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectVersionCategoryInclude<ExtArgs> | null
+    where?: SubjectVersionCategoryWhereInput
   }
 
   /**
@@ -80312,6 +81628,8 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     name: string | null
+    dM_TinhId: string | null
+    dM_Tinh_NewId: string | null
   }
 
   export type TrainingLocationMaxAggregateOutputType = {
@@ -80323,6 +81641,8 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     name: string | null
+    dM_TinhId: string | null
+    dM_Tinh_NewId: string | null
   }
 
   export type TrainingLocationCountAggregateOutputType = {
@@ -80334,6 +81654,8 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     name: number
+    dM_TinhId: number
+    dM_Tinh_NewId: number
     _all: number
   }
 
@@ -80347,6 +81669,8 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     name?: true
+    dM_TinhId?: true
+    dM_Tinh_NewId?: true
   }
 
   export type TrainingLocationMaxAggregateInputType = {
@@ -80358,6 +81682,8 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     name?: true
+    dM_TinhId?: true
+    dM_Tinh_NewId?: true
   }
 
   export type TrainingLocationCountAggregateInputType = {
@@ -80369,6 +81695,8 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     name?: true
+    dM_TinhId?: true
+    dM_Tinh_NewId?: true
     _all?: true
   }
 
@@ -80453,6 +81781,8 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     name: string
+    dM_TinhId: string | null
+    dM_Tinh_NewId: string | null
     _count: TrainingLocationCountAggregateOutputType | null
     _min: TrainingLocationMinAggregateOutputType | null
     _max: TrainingLocationMaxAggregateOutputType | null
@@ -80481,6 +81811,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     name?: boolean
+    dM_TinhId?: boolean
+    dM_Tinh_NewId?: boolean
+    dM_Tinh?: boolean | TrainingLocation$dM_TinhArgs<ExtArgs>
+    dM_Tinh_New?: boolean | TrainingLocation$dM_Tinh_NewArgs<ExtArgs>
     students?: boolean | TrainingLocation$studentsArgs<ExtArgs>
     buildings?: boolean | TrainingLocation$buildingsArgs<ExtArgs>
     _count?: boolean | TrainingLocationCountOutputTypeDefaultArgs<ExtArgs>
@@ -80495,6 +81829,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     name?: boolean
+    dM_TinhId?: boolean
+    dM_Tinh_NewId?: boolean
+    dM_Tinh?: boolean | TrainingLocation$dM_TinhArgs<ExtArgs>
+    dM_Tinh_New?: boolean | TrainingLocation$dM_Tinh_NewArgs<ExtArgs>
   }, ExtArgs["result"]["trainingLocation"]>
 
   export type TrainingLocationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -80506,6 +81844,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     name?: boolean
+    dM_TinhId?: boolean
+    dM_Tinh_NewId?: boolean
+    dM_Tinh?: boolean | TrainingLocation$dM_TinhArgs<ExtArgs>
+    dM_Tinh_New?: boolean | TrainingLocation$dM_Tinh_NewArgs<ExtArgs>
   }, ExtArgs["result"]["trainingLocation"]>
 
   export type TrainingLocationSelectScalar = {
@@ -80517,20 +81859,32 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     name?: boolean
+    dM_TinhId?: boolean
+    dM_Tinh_NewId?: boolean
   }
 
-  export type TrainingLocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name", ExtArgs["result"]["trainingLocation"]>
+  export type TrainingLocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "dM_TinhId" | "dM_Tinh_NewId", ExtArgs["result"]["trainingLocation"]>
   export type TrainingLocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dM_Tinh?: boolean | TrainingLocation$dM_TinhArgs<ExtArgs>
+    dM_Tinh_New?: boolean | TrainingLocation$dM_Tinh_NewArgs<ExtArgs>
     students?: boolean | TrainingLocation$studentsArgs<ExtArgs>
     buildings?: boolean | TrainingLocation$buildingsArgs<ExtArgs>
     _count?: boolean | TrainingLocationCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type TrainingLocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type TrainingLocationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type TrainingLocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dM_Tinh?: boolean | TrainingLocation$dM_TinhArgs<ExtArgs>
+    dM_Tinh_New?: boolean | TrainingLocation$dM_Tinh_NewArgs<ExtArgs>
+  }
+  export type TrainingLocationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dM_Tinh?: boolean | TrainingLocation$dM_TinhArgs<ExtArgs>
+    dM_Tinh_New?: boolean | TrainingLocation$dM_Tinh_NewArgs<ExtArgs>
+  }
 
   export type $TrainingLocationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "TrainingLocation"
     objects: {
+      dM_Tinh: Prisma.$DM_TinhPayload<ExtArgs> | null
+      dM_Tinh_New: Prisma.$DM_Tinh_NewPayload<ExtArgs> | null
       students: Prisma.$StudentPayload<ExtArgs>[]
       buildings: Prisma.$BuildingPayload<ExtArgs>[]
     }
@@ -80543,6 +81897,8 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       name: string
+      dM_TinhId: string | null
+      dM_Tinh_NewId: string | null
     }, ExtArgs["result"]["trainingLocation"]>
     composites: {}
   }
@@ -80937,6 +82293,8 @@ export namespace Prisma {
    */
   export interface Prisma__TrainingLocationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    dM_Tinh<T extends TrainingLocation$dM_TinhArgs<ExtArgs> = {}>(args?: Subset<T, TrainingLocation$dM_TinhArgs<ExtArgs>>): Prisma__DM_TinhClient<$Result.GetResult<Prisma.$DM_TinhPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    dM_Tinh_New<T extends TrainingLocation$dM_Tinh_NewArgs<ExtArgs> = {}>(args?: Subset<T, TrainingLocation$dM_Tinh_NewArgs<ExtArgs>>): Prisma__DM_Tinh_NewClient<$Result.GetResult<Prisma.$DM_Tinh_NewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     students<T extends TrainingLocation$studentsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingLocation$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     buildings<T extends TrainingLocation$buildingsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingLocation$buildingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BuildingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -80976,6 +82334,8 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"TrainingLocation", 'DateTime'>
     readonly updatedAt: FieldRef<"TrainingLocation", 'DateTime'>
     readonly name: FieldRef<"TrainingLocation", 'String'>
+    readonly dM_TinhId: FieldRef<"TrainingLocation", 'String'>
+    readonly dM_Tinh_NewId: FieldRef<"TrainingLocation", 'String'>
   }
     
 
@@ -81225,6 +82585,10 @@ export namespace Prisma {
      */
     data: TrainingLocationCreateManyInput | TrainingLocationCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingLocationIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -81295,6 +82659,10 @@ export namespace Prisma {
      * Limit how many TrainingLocations to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingLocationIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -81361,6 +82729,44 @@ export namespace Prisma {
      * Limit how many TrainingLocations to delete.
      */
     limit?: number
+  }
+
+  /**
+   * TrainingLocation.dM_Tinh
+   */
+  export type TrainingLocation$dM_TinhArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DM_Tinh
+     */
+    select?: DM_TinhSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DM_Tinh
+     */
+    omit?: DM_TinhOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_TinhInclude<ExtArgs> | null
+    where?: DM_TinhWhereInput
+  }
+
+  /**
+   * TrainingLocation.dM_Tinh_New
+   */
+  export type TrainingLocation$dM_Tinh_NewArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DM_Tinh_New
+     */
+    select?: DM_Tinh_NewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DM_Tinh_New
+     */
+    omit?: DM_Tinh_NewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_Tinh_NewInclude<ExtArgs> | null
+    where?: DM_Tinh_NewWhereInput
   }
 
   /**
@@ -142466,6 +143872,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: boolean | DM_Tinh$userProfilePlaceOfBirthArgs<ExtArgs>
     userProfilePermanentAddress?: boolean | DM_Tinh$userProfilePermanentAddressArgs<ExtArgs>
     userProfileCurrentAddress?: boolean | DM_Tinh$userProfileCurrentAddressArgs<ExtArgs>
+    trainingLocation?: boolean | DM_Tinh$trainingLocationArgs<ExtArgs>
     _count?: boolean | DM_TinhCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dM_Tinh"]>
 
@@ -142538,6 +143945,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: boolean | DM_Tinh$userProfilePlaceOfBirthArgs<ExtArgs>
     userProfilePermanentAddress?: boolean | DM_Tinh$userProfilePermanentAddressArgs<ExtArgs>
     userProfileCurrentAddress?: boolean | DM_Tinh$userProfileCurrentAddressArgs<ExtArgs>
+    trainingLocation?: boolean | DM_Tinh$trainingLocationArgs<ExtArgs>
     _count?: boolean | DM_TinhCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DM_TinhIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -142550,6 +143958,7 @@ export namespace Prisma {
       userProfilePlaceOfBirth: Prisma.$UserProfilePayload<ExtArgs>[]
       userProfilePermanentAddress: Prisma.$UserProfilePayload<ExtArgs>[]
       userProfileCurrentAddress: Prisma.$UserProfilePayload<ExtArgs>[]
+      trainingLocation: Prisma.$TrainingLocationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       Id: string
@@ -142968,6 +144377,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth<T extends DM_Tinh$userProfilePlaceOfBirthArgs<ExtArgs> = {}>(args?: Subset<T, DM_Tinh$userProfilePlaceOfBirthArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     userProfilePermanentAddress<T extends DM_Tinh$userProfilePermanentAddressArgs<ExtArgs> = {}>(args?: Subset<T, DM_Tinh$userProfilePermanentAddressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     userProfileCurrentAddress<T extends DM_Tinh$userProfileCurrentAddressArgs<ExtArgs> = {}>(args?: Subset<T, DM_Tinh$userProfileCurrentAddressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    trainingLocation<T extends DM_Tinh$trainingLocationArgs<ExtArgs> = {}>(args?: Subset<T, DM_Tinh$trainingLocationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingLocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -143499,6 +144909,30 @@ export namespace Prisma {
   }
 
   /**
+   * DM_Tinh.trainingLocation
+   */
+  export type DM_Tinh$trainingLocationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingLocation
+     */
+    select?: TrainingLocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingLocation
+     */
+    omit?: TrainingLocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingLocationInclude<ExtArgs> | null
+    where?: TrainingLocationWhereInput
+    orderBy?: TrainingLocationOrderByWithRelationInput | TrainingLocationOrderByWithRelationInput[]
+    cursor?: TrainingLocationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TrainingLocationScalarFieldEnum | TrainingLocationScalarFieldEnum[]
+  }
+
+  /**
    * DM_Tinh without action
    */
   export type DM_TinhDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -143835,6 +145269,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: boolean | DM_Tinh_New$userProfilePlaceOfBirthArgs<ExtArgs>
     userProfilePermanentAddress?: boolean | DM_Tinh_New$userProfilePermanentAddressArgs<ExtArgs>
     userProfileCurrentAddress?: boolean | DM_Tinh_New$userProfileCurrentAddressArgs<ExtArgs>
+    trainingLocation?: boolean | DM_Tinh_New$trainingLocationArgs<ExtArgs>
     _count?: boolean | DM_Tinh_NewCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dM_Tinh_New"]>
 
@@ -143907,6 +145342,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: boolean | DM_Tinh_New$userProfilePlaceOfBirthArgs<ExtArgs>
     userProfilePermanentAddress?: boolean | DM_Tinh_New$userProfilePermanentAddressArgs<ExtArgs>
     userProfileCurrentAddress?: boolean | DM_Tinh_New$userProfileCurrentAddressArgs<ExtArgs>
+    trainingLocation?: boolean | DM_Tinh_New$trainingLocationArgs<ExtArgs>
     _count?: boolean | DM_Tinh_NewCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DM_Tinh_NewIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -143919,6 +145355,7 @@ export namespace Prisma {
       userProfilePlaceOfBirth: Prisma.$UserProfilePayload<ExtArgs>[]
       userProfilePermanentAddress: Prisma.$UserProfilePayload<ExtArgs>[]
       userProfileCurrentAddress: Prisma.$UserProfilePayload<ExtArgs>[]
+      trainingLocation: Prisma.$TrainingLocationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       Id: string
@@ -144337,6 +145774,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth<T extends DM_Tinh_New$userProfilePlaceOfBirthArgs<ExtArgs> = {}>(args?: Subset<T, DM_Tinh_New$userProfilePlaceOfBirthArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     userProfilePermanentAddress<T extends DM_Tinh_New$userProfilePermanentAddressArgs<ExtArgs> = {}>(args?: Subset<T, DM_Tinh_New$userProfilePermanentAddressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     userProfileCurrentAddress<T extends DM_Tinh_New$userProfileCurrentAddressArgs<ExtArgs> = {}>(args?: Subset<T, DM_Tinh_New$userProfileCurrentAddressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    trainingLocation<T extends DM_Tinh_New$trainingLocationArgs<ExtArgs> = {}>(args?: Subset<T, DM_Tinh_New$trainingLocationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingLocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -144865,6 +146303,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserProfileScalarFieldEnum | UserProfileScalarFieldEnum[]
+  }
+
+  /**
+   * DM_Tinh_New.trainingLocation
+   */
+  export type DM_Tinh_New$trainingLocationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingLocation
+     */
+    select?: TrainingLocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingLocation
+     */
+    omit?: TrainingLocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingLocationInclude<ExtArgs> | null
+    where?: TrainingLocationWhereInput
+    orderBy?: TrainingLocationOrderByWithRelationInput | TrainingLocationOrderByWithRelationInput[]
+    cursor?: TrainingLocationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TrainingLocationScalarFieldEnum | TrainingLocationScalarFieldEnum[]
   }
 
   /**
@@ -308261,6 +309723,20 @@ export namespace Prisma {
   export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
 
 
+  export const SubjectVersionCategoryScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    name: 'name'
+  };
+
+  export type SubjectVersionCategoryScalarFieldEnum = (typeof SubjectVersionCategoryScalarFieldEnum)[keyof typeof SubjectVersionCategoryScalarFieldEnum]
+
+
   export const SubjectVersionScalarFieldEnum: {
     id: 'id',
     code: 'code',
@@ -308276,6 +309752,7 @@ export namespace Prisma {
     credit: 'credit',
     week: 'week',
     period: 'period',
+    schedulePeriod: 'schedulePeriod',
     numberOfTheory: 'numberOfTheory',
     numberOfPractical: 'numberOfPractical',
     numberOfSelfStudy: 'numberOfSelfStudy',
@@ -308291,7 +309768,8 @@ export namespace Prisma {
     materials: 'materials',
     rules: 'rules',
     managementOrganizationId: 'managementOrganizationId',
-    subjectId: 'subjectId'
+    subjectId: 'subjectId',
+    subjectVersionCategoryId: 'subjectVersionCategoryId'
   };
 
   export type SubjectVersionScalarFieldEnum = (typeof SubjectVersionScalarFieldEnum)[keyof typeof SubjectVersionScalarFieldEnum]
@@ -308559,7 +310037,9 @@ export namespace Prisma {
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    name: 'name'
+    name: 'name',
+    dM_TinhId: 'dM_TinhId',
+    dM_Tinh_NewId: 'dM_Tinh_NewId'
   };
 
   export type TrainingLocationScalarFieldEnum = (typeof TrainingLocationScalarFieldEnum)[keyof typeof TrainingLocationScalarFieldEnum]
@@ -312465,6 +313945,16 @@ export namespace Prisma {
   export type SubjectOrderByRelevanceFieldEnum = (typeof SubjectOrderByRelevanceFieldEnum)[keyof typeof SubjectOrderByRelevanceFieldEnum]
 
 
+  export const SubjectVersionCategoryOrderByRelevanceFieldEnum: {
+    id: 'id',
+    code: 'code',
+    description: 'description',
+    name: 'name'
+  };
+
+  export type SubjectVersionCategoryOrderByRelevanceFieldEnum = (typeof SubjectVersionCategoryOrderByRelevanceFieldEnum)[keyof typeof SubjectVersionCategoryOrderByRelevanceFieldEnum]
+
+
   export const SubjectVersionOrderByRelevanceFieldEnum: {
     id: 'id',
     code: 'code',
@@ -312479,7 +313969,8 @@ export namespace Prisma {
     materials: 'materials',
     rules: 'rules',
     managementOrganizationId: 'managementOrganizationId',
-    subjectId: 'subjectId'
+    subjectId: 'subjectId',
+    subjectVersionCategoryId: 'subjectVersionCategoryId'
   };
 
   export type SubjectVersionOrderByRelevanceFieldEnum = (typeof SubjectVersionOrderByRelevanceFieldEnum)[keyof typeof SubjectVersionOrderByRelevanceFieldEnum]
@@ -312648,7 +314139,9 @@ export namespace Prisma {
     id: 'id',
     code: 'code',
     description: 'description',
-    name: 'name'
+    name: 'name',
+    dM_TinhId: 'dM_TinhId',
+    dM_Tinh_NewId: 'dM_Tinh_NewId'
   };
 
   export type TrainingLocationOrderByRelevanceFieldEnum = (typeof TrainingLocationOrderByRelevanceFieldEnum)[keyof typeof TrainingLocationOrderByRelevanceFieldEnum]
@@ -318619,6 +320112,77 @@ export namespace Prisma {
     information?: StringNullableWithAggregatesFilter<"Subject"> | string | null
   }
 
+  export type SubjectVersionCategoryWhereInput = {
+    AND?: SubjectVersionCategoryWhereInput | SubjectVersionCategoryWhereInput[]
+    OR?: SubjectVersionCategoryWhereInput[]
+    NOT?: SubjectVersionCategoryWhereInput | SubjectVersionCategoryWhereInput[]
+    id?: StringFilter<"SubjectVersionCategory"> | string
+    code?: StringNullableFilter<"SubjectVersionCategory"> | string | null
+    active?: BoolFilter<"SubjectVersionCategory"> | boolean
+    description?: StringNullableFilter<"SubjectVersionCategory"> | string | null
+    deletedAt?: DateTimeNullableFilter<"SubjectVersionCategory"> | Date | string | null
+    createdAt?: DateTimeFilter<"SubjectVersionCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"SubjectVersionCategory"> | Date | string
+    name?: StringFilter<"SubjectVersionCategory"> | string
+    subjectVersions?: SubjectVersionListRelationFilter
+  }
+
+  export type SubjectVersionCategoryOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    name?: SortOrder
+    subjectVersions?: SubjectVersionOrderByRelationAggregateInput
+    _relevance?: SubjectVersionCategoryOrderByRelevanceInput
+  }
+
+  export type SubjectVersionCategoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: SubjectVersionCategoryWhereInput | SubjectVersionCategoryWhereInput[]
+    OR?: SubjectVersionCategoryWhereInput[]
+    NOT?: SubjectVersionCategoryWhereInput | SubjectVersionCategoryWhereInput[]
+    active?: BoolFilter<"SubjectVersionCategory"> | boolean
+    description?: StringNullableFilter<"SubjectVersionCategory"> | string | null
+    deletedAt?: DateTimeNullableFilter<"SubjectVersionCategory"> | Date | string | null
+    createdAt?: DateTimeFilter<"SubjectVersionCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"SubjectVersionCategory"> | Date | string
+    name?: StringFilter<"SubjectVersionCategory"> | string
+    subjectVersions?: SubjectVersionListRelationFilter
+  }, "id" | "code">
+
+  export type SubjectVersionCategoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    name?: SortOrder
+    _count?: SubjectVersionCategoryCountOrderByAggregateInput
+    _max?: SubjectVersionCategoryMaxOrderByAggregateInput
+    _min?: SubjectVersionCategoryMinOrderByAggregateInput
+  }
+
+  export type SubjectVersionCategoryScalarWhereWithAggregatesInput = {
+    AND?: SubjectVersionCategoryScalarWhereWithAggregatesInput | SubjectVersionCategoryScalarWhereWithAggregatesInput[]
+    OR?: SubjectVersionCategoryScalarWhereWithAggregatesInput[]
+    NOT?: SubjectVersionCategoryScalarWhereWithAggregatesInput | SubjectVersionCategoryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SubjectVersionCategory"> | string
+    code?: StringNullableWithAggregatesFilter<"SubjectVersionCategory"> | string | null
+    active?: BoolWithAggregatesFilter<"SubjectVersionCategory"> | boolean
+    description?: StringNullableWithAggregatesFilter<"SubjectVersionCategory"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"SubjectVersionCategory"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SubjectVersionCategory"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SubjectVersionCategory"> | Date | string
+    name?: StringWithAggregatesFilter<"SubjectVersionCategory"> | string
+  }
+
   export type SubjectVersionWhereInput = {
     AND?: SubjectVersionWhereInput | SubjectVersionWhereInput[]
     OR?: SubjectVersionWhereInput[]
@@ -318637,6 +320201,7 @@ export namespace Prisma {
     credit?: IntFilter<"SubjectVersion"> | number
     week?: IntNullableFilter<"SubjectVersion"> | number | null
     period?: IntFilter<"SubjectVersion"> | number
+    schedulePeriod?: IntNullableFilter<"SubjectVersion"> | number | null
     numberOfTheory?: IntNullableFilter<"SubjectVersion"> | number | null
     numberOfPractical?: IntNullableFilter<"SubjectVersion"> | number | null
     numberOfSelfStudy?: IntNullableFilter<"SubjectVersion"> | number | null
@@ -318653,8 +320218,10 @@ export namespace Prisma {
     rules?: StringNullableFilter<"SubjectVersion"> | string | null
     managementOrganizationId?: UuidNullableFilter<"SubjectVersion"> | string | null
     subjectId?: StringFilter<"SubjectVersion"> | string
+    subjectVersionCategoryId?: StringNullableFilter<"SubjectVersion"> | string | null
     managementOrganization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
     subject?: XOR<SubjectScalarRelationFilter, SubjectWhereInput>
+    subjectVersionCategory?: XOR<SubjectVersionCategoryNullableScalarRelationFilter, SubjectVersionCategoryWhereInput> | null
     trainingBlocks?: TrainingBlockSubjectListRelationFilter
     prerequisiteSubject?: SubjectVersionListRelationFilter
     dependentSubject?: SubjectVersionListRelationFilter
@@ -318683,6 +320250,7 @@ export namespace Prisma {
     credit?: SortOrder
     week?: SortOrderInput | SortOrder
     period?: SortOrder
+    schedulePeriod?: SortOrderInput | SortOrder
     numberOfTheory?: SortOrderInput | SortOrder
     numberOfPractical?: SortOrderInput | SortOrder
     numberOfSelfStudy?: SortOrderInput | SortOrder
@@ -318699,8 +320267,10 @@ export namespace Prisma {
     rules?: SortOrderInput | SortOrder
     managementOrganizationId?: SortOrderInput | SortOrder
     subjectId?: SortOrder
+    subjectVersionCategoryId?: SortOrderInput | SortOrder
     managementOrganization?: DM_DonViOrderByWithRelationInput
     subject?: SubjectOrderByWithRelationInput
+    subjectVersionCategory?: SubjectVersionCategoryOrderByWithRelationInput
     trainingBlocks?: TrainingBlockSubjectOrderByRelationAggregateInput
     prerequisiteSubject?: SubjectVersionOrderByRelationAggregateInput
     dependentSubject?: SubjectVersionOrderByRelationAggregateInput
@@ -318733,6 +320303,7 @@ export namespace Prisma {
     credit?: IntFilter<"SubjectVersion"> | number
     week?: IntNullableFilter<"SubjectVersion"> | number | null
     period?: IntFilter<"SubjectVersion"> | number
+    schedulePeriod?: IntNullableFilter<"SubjectVersion"> | number | null
     numberOfTheory?: IntNullableFilter<"SubjectVersion"> | number | null
     numberOfPractical?: IntNullableFilter<"SubjectVersion"> | number | null
     numberOfSelfStudy?: IntNullableFilter<"SubjectVersion"> | number | null
@@ -318749,8 +320320,10 @@ export namespace Prisma {
     rules?: StringNullableFilter<"SubjectVersion"> | string | null
     managementOrganizationId?: UuidNullableFilter<"SubjectVersion"> | string | null
     subjectId?: StringFilter<"SubjectVersion"> | string
+    subjectVersionCategoryId?: StringNullableFilter<"SubjectVersion"> | string | null
     managementOrganization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
     subject?: XOR<SubjectScalarRelationFilter, SubjectWhereInput>
+    subjectVersionCategory?: XOR<SubjectVersionCategoryNullableScalarRelationFilter, SubjectVersionCategoryWhereInput> | null
     trainingBlocks?: TrainingBlockSubjectListRelationFilter
     prerequisiteSubject?: SubjectVersionListRelationFilter
     dependentSubject?: SubjectVersionListRelationFilter
@@ -318779,6 +320352,7 @@ export namespace Prisma {
     credit?: SortOrder
     week?: SortOrderInput | SortOrder
     period?: SortOrder
+    schedulePeriod?: SortOrderInput | SortOrder
     numberOfTheory?: SortOrderInput | SortOrder
     numberOfPractical?: SortOrderInput | SortOrder
     numberOfSelfStudy?: SortOrderInput | SortOrder
@@ -318795,6 +320369,7 @@ export namespace Prisma {
     rules?: SortOrderInput | SortOrder
     managementOrganizationId?: SortOrderInput | SortOrder
     subjectId?: SortOrder
+    subjectVersionCategoryId?: SortOrderInput | SortOrder
     _count?: SubjectVersionCountOrderByAggregateInput
     _avg?: SubjectVersionAvgOrderByAggregateInput
     _max?: SubjectVersionMaxOrderByAggregateInput
@@ -318820,6 +320395,7 @@ export namespace Prisma {
     credit?: IntWithAggregatesFilter<"SubjectVersion"> | number
     week?: IntNullableWithAggregatesFilter<"SubjectVersion"> | number | null
     period?: IntWithAggregatesFilter<"SubjectVersion"> | number
+    schedulePeriod?: IntNullableWithAggregatesFilter<"SubjectVersion"> | number | null
     numberOfTheory?: IntNullableWithAggregatesFilter<"SubjectVersion"> | number | null
     numberOfPractical?: IntNullableWithAggregatesFilter<"SubjectVersion"> | number | null
     numberOfSelfStudy?: IntNullableWithAggregatesFilter<"SubjectVersion"> | number | null
@@ -318836,6 +320412,7 @@ export namespace Prisma {
     rules?: StringNullableWithAggregatesFilter<"SubjectVersion"> | string | null
     managementOrganizationId?: UuidNullableWithAggregatesFilter<"SubjectVersion"> | string | null
     subjectId?: StringWithAggregatesFilter<"SubjectVersion"> | string
+    subjectVersionCategoryId?: StringNullableWithAggregatesFilter<"SubjectVersion"> | string | null
   }
 
   export type EquivalencyGroupWhereInput = {
@@ -320255,6 +321832,10 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TrainingLocation"> | Date | string
     updatedAt?: DateTimeFilter<"TrainingLocation"> | Date | string
     name?: StringFilter<"TrainingLocation"> | string
+    dM_TinhId?: StringNullableFilter<"TrainingLocation"> | string | null
+    dM_Tinh_NewId?: StringNullableFilter<"TrainingLocation"> | string | null
+    dM_Tinh?: XOR<DM_TinhNullableScalarRelationFilter, DM_TinhWhereInput> | null
+    dM_Tinh_New?: XOR<DM_Tinh_NewNullableScalarRelationFilter, DM_Tinh_NewWhereInput> | null
     students?: StudentListRelationFilter
     buildings?: BuildingListRelationFilter
   }
@@ -320268,6 +321849,10 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     name?: SortOrder
+    dM_TinhId?: SortOrderInput | SortOrder
+    dM_Tinh_NewId?: SortOrderInput | SortOrder
+    dM_Tinh?: DM_TinhOrderByWithRelationInput
+    dM_Tinh_New?: DM_Tinh_NewOrderByWithRelationInput
     students?: StudentOrderByRelationAggregateInput
     buildings?: BuildingOrderByRelationAggregateInput
     _relevance?: TrainingLocationOrderByRelevanceInput
@@ -320285,6 +321870,10 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"TrainingLocation"> | Date | string | null
     createdAt?: DateTimeFilter<"TrainingLocation"> | Date | string
     updatedAt?: DateTimeFilter<"TrainingLocation"> | Date | string
+    dM_TinhId?: StringNullableFilter<"TrainingLocation"> | string | null
+    dM_Tinh_NewId?: StringNullableFilter<"TrainingLocation"> | string | null
+    dM_Tinh?: XOR<DM_TinhNullableScalarRelationFilter, DM_TinhWhereInput> | null
+    dM_Tinh_New?: XOR<DM_Tinh_NewNullableScalarRelationFilter, DM_Tinh_NewWhereInput> | null
     students?: StudentListRelationFilter
     buildings?: BuildingListRelationFilter
   }, "id" | "code" | "name">
@@ -320298,6 +321887,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     name?: SortOrder
+    dM_TinhId?: SortOrderInput | SortOrder
+    dM_Tinh_NewId?: SortOrderInput | SortOrder
     _count?: TrainingLocationCountOrderByAggregateInput
     _max?: TrainingLocationMaxOrderByAggregateInput
     _min?: TrainingLocationMinOrderByAggregateInput
@@ -320315,6 +321906,8 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"TrainingLocation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TrainingLocation"> | Date | string
     name?: StringWithAggregatesFilter<"TrainingLocation"> | string
+    dM_TinhId?: StringNullableWithAggregatesFilter<"TrainingLocation"> | string | null
+    dM_Tinh_NewId?: StringNullableWithAggregatesFilter<"TrainingLocation"> | string | null
   }
 
   export type BuildingWhereInput = {
@@ -325737,6 +327330,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileListRelationFilter
     userProfilePermanentAddress?: UserProfileListRelationFilter
     userProfileCurrentAddress?: UserProfileListRelationFilter
+    trainingLocation?: TrainingLocationListRelationFilter
   }
 
   export type DM_TinhOrderByWithRelationInput = {
@@ -325762,6 +327356,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileOrderByRelationAggregateInput
     userProfilePermanentAddress?: UserProfileOrderByRelationAggregateInput
     userProfileCurrentAddress?: UserProfileOrderByRelationAggregateInput
+    trainingLocation?: TrainingLocationOrderByRelationAggregateInput
     _relevance?: DM_TinhOrderByRelevanceInput
   }
 
@@ -325791,6 +327386,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileListRelationFilter
     userProfilePermanentAddress?: UserProfileListRelationFilter
     userProfileCurrentAddress?: UserProfileListRelationFilter
+    trainingLocation?: TrainingLocationListRelationFilter
   }, "Id">
 
   export type DM_TinhOrderByWithAggregationInput = {
@@ -325869,6 +327465,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileListRelationFilter
     userProfilePermanentAddress?: UserProfileListRelationFilter
     userProfileCurrentAddress?: UserProfileListRelationFilter
+    trainingLocation?: TrainingLocationListRelationFilter
   }
 
   export type DM_Tinh_NewOrderByWithRelationInput = {
@@ -325894,6 +327491,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileOrderByRelationAggregateInput
     userProfilePermanentAddress?: UserProfileOrderByRelationAggregateInput
     userProfileCurrentAddress?: UserProfileOrderByRelationAggregateInput
+    trainingLocation?: TrainingLocationOrderByRelationAggregateInput
     _relevance?: DM_Tinh_NewOrderByRelevanceInput
   }
 
@@ -325923,6 +327521,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileListRelationFilter
     userProfilePermanentAddress?: UserProfileListRelationFilter
     userProfileCurrentAddress?: UserProfileListRelationFilter
+    trainingLocation?: TrainingLocationListRelationFilter
   }, "Id">
 
   export type DM_Tinh_NewOrderByWithAggregationInput = {
@@ -342631,6 +344230,87 @@ export namespace Prisma {
     information?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type SubjectVersionCategoryCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    subjectVersions?: SubjectVersionCreateNestedManyWithoutSubjectVersionCategoryInput
+  }
+
+  export type SubjectVersionCategoryUncheckedCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    subjectVersions?: SubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionCategoryInput
+  }
+
+  export type SubjectVersionCategoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    subjectVersions?: SubjectVersionUpdateManyWithoutSubjectVersionCategoryNestedInput
+  }
+
+  export type SubjectVersionCategoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    subjectVersions?: SubjectVersionUncheckedUpdateManyWithoutSubjectVersionCategoryNestedInput
+  }
+
+  export type SubjectVersionCategoryCreateManyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+  }
+
+  export type SubjectVersionCategoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SubjectVersionCategoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
   export type SubjectVersionCreateInput = {
     id?: string
     code?: string | null
@@ -342646,6 +344326,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -342662,6 +344343,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
     subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -342690,6 +344372,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -342706,6 +344389,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganizationId?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -342734,6 +344418,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -342750,6 +344435,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
     subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -342778,6 +344464,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -342794,6 +344481,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -342822,6 +344510,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -342838,6 +344527,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganizationId?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
   }
 
   export type SubjectVersionUpdateManyMutationInput = {
@@ -342855,6 +344545,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -342886,6 +344577,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -342902,6 +344594,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EquivalencyGroupCreateInput = {
@@ -344482,6 +346175,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     name: string
+    dM_Tinh?: DM_TinhCreateNestedOneWithoutTrainingLocationInput
+    dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
     students?: StudentCreateNestedManyWithoutTrainingLocationInput
     buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
   }
@@ -344495,6 +346190,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     name: string
+    dM_TinhId?: string | null
+    dM_Tinh_NewId?: string | null
     students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
     buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
   }
@@ -344508,6 +346205,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
+    dM_Tinh?: DM_TinhUpdateOneWithoutTrainingLocationNestedInput
+    dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
     students?: StudentUpdateManyWithoutTrainingLocationNestedInput
     buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
   }
@@ -344521,6 +346220,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
+    dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
     students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
     buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
   }
@@ -344534,6 +346235,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     name: string
+    dM_TinhId?: string | null
+    dM_Tinh_NewId?: string | null
   }
 
   export type TrainingLocationUpdateManyMutationInput = {
@@ -344556,6 +346259,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
+    dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BuildingCreateInput = {
@@ -350935,6 +352640,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileCreateNestedManyWithoutProvinceOfBirthInput
     userProfilePermanentAddress?: UserProfileCreateNestedManyWithoutProvincePermanentAddressInput
     userProfileCurrentAddress?: UserProfileCreateNestedManyWithoutProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationCreateNestedManyWithoutDM_TinhInput
   }
 
   export type DM_TinhUncheckedCreateInput = {
@@ -350960,6 +352666,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileUncheckedCreateNestedManyWithoutProvinceOfBirthInput
     userProfilePermanentAddress?: UserProfileUncheckedCreateNestedManyWithoutProvincePermanentAddressInput
     userProfileCurrentAddress?: UserProfileUncheckedCreateNestedManyWithoutProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationUncheckedCreateNestedManyWithoutDM_TinhInput
   }
 
   export type DM_TinhUpdateInput = {
@@ -350985,6 +352692,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileUpdateManyWithoutProvinceOfBirthNestedInput
     userProfilePermanentAddress?: UserProfileUpdateManyWithoutProvincePermanentAddressNestedInput
     userProfileCurrentAddress?: UserProfileUpdateManyWithoutProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUpdateManyWithoutDM_TinhNestedInput
   }
 
   export type DM_TinhUncheckedUpdateInput = {
@@ -351010,6 +352718,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileUncheckedUpdateManyWithoutProvinceOfBirthNestedInput
     userProfilePermanentAddress?: UserProfileUncheckedUpdateManyWithoutProvincePermanentAddressNestedInput
     userProfileCurrentAddress?: UserProfileUncheckedUpdateManyWithoutProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUncheckedUpdateManyWithoutDM_TinhNestedInput
   }
 
   export type DM_TinhCreateManyInput = {
@@ -351098,6 +352807,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileCreateNestedManyWithoutNewProvinceOfBirthInput
     userProfilePermanentAddress?: UserProfileCreateNestedManyWithoutNewProvincePermanentAddressInput
     userProfileCurrentAddress?: UserProfileCreateNestedManyWithoutNewProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationCreateNestedManyWithoutDM_Tinh_NewInput
   }
 
   export type DM_Tinh_NewUncheckedCreateInput = {
@@ -351123,6 +352833,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceOfBirthInput
     userProfilePermanentAddress?: UserProfileUncheckedCreateNestedManyWithoutNewProvincePermanentAddressInput
     userProfileCurrentAddress?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationUncheckedCreateNestedManyWithoutDM_Tinh_NewInput
   }
 
   export type DM_Tinh_NewUpdateInput = {
@@ -351148,6 +352859,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileUpdateManyWithoutNewProvinceOfBirthNestedInput
     userProfilePermanentAddress?: UserProfileUpdateManyWithoutNewProvincePermanentAddressNestedInput
     userProfileCurrentAddress?: UserProfileUpdateManyWithoutNewProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUpdateManyWithoutDM_Tinh_NewNestedInput
   }
 
   export type DM_Tinh_NewUncheckedUpdateInput = {
@@ -351173,6 +352885,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileUncheckedUpdateManyWithoutNewProvinceOfBirthNestedInput
     userProfilePermanentAddress?: UserProfileUncheckedUpdateManyWithoutNewProvincePermanentAddressNestedInput
     userProfileCurrentAddress?: UserProfileUncheckedUpdateManyWithoutNewProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUncheckedUpdateManyWithoutDM_Tinh_NewNestedInput
   }
 
   export type DM_Tinh_NewCreateManyInput = {
@@ -369062,6 +370775,45 @@ export namespace Prisma {
     information?: SortOrder
   }
 
+  export type SubjectVersionCategoryOrderByRelevanceInput = {
+    fields: SubjectVersionCategoryOrderByRelevanceFieldEnum | SubjectVersionCategoryOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type SubjectVersionCategoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    name?: SortOrder
+  }
+
+  export type SubjectVersionCategoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    name?: SortOrder
+  }
+
+  export type SubjectVersionCategoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    name?: SortOrder
+  }
+
   export type EnumExamTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.ExamType | EnumExamTypeFieldRefInput<$PrismaModel>
     in?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel>
@@ -369079,6 +370831,11 @@ export namespace Prisma {
   export type SubjectScalarRelationFilter = {
     is?: SubjectWhereInput
     isNot?: SubjectWhereInput
+  }
+
+  export type SubjectVersionCategoryNullableScalarRelationFilter = {
+    is?: SubjectVersionCategoryWhereInput | null
+    isNot?: SubjectVersionCategoryWhereInput | null
   }
 
   export type TrainingBlockSubjectListRelationFilter = {
@@ -369152,6 +370909,7 @@ export namespace Prisma {
     credit?: SortOrder
     week?: SortOrder
     period?: SortOrder
+    schedulePeriod?: SortOrder
     numberOfTheory?: SortOrder
     numberOfPractical?: SortOrder
     numberOfSelfStudy?: SortOrder
@@ -369168,12 +370926,14 @@ export namespace Prisma {
     rules?: SortOrder
     managementOrganizationId?: SortOrder
     subjectId?: SortOrder
+    subjectVersionCategoryId?: SortOrder
   }
 
   export type SubjectVersionAvgOrderByAggregateInput = {
     credit?: SortOrder
     week?: SortOrder
     period?: SortOrder
+    schedulePeriod?: SortOrder
     numberOfTheory?: SortOrder
     numberOfPractical?: SortOrder
     numberOfSelfStudy?: SortOrder
@@ -369198,6 +370958,7 @@ export namespace Prisma {
     credit?: SortOrder
     week?: SortOrder
     period?: SortOrder
+    schedulePeriod?: SortOrder
     numberOfTheory?: SortOrder
     numberOfPractical?: SortOrder
     numberOfSelfStudy?: SortOrder
@@ -369214,6 +370975,7 @@ export namespace Prisma {
     rules?: SortOrder
     managementOrganizationId?: SortOrder
     subjectId?: SortOrder
+    subjectVersionCategoryId?: SortOrder
   }
 
   export type SubjectVersionMinOrderByAggregateInput = {
@@ -369231,6 +370993,7 @@ export namespace Prisma {
     credit?: SortOrder
     week?: SortOrder
     period?: SortOrder
+    schedulePeriod?: SortOrder
     numberOfTheory?: SortOrder
     numberOfPractical?: SortOrder
     numberOfSelfStudy?: SortOrder
@@ -369247,12 +371010,14 @@ export namespace Prisma {
     rules?: SortOrder
     managementOrganizationId?: SortOrder
     subjectId?: SortOrder
+    subjectVersionCategoryId?: SortOrder
   }
 
   export type SubjectVersionSumOrderByAggregateInput = {
     credit?: SortOrder
     week?: SortOrder
     period?: SortOrder
+    schedulePeriod?: SortOrder
     numberOfTheory?: SortOrder
     numberOfPractical?: SortOrder
     numberOfSelfStudy?: SortOrder
@@ -370302,6 +372067,16 @@ export namespace Prisma {
     name?: SortOrder
   }
 
+  export type DM_TinhNullableScalarRelationFilter = {
+    is?: DM_TinhWhereInput | null
+    isNot?: DM_TinhWhereInput | null
+  }
+
+  export type DM_Tinh_NewNullableScalarRelationFilter = {
+    is?: DM_Tinh_NewWhereInput | null
+    isNot?: DM_Tinh_NewWhereInput | null
+  }
+
   export type BuildingListRelationFilter = {
     every?: BuildingWhereInput
     some?: BuildingWhereInput
@@ -370327,6 +372102,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     name?: SortOrder
+    dM_TinhId?: SortOrder
+    dM_Tinh_NewId?: SortOrder
   }
 
   export type TrainingLocationMaxOrderByAggregateInput = {
@@ -370338,6 +372115,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     name?: SortOrder
+    dM_TinhId?: SortOrder
+    dM_Tinh_NewId?: SortOrder
   }
 
   export type TrainingLocationMinOrderByAggregateInput = {
@@ -370349,6 +372128,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     name?: SortOrder
+    dM_TinhId?: SortOrder
+    dM_Tinh_NewId?: SortOrder
   }
 
   export type TrainingLocationNullableScalarRelationFilter = {
@@ -374244,6 +376025,16 @@ export namespace Prisma {
     iDictionaryKey?: SortOrder
   }
 
+  export type TrainingLocationListRelationFilter = {
+    every?: TrainingLocationWhereInput
+    some?: TrainingLocationWhereInput
+    none?: TrainingLocationWhereInput
+  }
+
+  export type TrainingLocationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type DM_TinhOrderByRelevanceInput = {
     fields: DM_TinhOrderByRelevanceFieldEnum | DM_TinhOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -374729,11 +376520,6 @@ export namespace Prisma {
     iDictionaryKey?: SortOrder
   }
 
-  export type DM_TinhNullableScalarRelationFilter = {
-    is?: DM_TinhWhereInput | null
-    isNot?: DM_TinhWhereInput | null
-  }
-
   export type DM_QuanHuyenNullableScalarRelationFilter = {
     is?: DM_QuanHuyenWhereInput | null
     isNot?: DM_QuanHuyenWhereInput | null
@@ -374742,11 +376528,6 @@ export namespace Prisma {
   export type DM_XaPhuongNullableScalarRelationFilter = {
     is?: DM_XaPhuongWhereInput | null
     isNot?: DM_XaPhuongWhereInput | null
-  }
-
-  export type DM_Tinh_NewNullableScalarRelationFilter = {
-    is?: DM_Tinh_NewWhereInput | null
-    isNot?: DM_Tinh_NewWhereInput | null
   }
 
   export type DM_XaPhuong_NewNullableScalarRelationFilter = {
@@ -386646,6 +388427,48 @@ export namespace Prisma {
     deleteMany?: SubjectVersionScalarWhereInput | SubjectVersionScalarWhereInput[]
   }
 
+  export type SubjectVersionCreateNestedManyWithoutSubjectVersionCategoryInput = {
+    create?: XOR<SubjectVersionCreateWithoutSubjectVersionCategoryInput, SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput> | SubjectVersionCreateWithoutSubjectVersionCategoryInput[] | SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput[]
+    connectOrCreate?: SubjectVersionCreateOrConnectWithoutSubjectVersionCategoryInput | SubjectVersionCreateOrConnectWithoutSubjectVersionCategoryInput[]
+    createMany?: SubjectVersionCreateManySubjectVersionCategoryInputEnvelope
+    connect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+  }
+
+  export type SubjectVersionUncheckedCreateNestedManyWithoutSubjectVersionCategoryInput = {
+    create?: XOR<SubjectVersionCreateWithoutSubjectVersionCategoryInput, SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput> | SubjectVersionCreateWithoutSubjectVersionCategoryInput[] | SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput[]
+    connectOrCreate?: SubjectVersionCreateOrConnectWithoutSubjectVersionCategoryInput | SubjectVersionCreateOrConnectWithoutSubjectVersionCategoryInput[]
+    createMany?: SubjectVersionCreateManySubjectVersionCategoryInputEnvelope
+    connect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+  }
+
+  export type SubjectVersionUpdateManyWithoutSubjectVersionCategoryNestedInput = {
+    create?: XOR<SubjectVersionCreateWithoutSubjectVersionCategoryInput, SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput> | SubjectVersionCreateWithoutSubjectVersionCategoryInput[] | SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput[]
+    connectOrCreate?: SubjectVersionCreateOrConnectWithoutSubjectVersionCategoryInput | SubjectVersionCreateOrConnectWithoutSubjectVersionCategoryInput[]
+    upsert?: SubjectVersionUpsertWithWhereUniqueWithoutSubjectVersionCategoryInput | SubjectVersionUpsertWithWhereUniqueWithoutSubjectVersionCategoryInput[]
+    createMany?: SubjectVersionCreateManySubjectVersionCategoryInputEnvelope
+    set?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+    disconnect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+    delete?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+    connect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+    update?: SubjectVersionUpdateWithWhereUniqueWithoutSubjectVersionCategoryInput | SubjectVersionUpdateWithWhereUniqueWithoutSubjectVersionCategoryInput[]
+    updateMany?: SubjectVersionUpdateManyWithWhereWithoutSubjectVersionCategoryInput | SubjectVersionUpdateManyWithWhereWithoutSubjectVersionCategoryInput[]
+    deleteMany?: SubjectVersionScalarWhereInput | SubjectVersionScalarWhereInput[]
+  }
+
+  export type SubjectVersionUncheckedUpdateManyWithoutSubjectVersionCategoryNestedInput = {
+    create?: XOR<SubjectVersionCreateWithoutSubjectVersionCategoryInput, SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput> | SubjectVersionCreateWithoutSubjectVersionCategoryInput[] | SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput[]
+    connectOrCreate?: SubjectVersionCreateOrConnectWithoutSubjectVersionCategoryInput | SubjectVersionCreateOrConnectWithoutSubjectVersionCategoryInput[]
+    upsert?: SubjectVersionUpsertWithWhereUniqueWithoutSubjectVersionCategoryInput | SubjectVersionUpsertWithWhereUniqueWithoutSubjectVersionCategoryInput[]
+    createMany?: SubjectVersionCreateManySubjectVersionCategoryInputEnvelope
+    set?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+    disconnect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+    delete?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+    connect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+    update?: SubjectVersionUpdateWithWhereUniqueWithoutSubjectVersionCategoryInput | SubjectVersionUpdateWithWhereUniqueWithoutSubjectVersionCategoryInput[]
+    updateMany?: SubjectVersionUpdateManyWithWhereWithoutSubjectVersionCategoryInput | SubjectVersionUpdateManyWithWhereWithoutSubjectVersionCategoryInput[]
+    deleteMany?: SubjectVersionScalarWhereInput | SubjectVersionScalarWhereInput[]
+  }
+
   export type DM_DonViCreateNestedOneWithoutSubjectVersionsInput = {
     create?: XOR<DM_DonViCreateWithoutSubjectVersionsInput, DM_DonViUncheckedCreateWithoutSubjectVersionsInput>
     connectOrCreate?: DM_DonViCreateOrConnectWithoutSubjectVersionsInput
@@ -386656,6 +388479,12 @@ export namespace Prisma {
     create?: XOR<SubjectCreateWithoutSubjectVersionInput, SubjectUncheckedCreateWithoutSubjectVersionInput>
     connectOrCreate?: SubjectCreateOrConnectWithoutSubjectVersionInput
     connect?: SubjectWhereUniqueInput
+  }
+
+  export type SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput = {
+    create?: XOR<SubjectVersionCategoryCreateWithoutSubjectVersionsInput, SubjectVersionCategoryUncheckedCreateWithoutSubjectVersionsInput>
+    connectOrCreate?: SubjectVersionCategoryCreateOrConnectWithoutSubjectVersionsInput
+    connect?: SubjectVersionCategoryWhereUniqueInput
   }
 
   export type TrainingBlockSubjectCreateNestedManyWithoutSubjectInput = {
@@ -386828,6 +388657,16 @@ export namespace Prisma {
     upsert?: SubjectUpsertWithoutSubjectVersionInput
     connect?: SubjectWhereUniqueInput
     update?: XOR<XOR<SubjectUpdateToOneWithWhereWithoutSubjectVersionInput, SubjectUpdateWithoutSubjectVersionInput>, SubjectUncheckedUpdateWithoutSubjectVersionInput>
+  }
+
+  export type SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput = {
+    create?: XOR<SubjectVersionCategoryCreateWithoutSubjectVersionsInput, SubjectVersionCategoryUncheckedCreateWithoutSubjectVersionsInput>
+    connectOrCreate?: SubjectVersionCategoryCreateOrConnectWithoutSubjectVersionsInput
+    upsert?: SubjectVersionCategoryUpsertWithoutSubjectVersionsInput
+    disconnect?: SubjectVersionCategoryWhereInput | boolean
+    delete?: SubjectVersionCategoryWhereInput | boolean
+    connect?: SubjectVersionCategoryWhereUniqueInput
+    update?: XOR<XOR<SubjectVersionCategoryUpdateToOneWithWhereWithoutSubjectVersionsInput, SubjectVersionCategoryUpdateWithoutSubjectVersionsInput>, SubjectVersionCategoryUncheckedUpdateWithoutSubjectVersionsInput>
   }
 
   export type TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput = {
@@ -388598,6 +390437,18 @@ export namespace Prisma {
     deleteMany?: StudentScalarWhereInput | StudentScalarWhereInput[]
   }
 
+  export type DM_TinhCreateNestedOneWithoutTrainingLocationInput = {
+    create?: XOR<DM_TinhCreateWithoutTrainingLocationInput, DM_TinhUncheckedCreateWithoutTrainingLocationInput>
+    connectOrCreate?: DM_TinhCreateOrConnectWithoutTrainingLocationInput
+    connect?: DM_TinhWhereUniqueInput
+  }
+
+  export type DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput = {
+    create?: XOR<DM_Tinh_NewCreateWithoutTrainingLocationInput, DM_Tinh_NewUncheckedCreateWithoutTrainingLocationInput>
+    connectOrCreate?: DM_Tinh_NewCreateOrConnectWithoutTrainingLocationInput
+    connect?: DM_Tinh_NewWhereUniqueInput
+  }
+
   export type StudentCreateNestedManyWithoutTrainingLocationInput = {
     create?: XOR<StudentCreateWithoutTrainingLocationInput, StudentUncheckedCreateWithoutTrainingLocationInput> | StudentCreateWithoutTrainingLocationInput[] | StudentUncheckedCreateWithoutTrainingLocationInput[]
     connectOrCreate?: StudentCreateOrConnectWithoutTrainingLocationInput | StudentCreateOrConnectWithoutTrainingLocationInput[]
@@ -388624,6 +390475,26 @@ export namespace Prisma {
     connectOrCreate?: BuildingCreateOrConnectWithoutTrainingLocationInput | BuildingCreateOrConnectWithoutTrainingLocationInput[]
     createMany?: BuildingCreateManyTrainingLocationInputEnvelope
     connect?: BuildingWhereUniqueInput | BuildingWhereUniqueInput[]
+  }
+
+  export type DM_TinhUpdateOneWithoutTrainingLocationNestedInput = {
+    create?: XOR<DM_TinhCreateWithoutTrainingLocationInput, DM_TinhUncheckedCreateWithoutTrainingLocationInput>
+    connectOrCreate?: DM_TinhCreateOrConnectWithoutTrainingLocationInput
+    upsert?: DM_TinhUpsertWithoutTrainingLocationInput
+    disconnect?: DM_TinhWhereInput | boolean
+    delete?: DM_TinhWhereInput | boolean
+    connect?: DM_TinhWhereUniqueInput
+    update?: XOR<XOR<DM_TinhUpdateToOneWithWhereWithoutTrainingLocationInput, DM_TinhUpdateWithoutTrainingLocationInput>, DM_TinhUncheckedUpdateWithoutTrainingLocationInput>
+  }
+
+  export type DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput = {
+    create?: XOR<DM_Tinh_NewCreateWithoutTrainingLocationInput, DM_Tinh_NewUncheckedCreateWithoutTrainingLocationInput>
+    connectOrCreate?: DM_Tinh_NewCreateOrConnectWithoutTrainingLocationInput
+    upsert?: DM_Tinh_NewUpsertWithoutTrainingLocationInput
+    disconnect?: DM_Tinh_NewWhereInput | boolean
+    delete?: DM_Tinh_NewWhereInput | boolean
+    connect?: DM_Tinh_NewWhereUniqueInput
+    update?: XOR<XOR<DM_Tinh_NewUpdateToOneWithWhereWithoutTrainingLocationInput, DM_Tinh_NewUpdateWithoutTrainingLocationInput>, DM_Tinh_NewUncheckedUpdateWithoutTrainingLocationInput>
   }
 
   export type StudentUpdateManyWithoutTrainingLocationNestedInput = {
@@ -393338,6 +395209,13 @@ export namespace Prisma {
     connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
   }
 
+  export type TrainingLocationCreateNestedManyWithoutDM_TinhInput = {
+    create?: XOR<TrainingLocationCreateWithoutDM_TinhInput, TrainingLocationUncheckedCreateWithoutDM_TinhInput> | TrainingLocationCreateWithoutDM_TinhInput[] | TrainingLocationUncheckedCreateWithoutDM_TinhInput[]
+    connectOrCreate?: TrainingLocationCreateOrConnectWithoutDM_TinhInput | TrainingLocationCreateOrConnectWithoutDM_TinhInput[]
+    createMany?: TrainingLocationCreateManyDM_TinhInputEnvelope
+    connect?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+  }
+
   export type UserProfileUncheckedCreateNestedManyWithoutProvinceHometownInput = {
     create?: XOR<UserProfileCreateWithoutProvinceHometownInput, UserProfileUncheckedCreateWithoutProvinceHometownInput> | UserProfileCreateWithoutProvinceHometownInput[] | UserProfileUncheckedCreateWithoutProvinceHometownInput[]
     connectOrCreate?: UserProfileCreateOrConnectWithoutProvinceHometownInput | UserProfileCreateOrConnectWithoutProvinceHometownInput[]
@@ -393364,6 +395242,13 @@ export namespace Prisma {
     connectOrCreate?: UserProfileCreateOrConnectWithoutProvinceCurrentAddressInput | UserProfileCreateOrConnectWithoutProvinceCurrentAddressInput[]
     createMany?: UserProfileCreateManyProvinceCurrentAddressInputEnvelope
     connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+  }
+
+  export type TrainingLocationUncheckedCreateNestedManyWithoutDM_TinhInput = {
+    create?: XOR<TrainingLocationCreateWithoutDM_TinhInput, TrainingLocationUncheckedCreateWithoutDM_TinhInput> | TrainingLocationCreateWithoutDM_TinhInput[] | TrainingLocationUncheckedCreateWithoutDM_TinhInput[]
+    connectOrCreate?: TrainingLocationCreateOrConnectWithoutDM_TinhInput | TrainingLocationCreateOrConnectWithoutDM_TinhInput[]
+    createMany?: TrainingLocationCreateManyDM_TinhInputEnvelope
+    connect?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
   }
 
   export type UserProfileUpdateManyWithoutProvinceHometownNestedInput = {
@@ -393422,6 +395307,20 @@ export namespace Prisma {
     deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
   }
 
+  export type TrainingLocationUpdateManyWithoutDM_TinhNestedInput = {
+    create?: XOR<TrainingLocationCreateWithoutDM_TinhInput, TrainingLocationUncheckedCreateWithoutDM_TinhInput> | TrainingLocationCreateWithoutDM_TinhInput[] | TrainingLocationUncheckedCreateWithoutDM_TinhInput[]
+    connectOrCreate?: TrainingLocationCreateOrConnectWithoutDM_TinhInput | TrainingLocationCreateOrConnectWithoutDM_TinhInput[]
+    upsert?: TrainingLocationUpsertWithWhereUniqueWithoutDM_TinhInput | TrainingLocationUpsertWithWhereUniqueWithoutDM_TinhInput[]
+    createMany?: TrainingLocationCreateManyDM_TinhInputEnvelope
+    set?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    disconnect?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    delete?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    connect?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    update?: TrainingLocationUpdateWithWhereUniqueWithoutDM_TinhInput | TrainingLocationUpdateWithWhereUniqueWithoutDM_TinhInput[]
+    updateMany?: TrainingLocationUpdateManyWithWhereWithoutDM_TinhInput | TrainingLocationUpdateManyWithWhereWithoutDM_TinhInput[]
+    deleteMany?: TrainingLocationScalarWhereInput | TrainingLocationScalarWhereInput[]
+  }
+
   export type UserProfileUncheckedUpdateManyWithoutProvinceHometownNestedInput = {
     create?: XOR<UserProfileCreateWithoutProvinceHometownInput, UserProfileUncheckedCreateWithoutProvinceHometownInput> | UserProfileCreateWithoutProvinceHometownInput[] | UserProfileUncheckedCreateWithoutProvinceHometownInput[]
     connectOrCreate?: UserProfileCreateOrConnectWithoutProvinceHometownInput | UserProfileCreateOrConnectWithoutProvinceHometownInput[]
@@ -393478,6 +395377,20 @@ export namespace Prisma {
     deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
   }
 
+  export type TrainingLocationUncheckedUpdateManyWithoutDM_TinhNestedInput = {
+    create?: XOR<TrainingLocationCreateWithoutDM_TinhInput, TrainingLocationUncheckedCreateWithoutDM_TinhInput> | TrainingLocationCreateWithoutDM_TinhInput[] | TrainingLocationUncheckedCreateWithoutDM_TinhInput[]
+    connectOrCreate?: TrainingLocationCreateOrConnectWithoutDM_TinhInput | TrainingLocationCreateOrConnectWithoutDM_TinhInput[]
+    upsert?: TrainingLocationUpsertWithWhereUniqueWithoutDM_TinhInput | TrainingLocationUpsertWithWhereUniqueWithoutDM_TinhInput[]
+    createMany?: TrainingLocationCreateManyDM_TinhInputEnvelope
+    set?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    disconnect?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    delete?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    connect?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    update?: TrainingLocationUpdateWithWhereUniqueWithoutDM_TinhInput | TrainingLocationUpdateWithWhereUniqueWithoutDM_TinhInput[]
+    updateMany?: TrainingLocationUpdateManyWithWhereWithoutDM_TinhInput | TrainingLocationUpdateManyWithWhereWithoutDM_TinhInput[]
+    deleteMany?: TrainingLocationScalarWhereInput | TrainingLocationScalarWhereInput[]
+  }
+
   export type UserProfileCreateNestedManyWithoutNewProvinceHometownInput = {
     create?: XOR<UserProfileCreateWithoutNewProvinceHometownInput, UserProfileUncheckedCreateWithoutNewProvinceHometownInput> | UserProfileCreateWithoutNewProvinceHometownInput[] | UserProfileUncheckedCreateWithoutNewProvinceHometownInput[]
     connectOrCreate?: UserProfileCreateOrConnectWithoutNewProvinceHometownInput | UserProfileCreateOrConnectWithoutNewProvinceHometownInput[]
@@ -393506,6 +395419,13 @@ export namespace Prisma {
     connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
   }
 
+  export type TrainingLocationCreateNestedManyWithoutDM_Tinh_NewInput = {
+    create?: XOR<TrainingLocationCreateWithoutDM_Tinh_NewInput, TrainingLocationUncheckedCreateWithoutDM_Tinh_NewInput> | TrainingLocationCreateWithoutDM_Tinh_NewInput[] | TrainingLocationUncheckedCreateWithoutDM_Tinh_NewInput[]
+    connectOrCreate?: TrainingLocationCreateOrConnectWithoutDM_Tinh_NewInput | TrainingLocationCreateOrConnectWithoutDM_Tinh_NewInput[]
+    createMany?: TrainingLocationCreateManyDM_Tinh_NewInputEnvelope
+    connect?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+  }
+
   export type UserProfileUncheckedCreateNestedManyWithoutNewProvinceHometownInput = {
     create?: XOR<UserProfileCreateWithoutNewProvinceHometownInput, UserProfileUncheckedCreateWithoutNewProvinceHometownInput> | UserProfileCreateWithoutNewProvinceHometownInput[] | UserProfileUncheckedCreateWithoutNewProvinceHometownInput[]
     connectOrCreate?: UserProfileCreateOrConnectWithoutNewProvinceHometownInput | UserProfileCreateOrConnectWithoutNewProvinceHometownInput[]
@@ -393532,6 +395452,13 @@ export namespace Prisma {
     connectOrCreate?: UserProfileCreateOrConnectWithoutNewProvinceCurrentAddressInput | UserProfileCreateOrConnectWithoutNewProvinceCurrentAddressInput[]
     createMany?: UserProfileCreateManyNewProvinceCurrentAddressInputEnvelope
     connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
+  }
+
+  export type TrainingLocationUncheckedCreateNestedManyWithoutDM_Tinh_NewInput = {
+    create?: XOR<TrainingLocationCreateWithoutDM_Tinh_NewInput, TrainingLocationUncheckedCreateWithoutDM_Tinh_NewInput> | TrainingLocationCreateWithoutDM_Tinh_NewInput[] | TrainingLocationUncheckedCreateWithoutDM_Tinh_NewInput[]
+    connectOrCreate?: TrainingLocationCreateOrConnectWithoutDM_Tinh_NewInput | TrainingLocationCreateOrConnectWithoutDM_Tinh_NewInput[]
+    createMany?: TrainingLocationCreateManyDM_Tinh_NewInputEnvelope
+    connect?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
   }
 
   export type UserProfileUpdateManyWithoutNewProvinceHometownNestedInput = {
@@ -393590,6 +395517,20 @@ export namespace Prisma {
     deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
   }
 
+  export type TrainingLocationUpdateManyWithoutDM_Tinh_NewNestedInput = {
+    create?: XOR<TrainingLocationCreateWithoutDM_Tinh_NewInput, TrainingLocationUncheckedCreateWithoutDM_Tinh_NewInput> | TrainingLocationCreateWithoutDM_Tinh_NewInput[] | TrainingLocationUncheckedCreateWithoutDM_Tinh_NewInput[]
+    connectOrCreate?: TrainingLocationCreateOrConnectWithoutDM_Tinh_NewInput | TrainingLocationCreateOrConnectWithoutDM_Tinh_NewInput[]
+    upsert?: TrainingLocationUpsertWithWhereUniqueWithoutDM_Tinh_NewInput | TrainingLocationUpsertWithWhereUniqueWithoutDM_Tinh_NewInput[]
+    createMany?: TrainingLocationCreateManyDM_Tinh_NewInputEnvelope
+    set?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    disconnect?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    delete?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    connect?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    update?: TrainingLocationUpdateWithWhereUniqueWithoutDM_Tinh_NewInput | TrainingLocationUpdateWithWhereUniqueWithoutDM_Tinh_NewInput[]
+    updateMany?: TrainingLocationUpdateManyWithWhereWithoutDM_Tinh_NewInput | TrainingLocationUpdateManyWithWhereWithoutDM_Tinh_NewInput[]
+    deleteMany?: TrainingLocationScalarWhereInput | TrainingLocationScalarWhereInput[]
+  }
+
   export type UserProfileUncheckedUpdateManyWithoutNewProvinceHometownNestedInput = {
     create?: XOR<UserProfileCreateWithoutNewProvinceHometownInput, UserProfileUncheckedCreateWithoutNewProvinceHometownInput> | UserProfileCreateWithoutNewProvinceHometownInput[] | UserProfileUncheckedCreateWithoutNewProvinceHometownInput[]
     connectOrCreate?: UserProfileCreateOrConnectWithoutNewProvinceHometownInput | UserProfileCreateOrConnectWithoutNewProvinceHometownInput[]
@@ -393644,6 +395585,20 @@ export namespace Prisma {
     update?: UserProfileUpdateWithWhereUniqueWithoutNewProvinceCurrentAddressInput | UserProfileUpdateWithWhereUniqueWithoutNewProvinceCurrentAddressInput[]
     updateMany?: UserProfileUpdateManyWithWhereWithoutNewProvinceCurrentAddressInput | UserProfileUpdateManyWithWhereWithoutNewProvinceCurrentAddressInput[]
     deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
+  }
+
+  export type TrainingLocationUncheckedUpdateManyWithoutDM_Tinh_NewNestedInput = {
+    create?: XOR<TrainingLocationCreateWithoutDM_Tinh_NewInput, TrainingLocationUncheckedCreateWithoutDM_Tinh_NewInput> | TrainingLocationCreateWithoutDM_Tinh_NewInput[] | TrainingLocationUncheckedCreateWithoutDM_Tinh_NewInput[]
+    connectOrCreate?: TrainingLocationCreateOrConnectWithoutDM_Tinh_NewInput | TrainingLocationCreateOrConnectWithoutDM_Tinh_NewInput[]
+    upsert?: TrainingLocationUpsertWithWhereUniqueWithoutDM_Tinh_NewInput | TrainingLocationUpsertWithWhereUniqueWithoutDM_Tinh_NewInput[]
+    createMany?: TrainingLocationCreateManyDM_Tinh_NewInputEnvelope
+    set?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    disconnect?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    delete?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    connect?: TrainingLocationWhereUniqueInput | TrainingLocationWhereUniqueInput[]
+    update?: TrainingLocationUpdateWithWhereUniqueWithoutDM_Tinh_NewInput | TrainingLocationUpdateWithWhereUniqueWithoutDM_Tinh_NewInput[]
+    updateMany?: TrainingLocationUpdateManyWithWhereWithoutDM_Tinh_NewInput | TrainingLocationUpdateManyWithWhereWithoutDM_Tinh_NewInput[]
+    deleteMany?: TrainingLocationScalarWhereInput | TrainingLocationScalarWhereInput[]
   }
 
   export type UserProfileCreateNestedManyWithoutDistrictHometownInput = {
@@ -405494,6 +407449,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -405510,6 +407466,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
     subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -405537,6 +407494,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -405553,6 +407511,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganizationId?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -405706,6 +407665,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -405722,6 +407682,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
     subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -405749,6 +407710,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -405765,6 +407727,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -405933,6 +407896,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -405949,6 +407913,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
     subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -405976,6 +407941,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -405992,6 +407958,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganizationId?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -406121,6 +408088,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -406137,6 +408105,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
     subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -406164,6 +408133,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -406180,6 +408150,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -408879,6 +410850,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -408895,6 +410867,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
     subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -408922,6 +410895,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -408938,6 +410912,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganizationId?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -409387,6 +411362,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -409403,6 +411379,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
     subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -409430,6 +411407,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -409446,6 +411424,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -415895,6 +417874,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -415910,6 +417890,7 @@ export namespace Prisma {
     materials?: string | null
     rules?: string | null
     managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -415938,6 +417919,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -415953,6 +417935,7 @@ export namespace Prisma {
     materials?: string | null
     rules?: string | null
     managementOrganizationId?: string | null
+    subjectVersionCategoryId?: string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -416097,6 +418080,7 @@ export namespace Prisma {
     credit?: IntFilter<"SubjectVersion"> | number
     week?: IntNullableFilter<"SubjectVersion"> | number | null
     period?: IntFilter<"SubjectVersion"> | number
+    schedulePeriod?: IntNullableFilter<"SubjectVersion"> | number | null
     numberOfTheory?: IntNullableFilter<"SubjectVersion"> | number | null
     numberOfPractical?: IntNullableFilter<"SubjectVersion"> | number | null
     numberOfSelfStudy?: IntNullableFilter<"SubjectVersion"> | number | null
@@ -416113,6 +418097,123 @@ export namespace Prisma {
     rules?: StringNullableFilter<"SubjectVersion"> | string | null
     managementOrganizationId?: UuidNullableFilter<"SubjectVersion"> | string | null
     subjectId?: StringFilter<"SubjectVersion"> | string
+    subjectVersionCategoryId?: StringNullableFilter<"SubjectVersion"> | string | null
+  }
+
+  export type SubjectVersionCreateWithoutSubjectVersionCategoryInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    codeTkb?: string | null
+    examType: $Enums.ExamType
+    type?: $Enums.SubjectVersionType
+    credit: number
+    week?: number | null
+    period?: number
+    schedulePeriod?: number | null
+    numberOfTheory?: number | null
+    numberOfPractical?: number | null
+    numberOfSelfStudy?: number | null
+    numberOfPractice?: number | null
+    numberOfReview?: number | null
+    numberOfExam?: number | null
+    numberOfOther?: number | null
+    objectives?: string | null
+    learningOutcome?: string | null
+    structure?: string | null
+    guild?: string | null
+    academicResults?: string | null
+    materials?: string | null
+    rules?: string | null
+    managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
+    subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
+    prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
+    dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
+    coRequisiteSubject?: SubjectVersionCreateNestedManyWithoutDepCoRequisiteSubjectInput
+    depCoRequisiteSubject?: SubjectVersionCreateNestedManyWithoutCoRequisiteSubjectInput
+    equivalencyGroups?: SubjectInGroupCreateNestedManyWithoutSubjectInput
+    knowledgeBlocks?: KnowledgeBlockCreateNestedManyWithoutSubjectVersionInput
+    subjectClass?: SubjectClassCreateNestedManyWithoutSubjectInput
+    studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutSubjectVersionInput
+    documentFiles?: DocumentFileCreateNestedManyWithoutSubjectVersionInput
+    questionBanks?: QuestionBankCreateNestedManyWithoutSubjectVersionInput
+  }
+
+  export type SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    codeTkb?: string | null
+    examType: $Enums.ExamType
+    type?: $Enums.SubjectVersionType
+    credit: number
+    week?: number | null
+    period?: number
+    schedulePeriod?: number | null
+    numberOfTheory?: number | null
+    numberOfPractical?: number | null
+    numberOfSelfStudy?: number | null
+    numberOfPractice?: number | null
+    numberOfReview?: number | null
+    numberOfExam?: number | null
+    numberOfOther?: number | null
+    objectives?: string | null
+    learningOutcome?: string | null
+    structure?: string | null
+    guild?: string | null
+    academicResults?: string | null
+    materials?: string | null
+    rules?: string | null
+    managementOrganizationId?: string | null
+    subjectId: string
+    trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
+    prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
+    dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
+    coRequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDepCoRequisiteSubjectInput
+    depCoRequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutCoRequisiteSubjectInput
+    equivalencyGroups?: SubjectInGroupUncheckedCreateNestedManyWithoutSubjectInput
+    knowledgeBlocks?: KnowledgeBlockUncheckedCreateNestedManyWithoutSubjectVersionInput
+    subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutSubjectInput
+    studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectVersionInput
+    documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutSubjectVersionInput
+    questionBanks?: QuestionBankUncheckedCreateNestedManyWithoutSubjectVersionInput
+  }
+
+  export type SubjectVersionCreateOrConnectWithoutSubjectVersionCategoryInput = {
+    where: SubjectVersionWhereUniqueInput
+    create: XOR<SubjectVersionCreateWithoutSubjectVersionCategoryInput, SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput>
+  }
+
+  export type SubjectVersionCreateManySubjectVersionCategoryInputEnvelope = {
+    data: SubjectVersionCreateManySubjectVersionCategoryInput | SubjectVersionCreateManySubjectVersionCategoryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SubjectVersionUpsertWithWhereUniqueWithoutSubjectVersionCategoryInput = {
+    where: SubjectVersionWhereUniqueInput
+    update: XOR<SubjectVersionUpdateWithoutSubjectVersionCategoryInput, SubjectVersionUncheckedUpdateWithoutSubjectVersionCategoryInput>
+    create: XOR<SubjectVersionCreateWithoutSubjectVersionCategoryInput, SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput>
+  }
+
+  export type SubjectVersionUpdateWithWhereUniqueWithoutSubjectVersionCategoryInput = {
+    where: SubjectVersionWhereUniqueInput
+    data: XOR<SubjectVersionUpdateWithoutSubjectVersionCategoryInput, SubjectVersionUncheckedUpdateWithoutSubjectVersionCategoryInput>
+  }
+
+  export type SubjectVersionUpdateManyWithWhereWithoutSubjectVersionCategoryInput = {
+    where: SubjectVersionScalarWhereInput
+    data: XOR<SubjectVersionUpdateManyMutationInput, SubjectVersionUncheckedUpdateManyWithoutSubjectVersionCategoryInput>
   }
 
   export type DM_DonViCreateWithoutSubjectVersionsInput = {
@@ -416229,6 +418330,33 @@ export namespace Prisma {
     create: XOR<SubjectCreateWithoutSubjectVersionInput, SubjectUncheckedCreateWithoutSubjectVersionInput>
   }
 
+  export type SubjectVersionCategoryCreateWithoutSubjectVersionsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+  }
+
+  export type SubjectVersionCategoryUncheckedCreateWithoutSubjectVersionsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+  }
+
+  export type SubjectVersionCategoryCreateOrConnectWithoutSubjectVersionsInput = {
+    where: SubjectVersionCategoryWhereUniqueInput
+    create: XOR<SubjectVersionCategoryCreateWithoutSubjectVersionsInput, SubjectVersionCategoryUncheckedCreateWithoutSubjectVersionsInput>
+  }
+
   export type TrainingBlockSubjectCreateWithoutSubjectInput = {
     id?: string
     code?: string | null
@@ -416288,6 +418416,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -416304,6 +418433,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
     subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
     coRequisiteSubject?: SubjectVersionCreateNestedManyWithoutDepCoRequisiteSubjectInput
@@ -416331,6 +418461,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -416347,6 +418478,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganizationId?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
     coRequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDepCoRequisiteSubjectInput
@@ -416379,6 +418511,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -416395,6 +418528,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
     subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
     dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
     coRequisiteSubject?: SubjectVersionCreateNestedManyWithoutDepCoRequisiteSubjectInput
@@ -416422,6 +418556,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -416438,6 +418573,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganizationId?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
     dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
     coRequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDepCoRequisiteSubjectInput
@@ -416470,6 +418606,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -416486,6 +418623,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
     subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -416513,6 +418651,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -416529,6 +418668,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganizationId?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -416561,6 +418701,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -416577,6 +418718,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
     subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -416604,6 +418746,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -416620,6 +418763,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganizationId?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -417109,6 +419253,39 @@ export namespace Prisma {
     information?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type SubjectVersionCategoryUpsertWithoutSubjectVersionsInput = {
+    update: XOR<SubjectVersionCategoryUpdateWithoutSubjectVersionsInput, SubjectVersionCategoryUncheckedUpdateWithoutSubjectVersionsInput>
+    create: XOR<SubjectVersionCategoryCreateWithoutSubjectVersionsInput, SubjectVersionCategoryUncheckedCreateWithoutSubjectVersionsInput>
+    where?: SubjectVersionCategoryWhereInput
+  }
+
+  export type SubjectVersionCategoryUpdateToOneWithWhereWithoutSubjectVersionsInput = {
+    where?: SubjectVersionCategoryWhereInput
+    data: XOR<SubjectVersionCategoryUpdateWithoutSubjectVersionsInput, SubjectVersionCategoryUncheckedUpdateWithoutSubjectVersionsInput>
+  }
+
+  export type SubjectVersionCategoryUpdateWithoutSubjectVersionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type SubjectVersionCategoryUncheckedUpdateWithoutSubjectVersionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
   export type TrainingBlockSubjectUpsertWithWhereUniqueWithoutSubjectInput = {
     where: TrainingBlockSubjectWhereUniqueInput
     update: XOR<TrainingBlockSubjectUpdateWithoutSubjectInput, TrainingBlockSubjectUncheckedUpdateWithoutSubjectInput>
@@ -417448,6 +419625,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -417464,6 +419642,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
     subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -417491,6 +419670,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -417507,6 +419687,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganizationId?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -417575,6 +419756,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -417591,6 +419773,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
     subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -417618,6 +419801,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -417634,6 +419818,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -417692,6 +419877,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -417708,6 +419894,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
     subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
     coRequisiteSubject?: SubjectVersionCreateNestedManyWithoutDepCoRequisiteSubjectInput
@@ -417735,6 +419922,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -417751,6 +419939,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganizationId?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
     prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
     coRequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDepCoRequisiteSubjectInput
@@ -417827,6 +420016,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -417843,6 +420033,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
     subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
     coRequisiteSubject?: SubjectVersionUpdateManyWithoutDepCoRequisiteSubjectNestedInput
@@ -417870,6 +420061,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -417886,6 +420078,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
     coRequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDepCoRequisiteSubjectNestedInput
@@ -418889,6 +421082,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -418905,6 +421099,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
     subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -418932,6 +421127,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -418948,6 +421144,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganizationId?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -419884,6 +422081,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -419900,6 +422098,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
     subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -419927,6 +422126,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -419943,6 +422143,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -422942,6 +425143,116 @@ export namespace Prisma {
     data: XOR<StudentUpdateManyMutationInput, StudentUncheckedUpdateManyWithoutTrainingFormInput>
   }
 
+  export type DM_TinhCreateWithoutTrainingLocationInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    sDM_QuocGiaId?: string | null
+    iDM_KhuVucDiaLy_Id?: number | null
+    iDM_DonViHanhChinhId?: number | null
+    userProfileHometown?: UserProfileCreateNestedManyWithoutProvinceHometownInput
+    userProfilePlaceOfBirth?: UserProfileCreateNestedManyWithoutProvinceOfBirthInput
+    userProfilePermanentAddress?: UserProfileCreateNestedManyWithoutProvincePermanentAddressInput
+    userProfileCurrentAddress?: UserProfileCreateNestedManyWithoutProvinceCurrentAddressInput
+  }
+
+  export type DM_TinhUncheckedCreateWithoutTrainingLocationInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    sDM_QuocGiaId?: string | null
+    iDM_KhuVucDiaLy_Id?: number | null
+    iDM_DonViHanhChinhId?: number | null
+    userProfileHometown?: UserProfileUncheckedCreateNestedManyWithoutProvinceHometownInput
+    userProfilePlaceOfBirth?: UserProfileUncheckedCreateNestedManyWithoutProvinceOfBirthInput
+    userProfilePermanentAddress?: UserProfileUncheckedCreateNestedManyWithoutProvincePermanentAddressInput
+    userProfileCurrentAddress?: UserProfileUncheckedCreateNestedManyWithoutProvinceCurrentAddressInput
+  }
+
+  export type DM_TinhCreateOrConnectWithoutTrainingLocationInput = {
+    where: DM_TinhWhereUniqueInput
+    create: XOR<DM_TinhCreateWithoutTrainingLocationInput, DM_TinhUncheckedCreateWithoutTrainingLocationInput>
+  }
+
+  export type DM_Tinh_NewCreateWithoutTrainingLocationInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    sDM_QuocGiaId?: string | null
+    iDM_KhuVucDiaLy_Id?: number | null
+    iDM_DonViHanhChinhId?: number | null
+    userProfileHometown?: UserProfileCreateNestedManyWithoutNewProvinceHometownInput
+    userProfilePlaceOfBirth?: UserProfileCreateNestedManyWithoutNewProvinceOfBirthInput
+    userProfilePermanentAddress?: UserProfileCreateNestedManyWithoutNewProvincePermanentAddressInput
+    userProfileCurrentAddress?: UserProfileCreateNestedManyWithoutNewProvinceCurrentAddressInput
+  }
+
+  export type DM_Tinh_NewUncheckedCreateWithoutTrainingLocationInput = {
+    Id?: string
+    sMa?: string | null
+    sTen?: string | null
+    sGhiChu?: string | null
+    iSTT?: number | null
+    bActive?: boolean | null
+    bDeleted?: boolean | null
+    bSystem?: boolean | null
+    iDictionaryKey?: number | null
+    dNgayTao?: Date | string | null
+    dNgaySua?: Date | string | null
+    sNguoiTao?: string | null
+    sNguoiSua?: string | null
+    sThietBiTao?: string | null
+    sThietBiSua?: string | null
+    sDM_QuocGiaId?: string | null
+    iDM_KhuVucDiaLy_Id?: number | null
+    iDM_DonViHanhChinhId?: number | null
+    userProfileHometown?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceHometownInput
+    userProfilePlaceOfBirth?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceOfBirthInput
+    userProfilePermanentAddress?: UserProfileUncheckedCreateNestedManyWithoutNewProvincePermanentAddressInput
+    userProfileCurrentAddress?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceCurrentAddressInput
+  }
+
+  export type DM_Tinh_NewCreateOrConnectWithoutTrainingLocationInput = {
+    where: DM_Tinh_NewWhereUniqueInput
+    create: XOR<DM_Tinh_NewCreateWithoutTrainingLocationInput, DM_Tinh_NewUncheckedCreateWithoutTrainingLocationInput>
+  }
+
   export type StudentCreateWithoutTrainingLocationInput = {
     id?: string
     code?: string | null
@@ -423096,6 +425407,128 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DM_TinhUpsertWithoutTrainingLocationInput = {
+    update: XOR<DM_TinhUpdateWithoutTrainingLocationInput, DM_TinhUncheckedUpdateWithoutTrainingLocationInput>
+    create: XOR<DM_TinhCreateWithoutTrainingLocationInput, DM_TinhUncheckedCreateWithoutTrainingLocationInput>
+    where?: DM_TinhWhereInput
+  }
+
+  export type DM_TinhUpdateToOneWithWhereWithoutTrainingLocationInput = {
+    where?: DM_TinhWhereInput
+    data: XOR<DM_TinhUpdateWithoutTrainingLocationInput, DM_TinhUncheckedUpdateWithoutTrainingLocationInput>
+  }
+
+  export type DM_TinhUpdateWithoutTrainingLocationInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
+    iDM_KhuVucDiaLy_Id?: NullableIntFieldUpdateOperationsInput | number | null
+    iDM_DonViHanhChinhId?: NullableIntFieldUpdateOperationsInput | number | null
+    userProfileHometown?: UserProfileUpdateManyWithoutProvinceHometownNestedInput
+    userProfilePlaceOfBirth?: UserProfileUpdateManyWithoutProvinceOfBirthNestedInput
+    userProfilePermanentAddress?: UserProfileUpdateManyWithoutProvincePermanentAddressNestedInput
+    userProfileCurrentAddress?: UserProfileUpdateManyWithoutProvinceCurrentAddressNestedInput
+  }
+
+  export type DM_TinhUncheckedUpdateWithoutTrainingLocationInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
+    iDM_KhuVucDiaLy_Id?: NullableIntFieldUpdateOperationsInput | number | null
+    iDM_DonViHanhChinhId?: NullableIntFieldUpdateOperationsInput | number | null
+    userProfileHometown?: UserProfileUncheckedUpdateManyWithoutProvinceHometownNestedInput
+    userProfilePlaceOfBirth?: UserProfileUncheckedUpdateManyWithoutProvinceOfBirthNestedInput
+    userProfilePermanentAddress?: UserProfileUncheckedUpdateManyWithoutProvincePermanentAddressNestedInput
+    userProfileCurrentAddress?: UserProfileUncheckedUpdateManyWithoutProvinceCurrentAddressNestedInput
+  }
+
+  export type DM_Tinh_NewUpsertWithoutTrainingLocationInput = {
+    update: XOR<DM_Tinh_NewUpdateWithoutTrainingLocationInput, DM_Tinh_NewUncheckedUpdateWithoutTrainingLocationInput>
+    create: XOR<DM_Tinh_NewCreateWithoutTrainingLocationInput, DM_Tinh_NewUncheckedCreateWithoutTrainingLocationInput>
+    where?: DM_Tinh_NewWhereInput
+  }
+
+  export type DM_Tinh_NewUpdateToOneWithWhereWithoutTrainingLocationInput = {
+    where?: DM_Tinh_NewWhereInput
+    data: XOR<DM_Tinh_NewUpdateWithoutTrainingLocationInput, DM_Tinh_NewUncheckedUpdateWithoutTrainingLocationInput>
+  }
+
+  export type DM_Tinh_NewUpdateWithoutTrainingLocationInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
+    iDM_KhuVucDiaLy_Id?: NullableIntFieldUpdateOperationsInput | number | null
+    iDM_DonViHanhChinhId?: NullableIntFieldUpdateOperationsInput | number | null
+    userProfileHometown?: UserProfileUpdateManyWithoutNewProvinceHometownNestedInput
+    userProfilePlaceOfBirth?: UserProfileUpdateManyWithoutNewProvinceOfBirthNestedInput
+    userProfilePermanentAddress?: UserProfileUpdateManyWithoutNewProvincePermanentAddressNestedInput
+    userProfileCurrentAddress?: UserProfileUpdateManyWithoutNewProvinceCurrentAddressNestedInput
+  }
+
+  export type DM_Tinh_NewUncheckedUpdateWithoutTrainingLocationInput = {
+    Id?: StringFieldUpdateOperationsInput | string
+    sMa?: NullableStringFieldUpdateOperationsInput | string | null
+    sTen?: NullableStringFieldUpdateOperationsInput | string | null
+    sGhiChu?: NullableStringFieldUpdateOperationsInput | string | null
+    iSTT?: NullableIntFieldUpdateOperationsInput | number | null
+    bActive?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bDeleted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+    dNgayTao?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dNgaySua?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+    sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+    sDM_QuocGiaId?: NullableStringFieldUpdateOperationsInput | string | null
+    iDM_KhuVucDiaLy_Id?: NullableIntFieldUpdateOperationsInput | number | null
+    iDM_DonViHanhChinhId?: NullableIntFieldUpdateOperationsInput | number | null
+    userProfileHometown?: UserProfileUncheckedUpdateManyWithoutNewProvinceHometownNestedInput
+    userProfilePlaceOfBirth?: UserProfileUncheckedUpdateManyWithoutNewProvinceOfBirthNestedInput
+    userProfilePermanentAddress?: UserProfileUncheckedUpdateManyWithoutNewProvincePermanentAddressNestedInput
+    userProfileCurrentAddress?: UserProfileUncheckedUpdateManyWithoutNewProvinceCurrentAddressNestedInput
+  }
+
   export type StudentUpsertWithWhereUniqueWithoutTrainingLocationInput = {
     where: StudentWhereUniqueInput
     update: XOR<StudentUpdateWithoutTrainingLocationInput, StudentUncheckedUpdateWithoutTrainingLocationInput>
@@ -423153,6 +425586,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     name: string
+    dM_Tinh?: DM_TinhCreateNestedOneWithoutTrainingLocationInput
+    dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
     students?: StudentCreateNestedManyWithoutTrainingLocationInput
   }
 
@@ -423165,6 +425600,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     name: string
+    dM_TinhId?: string | null
+    dM_Tinh_NewId?: string | null
     students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
   }
 
@@ -423249,6 +425686,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
+    dM_Tinh?: DM_TinhUpdateOneWithoutTrainingLocationNestedInput
+    dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
     students?: StudentUpdateManyWithoutTrainingLocationNestedInput
   }
 
@@ -423261,6 +425700,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
+    dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
     students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
   }
 
@@ -426467,6 +428908,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     name: string
+    dM_Tinh?: DM_TinhCreateNestedOneWithoutTrainingLocationInput
+    dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
     buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
   }
 
@@ -426479,6 +428922,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     name: string
+    dM_TinhId?: string | null
+    dM_Tinh_NewId?: string | null
     buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
   }
 
@@ -428214,6 +430659,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
+    dM_Tinh?: DM_TinhUpdateOneWithoutTrainingLocationNestedInput
+    dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
     buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
   }
 
@@ -428226,6 +430673,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
+    dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
+    dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
     buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
   }
 
@@ -438313,6 +440762,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -438328,6 +440778,7 @@ export namespace Prisma {
     materials?: string | null
     rules?: string | null
     subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -438356,6 +440807,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -438371,6 +440823,7 @@ export namespace Prisma {
     materials?: string | null
     rules?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -442161,6 +444614,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TrainingLocationCreateWithoutDM_TinhInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
+    students?: StudentCreateNestedManyWithoutTrainingLocationInput
+    buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
+  }
+
+  export type TrainingLocationUncheckedCreateWithoutDM_TinhInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    dM_Tinh_NewId?: string | null
+    students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
+    buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
+  }
+
+  export type TrainingLocationCreateOrConnectWithoutDM_TinhInput = {
+    where: TrainingLocationWhereUniqueInput
+    create: XOR<TrainingLocationCreateWithoutDM_TinhInput, TrainingLocationUncheckedCreateWithoutDM_TinhInput>
+  }
+
+  export type TrainingLocationCreateManyDM_TinhInputEnvelope = {
+    data: TrainingLocationCreateManyDM_TinhInput | TrainingLocationCreateManyDM_TinhInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserProfileUpsertWithWhereUniqueWithoutProvinceHometownInput = {
     where: UserProfileWhereUniqueInput
     update: XOR<UserProfileUpdateWithoutProvinceHometownInput, UserProfileUncheckedUpdateWithoutProvinceHometownInput>
@@ -442223,6 +444714,38 @@ export namespace Prisma {
   export type UserProfileUpdateManyWithWhereWithoutProvinceCurrentAddressInput = {
     where: UserProfileScalarWhereInput
     data: XOR<UserProfileUpdateManyMutationInput, UserProfileUncheckedUpdateManyWithoutProvinceCurrentAddressInput>
+  }
+
+  export type TrainingLocationUpsertWithWhereUniqueWithoutDM_TinhInput = {
+    where: TrainingLocationWhereUniqueInput
+    update: XOR<TrainingLocationUpdateWithoutDM_TinhInput, TrainingLocationUncheckedUpdateWithoutDM_TinhInput>
+    create: XOR<TrainingLocationCreateWithoutDM_TinhInput, TrainingLocationUncheckedCreateWithoutDM_TinhInput>
+  }
+
+  export type TrainingLocationUpdateWithWhereUniqueWithoutDM_TinhInput = {
+    where: TrainingLocationWhereUniqueInput
+    data: XOR<TrainingLocationUpdateWithoutDM_TinhInput, TrainingLocationUncheckedUpdateWithoutDM_TinhInput>
+  }
+
+  export type TrainingLocationUpdateManyWithWhereWithoutDM_TinhInput = {
+    where: TrainingLocationScalarWhereInput
+    data: XOR<TrainingLocationUpdateManyMutationInput, TrainingLocationUncheckedUpdateManyWithoutDM_TinhInput>
+  }
+
+  export type TrainingLocationScalarWhereInput = {
+    AND?: TrainingLocationScalarWhereInput | TrainingLocationScalarWhereInput[]
+    OR?: TrainingLocationScalarWhereInput[]
+    NOT?: TrainingLocationScalarWhereInput | TrainingLocationScalarWhereInput[]
+    id?: StringFilter<"TrainingLocation"> | string
+    code?: StringNullableFilter<"TrainingLocation"> | string | null
+    active?: BoolFilter<"TrainingLocation"> | boolean
+    description?: StringNullableFilter<"TrainingLocation"> | string | null
+    deletedAt?: DateTimeNullableFilter<"TrainingLocation"> | Date | string | null
+    createdAt?: DateTimeFilter<"TrainingLocation"> | Date | string
+    updatedAt?: DateTimeFilter<"TrainingLocation"> | Date | string
+    name?: StringFilter<"TrainingLocation"> | string
+    dM_TinhId?: StringNullableFilter<"TrainingLocation"> | string | null
+    dM_Tinh_NewId?: StringNullableFilter<"TrainingLocation"> | string | null
   }
 
   export type UserProfileCreateWithoutNewProvinceHometownInput = {
@@ -443489,6 +446012,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TrainingLocationCreateWithoutDM_Tinh_NewInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    dM_Tinh?: DM_TinhCreateNestedOneWithoutTrainingLocationInput
+    students?: StudentCreateNestedManyWithoutTrainingLocationInput
+    buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
+  }
+
+  export type TrainingLocationUncheckedCreateWithoutDM_Tinh_NewInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    dM_TinhId?: string | null
+    students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
+    buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
+  }
+
+  export type TrainingLocationCreateOrConnectWithoutDM_Tinh_NewInput = {
+    where: TrainingLocationWhereUniqueInput
+    create: XOR<TrainingLocationCreateWithoutDM_Tinh_NewInput, TrainingLocationUncheckedCreateWithoutDM_Tinh_NewInput>
+  }
+
+  export type TrainingLocationCreateManyDM_Tinh_NewInputEnvelope = {
+    data: TrainingLocationCreateManyDM_Tinh_NewInput | TrainingLocationCreateManyDM_Tinh_NewInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserProfileUpsertWithWhereUniqueWithoutNewProvinceHometownInput = {
     where: UserProfileWhereUniqueInput
     update: XOR<UserProfileUpdateWithoutNewProvinceHometownInput, UserProfileUncheckedUpdateWithoutNewProvinceHometownInput>
@@ -443551,6 +446112,22 @@ export namespace Prisma {
   export type UserProfileUpdateManyWithWhereWithoutNewProvinceCurrentAddressInput = {
     where: UserProfileScalarWhereInput
     data: XOR<UserProfileUpdateManyMutationInput, UserProfileUncheckedUpdateManyWithoutNewProvinceCurrentAddressInput>
+  }
+
+  export type TrainingLocationUpsertWithWhereUniqueWithoutDM_Tinh_NewInput = {
+    where: TrainingLocationWhereUniqueInput
+    update: XOR<TrainingLocationUpdateWithoutDM_Tinh_NewInput, TrainingLocationUncheckedUpdateWithoutDM_Tinh_NewInput>
+    create: XOR<TrainingLocationCreateWithoutDM_Tinh_NewInput, TrainingLocationUncheckedCreateWithoutDM_Tinh_NewInput>
+  }
+
+  export type TrainingLocationUpdateWithWhereUniqueWithoutDM_Tinh_NewInput = {
+    where: TrainingLocationWhereUniqueInput
+    data: XOR<TrainingLocationUpdateWithoutDM_Tinh_NewInput, TrainingLocationUncheckedUpdateWithoutDM_Tinh_NewInput>
+  }
+
+  export type TrainingLocationUpdateManyWithWhereWithoutDM_Tinh_NewInput = {
+    where: TrainingLocationScalarWhereInput
+    data: XOR<TrainingLocationUpdateManyMutationInput, TrainingLocationUncheckedUpdateManyWithoutDM_Tinh_NewInput>
   }
 
   export type UserProfileCreateWithoutDistrictHometownInput = {
@@ -447590,6 +450167,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileCreateNestedManyWithoutProvinceHometownInput
     userProfilePlaceOfBirth?: UserProfileCreateNestedManyWithoutProvinceOfBirthInput
     userProfilePermanentAddress?: UserProfileCreateNestedManyWithoutProvincePermanentAddressInput
+    trainingLocation?: TrainingLocationCreateNestedManyWithoutDM_TinhInput
   }
 
   export type DM_TinhUncheckedCreateWithoutUserProfileCurrentAddressInput = {
@@ -447614,6 +450192,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUncheckedCreateNestedManyWithoutProvinceHometownInput
     userProfilePlaceOfBirth?: UserProfileUncheckedCreateNestedManyWithoutProvinceOfBirthInput
     userProfilePermanentAddress?: UserProfileUncheckedCreateNestedManyWithoutProvincePermanentAddressInput
+    trainingLocation?: TrainingLocationUncheckedCreateNestedManyWithoutDM_TinhInput
   }
 
   export type DM_TinhCreateOrConnectWithoutUserProfileCurrentAddressInput = {
@@ -447751,6 +450330,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileCreateNestedManyWithoutNewProvinceHometownInput
     userProfilePlaceOfBirth?: UserProfileCreateNestedManyWithoutNewProvinceOfBirthInput
     userProfilePermanentAddress?: UserProfileCreateNestedManyWithoutNewProvincePermanentAddressInput
+    trainingLocation?: TrainingLocationCreateNestedManyWithoutDM_Tinh_NewInput
   }
 
   export type DM_Tinh_NewUncheckedCreateWithoutUserProfileCurrentAddressInput = {
@@ -447775,6 +450355,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceHometownInput
     userProfilePlaceOfBirth?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceOfBirthInput
     userProfilePermanentAddress?: UserProfileUncheckedCreateNestedManyWithoutNewProvincePermanentAddressInput
+    trainingLocation?: TrainingLocationUncheckedCreateNestedManyWithoutDM_Tinh_NewInput
   }
 
   export type DM_Tinh_NewCreateOrConnectWithoutUserProfileCurrentAddressInput = {
@@ -447855,6 +450436,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileCreateNestedManyWithoutProvinceHometownInput
     userProfilePermanentAddress?: UserProfileCreateNestedManyWithoutProvincePermanentAddressInput
     userProfileCurrentAddress?: UserProfileCreateNestedManyWithoutProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationCreateNestedManyWithoutDM_TinhInput
   }
 
   export type DM_TinhUncheckedCreateWithoutUserProfilePlaceOfBirthInput = {
@@ -447879,6 +450461,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUncheckedCreateNestedManyWithoutProvinceHometownInput
     userProfilePermanentAddress?: UserProfileUncheckedCreateNestedManyWithoutProvincePermanentAddressInput
     userProfileCurrentAddress?: UserProfileUncheckedCreateNestedManyWithoutProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationUncheckedCreateNestedManyWithoutDM_TinhInput
   }
 
   export type DM_TinhCreateOrConnectWithoutUserProfilePlaceOfBirthInput = {
@@ -448016,6 +450599,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileCreateNestedManyWithoutNewProvinceHometownInput
     userProfilePermanentAddress?: UserProfileCreateNestedManyWithoutNewProvincePermanentAddressInput
     userProfileCurrentAddress?: UserProfileCreateNestedManyWithoutNewProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationCreateNestedManyWithoutDM_Tinh_NewInput
   }
 
   export type DM_Tinh_NewUncheckedCreateWithoutUserProfilePlaceOfBirthInput = {
@@ -448040,6 +450624,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceHometownInput
     userProfilePermanentAddress?: UserProfileUncheckedCreateNestedManyWithoutNewProvincePermanentAddressInput
     userProfileCurrentAddress?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationUncheckedCreateNestedManyWithoutDM_Tinh_NewInput
   }
 
   export type DM_Tinh_NewCreateOrConnectWithoutUserProfilePlaceOfBirthInput = {
@@ -448161,6 +450746,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileCreateNestedManyWithoutProvinceHometownInput
     userProfilePlaceOfBirth?: UserProfileCreateNestedManyWithoutProvinceOfBirthInput
     userProfileCurrentAddress?: UserProfileCreateNestedManyWithoutProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationCreateNestedManyWithoutDM_TinhInput
   }
 
   export type DM_TinhUncheckedCreateWithoutUserProfilePermanentAddressInput = {
@@ -448185,6 +450771,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUncheckedCreateNestedManyWithoutProvinceHometownInput
     userProfilePlaceOfBirth?: UserProfileUncheckedCreateNestedManyWithoutProvinceOfBirthInput
     userProfileCurrentAddress?: UserProfileUncheckedCreateNestedManyWithoutProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationUncheckedCreateNestedManyWithoutDM_TinhInput
   }
 
   export type DM_TinhCreateOrConnectWithoutUserProfilePermanentAddressInput = {
@@ -448322,6 +450909,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileCreateNestedManyWithoutNewProvinceHometownInput
     userProfilePlaceOfBirth?: UserProfileCreateNestedManyWithoutNewProvinceOfBirthInput
     userProfileCurrentAddress?: UserProfileCreateNestedManyWithoutNewProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationCreateNestedManyWithoutDM_Tinh_NewInput
   }
 
   export type DM_Tinh_NewUncheckedCreateWithoutUserProfilePermanentAddressInput = {
@@ -448346,6 +450934,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceHometownInput
     userProfilePlaceOfBirth?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceOfBirthInput
     userProfileCurrentAddress?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationUncheckedCreateNestedManyWithoutDM_Tinh_NewInput
   }
 
   export type DM_Tinh_NewCreateOrConnectWithoutUserProfilePermanentAddressInput = {
@@ -448561,6 +451150,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileCreateNestedManyWithoutProvinceOfBirthInput
     userProfilePermanentAddress?: UserProfileCreateNestedManyWithoutProvincePermanentAddressInput
     userProfileCurrentAddress?: UserProfileCreateNestedManyWithoutProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationCreateNestedManyWithoutDM_TinhInput
   }
 
   export type DM_TinhUncheckedCreateWithoutUserProfileHometownInput = {
@@ -448585,6 +451175,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileUncheckedCreateNestedManyWithoutProvinceOfBirthInput
     userProfilePermanentAddress?: UserProfileUncheckedCreateNestedManyWithoutProvincePermanentAddressInput
     userProfileCurrentAddress?: UserProfileUncheckedCreateNestedManyWithoutProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationUncheckedCreateNestedManyWithoutDM_TinhInput
   }
 
   export type DM_TinhCreateOrConnectWithoutUserProfileHometownInput = {
@@ -448722,6 +451313,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileCreateNestedManyWithoutNewProvinceOfBirthInput
     userProfilePermanentAddress?: UserProfileCreateNestedManyWithoutNewProvincePermanentAddressInput
     userProfileCurrentAddress?: UserProfileCreateNestedManyWithoutNewProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationCreateNestedManyWithoutDM_Tinh_NewInput
   }
 
   export type DM_Tinh_NewUncheckedCreateWithoutUserProfileHometownInput = {
@@ -448746,6 +451338,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceOfBirthInput
     userProfilePermanentAddress?: UserProfileUncheckedCreateNestedManyWithoutNewProvincePermanentAddressInput
     userProfileCurrentAddress?: UserProfileUncheckedCreateNestedManyWithoutNewProvinceCurrentAddressInput
+    trainingLocation?: TrainingLocationUncheckedCreateNestedManyWithoutDM_Tinh_NewInput
   }
 
   export type DM_Tinh_NewCreateOrConnectWithoutUserProfileHometownInput = {
@@ -450756,6 +453349,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUpdateManyWithoutProvinceHometownNestedInput
     userProfilePlaceOfBirth?: UserProfileUpdateManyWithoutProvinceOfBirthNestedInput
     userProfilePermanentAddress?: UserProfileUpdateManyWithoutProvincePermanentAddressNestedInput
+    trainingLocation?: TrainingLocationUpdateManyWithoutDM_TinhNestedInput
   }
 
   export type DM_TinhUncheckedUpdateWithoutUserProfileCurrentAddressInput = {
@@ -450780,6 +453374,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUncheckedUpdateManyWithoutProvinceHometownNestedInput
     userProfilePlaceOfBirth?: UserProfileUncheckedUpdateManyWithoutProvinceOfBirthNestedInput
     userProfilePermanentAddress?: UserProfileUncheckedUpdateManyWithoutProvincePermanentAddressNestedInput
+    trainingLocation?: TrainingLocationUncheckedUpdateManyWithoutDM_TinhNestedInput
   }
 
   export type DM_QuanHuyenUpsertWithoutUserProfileCurrentAddressInput = {
@@ -450935,6 +453530,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUpdateManyWithoutNewProvinceHometownNestedInput
     userProfilePlaceOfBirth?: UserProfileUpdateManyWithoutNewProvinceOfBirthNestedInput
     userProfilePermanentAddress?: UserProfileUpdateManyWithoutNewProvincePermanentAddressNestedInput
+    trainingLocation?: TrainingLocationUpdateManyWithoutDM_Tinh_NewNestedInput
   }
 
   export type DM_Tinh_NewUncheckedUpdateWithoutUserProfileCurrentAddressInput = {
@@ -450959,6 +453555,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUncheckedUpdateManyWithoutNewProvinceHometownNestedInput
     userProfilePlaceOfBirth?: UserProfileUncheckedUpdateManyWithoutNewProvinceOfBirthNestedInput
     userProfilePermanentAddress?: UserProfileUncheckedUpdateManyWithoutNewProvincePermanentAddressNestedInput
+    trainingLocation?: TrainingLocationUncheckedUpdateManyWithoutDM_Tinh_NewNestedInput
   }
 
   export type DM_XaPhuong_NewUpsertWithoutUserProfileCurrentAddressInput = {
@@ -451051,6 +453648,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUpdateManyWithoutProvinceHometownNestedInput
     userProfilePermanentAddress?: UserProfileUpdateManyWithoutProvincePermanentAddressNestedInput
     userProfileCurrentAddress?: UserProfileUpdateManyWithoutProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUpdateManyWithoutDM_TinhNestedInput
   }
 
   export type DM_TinhUncheckedUpdateWithoutUserProfilePlaceOfBirthInput = {
@@ -451075,6 +453673,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUncheckedUpdateManyWithoutProvinceHometownNestedInput
     userProfilePermanentAddress?: UserProfileUncheckedUpdateManyWithoutProvincePermanentAddressNestedInput
     userProfileCurrentAddress?: UserProfileUncheckedUpdateManyWithoutProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUncheckedUpdateManyWithoutDM_TinhNestedInput
   }
 
   export type DM_QuanHuyenUpsertWithoutUserProfilePlaceOfBirthInput = {
@@ -451230,6 +453829,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUpdateManyWithoutNewProvinceHometownNestedInput
     userProfilePermanentAddress?: UserProfileUpdateManyWithoutNewProvincePermanentAddressNestedInput
     userProfileCurrentAddress?: UserProfileUpdateManyWithoutNewProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUpdateManyWithoutDM_Tinh_NewNestedInput
   }
 
   export type DM_Tinh_NewUncheckedUpdateWithoutUserProfilePlaceOfBirthInput = {
@@ -451254,6 +453854,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUncheckedUpdateManyWithoutNewProvinceHometownNestedInput
     userProfilePermanentAddress?: UserProfileUncheckedUpdateManyWithoutNewProvincePermanentAddressNestedInput
     userProfileCurrentAddress?: UserProfileUncheckedUpdateManyWithoutNewProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUncheckedUpdateManyWithoutDM_Tinh_NewNestedInput
   }
 
   export type DM_XaPhuong_NewUpsertWithoutUserProfilePlaceOfBirthInput = {
@@ -451393,6 +453994,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUpdateManyWithoutProvinceHometownNestedInput
     userProfilePlaceOfBirth?: UserProfileUpdateManyWithoutProvinceOfBirthNestedInput
     userProfileCurrentAddress?: UserProfileUpdateManyWithoutProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUpdateManyWithoutDM_TinhNestedInput
   }
 
   export type DM_TinhUncheckedUpdateWithoutUserProfilePermanentAddressInput = {
@@ -451417,6 +454019,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUncheckedUpdateManyWithoutProvinceHometownNestedInput
     userProfilePlaceOfBirth?: UserProfileUncheckedUpdateManyWithoutProvinceOfBirthNestedInput
     userProfileCurrentAddress?: UserProfileUncheckedUpdateManyWithoutProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUncheckedUpdateManyWithoutDM_TinhNestedInput
   }
 
   export type DM_QuanHuyenUpsertWithoutUserProfilePermanentAddressInput = {
@@ -451572,6 +454175,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUpdateManyWithoutNewProvinceHometownNestedInput
     userProfilePlaceOfBirth?: UserProfileUpdateManyWithoutNewProvinceOfBirthNestedInput
     userProfileCurrentAddress?: UserProfileUpdateManyWithoutNewProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUpdateManyWithoutDM_Tinh_NewNestedInput
   }
 
   export type DM_Tinh_NewUncheckedUpdateWithoutUserProfilePermanentAddressInput = {
@@ -451596,6 +454200,7 @@ export namespace Prisma {
     userProfileHometown?: UserProfileUncheckedUpdateManyWithoutNewProvinceHometownNestedInput
     userProfilePlaceOfBirth?: UserProfileUncheckedUpdateManyWithoutNewProvinceOfBirthNestedInput
     userProfileCurrentAddress?: UserProfileUncheckedUpdateManyWithoutNewProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUncheckedUpdateManyWithoutDM_Tinh_NewNestedInput
   }
 
   export type DM_XaPhuong_NewUpsertWithoutUserProfilePermanentAddressInput = {
@@ -451841,6 +454446,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileUpdateManyWithoutProvinceOfBirthNestedInput
     userProfilePermanentAddress?: UserProfileUpdateManyWithoutProvincePermanentAddressNestedInput
     userProfileCurrentAddress?: UserProfileUpdateManyWithoutProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUpdateManyWithoutDM_TinhNestedInput
   }
 
   export type DM_TinhUncheckedUpdateWithoutUserProfileHometownInput = {
@@ -451865,6 +454471,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileUncheckedUpdateManyWithoutProvinceOfBirthNestedInput
     userProfilePermanentAddress?: UserProfileUncheckedUpdateManyWithoutProvincePermanentAddressNestedInput
     userProfileCurrentAddress?: UserProfileUncheckedUpdateManyWithoutProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUncheckedUpdateManyWithoutDM_TinhNestedInput
   }
 
   export type DM_QuanHuyenUpsertWithoutUserProfileHometownInput = {
@@ -452020,6 +454627,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileUpdateManyWithoutNewProvinceOfBirthNestedInput
     userProfilePermanentAddress?: UserProfileUpdateManyWithoutNewProvincePermanentAddressNestedInput
     userProfileCurrentAddress?: UserProfileUpdateManyWithoutNewProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUpdateManyWithoutDM_Tinh_NewNestedInput
   }
 
   export type DM_Tinh_NewUncheckedUpdateWithoutUserProfileHometownInput = {
@@ -452044,6 +454652,7 @@ export namespace Prisma {
     userProfilePlaceOfBirth?: UserProfileUncheckedUpdateManyWithoutNewProvinceOfBirthNestedInput
     userProfilePermanentAddress?: UserProfileUncheckedUpdateManyWithoutNewProvincePermanentAddressNestedInput
     userProfileCurrentAddress?: UserProfileUncheckedUpdateManyWithoutNewProvinceCurrentAddressNestedInput
+    trainingLocation?: TrainingLocationUncheckedUpdateManyWithoutDM_Tinh_NewNestedInput
   }
 
   export type DM_XaPhuong_NewUpsertWithoutUserProfileHometownInput = {
@@ -479201,6 +481810,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -479217,6 +481827,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectVersionsInput
     subject: SubjectCreateNestedOneWithoutSubjectVersionInput
+    subjectVersionCategory?: SubjectVersionCategoryCreateNestedOneWithoutSubjectVersionsInput
     trainingBlocks?: TrainingBlockSubjectCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -479244,6 +481855,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -479260,6 +481872,7 @@ export namespace Prisma {
     rules?: string | null
     managementOrganizationId?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutSubjectInput
     prerequisiteSubject?: SubjectVersionUncheckedCreateNestedManyWithoutDependentSubjectInput
     dependentSubject?: SubjectVersionUncheckedCreateNestedManyWithoutPrerequisiteSubjectInput
@@ -480038,6 +482651,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -480054,6 +482668,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
     subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -480081,6 +482696,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -480097,6 +482713,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -503823,6 +506440,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -503838,6 +506456,7 @@ export namespace Prisma {
     materials?: string | null
     rules?: string | null
     managementOrganizationId?: string | null
+    subjectVersionCategoryId?: string | null
   }
 
   export type SubjectVersionUpdateWithoutSubjectInput = {
@@ -503855,6 +506474,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -503870,6 +506490,7 @@ export namespace Prisma {
     materials?: NullableStringFieldUpdateOperationsInput | string | null
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -503898,6 +506519,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -503913,6 +506535,7 @@ export namespace Prisma {
     materials?: NullableStringFieldUpdateOperationsInput | string | null
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -503941,6 +506564,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -503956,6 +506580,165 @@ export namespace Prisma {
     materials?: NullableStringFieldUpdateOperationsInput | string | null
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SubjectVersionCreateManySubjectVersionCategoryInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    codeTkb?: string | null
+    examType: $Enums.ExamType
+    type?: $Enums.SubjectVersionType
+    credit: number
+    week?: number | null
+    period?: number
+    schedulePeriod?: number | null
+    numberOfTheory?: number | null
+    numberOfPractical?: number | null
+    numberOfSelfStudy?: number | null
+    numberOfPractice?: number | null
+    numberOfReview?: number | null
+    numberOfExam?: number | null
+    numberOfOther?: number | null
+    objectives?: string | null
+    learningOutcome?: string | null
+    structure?: string | null
+    guild?: string | null
+    academicResults?: string | null
+    materials?: string | null
+    rules?: string | null
+    managementOrganizationId?: string | null
+    subjectId: string
+  }
+
+  export type SubjectVersionUpdateWithoutSubjectVersionCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
+    examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
+    type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+    credit?: IntFieldUpdateOperationsInput | number
+    week?: NullableIntFieldUpdateOperationsInput | number | null
+    period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
+    objectives?: NullableStringFieldUpdateOperationsInput | string | null
+    learningOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+    structure?: NullableStringFieldUpdateOperationsInput | string | null
+    guild?: NullableStringFieldUpdateOperationsInput | string | null
+    academicResults?: NullableStringFieldUpdateOperationsInput | string | null
+    materials?: NullableStringFieldUpdateOperationsInput | string | null
+    rules?: NullableStringFieldUpdateOperationsInput | string | null
+    managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
+    subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
+    prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
+    dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
+    coRequisiteSubject?: SubjectVersionUpdateManyWithoutDepCoRequisiteSubjectNestedInput
+    depCoRequisiteSubject?: SubjectVersionUpdateManyWithoutCoRequisiteSubjectNestedInput
+    equivalencyGroups?: SubjectInGroupUpdateManyWithoutSubjectNestedInput
+    knowledgeBlocks?: KnowledgeBlockUpdateManyWithoutSubjectVersionNestedInput
+    subjectClass?: SubjectClassUpdateManyWithoutSubjectNestedInput
+    studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutSubjectVersionNestedInput
+    documentFiles?: DocumentFileUpdateManyWithoutSubjectVersionNestedInput
+    questionBanks?: QuestionBankUpdateManyWithoutSubjectVersionNestedInput
+  }
+
+  export type SubjectVersionUncheckedUpdateWithoutSubjectVersionCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
+    examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
+    type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+    credit?: IntFieldUpdateOperationsInput | number
+    week?: NullableIntFieldUpdateOperationsInput | number | null
+    period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
+    objectives?: NullableStringFieldUpdateOperationsInput | string | null
+    learningOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+    structure?: NullableStringFieldUpdateOperationsInput | string | null
+    guild?: NullableStringFieldUpdateOperationsInput | string | null
+    academicResults?: NullableStringFieldUpdateOperationsInput | string | null
+    materials?: NullableStringFieldUpdateOperationsInput | string | null
+    rules?: NullableStringFieldUpdateOperationsInput | string | null
+    managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectId?: StringFieldUpdateOperationsInput | string
+    trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+    prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
+    dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
+    coRequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDepCoRequisiteSubjectNestedInput
+    depCoRequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutCoRequisiteSubjectNestedInput
+    equivalencyGroups?: SubjectInGroupUncheckedUpdateManyWithoutSubjectNestedInput
+    knowledgeBlocks?: KnowledgeBlockUncheckedUpdateManyWithoutSubjectVersionNestedInput
+    subjectClass?: SubjectClassUncheckedUpdateManyWithoutSubjectNestedInput
+    studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectVersionNestedInput
+    documentFiles?: DocumentFileUncheckedUpdateManyWithoutSubjectVersionNestedInput
+    questionBanks?: QuestionBankUncheckedUpdateManyWithoutSubjectVersionNestedInput
+  }
+
+  export type SubjectVersionUncheckedUpdateManyWithoutSubjectVersionCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
+    examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
+    type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+    credit?: IntFieldUpdateOperationsInput | number
+    week?: NullableIntFieldUpdateOperationsInput | number | null
+    period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
+    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
+    objectives?: NullableStringFieldUpdateOperationsInput | string | null
+    learningOutcome?: NullableStringFieldUpdateOperationsInput | string | null
+    structure?: NullableStringFieldUpdateOperationsInput | string | null
+    guild?: NullableStringFieldUpdateOperationsInput | string | null
+    academicResults?: NullableStringFieldUpdateOperationsInput | string | null
+    materials?: NullableStringFieldUpdateOperationsInput | string | null
+    rules?: NullableStringFieldUpdateOperationsInput | string | null
+    managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    subjectId?: StringFieldUpdateOperationsInput | string
   }
 
   export type TrainingBlockSubjectCreateManySubjectInput = {
@@ -504166,6 +506949,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -504182,6 +506966,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
     subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
     coRequisiteSubject?: SubjectVersionUpdateManyWithoutDepCoRequisiteSubjectNestedInput
@@ -504209,6 +506994,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -504225,6 +507011,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
     coRequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDepCoRequisiteSubjectNestedInput
@@ -504252,6 +507039,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -504268,6 +507056,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SubjectVersionUpdateWithoutPrerequisiteSubjectInput = {
@@ -504285,6 +507074,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -504301,6 +507091,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
     subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
     dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
     coRequisiteSubject?: SubjectVersionUpdateManyWithoutDepCoRequisiteSubjectNestedInput
@@ -504328,6 +507119,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -504344,6 +507136,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
     dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
     coRequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDepCoRequisiteSubjectNestedInput
@@ -504371,6 +507164,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -504387,6 +507181,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SubjectVersionUpdateWithoutDepCoRequisiteSubjectInput = {
@@ -504404,6 +507199,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -504420,6 +507216,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
     subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -504447,6 +507244,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -504463,6 +507261,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -504490,6 +507289,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -504506,6 +507306,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SubjectVersionUpdateWithoutCoRequisiteSubjectInput = {
@@ -504523,6 +507324,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -504539,6 +507341,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganization?: DM_DonViUpdateOneWithoutSubjectVersionsNestedInput
     subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -504566,6 +507369,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -504582,6 +507386,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -504609,6 +507414,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -504625,6 +507431,7 @@ export namespace Prisma {
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SubjectInGroupUpdateWithoutSubjectInput = {
@@ -516458,6 +519265,7 @@ export namespace Prisma {
     credit: number
     week?: number | null
     period?: number
+    schedulePeriod?: number | null
     numberOfTheory?: number | null
     numberOfPractical?: number | null
     numberOfSelfStudy?: number | null
@@ -516473,6 +519281,7 @@ export namespace Prisma {
     materials?: string | null
     rules?: string | null
     subjectId: string
+    subjectVersionCategoryId?: string | null
   }
 
   export type SubjectCreateManyManagementOrganizationInput = {
@@ -516964,6 +519773,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -516979,6 +519789,7 @@ export namespace Prisma {
     materials?: NullableStringFieldUpdateOperationsInput | string | null
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     subject?: SubjectUpdateOneRequiredWithoutSubjectVersionNestedInput
+    subjectVersionCategory?: SubjectVersionCategoryUpdateOneWithoutSubjectVersionsNestedInput
     trainingBlocks?: TrainingBlockSubjectUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -517007,6 +519818,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -517022,6 +519834,7 @@ export namespace Prisma {
     materials?: NullableStringFieldUpdateOperationsInput | string | null
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     trainingBlocks?: TrainingBlockSubjectUncheckedUpdateManyWithoutSubjectNestedInput
     prerequisiteSubject?: SubjectVersionUncheckedUpdateManyWithoutDependentSubjectNestedInput
     dependentSubject?: SubjectVersionUncheckedUpdateManyWithoutPrerequisiteSubjectNestedInput
@@ -517050,6 +519863,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number
     week?: NullableIntFieldUpdateOperationsInput | number | null
     period?: IntFieldUpdateOperationsInput | number
+    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
     numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
@@ -517065,6 +519879,7 @@ export namespace Prisma {
     materials?: NullableStringFieldUpdateOperationsInput | string | null
     rules?: NullableStringFieldUpdateOperationsInput | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
+    subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SubjectUpdateWithoutManagementOrganizationInput = {
@@ -520296,6 +523111,18 @@ export namespace Prisma {
     trinhDoHocVanId?: string | null
   }
 
+  export type TrainingLocationCreateManyDM_TinhInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    dM_Tinh_NewId?: string | null
+  }
+
   export type UserProfileUpdateWithoutProvinceHometownInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -521992,6 +524819,46 @@ export namespace Prisma {
     trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type TrainingLocationUpdateWithoutDM_TinhInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
+    students?: StudentUpdateManyWithoutTrainingLocationNestedInput
+    buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
+  }
+
+  export type TrainingLocationUncheckedUpdateWithoutDM_TinhInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
+    buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
+  }
+
+  export type TrainingLocationUncheckedUpdateManyWithoutDM_TinhInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type UserProfileCreateManyNewProvinceHometownInput = {
     id?: string
     code?: string | null
@@ -522462,6 +525329,18 @@ export namespace Prisma {
     familyPhone?: string | null
     familyName?: string | null
     trinhDoHocVanId?: string | null
+  }
+
+  export type TrainingLocationCreateManyDM_Tinh_NewInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    dM_TinhId?: string | null
   }
 
   export type UserProfileUpdateWithoutNewProvinceHometownInput = {
@@ -524158,6 +527037,46 @@ export namespace Prisma {
     familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
     familyName?: NullableStringFieldUpdateOperationsInput | string | null
     trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TrainingLocationUpdateWithoutDM_Tinh_NewInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    dM_Tinh?: DM_TinhUpdateOneWithoutTrainingLocationNestedInput
+    students?: StudentUpdateManyWithoutTrainingLocationNestedInput
+    buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
+  }
+
+  export type TrainingLocationUncheckedUpdateWithoutDM_Tinh_NewInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
+    buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
+  }
+
+  export type TrainingLocationUncheckedUpdateManyWithoutDM_Tinh_NewInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserProfileCreateManyDistrictHometownInput = {

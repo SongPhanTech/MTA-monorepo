@@ -31,6 +31,7 @@ export * from './fixed-class';
 export * from './curriculum';
 export * from './curriculum-version';
 export * from './subject';
+export * from './subject-version-category';
 export * from './subject-version';
 export * from './equivalency-group';
 export * from './subject-in-group';

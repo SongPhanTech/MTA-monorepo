@@ -55,7 +55,10 @@ enum ExamStatus {
 
 enum SemesterType {
   FIRST
+  FIRST_SUPPLEMENTARY
   SECOND
+  SECOND_SUPPLEMENTARY
+  SUMMER
 
   @@schema("ql-dao-tao")
 }
@@ -83,6 +86,7 @@ enum ExamType {
 
 enum SubjectVersionType {
   Normal
+  Research
   Project
 
   @@schema("ql-dao-tao")
@@ -1224,25 +1228,45 @@ model Subject {
   @@schema("ql-dao-tao")
 }
 
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SubjectVersionCategory {
+  id              String           @id() @default(cuid())
+  code            String?          @unique()
+  active          Boolean          @default(true)
+  description     String?          @db.Text()
+  deletedAt       DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt()
+  name            String
+  subjectVersions SubjectVersion[]
+
+  @@schema("ql-dao-tao")
+}
+
 /// Phiên bản môn học
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model SubjectVersion {
-  id                       String                 @id() @default(cuid())
-  code                     String?                @unique()
-  active                   Boolean                @default(true)
-  description              String?                @db.Text()
+  id                       String                  @id() @default(cuid())
+  code                     String?                 @unique()
+  active                   Boolean                 @default(true)
+  description              String?                 @db.Text()
   deletedAt                DateTime?
-  createdAt                DateTime               @default(now())
-  updatedAt                DateTime               @default(now()) @updatedAt()
+  createdAt                DateTime                @default(now())
+  updatedAt                DateTime                @default(now()) @updatedAt()
   name                     String
   codeTkb                  String?
   examType                 ExamType
-  type                     SubjectVersionType     @default(Normal)
+  type                     SubjectVersionType      @default(Normal)
   credit                   Int
   week                     Int?
-  period                   Int                    @default(0)
+  /// số tiết
+  period                   Int                     @default(0)
+  /// số tiết TKB
+  schedulePeriod           Int?
   numberOfTheory           Int?
   numberOfPractical        Int?
   numberOfSelfStudy        Int?
@@ -1257,17 +1281,19 @@ model SubjectVersion {
   academicResults          String?
   materials                String?
   rules                    String?
-  managementOrganization   DM_DonVi?              @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?                @db.Uuid()
-  subject                  Subject                @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
+  managementOrganization   DM_DonVi?               @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?                 @db.Uuid()
+  subject                  Subject                 @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
   subjectId                String
+  subjectVersionCategory   SubjectVersionCategory? @relation(fields: [subjectVersionCategoryId], references: [id])
+  subjectVersionCategoryId String?
   /// môn học khối kiến thức - CTĐT
   trainingBlocks           TrainingBlockSubject[]
   /// môn học tiên quyết
-  prerequisiteSubject      SubjectVersion[]       @relation(name: "PrerequisiteSubject")
-  dependentSubject         SubjectVersion[]       @relation(name: "PrerequisiteSubject")
-  coRequisiteSubject       SubjectVersion[]       @relation(name: "CoRequisiteSubject")
-  depCoRequisiteSubject    SubjectVersion[]       @relation(name: "CoRequisiteSubject")
+  prerequisiteSubject      SubjectVersion[]        @relation(name: "PrerequisiteSubject")
+  dependentSubject         SubjectVersion[]        @relation(name: "PrerequisiteSubject")
+  coRequisiteSubject       SubjectVersion[]        @relation(name: "CoRequisiteSubject")
+  depCoRequisiteSubject    SubjectVersion[]        @relation(name: "CoRequisiteSubject")
   equivalencyGroups        SubjectInGroup[]
   knowledgeBlocks          KnowledgeBlock[]
   subjectClass             SubjectClass[]
@@ -1628,16 +1654,20 @@ model TrainingForm {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model TrainingLocation {
-  id          String     @id() @default(cuid())
-  code        String?    @unique()
-  active      Boolean    @default(true)
-  description String?    @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @default(now()) @updatedAt()
-  name        String     @unique()
-  students    Student[]
-  buildings   Building[]
+  id            String       @id() @default(cuid())
+  code          String?      @unique()
+  active        Boolean      @default(true)
+  description   String?      @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt()
+  name          String       @unique()
+  dM_Tinh       DM_Tinh?     @relation(fields: [dM_TinhId], references: [Id])
+  dM_TinhId     String?
+  dM_Tinh_New   DM_Tinh_New? @relation(fields: [dM_Tinh_NewId], references: [Id])
+  dM_Tinh_NewId String?
+  students      Student[]
+  buildings     Building[]
 
   @@schema("ql-dao-tao")
 }
@@ -2908,28 +2938,29 @@ model DM_QuocGia {
 /// @@deny('read', bDeleted == true)
 /// @@allow('read', auth() != null)
 model DM_Tinh {
-  Id                          String        @id() @default(uuid()) @db.Uuid()
+  Id                          String             @id() @default(uuid()) @db.Uuid()
   sMa                         String?
   sTen                        String?
   sGhiChu                     String?
-  iSTT                        Int?          @default(0)
-  bActive                     Boolean?      @default(true)
-  bDeleted                    Boolean?      @default(false)
-  bSystem                     Boolean?      @default(false)
-  iDictionaryKey              Int?          @default(0)
+  iSTT                        Int?               @default(0)
+  bActive                     Boolean?           @default(true)
+  bDeleted                    Boolean?           @default(false)
+  bSystem                     Boolean?           @default(false)
+  iDictionaryKey              Int?               @default(0)
   dNgayTao                    DateTime?
   dNgaySua                    DateTime?
   sNguoiTao                   String?
   sNguoiSua                   String?
   sThietBiTao                 String?
   sThietBiSua                 String?
-  sDM_QuocGiaId               String?       @db.Uuid()
+  sDM_QuocGiaId               String?            @db.Uuid()
   iDM_KhuVucDiaLy_Id          Int?
   iDM_DonViHanhChinhId        Int?
-  userProfileHometown         UserProfile[] @relation("ProvinceHometown")
-  userProfilePlaceOfBirth     UserProfile[] @relation("ProvincePlaceOfBirth")
-  userProfilePermanentAddress UserProfile[] @relation("ProvincePermanentAddress")
-  userProfileCurrentAddress   UserProfile[] @relation("ProvinceCurrentAddress")
+  userProfileHometown         UserProfile[]      @relation("ProvinceHometown")
+  userProfilePlaceOfBirth     UserProfile[]      @relation("ProvincePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[]      @relation("ProvincePermanentAddress")
+  userProfileCurrentAddress   UserProfile[]      @relation("ProvinceCurrentAddress")
+  trainingLocation            TrainingLocation[]
 
   @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
   @@schema("mta")
@@ -2939,28 +2970,29 @@ model DM_Tinh {
 /// @@deny('read', bDeleted == true)
 /// @@allow('read', auth() != null)
 model DM_Tinh_New {
-  Id                          String        @id() @default(uuid()) @db.Uuid()
+  Id                          String             @id() @default(uuid()) @db.Uuid()
   sMa                         String?
   sTen                        String?
   sGhiChu                     String?
-  iSTT                        Int?          @default(0)
-  bActive                     Boolean?      @default(true)
-  bDeleted                    Boolean?      @default(false)
-  bSystem                     Boolean?      @default(false)
-  iDictionaryKey              Int?          @default(0)
+  iSTT                        Int?               @default(0)
+  bActive                     Boolean?           @default(true)
+  bDeleted                    Boolean?           @default(false)
+  bSystem                     Boolean?           @default(false)
+  iDictionaryKey              Int?               @default(0)
   dNgayTao                    DateTime?
   dNgaySua                    DateTime?
   sNguoiTao                   String?
   sNguoiSua                   String?
   sThietBiTao                 String?
   sThietBiSua                 String?
-  sDM_QuocGiaId               String?       @db.Uuid()
+  sDM_QuocGiaId               String?            @db.Uuid()
   iDM_KhuVucDiaLy_Id          Int?
   iDM_DonViHanhChinhId        Int?
-  userProfileHometown         UserProfile[] @relation("NewProvinceHometown")
-  userProfilePlaceOfBirth     UserProfile[] @relation("NewProvincePlaceOfBirth")
-  userProfilePermanentAddress UserProfile[] @relation("NewProvincePermanentAddress")
-  userProfileCurrentAddress   UserProfile[] @relation("NewProvinceCurrentAddress")
+  userProfileHometown         UserProfile[]      @relation("NewProvinceHometown")
+  userProfilePlaceOfBirth     UserProfile[]      @relation("NewProvincePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[]      @relation("NewProvincePermanentAddress")
+  userProfileCurrentAddress   UserProfile[]      @relation("NewProvinceCurrentAddress")
+  trainingLocation            TrainingLocation[]
 
   @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_New_iDM_QuocGiaId")
   @@schema("mta")

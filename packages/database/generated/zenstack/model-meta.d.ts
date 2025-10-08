@@ -4893,6 +4893,107 @@ declare const metadata: {
                 })[];
             }[];
         };
+        subjectVersionCategory: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                name: {
+                    name: string;
+                    type: string;
+                };
+                subjectVersions: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
+        };
         subjectVersion: {
             name: string;
             fields: {
@@ -5003,6 +5104,11 @@ declare const metadata: {
                             value: number;
                         }[];
                     }[];
+                };
+                schedulePeriod: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
                 };
                 numberOfTheory: {
                     name: string;
@@ -5126,6 +5232,31 @@ declare const metadata: {
                 subjectId: {
                     name: string;
                     type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                subjectVersionCategory: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                subjectVersionCategoryId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
                     isForeignKey: boolean;
                     relationField: string;
                 };
@@ -7730,6 +7861,56 @@ declare const metadata: {
                         name: string;
                         args: never[];
                     }[];
+                };
+                dM_Tinh: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        Id: string;
+                    };
+                };
+                dM_TinhId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                dM_Tinh_New: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        Id: string;
+                    };
+                };
+                dM_Tinh_NewId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
                 };
                 students: {
                     name: string;
@@ -16254,6 +16435,13 @@ declare const metadata: {
                     }[];
                     backLink: string;
                 };
+                trainingLocation: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
             };
             uniqueConstraints: {
                 Id: {
@@ -16473,6 +16661,13 @@ declare const metadata: {
                             value: string;
                         }[];
                     }[];
+                    backLink: string;
+                };
+                trainingLocation: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
                     backLink: string;
                 };
             };

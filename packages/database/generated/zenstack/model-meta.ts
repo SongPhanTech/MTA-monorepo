@@ -2696,6 +2696,60 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
+        subjectVersionCategory: {
+            name: 'SubjectVersionCategory', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, subjectVersions: {
+                    name: "subjectVersions",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectVersionCategory',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
         subjectVersion: {
             name: 'SubjectVersion', fields: {
                 id: {
@@ -2754,6 +2808,10 @@ const metadata = {
                     name: "period",
                     type: "Int",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, schedulePeriod: {
+                    name: "schedulePeriod",
+                    type: "Int",
+                    isOptional: true,
                 }, numberOfTheory: {
                     name: "numberOfTheory",
                     type: "Int",
@@ -2839,6 +2897,21 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'subject',
+                }, subjectVersionCategory: {
+                    name: "subjectVersionCategory",
+                    type: "SubjectVersionCategory",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'subjectVersions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionCategoryId" },
+                }, subjectVersionCategoryId: {
+                    name: "subjectVersionCategoryId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'subjectVersionCategory',
                 }, trainingBlocks: {
                     name: "trainingBlocks",
                     type: "TrainingBlockSubject",
@@ -4271,6 +4344,36 @@ const metadata = {
                     name: "name",
                     type: "String",
                     attributes: [{ "name": "@unique", "args": [] }],
+                }, dM_Tinh: {
+                    name: "dM_Tinh",
+                    type: "DM_Tinh",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingLocation',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "dM_TinhId" },
+                }, dM_TinhId: {
+                    name: "dM_TinhId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_Tinh',
+                }, dM_Tinh_New: {
+                    name: "dM_Tinh_New",
+                    type: "DM_Tinh_New",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'trainingLocation',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "Id": "dM_Tinh_NewId" },
+                }, dM_Tinh_NewId: {
+                    name: "dM_Tinh_NewId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'dM_Tinh_New',
                 }, students: {
                     name: "students",
                     type: "Student",
@@ -9080,6 +9183,12 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ProvinceCurrentAddress" }] }],
                     backLink: 'provinceCurrentAddress',
+                }, trainingLocation: {
+                    name: "trainingLocation",
+                    type: "TrainingLocation",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_Tinh',
                 },
             }, uniqueConstraints: {
                 Id: {
@@ -9198,6 +9307,12 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "NewProvinceCurrentAddress" }] }],
                     backLink: 'newProvinceCurrentAddress',
+                }, trainingLocation: {
+                    name: "trainingLocation",
+                    type: "TrainingLocation",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'dM_Tinh_New',
                 },
             }, uniqueConstraints: {
                 Id: {

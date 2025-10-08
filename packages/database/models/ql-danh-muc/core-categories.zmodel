@@ -224,28 +224,30 @@ model DM_QuocGia extends CoreBase {
 }
 
 model DM_Tinh extends CoreBase {
-  sDM_QuocGiaId               String?       @db.Uuid
+  sDM_QuocGiaId               String?            @db.Uuid
   iDM_KhuVucDiaLy_Id          Int?
   iDM_DonViHanhChinhId        Int?
 
-  userProfileHometown         UserProfile[] @relation("ProvinceHometown")
-  userProfilePlaceOfBirth     UserProfile[] @relation("ProvincePlaceOfBirth")
-  userProfilePermanentAddress UserProfile[] @relation("ProvincePermanentAddress")
-  userProfileCurrentAddress   UserProfile[] @relation("ProvinceCurrentAddress")
+  userProfileHometown         UserProfile[]      @relation("ProvinceHometown")
+  userProfilePlaceOfBirth     UserProfile[]      @relation("ProvincePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[]      @relation("ProvincePermanentAddress")
+  userProfileCurrentAddress   UserProfile[]      @relation("ProvinceCurrentAddress")
+  trainingLocation            TrainingLocation[]
 
   @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_iDM_QuocGiaId")
   @@schema("mta")
 }
 
 model DM_Tinh_New extends CoreBase {
-  sDM_QuocGiaId               String?       @db.Uuid
+  sDM_QuocGiaId               String?            @db.Uuid
   iDM_KhuVucDiaLy_Id          Int?
   iDM_DonViHanhChinhId        Int?
 
-  userProfileHometown         UserProfile[] @relation("NewProvinceHometown")
-  userProfilePlaceOfBirth     UserProfile[] @relation("NewProvincePlaceOfBirth")
-  userProfilePermanentAddress UserProfile[] @relation("NewProvincePermanentAddress")
-  userProfileCurrentAddress   UserProfile[] @relation("NewProvinceCurrentAddress")
+  userProfileHometown         UserProfile[]      @relation("NewProvinceHometown")
+  userProfilePlaceOfBirth     UserProfile[]      @relation("NewProvincePlaceOfBirth")
+  userProfilePermanentAddress UserProfile[]      @relation("NewProvincePermanentAddress")
+  userProfileCurrentAddress   UserProfile[]      @relation("NewProvinceCurrentAddress")
+  trainingLocation            TrainingLocation[]
 
   @@index([sDM_QuocGiaId], map: "IX_DM_Tinh_New_iDM_QuocGiaId")
   @@schema("mta")

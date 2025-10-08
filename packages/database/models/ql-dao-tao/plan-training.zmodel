@@ -142,8 +142,11 @@ model SchoolYear extends Base {
 }
 
 enum SemesterType {
-  FIRST // Kỳ học đầu tiên
-  SECOND // Kỳ học thứ hai
+  FIRST // Học kỳ 1
+  FIRST_SUPPLEMENTARY // HK phụ HK1
+  SECOND // Học kỳ 2
+  SECOND_SUPPLEMENTARY // HK phụ HK2
+  SUMMER // Học kỳ hè
   @@schema("ql-dao-tao")
 }
 
@@ -152,7 +155,7 @@ enum SemesterType {
 model Semester extends Base {
   name                    String
   shortName               String? // tên ngắn gọn
-  semesterType            SemesterType? // dựa vào semesterType để xác định kỳ học là kỳ 1 hay kỳ 2 => môn học sẽ có kỳ học tương ứng
+  semesterType            SemesterType?
   schoolYear              SchoolYear                @relation(fields: [schoolYearId], references: [id])
   schoolYearId            String
   startDate               DateTime
@@ -379,9 +382,16 @@ enum ExamType {
   @@schema("ql-dao-tao")
 }
 
+model SubjectVersionCategory extends Base {
+  name            String
+  subjectVersions SubjectVersion[]
+  @@schema("ql-dao-tao")
+}
+
 enum SubjectVersionType {
-  Normal
-  Project
+  Normal // Môn thường
+  Research // Chuyên đề nghiên cứu
+  Project // Luân văn/Đồ án
 
   @@schema("ql-dao-tao")
 }
@@ -391,10 +401,13 @@ model SubjectVersion extends Base {
   name                     String
   codeTkb                  String?
   examType                 ExamType
-  type                     SubjectVersionType     @default(Normal) // loại môn học
+  type                     SubjectVersionType      @default(Normal) // loại môn học
   credit                   Int // số tín chỉ
   week                     Int? // số tuần
-  period                   Int                    @default(0) // số tiết
+  /// số tiết
+  period                   Int                     @default(0)
+  /// số tiết TKB
+  schedulePeriod           Int?
   numberOfTheory           Int? // số tiết lý thuyết
   numberOfPractical        Int? // số tiết bài tập
   numberOfSelfStudy        Int? // số tiết thảo luận/tự học
@@ -412,22 +425,25 @@ model SubjectVersion extends Base {
   materials                String? // VIII. Cơ sở vật chất, học liệu
   rules                    String? // ​IX. Quy định của học phần
 
-  managementOrganization   DM_DonVi?              @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?                @db.Uuid
+  managementOrganization   DM_DonVi?               @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?                 @db.Uuid
 
-  subject                  Subject                @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
+  subject                  Subject                 @relation(name: "SubjectVersion", fields: [subjectId], references: [id])
   subjectId                String
+
+  subjectVersionCategory   SubjectVersionCategory? @relation(fields: [subjectVersionCategoryId], references: [id])
+  subjectVersionCategoryId String?
 
   /// môn học khối kiến thức - CTĐT
   trainingBlocks           TrainingBlockSubject[]
 
   /// môn học tiên quyết
-  prerequisiteSubject      SubjectVersion[]       @relation(name: "PrerequisiteSubject")
-  dependentSubject         SubjectVersion[]       @relation(name: "PrerequisiteSubject")
+  prerequisiteSubject      SubjectVersion[]        @relation(name: "PrerequisiteSubject")
+  dependentSubject         SubjectVersion[]        @relation(name: "PrerequisiteSubject")
 
   // môn học song hành
-  coRequisiteSubject       SubjectVersion[]       @relation(name: "CoRequisiteSubject")
-  depCoRequisiteSubject    SubjectVersion[]       @relation(name: "CoRequisiteSubject")
+  coRequisiteSubject       SubjectVersion[]        @relation(name: "CoRequisiteSubject")
+  depCoRequisiteSubject    SubjectVersion[]        @relation(name: "CoRequisiteSubject")
 
   // Nhóm môn tương đương
   equivalencyGroups        SubjectInGroup[]
@@ -492,10 +508,10 @@ model TrainingBlockSubject extends Base {
   semester                           Int? // kỳ học
 
   type                               SubjectRequirementType           @default(None) // loại bắt buộc
-  useForFinalScore                   Boolean // có sử dụng để tính điểm thi cuối kỳ hay không
-  graduation                         Boolean // có phải là môn học tốt nghiệp hay không
-  project                            Boolean // có phải là môn học đồ án hay không
-  print                              Boolean // có in trên bảng điểm hay không
+  /// tính điểm thi cuối ~ !môn điều kiện ~ in trên bảng điểm
+  useForFinalScore                   Boolean
+  /// môn tốt nghiệp (dùng trong bảng tốt nghiệp, điểm đạt tốt nghiệp)
+  graduation                         Boolean
   @@schema("ql-dao-tao")
 }
 

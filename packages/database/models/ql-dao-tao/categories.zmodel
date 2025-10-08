@@ -74,7 +74,13 @@ model TrainingForm extends Base {
 
 /// địa điểm đào tạo
 model TrainingLocation extends Base {
-  name      String     @unique
+  name          String       @unique
+
+  dM_Tinh       DM_Tinh?     @relation(fields: [dM_TinhId], references: [Id])
+  dM_TinhId     String?
+
+  dM_Tinh_New   DM_Tinh_New? @relation(fields: [dM_Tinh_NewId], references: [Id])
+  dM_Tinh_NewId String?
 
   students  Student[]
   buildings Building[]

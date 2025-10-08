@@ -128,7 +128,7 @@ const TargetMap = {
     lectureID: 'ID giảng viên',
     archivedCertificateId: 'Chứng chỉ',
     archivedAwardId: 'Thành tích',
-    semesterType: 'Học kì chính',
+    semesterType: 'Học kỳ',
     originalDiplomaNumber: 'Số vào sổ gốc',
     diplomaNumber: 'Số hiệu văn bằng',
 }

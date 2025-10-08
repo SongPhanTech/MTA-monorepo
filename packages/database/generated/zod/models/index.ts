@@ -31,6 +31,7 @@ export * from './FixedClass.schema';
 export * from './Curriculum.schema';
 export * from './CurriculumVersion.schema';
 export * from './Subject.schema';
+export * from './SubjectVersionCategory.schema';
 export * from './SubjectVersion.schema';
 export * from './EquivalencyGroup.schema';
 export * from './SubjectInGroup.schema';
