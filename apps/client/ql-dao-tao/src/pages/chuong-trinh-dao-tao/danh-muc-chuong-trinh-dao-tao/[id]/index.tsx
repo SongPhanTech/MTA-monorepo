@@ -365,7 +365,7 @@ export default function TrainingProgramSubjects() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                Phiên bản CTĐT:{' '}
+                CTĐT toàn khóa:{' '}
                 {[
                     initialValue?.code,
                     initialValue?.name,
@@ -795,10 +795,10 @@ TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement)
             breadcrumbList={[
                 { title: 'Chương trình đào tạo' },
                 {
-                    title: 'Danh mục CTĐT',
+                    title: 'Danh mục CTĐT khung',
                     href: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                 },
-                { title: 'Chi tiết phiên bản CTĐT' },
+                { title: 'Chi tiết CTĐT toàn khóa' },
             ]}
         >
             {page}

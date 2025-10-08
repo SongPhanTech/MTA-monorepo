@@ -148,7 +148,7 @@ const PutCurriculumVersion = () => {
                 message.success('Cập nhật thành công')
             } else {
                 if (!input?.curriculumId) {
-                    message.error('Thiếu curriculumId, không thể tạo phiên bản CTĐT')
+                    message.error('Thiếu curriculumId, không thể tạo CTĐT toàn khóa')
                     return
                 }
                 await createCurriculumVersion({
@@ -214,7 +214,7 @@ const PutCurriculumVersion = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={input?.versionId ? 'Sửa phiên bản CTĐT' : 'Thêm phiên bản CTĐT'}
+            title={input?.versionId ? 'Sửa CTĐT toàn khóa' : 'Thêm CTĐT toàn khóa'}
             className="w-[60vw]"
             style={{ top: 20 }}
         >
@@ -231,29 +231,29 @@ const PutCurriculumVersion = () => {
                                         <FormItem
                                             form={form}
                                             name="code"
-                                            label="Mã phiên bản"
+                                            label="Mã CTĐT toàn khóa"
                                             required
                                         >
-                                            <Input placeholder="Nhập mã phiên bản CTĐT" />
+                                            <Input placeholder="Nhập mã CTĐT toàn khóa" />
                                         </FormItem>
                                     </Col>
                                     <Col span={12}>
                                         <FormItem
                                             form={form}
                                             name="name"
-                                            label="Tên phiên bản (tiếng việt)"
+                                            label="Tên CTĐT toàn khóa (tiếng việt)"
                                             required
                                         >
-                                            <Input placeholder="Nhập tên phiên bản (tiếng việt)" />
+                                            <Input placeholder="Nhập tên CTĐT toàn khóa (tiếng việt)" />
                                         </FormItem>
                                     </Col>
                                     <Col span={12}>
                                         <FormItem
                                             form={form}
                                             name="englishName"
-                                            label="Tên phiên bản (tiếng anh)"
+                                            label="Tên CTĐT toàn khóa (tiếng anh)"
                                         >
-                                            <Input placeholder="Nhập tên phiên bản (tiếng anh)" />
+                                            <Input placeholder="Nhập tên CTĐT toàn khóa (tiếng anh)" />
                                         </FormItem>
                                     </Col>
                                     <Col span={12}>

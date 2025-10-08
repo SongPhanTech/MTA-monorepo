@@ -472,7 +472,7 @@ export default function TrainingProgramCatalog() {
                                 type: 'input',
                             },
                             {
-                                title: 'Tên phiên bản CTĐT',
+                                title: 'Tên CTĐT toàn khóa',
                                 dataIndex: 'name',
                                 align: 'center',
                                 fixed: 'left',
@@ -735,7 +735,7 @@ export default function TrainingProgramCatalog() {
                                                 versionId: '',
                                             })
                                         }}
-                                        title="Thêm mới phiên bản"
+                                        title="Thêm mới CTĐT toàn khóa"
                                     />
                                 )}
                                 {can(

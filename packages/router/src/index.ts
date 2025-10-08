@@ -113,16 +113,16 @@ const NAVIGATION: NavigationType = {
                 children: [
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                        label: 'Danh mục CTĐT',
+                        label: 'Danh mục CTĐT khung',
                         path: ROUTER_PATH.QL_DAO_TAO
                             .CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
-                        description: 'Danh mục CTĐT',
+                        description: 'Danh mục CTĐT khung',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
-                        label: 'Khối kiến thức CTĐT',
+                        label: 'Khối kiến thức CTĐT khung',
                         path: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
-                        description: 'Khối kiến thức CTĐT',
+                        description: 'Khối kiến thức CTĐT khung',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,

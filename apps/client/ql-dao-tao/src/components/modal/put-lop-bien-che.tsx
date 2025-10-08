@@ -77,17 +77,30 @@ const PutFixedClassModal = () => {
 
     const { data: curriculumData = [], refetch: refetchCurriculum } = useFindManyCurriculum({
         where: {
-            // curriculumVersion:{
-            //     some:{
-            //         trainingObjectType:{
-            //             some:{
-            //                 trainingCourse:{
-            //                     id:trainingCourseIdForm
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
+            curriculumVersion: {
+                some: {
+                    OR: [
+                        ...(trainingCourseIdForm
+                            ? [
+                                  {
+                                      fixedClasses: {
+                                          some: {
+                                              trainingCourse: {
+                                                  id: trainingCourseIdForm,
+                                              },
+                                          },
+                                      },
+                                  },
+                              ]
+                            : []),
+                        {
+                            fixedClasses: {
+                                none: {},
+                            },
+                        },
+                    ],
+                },
+            },
         },
         include: {
             curriculumVersion: {
