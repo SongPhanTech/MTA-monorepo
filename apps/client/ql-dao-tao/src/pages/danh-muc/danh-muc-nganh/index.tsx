@@ -53,6 +53,14 @@ export default function TrainingFieldPage() {
                       },
                   }
                 : {}),
+            ...(filters.active
+                ? {
+                      active: {
+                          equals: filters.active[0],
+                      },
+                  }
+                : {}),
+
             ...(filters.trainingObjectTypes
                 ? {
                       trainingObjectTypes: {
@@ -79,13 +87,6 @@ export default function TrainingFieldPage() {
                       },
                   }
                 : {}),
-            ...(filters.active
-                ? {
-                      active: {
-                          equals: filters.active,
-                      },
-                  }
-                : {}),
         }),
         [
             filters.code,
@@ -100,6 +101,7 @@ export default function TrainingFieldPage() {
         where,
         include: {
             organization: true,
+            documentFiles: true,
             trainingObjectTypes: {
                 include: {
                     trainingObjectType: true,
@@ -184,6 +186,10 @@ export default function TrainingFieldPage() {
                         data={data}
                         filters={filters}
                         setFilters={(value) => {
+                            console.log(value)
+                            if (value.active?.length === 0 || value.active?.length === 2) {
+                                value.active = undefined
+                            }
                             setFilters(value)
                             setCurrentPage(1)
                         }}
@@ -248,7 +254,7 @@ export default function TrainingFieldPage() {
                             {
                                 title: 'Số quyết định',
                                 fixed: 'left',
-
+                                dataIndex: 'decisionNo',
                                 align: 'center',
                                 type: 'input',
                             },
@@ -286,6 +292,7 @@ export default function TrainingFieldPage() {
                                 align: 'center',
                                 width: 130,
                                 type: 'select',
+                                dataIndex: 'active',
                                 options: [
                                     { label: 'Đang hoạt động', value: true },
                                     { label: 'Không hoạt động', value: false },
