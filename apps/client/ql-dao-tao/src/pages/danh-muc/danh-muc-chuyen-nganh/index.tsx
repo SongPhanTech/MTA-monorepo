@@ -37,6 +37,7 @@ export default function TrainingMajorPage() {
         numberCreditsRequired: undefined,
         numberCreditsElective: undefined,
         organization: undefined,
+        active: undefined,
     })
 
     const isFiltering = useMemo(() => {

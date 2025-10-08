@@ -30,6 +30,7 @@ export default function TrainingObjectTypePage() {
         baseScore: undefined,
     })
 
+    //TODO: add hiển thị thêm bậc đào tạo và hình thức đào tạo
     const { data = [], refetch } = useFindManyTrainingObjectType({
         where: {
             ...(filters.name
@@ -213,6 +214,18 @@ export default function TrainingObjectTypePage() {
                                           ]
                                         : ''
                                 },
+                            },
+                            {
+                                title: 'Hình thức đào tạo',
+                                fixed: 'left',
+                                align: 'center',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Bậc đào tạo',
+                                fixed: 'left',
+                                align: 'center',
+                                type: 'input',
                             },
                             {
                                 title: 'Trạng thái',

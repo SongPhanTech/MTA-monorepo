@@ -31,6 +31,8 @@ const PutTrainingObjectTypeModal = () => {
 
     const { mutateAsync: createTrainingObjectType } = useCreateTrainingObjectType()
     const { mutateAsync: updateTrainingObjectType } = useUpdateTrainingObjectType()
+
+    //TODO: add hiển thị thêm bậc đào tạo và hình thức đào tạo và lưu thêm bậc đào tạo và hình thức đào tạo
     async function onOk({ ...rest }: TrainingObjectType) {
         try {
             showSpinner()
@@ -114,6 +116,16 @@ const PutTrainingObjectTypeModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên đối tượng đào tạo" required>
                     <Input placeholder="Nhập tên đối tượng đào tạo" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="trainingType" label="Hình thức đào tạo" required>
+                    <Input placeholder="Nhập tên hình thức đào tạo" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="trainingLevel" label="Bậc đào tạo" required>
+                    <Input placeholder="Nhập tên bậc đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>

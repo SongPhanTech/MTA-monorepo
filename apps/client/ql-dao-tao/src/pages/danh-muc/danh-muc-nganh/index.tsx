@@ -32,6 +32,7 @@ export default function TrainingFieldPage() {
         code: '',
         organization: undefined,
         publishDate: undefined,
+        active: undefined,
     })
 
     const where = useMemo(
@@ -78,6 +79,13 @@ export default function TrainingFieldPage() {
                       },
                   }
                 : {}),
+            ...(filters.active
+                ? {
+                      active: {
+                          equals: filters.active,
+                      },
+                  }
+                : {}),
         }),
         [
             filters.code,
@@ -85,6 +93,7 @@ export default function TrainingFieldPage() {
             filters.trainingObjectTypes,
             filters.organization,
             filters.publishDate,
+            filters.active,
         ]
     )
     const { data = [] } = useFindManyTrainingField({
@@ -237,6 +246,13 @@ export default function TrainingFieldPage() {
                                     organization?.sTen ? organization?.sTen : '',
                             },
                             {
+                                title: 'Số quyết định',
+                                fixed: 'left',
+
+                                align: 'center',
+                                type: 'input',
+                            },
+                            {
                                 title: 'Ngày ban hành',
                                 align: 'center',
                                 width: 150,
@@ -244,6 +260,13 @@ export default function TrainingFieldPage() {
                                 type: 'date',
                                 render: (__, { publishDate }) =>
                                     publishDate ? dayjs(publishDate).format('DD/MM/YYYY') : '',
+                            },
+                            {
+                                title: 'Tài liệu đính kèm',
+                                width: 200,
+                                fixed: 'left',
+                                align: 'center',
+                                type: 'input',
                             },
                             {
                                 title: 'Mô tả',
@@ -262,6 +285,11 @@ export default function TrainingFieldPage() {
                                 title: 'Trạng thái',
                                 align: 'center',
                                 width: 130,
+                                type: 'select',
+                                options: [
+                                    { label: 'Đang hoạt động', value: true },
+                                    { label: 'Không hoạt động', value: false },
+                                ],
                                 render: (value, record) => {
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
