@@ -25,6 +25,7 @@ export * from './ArchivedAward.schema';
 export * from './SchoolYear.schema';
 export * from './Semester.schema';
 export * from './Milestone.schema';
+export * from './TrainingLanguage.schema';
 export * from './TrainingCourse.schema';
 export * from './TrainingCourseRegulation.schema';
 export * from './FixedClass.schema';

@@ -3392,6 +3392,114 @@ declare const metadata: {
                 })[];
             }[];
         };
+        trainingLanguage: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                name: {
+                    name: string;
+                    type: string;
+                };
+                trainingCourses: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                curriculumVersion: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
+        };
         trainingCourse: {
             name: string;
             fields: {
@@ -3511,6 +3619,56 @@ declare const metadata: {
                     name: string;
                     type: string;
                     isOptional: boolean;
+                };
+                admissionStartDate: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                admissionEndDate: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                admissionDecision: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                studentRecognitionDecision: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                regulation: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                trainingLanguage: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                trainingLanguageId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
                 };
                 baseScore: {
                     name: string;
@@ -3710,6 +3868,13 @@ declare const metadata: {
                     isArray: boolean;
                     backLink: string;
                     isRelationOwner: boolean;
+                };
+                documentFiles: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
                 };
             };
             uniqueConstraints: {
@@ -4476,12 +4641,27 @@ declare const metadata: {
                 trainingLanguage: {
                     name: string;
                     type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: {
                             name: string;
+                            value: null[];
                         }[];
                     }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                trainingLanguageId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
                 };
                 numberOfSemesters: {
                     name: string;
@@ -5776,14 +5956,6 @@ declare const metadata: {
                     type: string;
                 };
                 graduation: {
-                    name: string;
-                    type: string;
-                };
-                project: {
-                    name: string;
-                    type: string;
-                };
-                print: {
                     name: string;
                     type: string;
                 };
@@ -26961,6 +27133,31 @@ declare const metadata: {
                     };
                 };
                 archivedCertificateId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                trainingCourse: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                trainingCourseId: {
                     name: string;
                     type: string;
                     isOptional: boolean;

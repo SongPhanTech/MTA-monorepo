@@ -1,6 +1,5 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { GENDER_MEAN } from '@constants/constants'
-import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
 import type { DM_DonVi, FixedClass, Student, TrainingCourse } from '@workspace/db'
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
@@ -51,7 +50,6 @@ const ModalPrintToDSHV = () => {
       `,
     })
 
-    const { getTrainingLanguageLabel } = useTrainingLanguageOptions()
     const basicInfoCol1 = [
         {
             title: 'Mã lớp quản lý:',

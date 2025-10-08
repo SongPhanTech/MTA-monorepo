@@ -6,8 +6,6 @@
 // @ts-nocheck
 
 import { z } from 'zod';
-import { TrainingLanguage } from '../../zenstack/models';
-import { TrainingLanguageSchema } from '../enums/TrainingLanguage.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -19,7 +17,6 @@ const baseSchema = z.object({
     name: z.string(),
     shortName: z.string().nullish(),
     englishName: z.string().nullish(),
-    trainingLanguage: TrainingLanguageSchema,
     numberOfSemesters: z.number().nullish(),
     yearCreation: z.number().nullish(),
     yearApplication: z.number().nullish(),
@@ -39,6 +36,7 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    trainingLanguage: z.record(z.unknown()).optional(),
     curriculum: z.record(z.unknown()),
     trainingObjectType: z.record(z.unknown()),
     trainingLevel: z.record(z.unknown()),
@@ -51,6 +49,7 @@ const relationSchema = z.object({
 }
 );
 const fkSchema = z.object({
+    trainingLanguageId: z.string().nullish(),
     curriculumId: z.string(),
     trainingObjectTypeId: z.string(),
     trainingLevelId: z.string(),
@@ -93,7 +92,6 @@ export const CurriculumVersionPrismaUpdateSchema = z.object({
     name: z.string(),
     shortName: z.string().nullish(),
     englishName: z.string().nullish(),
-    trainingLanguage: TrainingLanguageSchema,
     numberOfSemesters: z.union([z.number().nullish(), z.record(z.unknown())]),
     yearCreation: z.union([z.number().nullish(), z.record(z.unknown())]),
     yearApplication: z.union([z.number().nullish(), z.record(z.unknown())]),
@@ -117,7 +115,7 @@ export const CurriculumVersionPrismaUpdateSchema = z.object({
  * `CurriculumVersion` schema for create operations excluding foreign keys and relations.
  */
 export const CurriculumVersionCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, trainingLanguage: true
+    id: true, active: true, createdAt: true, updatedAt: true
 });
 
 

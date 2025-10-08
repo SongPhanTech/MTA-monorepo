@@ -11,10 +11,10 @@ import type {
     TrainingObjectType,
     TrainingTime,
 } from '@workspace/db'
-import { TrainingLanguage } from '@workspace/db'
 import {
     useCreateCurriculumVersion,
     useFindManyDiplomaType,
+    useFindManyTrainingLanguage,
     useFindManyTrainingLevel,
     useFindManyTrainingObjectType,
     useFindManyTrainingTime,
@@ -30,7 +30,6 @@ import './index.css'
 import DocumentPaths from '@components/commons/documentPaths'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Tabs from '@components/commons/tabar'
-import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
 export type PutCurriculumVersion = CurriculumVersion & {
     documentFiles?: DocumentFile[]
 }
@@ -44,7 +43,6 @@ type CurriculumVersionInput = {
 const PutCurriculumVersion = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutCurriculumVersion>()
-    const { options: trainingLanguageOptions } = useTrainingLanguageOptions()
 
     const { isOpen, onClose, input } = useDisclosure<CurriculumVersionInput>({
         tag: 'PutCurriculumVersion',
@@ -61,6 +59,11 @@ const PutCurriculumVersion = () => {
 
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
 
+    const { data: trainingLanguageData = [] } = useFindManyTrainingLanguage({
+        where: { active: true },
+        orderBy: { name: 'asc' },
+    })
+
     const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
     const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
     async function onOk(output?: PutCurriculumVersion) {
@@ -73,7 +76,7 @@ const PutCurriculumVersion = () => {
                 name: output.name.trim(),
                 shortName: output?.shortName,
                 englishName: output.englishName,
-                trainingLanguage: output.trainingLanguage,
+                trainingLanguageId: output.trainingLanguageId,
                 yearCreation: output.yearCreation,
                 yearApplication: output.yearApplication,
                 trainingObjectTypeId: output.trainingObjectTypeId,
@@ -265,13 +268,15 @@ const PutCurriculumVersion = () => {
                                         <FormItem
                                             form={form}
                                             label="Ngôn ngữ đào tạo"
-                                            name="trainingLanguage"
+                                            name="trainingLanguageId"
                                         >
                                             <Select
                                                 placeholder="Chọn ngôn ngữ đào tạo"
-                                                options={trainingLanguageOptions}
+                                                options={trainingLanguageData.map((item) => ({
+                                                    label: item.name,
+                                                    value: item.id,
+                                                }))}
                                                 allowClear
-                                                defaultValue={TrainingLanguage.Vietnamese}
                                             />
                                         </FormItem>
                                     </Col>

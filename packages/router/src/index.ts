@@ -215,6 +215,13 @@ const NAVIGATION: NavigationType = {
                 description: 'Thông tin năm học, kỳ học',
             },
             {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NGON_NGU_DAO_TAO,
+                label: 'Ngôn ngữ đào tạo',
+                icon: BookOpenCheck,
+                path: ROUTER_PATH.QL_DAO_TAO.NGON_NGU_DAO_TAO,
+                description: 'Ngôn ngữ đào tạo',
+            },
+            {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CHUYEN_DOI_DIEM,
                 label: 'Bảng chuyển đổi điểm',
                 icon: GitCompare,

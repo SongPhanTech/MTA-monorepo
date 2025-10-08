@@ -12,7 +12,6 @@ import { ConfigKey } from "../prisma-client";
 import { QuestionType } from "../prisma-client";
 import { ExamStatus } from "../prisma-client";
 import { SemesterType } from "../prisma-client";
-import { TrainingLanguage } from "../prisma-client";
 import { ExamType } from "../prisma-client";
 import { SubjectVersionType } from "../prisma-client";
 import { EquivalencySide } from "../prisma-client";
@@ -445,6 +444,26 @@ const policy: PolicyDef = {
                 update: { guard: Milestone_update, },
                 postUpdate: { guard: Milestone_postUpdate, },
                 delete: { guard: Milestone_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingLanguage: {
+            modelLevel: {
+                read: { guard: TrainingLanguage_read, },
+                create: { guard: TrainingLanguage_create, inputChecker: TrainingLanguage_create_input, },
+                update: { guard: TrainingLanguage_update, },
+                postUpdate: { guard: TrainingLanguage_postUpdate, },
+                delete: { guard: TrainingLanguage_delete, }
             },
             fieldLevel: {
                 read:
@@ -4620,6 +4639,7 @@ const policy: PolicyDef = {
         schoolYear: { hasValidation: false },
         semester: { hasValidation: false },
         milestone: { hasValidation: false },
+        trainingLanguage: { hasValidation: false },
         trainingCourse: { hasValidation: false },
         trainingCourseRegulation: { hasValidation: false },
         fixedClass: { hasValidation: false },
@@ -6125,6 +6145,71 @@ function Milestone_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_Milestone_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingLanguage_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingLanguage_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingLanguage_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingLanguage_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingLanguage_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingLanguage_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingLanguage_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingLanguage_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingLanguage_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingLanguage_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingLanguage_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

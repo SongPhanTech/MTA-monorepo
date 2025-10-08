@@ -21,6 +21,11 @@ const baseSchema = z.object({
     academicYear: z.string().nullish(),
     maxTrainingTime: z.number().nullish(),
     admissionQuota: z.number().nullish(),
+    admissionStartDate: z.coerce.date().nullish(),
+    admissionEndDate: z.coerce.date().nullish(),
+    admissionDecision: z.string().nullish(),
+    studentRecognitionDecision: z.string().nullish(),
+    regulation: z.string().nullish(),
     baseScore: AcademicRankingBaseTypeSchema,
     coef_1: z.number().default(0.1),
     coef_2: z.number().default(0.3),
@@ -35,6 +40,7 @@ const baseSchema = z.object({
 ).strict();
 const relationSchema = z.object({
     semesterStart: z.record(z.unknown()),
+    trainingLanguage: z.record(z.unknown()).optional(),
     trainingObjectType: z.record(z.unknown()),
     trainingCourseRegulation: z.array(z.unknown()).optional(),
     fixedClass: z.array(z.unknown()).optional(),
@@ -46,10 +52,12 @@ const relationSchema = z.object({
     notifications: z.array(z.unknown()).optional(),
     surveyObjectTypes: z.array(z.unknown()).optional(),
     classRegisterSession: z.array(z.unknown()).optional(),
+    documentFiles: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     semesterStartId: z.string(),
+    trainingLanguageId: z.string().nullish(),
     trainingObjectTypeId: z.string(),
 }
 );
@@ -91,6 +99,11 @@ export const TrainingCoursePrismaUpdateSchema = z.object({
     academicYear: z.string().nullish(),
     maxTrainingTime: z.union([z.number().nullish(), z.record(z.unknown())]),
     admissionQuota: z.union([z.number().nullish(), z.record(z.unknown())]),
+    admissionStartDate: z.coerce.date().nullish(),
+    admissionEndDate: z.coerce.date().nullish(),
+    admissionDecision: z.string().nullish(),
+    studentRecognitionDecision: z.string().nullish(),
+    regulation: z.string().nullish(),
     baseScore: AcademicRankingBaseTypeSchema,
     coef_1: z.union([z.number().default(0.1), z.record(z.unknown())]),
     coef_2: z.union([z.number().default(0.3), z.record(z.unknown())]),
