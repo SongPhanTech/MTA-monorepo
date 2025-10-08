@@ -81,9 +81,16 @@ model TrainingLocation extends Base {
 
   dM_Tinh_New   DM_Tinh_New? @relation(fields: [dM_Tinh_NewId], references: [Id])
   dM_Tinh_NewId String?
+  name          String       @unique
 
-  students  Student[]
-  buildings Building[]
+  dM_Tinh       DM_Tinh?     @relation(fields: [dM_TinhId], references: [Id])
+  dM_TinhId     String?
+
+  dM_Tinh_New   DM_Tinh_New? @relation(fields: [dM_Tinh_NewId], references: [Id])
+  dM_Tinh_NewId String?
+
+  students      Student[]
+  buildings     Building[]
   @@schema("ql-dao-tao")
 }
 
@@ -223,6 +230,47 @@ model TrainingTime extends Base {
   curriculumVersion CurriculumVersion[]
   @@schema("ql-dao-tao")
 }
+
+/// Chứng chỉ
+model Certificate extends Base {
+  name                String
+  englishName         String?
+
+  /// SV đạt
+  archivedCertificate ArchivedCertificate[]
+  /// môn học có thể phiên điểm
+  subjects            CertificateOnSubject[]
+  @@schema("ql-dao-tao")
+}
+
+model CertificateOnSubject extends Base {
+  /// phiên điểm môn học
+  finalScore    Float       @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
+
+  certificate   Certificate @relation(fields: [certificateId], references: [id])
+  certificateId String
+
+  subject       Subject     @relation(fields: [subjectId], references: [id])
+  subjectId     String
+
+  @@schema("ql-dao-tao")
+}
+
+/// Giải thưởng
+model Award extends Base {
+  name          String
+  englishName   String?
+  bonusScore    Float
+
+  /// môn học có thể cộng điểm
+  subjects      Subject[]
+  /// SV đạt
+  archivedAward ArchivedAward[]
+
+  @@schema("ql-dao-tao")
+}
+
+
 
 // enum DiplomaFields {
 //   VI_FULLNAME
