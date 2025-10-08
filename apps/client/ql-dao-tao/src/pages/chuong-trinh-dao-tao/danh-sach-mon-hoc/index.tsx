@@ -91,6 +91,9 @@ export default function SubjectList() {
         include: {
             _count: true,
             subjectVersion: {
+                include: {
+                    trainingBlocks: true,
+                },
                 orderBy: [
                     ...emptyObjectIf([{ credit: filters.credit }], !!filters.credit),
                     ...emptyObjectIf([{ period: filters.period }], !!filters.period),
@@ -515,8 +518,19 @@ export default function SubjectList() {
                                     'SUA',
                                     'XOA'
                                 ),
-                                render: (_, record: { id?: string; subjectId?: string }) => {
-                                    const { id: subjectVersionId, subjectId } = record
+                                render: (
+                                    _,
+                                    record: {
+                                        id?: string
+                                        subjectId?: string
+                                        trainingBlocks: any[]
+                                    }
+                                ) => {
+                                    const {
+                                        id: subjectVersionId,
+                                        subjectId,
+                                        trainingBlocks,
+                                    } = record
                                     return subjectVersionId && subjectId ? (
                                         <Row className="justify-center gap-2">
                                             {can(
@@ -538,6 +552,7 @@ export default function SubjectList() {
                                                 'XOA'
                                             ) && (
                                                 <DeleteIcon
+                                                    disabled={trainingBlocks?.length > 0}
                                                     popConfirm={{
                                                         onConfirm: () =>
                                                             handleDelete(subjectVersionId),

@@ -779,7 +779,7 @@ const PutTrainingCourseModal = () => {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lồng nhập mã tham số',
+                                                message: 'Vui lòng nhập mã tham số',
                                             },
                                         ]}
                                     >
@@ -798,7 +798,7 @@ const PutTrainingCourseModal = () => {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lồng nhập tên tham số',
+                                                message: 'Vui lòng nhập tên tham số',
                                             },
                                         ]}
                                     >
@@ -819,7 +819,7 @@ const PutTrainingCourseModal = () => {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lồng nhập giá trị',
+                                                message: 'Vui lòng nhập giá trị',
                                             },
                                         ]}
                                     >

@@ -140,7 +140,7 @@ const ExportStudentInFixedClass = ({
         worksheet.getCell('J1').style = headerTitleStyle
 
         worksheet.mergeCells('A4:R4')
-        worksheet.getCell('A4').value = 'DANH SÁCH HỌC VIÊN TRONG LỚP'
+        worksheet.getCell('A4').value = `DANH SÁCH HỌC VIÊN TRONG LỚP: ${fixedClassName}`
         worksheet.getCell('A4').style = headerSubtitleStyle
         worksheet.getRow(4).height = 20
 
@@ -152,7 +152,7 @@ const ExportStudentInFixedClass = ({
             'Họ và tên',
             'Ngày sinh (dd/mm/yyyy)',
             'Giới tính',
-            'Số điện thoại',
+            'SĐT',
             'Cấp bậc',
             'Ngành',
             'Chuyên ngành',

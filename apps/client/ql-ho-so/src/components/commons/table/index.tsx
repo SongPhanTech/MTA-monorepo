@@ -1,6 +1,6 @@
 import { FilterFilled } from '@ant-design/icons'
+import type { ColumnTypeProps, FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import type { ColumnTypeProps, FilterProps } from '@constants/type'
 import {
     AutoComplete,
     Button,
