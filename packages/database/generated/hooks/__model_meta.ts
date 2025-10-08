@@ -1731,6 +1731,63 @@ const metadata = {
                 },
             },
         },
+        trainingLanguage: {
+            name: 'TrainingLanguage', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, trainingCourses: {
+                    name: "trainingCourses",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingLanguage',
+                }, curriculumVersion: {
+                    name: "curriculumVersion",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingLanguage',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
         trainingCourse: {
             name: 'TrainingCourse', fields: {
                 id: {
@@ -1797,6 +1854,40 @@ const metadata = {
                     name: "admissionQuota",
                     type: "Int",
                     isOptional: true,
+                }, admissionStartDate: {
+                    name: "admissionStartDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, admissionEndDate: {
+                    name: "admissionEndDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, admissionDecision: {
+                    name: "admissionDecision",
+                    type: "String",
+                    isOptional: true,
+                }, studentRecognitionDecision: {
+                    name: "studentRecognitionDecision",
+                    type: "String",
+                    isOptional: true,
+                }, regulation: {
+                    name: "regulation",
+                    type: "String",
+                    isOptional: true,
+                }, trainingLanguage: {
+                    name: "trainingLanguage",
+                    type: "TrainingLanguage",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'trainingCourses',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingLanguageId" },
+                }, trainingLanguageId: {
+                    name: "trainingLanguageId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingLanguage',
                 }, baseScore: {
                     name: "baseScore",
                     type: "AcademicRankingBaseType",
@@ -1911,6 +2002,12 @@ const metadata = {
                     isArray: true,
                     backLink: 'trainingCourses',
                     isRelationOwner: true,
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingCourse',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -2310,7 +2407,17 @@ const metadata = {
                 }, trainingLanguage: {
                     name: "trainingLanguage",
                     type: "TrainingLanguage",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'curriculumVersion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingLanguageId" },
+                }, trainingLanguageId: {
+                    name: "trainingLanguageId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingLanguage',
                 }, numberOfSemesters: {
                     name: "numberOfSemesters",
                     type: "Int",
@@ -3025,12 +3132,6 @@ const metadata = {
                     type: "Boolean",
                 }, graduation: {
                     name: "graduation",
-                    type: "Boolean",
-                }, project: {
-                    name: "project",
-                    type: "Boolean",
-                }, print: {
-                    name: "print",
                     type: "Boolean",
                 },
             }, uniqueConstraints: {
@@ -14311,6 +14412,20 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'archivedCertificate',
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
                 }, archivedAward: {
                     name: "archivedAward",
                     type: "ArchivedAward",

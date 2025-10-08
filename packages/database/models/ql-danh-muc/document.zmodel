@@ -16,6 +16,8 @@ model DocumentFile extends Base {
   archivedCertificate        ArchivedCertificate?            @relation(fields: [archivedCertificateId], references: [id])
   archivedCertificateId      String?
 
+  trainingCourse             TrainingCourse?                 @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId           String?
 
   archivedAward              ArchivedAward?                  @relation(fields: [archivedAwardId], references: [id])
   archivedAwardId            String?

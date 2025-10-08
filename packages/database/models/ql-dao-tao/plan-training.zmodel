@@ -187,45 +187,69 @@ model Milestone extends Base {
   @@schema("ql-dao-tao")
 }
 
+model TrainingLanguage extends Base {
+  name              String
+
+  trainingCourses   TrainingCourse[]
+  curriculumVersion CurriculumVersion[]
+
+  @@schema("ql-dao-tao")
+}
+
 /// Khoá học
 model TrainingCourse extends Base {
-  name                     String
-  semesterStart            Semester                   @relation(fields: [semesterStartId], references: [id]) // Kỳ học bắt đầu
-  semesterStartId          String
-  startYear                Int?
-  endYear                  Int?
-  academicYear             String?
-  maxTrainingTime          Float?
-  admissionQuota           Int?
+  name                       String
+  semesterStart              Semester                   @relation(fields: [semesterStartId], references: [id]) // Kỳ học bắt đầu
+  semesterStartId            String
+  startYear                  Int?
+  endYear                    Int?
+  academicYear               String?
+  maxTrainingTime            Float?
+  /// Chỉ tiêu tuyển sinh
+  admissionQuota             Int?
+  /// Ngày nhập học
+  admissionStartDate         DateTime?
+  /// Ngày kết thúc
+  admissionEndDate           DateTime?
+  /// Mã/số hiệu QĐ tuyển sinh
+  admissionDecision          String?
+  /// Mã/số hiệu QĐ công nhận SV
+  studentRecognitionDecision String?
+  /// Mã/số hiệu quy chế đào tạo
+  regulation                 String?
 
-  baseScore                AcademicRankingBaseType
+  trainingLanguage           TrainingLanguage?          @relation(fields: [trainingLanguageId], references: [id])
+  trainingLanguageId         String?
 
-  coef_1                   Float                      @default(0.1) // Hệ số 1
-  coef_2                   Float                      @default(0.3) // Hệ số 2
-  coef_3                   Float                      @default(0.6) // Hệ số 3
+  baseScore                  AcademicRankingBaseType
 
-  scoreToTakeExam          Float                      @default(0) // Điểm tối thiểu để được thi (điểm liệt)
-  scoreToPass              Float                      @default(4) // Điểm tối thiểu để qua môn
-  scoreToPassConditional   Float                      @default(5) // Điểm tối thiểu để qua môn điều kiện (5 đối với QS, =scoreToPass đối với DS)
+  coef_1                     Float                      @default(0.1) // Hệ số 1
+  coef_2                     Float                      @default(0.3) // Hệ số 2
+  coef_3                     Float                      @default(0.6) // Hệ số 3
 
-  scoreToTakeGraduation    Float                      @default(5) // Điểm liệt môn tốt nghiệp
-  scoreToPassGraduation    Float                      @default(5.5) // Điểm tối để qua môn tốt nghiệp
+  scoreToTakeExam            Float                      @default(0) // Điểm tối thiểu để được thi (điểm liệt)
+  scoreToPass                Float                      @default(4) // Điểm tối thiểu để qua môn
+  scoreToPassConditional     Float                      @default(5) // Điểm tối thiểu để qua môn điều kiện (5 đối với QS, =scoreToPass đối với DS)
 
-  scoreToRetain            Float                      @default(6.9)
+  scoreToTakeGraduation      Float                      @default(5) // Điểm liệt môn tốt nghiệp
+  scoreToPassGraduation      Float                      @default(5.5) // Điểm tối để qua môn tốt nghiệp
 
-  trainingObjectType       TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
-  trainingObjectTypeId     String
+  scoreToRetain              Float                      @default(6.9)
 
-  trainingCourseRegulation TrainingCourseRegulation[]
-  fixedClass               FixedClass[]
-  scoreConverts            ScoreConvert[]
-  academicRankingConvert   AcademicRankingConvert[]
-  scholarships             Scholarship[]
-  academicWarningRule      AcademicWarningRule[]
-  academicActionConfig     AcademicActionConfig[]
-  notifications            Notification[]  // Thông báo cho khoá
-  surveyObjectTypes        SurveyObjectType[]
-  classRegisterSession     ClassRegisterSession[]
+  trainingObjectType         TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
+  trainingObjectTypeId       String
+
+  trainingCourseRegulation   TrainingCourseRegulation[]
+  fixedClass                 FixedClass[]
+  scoreConverts              ScoreConvert[]
+  academicRankingConvert     AcademicRankingConvert[]
+  scholarships               Scholarship[]
+  academicWarningRule        AcademicWarningRule[]
+  academicActionConfig       AcademicActionConfig[]
+  notifications              Notification[]  // Thông báo cho khoá
+  surveyObjectTypes          SurveyObjectType[]
+  classRegisterSession       ClassRegisterSession[]
+  documentFiles              DocumentFile[]
 
   @@schema("ql-dao-tao")
 }
@@ -297,12 +321,6 @@ model Curriculum extends Base {
 
   documentFiles            DocumentFile[]
   curriculumVersion        CurriculumVersion[]
-  @@schema("ql-dao-tao")
-}
-
-enum TrainingLanguage {
-  Vietnamese // Tiếng Việt
-  English // Tiếng Anh
 
   @@schema("ql-dao-tao")
 }
@@ -312,7 +330,8 @@ model CurriculumVersion extends Base {
   name                  String
   shortName             String?
   englishName           String?
-  trainingLanguage      TrainingLanguage                   @default(Vietnamese) // Ngôn ngữ đào tạo
+  trainingLanguage      TrainingLanguage?                  @relation(fields: [trainingLanguageId], references: [id])
+  trainingLanguageId    String?
   numberOfSemesters     Int? // Số kỳ học
   yearCreation          Int? // Năm tạo chương trình đào tạo
   yearApplication       Int? // Năm áp dụng chương trình đào tạo

@@ -1,5 +1,4 @@
 import { GridBlock } from '@components/commons/grid-block'
-import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
 import { useFindUniqueStudent } from '@workspace/db/hooks'
 import { Button, Modal, Space } from 'antd'
 import dayjs from 'dayjs'
@@ -47,7 +46,6 @@ export const ModalPhuLucThacSi = () => {
     } = useDisclosure<string>({
         tag: 'ModalPhuLucThacSi',
     })
-    const { getTrainingLanguageLabel } = useTrainingLanguageOptions()
 
     const { data } = useFindUniqueStudent(
         {
@@ -71,6 +69,7 @@ export const ModalPhuLucThacSi = () => {
                             },
                         },
                         trainingTime: true,
+                        trainingLanguage: true,
                     },
                 },
             },
@@ -150,9 +149,7 @@ export const ModalPhuLucThacSi = () => {
         },
         {
             title: 'Ngôn ngữ đào tạo:',
-            value: (
-                <span>{getTrainingLanguageLabel(data?.curriculumVersion?.trainingLanguage)}</span>
-            ),
+            value: <span>{data?.curriculumVersion?.trainingLanguage?.name}</span>,
         },
     ]
     const basicInfoCol4 = [

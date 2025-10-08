@@ -63,13 +63,6 @@ enum SemesterType {
   @@schema("ql-dao-tao")
 }
 
-enum TrainingLanguage {
-  Vietnamese
-  English
-
-  @@schema("ql-dao-tao")
-}
-
 /// loại hình thi
 enum ExamType {
   OfflineWritten
@@ -952,45 +945,74 @@ model Milestone {
   @@schema("ql-dao-tao")
 }
 
+model TrainingLanguage {
+  id                String              @id() @default(cuid())
+  code              String?             @unique()
+  active            Boolean             @default(true)
+  description       String?             @db.Text()
+  deletedAt         DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @default(now()) @updatedAt()
+  name              String
+  trainingCourses   TrainingCourse[]
+  curriculumVersion CurriculumVersion[]
+
+  @@schema("ql-dao-tao")
+}
+
 /// Khoá học
 model TrainingCourse {
-  id                       String                     @id() @default(cuid())
-  code                     String?                    @unique()
-  active                   Boolean                    @default(true)
-  description              String?                    @db.Text()
-  deletedAt                DateTime?
-  createdAt                DateTime                   @default(now())
-  updatedAt                DateTime                   @default(now()) @updatedAt()
-  name                     String
-  semesterStart            Semester                   @relation(fields: [semesterStartId], references: [id])
-  semesterStartId          String
-  startYear                Int?
-  endYear                  Int?
-  academicYear             String?
-  maxTrainingTime          Float?
-  admissionQuota           Int?
-  baseScore                AcademicRankingBaseType
-  coef_1                   Float                      @default(0.1)
-  coef_2                   Float                      @default(0.3)
-  coef_3                   Float                      @default(0.6)
-  scoreToTakeExam          Float                      @default(0)
-  scoreToPass              Float                      @default(4)
-  scoreToPassConditional   Float                      @default(5)
-  scoreToTakeGraduation    Float                      @default(5)
-  scoreToPassGraduation    Float                      @default(5.5)
-  scoreToRetain            Float                      @default(6.9)
-  trainingObjectType       TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId     String
-  trainingCourseRegulation TrainingCourseRegulation[]
-  fixedClass               FixedClass[]
-  scoreConverts            ScoreConvert[]
-  academicRankingConvert   AcademicRankingConvert[]
-  scholarships             Scholarship[]
-  academicWarningRule      AcademicWarningRule[]
-  academicActionConfig     AcademicActionConfig[]
-  notifications            Notification[]
-  surveyObjectTypes        SurveyObjectType[]
-  classRegisterSession     ClassRegisterSession[]
+  id                         String                     @id() @default(cuid())
+  code                       String?                    @unique()
+  active                     Boolean                    @default(true)
+  description                String?                    @db.Text()
+  deletedAt                  DateTime?
+  createdAt                  DateTime                   @default(now())
+  updatedAt                  DateTime                   @default(now()) @updatedAt()
+  name                       String
+  semesterStart              Semester                   @relation(fields: [semesterStartId], references: [id])
+  semesterStartId            String
+  startYear                  Int?
+  endYear                    Int?
+  academicYear               String?
+  maxTrainingTime            Float?
+  /// Chỉ tiêu tuyển sinh
+  admissionQuota             Int?
+  /// Ngày nhập học
+  admissionStartDate         DateTime?
+  /// Ngày kết thúc
+  admissionEndDate           DateTime?
+  /// Mã/số hiệu QĐ tuyển sinh
+  admissionDecision          String?
+  /// Mã/số hiệu QĐ công nhận SV
+  studentRecognitionDecision String?
+  /// Mã/số hiệu quy chế đào tạo
+  regulation                 String?
+  trainingLanguage           TrainingLanguage?          @relation(fields: [trainingLanguageId], references: [id])
+  trainingLanguageId         String?
+  baseScore                  AcademicRankingBaseType
+  coef_1                     Float                      @default(0.1)
+  coef_2                     Float                      @default(0.3)
+  coef_3                     Float                      @default(0.6)
+  scoreToTakeExam            Float                      @default(0)
+  scoreToPass                Float                      @default(4)
+  scoreToPassConditional     Float                      @default(5)
+  scoreToTakeGraduation      Float                      @default(5)
+  scoreToPassGraduation      Float                      @default(5.5)
+  scoreToRetain              Float                      @default(6.9)
+  trainingObjectType         TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId       String
+  trainingCourseRegulation   TrainingCourseRegulation[]
+  fixedClass                 FixedClass[]
+  scoreConverts              ScoreConvert[]
+  academicRankingConvert     AcademicRankingConvert[]
+  scholarships               Scholarship[]
+  academicWarningRule        AcademicWarningRule[]
+  academicActionConfig       AcademicActionConfig[]
+  notifications              Notification[]
+  surveyObjectTypes          SurveyObjectType[]
+  classRegisterSession       ClassRegisterSession[]
+  documentFiles              DocumentFile[]
 
   @@schema("ql-dao-tao")
 }
@@ -1084,7 +1106,8 @@ model CurriculumVersion {
   name                  String
   shortName             String?
   englishName           String?
-  trainingLanguage      TrainingLanguage                   @default(Vietnamese)
+  trainingLanguage      TrainingLanguage?                  @relation(fields: [trainingLanguageId], references: [id])
+  trainingLanguageId    String?
   numberOfSemesters     Int?
   yearCreation          Int?
   yearApplication       Int?
@@ -1259,10 +1282,10 @@ model TrainingBlockSubject {
   trainingBlockOnCurriculumVersionId String
   semester                           Int?
   type                               SubjectRequirementType           @default(None)
+  /// tính điểm thi cuối ~ !môn điều kiện ~ in trên bảng điểm
   useForFinalScore                   Boolean
+  /// môn tốt nghiệp (dùng trong bảng tốt nghiệp, điểm đạt tốt nghiệp)
   graduation                         Boolean
-  project                            Boolean
-  print                              Boolean
 
   @@schema("ql-dao-tao")
 }
@@ -3967,6 +3990,8 @@ model DocumentFile {
   mimeType                   String?
   archivedCertificate        ArchivedCertificate?            @relation(fields: [archivedCertificateId], references: [id])
   archivedCertificateId      String?
+  trainingCourse             TrainingCourse?                 @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId           String?
   archivedAward              ArchivedAward?                  @relation(fields: [archivedAwardId], references: [id])
   archivedAwardId            String?
   curriculum                 Curriculum?                     @relation(fields: [curriculumId], references: [id])

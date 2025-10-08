@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const TrainingLanguageSchema = z.enum(["Vietnamese", "English"])
+export const TrainingLanguageOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "name"])

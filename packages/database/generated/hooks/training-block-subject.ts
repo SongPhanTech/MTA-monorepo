@@ -329,7 +329,7 @@ export function useSuspenseCountTrainingBlockSubject<TArgs extends Prisma.Traini
 }
 import type { SubjectRequirementType } from '../zenstack/models';
 
-export function useCheckTrainingBlockSubject<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; subjectId?: string; trainingBlockOnCurriculumVersionId?: string; semester?: number; type?: SubjectRequirementType; useForFinalScore?: boolean; graduation?: boolean; project?: boolean; print?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTrainingBlockSubject<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; subjectId?: string; trainingBlockOnCurriculumVersionId?: string; semester?: number; type?: SubjectRequirementType; useForFinalScore?: boolean; graduation?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TrainingBlockSubject', `${endpoint}/trainingBlockSubject/check`, args, options, fetch);
 }
