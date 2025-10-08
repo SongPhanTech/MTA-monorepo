@@ -74,7 +74,13 @@ model TrainingForm extends Base {
 
 /// địa điểm đào tạo
 model TrainingLocation extends Base {
-  name      String     @unique
+  name          String       @unique
+
+  dM_Tinh       DM_Tinh?     @relation(fields: [dM_TinhId], references: [Id])
+  dM_TinhId     String?
+
+  dM_Tinh_New   DM_Tinh_New? @relation(fields: [dM_Tinh_NewId], references: [Id])
+  dM_Tinh_NewId String?
 
   students  Student[]
   buildings Building[]
@@ -122,11 +128,15 @@ model TrainingField extends Base {
   name                String                              @unique
   englishName         String
   publishDate         DateTime
+  ///  số QĐ mở mã ngành
+  decisionNo          String?
   organization        DM_DonVi                            @relation(fields: [organizationId], references: [Id])
   organizationId      String                              @db.Uuid
   trainingObjectTypes TrainingFieldOnTrainingObjectType[]
   trainingMajors      TrainingMajor[]
   surveyObjectTypes   SurveyObjectType[]
+  documentFiles       DocumentFile[]
+
   @@schema("ql-dao-tao")
 }
 
@@ -152,8 +162,12 @@ model TrainingMajor extends Base {
   numberCreditsRequired Int                                 @default(0)
   /// Số tín chỉ tự chọn
   numberCreditsElective Int                                 @default(0)
-  organization          DM_DonVi                            @relation(fields: [organizationId], references: [Id])
+  organization          DM_DonVi                            @relation("organization", fields: [organizationId], references: [Id])
   organizationId        String                              @db.Uuid
+  secondOrganization    DM_DonVi?                           @relation("secondOrganization", fields: [secondOrganizationId], references: [Id])
+  secondOrganizationId  String?                             @db.Uuid
+  thirdOrganization     DM_DonVi?                           @relation("thirdOrganization", fields: [thirdOrganizationId], references: [Id])
+  thirdOrganizationId   String?                             @db.Uuid
   trainingField         TrainingField                       @relation(fields: [trainingFieldId], references: [id])
   trainingFieldId       String
 

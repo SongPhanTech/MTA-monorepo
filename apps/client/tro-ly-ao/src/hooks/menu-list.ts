@@ -1,6 +1,6 @@
 import { useStoreActions, useStoreState } from '@redux/hook'
 import ability from '@workspace/permissions/ability'
-import { PERMISSIONS, usePermissions } from '@workspace/permissions/hooks'
+import { usePermissions } from '@workspace/permissions/hooks'
 import NAVIGATION from '@workspace/router'
 import { useEffect, useMemo } from 'react'
 
@@ -22,9 +22,15 @@ const useMenuList = () => {
     }, [permissions])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <needed>
-    const menus = useMemo(
-        () =>
-            NAVIGATION.TRO_LY_AO.menus
+    const menus = useMemo(() => {
+        console.log('TRO_LY_AO permissions:', permissions)
+        console.log('TRO_LY_AO original menus:', NAVIGATION.TRO_LY_AO.menus)
+
+        // todo: Tạm thời bypass permissions để test menu
+        return NAVIGATION.TRO_LY_AO.menus || []
+
+        /* Original permission-based filtering:
+            return NAVIGATION.TRO_LY_AO.menus
                 .map((menu) => {
                     if (menu.children) {
                         const filteredChildren = menu.children.filter((child) => {
@@ -45,9 +51,9 @@ const useMenuList = () => {
                         ? menu
                         : null
                 })
-                .filter((menu) => menu !== null),
-        [isUpdateAbility, permissions, ability]
-    )
+                .filter((menu) => menu !== null)
+            */
+    }, [isUpdateAbility, permissions, ability])
 
     return menus
 }

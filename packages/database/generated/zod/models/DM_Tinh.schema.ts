@@ -32,6 +32,7 @@ const relationSchema = z.object({
     userProfilePlaceOfBirth: z.array(z.unknown()).optional(),
     userProfilePermanentAddress: z.array(z.unknown()).optional(),
     userProfileCurrentAddress: z.array(z.unknown()).optional(),
+    trainingLocation: z.array(z.unknown()).optional(),
 }
 );
 

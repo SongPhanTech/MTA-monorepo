@@ -1,6 +1,6 @@
 import ChatInput from '@components/commons/input-chat-bot'
 import ChatLayout from '@layouts/chat-layout'
-import { type DocumentType, MessageSender } from '@workspace/db'
+import { MessageSender } from '@workspace/db'
 import { useCreateConversation } from '@workspace/db/hooks'
 import { Card, message } from 'antd'
 import { useRouter } from 'next/router'
@@ -12,19 +12,9 @@ const SUGGESTED_QUESTIONS = [
     'Điều kiện tuyển sinh vào học viện là gì?',
     'Chương trình đào tạo có những ngành nào?',
     'Quy chế thi cử như thế nào?',
-    'Chính sách hỗ trợ cho học viên quân sự?',
+    'Chính sách hỗ trợ cho học viên?',
     'Thông tin về cơ sở vật chất của học viện?',
     'Lịch học và thời gian biểu ra sao?',
-    'Học phí và chi phí sinh hoạt như thế nào?',
-    'Điều kiện tốt nghiệp và cấp bằng?',
-    'Cơ hội việc làm sau khi tốt nghiệp?',
-    'Quy định về kỷ luật và nội quy?',
-    'Hoạt động ngoại khóa và câu lạc bộ?',
-    'Chương trình trao đổi sinh viên quốc tế?',
-    'Hỗ trợ học bổng và tài chính?',
-    'Thư viện và tài nguyên học tập?',
-    'Dịch vụ tư vấn và hướng nghiệp?',
-    'Quy trình đăng ký môn học?',
 ]
 
 export default function TroLyAo() {
@@ -60,7 +50,6 @@ export default function TroLyAo() {
                             },
                         ],
                     },
-                    type: 'ACADEMY_INFORMATION' as DocumentType,
                 },
             })
 
@@ -106,7 +95,6 @@ export default function TroLyAo() {
                             },
                         ],
                     },
-                    type: 'ACADEMY_INFORMATION' as DocumentType,
                 },
             })
 
@@ -127,7 +115,7 @@ export default function TroLyAo() {
     }
     return (
         <div className="flex flex-col h-full items-center bg-white overflow-hidden">
-            <div className="w-full flex flex-col h-full px-4 min-w-0 relative">
+            <div className="w-full flex flex-col h-full min-w-0 relative">
                 <div className="flex-1 overflow-y-auto pb-4 no-scrollbar">
                     {/* Welcome message */}
                     <div className="text-center mb-8 mt-8">

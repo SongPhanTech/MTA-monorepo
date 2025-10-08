@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const SemesterTypeSchema = z.enum(["FIRST", "SECOND"])
+export const SemesterTypeSchema = z.enum(["FIRST", "FIRST_SUPPLEMENTARY", "SECOND", "SECOND_SUPPLEMENTARY", "SUMMER"])

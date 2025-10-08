@@ -4,7 +4,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import { type SchoolYear, type Semester, SemesterType } from '@workspace/db'
+import type { SchoolYear, Semester } from '@workspace/db'
 import {
     useCreateSemester,
     useFindManySchoolYear,
@@ -16,6 +16,7 @@ import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import { useSemesterTypeOptions } from '@hooks/semesterType'
 import { useWatch } from 'antd/es/form/Form'
 export type PutSemester = Semester
 
@@ -32,6 +33,7 @@ const PutSemesterModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
+    const { options } = useSemesterTypeOptions()
 
     const { data = [], refetch } = useFindManySchoolYear({
         take: 1000,
@@ -142,24 +144,23 @@ const PutSemesterModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="semesterType" label="Loại học kỳ" required>
-                    <Select
-                        placeholder="Chọn loại học kỳ"
-                        options={[
-                            {
-                                value: SemesterType.FIRST,
-                                label: 'Học kỳ 1',
+                <FormItem
+                    form={form}
+                    name="semesterType"
+                    label="Loại học kỳ"
+                    rules={[
+                        {
+                            validator: (_, value) => {
+                                if (value === undefined) {
+                                    return Promise.reject('Vui lòng chọn loại học kỳ')
+                                }
+                                // allow null explicitly
+                                return Promise.resolve()
                             },
-                            {
-                                value: SemesterType.SECOND,
-                                label: 'Học kỳ 2',
-                            },
-                            {
-                                value: null,
-                                label: 'Học kỳ khác',
-                            },
-                        ]}
-                    />
+                        },
+                    ]}
+                >
+                    <Select placeholder="Chọn loại học kỳ" options={options} />
                 </FormItem>
             </Col>
             <Col span={12}>

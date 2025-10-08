@@ -24,6 +24,8 @@ const baseSchema = z.object({
 ).strict();
 const relationSchema = z.object({
     organization: z.record(z.unknown()),
+    secondOrganization: z.record(z.unknown()).optional(),
+    thirdOrganization: z.record(z.unknown()).optional(),
     trainingField: z.record(z.unknown()),
     trainingObjectTypes: z.array(z.unknown()).optional(),
     curriculum: z.array(z.unknown()).optional(),
@@ -34,6 +36,8 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     organizationId: z.string().uuid(),
+    secondOrganizationId: z.string().uuid().nullish(),
+    thirdOrganizationId: z.string().uuid().nullish(),
     trainingFieldId: z.string(),
 }
 );

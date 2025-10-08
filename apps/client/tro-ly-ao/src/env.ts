@@ -16,6 +16,7 @@ export const env = createEnv({
      * `NEXT_PUBLIC_`.
      */
     client: {
+        NEXT_PUBLIC_ENVIRONMENT: z.enum(['develop', 'test', 'product', 'local']),
         NEXT_PUBLIC_MINIO_ENDPOINT: z.string().url(),
         NEXT_PUBLIC_CHAT_BOT_URL: z.string().url(),
         NEXT_PUBLIC_DOC_CHAT_BOT_URL: z.string().url(),
@@ -28,6 +29,7 @@ export const env = createEnv({
      */
     runtimeEnv: {
         ENVIRONMENT: process.env.ENVIRONMENT,
+        NEXT_PUBLIC_ENVIRONMENT: process.env.NEXT_PUBLIC_ENVIRONMENT,
         NEXT_PUBLIC_MINIO_ENDPOINT: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
         NEXT_PUBLIC_CHAT_BOT_URL: process.env.NEXT_PUBLIC_CHAT_BOT_URL,
         NEXT_PUBLIC_DOC_CHAT_BOT_URL: process.env.NEXT_PUBLIC_DOC_CHAT_BOT_URL,

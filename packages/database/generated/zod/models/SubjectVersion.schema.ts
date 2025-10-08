@@ -24,6 +24,7 @@ const baseSchema = z.object({
     credit: z.number(),
     week: z.number().nullish(),
     period: z.number().default(0),
+    schedulePeriod: z.number().nullish(),
     numberOfTheory: z.number().nullish(),
     numberOfPractical: z.number().nullish(),
     numberOfSelfStudy: z.number().nullish(),
@@ -43,6 +44,7 @@ const baseSchema = z.object({
 const relationSchema = z.object({
     managementOrganization: z.record(z.unknown()).optional(),
     subject: z.record(z.unknown()),
+    subjectVersionCategory: z.record(z.unknown()).optional(),
     trainingBlocks: z.array(z.unknown()).optional(),
     prerequisiteSubject: z.array(z.unknown()).optional(),
     dependentSubject: z.array(z.unknown()).optional(),
@@ -59,6 +61,7 @@ const relationSchema = z.object({
 const fkSchema = z.object({
     managementOrganizationId: z.string().uuid().nullish(),
     subjectId: z.string(),
+    subjectVersionCategoryId: z.string().nullish(),
 }
 );
 
@@ -100,6 +103,7 @@ export const SubjectVersionPrismaUpdateSchema = z.object({
     credit: z.union([z.number(), z.record(z.unknown())]),
     week: z.union([z.number().nullish(), z.record(z.unknown())]),
     period: z.union([z.number().default(0), z.record(z.unknown())]),
+    schedulePeriod: z.union([z.number().nullish(), z.record(z.unknown())]),
     numberOfTheory: z.union([z.number().nullish(), z.record(z.unknown())]),
     numberOfPractical: z.union([z.number().nullish(), z.record(z.unknown())]),
     numberOfSelfStudy: z.union([z.number().nullish(), z.record(z.unknown())]),

@@ -18,8 +18,15 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    dM_Tinh: z.record(z.unknown()).optional(),
+    dM_Tinh_New: z.record(z.unknown()).optional(),
     students: z.array(z.unknown()).optional(),
     buildings: z.array(z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    dM_TinhId: z.string().nullish(),
+    dM_Tinh_NewId: z.string().nullish(),
 }
 );
 
@@ -32,7 +39,7 @@ export const TrainingLocationScalarSchema = baseSchema;
 /**
  * `TrainingLocation` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const TrainingLocationSchema = TrainingLocationScalarSchema.merge(relationSchema.partial());
+export const TrainingLocationSchema = TrainingLocationScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -69,9 +76,7 @@ export const TrainingLocationCreateScalarSchema = baseSchema.partial({
 /**
  * `TrainingLocation` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const TrainingLocationCreateSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
-});
+export const TrainingLocationCreateSchema = TrainingLocationCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -83,5 +88,5 @@ export const TrainingLocationUpdateScalarSchema = baseSchema.partial();
 /**
  * `TrainingLocation` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const TrainingLocationUpdateSchema = TrainingLocationUpdateScalarSchema;
+export const TrainingLocationUpdateSchema = TrainingLocationUpdateScalarSchema.merge(fkSchema.partial());
 

@@ -1,8 +1,7 @@
-import { EyeOutlined } from '@ant-design/icons'
+import { AuditOutlined, EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
 import DeleteIcon from '@components/icons/delete'
-import { DOCUMENT_TYPE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import { cn, formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { $Enums } from '@workspace/db'
@@ -18,8 +17,10 @@ import { Button, Input, message, Tabs, type TabsProps, Tag, Tooltip } from 'antd
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { deleteVectorRecordFAQ, deleteVectorRecordHoiDap } from '@/api/chunking_and_vectorize'
+import { useTopics } from '@/hooks/useTopics'
 
 function Page() {
+    const { topicOptions } = useTopics()
     const [filters, setFilters] = useState<{
         title: string
         status: $Enums.DocumentStatus
@@ -68,6 +69,7 @@ function Page() {
     const { data: documents = [] } = useFindManyDocument({
         include: {
             uploadedBy: true,
+            topic: true,
         },
         where: {
             status: filters.status,
@@ -93,7 +95,10 @@ function Page() {
         where: { status: $Enums.DocumentStatus.PENDING },
     })
     const { data: faqs = [] } = useFindManyFAQ({
-        include: { uploadedBy: true },
+        include: {
+            uploadedBy: true,
+            topic: true,
+        },
         where: {
             status: faqFilter.status,
             question: {
@@ -259,9 +264,8 @@ function Page() {
                                 },
                                 {
                                     title: 'Loại tài liệu',
-                                    dataIndex: 'type',
-                                    render: (value) =>
-                                        DOCUMENT_TYPE.find((item) => item.value === value)?.label,
+                                    dataIndex: 'topic',
+                                    render: (topic) => topic?.name || 'Chưa phân loại',
                                 },
                                 {
                                     title: 'Người tải lên',
@@ -287,18 +291,6 @@ function Page() {
                                     dataIndex: 'status',
                                     align: 'center',
                                     width: 120,
-                                    onCell: (record) => ({
-                                        className: 'cursor-pointer',
-                                        onClick: (e) => {
-                                            e.stopPropagation()
-                                            if (
-                                                record.status === $Enums.DocumentStatus.PENDING ||
-                                                record.status === $Enums.DocumentStatus.DENY
-                                            ) {
-                                                openPheDuyetTaiLieu(record.id)
-                                            }
-                                        },
-                                    }),
                                     render: (value: $Enums.DocumentStatus) => {
                                         const statusMap = {
                                             [$Enums.DocumentStatus.APPROVE]: {
@@ -332,9 +324,20 @@ function Page() {
                                     title: 'Thao tác',
                                     key: 'action',
                                     align: 'center',
-                                    width: 80,
+                                    width: 120,
                                     render: (_, record) => (
                                         <div className="flex items-center justify-center gap-2">
+                                            {(record.status === $Enums.DocumentStatus.PENDING ||
+                                                record.status === $Enums.DocumentStatus.DENY) && (
+                                                <Tooltip title="Phê duyệt" placement="top">
+                                                    <AuditOutlined
+                                                        onClick={() =>
+                                                            openPheDuyetTaiLieu(record.id)
+                                                        }
+                                                        className="text-green-600 cursor-pointer text-lg"
+                                                    />
+                                                </Tooltip>
+                                            )}
                                             <Tooltip title="Xem chi tiết" placement="leftTop">
                                                 <EyeOutlined
                                                     onClick={() => openPreviewTaiLieu(record.id)}
@@ -474,13 +477,10 @@ function Page() {
                                 },
                                 {
                                     title: 'Loại câu hỏi',
-                                    dataIndex: 'type',
+                                    dataIndex: 'topic',
                                     width: 200,
                                     align: 'center',
-                                    render: (value) => {
-                                        return DOCUMENT_TYPE.find((item) => item.value === value)
-                                            ?.label
-                                    },
+                                    render: (topic) => topic?.name || 'Chưa phân loại',
                                 },
                                 {
                                     title: 'Câu trả lời',
@@ -515,18 +515,7 @@ function Page() {
                                     title: 'Trạng thái',
                                     dataIndex: 'status',
                                     align: 'center',
-                                    width: 120,
-                                    onCell: (record) => ({
-                                        onClick: (e) => {
-                                            e.stopPropagation()
-                                            if (
-                                                record.status === $Enums.DocumentStatus.PENDING ||
-                                                record.status === $Enums.DocumentStatus.DENY
-                                            ) {
-                                                openPheDuyetCauHoiThuongGap(record.id)
-                                            }
-                                        },
-                                    }),
+                                    width: 100,
                                     render: (value: $Enums.DocumentStatus) => {
                                         const statusMap = {
                                             [$Enums.DocumentStatus.APPROVE]: {
@@ -549,7 +538,7 @@ function Page() {
                                         return (
                                             <Tag
                                                 color={status.color}
-                                                className="px-3 py-1 text-sm rounded cursor-pointer"
+                                                className="px-3 py-1 text-sm rounded"
                                             >
                                                 {status.label}
                                             </Tag>
@@ -560,9 +549,20 @@ function Page() {
                                     title: 'Thao tác',
                                     key: 'action',
                                     align: 'center',
-                                    width: 80,
+                                    width: 100,
                                     render: (_, record) => (
                                         <div className="flex items-center justify-center gap-2">
+                                            {(record.status === $Enums.DocumentStatus.PENDING ||
+                                                record.status === $Enums.DocumentStatus.DENY) && (
+                                                <Tooltip title="Phê duyệt" placement="top">
+                                                    <AuditOutlined
+                                                        onClick={() =>
+                                                            openPheDuyetCauHoiThuongGap(record.id)
+                                                        }
+                                                        className="text-green-600 cursor-pointer text-lg"
+                                                    />
+                                                </Tooltip>
+                                            )}
                                             <Tooltip title="Xem chi tiết" placement="leftTop">
                                                 <EyeOutlined
                                                     onClick={() => openPutCauHoi(record.id)}
@@ -610,7 +610,7 @@ function Page() {
     )
 }
 Page.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
+    return <DefaultLayout breadcrumbList={[{ title: 'Quản trị dữ liệu' }]}>{page}</DefaultLayout>
 }
 
 export default Page

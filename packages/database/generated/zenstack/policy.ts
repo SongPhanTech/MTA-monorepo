@@ -578,6 +578,26 @@ const policy: PolicyDef = {
             },
 
         },
+        subjectVersionCategory: {
+            modelLevel: {
+                read: { guard: SubjectVersionCategory_read, },
+                create: { guard: SubjectVersionCategory_create, inputChecker: SubjectVersionCategory_create_input, },
+                update: { guard: SubjectVersionCategory_update, },
+                postUpdate: { guard: SubjectVersionCategory_postUpdate, },
+                delete: { guard: SubjectVersionCategory_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         subjectVersion: {
             modelLevel: {
                 read: { guard: SubjectVersion_read, },
@@ -4606,6 +4626,7 @@ const policy: PolicyDef = {
         curriculum: { hasValidation: false },
         curriculumVersion: { hasValidation: false },
         subject: { hasValidation: false },
+        subjectVersionCategory: { hasValidation: false },
         subjectVersion: { hasValidation: false },
         equivalencyGroup: { hasValidation: false },
         subjectInGroup: { hasValidation: false },
@@ -6494,6 +6515,71 @@ function Subject_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_Subject_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectVersionCategory_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_SubjectVersionCategory_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectVersionCategory_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectVersionCategory_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectVersionCategory_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function SubjectVersionCategory_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectVersionCategory_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectVersionCategory_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_SubjectVersionCategory_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function SubjectVersionCategory_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectVersionCategory_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

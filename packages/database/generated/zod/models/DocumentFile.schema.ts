@@ -35,6 +35,7 @@ const relationSchema = z.object({
     diplomaVerification: z.record(z.unknown()).optional(),
     diplomaVerificationFront: z.record(z.unknown()).optional(),
     diplomaVerificationBack: z.record(z.unknown()).optional(),
+    trainingField: z.record(z.unknown()).optional(),
     note: z.record(z.unknown()).optional(),
 }
 );
@@ -53,6 +54,7 @@ const fkSchema = z.object({
     diplomaVerificationId: z.string().nullish(),
     diplomaVerificationFrontId: z.string().nullish(),
     diplomaVerificationBackId: z.string().nullish(),
+    trainingFieldId: z.string().nullish(),
     noteId: z.string().nullish(),
 }
 );

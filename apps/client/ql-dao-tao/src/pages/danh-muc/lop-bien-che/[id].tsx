@@ -1,6 +1,7 @@
 import { SafetyCertificateOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
+import ExportStudentInFixedClass from '@components/modal/export-list-student-in-fixedClass'
 import { FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -41,6 +42,9 @@ export default function StudentFixedClassPage() {
         trainingMajors: undefined,
         trainingField: undefined,
         dateOfBirth: undefined,
+        phone: undefined,
+        statusStudent: undefined,
+        rank: undefined,
     })
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
@@ -96,14 +100,34 @@ export default function StudentFixedClassPage() {
                     {
                         firstName: {
                             contains: filters.name,
+                            mode: 'insensitive',
                         },
                     },
                     {
                         lastName: {
                             contains: filters.name,
+                            mode: 'insensitive',
                         },
                     },
                 ],
+                ...(filters.rank
+                    ? {
+                          rank: {
+                              sTen: {
+                                  contains: filters.rank,
+                                  mode: 'insensitive',
+                              },
+                          },
+                      }
+                    : {}),
+                ...(filters.phone
+                    ? {
+                          phoneNumber: {
+                              contains: filters.phone,
+                              mode: 'insensitive',
+                          },
+                      }
+                    : {}),
                 ...(filters.gender
                     ? {
                           genderId: {
@@ -120,6 +144,7 @@ export default function StudentFixedClassPage() {
                       }
                     : {}),
             },
+
             ...(filters.code
                 ? {
                       code: {
@@ -132,6 +157,13 @@ export default function StudentFixedClassPage() {
                 ? {
                       curriculumVersionId: {
                           in: filters.curriculumVersion,
+                      },
+                  }
+                : {}),
+            ...(filters.statusStudent
+                ? {
+                      status: {
+                          in: filters.statusStudent,
                       },
                   }
                 : {}),
@@ -159,7 +191,11 @@ export default function StudentFixedClassPage() {
             },
         },
         include: {
-            userProfile: true,
+            userProfile: {
+                include: {
+                    rank: true,
+                },
+            },
             trainingObjectType: {
                 include: {
                     trainingFields: {
@@ -199,7 +235,9 @@ export default function StudentFixedClassPage() {
             },
         },
         orderBy: {
-            createdAt: 'desc',
+            userProfile: {
+                firstName: 'asc',
+            },
         },
     })
 
@@ -352,6 +390,10 @@ export default function StudentFixedClassPage() {
                                         Xoá SV khỏi lớp
                                     </Button>
                                 </Popconfirm>
+                                <ExportStudentInFixedClass
+                                    data={data}
+                                    fixedClassName={`${fixedClass?.name}_${fixedClass?.trainingCourse?.name}`}
+                                />
                                 <Button onClick={handleModalPrint} type="primary">
                                     In danh sách
                                 </Button>
@@ -441,6 +483,28 @@ export default function StudentFixedClassPage() {
                                         : '',
                             },
                             {
+                                title: 'SĐT',
+                                align: 'center',
+                                width: 120,
+                                dataIndex: 'phone',
+                                type: 'input',
+                                render: (__, record) =>
+                                    record.userProfile?.phoneNumber
+                                        ? record.userProfile?.phoneNumber
+                                        : '',
+                            },
+                            {
+                                title: 'Cấp bậc',
+                                align: 'center',
+                                width: 120,
+                                dataIndex: 'rank',
+                                type: 'input',
+                                render: (__, record) =>
+                                    record.userProfile?.rank?.sTen
+                                        ? record.userProfile?.rank?.sTen
+                                        : '',
+                            },
+                            {
                                 title: 'Ngành',
                                 width: 150,
                                 align: 'center',
@@ -493,6 +557,14 @@ export default function StudentFixedClassPage() {
                                 title: 'Trạng thái',
                                 align: 'center',
                                 width: 120,
+                                type: 'select',
+                                dataIndex: 'status',
+                                options: Object.entries(FIXED_CLASS_STUDENT_STATUS).map(
+                                    ([value, item]) => ({
+                                        label: item.label,
+                                        value,
+                                    })
+                                ),
                                 render: (_, record) => {
                                     const statusInfo =
                                         FIXED_CLASS_STUDENT_STATUS[

@@ -1,20 +1,19 @@
-import { CloseCircleOutlined } from '@ant-design/icons'
+import { CloseCircleOutlined, InboxOutlined } from '@ant-design/icons'
 import { fetchReadDocumentContentDocumentDocumentReaderGet } from '@api/qa/qaComponents'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import UploadDragAndDrop, { FileUploadIcon } from '@components/commons/upload'
-import { DOCUMENT_TYPE } from '@constants/constants'
 import { cn, formatNiceBytes } from '@lib/utils'
-import { $Enums } from '@workspace/db'
 import { useCreateManyDocument } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { Col, Form, Input, Modal, message, Progress } from 'antd'
 import axios from 'axios'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useTopics } from '@/hooks/useTopics'
 
 type DocumentFormType = {
-    type: $Enums.DocumentType
+    topicId: string
     files: Record<
         string,
         {
@@ -29,7 +28,12 @@ type DocumentFormType = {
     >
 }
 const ThemTaiLieu = () => {
-    const { isOpen, onClose } = useDisclosure<string>({
+    const { selectableTopicOptions } = useTopics()
+    const {
+        isOpen,
+        onClose,
+        input: selectedFiles,
+    } = useDisclosure<{ file: File; progress: number; timeLeft: number }[]>({
         tag: 'ThemTaiLieu',
     })
 
@@ -40,7 +44,7 @@ const ThemTaiLieu = () => {
     const [form] = Form.useForm<DocumentFormType>()
 
     const files = Form.useWatch('files', form) || {}
-    const type = Form.useWatch('type', form) || {}
+    const selectedTopicId = Form.useWatch('topicId', form)
     const [modalThemTaiLieu, contextConfirmThemTaiLieu] = Modal.useModal()
 
     const onUpload = async (
@@ -50,6 +54,13 @@ const ThemTaiLieu = () => {
         }>
     ) => {
         try {
+            // Kiểm tra xem đã chọn topic chưa
+            const currentTopicId = form.getFieldValue('topicId')
+            if (!currentTopicId) {
+                message.error('Vui lòng chọn loại tài liệu trước khi tải lên')
+                return
+            }
+
             const valuesWithId = values.map((item) => ({
                 ...item,
                 id: crypto.randomUUID(),
@@ -96,12 +107,16 @@ const ThemTaiLieu = () => {
                             })
                         },
                     })
+                    const selectedTopicId = form.getFieldValue('topicId')
+                    const selectedTopic = selectableTopicOptions.find(
+                        (topic) => topic.id === selectedTopicId
+                    )
                     const resReaderDocument =
                         await fetchReadDocumentContentDocumentDocumentReaderGet({
                             queryParams: {
                                 uri_file: resPresignedUrl.fileName,
-                                type,
-                            },
+                                topic_type: selectedTopic?.type || '',
+                            } as any,
                         })
                     form.setFieldsValue({
                         files: {
@@ -153,7 +168,7 @@ const ThemTaiLieu = () => {
                     uri: url,
                     title: file.name,
                     fileType: file.type,
-                    type: values.type,
+                    topicId: values.topicId,
                     body,
                     fileSize: file.size,
                 })),
@@ -188,26 +203,47 @@ const ThemTaiLieu = () => {
                     className={cn('mt-4', selectedFile ? 'w-2/5' : 'w-full')}
                     initialValues={{
                         files: {},
-                        type: $Enums.DocumentType.ACADEMY_INFORMATION,
+                        topicId: null,
                     }}
                 >
                     <Col span={24}>
-                        <FormItem form={form} name={'type'} label="Loại tài liệu">
+                        <FormItem
+                            form={form}
+                            name={'topicId'}
+                            label="Loại tài liệu"
+                            rules={[{ required: true, message: 'Vui lòng chọn loại tài liệu' }]}
+                        >
                             <Select
-                                defaultValue={$Enums.DocumentType.ACADEMY_INFORMATION}
-                                options={DOCUMENT_TYPE}
+                                placeholder="Chọn loại tài liệu"
+                                options={selectableTopicOptions.map((topic) => ({
+                                    value: topic.id,
+                                    label: topic.name,
+                                }))}
                             />
                         </FormItem>
                     </Col>
                     <Col span={24}>
                         <FormItem form={form} name={'files'}>
-                            <UploadDragAndDrop
-                                multiple
-                                accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"
-                                className="w-full h-[165px]"
-                                isShowUpload={false}
-                                onUpload={onUpload}
-                            />
+                            {selectedTopicId ? (
+                                <UploadDragAndDrop
+                                    multiple
+                                    accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"
+                                    className="w-full h-[165px]"
+                                    isShowUpload={false}
+                                    onUpload={onUpload}
+                                />
+                            ) : (
+                                <div className="w-full h-[165px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
+                                    <div className="text-center text-gray-500">
+                                        <div className="text-4xl mb-2">
+                                            <InboxOutlined />
+                                        </div>
+                                        <div>
+                                            Vui lòng chọn loại tài liệu trước khi tải lên file
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </FormItem>
                     </Col>
                     <div className="overflow-y-scroll max-h-[300px] mt-4">

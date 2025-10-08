@@ -352,6 +352,16 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col>
             <Col span={8}>
+                <FormItem form={form} name="schedulePeriod" label="Số tiết TKB" required>
+                    <InputNumber
+                        min={0}
+                        type="number"
+                        placeholder="Số tiết TKB"
+                        className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={8}>
                 <FormItem form={form} name="numberOfTheory" label="Số tiết lý thuyết">
                     <InputNumber
                         min={0}

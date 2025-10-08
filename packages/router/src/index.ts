@@ -457,6 +457,11 @@ const NAVIGATION: NavigationType = {
                 icon: SettingOutlined,
                 children: [
                     {
+                        id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CHU_DE,
+                        label: 'Chủ đề',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CHU_DE,
+                    },
+                    {
                         id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU,
                         label: 'Dữ liệu',
                         path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU,
@@ -477,7 +482,7 @@ const NAVIGATION: NavigationType = {
                 id: 'tro-ly-ao',
                 label: 'Trợ lý ảo',
                 icon: MessageOutlined,
-                path: ROUTER_PATH.TRO_LY_AO.INDEX,
+                path: ROUTER_PATH.TRO_LY_AO.TRO_LY_AO,
             },
         ],
     },

@@ -22,7 +22,7 @@ import {
     useFindUniqueFixedClass,
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Radio } from 'antd'
+import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -54,6 +54,7 @@ const PutFixedClassModal = () => {
             updateFixedClassWithStudent()
         },
     })
+    const trainingCourseIdForm = Form.useWatch('trainingCourseId', form)
 
     const trainingObjectTypeForm = Form.useWatch('trainingObjectTypeId', form)
     const curriculumVersionIdForm = Form.useWatch('curriculumVersionId', form)
@@ -75,7 +76,19 @@ const PutFixedClassModal = () => {
         })
 
     const { data: curriculumData = [], refetch: refetchCurriculum } = useFindManyCurriculum({
-        where: {},
+        where: {
+            // curriculumVersion:{
+            //     some:{
+            //         trainingObjectType:{
+            //             some:{
+            //                 trainingCourse:{
+            //                     id:trainingCourseIdForm
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+        },
         include: {
             curriculumVersion: {
                 include: {
@@ -174,7 +187,7 @@ const PutFixedClassModal = () => {
             code: dataOutput.code,
             name: dataOutput.name,
             description: dataOutput.description,
-            startYear: dataOutput.startYear,
+            // startYear: dataOutput.startYear,
             graduated: dataOutput.graduated,
             active: dataOutput.active,
             summary: dataOutput.summary,
@@ -218,7 +231,7 @@ const PutFixedClassModal = () => {
                 code: output.code,
                 name: output.name.trim(),
                 description: output.description,
-                startYear: output.startYear,
+                // startYear: output.startYear,
                 graduated: output.graduated,
                 active: output.active,
                 summary: output.summary,
@@ -367,21 +380,34 @@ const PutFixedClassModal = () => {
             maskClosable={true}
             title={id ? 'Chỉnh sửa lớp quản lý' : 'Thêm mới lớp quản lý'}
             className="w-[45vw]"
-            formProps={{
-                onValuesChange(changedValues, values) {
-                    if (changedValues.trainingCourseId) {
-                        form.setFieldValue(
-                            'startYear',
-                            trainingCourseData
-                                .find(
-                                    (i: TrainingCourse) => i.id === changedValues?.trainingCourseId
-                                )
-                                ?.semesterStart?.schoolYear?.startDate?.getFullYear?.()
-                        )
-                    }
-                },
-            }}
+            // formProps={{
+            //     onValuesChange(changedValues, values) {
+            //         if (changedValues.trainingCourseId) {
+            //             form.setFieldValue(
+            //                 'startYear',
+            //                 trainingCourseData
+            //                     .find(
+            //                         (i: TrainingCourse) => i.id === changedValues?.trainingCourseId
+            //                     )
+            //                     ?.semesterStart?.schoolYear?.startDate?.getFullYear?.()
+            //             )
+            //         }
+            //     },
+            // }}
         >
+            <Col span={12}>
+                <FormItem form={form} name="trainingCourseId" label="Khóa" required>
+                    <Select
+                        placeholder="Chọn khóa"
+                        options={trainingCourseData.map((i: TrainingCourse) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
+                </FormItem>
+            </Col>
             <Col span={12}>
                 <FormItem form={form} name="curriculumVersionId" label="Chương trình đào tạo">
                     <TreeSelect
@@ -407,19 +433,7 @@ const PutFixedClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
-                <FormItem form={form} name="trainingCourseId" label="Khóa" required>
-                    <Select
-                        placeholder="Chọn khóa"
-                        options={trainingCourseData.map((i: TrainingCourse) => {
-                            return {
-                                value: i.id,
-                                label: i.name,
-                            }
-                        })}
-                    />
-                </FormItem>
-            </Col>
+
             <Col span={12}>
                 <FormItem
                     form={form}
@@ -502,7 +516,7 @@ const PutFixedClassModal = () => {
                     <Input placeholder="Nhập tên viết tắt" />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem form={form} name="startYear" label="Năm bắt đầu">
                     <InputNumber
                         type="number"
@@ -523,7 +537,7 @@ const PutFixedClassModal = () => {
                         placeholder="Nhập sĩ số"
                     />
                 </FormItem>
-            </Col>
+            </Col> */}
 
             <Col span={12}>
                 <FormItem form={form} name="description" label="Mô tả">

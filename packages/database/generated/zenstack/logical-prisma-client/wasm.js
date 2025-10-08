@@ -544,6 +544,17 @@ exports.Prisma.SubjectScalarFieldEnum = {
   information: 'information'
 };
 
+exports.Prisma.SubjectVersionCategoryScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name'
+};
+
 exports.Prisma.SubjectVersionScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -559,6 +570,7 @@ exports.Prisma.SubjectVersionScalarFieldEnum = {
   credit: 'credit',
   week: 'week',
   period: 'period',
+  schedulePeriod: 'schedulePeriod',
   numberOfTheory: 'numberOfTheory',
   numberOfPractical: 'numberOfPractical',
   numberOfSelfStudy: 'numberOfSelfStudy',
@@ -574,7 +586,8 @@ exports.Prisma.SubjectVersionScalarFieldEnum = {
   materials: 'materials',
   rules: 'rules',
   managementOrganizationId: 'managementOrganizationId',
-  subjectId: 'subjectId'
+  subjectId: 'subjectId',
+  subjectVersionCategoryId: 'subjectVersionCategoryId'
 };
 
 exports.Prisma.EquivalencyGroupScalarFieldEnum = {
@@ -797,7 +810,9 @@ exports.Prisma.TrainingLocationScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  name: 'name'
+  name: 'name',
+  dM_TinhId: 'dM_TinhId',
+  dM_Tinh_NewId: 'dM_Tinh_NewId'
 };
 
 exports.Prisma.BuildingScalarFieldEnum = {
@@ -842,6 +857,7 @@ exports.Prisma.TrainingFieldScalarFieldEnum = {
   name: 'name',
   englishName: 'englishName',
   publishDate: 'publishDate',
+  decisionNo: 'decisionNo',
   organizationId: 'organizationId'
 };
 
@@ -872,6 +888,8 @@ exports.Prisma.TrainingMajorScalarFieldEnum = {
   numberCreditsRequired: 'numberCreditsRequired',
   numberCreditsElective: 'numberCreditsElective',
   organizationId: 'organizationId',
+  secondOrganizationId: 'secondOrganizationId',
+  thirdOrganizationId: 'thirdOrganizationId',
   trainingFieldId: 'trainingFieldId'
 };
 
@@ -2639,6 +2657,7 @@ exports.Prisma.DocumentFileScalarFieldEnum = {
   diplomaVerificationId: 'diplomaVerificationId',
   diplomaVerificationFrontId: 'diplomaVerificationFrontId',
   diplomaVerificationBackId: 'diplomaVerificationBackId',
+  trainingFieldId: 'trainingFieldId',
   noteId: 'noteId'
 };
 
@@ -4057,6 +4076,13 @@ exports.Prisma.SubjectOrderByRelevanceFieldEnum = {
   information: 'information'
 };
 
+exports.Prisma.SubjectVersionCategoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  name: 'name'
+};
+
 exports.Prisma.SubjectVersionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -4071,7 +4097,8 @@ exports.Prisma.SubjectVersionOrderByRelevanceFieldEnum = {
   materials: 'materials',
   rules: 'rules',
   managementOrganizationId: 'managementOrganizationId',
-  subjectId: 'subjectId'
+  subjectId: 'subjectId',
+  subjectVersionCategoryId: 'subjectVersionCategoryId'
 };
 
 exports.Prisma.EquivalencyGroupOrderByRelevanceFieldEnum = {
@@ -4195,7 +4222,9 @@ exports.Prisma.TrainingLocationOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  name: 'name'
+  name: 'name',
+  dM_TinhId: 'dM_TinhId',
+  dM_Tinh_NewId: 'dM_Tinh_NewId'
 };
 
 exports.Prisma.BuildingOrderByRelevanceFieldEnum = {
@@ -4220,6 +4249,7 @@ exports.Prisma.TrainingFieldOrderByRelevanceFieldEnum = {
   description: 'description',
   name: 'name',
   englishName: 'englishName',
+  decisionNo: 'decisionNo',
   organizationId: 'organizationId'
 };
 
@@ -4239,6 +4269,8 @@ exports.Prisma.TrainingMajorOrderByRelevanceFieldEnum = {
   englishName: 'englishName',
   summary: 'summary',
   organizationId: 'organizationId',
+  secondOrganizationId: 'secondOrganizationId',
+  thirdOrganizationId: 'thirdOrganizationId',
   trainingFieldId: 'trainingFieldId'
 };
 
@@ -5336,6 +5368,7 @@ exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
   diplomaVerificationId: 'diplomaVerificationId',
   diplomaVerificationFrontId: 'diplomaVerificationFrontId',
   diplomaVerificationBackId: 'diplomaVerificationBackId',
+  trainingFieldId: 'trainingFieldId',
   noteId: 'noteId'
 };
 
@@ -6060,7 +6093,10 @@ exports.ExamStatus = exports.$Enums.ExamStatus = {
 
 exports.SemesterType = exports.$Enums.SemesterType = {
   FIRST: 'FIRST',
-  SECOND: 'SECOND'
+  FIRST_SUPPLEMENTARY: 'FIRST_SUPPLEMENTARY',
+  SECOND: 'SECOND',
+  SECOND_SUPPLEMENTARY: 'SECOND_SUPPLEMENTARY',
+  SUMMER: 'SUMMER'
 };
 
 exports.AcademicRankingBaseType = exports.$Enums.AcademicRankingBaseType = {
@@ -6086,6 +6122,7 @@ exports.ExamType = exports.$Enums.ExamType = {
 
 exports.SubjectVersionType = exports.$Enums.SubjectVersionType = {
   Normal: 'Normal',
+  Research: 'Research',
   Project: 'Project'
 };
 
@@ -6428,6 +6465,7 @@ exports.Prisma.ModelName = {
   Curriculum: 'Curriculum',
   CurriculumVersion: 'CurriculumVersion',
   Subject: 'Subject',
+  SubjectVersionCategory: 'SubjectVersionCategory',
   SubjectVersion: 'SubjectVersion',
   EquivalencyGroup: 'EquivalencyGroup',
   SubjectInGroup: 'SubjectInGroup',

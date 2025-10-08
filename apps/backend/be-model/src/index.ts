@@ -28,7 +28,8 @@ app.use(
             'https://daotao.mta.swantech.vn',
             'https://chatbot.mta.swantech.vn',
             'https://khaothi.mta.swantech.vn',
-            'https://danhmuc.mta.swantech.vn',
+            'https://am.swantech.vn',
+            'https://14.224.217.69:8243',
             'https://*.swantech.vn',
         ],
         credentials: true,
@@ -127,7 +128,7 @@ const TargetMap = {
     lectureID: 'ID giảng viên',
     archivedCertificateId: 'Chứng chỉ',
     archivedAwardId: 'Thành tích',
-    semesterType: 'Học kì chính',
+    semesterType: 'Học kỳ',
     originalDiplomaNumber: 'Số vào sổ gốc',
     diplomaNumber: 'Số hiệu văn bằng',
 }

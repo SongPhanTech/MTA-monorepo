@@ -2,18 +2,18 @@ import { env } from '@/env'
 
 export async function fetchXuLyVanBan({
     text,
-    doc_type,
+    topic_type,
     conversationId,
     signal,
 }: {
     text: string
-    doc_type: string
+    topic_type: string
     conversationId: string
     signal?: AbortSignal
 }) {
     const params = new URLSearchParams({
         text,
-        doc_type,
+        topic_type,
         conversationId,
     })
 
