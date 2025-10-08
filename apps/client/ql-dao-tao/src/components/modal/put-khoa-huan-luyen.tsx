@@ -96,6 +96,7 @@ const PutTrainingCourseModal = () => {
             trainingCourseClone,
             schoolYearId,
             trainingCourseRegulation,
+            trainingLanguageId,
             ...rest
         } = output
         try {
@@ -103,6 +104,7 @@ const PutTrainingCourseModal = () => {
             const data = {
                 trainingObjectType: { connect: { id: trainingObjectTypeId } },
                 semesterStart: { connect: { id: semesterStartId } },
+                trainingLanguage: { connect: { id: trainingLanguageId || undefined } },
                 ...rest,
             }
             if (id) {

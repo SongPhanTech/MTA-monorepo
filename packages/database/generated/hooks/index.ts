@@ -25,6 +25,7 @@ export * from './archived-award';
 export * from './school-year';
 export * from './semester';
 export * from './milestone';
+export * from './training-language';
 export * from './training-course';
 export * from './training-course-regulation';
 export * from './fixed-class';

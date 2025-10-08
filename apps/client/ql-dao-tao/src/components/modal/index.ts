@@ -58,6 +58,7 @@ import PutTrainingBlockSubject from './put-mon-hoc-chuong-trinh-dao-tao'
 import PutSubjectTienQuyetSongHanh from './put-mon-hoc-tien-quyet-song-hanh'
 import PutSchoolYearModal from './put-nam-hoc'
 import PutTrainingFieldModal from './put-nganh'
+import PutTrainingLanguage from './put-ngon-ngu-dao-tao'
 import PutSubjectGroupModal from './put-nhom-mon-hoc'
 import PutOneSubjectClassModal from './put-one-subject-class'
 import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
@@ -181,4 +182,5 @@ export {
     NhapDiemThuCong,
     PutChuanDauRaModal,
     MoKhoaNhapDiem,
+    PutTrainingLanguage,
 }

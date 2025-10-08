@@ -82,6 +82,7 @@ export default {
     "MON_HOC": "/mon-hoc",
     "NAM_HOC_KY_HOC_ID": "/nam-hoc-ky-hoc/[id]",
     "NAM_HOC_KY_HOC": "/nam-hoc-ky-hoc",
+    "NGON_NGU_DAO_TAO": "/ngon-ngu-dao-tao",
     "QL_REN_LUYEN_ID": "/ql-ren-luyen/[id]",
     "QL_REN_LUYEN_ID_LOP_BIEN_CHE": "/ql-ren-luyen/[id]/lop-bien-che",
     "QL_REN_LUYEN": "/ql-ren-luyen",

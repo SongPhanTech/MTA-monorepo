@@ -416,6 +416,17 @@ exports.Prisma.MilestoneScalarFieldEnum = {
   schoolYearId: 'schoolYearId'
 };
 
+exports.Prisma.TrainingLanguageScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name'
+};
+
 exports.Prisma.TrainingCourseScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -431,6 +442,12 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   academicYear: 'academicYear',
   maxTrainingTime: 'maxTrainingTime',
   admissionQuota: 'admissionQuota',
+  admissionStartDate: 'admissionStartDate',
+  admissionEndDate: 'admissionEndDate',
+  admissionDecision: 'admissionDecision',
+  studentRecognitionDecision: 'studentRecognitionDecision',
+  regulation: 'regulation',
+  trainingLanguageId: 'trainingLanguageId',
   baseScore: 'baseScore',
   coef_1: 'coef_1',
   coef_2: 'coef_2',
@@ -506,7 +523,7 @@ exports.Prisma.CurriculumVersionScalarFieldEnum = {
   name: 'name',
   shortName: 'shortName',
   englishName: 'englishName',
-  trainingLanguage: 'trainingLanguage',
+  trainingLanguageId: 'trainingLanguageId',
   numberOfSemesters: 'numberOfSemesters',
   yearCreation: 'yearCreation',
   yearApplication: 'yearApplication',
@@ -626,9 +643,7 @@ exports.Prisma.TrainingBlockSubjectScalarFieldEnum = {
   semester: 'semester',
   type: 'type',
   useForFinalScore: 'useForFinalScore',
-  graduation: 'graduation',
-  project: 'project',
-  print: 'print'
+  graduation: 'graduation'
 };
 
 exports.Prisma.ClassRegisterSessionCreditScalarFieldEnum = {
@@ -2644,6 +2659,7 @@ exports.Prisma.DocumentFileScalarFieldEnum = {
   size: 'size',
   mimeType: 'mimeType',
   archivedCertificateId: 'archivedCertificateId',
+  trainingCourseId: 'trainingCourseId',
   archivedAwardId: 'archivedAwardId',
   curriculumId: 'curriculumId',
   curriculumVersionId: 'curriculumVersionId',
@@ -3996,6 +4012,13 @@ exports.Prisma.MilestoneOrderByRelevanceFieldEnum = {
   schoolYearId: 'schoolYearId'
 };
 
+exports.Prisma.TrainingLanguageOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  name: 'name'
+};
+
 exports.Prisma.TrainingCourseOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -4003,6 +4026,10 @@ exports.Prisma.TrainingCourseOrderByRelevanceFieldEnum = {
   name: 'name',
   semesterStartId: 'semesterStartId',
   academicYear: 'academicYear',
+  admissionDecision: 'admissionDecision',
+  studentRecognitionDecision: 'studentRecognitionDecision',
+  regulation: 'regulation',
+  trainingLanguageId: 'trainingLanguageId',
   trainingObjectTypeId: 'trainingObjectTypeId'
 };
 
@@ -4048,6 +4075,7 @@ exports.Prisma.CurriculumVersionOrderByRelevanceFieldEnum = {
   name: 'name',
   shortName: 'shortName',
   englishName: 'englishName',
+  trainingLanguageId: 'trainingLanguageId',
   curriculumId: 'curriculumId',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingLevelId: 'trainingLevelId',
@@ -5355,6 +5383,7 @@ exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
   path: 'path',
   mimeType: 'mimeType',
   archivedCertificateId: 'archivedCertificateId',
+  trainingCourseId: 'trainingCourseId',
   archivedAwardId: 'archivedAwardId',
   curriculumId: 'curriculumId',
   curriculumVersionId: 'curriculumVersionId',
@@ -6104,11 +6133,6 @@ exports.AcademicRankingBaseType = exports.$Enums.AcademicRankingBaseType = {
   Base4: 'Base4'
 };
 
-exports.TrainingLanguage = exports.$Enums.TrainingLanguage = {
-  Vietnamese: 'Vietnamese',
-  English: 'English'
-};
-
 exports.ExamType = exports.$Enums.ExamType = {
   OfflineWritten: 'OfflineWritten',
   OnlineWritten: 'OnlineWritten',
@@ -6459,6 +6483,7 @@ exports.Prisma.ModelName = {
   SchoolYear: 'SchoolYear',
   Semester: 'Semester',
   Milestone: 'Milestone',
+  TrainingLanguage: 'TrainingLanguage',
   TrainingCourse: 'TrainingCourse',
   TrainingCourseRegulation: 'TrainingCourseRegulation',
   FixedClass: 'FixedClass',

@@ -115,11 +115,7 @@ const ModalPrintToKQHT = () => {
         {
             title: 'Ngôn ngữ đào tạo:',
             value: (
-                <span>
-                    {getTrainingLanguageLabel(
-                        input?.dataStudent?.curriculumVersion?.trainingLanguage
-                    )}
-                </span>
+                <span>{input?.dataStudent?.curriculumVersion?.trainingLanguage?.name || ''}</span>
             ),
         },
         {

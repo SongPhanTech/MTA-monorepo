@@ -71,15 +71,13 @@ const PutTrainingBlockSubject = () => {
                 ...initialValue,
                 useForFinalScore: initialValue.useForFinalScore,
                 graduation: initialValue.graduation,
-                project: initialValue.project,
-                print: initialValue.print,
+                // print: initialValue.print,
             })
         } else {
             form.setFieldsValue({
                 useForFinalScore: false,
                 graduation: false,
-                project: false,
-                print: false,
+                // print: false,
                 active: true,
             })
         }
@@ -99,8 +97,7 @@ const PutTrainingBlockSubject = () => {
                 type: output?.type,
                 useForFinalScore: output?.useForFinalScore,
                 graduation: output?.graduation,
-                project: output?.project,
-                print: output?.print,
+                // print: output?.print,
                 active: output?.active,
             }
 
@@ -253,22 +250,14 @@ const PutTrainingBlockSubject = () => {
                     </FormItem>
                 </div>
             </Col>
-            <Col span={24}>
-                <div className="flex justify-between items-center mb-6">
-                    <span>Có phải là môn học đồ án hay không?</span>
-                    <FormItem form={form} name="project" valuePropName="checked" className="mb-0">
-                        <Checkbox />
-                    </FormItem>
-                </div>
-            </Col>
-            <Col span={24}>
+            {/* <Col span={24}>
                 <div className="flex justify-between items-center mb-6">
                     <span>Có in trên bảng điểm hay không?</span>
                     <FormItem form={form} name="print" valuePropName="checked" className="mb-0">
                         <Checkbox />
                     </FormItem>
                 </div>
-            </Col>
+            </Col> */}
             {input?.trainingBlockSubjectId && (
                 <Col span={24}>
                     <FormItem form={form} name={'active'} label="Trạng thái" required>

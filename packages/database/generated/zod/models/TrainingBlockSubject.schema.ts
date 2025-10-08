@@ -20,8 +20,6 @@ const baseSchema = z.object({
     type: SubjectRequirementTypeSchema,
     useForFinalScore: z.boolean(),
     graduation: z.boolean(),
-    project: z.boolean(),
-    print: z.boolean(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -69,9 +67,7 @@ export const TrainingBlockSubjectPrismaUpdateSchema = z.object({
     semester: z.union([z.number().nullish(), z.record(z.unknown())]),
     type: SubjectRequirementTypeSchema,
     useForFinalScore: z.boolean(),
-    graduation: z.boolean(),
-    project: z.boolean(),
-    print: z.boolean()
+    graduation: z.boolean()
 }).partial().passthrough();
 
 
