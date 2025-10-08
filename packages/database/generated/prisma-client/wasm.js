@@ -770,7 +770,9 @@ exports.Prisma.TrainingObjectTypeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   name: 'name',
-  type: 'type'
+  type: 'type',
+  trainingFormId: 'trainingFormId',
+  trainingLevelId: 'trainingLevelId'
 };
 
 exports.Prisma.PriorityObjectScalarFieldEnum = {
@@ -4215,7 +4217,9 @@ exports.Prisma.TrainingObjectTypeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  name: 'name'
+  name: 'name',
+  trainingFormId: 'trainingFormId',
+  trainingLevelId: 'trainingLevelId'
 };
 
 exports.Prisma.PriorityObjectOrderByRelevanceFieldEnum = {

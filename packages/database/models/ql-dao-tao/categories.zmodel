@@ -23,18 +23,23 @@ enum TrainingObjectTypes {
 model TrainingObjectType extends Base {
   name                 String                              @unique
   type                 TrainingObjectTypes
+
+  trainingForm         TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
+  trainingFormId       String?
+
+  trainingLevel        TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId      String?
+
   trainingCourse       TrainingCourse[]
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
   trainingFields       TrainingFieldOnTrainingObjectType[]
   students             Student[]
   trainingScoreSession TrainingScoreSession[]
+  subjectClass         SubjectClass[]
+  graduationSession    GraduationSession[]
 
   @@schema("ql-dao-tao")
-
-  subjectClass         SubjectClass[]
-
-  graduationSession    GraduationSession[]
 }
 
 /// đối tượng ưu tiên
@@ -56,19 +61,21 @@ model TrainingType extends Base {
 
 /// Bậc đào tạo (Đại học, thạc sĩ, tiến sĩ)
 model TrainingLevel extends Base {
-  name              String              @unique
+  name               String               @unique
 
-  curriculumVersion CurriculumVersion[]
-  students          Student[]
+  curriculumVersion  CurriculumVersion[]
+  students           Student[]
+  trainingObjectType TrainingObjectType[]
 
   @@schema("ql-dao-tao")
 }
 
 /// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
 model TrainingForm extends Base {
-  name     String    @unique
+  name               String               @unique
 
-  students Student[]
+  students           Student[]
+  trainingObjectType TrainingObjectType[]
   @@schema("ql-dao-tao")
 }
 
@@ -82,8 +89,8 @@ model TrainingLocation extends Base {
   dM_Tinh_New   DM_Tinh_New? @relation(fields: [dM_Tinh_NewId], references: [Id])
   dM_Tinh_NewId String?
 
-  students  Student[]
-  buildings Building[]
+  students      Student[]
+  buildings     Building[]
   @@schema("ql-dao-tao")
 }
 

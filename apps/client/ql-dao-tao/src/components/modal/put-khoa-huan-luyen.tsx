@@ -1,4 +1,5 @@
 import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
@@ -15,6 +16,7 @@ import {
     useFindManySchoolYear,
     useFindManySemester,
     useFindManyTrainingCourse,
+    useFindManyTrainingLanguage,
     useFindManyTrainingObjectType,
     useFindUniqueTrainingCourse,
 } from '@workspace/db/hooks'
@@ -47,9 +49,18 @@ const PutTrainingCourseModal = () => {
     const [trainingCourseRegulationDelete, setTrainingCourseRegulation] = useState<
         TrainingCourseRegulation[]
     >([])
-    const { data: trainingCourse = [] } = useFindManyTrainingCourse()
+    const { data: trainingCourse = [] } = useFindManyTrainingCourse({
+        orderBy: { createdAt: 'desc' },
+    })
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
+        where: { active: true },
+        orderBy: { name: 'asc' },
+    })
+    const { data: trainingLanguageData = [] } = useFindManyTrainingLanguage({
+        where: { active: true },
+        orderBy: { name: 'asc' },
+    })
     const { data: selectedTrainingCourse } = useFindUniqueTrainingCourse(
         {
             where: {
@@ -89,6 +100,8 @@ const PutTrainingCourseModal = () => {
     )
     const { mutateAsync: createTrainingCourse } = useCreateTrainingCourse()
     async function onOk(output?: PutTrainingCourse) {
+        console.log('output', output)
+
         if (!output) return
         const {
             trainingObjectTypeId,
@@ -413,8 +426,13 @@ const PutTrainingCourseModal = () => {
                 scoreToPassConditional: selectedTrainingCourse.scoreToPassConditional,
                 scoreToTakeGraduation: selectedTrainingCourse.scoreToTakeGraduation,
                 scoreToPassGraduation: selectedTrainingCourse.scoreToPassGraduation,
-                admissionQuota: selectedTrainingCourse.admissionQuota,
                 maxTrainingTime: selectedTrainingCourse.maxTrainingTime,
+                admissionQuota: selectedTrainingCourse.admissionQuota,
+                admissionStartDate: selectedTrainingCourse.admissionStartDate,
+                admissionEndDate: selectedTrainingCourse.admissionEndDate,
+                admissionDecision: selectedTrainingCourse.admissionDecision,
+                studentRecognitionDecision: selectedTrainingCourse.studentRecognitionDecision,
+                regulation: selectedTrainingCourse.regulation,
                 trainingCourseRegulation: selectedTrainingCourse.trainingCourseRegulation,
                 baseScore: selectedTrainingCourse.baseScore,
             })
@@ -513,6 +531,18 @@ const PutTrainingCourseModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
+                    <FormItem form={form} label="Ngôn ngữ đào tạo" name="trainingLanguageId">
+                        <Select
+                            placeholder="Chọn ngôn ngữ đào tạo"
+                            options={trainingLanguageData.map((item) => ({
+                                label: item.name,
+                                value: item.id,
+                            }))}
+                            allowClear
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
                     <FormItem form={form} name="academicYear" label="Niên khoá">
                         <Input placeholder="Nhập niên khoá" />
                     </FormItem>
@@ -525,17 +555,6 @@ const PutTrainingCourseModal = () => {
                             min={0}
                             step={1}
                             placeholder="Nhập thời gian đào tạo"
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={8}>
-                    <FormItem form={form} name="admissionQuota" label="Chỉ tiêu tuyển sinh">
-                        <InputNumber
-                            type="number"
-                            style={{ width: '100%' }}
-                            min={0}
-                            step={1}
-                            placeholder="Nhập chỉ tiêu tuyển sinh"
                         />
                     </FormItem>
                 </Col>
@@ -554,13 +573,75 @@ const PutTrainingCourseModal = () => {
                     span={24}
                     className="text-base font-semibold mb-4 underline-offset-2 underline"
                 >
+                    Quyết định/Quy chế
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="admissionQuota" label="Chỉ tiêu tuyển sinh">
+                        <InputNumber
+                            type="number"
+                            min={0}
+                            step={1}
+                            placeholder="300"
+                            className="w-full"
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="admissionStartDate" label="Ngày nhập học">
+                        <DatePicker
+                            format={{
+                                format: 'DD/MM/YYYY',
+                                type: 'mask',
+                            }}
+                            className="w-full"
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="admissionEndDate" label="Ngày kết thúc">
+                        <DatePicker
+                            format={{
+                                format: 'DD/MM/YYYY',
+                                type: 'mask',
+                            }}
+                            className="w-full"
+                        />
+                    </FormItem>
+                </Col>
+
+                <Col span={8}>
+                    <FormItem form={form} name="admissionDecision" label="Số QĐ tuyển sinh">
+                        <Input placeholder="Mã/số QĐ" />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem
+                        form={form}
+                        name="studentRecognitionDecision"
+                        label="Số QĐ công nhận SV"
+                    >
+                        <Input placeholder="Mã/số QĐ" />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="regulation" label="Số QĐ quy chế đào tạo">
+                        <Input placeholder="Mã/số QĐ" />
+                    </FormItem>
+                </Col>
+            </Row>
+
+            <Row gutter={16} className="px-6">
+                <Col
+                    span={24}
+                    className="text-base font-semibold mb-4 underline-offset-2 underline"
+                >
                     Thông tin điểm
                 </Col>
                 {!id && (
                     <Col span={8}>
                         <FormItem form={form} name="trainingCourseClone" label="Sao chép quy chế">
                             <Select
-                                placeholder="Chọn khóa để sao chép"
+                                placeholder="Chọn khoá để sao chép"
                                 options={trainingCourse.map((i) => {
                                     return {
                                         value: i.id,

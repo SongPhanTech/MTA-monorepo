@@ -1590,6 +1590,10 @@ model TrainingObjectType {
   updatedAt            DateTime                            @default(now()) @updatedAt()
   name                 String                              @unique()
   type                 TrainingObjectTypes
+  trainingForm         TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
+  trainingFormId       String?
+  trainingLevel        TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId      String?
   trainingCourse       TrainingCourse[]
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
@@ -1643,16 +1647,17 @@ model TrainingType {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model TrainingLevel {
-  id                String              @id() @default(cuid())
-  code              String?             @unique()
-  active            Boolean             @default(true)
-  description       String?             @db.Text()
-  deletedAt         DateTime?
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @default(now()) @updatedAt()
-  name              String              @unique()
-  curriculumVersion CurriculumVersion[]
-  students          Student[]
+  id                 String               @id() @default(cuid())
+  code               String?              @unique()
+  active             Boolean              @default(true)
+  description        String?              @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt()
+  name               String               @unique()
+  curriculumVersion  CurriculumVersion[]
+  students           Student[]
+  trainingObjectType TrainingObjectType[]
 
   @@schema("ql-dao-tao")
 }
@@ -1662,15 +1667,16 @@ model TrainingLevel {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model TrainingForm {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  name        String    @unique()
-  students    Student[]
+  id                 String               @id() @default(cuid())
+  code               String?              @unique()
+  active             Boolean              @default(true)
+  description        String?              @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt()
+  name               String               @unique()
+  students           Student[]
+  trainingObjectType TrainingObjectType[]
 
   @@schema("ql-dao-tao")
 }
