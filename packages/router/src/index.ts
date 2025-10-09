@@ -235,16 +235,16 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOAI_HINH_DAO_TAO,
-                        label: 'Loại hình đào tạo',
+                        label: 'Hình thức đào tạo',
                         icon: PieChartOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOAI_HINH_DAO_TAO,
-                        description: 'Loại hình đào tạo',
+                        description: 'Hình thức đào tạo',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_TRINH_DO_DAO_TAO,
-                        label: 'Trình độ đào tạo',
+                        label: 'Bậc đào tạo',
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_TRINH_DO_DAO_TAO,
-                        description: 'Trình độ đào tạo',
+                        description: 'Bậc đào tạo',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_NGON_NGU_DAO_TAO,
@@ -290,10 +290,10 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
-                        label: 'Tòa nhà Phòng học',
+                        label: 'Khu vực đào tạo',
                         icon: TeamOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC,
-                        description: 'Danh mục tòa nhà Phòng học',
+                        description: 'Danh mục khu vực đào tạo',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,

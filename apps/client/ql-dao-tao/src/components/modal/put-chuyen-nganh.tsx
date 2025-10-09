@@ -218,6 +218,38 @@ const PutTrainingMajorModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="secondOrganizationId"
+                    label="Đơn vị quản lý 2"
+                    className="mb-2"
+                >
+                    <TreeSelect
+                        allowClear
+                        showSearch
+                        placeholder="Chọn đơn vị quản lý 2"
+                        treeDefaultExpandAll
+                        treeData={treeData}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="thirdOrganizationId"
+                    label="Đơn vị quản lý 3"
+                    className="mb-2"
+                >
+                    <TreeSelect
+                        allowClear
+                        showSearch
+                        placeholder="Chọn đơn vị quản lý 3"
+                        treeDefaultExpandAll
+                        treeData={treeData}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
                 <FormItem form={form} name="code" label="Mã chuyên ngành" required>
                     <Input placeholder="Nhập mã chuyên ngành" />
                 </FormItem>

@@ -1,6 +1,7 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import ViewIcon from '@components/icons/view'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
@@ -318,6 +319,22 @@ export default function TrainingLocationPage() {
                                                                 trainingLocationId,
                                                                 id,
                                                             })
+                                                        }}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                                    'XEM'
+                                                ) && (
+                                                    <ViewIcon
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            if (id) {
+                                                                router.push(
+                                                                    `${ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC_PHONG_HOC_ID.replace('[id]', id)}`
+                                                                )
+                                                            }
                                                         }}
                                                         className="text-sm text-blue-700 cursor-pointer"
                                                     />
