@@ -220,7 +220,12 @@ model TrainingCourse extends Base {
 
   trainingLanguage           TrainingLanguage?          @relation(fields: [trainingLanguageId], references: [id])
   trainingLanguageId         String?
-
+  /// khoá sửa tham số của "Thông tin chung"
+  isGeneralInfoLocked        Boolean                    @default(false)
+  /// khoá sửa tham số của "Quyết định/Quy chế"
+  isRegulationLocked         Boolean                    @default(false)
+  /// khoá sửa tham số của "Thông tin điểm và Tham số bổ sung"
+  isScoreConfigLocked        Boolean                    @default(false)
   baseScore                  AcademicRankingBaseType
 
   coef_1                     Float                      @default(0.1) // Hệ số 1
