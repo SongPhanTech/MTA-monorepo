@@ -98,9 +98,6 @@ export default function SubjectList() {
         include: {
             _count: true,
             subjectVersion: {
-                include: {
-                    trainingBlocks: true,
-                },
                 orderBy: [
                     ...emptyObjectIf([{ credit: filters.credit }], !!filters.credit),
                     ...emptyObjectIf([{ period: filters.period }], !!filters.period),
