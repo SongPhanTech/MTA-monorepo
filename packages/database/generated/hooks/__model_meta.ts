@@ -3891,6 +3891,34 @@ const metadata = {
                 }, type: {
                     name: "type",
                     type: "TrainingObjectTypes",
+                }, trainingForm: {
+                    name: "trainingForm",
+                    type: "TrainingForm",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'trainingObjectType',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingFormId" },
+                }, trainingFormId: {
+                    name: "trainingFormId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingForm',
+                }, trainingLevel: {
+                    name: "trainingLevel",
+                    type: "TrainingLevel",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'trainingObjectType',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingLevelId" },
+                }, trainingLevelId: {
+                    name: "trainingLevelId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingLevel',
                 }, trainingCourse: {
                     name: "trainingCourse",
                     type: "TrainingCourse",
@@ -4108,6 +4136,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingLevel',
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingLevel',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -4159,6 +4193,12 @@ const metadata = {
                 }, students: {
                     name: "students",
                     type: "Student",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingForm',
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingForm',

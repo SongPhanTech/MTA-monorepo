@@ -1,5 +1,6 @@
 import { queryClient } from '@api/index'
 import DatePicker from '@components/commons/date-picker'
+import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
@@ -24,6 +25,7 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Form, Input, InputNumber, message, Radio, Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import type { DocumentFile } from '@workspace/db'
 import { Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -31,6 +33,7 @@ export type PutTrainingCourse = TrainingCourse & {
     schoolYearId: string | undefined
     trainingCourseClone: string | null
     trainingCourseRegulation: TrainingCourseRegulation[]
+    documentFiles: DocumentFile[]
 }
 dayjs.locale('vi')
 const PutTrainingCourseModal = () => {
@@ -49,7 +52,9 @@ const PutTrainingCourseModal = () => {
     const [trainingCourseRegulationDelete, setTrainingCourseRegulation] = useState<
         TrainingCourseRegulation[]
     >([])
-    const { data: trainingCourse = [] } = useFindManyTrainingCourse({
+    const [document, setDocument] = useState<DocumentFile[]>([])
+
+    const { data: trainingCourses = [] } = useFindManyTrainingCourse({
         orderBy: { createdAt: 'desc' },
     })
 
@@ -100,8 +105,6 @@ const PutTrainingCourseModal = () => {
     )
     const { mutateAsync: createTrainingCourse } = useCreateTrainingCourse()
     async function onOk(output?: PutTrainingCourse) {
-        console.log('output', output)
-
         if (!output) return
         const {
             trainingObjectTypeId,
@@ -117,7 +120,9 @@ const PutTrainingCourseModal = () => {
             const data = {
                 trainingObjectType: { connect: { id: trainingObjectTypeId } },
                 semesterStart: { connect: { id: semesterStartId } },
-                trainingLanguage: { connect: { id: trainingLanguageId || undefined } },
+                ...(trainingLanguageId
+                    ? { trainingLanguage: { connect: { id: trainingLanguageId } } }
+                    : {}),
                 ...rest,
             }
             if (id) {
@@ -132,7 +137,45 @@ const PutTrainingCourseModal = () => {
                             where: {
                                 id: id,
                             },
-                            data,
+                            data: {
+                                ...data,
+                                documentFiles: {
+                                    upsert: (output.documentFiles || [])
+                                        .filter((file) => !!file.id)
+                                        .map((file) => ({
+                                            where: { id: file.id },
+                                            create: {
+                                                name: file.name,
+                                                path: file.path,
+                                                mimeType: file.mimeType,
+                                                size: file.size,
+                                                curriculum: { connect: { id } },
+                                            },
+                                            update: {
+                                                name: file.name,
+                                                path: file.path,
+                                                mimeType: file.mimeType,
+                                                size: file.size,
+                                            },
+                                        })),
+                                    create: (output.documentFiles || [])
+                                        .filter((file) => !file.id)
+                                        .map((file) => ({
+                                            name: file.name,
+                                            path: file.path,
+                                            mimeType: file.mimeType,
+                                            size: file.size,
+                                        })),
+                                    disconnect: document
+                                        .filter(
+                                            (existing) =>
+                                                !output.documentFiles?.some(
+                                                    (f) => f.id === existing.id
+                                                )
+                                        )
+                                        .map((file) => ({ id: file.id })),
+                                },
+                            },
                         },
                     },
                 ]
@@ -200,6 +243,14 @@ const PutTrainingCourseModal = () => {
                 await createTrainingCourse({
                     data: {
                         ...data,
+                        documentFiles: {
+                            create: (output.documentFiles || []).map((file) => ({
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            })),
+                        },
                         trainingCourseRegulation: {
                             createMany: {
                                 data: trainingCourseRegulation.map((i) => ({
@@ -345,12 +396,13 @@ const PutTrainingCourseModal = () => {
             schoolYear: true,
         },
     })
-    const { data: level } = useFindUniqueTrainingCourse(
+    const { data: trainingCourse } = useFindUniqueTrainingCourse(
         {
             where: { id },
             include: {
                 semesterStart: true,
                 trainingCourseRegulation: true,
+                documentFiles: true,
             },
         },
         {
@@ -411,11 +463,12 @@ const PutTrainingCourseModal = () => {
     const listForm = Form.useWatch('trainingCourseRegulation', form) ?? []
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        if (level) {
+        if (trainingCourse) {
             form.setFieldsValue({
-                ...level,
-                schoolYearId: level.semesterStart?.schoolYearId,
+                ...trainingCourse,
+                schoolYearId: trainingCourse.semesterStart?.schoolYearId,
             })
+            setDocument(trainingCourse?.documentFiles)
         } else if (selectedTrainingCourse) {
             form.setFieldsValue({
                 coef_1: selectedTrainingCourse.coef_1,
@@ -442,7 +495,7 @@ const PutTrainingCourseModal = () => {
                 trainingCourseRegulation: [],
             })
         }
-    }, [level, selectedTrainingCourse])
+    }, [trainingCourse, selectedTrainingCourse])
 
     return (
         <PutFormModal
@@ -642,7 +695,7 @@ const PutTrainingCourseModal = () => {
                         <FormItem form={form} name="trainingCourseClone" label="Sao chép quy chế">
                             <Select
                                 placeholder="Chọn khoá để sao chép"
-                                options={trainingCourse.map((i) => {
+                                options={trainingCourses.map((i) => {
                                     return {
                                         value: i.id,
                                         label: i.name,
@@ -949,6 +1002,17 @@ const PutTrainingCourseModal = () => {
                         pagination={false}
                     />
                 </FormItem>
+                <Col span={24}>
+                    <FormItem form={form} name="documentFiles" label="Tài liệu đính kèm">
+                        <DocumentPaths
+                            form={form}
+                            data={document}
+                            relationId={id || ''}
+                            relationType="trainingCourseId"
+                            titleForm="documentFiles"
+                        />
+                    </FormItem>
+                </Col>
             </Col>
         </PutFormModal>
     )

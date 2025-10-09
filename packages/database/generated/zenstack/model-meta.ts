@@ -4505,6 +4505,7 @@ const metadata = {
                     name: "dM_TinhId",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'dM_Tinh',
                 }, dM_Tinh_New: {
@@ -4520,6 +4521,7 @@ const metadata = {
                     name: "dM_Tinh_NewId",
                     type: "String",
                     isOptional: true,
+                    attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'dM_Tinh_New',
                 }, students: {

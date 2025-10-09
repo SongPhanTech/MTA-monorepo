@@ -1551,9 +1551,9 @@ model TrainingLocation {
   updatedAt     DateTime     @default(now()) @updatedAt()
   name          String       @unique()
   dM_Tinh       DM_Tinh?     @relation(fields: [dM_TinhId], references: [Id])
-  dM_TinhId     String?
+  dM_TinhId     String?      @db.Uuid()
   dM_Tinh_New   DM_Tinh_New? @relation(fields: [dM_Tinh_NewId], references: [Id])
-  dM_Tinh_NewId String?
+  dM_Tinh_NewId String?      @db.Uuid()
   students      Student[]
   buildings     Building[]
 

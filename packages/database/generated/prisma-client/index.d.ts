@@ -323609,8 +323609,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TrainingLocation"> | Date | string
     updatedAt?: DateTimeFilter<"TrainingLocation"> | Date | string
     name?: StringFilter<"TrainingLocation"> | string
-    dM_TinhId?: StringNullableFilter<"TrainingLocation"> | string | null
-    dM_Tinh_NewId?: StringNullableFilter<"TrainingLocation"> | string | null
+    dM_TinhId?: UuidNullableFilter<"TrainingLocation"> | string | null
+    dM_Tinh_NewId?: UuidNullableFilter<"TrainingLocation"> | string | null
     dM_Tinh?: XOR<DM_TinhNullableScalarRelationFilter, DM_TinhWhereInput> | null
     dM_Tinh_New?: XOR<DM_Tinh_NewNullableScalarRelationFilter, DM_Tinh_NewWhereInput> | null
     students?: StudentListRelationFilter
@@ -323647,8 +323647,8 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"TrainingLocation"> | Date | string | null
     createdAt?: DateTimeFilter<"TrainingLocation"> | Date | string
     updatedAt?: DateTimeFilter<"TrainingLocation"> | Date | string
-    dM_TinhId?: StringNullableFilter<"TrainingLocation"> | string | null
-    dM_Tinh_NewId?: StringNullableFilter<"TrainingLocation"> | string | null
+    dM_TinhId?: UuidNullableFilter<"TrainingLocation"> | string | null
+    dM_Tinh_NewId?: UuidNullableFilter<"TrainingLocation"> | string | null
     dM_Tinh?: XOR<DM_TinhNullableScalarRelationFilter, DM_TinhWhereInput> | null
     dM_Tinh_New?: XOR<DM_Tinh_NewNullableScalarRelationFilter, DM_Tinh_NewWhereInput> | null
     students?: StudentListRelationFilter
@@ -323683,8 +323683,8 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"TrainingLocation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TrainingLocation"> | Date | string
     name?: StringWithAggregatesFilter<"TrainingLocation"> | string
-    dM_TinhId?: StringNullableWithAggregatesFilter<"TrainingLocation"> | string | null
-    dM_Tinh_NewId?: StringNullableWithAggregatesFilter<"TrainingLocation"> | string | null
+    dM_TinhId?: UuidNullableWithAggregatesFilter<"TrainingLocation"> | string | null
+    dM_Tinh_NewId?: UuidNullableWithAggregatesFilter<"TrainingLocation"> | string | null
   }
 
   export type BuildingWhereInput = {
@@ -447928,8 +447928,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TrainingLocation"> | Date | string
     updatedAt?: DateTimeFilter<"TrainingLocation"> | Date | string
     name?: StringFilter<"TrainingLocation"> | string
-    dM_TinhId?: StringNullableFilter<"TrainingLocation"> | string | null
-    dM_Tinh_NewId?: StringNullableFilter<"TrainingLocation"> | string | null
+    dM_TinhId?: UuidNullableFilter<"TrainingLocation"> | string | null
+    dM_Tinh_NewId?: UuidNullableFilter<"TrainingLocation"> | string | null
   }
 
   export type UserProfileCreateWithoutNewProvinceHometownInput = {
