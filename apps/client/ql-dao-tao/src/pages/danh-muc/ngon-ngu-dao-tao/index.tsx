@@ -98,7 +98,10 @@ export default function TrainingLanguage() {
                     <Row gutter={[16, 16]} align="top" justify="end">
                         <Col span={4}>
                             <Flex justify="end" gap={4}>
-                                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NGON_NGU_DAO_TAO, 'THEM') && (
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_NGON_NGU_DAO_TAO,
+                                    'THEM'
+                                ) && (
                                     <Button onClick={handleModal} type="primary">
                                         Thêm mới
                                     </Button>
@@ -145,7 +148,7 @@ export default function TrainingLanguage() {
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
                                         {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NGON_NGU_DAO_TAO,
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_NGON_NGU_DAO_TAO,
                                             'SUA'
                                         ) && (
                                             <EditIcon
@@ -154,7 +157,7 @@ export default function TrainingLanguage() {
                                             />
                                         )}
                                         {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_NGON_NGU_DAO_TAO,
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_NGON_NGU_DAO_TAO,
                                             'XOA'
                                         ) && (
                                             <DeleteIcon

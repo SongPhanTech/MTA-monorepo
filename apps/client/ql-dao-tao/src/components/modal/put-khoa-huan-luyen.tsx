@@ -1,4 +1,6 @@
 import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
+import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
@@ -15,6 +17,7 @@ import {
     useFindManySchoolYear,
     useFindManySemester,
     useFindManyTrainingCourse,
+    useFindManyTrainingLanguage,
     useFindManyTrainingObjectType,
     useFindUniqueTrainingCourse,
 } from '@workspace/db/hooks'
@@ -22,6 +25,7 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Form, Input, InputNumber, message, Radio, Row } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
+import type { DocumentFile } from '@workspace/db'
 import { Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -29,6 +33,7 @@ export type PutTrainingCourse = TrainingCourse & {
     schoolYearId: string | undefined
     trainingCourseClone: string | null
     trainingCourseRegulation: TrainingCourseRegulation[]
+    documentFiles: DocumentFile[]
 }
 dayjs.locale('vi')
 const PutTrainingCourseModal = () => {
@@ -47,9 +52,20 @@ const PutTrainingCourseModal = () => {
     const [trainingCourseRegulationDelete, setTrainingCourseRegulation] = useState<
         TrainingCourseRegulation[]
     >([])
-    const { data: trainingCourse = [] } = useFindManyTrainingCourse()
+    const [document, setDocument] = useState<DocumentFile[]>([])
 
-    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: trainingCourses = [] } = useFindManyTrainingCourse({
+        orderBy: { createdAt: 'desc' },
+    })
+
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
+        where: { active: true },
+        orderBy: { name: 'asc' },
+    })
+    const { data: trainingLanguageData = [] } = useFindManyTrainingLanguage({
+        where: { active: true },
+        orderBy: { name: 'asc' },
+    })
     const { data: selectedTrainingCourse } = useFindUniqueTrainingCourse(
         {
             where: {
@@ -104,7 +120,9 @@ const PutTrainingCourseModal = () => {
             const data = {
                 trainingObjectType: { connect: { id: trainingObjectTypeId } },
                 semesterStart: { connect: { id: semesterStartId } },
-                trainingLanguage: { connect: { id: trainingLanguageId || undefined } },
+                ...(trainingLanguageId
+                    ? { trainingLanguage: { connect: { id: trainingLanguageId } } }
+                    : {}),
                 ...rest,
             }
             if (id) {
@@ -119,7 +137,45 @@ const PutTrainingCourseModal = () => {
                             where: {
                                 id: id,
                             },
-                            data,
+                            data: {
+                                ...data,
+                                documentFiles: {
+                                    upsert: (output.documentFiles || [])
+                                        .filter((file) => !!file.id)
+                                        .map((file) => ({
+                                            where: { id: file.id },
+                                            create: {
+                                                name: file.name,
+                                                path: file.path,
+                                                mimeType: file.mimeType,
+                                                size: file.size,
+                                                curriculum: { connect: { id } },
+                                            },
+                                            update: {
+                                                name: file.name,
+                                                path: file.path,
+                                                mimeType: file.mimeType,
+                                                size: file.size,
+                                            },
+                                        })),
+                                    create: (output.documentFiles || [])
+                                        .filter((file) => !file.id)
+                                        .map((file) => ({
+                                            name: file.name,
+                                            path: file.path,
+                                            mimeType: file.mimeType,
+                                            size: file.size,
+                                        })),
+                                    disconnect: document
+                                        .filter(
+                                            (existing) =>
+                                                !output.documentFiles?.some(
+                                                    (f) => f.id === existing.id
+                                                )
+                                        )
+                                        .map((file) => ({ id: file.id })),
+                                },
+                            },
                         },
                     },
                 ]
@@ -187,6 +243,14 @@ const PutTrainingCourseModal = () => {
                 await createTrainingCourse({
                     data: {
                         ...data,
+                        documentFiles: {
+                            create: (output.documentFiles || []).map((file) => ({
+                                name: file.name,
+                                path: file.path,
+                                mimeType: file.mimeType,
+                                size: file.size,
+                            })),
+                        },
                         trainingCourseRegulation: {
                             createMany: {
                                 data: trainingCourseRegulation.map((i) => ({
@@ -332,12 +396,13 @@ const PutTrainingCourseModal = () => {
             schoolYear: true,
         },
     })
-    const { data: level } = useFindUniqueTrainingCourse(
+    const { data: trainingCourse } = useFindUniqueTrainingCourse(
         {
             where: { id },
             include: {
                 semesterStart: true,
                 trainingCourseRegulation: true,
+                documentFiles: true,
             },
         },
         {
@@ -398,11 +463,12 @@ const PutTrainingCourseModal = () => {
     const listForm = Form.useWatch('trainingCourseRegulation', form) ?? []
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        if (level) {
+        if (trainingCourse) {
             form.setFieldsValue({
-                ...level,
-                schoolYearId: level.semesterStart?.schoolYearId,
+                ...trainingCourse,
+                schoolYearId: trainingCourse.semesterStart?.schoolYearId,
             })
+            setDocument(trainingCourse?.documentFiles)
         } else if (selectedTrainingCourse) {
             form.setFieldsValue({
                 coef_1: selectedTrainingCourse.coef_1,
@@ -413,8 +479,13 @@ const PutTrainingCourseModal = () => {
                 scoreToPassConditional: selectedTrainingCourse.scoreToPassConditional,
                 scoreToTakeGraduation: selectedTrainingCourse.scoreToTakeGraduation,
                 scoreToPassGraduation: selectedTrainingCourse.scoreToPassGraduation,
-                admissionQuota: selectedTrainingCourse.admissionQuota,
                 maxTrainingTime: selectedTrainingCourse.maxTrainingTime,
+                admissionQuota: selectedTrainingCourse.admissionQuota,
+                admissionStartDate: selectedTrainingCourse.admissionStartDate,
+                admissionEndDate: selectedTrainingCourse.admissionEndDate,
+                admissionDecision: selectedTrainingCourse.admissionDecision,
+                studentRecognitionDecision: selectedTrainingCourse.studentRecognitionDecision,
+                regulation: selectedTrainingCourse.regulation,
                 trainingCourseRegulation: selectedTrainingCourse.trainingCourseRegulation,
                 baseScore: selectedTrainingCourse.baseScore,
             })
@@ -424,7 +495,7 @@ const PutTrainingCourseModal = () => {
                 trainingCourseRegulation: [],
             })
         }
-    }, [level, selectedTrainingCourse])
+    }, [trainingCourse, selectedTrainingCourse])
 
     return (
         <PutFormModal
@@ -513,6 +584,18 @@ const PutTrainingCourseModal = () => {
                     </FormItem>
                 </Col>
                 <Col span={8}>
+                    <FormItem form={form} label="Ngôn ngữ đào tạo" name="trainingLanguageId">
+                        <Select
+                            placeholder="Chọn ngôn ngữ đào tạo"
+                            options={trainingLanguageData.map((item) => ({
+                                label: item.name,
+                                value: item.id,
+                            }))}
+                            allowClear
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
                     <FormItem form={form} name="academicYear" label="Niên khoá">
                         <Input placeholder="Nhập niên khoá" />
                     </FormItem>
@@ -525,17 +608,6 @@ const PutTrainingCourseModal = () => {
                             min={0}
                             step={1}
                             placeholder="Nhập thời gian đào tạo"
-                        />
-                    </FormItem>
-                </Col>
-                <Col span={8}>
-                    <FormItem form={form} name="admissionQuota" label="Chỉ tiêu tuyển sinh">
-                        <InputNumber
-                            type="number"
-                            style={{ width: '100%' }}
-                            min={0}
-                            step={1}
-                            placeholder="Nhập chỉ tiêu tuyển sinh"
                         />
                     </FormItem>
                 </Col>
@@ -554,14 +626,76 @@ const PutTrainingCourseModal = () => {
                     span={24}
                     className="text-base font-semibold mb-4 underline-offset-2 underline"
                 >
+                    Quyết định/Quy chế
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="admissionQuota" label="Chỉ tiêu tuyển sinh">
+                        <InputNumber
+                            type="number"
+                            min={0}
+                            step={1}
+                            placeholder="300"
+                            className="w-full"
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="admissionStartDate" label="Ngày nhập học">
+                        <DatePicker
+                            format={{
+                                format: 'DD/MM/YYYY',
+                                type: 'mask',
+                            }}
+                            className="w-full"
+                        />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="admissionEndDate" label="Ngày kết thúc">
+                        <DatePicker
+                            format={{
+                                format: 'DD/MM/YYYY',
+                                type: 'mask',
+                            }}
+                            className="w-full"
+                        />
+                    </FormItem>
+                </Col>
+
+                <Col span={8}>
+                    <FormItem form={form} name="admissionDecision" label="Số QĐ tuyển sinh">
+                        <Input placeholder="Mã/số QĐ" />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem
+                        form={form}
+                        name="studentRecognitionDecision"
+                        label="Số QĐ công nhận SV"
+                    >
+                        <Input placeholder="Mã/số QĐ" />
+                    </FormItem>
+                </Col>
+                <Col span={8}>
+                    <FormItem form={form} name="regulation" label="Số QĐ quy chế đào tạo">
+                        <Input placeholder="Mã/số QĐ" />
+                    </FormItem>
+                </Col>
+            </Row>
+
+            <Row gutter={16} className="px-6">
+                <Col
+                    span={24}
+                    className="text-base font-semibold mb-4 underline-offset-2 underline"
+                >
                     Thông tin điểm
                 </Col>
                 {!id && (
                     <Col span={8}>
                         <FormItem form={form} name="trainingCourseClone" label="Sao chép quy chế">
                             <Select
-                                placeholder="Chọn khóa để sao chép"
-                                options={trainingCourse.map((i) => {
+                                placeholder="Chọn khoá để sao chép"
+                                options={trainingCourses.map((i) => {
                                     return {
                                         value: i.id,
                                         label: i.name,
@@ -779,7 +913,7 @@ const PutTrainingCourseModal = () => {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lồng nhập mã tham số',
+                                                message: 'Vui lòng nhập mã tham số',
                                             },
                                         ]}
                                     >
@@ -798,7 +932,7 @@ const PutTrainingCourseModal = () => {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lồng nhập tên tham số',
+                                                message: 'Vui lòng nhập tên tham số',
                                             },
                                         ]}
                                     >
@@ -819,7 +953,7 @@ const PutTrainingCourseModal = () => {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lồng nhập giá trị',
+                                                message: 'Vui lòng nhập giá trị',
                                             },
                                         ]}
                                     >
@@ -868,6 +1002,17 @@ const PutTrainingCourseModal = () => {
                         pagination={false}
                     />
                 </FormItem>
+                <Col span={24}>
+                    <FormItem form={form} name="documentFiles" label="Tài liệu đính kèm">
+                        <DocumentPaths
+                            form={form}
+                            data={document}
+                            relationId={id || ''}
+                            relationType="trainingCourseId"
+                            titleForm="documentFiles"
+                        />
+                    </FormItem>
+                </Col>
             </Col>
         </PutFormModal>
     )

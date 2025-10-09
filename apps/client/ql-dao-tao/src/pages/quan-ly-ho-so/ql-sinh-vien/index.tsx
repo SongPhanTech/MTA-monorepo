@@ -30,7 +30,7 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, Form, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -51,14 +51,18 @@ export default function UserProfilePageDs() {
         trainingCourse: undefined,
         trainingMajors: undefined,
         curriculumVersion: undefined,
-        trainingCourseId:undefined,
-        fixedClassId:undefined
+        trainingCourseId: undefined,
+        fixedClassId: undefined,
+        rank: undefined,
+        phone: undefined,
     })
+
+    const form = Form.useForm<{ trainingCourseId: string }>()
 
     const [importModalVisible, setImportModalVisible] = useState(false)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    const where = useMemo(
+    const where:any = useMemo(
         () => ({
             // ...(filters.trainingObjectTypes && {
             //     trainingObjectTypeId: { in: filters.trainingObjectTypes },
@@ -72,7 +76,7 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-            ...(filters.name && filters.name !== ''
+            ...((filters.name && filters.name !== '') || (filters.rank && filters.rank !== '') || (filters.phone && filters.phone !== '')
                 ? {
                       userProfile: {
                           OR: [
@@ -95,6 +99,24 @@ export default function UserProfilePageDs() {
                                   },
                               },
                           ],
+                          ...(filters.rank
+                              ? {
+                                    rank: {
+                                        sTen: {
+                                            contains: filters.rank,
+                                            mode: 'insensitive',
+                                        },
+                                    },
+                                }
+                              : {}),
+                          ...(filters.phone
+                              ? {
+                                    phoneNumber: {
+                                        contains: filters.phone,
+                                        mode: 'insensitive',
+                                    },
+                                }
+                              : {}),
                       },
                   }
                 : {}),
@@ -112,7 +134,7 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-                 ...(filters.fixedClassId
+            ...(filters.fixedClassId
                 ? {
                       fixedClassId: filters.fixedClassId,
                   }
@@ -160,15 +182,17 @@ export default function UserProfilePageDs() {
                   }
                 : {}),
         }),
-        [
-            filters
-        ]
+        [filters]
     )
 
     const { data = [] } = useFindManyStudent({
         where,
         include: {
-            userProfile: true,
+            userProfile: {
+                include: {
+                    rank: true,
+                },
+            },
             trainingObjectType: true,
             fixedClass: {
                 include: {
@@ -233,6 +257,13 @@ export default function UserProfilePageDs() {
     })
 
     const { data: fixedClassData = [] } = useFindManyFixedClass({
+        where: {
+            trainingCourse: {
+                trainingObjectTypeId,
+                deletedAt: null,
+                active: true,
+            },
+        },
         include: {
             trainingCourse: true,
         },
@@ -368,10 +399,10 @@ export default function UserProfilePageDs() {
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[16, 16]} align="top" justify="end">
-                           <Col span={12}>
+                        <Col span={12}>
                             <Flex>
                                 <Col span={12}>
-                                     <Select
+                                    <Select
                                         className="w-full"
                                         placeholder="Chọn khoá học"
                                         options={TrainingCourseData.map((i: TrainingCourse) => ({
@@ -387,7 +418,7 @@ export default function UserProfilePageDs() {
                                         allowClear
                                     />
                                 </Col>
-                    
+
                                 <Col span={12}>
                                     <Select
                                         className="w-full"
@@ -475,6 +506,28 @@ export default function UserProfilePageDs() {
                                 render: (__, record: { userProfile?: UserProfile }) =>
                                     record.userProfile
                                         ? `${record.userProfile.lastName} ${record.userProfile.firstName}`
+                                        : '',
+                            },
+                            {
+                                title: 'SĐT',
+                                align: 'center',
+                                width: 120,
+                                dataIndex: 'phone',
+                                type: 'input',
+                                render: (__, record) =>
+                                    record.userProfile?.phoneNumber
+                                        ? record.userProfile?.phoneNumber
+                                        : '',
+                            },
+                            {
+                                title: 'Cấp bậc',
+                                align: 'center',
+                                width: 120,
+                                dataIndex: 'rank',
+                                type: 'input',
+                                render: (__, record) =>
+                                    record.userProfile?.rank?.sTen
+                                        ? record.userProfile?.rank?.sTen
                                         : '',
                             },
                             {

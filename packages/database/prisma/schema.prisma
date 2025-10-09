@@ -1461,6 +1461,10 @@ model TrainingObjectType {
   updatedAt            DateTime                            @default(now()) @updatedAt()
   name                 String                              @unique()
   type                 TrainingObjectTypes
+  trainingForm         TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
+  trainingFormId       String?
+  trainingLevel        TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId      String?
   trainingCourse       TrainingCourse[]
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
@@ -1505,31 +1509,33 @@ model TrainingType {
 
 /// Bậc đào tạo (Đại học, thạc sĩ, tiến sĩ)
 model TrainingLevel {
-  id                String              @id() @default(cuid())
-  code              String?             @unique()
-  active            Boolean             @default(true)
-  description       String?             @db.Text()
-  deletedAt         DateTime?
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @default(now()) @updatedAt()
-  name              String              @unique()
-  curriculumVersion CurriculumVersion[]
-  students          Student[]
+  id                 String               @id() @default(cuid())
+  code               String?              @unique()
+  active             Boolean              @default(true)
+  description        String?              @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt()
+  name               String               @unique()
+  curriculumVersion  CurriculumVersion[]
+  students           Student[]
+  trainingObjectType TrainingObjectType[]
 
   @@schema("ql-dao-tao")
 }
 
 /// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
 model TrainingForm {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  name        String    @unique()
-  students    Student[]
+  id                 String               @id() @default(cuid())
+  code               String?              @unique()
+  active             Boolean              @default(true)
+  description        String?              @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt()
+  name               String               @unique()
+  students           Student[]
+  trainingObjectType TrainingObjectType[]
 
   @@schema("ql-dao-tao")
 }
@@ -1545,9 +1551,9 @@ model TrainingLocation {
   updatedAt     DateTime     @default(now()) @updatedAt()
   name          String       @unique()
   dM_Tinh       DM_Tinh?     @relation(fields: [dM_TinhId], references: [Id])
-  dM_TinhId     String?
+  dM_TinhId     String?      @db.Uuid()
   dM_Tinh_New   DM_Tinh_New? @relation(fields: [dM_Tinh_NewId], references: [Id])
-  dM_Tinh_NewId String?
+  dM_Tinh_NewId String?      @db.Uuid()
   students      Student[]
   buildings     Building[]
 

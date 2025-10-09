@@ -1,0 +1,1082 @@
+import FormItem from '@components/commons/form-item'
+import ImportScoreModal from '@components/commons/print/nhap-diem-tu-file'
+import Select from '@components/commons/select'
+import Table from '@components/commons/table'
+import type { FilterProps } from '@constants/type'
+import useSpinner from '@hooks/spinner'
+import DefaultLayout from '@layouts/default-layout'
+import { formatDate } from '@lib/utils'
+import { useSession } from '@workspace/auth/react'
+import type { StudentSubjectScore } from '@workspace/db'
+import {
+    useFindManyStudentSubjectScore,
+    useFindManySubjectClass,
+    useFindUniqueSubjectClass,
+} from '@workspace/db/hooks'
+import { listUser } from '@workspace/libs/constants'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import {
+    Button,
+    Checkbox,
+    Col,
+    Flex,
+    Form,
+    Input,
+    InputNumber,
+    Modal,
+    message,
+    Popover,
+    Row,
+    Skeleton,
+} from 'antd'
+import dayjs from 'dayjs'
+import { Ellipsis, FileUp, Save } from 'lucide-react'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+
+type PutStudentSubjectScore = StudentSubjectScore & {}
+type FilterTable = FilterProps & {
+    fullname?: string
+    fixedClassName?: string
+    attendanceScore?: 'asc' | 'desc'
+    midtermScore?: 'asc' | 'desc'
+    examScore?: 'asc' | 'desc'
+}
+export default function SubjectClassScore() {
+    const { can } = useAbility()
+    const canReadAll = can(
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
+        'XEM_TAT_CA'
+    )
+    const { showSpinner, hideSpinner } = useSpinner()
+    const router = useRouter()
+    const [form] = Form.useForm<{
+        list: PutStudentSubjectScore[]
+        isLockExamScore: boolean
+        isLockScore: boolean
+        scoreChecked: boolean
+        scoreSubmitted: boolean
+    }>()
+    const { id: semesterId } = useSemesterStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { data: session } = useSession()
+    const profileId = session?.sDM_NhanVienId || ''
+    const [open, setOpen] = useState(false)
+    const subjectClassId = router.query?.subjectClassId as string
+    const [importModalVisible, setImportModalVisible] = useState(false)
+    const [filterTable, setFilterTable] = useState<FilterTable>({
+        fullname: '',
+        fixedClassName: '',
+        dateOfBirth: undefined,
+        attendanceScore: undefined,
+        midtermScore: undefined,
+        examScore: undefined,
+    })
+
+    const handleSave = () => {
+        Modal.confirm({
+            title: 'Xác nhận',
+            content: 'Bạn có chắc chắn muốn nhập điểm không?',
+            okText: 'Xác nhận',
+            cancelText: 'Hủy',
+            onOk: async () => {
+                handleSaveScores()
+            },
+        })
+    }
+
+    const handleSaveScores = async () => {
+        try {
+            showSpinner()
+            const dataSubmit = form.getFieldsValue()
+            console.log('dataSubmit', dataSubmit)
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi khi lưu điểm, vui lòng thử lại.')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const handleImportConfirm = (importedData: any[]) => {
+        showSpinner()
+
+        try {
+            message.success('Nhập điểm từ file thành công!')
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Có lỗi xảy ra khi nhập điểm từ file')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const { data: subjectClassData = [], isFetching } = useFindManySubjectClass(
+        {
+            where: {
+                ...(semesterId ? { semesterId } : {}),
+                ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
+                // ...(!canReadAll
+                //     ? {
+                //           mainLecturer: {
+                //               userProfileId: profileId,
+                //           },
+                //       } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
+                //     : {}),
+                deletedAt: null,
+                active: true,
+                cancelled: false,
+            },
+            include: {
+                subject: {
+                    include: {
+                        managementOrganization: true,
+                    },
+                },
+                semester: {
+                    include: {
+                        schoolYear: true,
+                    },
+                },
+                mainLecturer: {
+                    include: { userProfile: true },
+                },
+                extraLecturer: {
+                    include: { userProfile: true },
+                },
+                subjectClassStudent: {
+                    include: {
+                        student: {
+                            include: {
+                                userProfile: true,
+                                fixedClass: {
+                                    include: {
+                                        trainingCourse: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                _count: {
+                    select: {
+                        subjectClassStudent: {
+                            where: {
+                                deletedAt: null,
+                            },
+                        },
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        },
+        { refetchOnWindowFocus: false }
+    )
+
+    const {
+        data: dataDetailSubjectClass,
+        refetch: refetchSubjectClass,
+        isFetching: isFetchingSubject,
+    } = useFindUniqueSubjectClass(
+        {
+            where: {
+                id: subjectClassId,
+            },
+        },
+        { refetchOnWindowFocus: false, enabled: !!subjectClassId }
+    )
+
+    const {
+        data: dataTable = [],
+        refetch,
+        isFetching: loadingTable,
+    } = useFindManyStudentSubjectScore(
+        {
+            where: {
+                subjectClassId: subjectClassId || '',
+                ...(filterTable.fullname
+                    ? {
+                          student: {
+                              userProfile: {
+                                  fullname: { contains: filterTable.fullname, mode: 'insensitive' },
+                              },
+                          },
+                      }
+                    : {}),
+                ...(filterTable.code
+                    ? {
+                          student: {
+                              userProfile: {
+                                  code: { contains: filterTable.code, mode: 'insensitive' },
+                              },
+                          },
+                      }
+                    : {}),
+                ...(filterTable.fixedClassName
+                    ? {
+                          student: {
+                              fixedClass: {
+                                  name: {
+                                      contains: filterTable.fixedClassName,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          },
+                      }
+                    : {}),
+                ...(filterTable.dateOfBirth?.length === 2
+                    ? {
+                          student: {
+                              userProfile: {
+                                  dateOfBirth: {
+                                      gte: dayjs(
+                                          filterTable.dateOfBirth?.[0],
+                                          'DD/MM/YYYY'
+                                      ).toDate(),
+                                      lte: dayjs(
+                                          filterTable.dateOfBirth?.[1],
+                                          'DD/MM/YYYY'
+                                      ).toDate(),
+                                  },
+                              },
+                          },
+                      }
+                    : {}),
+            },
+            include: {
+                student: {
+                    include: {
+                        userProfile: true,
+                        fixedClass: {
+                            include: {
+                                trainingCourse: {
+                                    include: {
+                                        scoreConverts: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                subjectClass: {
+                    include: {
+                        subject: true,
+                        semester: {
+                            include: {
+                                schoolYear: true,
+                            },
+                        },
+                        mainLecturer: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                        extraLecturer: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                        enterGradeLecturer: {
+                            include: {
+                                userProfile: true,
+                            },
+                        },
+                    },
+                },
+                awards: {
+                    include: {
+                        archivedAward: true,
+                    },
+                },
+                certificates: {
+                    include: {
+                        archivedCertificate: true,
+                    },
+                },
+            },
+            orderBy: [
+                ...(filterTable.attendanceScore
+                    ? [
+                          {
+                              attendanceScore: filterTable.attendanceScore,
+                          },
+                      ]
+                    : []),
+                ...(filterTable.midtermScore
+                    ? [
+                          {
+                              midtermScore: filterTable.midtermScore,
+                          },
+                      ]
+                    : []),
+                ...(filterTable.examScore
+                    ? [
+                          {
+                              examScore: filterTable.examScore,
+                          },
+                      ]
+                    : []),
+                {
+                    student: {
+                        userProfile: {
+                            firstName: 'asc',
+                        },
+                    },
+                },
+            ],
+        },
+        { refetchOnWindowFocus: false }
+    )
+
+    // const statistics = getScoreStatistics(dataTable)
+    const handleOpenChange = (newOpen: boolean) => {
+        setOpen(newOpen)
+    }
+
+    const handleScoreInputKeyDown = (
+        e: React.KeyboardEvent<HTMLInputElement>,
+        recordId: string,
+        type: 'cc' | 'tx' | 'thi',
+        dataTable: Partial<StudentSubjectScore>[]
+    ) => {
+        const fieldOrder: ('cc' | 'tx' | 'thi')[] = ['cc', 'tx', 'thi']
+        const currentRowIndex = dataTable.findIndex((item) => item.id === recordId)
+
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            e.preventDefault()
+            e.stopPropagation()
+            const direction = e.key === 'ArrowDown' ? 1 : -1
+            const targetRow = dataTable[currentRowIndex + direction]
+            if (targetRow) {
+                const nextInputId = `score-${type}-${targetRow.id}`
+                const nextInput = document.getElementById(nextInputId)
+                if (nextInput) {
+                    ;(nextInput as HTMLElement).focus()
+                }
+            }
+        }
+
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            e.preventDefault()
+            e.stopPropagation()
+            const currentColIndex = fieldOrder.indexOf(type)
+            const direction = e.key === 'ArrowRight' ? 1 : -1
+            const targetColIndex = currentColIndex + direction
+            if (targetColIndex >= 0 && targetColIndex < fieldOrder.length) {
+                const nextType = fieldOrder[targetColIndex]
+                const nextInputId = `score-${nextType}-${recordId}`
+                const nextInput = document.getElementById(nextInputId)
+                if (nextInput) {
+                    ;(nextInput as HTMLElement).focus()
+                }
+            }
+        }
+    }
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    useEffect(() => {
+        if (subjectClassId) {
+            form.setFieldsValue({
+                list: [...dataTable],
+                isLockExamScore: dataDetailSubjectClass?.isLockExamScore,
+                isLockScore: dataDetailSubjectClass?.isLockScore,
+                scoreChecked: dataDetailSubjectClass?.scoreChecked,
+                scoreSubmitted: dataDetailSubjectClass?.scoreSubmitted,
+            })
+        }
+    }, [dataTable, subjectClassId])
+
+    useEffect(() => {
+        if (subjectClassId) {
+            console.log('subjectClassId', subjectClassId)
+
+            // setSubjectClassIdSelected(subjectClassId as string)
+        }
+    }, [subjectClassId])
+
+    return (
+        <div className="bg-white">
+            {isFetching ? (
+                <Skeleton />
+            ) : (
+                <Row gutter={[16, 16]}>
+                    <Col span={24}>
+                        <Col span={8}>
+                            <Form.Item name="searchText">
+                                <Select
+                                    placeholder="Chọn lớp môn học"
+                                    options={subjectClassData?.map((i) => {
+                                        return {
+                                            label: `${i.name}-${i.code}`,
+                                            value: i.id,
+                                            key: i.id,
+                                        }
+                                    })}
+                                    defaultValue={subjectClassId}
+                                    onChange={(value) => {
+                                        router.push(
+                                            `/quan-ly-diem/ql-diem-cc-tx?subjectClassId=${value}`
+                                        )
+                                    }}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Col>
+                    {isFetchingSubject ? (
+                        <Skeleton />
+                    ) : (
+                        <>
+                            {dataDetailSubjectClass && (
+                                <>
+                                    <Col span={12}>
+                                        <Flex align="center">
+                                            <div className="mr-6">
+                                                Hạn nhập điểm TX/CC:
+                                                <span
+                                                    className={`ml-1 ${dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) ? '' : 'text-red-500'}`}
+                                                >
+                                                    {dataDetailSubjectClass?.scoreDeadline &&
+                                                        formatDate(
+                                                            dataDetailSubjectClass?.scoreDeadline
+                                                        )}
+                                                </span>
+                                            </div>
+                                        </Flex>
+                                    </Col>
+                                    <Col span={12} className="flex justify-end">
+                                        <Flex gap={4}>
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                'NHAP_EXCEL',
+                                                'XUAT_EXCEL'
+                                            ) && (
+                                                <Popover
+                                                    content={
+                                                        <Flex vertical align="flex-start" gap={4}>
+                                                            {can(
+                                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                                'NHAP_EXCEL'
+                                                            ) && (
+                                                                <>
+                                                                    <Button
+                                                                        onClick={() =>
+                                                                            setImportModalVisible(
+                                                                                true
+                                                                            )
+                                                                        }
+                                                                        disabled={!subjectClassId}
+                                                                        className="w-full flex justify-start"
+                                                                    >
+                                                                        <FileUp />
+                                                                        Nhập điểm từ file
+                                                                    </Button>
+                                                                    <ImportScoreModal
+                                                                        visible={importModalVisible}
+                                                                        onCancel={() =>
+                                                                            setImportModalVisible(
+                                                                                false
+                                                                            )
+                                                                        }
+                                                                        onConfirm={
+                                                                            handleImportConfirm
+                                                                        }
+                                                                        existingStudents={dataTable}
+                                                                    />
+                                                                </>
+                                                            )}
+                                                            {/* {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                    'XUAT_EXCEL'
+                                                ) && (
+                                                    <ExportScoreTemplate
+                                                        selectedFixedClass={selectedFixedClass}
+                                                        dataTable={dataTable}
+                                                    />
+                                                )} */}
+                                                        </Flex>
+                                                    }
+                                                    trigger="click"
+                                                    open={open}
+                                                    onOpenChange={handleOpenChange}
+                                                    placement="bottomLeft"
+                                                    arrow={false}
+                                                >
+                                                    <Button disabled={!subjectClassId}>
+                                                        <Ellipsis />
+                                                    </Button>
+                                                </Popover>
+                                            )}
+                                            {/* {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                    'IN_DS_THI'
+                                ) &&
+                                    !!dataDetailSubjectClass?.enteredScore && (
+                                        <ExportTemplateExam
+                                            selectedFixedClass={selectedFixedClass}
+                                            dataClass={selectedClassInfo}
+                                            dataTable={dataTable}
+                                        />
+                                    )} */}
+
+                                            <Button type="primary" onClick={handleSave}>
+                                                <Save stroke="white" />
+                                                Lưu
+                                            </Button>
+                                        </Flex>
+                                    </Col>
+                                    <Col span={24} className="">
+                                        <Flex align="center" justify="space-between">
+                                            <Form
+                                                className="flex gap-0 lg:gap-[2px] 2xl:gap-3"
+                                                form={form}
+                                                layout="horizontal"
+                                            >
+                                                <Form.Item
+                                                    className="mb-0"
+                                                    name="isLockScore"
+                                                    valuePropName="checked"
+                                                >
+                                                    <Checkbox
+                                                        disabled={profileId !== listUser?.P13}
+                                                    >
+                                                        Khóa điểm CC/TX
+                                                    </Checkbox>
+                                                </Form.Item>
+
+                                                <Form.Item
+                                                    className="mb-0"
+                                                    name="isLockExamScore"
+                                                    valuePropName="checked"
+                                                >
+                                                    <Checkbox
+                                                        disabled={profileId !== listUser?.P13}
+                                                    >
+                                                        Khóa điểm thi
+                                                    </Checkbox>
+                                                </Form.Item>
+
+                                                <Form.Item
+                                                    className="mb-0"
+                                                    name="scoreSubmitted"
+                                                    valuePropName="checked"
+                                                >
+                                                    <Checkbox
+                                                        disabled={profileId !== listUser?.P13}
+                                                    >
+                                                        P13 đã nhận Phiếu điểm
+                                                    </Checkbox>
+                                                </Form.Item>
+
+                                                <Form.Item
+                                                    className="mb-0"
+                                                    name="scoreChecked"
+                                                    valuePropName="checked"
+                                                >
+                                                    <Checkbox disabled={profileId !== listUser?.P2}>
+                                                        P2/P7 đã kiểm tra
+                                                    </Checkbox>
+                                                </Form.Item>
+                                            </Form>
+                                        </Flex>
+                                    </Col>
+                                </>
+                            )}
+                            {loadingTable ? (
+                                <Col span={24}>
+                                    <Skeleton />
+                                </Col>
+                            ) : (
+                                <Col span={24}>
+                                    {/* {dataDetailSubjectClass && (
+                                        <div className="flex flex-row gap-2">
+                                            <div className="font-bold">Tổng hợp kết quả thi:</div>
+                                            {Object.entries(statistics).map(
+                                                ([type, { count, percentage }]) => (
+                                                    <p key={type}>
+                                                        {type}: {count}= {percentage}%
+                                                    </p>
+                                                )
+                                            )}
+                                        </div>
+                                    )} */}
+                                    <Form form={form}>
+                                        <FormItem form={form} name="list">
+                                            <Table
+                                                rowKey="id"
+                                                id="student-subject-score"
+                                                filters={filterTable}
+                                                setFilters={setFilterTable}
+                                                columns={[
+                                                    {
+                                                        title: 'STT',
+                                                        width: 60,
+                                                        align: 'center',
+                                                        fixed: 'left',
+                                                        render: (_, __, index) => index + 1,
+                                                    },
+                                                    {
+                                                        title: 'Mã sinh viên',
+                                                        dataIndex: 'code',
+                                                        align: 'center',
+                                                        width: 150,
+                                                        fixed: 'left',
+                                                        type: 'input',
+                                                        render: (_, record) =>
+                                                            record.student?.code || '',
+                                                    },
+                                                    {
+                                                        title: 'Họ và tên',
+                                                        dataIndex: 'fullname',
+                                                        width: 150,
+                                                        fixed: 'left',
+                                                        type: 'input',
+                                                        render: (_, record) =>
+                                                            record?.student?.userProfile
+                                                                ?.fullname || '',
+                                                    },
+                                                    {
+                                                        title: 'Ngày sinh',
+                                                        dataIndex: 'dateOfBirth',
+                                                        width: 125,
+                                                        type: 'date',
+                                                        render: (_, record) =>
+                                                            record?.student?.userProfile.dateOfBirth
+                                                                ? dayjs(
+                                                                      record?.student?.userProfile
+                                                                          .dateOfBirth
+                                                                  ).format('DD/MM/YYYY')
+                                                                : '',
+                                                    },
+                                                    {
+                                                        title: 'Tên lớp',
+                                                        dataIndex: 'fixedClassName',
+                                                        width: 200,
+                                                        align: 'center',
+                                                        type: 'input',
+                                                        render: (_, record) =>
+                                                            record.student?.fixedClass?.name ||
+                                                            'Chưa có lớp',
+                                                    },
+                                                    // #region Điểm CC
+                                                    {
+                                                        title: 'Điểm CC',
+                                                        dataIndex: 'attendanceScore',
+                                                        width: 100,
+                                                        align: 'center',
+                                                        type: 'order',
+                                                        render: (_, record, index: number) => {
+                                                            const isEditable =
+                                                                can(
+                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                                    'NHAP_DIEM'
+                                                                ) &&
+                                                                record.subjectClass
+                                                                    ?.scoreDeadline &&
+                                                                dayjs().isBefore(
+                                                                    record.subjectClass
+                                                                        .scoreDeadline
+                                                                )
+                                                            const openClock =
+                                                                record.subjectClass?.isLockScore
+
+                                                            // if (isEditable && openClock) {
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={[
+                                                                        'list',
+                                                                        index,
+                                                                        'attendanceScore',
+                                                                    ]}
+                                                                    label=""
+                                                                >
+                                                                    <InputNumber
+                                                                        disabled={
+                                                                            !(
+                                                                                isEditable &&
+                                                                                !openClock
+                                                                            )
+                                                                        }
+                                                                        min={0}
+                                                                        id={`score-cc-${record.id}`}
+                                                                        style={{ width: '100%' }}
+                                                                        step={0.5}
+                                                                        controls={false}
+                                                                        // status={isInvalid ? 'error' : undefined}
+                                                                        onKeyDown={(e) =>
+                                                                            handleScoreInputKeyDown(
+                                                                                e,
+                                                                                record.id,
+                                                                                'cc',
+                                                                                dataTable
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                        // return Score !== null ? <span>{Score}</span> : null
+                                                        // },
+                                                    },
+                                                    // #region Điểm TX
+                                                    {
+                                                        title: 'Điểm TX',
+                                                        dataIndex: 'midtermScore',
+                                                        width: 100,
+                                                        align: 'center',
+                                                        type: 'order',
+                                                        render: (_, record, index: number) => {
+                                                            const isEditable =
+                                                                can(
+                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                                    'NHAP_DIEM'
+                                                                ) &&
+                                                                record.subjectClass
+                                                                    ?.scoreDeadline &&
+                                                                dayjs().isBefore(
+                                                                    record.subjectClass
+                                                                        .scoreDeadline
+                                                                )
+                                                            const openClock =
+                                                                record.subjectClass?.isLockScore
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={[
+                                                                        'list',
+                                                                        index,
+                                                                        'midtermScore',
+                                                                    ]}
+                                                                    label=""
+                                                                    rules={[]}
+                                                                >
+                                                                    <InputNumber
+                                                                        disabled={
+                                                                            !(
+                                                                                isEditable &&
+                                                                                !openClock
+                                                                            )
+                                                                        }
+                                                                        min={0}
+                                                                        id={`score-cc-${record.id}`}
+                                                                        style={{ width: '100%' }}
+                                                                        step={0.5}
+                                                                        controls={false}
+                                                                        // status={isInvalid ? 'error' : undefined}
+                                                                        onKeyDown={(e) =>
+                                                                            handleScoreInputKeyDown(
+                                                                                e,
+                                                                                record.id,
+                                                                                'cc',
+                                                                                dataTable
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </Form.Item>
+                                                            )
+                                                            // return Score !== null ? <span>{Score}</span> : null
+                                                        },
+                                                    },
+                                                    // #region Điểm Thi
+                                                    // {
+                                                    //     title: 'Điểm thi',
+                                                    //     dataIndex: 'examScore',
+                                                    //     width: 100,
+                                                    //     type: 'order',
+                                                    //     align: 'center',
+                                                    //     render: (_, record) => {
+                                                    //         return ''
+                                                    //     },
+                                                    // },
+                                                    // {
+                                                    //     title: 'Điểm cộng',
+                                                    //     align: 'center',
+                                                    //     width: 120,
+                                                    //     render: (_, record) =>
+                                                    //         record.awards.reduce(
+                                                    //             (
+                                                    //                 acc: number,
+                                                    //                 curr: {
+                                                    //                     archivedAward: ArchivedAward
+                                                    //                 }
+                                                    //             ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
+                                                    //             0
+                                                    //         ),
+                                                    // },
+                                                    // {
+                                                    //     title: 'Điểm HP',
+                                                    //     width: 80,
+                                                    //     align: 'center',
+                                                    //     render: (record) => {
+                                                    //         const { finalScore } = renderFinalScore(record)
+                                                    //         return finalScore
+                                                    //     },
+                                                    // },
+                                                    // #region Cấm thi/Hoãn thi/Đình chỉ
+                                                    {
+                                                        title: 'Cấm thi',
+                                                        dataIndex: 'examBanned',
+                                                        width: 80,
+                                                        align: 'center',
+                                                        render: (value, record, index: number) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={[
+                                                                        'list',
+                                                                        index,
+                                                                        'examBanned',
+                                                                    ]}
+                                                                    label=""
+                                                                    valuePropName="checked"
+                                                                >
+                                                                    <Checkbox />
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
+                                                    {
+                                                        title: 'Lý do cấm thi',
+                                                        dataIndex: 'examBannedReason',
+                                                        width: 150,
+                                                        render: (value, record, index: number) => {
+                                                            // const isBanned = Form.useWatch(['list', index, 'examBanned'], form);
+                                                            return (
+                                                                <Form.Item
+                                                                    noStyle
+                                                                    shouldUpdate={(prev, cur) =>
+                                                                        prev.list?.[index]
+                                                                            ?.examBanned !==
+                                                                        cur.list?.[index]
+                                                                            ?.examBanned
+                                                                    }
+                                                                >
+                                                                    {({ getFieldValue }) => {
+                                                                        const isBanned =
+                                                                            getFieldValue([
+                                                                                'list',
+                                                                                index,
+                                                                                'examBanned',
+                                                                            ])
+                                                                        return (
+                                                                            <Form.Item
+                                                                                name={[
+                                                                                    'list',
+                                                                                    index,
+                                                                                    'examBannedReason',
+                                                                                ]}
+                                                                                style={{
+                                                                                    margin: 0,
+                                                                                }}
+                                                                            >
+                                                                                <Input
+                                                                                    disabled={
+                                                                                        !isBanned
+                                                                                    }
+                                                                                    placeholder="Nhập lý do cấm thi"
+                                                                                />
+                                                                            </Form.Item>
+                                                                        )
+                                                                    }}
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
+
+                                                    {
+                                                        title: 'Hoãn thi',
+                                                        dataIndex: 'examPostponed',
+                                                        width: 80,
+                                                        align: 'center',
+                                                        render: (value, record, index: number) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={[
+                                                                        'list',
+                                                                        index,
+                                                                        'examPostponed',
+                                                                    ]}
+                                                                    label=""
+                                                                    valuePropName="checked"
+                                                                >
+                                                                    <Checkbox />
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
+
+                                                    {
+                                                        title: 'Lý do hoãn thi',
+                                                        dataIndex: 'repeatedReason',
+                                                        width: 200,
+                                                        render: (value, record, index: number) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    noStyle
+                                                                    shouldUpdate={(prev, cur) =>
+                                                                        prev.list?.[index]
+                                                                            ?.examPostponed !==
+                                                                        cur.list?.[index]
+                                                                            ?.examPostponed
+                                                                    }
+                                                                >
+                                                                    {({ getFieldValue }) => {
+                                                                        const isBanned =
+                                                                            getFieldValue([
+                                                                                'list',
+                                                                                index,
+                                                                                'examPostponed',
+                                                                            ])
+                                                                        return (
+                                                                            <Form.Item
+                                                                                name={[
+                                                                                    'list',
+                                                                                    index,
+                                                                                    'repeatedReason',
+                                                                                ]}
+                                                                                style={{
+                                                                                    margin: 0,
+                                                                                }}
+                                                                            >
+                                                                                <Input
+                                                                                    disabled={
+                                                                                        !isBanned
+                                                                                    }
+                                                                                    placeholder="Nhập lý do hoãn thi"
+                                                                                />
+                                                                            </Form.Item>
+                                                                        )
+                                                                    }}
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
+
+                                                    {
+                                                        title: 'Đình chỉ',
+                                                        dataIndex: 'suspended',
+                                                        width: 80,
+                                                        align: 'center',
+                                                        render: (value, record, index: number) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={[
+                                                                        'list',
+                                                                        index,
+                                                                        'suspended',
+                                                                    ]}
+                                                                    label=""
+                                                                    valuePropName="checked"
+                                                                >
+                                                                    <Checkbox />
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
+
+                                                    {
+                                                        title: 'Lý do đình chỉ',
+                                                        dataIndex: 'suspendedReason',
+                                                        width: 200,
+                                                        render: (value, record, index: number) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    noStyle
+                                                                    shouldUpdate={(prev, cur) =>
+                                                                        prev.list?.[index]
+                                                                            ?.suspended !==
+                                                                        cur.list?.[index]?.suspended
+                                                                    }
+                                                                >
+                                                                    {({ getFieldValue }) => {
+                                                                        const isBanned =
+                                                                            getFieldValue([
+                                                                                'list',
+                                                                                index,
+                                                                                'suspended',
+                                                                            ])
+                                                                        return (
+                                                                            <Form.Item
+                                                                                name={[
+                                                                                    'list',
+                                                                                    index,
+                                                                                    'suspendedReason',
+                                                                                ]}
+                                                                                style={{
+                                                                                    margin: 0,
+                                                                                }}
+                                                                            >
+                                                                                <Input
+                                                                                    disabled={
+                                                                                        !isBanned
+                                                                                    }
+                                                                                    placeholder="Nhập lý do đình chỉ"
+                                                                                />
+                                                                            </Form.Item>
+                                                                        )
+                                                                    }}
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
+
+                                                    {
+                                                        title: 'Ghi chú',
+                                                        dataIndex: 'description',
+                                                        width: 150,
+                                                        align: 'center',
+                                                        render: (value, record, index: number) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={[
+                                                                        'list',
+                                                                        index,
+                                                                        'description',
+                                                                    ]}
+                                                                    label=""
+                                                                >
+                                                                    <Input
+                                                                        placeholder="Nhập ghi chú"
+                                                                        style={{
+                                                                            width: '100%',
+                                                                        }}
+                                                                    />
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
+                                                ]}
+                                                data={dataTable}
+                                                pagination={{
+                                                    pageSize: dataTable.length,
+                                                    hideOnSinglePage: true,
+                                                }}
+                                            />
+                                        </FormItem>
+                                    </Form>
+                                </Col>
+                            )}
+                        </>
+                    )}
+                </Row>
+            )}
+        </div>
+    )
+}
+
+SubjectClassScore.getLayout = function getLayout(page: React.ReactElement) {
+    return <DefaultLayout>{page}</DefaultLayout>
+}

@@ -6,7 +6,7 @@ import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import type { DM_DonVi, TrainingObjectType } from '@workspace/db'
+import type { DM_DonVi, DocumentFile, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
     useFindManyDM_DonVi,
@@ -32,6 +32,7 @@ export default function TrainingFieldPage() {
         code: '',
         organization: undefined,
         publishDate: undefined,
+        active: undefined,
     })
 
     const where = useMemo(
@@ -52,6 +53,14 @@ export default function TrainingFieldPage() {
                       },
                   }
                 : {}),
+            ...(filters.active
+                ? {
+                      active: {
+                          equals: filters.active[0],
+                      },
+                  }
+                : {}),
+
             ...(filters.trainingObjectTypes
                 ? {
                       trainingObjectTypes: {
@@ -85,12 +94,14 @@ export default function TrainingFieldPage() {
             filters.trainingObjectTypes,
             filters.organization,
             filters.publishDate,
+            filters.active,
         ]
     )
     const { data = [] } = useFindManyTrainingField({
         where,
         include: {
             organization: true,
+            documentFiles: true,
             trainingObjectTypes: {
                 include: {
                     trainingObjectType: true,
@@ -175,6 +186,10 @@ export default function TrainingFieldPage() {
                         data={data}
                         filters={filters}
                         setFilters={(value) => {
+                            console.log(value)
+                            if (value.active?.length === 0 || value.active?.length === 2) {
+                                value.active = undefined
+                            }
                             setFilters(value)
                             setCurrentPage(1)
                         }}
@@ -237,6 +252,13 @@ export default function TrainingFieldPage() {
                                     organization?.sTen ? organization?.sTen : '',
                             },
                             {
+                                title: 'Số quyết định',
+                                fixed: 'left',
+                                dataIndex: 'decisionNo',
+                                align: 'center',
+                                type: 'input',
+                            },
+                            {
                                 title: 'Ngày ban hành',
                                 align: 'center',
                                 width: 150,
@@ -244,6 +266,20 @@ export default function TrainingFieldPage() {
                                 type: 'date',
                                 render: (__, { publishDate }) =>
                                     publishDate ? dayjs(publishDate).format('DD/MM/YYYY') : '',
+                            },
+                            {
+                                title: 'Tài liệu đính kèm',
+                                width: 200,
+
+                                fixed: 'left',
+                                align: 'center',
+                                type: 'input',
+                                render: (__, record) =>
+                                    record.documentFiles?.length > 0
+                                        ? record.documentFiles
+                                              .map((file: DocumentFile) => file.name)
+                                              .join(', ')
+                                        : '',
                             },
                             {
                                 title: 'Mô tả',
@@ -262,6 +298,12 @@ export default function TrainingFieldPage() {
                                 title: 'Trạng thái',
                                 align: 'center',
                                 width: 130,
+                                type: 'select',
+                                dataIndex: 'active',
+                                options: [
+                                    { label: 'Đang hoạt động', value: true },
+                                    { label: 'Không hoạt động', value: false },
+                                ],
                                 render: (value, record) => {
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>

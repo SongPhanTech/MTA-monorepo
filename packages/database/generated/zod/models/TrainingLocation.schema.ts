@@ -25,8 +25,8 @@ const relationSchema = z.object({
 }
 );
 const fkSchema = z.object({
-    dM_TinhId: z.string().nullish(),
-    dM_Tinh_NewId: z.string().nullish(),
+    dM_TinhId: z.string().uuid().nullish(),
+    dM_Tinh_NewId: z.string().uuid().nullish(),
 }
 );
 

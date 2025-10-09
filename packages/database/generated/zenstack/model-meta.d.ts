@@ -7432,6 +7432,56 @@ declare const metadata: {
                     name: string;
                     type: string;
                 };
+                trainingForm: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                trainingFormId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                trainingLevel: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                trainingLevelId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
                 trainingCourse: {
                     name: string;
                     type: string;
@@ -7823,6 +7873,13 @@ declare const metadata: {
                     isArray: boolean;
                     backLink: string;
                 };
+                trainingObjectType: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
             };
             uniqueConstraints: {
                 id: {
@@ -7926,6 +7983,13 @@ declare const metadata: {
                     }[];
                 };
                 students: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                trainingObjectType: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -8056,6 +8120,10 @@ declare const metadata: {
                     name: string;
                     type: string;
                     isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
                     isForeignKey: boolean;
                     relationField: string;
                 };
@@ -8081,6 +8149,10 @@ declare const metadata: {
                     name: string;
                     type: string;
                     isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
                     isForeignKey: boolean;
                     relationField: string;
                 };
