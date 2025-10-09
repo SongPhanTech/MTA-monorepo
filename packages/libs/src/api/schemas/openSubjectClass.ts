@@ -16,6 +16,7 @@ export interface OpenSubjectClass {
     subjectVersionId: string
     subjectVersionName: string
     subjectVersionCode: string
+    managementOrganizationCode: string
     subjectVersionCredit: number
     curriculumVersion: OpenSubjectClassCurriculumVersionItem[]
     subjectClass: OpenSubjectClassSubjectClassItem[]
