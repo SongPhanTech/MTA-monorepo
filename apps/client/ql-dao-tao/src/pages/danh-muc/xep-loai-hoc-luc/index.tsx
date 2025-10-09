@@ -300,6 +300,12 @@ export default function AcademicRankingConvertPage() {
                                 title: 'Điểm hệ 10 đến',
                                 dataIndex: 'base10Max',
                                 align: 'center',
+                                render: (value) => {
+                                    if (value && value % 1 >= 0.99) {
+                                        return Math.ceil(value).toString()
+                                    }
+                                    return value?.toString()
+                                },
                             },
                             {
                                 title: 'Điểm hệ 4 từ',

@@ -37,6 +37,7 @@ export default function TrainingMajorPage() {
         numberCreditsRequired: undefined,
         numberCreditsElective: undefined,
         organization: undefined,
+        active: undefined,
     })
 
     const isFiltering = useMemo(() => {
@@ -73,6 +74,13 @@ export default function TrainingMajorPage() {
                                         name: {
                                             contains: filters.name,
                                             mode: 'insensitive',
+                                        },
+                                    }
+                                  : {}),
+                              ...(filters.active
+                                  ? {
+                                        active: {
+                                            equals: filters.active[0],
                                         },
                                     }
                                   : {}),
@@ -134,6 +142,13 @@ export default function TrainingMajorPage() {
                               },
                           }
                         : {}),
+                    ...(filters.active
+                        ? {
+                              active: {
+                                  equals: filters.active[0],
+                              },
+                          }
+                        : {}),
 
                     ...emptyObjectIf(
                         {
@@ -158,6 +173,8 @@ export default function TrainingMajorPage() {
                 },
                 include: {
                     organization: true,
+                    secondOrganization: true,
+                    thirdOrganization: true,
                     trainingObjectTypes: {
                         include: {
                             trainingObjectType: true,
@@ -307,6 +324,10 @@ export default function TrainingMajorPage() {
                         currentPage={currentPage}
                         filters={filters}
                         setFilters={(value) => {
+                            console.log(value)
+                            if (value.active?.length === 0 || value.active?.length === 2) {
+                                value.active = undefined
+                            }
                             setFilters(value)
                             setCurrentPage(1)
                         }}
@@ -369,6 +390,24 @@ export default function TrainingMajorPage() {
                                 type: 'tree_select',
                                 options: treeData,
                             },
+                            {
+                                title: 'Đơn vị quản lý 2',
+                                dataIndex: 'secondOrganization',
+                                align: 'center',
+                                width: 150,
+                                render: (value) => value?.sTen,
+                                type: 'tree_select',
+                                options: treeData,
+                            },
+                            {
+                                title: 'Đơn vị quản lý 3',
+                                dataIndex: 'thirdOrganization',
+                                align: 'center',
+                                width: 150,
+                                render: (value) => value?.sTen,
+                                type: 'tree_select',
+                                options: treeData,
+                            },
 
                             {
                                 title: 'Số TC chuyên ngành',
@@ -412,6 +451,18 @@ export default function TrainingMajorPage() {
                                 align: 'center',
                                 width: 130,
                                 fixed: 'right',
+                                type: 'select',
+                                dataIndex: 'active',
+                                options: [
+                                    {
+                                        value: true,
+                                        label: 'Đang hoạt động',
+                                    },
+                                    {
+                                        value: false,
+                                        label: 'Không hoạt động',
+                                    },
+                                ],
                                 render: (value, record) => {
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>
