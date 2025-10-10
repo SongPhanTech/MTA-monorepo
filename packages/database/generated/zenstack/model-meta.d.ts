@@ -3670,6 +3670,39 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
+                isGeneralInfoLocked: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                isRegulationLocked: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                isScoreConfigLocked: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
                 baseScore: {
                     name: string;
                     type: string;

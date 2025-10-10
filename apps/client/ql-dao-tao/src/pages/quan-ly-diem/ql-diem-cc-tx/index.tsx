@@ -13,7 +13,9 @@ import {
     useFindManySubjectClass,
     useFindUniqueSubjectClass,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { listUser } from '@workspace/libs/constants'
+import { calcFinalScore } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -32,9 +34,10 @@ import {
     Skeleton,
 } from 'antd'
 import dayjs from 'dayjs'
+import _ from 'lodash'
 import { Ellipsis, FileUp, Save } from 'lucide-react'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 type PutStudentSubjectScore = StudentSubjectScore & {}
 type FilterTable = FilterProps & {
@@ -66,6 +69,7 @@ export default function SubjectClassScore() {
     const [open, setOpen] = useState(false)
     const subjectClassId = router.query?.subjectClassId as string
     const [importModalVisible, setImportModalVisible] = useState(false)
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
     const [filterTable, setFilterTable] = useState<FilterTable>({
         fullname: '',
         fixedClassName: '',
@@ -86,12 +90,88 @@ export default function SubjectClassScore() {
             },
         })
     }
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
 
     const handleSaveScores = async () => {
         try {
             showSpinner()
             const dataSubmit = form.getFieldsValue()
-            console.log('dataSubmit', dataSubmit)
+            const error = dataSubmit?.list.find(
+                (i: any) =>
+                    i?.attendanceScore > 10 ||
+                    i?.attendanceScore < 0 ||
+                    i?.midtermScore > 10 ||
+                    i?.midtermScore < 0 ||
+                    i?.examScore > 10 ||
+                    i?.examScore < 0
+            )
+            if (error) {
+                message.error('Bạn chưa nhập đúng điểm số')
+                return
+            }
+            let listSqlTransaction: any = []
+            const itemEnteredScore = dataSubmit?.list.find(
+                (i) => i?.attendanceScore || i?.midtermScore
+            )
+            if (!itemEnteredScore && subjectClassId) {
+                listSqlTransaction = [
+                    ...listSqlTransaction,
+                    {
+                        model: 'SubjectClass',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: subjectClassId,
+                            },
+                            data: { enteredScore: true },
+                        },
+                    },
+                ]
+            }
+            //  const itemEnteredExamScore = dataSubmit?.list.find((i) => i?.examScore)
+            //     if (!itemEnteredExamScore && subjectClassId) {
+            //     listSqlTransaction = [
+            //         ...listSqlTransaction,
+            //         {
+            //             model: 'SubjectClass',
+            //             operation: 'update',
+            //             data: {
+            //                 where: {
+            //                     id: subjectClassId,
+            //                 },
+            //                 data: { enteredExamScore: true },
+            //             },
+            //         },
+            //     ]
+            // }
+            if (dataSubmit?.list?.length > 0) {
+                listSqlTransaction = [
+                    ...listSqlTransaction,
+                    ...dataSubmit.list.map(({ id, newData }: any) => {
+                        return {
+                            model: 'StudentSubjectScore',
+                            operation: 'update',
+                            data: {
+                                where: {
+                                    id,
+                                },
+                                data: newData,
+                            },
+                        }
+                    }),
+                ]
+            }
+            if (listSqlTransaction?.length > 0) {
+                await sqlTransaction(listSqlTransaction)
+                message.success('Đã cập nhật điểm thi thành công!')
+                debouncedRefetch()
+            }
+            setHasUnsavedChanges(false)
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -404,6 +484,32 @@ export default function SubjectClassScore() {
         }
     }, [subjectClassId])
 
+    useEffect(() => {
+        if (!hasUnsavedChanges) return
+
+        const handleRouteChange = (url: string) => {
+            if (
+                router.pathname !== url &&
+                !confirm('Bạn có thay đổi chưa được lưu. Bạn có chắc muốn rời đi?')
+            ) {
+                router.events.emit('routeChangeError')
+                throw 'Route change aborted'
+            }
+        }
+
+        router.events.on('routeChangeStart', handleRouteChange)
+
+        return () => {
+            router.events.off('routeChangeStart', handleRouteChange)
+        }
+    }, [
+        hasUnsavedChanges,
+        router.events.emit,
+        router.events.off,
+        router.events.on,
+        router.pathname,
+    ])
+
     return (
         <div className="bg-white">
             {isFetching ? (
@@ -424,6 +530,7 @@ export default function SubjectClassScore() {
                                     })}
                                     defaultValue={subjectClassId}
                                     onChange={(value) => {
+                                        setHasUnsavedChanges(false)
                                         router.push(
                                             `/quan-ly-diem/ql-diem-cc-tx?subjectClassId=${value}`
                                         )
@@ -528,7 +635,11 @@ export default function SubjectClassScore() {
                                         />
                                     )} */}
 
-                                            <Button type="primary" onClick={handleSave}>
+                                            <Button
+                                                disabled={!hasUnsavedChanges}
+                                                type="primary"
+                                                onClick={handleSave}
+                                            >
                                                 <Save stroke="white" />
                                                 Lưu
                                             </Button>
@@ -609,7 +720,16 @@ export default function SubjectClassScore() {
                                             )}
                                         </div>
                                     )} */}
-                                    <Form form={form}>
+                                    <Form
+                                        form={form}
+                                        onValuesChange={() => {
+                                            const current = form.getFieldsValue()
+                                            const changed =
+                                                JSON.stringify(current.list || []) !==
+                                                JSON.stringify(dataTable)
+                                            setHasUnsavedChanges(changed)
+                                        }}
+                                    >
                                         <FormItem form={form} name="list">
                                             <Table
                                                 rowKey="id"
@@ -699,6 +819,37 @@ export default function SubjectClassScore() {
                                                                         'attendanceScore',
                                                                     ]}
                                                                     label=""
+                                                                    validateTrigger="onBlur"
+                                                                    rules={[
+                                                                        {
+                                                                            validator: (
+                                                                                _,
+                                                                                value
+                                                                            ) => {
+                                                                                if (
+                                                                                    value == null ||
+                                                                                    value === ''
+                                                                                )
+                                                                                    return Promise.resolve()
+                                                                                if (value > 10) {
+                                                                                    message.error(
+                                                                                        'Điểm phải là nhỏ hơn 10!'
+                                                                                    )
+                                                                                    return Promise.reject()
+                                                                                }
+                                                                                if (
+                                                                                    value % 0.5 !==
+                                                                                    0
+                                                                                ) {
+                                                                                    message.error(
+                                                                                        'Điểm phải là bội số của 0.5!'
+                                                                                    )
+                                                                                    return Promise.reject()
+                                                                                }
+                                                                                return Promise.resolve()
+                                                                            },
+                                                                        },
+                                                                    ]}
                                                                 >
                                                                     <InputNumber
                                                                         disabled={
@@ -758,7 +909,36 @@ export default function SubjectClassScore() {
                                                                         'midtermScore',
                                                                     ]}
                                                                     label=""
-                                                                    rules={[]}
+                                                                    rules={[
+                                                                        {
+                                                                            validator: (
+                                                                                _,
+                                                                                value
+                                                                            ) => {
+                                                                                if (
+                                                                                    value == null ||
+                                                                                    value === ''
+                                                                                )
+                                                                                    return Promise.resolve()
+                                                                                if (value > 10) {
+                                                                                    message.error(
+                                                                                        'Điểm phải là nhỏ hơn 10!'
+                                                                                    )
+                                                                                    return Promise.reject()
+                                                                                }
+                                                                                if (
+                                                                                    value % 0.5 !==
+                                                                                    0
+                                                                                ) {
+                                                                                    message.error(
+                                                                                        'Điểm phải là bội số của 0.5!'
+                                                                                    )
+                                                                                    return Promise.reject()
+                                                                                }
+                                                                                return Promise.resolve()
+                                                                            },
+                                                                        },
+                                                                    ]}
                                                                 >
                                                                     <InputNumber
                                                                         disabled={
@@ -768,7 +948,7 @@ export default function SubjectClassScore() {
                                                                             )
                                                                         }
                                                                         min={0}
-                                                                        id={`score-cc-${record.id}`}
+                                                                        id={`score-tx-${record.id}`}
                                                                         style={{ width: '100%' }}
                                                                         step={0.5}
                                                                         controls={false}
@@ -777,7 +957,7 @@ export default function SubjectClassScore() {
                                                                             handleScoreInputKeyDown(
                                                                                 e,
                                                                                 record.id,
-                                                                                'cc',
+                                                                                'tx',
                                                                                 dataTable
                                                                             )
                                                                         }
@@ -788,16 +968,36 @@ export default function SubjectClassScore() {
                                                         },
                                                     },
                                                     // #region Điểm Thi
-                                                    // {
-                                                    //     title: 'Điểm thi',
-                                                    //     dataIndex: 'examScore',
-                                                    //     width: 100,
-                                                    //     type: 'order',
-                                                    //     align: 'center',
-                                                    //     render: (_, record) => {
-                                                    //         return ''
-                                                    //     },
-                                                    // },
+                                                    {
+                                                        title: 'Điểm thi',
+                                                        dataIndex: 'examScore',
+                                                        width: 100,
+                                                        type: 'order',
+                                                        align: 'center',
+                                                        render: (_, record, index: number) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={[
+                                                                        'list',
+                                                                        index,
+                                                                        'examScore',
+                                                                    ]}
+                                                                    label=""
+                                                                    rules={[]}
+                                                                >
+                                                                    <InputNumber
+                                                                        disabled={true}
+                                                                        min={0}
+                                                                        id={`score-thi-${record.id}`}
+                                                                        style={{ width: '100%' }}
+                                                                        step={0.5}
+                                                                        controls={false}
+                                                                    />
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
                                                     // {
                                                     //     title: 'Điểm cộng',
                                                     //     align: 'center',
@@ -809,19 +1009,70 @@ export default function SubjectClassScore() {
                                                     //                 curr: {
                                                     //                     archivedAward: ArchivedAward
                                                     //                 }
-                                                    //             ) => acc + (curr?.archivedAward?.bonusScore ?? 0),
+                                                    //             ) =>
+                                                    //                 acc +
+                                                    //                 (curr?.archivedAward
+                                                    //                     ?.bonusScore ?? 0),
                                                     //             0
                                                     //         ),
                                                     // },
-                                                    // {
-                                                    //     title: 'Điểm HP',
-                                                    //     width: 80,
-                                                    //     align: 'center',
-                                                    //     render: (record) => {
-                                                    //         const { finalScore } = renderFinalScore(record)
-                                                    //         return finalScore
-                                                    //     },
-                                                    // },
+                                                    {
+                                                        title: 'Điểm HP',
+                                                        width: 80,
+                                                        align: 'center',
+                                                        render: (
+                                                            __,
+                                                            record: any,
+                                                            index: number
+                                                        ) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    noStyle
+                                                                    shouldUpdate={(prev, cur) =>
+                                                                        prev.list?.[index]
+                                                                            ?.midtermScore !==
+                                                                            cur.list?.[index]
+                                                                                ?.midtermScore ||
+                                                                        prev.list?.[index]
+                                                                            ?.attendanceScore !==
+                                                                            cur.list?.[index]
+                                                                                ?.attendanceScore ||
+                                                                        prev.list?.[index]
+                                                                            ?.examScore !==
+                                                                            cur.list?.[index]
+                                                                                ?.examScore
+                                                                    }
+                                                                >
+                                                                    {({ getFieldValue }) => {
+                                                                        const recordForm: any =
+                                                                            getFieldValue([
+                                                                                'list',
+                                                                                index,
+                                                                            ])
+                                                                        const finalScore =
+                                                                            calcFinalScore(
+                                                                                record?.student
+                                                                                    ?.fixedClass
+                                                                                    ?.trainingCourse,
+                                                                                {
+                                                                                    ...record,
+                                                                                    attendanceScore:
+                                                                                        recordForm?.attendanceScore,
+                                                                                    midtermScore:
+                                                                                        recordForm?.midtermScore,
+                                                                                    examScore:
+                                                                                        recordForm?.examScore,
+                                                                                }
+                                                                            )?.toFixed(1)
+
+                                                                        return (
+                                                                            <div>{finalScore}</div>
+                                                                        )
+                                                                    }}
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
                                                     // #region Cấm thi/Hoãn thi/Đình chỉ
                                                     {
                                                         title: 'Cấm thi',
@@ -829,6 +1080,19 @@ export default function SubjectClassScore() {
                                                         width: 80,
                                                         align: 'center',
                                                         render: (value, record, index: number) => {
+                                                            const isEditable =
+                                                                can(
+                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                                    'NHAP_DIEM'
+                                                                ) &&
+                                                                record.subjectClass
+                                                                    ?.scoreDeadline &&
+                                                                dayjs().isBefore(
+                                                                    record.subjectClass
+                                                                        .scoreDeadline
+                                                                )
+                                                            const openClock =
+                                                                record.subjectClass?.isLockScore
                                                             return (
                                                                 <Form.Item
                                                                     className="w-full mb-0"
@@ -840,7 +1104,14 @@ export default function SubjectClassScore() {
                                                                     label=""
                                                                     valuePropName="checked"
                                                                 >
-                                                                    <Checkbox />
+                                                                    <Checkbox
+                                                                        disabled={
+                                                                            !(
+                                                                                isEditable &&
+                                                                                !openClock
+                                                                            )
+                                                                        }
+                                                                    />
                                                                 </Form.Item>
                                                             )
                                                         },
@@ -899,6 +1170,19 @@ export default function SubjectClassScore() {
                                                         width: 80,
                                                         align: 'center',
                                                         render: (value, record, index: number) => {
+                                                            const isEditable =
+                                                                can(
+                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                                    'NHAP_DIEM'
+                                                                ) &&
+                                                                record.subjectClass
+                                                                    ?.scoreDeadline &&
+                                                                dayjs().isBefore(
+                                                                    record.subjectClass
+                                                                        .scoreDeadline
+                                                                )
+                                                            const openClock =
+                                                                record.subjectClass?.isLockScore
                                                             return (
                                                                 <Form.Item
                                                                     className="w-full mb-0"
@@ -910,7 +1194,14 @@ export default function SubjectClassScore() {
                                                                     label=""
                                                                     valuePropName="checked"
                                                                 >
-                                                                    <Checkbox />
+                                                                    <Checkbox
+                                                                        disabled={
+                                                                            !(
+                                                                                isEditable &&
+                                                                                !openClock
+                                                                            )
+                                                                        }
+                                                                    />
                                                                 </Form.Item>
                                                             )
                                                         },
@@ -969,6 +1260,19 @@ export default function SubjectClassScore() {
                                                         width: 80,
                                                         align: 'center',
                                                         render: (value, record, index: number) => {
+                                                            const isEditable =
+                                                                can(
+                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                                    'NHAP_DIEM'
+                                                                ) &&
+                                                                record.subjectClass
+                                                                    ?.scoreDeadline &&
+                                                                dayjs().isBefore(
+                                                                    record.subjectClass
+                                                                        .scoreDeadline
+                                                                )
+                                                            const openClock =
+                                                                record.subjectClass?.isLockScore
                                                             return (
                                                                 <Form.Item
                                                                     className="w-full mb-0"
@@ -980,7 +1284,14 @@ export default function SubjectClassScore() {
                                                                     label=""
                                                                     valuePropName="checked"
                                                                 >
-                                                                    <Checkbox />
+                                                                    <Checkbox
+                                                                        disabled={
+                                                                            !(
+                                                                                isEditable &&
+                                                                                !openClock
+                                                                            )
+                                                                        }
+                                                                    />
                                                                 </Form.Item>
                                                             )
                                                         },

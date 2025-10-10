@@ -990,6 +990,12 @@ model TrainingCourse {
   regulation                 String?
   trainingLanguage           TrainingLanguage?          @relation(fields: [trainingLanguageId], references: [id])
   trainingLanguageId         String?
+  /// khoá sửa tham số của "Thông tin chung"
+  isGeneralInfoLocked        Boolean                    @default(false)
+  /// khoá sửa tham số của "Quyết định/Quy chế"
+  isRegulationLocked         Boolean                    @default(false)
+  /// khoá sửa tham số của "Thông tin điểm và Tham số bổ sung"
+  isScoreConfigLocked        Boolean                    @default(false)
   baseScore                  AcademicRankingBaseType
   coef_1                     Float                      @default(0.1)
   coef_2                     Float                      @default(0.3)
@@ -999,6 +1005,7 @@ model TrainingCourse {
   scoreToPassConditional     Float                      @default(5)
   scoreToTakeGraduation      Float                      @default(5)
   scoreToPassGraduation      Float                      @default(5.5)
+  /// điểm giữ lại khi lưu ban
   scoreToRetain              Float                      @default(6.9)
   trainingObjectType         TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId       String
@@ -1525,7 +1532,7 @@ model TrainingLevel {
   @@schema("ql-dao-tao")
 }
 
-/// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
+/// hình thức đào tạo/hình thức huấn luyện (Trực tiếp, trực tuyến, kết hợp)
 model TrainingForm {
   id                 String               @id() @default(cuid())
   code               String?              @unique()
@@ -4322,7 +4329,7 @@ model GraduationDecision {
   @@schema("ql-dao-tao")
 }
 
-/// Xếp loại học tập
+/// Xếp loại học tập/Xếp loại tốt nghiệp
 model AcademicRankingConvert {
   id                 String                        @id() @default(cuid())
   code               String?                       @unique()

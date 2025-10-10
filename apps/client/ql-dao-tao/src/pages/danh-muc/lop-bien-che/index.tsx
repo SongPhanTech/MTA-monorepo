@@ -375,7 +375,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                             },
 
                             {
-                                title: 'Trình độ đào tạo',
+                                title: 'Bậc đào tạo',
                                 align: 'center',
                                 width: 150,
                                 type: 'select',

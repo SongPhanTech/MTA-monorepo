@@ -12,6 +12,7 @@ WITH FCS AS (
                 sv.credit as subject_version_credit,
                 cv.id as curriculum_version_id,
                 cv.name as curriculum_version_name,
+                cv.code as curriculum_version_code,
                 sv.name as subject_version_name,
                 tbs.semester as training_block_subject_semester,
                 (($1 - fc."startYear") * 2 + $2) as fixed_class_semester,
@@ -28,6 +29,7 @@ WITH FCS AS (
                 c."trainingMajorId" as training_major_id,
                 c."managementOrganizationId" as management_organization_id,
                 dv."sTen" as management_organization_name,
+                dv."sMa" as management_organization_code,
                 tc."trainingObjectTypeId" as training_object_type_id,
                 COUNT(fc.id) as fixed_class_count
         FROM "ql-dao-tao"."SubjectVersion" sv
@@ -61,6 +63,7 @@ WITH FCS AS (
                 sc.id,
                 c."managementOrganizationId",
                 tc."trainingObjectTypeId",
+                management_organization_code,
                 management_organization_name
 )
 SELECT json_build_object(
@@ -74,6 +77,8 @@ SELECT json_build_object(
                 management_organization_id,
                 'managementOrganizationName',
                 management_organization_name,
+                'managementOrganizationCode',
+                management_organization_code,
                 'subjectVersionId',
                 subject_version_id,
                 'subjectVersionName',
@@ -97,7 +102,9 @@ SELECT json_build_object(
                                 'curriculumVersionId',
                                 curriculum_version_id,
                                 'curriculumVersionName',
-                                curriculum_version_name
+                                curriculum_version_name,
+                                'curriculumVersionCode',
+                                curriculum_version_code
                         )
                 ),
                 'fixedClass',
@@ -105,6 +112,8 @@ SELECT json_build_object(
                         json_build_object(
                                 'fixedClassId',
                                 fixed_class_id,
+                                'fixedClassCode',
+                                fixed_class_code,
                                 'fixedClassName',
                                 fixed_class_name,
                                 'fixedClassCount',
@@ -143,5 +152,6 @@ GROUP BY subject_version_id,
         training_major_id,
         training_course_id,
         management_organization_id,
+        management_organization_code,
         management_organization_name
 LIMIT $8 OFFSET ($7 - 1) * $8;

@@ -50,6 +50,7 @@ const useAbility = () => {
                 | QL_HO_SO_PERMISSION,
             ...action: (keyof typeof PERMISSIONS)[]
         ) => {
+            if (process.env.NODE_ENV === 'development') return true
             const perm = ability.actionsFor(subject)
             if (perm.length === 0) return false
 
@@ -65,6 +66,7 @@ const useAbility = () => {
                 | QL_HO_SO_PERMISSION,
             ...action: (keyof typeof PERMISSIONS)[]
         ) => {
+            if (process.env.NODE_ENV === 'development') return true
             const perm = ability.actionsFor(subject)
             if (perm.length === 0) return false
 
