@@ -215,7 +215,7 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
                                         setCurrentPage(1)
                                     }}
                                 >
-                                    Lớp quản lý có môn theo kỳ học dự kiến
+                                    Lớp có môn theo kỳ học dự kiến
                                 </Checkbox>
                             </Form.Item>
                         </Col>
@@ -234,7 +234,7 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
                     columns={[
                         {
                             title: 'STT',
-                            width: 60,
+                            width: 35,
                             align: 'center',
                             fixed: 'left',
                             render: (_, __, index) =>
@@ -244,7 +244,7 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
                             title: 'Lớp QL',
                             dataIndex: 'code',
                             align: 'center',
-                            width: 120,
+                            width: 100,
                         },
                         {
                             title: 'Khoá học',
@@ -292,7 +292,7 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
                     columns={[
                         {
                             title: 'STT',
-                            width: 60,
+                            width: 35,
                             align: 'center',
                             fixed: 'left',
                             render: (_, __, index) =>
@@ -302,7 +302,7 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
                             title: 'Lớp QL',
                             dataIndex: 'code',
                             align: 'center',
-                            width: 120,
+                            width: 100,
                         },
                         {
                             title: 'Khoá học',

@@ -3,11 +3,9 @@ import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
-import type { SubjectClassTime } from '@workspace/db'
 import { useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Checkbox, Col, Flex, Form, Input, Row } from 'antd'
-import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
@@ -226,14 +224,14 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                         title: 'Khu vực',
                         dataIndex: ['room', 'building', 'name'],
                         align: 'center',
-                        width: 180,
+                        width: 120,
                     },
-                    {
-                        title: 'Phòng học',
-                        dataIndex: ['room', 'name'],
-                        align: 'center',
-                        width: 180,
-                    },
+                    // {
+                    //     title: 'Phòng học',
+                    //     dataIndex: ['room', 'name'],
+                    //     align: 'center',
+                    //     width: 100,
+                    // },
                     {
                         title: 'Số SV max',
                         dataIndex: 'maxStudent',
@@ -253,7 +251,7 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                     {
                         title: 'Lớp QL đã ĐK',
                         align: 'center',
-                        width: 100,
+                        width: 120,
                         render: (__, record: any) => {
                             return record?.fixedClasses.length ? (
                                 <TextTruncate
