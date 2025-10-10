@@ -62,10 +62,8 @@ export default function TrainingCoursePage() {
         [filters.code, filters.name, filters.semesterStart, trainingObjectTypeId]
     )
 
-    const { data = [] } = useFindManyTrainingCourse({
-        where: {
-            ...where,
-        },
+    const { data = [], refetch } = useFindManyTrainingCourse({
+        where,
         include: {
             trainingObjectType: true,
             trainingLanguage: true,
@@ -91,15 +89,14 @@ export default function TrainingCoursePage() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountTrainingCourse({
-        where: {
-            ...where,
-            deletedAt: null,
-        },
-    })
+    const { data: count, refetch: refetchCount } = useCountTrainingCourse({ where })
 
     const { onOpen } = useDisclosure<string>({
         tag: 'PutTrainingCourseModal',
+        onClose: () => {
+            refetch()
+            refetchCount()
+        },
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -112,9 +109,7 @@ export default function TrainingCoursePage() {
         try {
             showSpinner()
             await updateTrainingCourse({
-                where: {
-                    id,
-                },
+                where: { id },
                 data: {
                     code: id,
                     deletedAt: new Date(),
@@ -228,30 +223,20 @@ export default function TrainingCoursePage() {
                                     index + (currentPage - 1) * DEFAULT_PAGINATE_SIZE + 1,
                             },
                             {
-                                title: 'Mã khóa',
+                                title: 'Mã khoá',
                                 dataIndex: 'code',
-                                width: 150,
+                                width: 120,
                                 fixed: 'left',
                                 align: 'center',
                                 type: 'input',
                             },
                             {
-                                title: 'Tên khóa',
+                                title: 'Tên khoá',
                                 dataIndex: 'name',
                                 width: 200,
                                 fixed: 'left',
                                 align: 'center',
                                 type: 'input',
-                            },
-                            {
-                                title: 'Đối tượng đào tạo',
-                                dataIndex: 'trainingObjectTypes',
-                                align: 'center',
-                                width: 175,
-                                render: (__, record) =>
-                                    record?.trainingObjectType?.name
-                                        ? record?.trainingObjectType?.name
-                                        : '',
                             },
                             {
                                 title: 'Năm bắt đầu',
@@ -278,7 +263,7 @@ export default function TrainingCoursePage() {
                                 title: 'Niên khoá',
                                 align: 'center',
                                 dataIndex: 'academicYear',
-                                width: 150,
+                                width: 100,
                             },
                             {
                                 title: 'Chỉ tiêu tuyển sinh',
@@ -288,10 +273,22 @@ export default function TrainingCoursePage() {
                                 type: 'order',
                             },
                             {
-                                title: 'Mô tả',
-                                width: 100,
+                                title: 'Số QĐ tuyển sinh',
                                 align: 'center',
-                                dataIndex: 'description',
+                                dataIndex: 'admissionDecision',
+                                width: 150,
+                            },
+                            {
+                                title: 'Số QĐ công nhận SV',
+                                align: 'center',
+                                dataIndex: 'studentRecognitionDecision',
+                                width: 150,
+                            },
+                            {
+                                title: 'Số quy chế đào tạo',
+                                align: 'center',
+                                dataIndex: 'regulation',
+                                width: 150,
                             },
                             {
                                 title: 'Trạng thái',

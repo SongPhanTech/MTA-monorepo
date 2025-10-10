@@ -91,7 +91,7 @@ const MoKhoaNhapDiem = () => {
             width={600}
         >
             <Col span={24}>
-                <FormItem form={form} label="Khóa điểm ĐQT" labelAlign="left" name="isLockScore">
+                <FormItem form={form} label="Khoá điểm ĐQT" labelAlign="left" name="isLockScore">
                     <Radio.Group
                         onChange={(e) => {
                             form.setFieldsValue({
@@ -99,8 +99,8 @@ const MoKhoaNhapDiem = () => {
                             })
                         }}
                     >
-                        <Radio value={true}>Đã khóa</Radio>
-                        <Radio value={false}>Chưa khóa</Radio>
+                        <Radio value={true}>Đã khoá</Radio>
+                        <Radio value={false}>Chưa khoá</Radio>
                     </Radio.Group>
                 </FormItem>
             </Col>
@@ -108,7 +108,7 @@ const MoKhoaNhapDiem = () => {
             <Col span={24}>
                 <FormItem
                     form={form}
-                    label="Khóa điểm thi"
+                    label="Khoá điểm thi"
                     name="isLockExamScore"
                     labelAlign="left"
                 >
@@ -119,8 +119,8 @@ const MoKhoaNhapDiem = () => {
                             })
                         }}
                     >
-                        <Radio value={true}>Đã khóa</Radio>
-                        <Radio value={false}>Chưa khóa</Radio>
+                        <Radio value={true}>Đã khoá</Radio>
+                        <Radio value={false}>Chưa khoá</Radio>
                     </Radio.Group>
                 </FormItem>
             </Col>

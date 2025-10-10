@@ -176,9 +176,9 @@ const NAVIGATION: NavigationType = {
                 children: [
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_KHOA_NHAP_DIEM,
-                        label: 'Mở/Khóa nhập điểm',
+                        label: 'Mở/Khoá nhập điểm',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_KHOA_NHAP_DIEM,
-                        description: 'Mở/Khóa nhập điểm',
+                        description: 'Mở/Khoá nhập điểm',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,

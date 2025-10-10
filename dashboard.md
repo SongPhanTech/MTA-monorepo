@@ -7,13 +7,13 @@ BGĐ cần một cái nhìn **tổng quan, chiến lược** về toàn bộ ho�
 * **Biểu đồ tròn/cột - Tỷ lệ phân bổ Sinh viên/Học viên:**
   * Phân bổ theo **Hệ đào tạo** (`TrainingObjectType`: Quân sự, Dân sự, Quốc tế).
   * Phân bổ theo **Bậc đào tạo** (`TrainingLevel`: Đại học, Thạc sĩ, Tiến sĩ).
-  * Phân bổ theo **Khóa học** (`TrainingCourse`).
+  * Phân bổ theo **Khoá học** (`TrainingCourse`).
   * *Nguồn dữ liệu:* `Student`, `TrainingObjectType`, `TrainingLevel`, `FixedClass`.
 
 * **Biểu đồ đường - Xu hướng chất lượng đầu vào và đầu ra qua các năm:**
-  * **Đầu vào:** Điểm trúng tuyển trung bình (`entryScore`) qua các khóa.
-  * **Đầu ra:** Điểm GPA tích lũy trung bình (`cumulativeGpaBase10`) của sinh viên tốt nghiệp qua các khóa.
-  * **Tỷ lệ tốt nghiệp:** % sinh viên tốt nghiệp đúng hạn, trễ hạn qua các khóa.
+  * **Đầu vào:** Điểm trúng tuyển trung bình (`entryScore`) qua các khoá.
+  * **Đầu ra:** Điểm GPA tích lũy trung bình (`cumulativeGpaBase10`) của sinh viên tốt nghiệp qua các khoá.
+  * **Tỷ lệ tốt nghiệp:** % sinh viên tốt nghiệp đúng hạn, trễ hạn qua các khoá.
   * *Nguồn dữ liệu:* `Student`, `StudentSemesterResult`, `GraduationDecision`.
 
 * **Biểu đồ cột chồng - Thống kê kết quả học tập toàn Học viện:**
@@ -48,7 +48,7 @@ BGĐ cần một cái nhìn **tổng quan, chiến lược** về toàn bộ ho�
     * *Nguồn dữ liệu:* `Student`, `StudentSemesterResult`.
 
   * **Biểu đồ cột - Phân tích kết quả học tập theo học kỳ/năm học:**
-    * Điểm GPA trung bình theo **Lớp niên chế** (`FixedClass`), **Khóa học** (`TrainingCourse`), **Ngành** (`TrainingMajor`).
+    * Điểm GPA trung bình theo **Lớp niên chế** (`FixedClass`), **Khoá học** (`TrainingCourse`), **Ngành** (`TrainingMajor`).
     * Tỷ lệ % sinh viên qua môn/rớt môn của các học phần.
     * *Nguồn dữ liệu:* `StudentSemesterResult`, `StudentYearResult`, `StudentSubjectScore`.
 
@@ -92,7 +92,7 @@ BGĐ cần một cái nhìn **tổng quan, chiến lược** về toàn bộ ho�
 
 * **Dashboard Nhân khẩu học:**
   * **Biểu đồ tròn/cột - Phân bổ HV/SV:** Theo **Giới tính** (`gender`), **Dân tộc** (`ethnicityId`), **Tôn giáo** (`religionId`), **Quê quán** (`provinceHometownId`).
-  * **Biểu đồ đường - Xu hướng tuyển sinh** qua các năm theo ngành/khóa.
+  * **Biểu đồ đường - Xu hướng tuyển sinh** qua các năm theo ngành/khoá.
   * *Nguồn dữ liệu:* `UserProfile`, `Student`.
 
 * **Dashboard Quản lý Hồ sơ:**
@@ -126,5 +126,5 @@ BGĐ cần một cái nhìn **tổng quan, chiến lược** về toàn bộ ho�
 
 Dashboard của các Phó phòng về cơ bản sẽ **giống với Trưởng phòng** nhưng có thể được tùy chỉnh hoặc lọc theo phạm vi công việc được phân công cụ thể.
 
-* **Ví dụ:** Phó phòng Đào tạo phụ trách khối năm 1-2 sẽ có dashboard tương tự Trưởng phòng nhưng mặc định lọc dữ liệu cho các khóa và lớp thuộc năm 1 và 2.
+* **Ví dụ:** Phó phòng Đào tạo phụ trách khối năm 1-2 sẽ có dashboard tương tự Trưởng phòng nhưng mặc định lọc dữ liệu cho các khoá và lớp thuộc năm 1 và 2.
 * Hệ thống nên cho phép **tùy chỉnh (customize) dashboard**, để mỗi người dùng có thể thêm/bớt/sắp xếp các widget phù hợp nhất với nhu cầu công việc của họ.

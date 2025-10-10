@@ -114,7 +114,7 @@ export const ModalPhuLucThacSi = () => {
             ),
         },
         {
-            title: 'Khóa:',
+            title: 'Khoá:',
             value: <span>{data?.fixedClass?.trainingCourse?.name}</span>,
         },
     ]
@@ -712,7 +712,7 @@ export const ModalPhuLucThacSi = () => {
                         <div className="w-full flex flex-col items-center font-bold">
                             <div className="mt-4 uppercase">Phiếu học viên quân sự</div>
                             <div className="text-sm flex flex-col items-center">
-                                <span>{`Khóa: ${data?.fixedClass?.trainingCourse?.name}, Lớp CN: ${data?.fixedClass?.name}`}</span>
+                                <span>{`Khoá: ${data?.fixedClass?.trainingCourse?.name}, Lớp CN: ${data?.fixedClass?.name}`}</span>
                                 <span>{`Chuyên ngành: ${data?.curriculumVersion?.curriculum?.trainingMajor?.name}`}</span>
                             </div>
                         </div>
@@ -934,7 +934,7 @@ export const ModalPhuLucThacSi = () => {
                                             Hình thức ĐT
                                         </th>
                                         <th className="border border-black px-2 py-1 w-1/5">
-                                            Niên khóa
+                                            Niên khoá
                                         </th>
                                         <th className="border border-black px-2 py-1 w-1/5">
                                             Xếp loại TN

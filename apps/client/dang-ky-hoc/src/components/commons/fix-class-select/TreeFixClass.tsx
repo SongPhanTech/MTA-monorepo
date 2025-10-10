@@ -24,7 +24,7 @@ const TreeFixClass: React.FC<TreeFixClassProps> = ({ onChangeSelected }) => {
 
     // Tạo cấu trúc cây từ dữ liệu
     const treeData = trainingCourses.map((course) => ({
-        title: course.name || `Khóa học ${course.id}`, // Tên khóa học
+        title: course.name || `Khoá học ${course.id}`, // Tên khoá học
         key: `course-${course.id}`,
         children: fixedClasses
             .filter((fixedClass) => fixedClass.trainingCourseId === course.id)

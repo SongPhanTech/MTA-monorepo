@@ -272,7 +272,7 @@ const XetCanhCaoHocDuong = ({ semesterId }: XetCanhCaoHocDuongProps) => {
                                 render: (__, record) => record?.student?.fixedClass?.name,
                             },
                             {
-                                title: 'Khóa',
+                                title: 'Khoá',
                                 dataIndex: 'trainingCourseId',
                                 width: 150,
                                 align: 'center',

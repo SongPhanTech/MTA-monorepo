@@ -213,7 +213,7 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
                                         setCurrentPage(1)
                                     }}
                                 >
-                                    Lớp quản lý có môn theo kì học dự kiến
+                                    Lớp quản lý có môn theo kỳ học dự kiến
                                 </Checkbox>
                             </Form.Item>
                         </Col>

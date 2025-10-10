@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 async function seedScholarshipCriteria() {
     console.log('Bắt đầu seed tiêu chí học bổng...')
 
-    // --- Lấy ID của các khóa học Dân sự và Quân sự (giả sử đã có) ---
+    // --- Lấy ID của các khoá học Dân sự và Quân sự (giả sử đã có) ---
     const civilianCourse = await prisma.trainingCourse.findMany({
         where: { trainingObjectType: { type: 'CIVILIAN' } },
     })

@@ -60,7 +60,7 @@ const dataNgoaiNgu = [
 const dataTinHoc = [
     {
         id: '1',
-        hinhThucDaoTao: 'Khóa học',
+        hinhThucDaoTao: 'Khoá học',
         trinhDo: 'Chứng chỉ IC3',
         coSoDaoTao: 'Trung tâm Tin học Đại học Bách Khoa',
         thoiGianBatDau: '01/06/2019',
@@ -72,7 +72,7 @@ const dataTinHoc = [
 const dataQuocPhongAnNinh = [
     {
         id: '1',
-        boiDuongQuocPhongAnNinh: 'Khóa bồi dưỡng kiến thức QP-AN cho cán bộ lãnh đạo',
+        boiDuongQuocPhongAnNinh: 'Khoá bồi dưỡng kiến thức QP-AN cho cán bộ lãnh đạo',
         thoiGianBatDau: '01/03/2021',
         thoiGianKetThuc: '30/03/2021',
     },

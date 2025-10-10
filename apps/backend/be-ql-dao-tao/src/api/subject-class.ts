@@ -54,7 +54,7 @@ const openSubjectClass = createRoute({
             search: z
                 .string()
                 .openapi('search', {
-                    description: 'Từ khóa tìm kiếm',
+                    description: 'Từ khoá tìm kiếm',
                 })
                 .optional(),
             page: z.string().openapi('page', {
@@ -103,7 +103,7 @@ const fixedClassBySubjectClassSemester = createRoute({
             search: z
                 .string()
                 .openapi('search', {
-                    description: 'Từ khóa tìm kiếm',
+                    description: 'Từ khoá tìm kiếm',
                 })
                 .optional(),
             page: z.string().openapi('page', {
@@ -156,7 +156,7 @@ const studentBySubjectClassSemester = createRoute({
             search: z
                 .string()
                 .openapi('search', {
-                    description: 'Từ khóa tìm kiếm',
+                    description: 'Từ khoá tìm kiếm',
                 })
                 .optional(),
             page: z.string().openapi('page', {

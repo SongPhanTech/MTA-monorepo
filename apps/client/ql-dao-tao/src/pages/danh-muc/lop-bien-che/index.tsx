@@ -349,7 +349,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                     '',
                             },
                             {
-                                title: 'Khóa',
+                                title: 'Khoá',
                                 dataIndex: 'trainingCourse',
                                 align: 'center',
                                 width: 150,
