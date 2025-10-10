@@ -5818,6 +5818,7 @@ export namespace Prisma {
         numberOfSemesters: 'numberOfSemesters',
         yearCreation: 'yearCreation',
         yearApplication: 'yearApplication',
+        isLock: 'isLock',
         curriculumId: 'curriculumId',
         trainingObjectTypeId: 'trainingObjectTypeId',
         trainingLevelId: 'trainingLevelId',
@@ -21104,6 +21105,7 @@ export namespace Prisma {
         readonly numberOfSemesters: FieldRef<"CurriculumVersion", 'Int'>;
         readonly yearCreation: FieldRef<"CurriculumVersion", 'Int'>;
         readonly yearApplication: FieldRef<"CurriculumVersion", 'Int'>;
+        readonly isLock: FieldRef<"CurriculumVersion", 'Boolean'>;
         readonly curriculumId: FieldRef<"CurriculumVersion", 'String'>;
         readonly trainingObjectTypeId: FieldRef<"CurriculumVersion", 'String'>;
         readonly trainingLevelId: FieldRef<"CurriculumVersion", 'String'>;
@@ -141450,6 +141452,7 @@ export namespace Prisma {
         numberOfSemesters: number | null
         yearCreation: number | null
         yearApplication: number | null
+        isLock: boolean | null
         curriculumId: string | null
         trainingObjectTypeId: string | null
         trainingLevelId: string | null
@@ -141484,6 +141487,7 @@ export namespace Prisma {
         numberOfSemesters: number | null
         yearCreation: number | null
         yearApplication: number | null
+        isLock: boolean | null
         curriculumId: string | null
         trainingObjectTypeId: string | null
         trainingLevelId: string | null
@@ -141518,6 +141522,7 @@ export namespace Prisma {
         numberOfSemesters: number
         yearCreation: number
         yearApplication: number
+        isLock: number
         curriculumId: number
         trainingObjectTypeId: number
         trainingLevelId: number
@@ -141567,6 +141572,7 @@ export namespace Prisma {
         numberOfSemesters?: true
         yearCreation?: true
         yearApplication?: true
+        isLock?: true
         curriculumId?: true
         trainingObjectTypeId?: true
         trainingLevelId?: true
@@ -141601,6 +141607,7 @@ export namespace Prisma {
         numberOfSemesters?: true
         yearCreation?: true
         yearApplication?: true
+        isLock?: true
         curriculumId?: true
         trainingObjectTypeId?: true
         trainingLevelId?: true
@@ -141635,6 +141642,7 @@ export namespace Prisma {
         numberOfSemesters?: true
         yearCreation?: true
         yearApplication?: true
+        isLock?: true
         curriculumId?: true
         trainingObjectTypeId?: true
         trainingLevelId?: true
@@ -141750,6 +141758,7 @@ export namespace Prisma {
         numberOfSemesters: number | null
         yearCreation: number | null
         yearApplication: number | null
+        isLock: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingLevelId: string
@@ -141801,6 +141810,7 @@ export namespace Prisma {
         numberOfSemesters?: boolean
         yearCreation?: boolean
         yearApplication?: boolean
+        isLock?: boolean
         curriculumId?: boolean
         trainingObjectTypeId?: boolean
         trainingLevelId?: boolean
@@ -141846,6 +141856,7 @@ export namespace Prisma {
         numberOfSemesters?: boolean
         yearCreation?: boolean
         yearApplication?: boolean
+        isLock?: boolean
         curriculumId?: boolean
         trainingObjectTypeId?: boolean
         trainingLevelId?: boolean
@@ -141886,6 +141897,7 @@ export namespace Prisma {
         numberOfSemesters?: boolean
         yearCreation?: boolean
         yearApplication?: boolean
+        isLock?: boolean
         curriculumId?: boolean
         trainingObjectTypeId?: boolean
         trainingLevelId?: boolean
@@ -141926,6 +141938,7 @@ export namespace Prisma {
         numberOfSemesters?: boolean
         yearCreation?: boolean
         yearApplication?: boolean
+        isLock?: boolean
         curriculumId?: boolean
         trainingObjectTypeId?: boolean
         trainingLevelId?: boolean
@@ -141945,7 +141958,7 @@ export namespace Prisma {
         guide?: boolean
         renderPath?: boolean
     };
-    export type CurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "shortName" | "englishName" | "trainingLanguageId" | "numberOfSemesters" | "yearCreation" | "yearApplication" | "curriculumId" | "trainingObjectTypeId" | "trainingLevelId" | "trainingTimeId" | "diplomaTypeId" | "requiredCredits" | "electiveCredits" | "jobPosition" | "objectives" | "learningOutcome" | "inputStandard" | "time" | "structure" | "matrixLearningOutcome" | "summary" | "learningDiagram" | "guide" | "renderPath", ExtArgs["result"]["curriculumVersion"]>;
+    export type CurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "shortName" | "englishName" | "trainingLanguageId" | "numberOfSemesters" | "yearCreation" | "yearApplication" | "isLock" | "curriculumId" | "trainingObjectTypeId" | "trainingLevelId" | "trainingTimeId" | "diplomaTypeId" | "requiredCredits" | "electiveCredits" | "jobPosition" | "objectives" | "learningOutcome" | "inputStandard" | "time" | "structure" | "matrixLearningOutcome" | "summary" | "learningDiagram" | "guide" | "renderPath", ExtArgs["result"]["curriculumVersion"]>;
     export type CurriculumVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingLanguage?: boolean | CurriculumVersion$trainingLanguageArgs<ExtArgs>
         curriculum?: boolean | CurriculumDefaultArgs<ExtArgs>
@@ -142004,6 +142017,7 @@ export namespace Prisma {
             numberOfSemesters: number | null
             yearCreation: number | null
             yearApplication: number | null
+            isLock: boolean
             curriculumId: string
             trainingObjectTypeId: string
             trainingLevelId: string
@@ -298387,6 +298401,7 @@ export namespace Prisma {
         numberOfSemesters?: IntNullableFilter<"CurriculumVersion"> | number | null
         yearCreation?: IntNullableFilter<"CurriculumVersion"> | number | null
         yearApplication?: IntNullableFilter<"CurriculumVersion"> | number | null
+        isLock?: BoolFilter<"CurriculumVersion"> | boolean
         curriculumId?: StringFilter<"CurriculumVersion"> | string
         trainingObjectTypeId?: StringFilter<"CurriculumVersion"> | string
         trainingLevelId?: StringFilter<"CurriculumVersion"> | string
@@ -298431,6 +298446,7 @@ export namespace Prisma {
         numberOfSemesters?: SortOrderInput | SortOrder
         yearCreation?: SortOrderInput | SortOrder
         yearApplication?: SortOrderInput | SortOrder
+        isLock?: SortOrder
         curriculumId?: SortOrder
         trainingObjectTypeId?: SortOrder
         trainingLevelId?: SortOrder
@@ -298479,6 +298495,7 @@ export namespace Prisma {
         numberOfSemesters?: IntNullableFilter<"CurriculumVersion"> | number | null
         yearCreation?: IntNullableFilter<"CurriculumVersion"> | number | null
         yearApplication?: IntNullableFilter<"CurriculumVersion"> | number | null
+        isLock?: BoolFilter<"CurriculumVersion"> | boolean
         curriculumId?: StringFilter<"CurriculumVersion"> | string
         trainingObjectTypeId?: StringFilter<"CurriculumVersion"> | string
         trainingLevelId?: StringFilter<"CurriculumVersion"> | string
@@ -298523,6 +298540,7 @@ export namespace Prisma {
         numberOfSemesters?: SortOrderInput | SortOrder
         yearCreation?: SortOrderInput | SortOrder
         yearApplication?: SortOrderInput | SortOrder
+        isLock?: SortOrder
         curriculumId?: SortOrder
         trainingObjectTypeId?: SortOrder
         trainingLevelId?: SortOrder
@@ -298565,6 +298583,7 @@ export namespace Prisma {
         numberOfSemesters?: IntNullableWithAggregatesFilter<"CurriculumVersion"> | number | null
         yearCreation?: IntNullableWithAggregatesFilter<"CurriculumVersion"> | number | null
         yearApplication?: IntNullableWithAggregatesFilter<"CurriculumVersion"> | number | null
+        isLock?: BoolWithAggregatesFilter<"CurriculumVersion"> | boolean
         curriculumId?: StringWithAggregatesFilter<"CurriculumVersion"> | string
         trainingObjectTypeId?: StringWithAggregatesFilter<"CurriculumVersion"> | string
         trainingLevelId?: StringWithAggregatesFilter<"CurriculumVersion"> | string
@@ -321434,6 +321453,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         requiredCredits?: number | null
         electiveCredits?: number | null
         jobPosition?: string | null
@@ -321473,6 +321493,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingLevelId: string
@@ -321510,6 +321531,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
         electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
         jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -321549,6 +321571,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
@@ -321587,6 +321610,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingLevelId: string
@@ -321620,6 +321644,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
         electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
         jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -321649,6 +321674,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
@@ -346512,6 +346538,7 @@ export namespace Prisma {
         numberOfSemesters?: SortOrder
         yearCreation?: SortOrder
         yearApplication?: SortOrder
+        isLock?: SortOrder
         curriculumId?: SortOrder
         trainingObjectTypeId?: SortOrder
         trainingLevelId?: SortOrder
@@ -346553,6 +346580,7 @@ export namespace Prisma {
         numberOfSemesters?: SortOrder
         yearCreation?: SortOrder
         yearApplication?: SortOrder
+        isLock?: SortOrder
         curriculumId?: SortOrder
         trainingObjectTypeId?: SortOrder
         trainingLevelId?: SortOrder
@@ -346587,6 +346615,7 @@ export namespace Prisma {
         numberOfSemesters?: SortOrder
         yearCreation?: SortOrder
         yearApplication?: SortOrder
+        isLock?: SortOrder
         curriculumId?: SortOrder
         trainingObjectTypeId?: SortOrder
         trainingLevelId?: SortOrder
@@ -385786,6 +385815,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         requiredCredits?: number | null
         electiveCredits?: number | null
         jobPosition?: string | null
@@ -385823,6 +385853,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingLevelId: string
@@ -385898,6 +385929,7 @@ export namespace Prisma {
         numberOfSemesters?: IntNullableFilter<"CurriculumVersion"> | number | null
         yearCreation?: IntNullableFilter<"CurriculumVersion"> | number | null
         yearApplication?: IntNullableFilter<"CurriculumVersion"> | number | null
+        isLock?: BoolFilter<"CurriculumVersion"> | boolean
         curriculumId?: StringFilter<"CurriculumVersion"> | string
         trainingObjectTypeId?: StringFilter<"CurriculumVersion"> | string
         trainingLevelId?: StringFilter<"CurriculumVersion"> | string
@@ -387780,6 +387812,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         requiredCredits?: number | null
         electiveCredits?: number | null
         jobPosition?: string | null
@@ -387818,6 +387851,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingLevelId: string
@@ -388607,6 +388641,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
         electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
         jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -388645,6 +388680,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
@@ -388914,6 +388950,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         requiredCredits?: number | null
         electiveCredits?: number | null
         jobPosition?: string | null
@@ -388952,6 +388989,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         trainingObjectTypeId: string
         trainingLevelId: string
         trainingTimeId: string
@@ -395726,6 +395764,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         requiredCredits?: number | null
         electiveCredits?: number | null
         jobPosition?: string | null
@@ -395764,6 +395803,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingLevelId: string
         trainingTimeId: string
@@ -396608,6 +396648,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         requiredCredits?: number | null
         electiveCredits?: number | null
         jobPosition?: string | null
@@ -396646,6 +396687,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingTimeId: string
@@ -399940,6 +399982,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         requiredCredits?: number | null
         electiveCredits?: number | null
         jobPosition?: string | null
@@ -399978,6 +400021,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingLevelId: string
@@ -400094,6 +400138,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
         electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
         jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -400132,6 +400177,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
@@ -400181,6 +400227,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         requiredCredits?: number | null
         electiveCredits?: number | null
         jobPosition?: string | null
@@ -400219,6 +400266,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingLevelId: string
@@ -400276,6 +400324,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         requiredCredits?: number | null
         electiveCredits?: number | null
         jobPosition?: string | null
@@ -400314,6 +400363,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingLevelId: string
@@ -401383,6 +401433,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         requiredCredits?: number | null
         electiveCredits?: number | null
         jobPosition?: string | null
@@ -401421,6 +401472,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingLevelId: string
@@ -403025,6 +403077,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
         electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
         jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -403063,6 +403116,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
@@ -451319,6 +451373,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         requiredCredits?: number | null
         electiveCredits?: number | null
         jobPosition?: string | null
@@ -451357,6 +451412,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingLevelId: string
@@ -452202,6 +452258,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
         electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
         jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -452240,6 +452297,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
@@ -473209,6 +473267,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingLevelId: string
@@ -473369,6 +473428,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
         electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
         jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -473406,6 +473466,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
@@ -473443,6 +473504,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
@@ -474625,6 +474687,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         trainingObjectTypeId: string
         trainingLevelId: string
         trainingTimeId: string
@@ -474744,6 +474807,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
         electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
         jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -474782,6 +474846,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
         trainingTimeId?: StringFieldUpdateOperationsInput | string
@@ -474819,6 +474884,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
         trainingTimeId?: StringFieldUpdateOperationsInput | string
@@ -477633,6 +477699,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingLevelId: string
         trainingTimeId: string
@@ -477903,6 +477970,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
         electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
         jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -477941,6 +478009,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
         trainingTimeId?: StringFieldUpdateOperationsInput | string
@@ -477978,6 +478047,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
         trainingTimeId?: StringFieldUpdateOperationsInput | string
@@ -478716,6 +478786,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingTimeId: string
@@ -478791,6 +478862,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
         electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
         jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -478829,6 +478901,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingTimeId?: StringFieldUpdateOperationsInput | string
@@ -478866,6 +478939,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingTimeId?: StringFieldUpdateOperationsInput | string
@@ -480938,6 +481012,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingLevelId: string
@@ -480970,6 +481045,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
         electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
         jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -481008,6 +481084,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
@@ -481045,6 +481122,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
@@ -481078,6 +481156,7 @@ export namespace Prisma {
         numberOfSemesters?: number | null
         yearCreation?: number | null
         yearApplication?: number | null
+        isLock?: boolean
         curriculumId: string
         trainingObjectTypeId: string
         trainingLevelId: string
@@ -481130,6 +481209,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         requiredCredits?: NullableIntFieldUpdateOperationsInput | number | null
         electiveCredits?: NullableIntFieldUpdateOperationsInput | number | null
         jobPosition?: NullableStringFieldUpdateOperationsInput | string | null
@@ -481168,6 +481248,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string
@@ -481205,6 +481286,7 @@ export namespace Prisma {
         numberOfSemesters?: NullableIntFieldUpdateOperationsInput | number | null
         yearCreation?: NullableIntFieldUpdateOperationsInput | number | null
         yearApplication?: NullableIntFieldUpdateOperationsInput | number | null
+        isLock?: BoolFieldUpdateOperationsInput | boolean
         curriculumId?: StringFieldUpdateOperationsInput | string
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         trainingLevelId?: StringFieldUpdateOperationsInput | string

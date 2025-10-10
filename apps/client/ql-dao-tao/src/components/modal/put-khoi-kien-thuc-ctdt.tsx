@@ -90,7 +90,7 @@ const PutTrainingBlock = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa khối kiến thức CTDT' : 'Thêm mới khối kiến thức CTDT'}
+            title={id ? 'Chỉnh sửa khối kiến thức CTĐT' : 'Thêm mới khối kiến thức CTĐT'}
             className="min-w-[400px] w-[500px]"
         >
             <Col span={24}>

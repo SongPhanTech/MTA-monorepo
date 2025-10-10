@@ -4,6 +4,7 @@ import CopyPlusIcon from '@components/icons/copyPlus'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import LockPlusIcon from '@components/icons/lockPlus'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
@@ -305,7 +306,30 @@ export default function TrainingProgramCatalog() {
         }
     }
 
+    const handleToggleLock = async (id: string, isLocked: boolean) => {
+        try {
+            showSpinner()
+            await updateCurriculumVersion({
+                where: {
+                    id,
+                },
+                data: {
+                    isLock: !isLocked,
+                },
+            })
+            message.success(isLocked ? 'Mở khóa thành công' : 'Khóa thành công')
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     const handleRowClick = (record: { id?: string }) => {
+        if ((record as CurriculumVersion)?.isLock) {
+            return
+        }
+
         if (
             record?.id &&
             can(
@@ -472,7 +496,7 @@ export default function TrainingProgramCatalog() {
                                 type: 'input',
                             },
                             {
-                                title: 'Tên phiên bản CTĐT',
+                                title: 'Tên CTĐT toàn khóa',
                                 dataIndex: 'name',
                                 align: 'center',
                                 fixed: 'left',
@@ -633,7 +657,7 @@ export default function TrainingProgramCatalog() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 120,
+                                width: 150,
                                 fixed: 'right',
                                 align: 'center',
                                 hidden: !canSome(
@@ -645,6 +669,8 @@ export default function TrainingProgramCatalog() {
                                 ),
                                 render: (_, record) => {
                                     if (record?.id) {
+                                        const isLocked = (record as CurriculumVersion)?.isLock
+
                                         return (
                                             <Row className="justify-center gap-2">
                                                 {can(
@@ -695,6 +721,24 @@ export default function TrainingProgramCatalog() {
                                                         className="text-sm text-blue-700 cursor-pointer"
                                                     />
                                                 )}
+                                                {/* TODO: CẦN THÊM MỘT QUYỀN ĐỂ LOCK/UNLOCK*/}
+                                                <LockPlusIcon
+                                                    isLocked={(record as CurriculumVersion)?.isLock}
+                                                    popConfirm={{
+                                                        onConfirm: (e) => {
+                                                            handleToggleLock(
+                                                                record?.id,
+                                                                (record as CurriculumVersion)
+                                                                    ?.isLock || false
+                                                            )
+                                                            e?.stopPropagation()
+                                                        },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
+                                                    }}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                />
                                                 {can(
                                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                                                     'XOA'
@@ -735,7 +779,7 @@ export default function TrainingProgramCatalog() {
                                                 versionId: '',
                                             })
                                         }}
-                                        title="Thêm mới phiên bản"
+                                        title="Thêm mới CTĐT toàn khóa"
                                     />
                                 )}
                                 {can(

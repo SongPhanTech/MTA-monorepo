@@ -1208,6 +1208,7 @@ model CurriculumVersion {
   numberOfSemesters     Int?
   yearCreation          Int?
   yearApplication       Int?
+  isLock                Boolean                            @default(false)
   curriculum            Curriculum                         @relation(fields: [curriculumId], references: [id])
   curriculumId          String
   trainingObjectType    TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id])
