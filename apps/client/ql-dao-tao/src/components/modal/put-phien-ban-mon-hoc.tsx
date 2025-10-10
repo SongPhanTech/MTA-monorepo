@@ -7,6 +7,7 @@ import { type DocumentFile, type SubjectVersion, SubjectVersionType } from '@wor
 import {
     useCreateSubjectVersion,
     useFindManySubject,
+    useFindManyTrainingObjectType,
     useFindUniqueSubject,
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
@@ -82,6 +83,10 @@ const PutVersionSubjectModal = () => {
         },
     })
 
+    const { data: trainingObjectType = [] } = useFindManyTrainingObjectType({
+        select: { id: true, name: true },
+    })
+
     const treeData =
         subjectData
             .filter((subject) => subject.subjectVersion.length > 0)
@@ -126,6 +131,9 @@ const PutVersionSubjectModal = () => {
                 learningOutcome: output.learningOutcome,
                 structure: output.structure,
                 guild: output.guild,
+                trainingObjectTypeId: output.trainingObjectTypeId
+                    ? output.trainingObjectTypeId
+                    : '',
                 academicResults: output.academicResults,
                 materials: output.materials,
                 rules: output.rules,
@@ -441,6 +449,18 @@ const PutVersionSubjectModal = () => {
                         options={subjectVersionTypeOptions?.map((item) => ({
                             label: item.label,
                             value: item.value,
+                        }))}
+                        allowClear
+                    />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="trainingObjectTypeId" label="Đối tượng đào tạo">
+                    <Select
+                        placeholder="Chọn đối tượng đào tạo"
+                        options={trainingObjectType?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
                         }))}
                         allowClear
                     />

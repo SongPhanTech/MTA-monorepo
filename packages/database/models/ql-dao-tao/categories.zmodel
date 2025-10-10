@@ -38,6 +38,7 @@ model TrainingObjectType extends Base {
   trainingScoreSession TrainingScoreSession[]
   subjectClass         SubjectClass[]
   graduationSession    GraduationSession[]
+  subjectVersion       SubjectVersion[]
 
   @@schema("ql-dao-tao")
 }
