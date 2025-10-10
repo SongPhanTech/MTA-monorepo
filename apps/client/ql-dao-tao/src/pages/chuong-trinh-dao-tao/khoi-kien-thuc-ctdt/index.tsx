@@ -5,6 +5,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { Prisma } from '@workspace/db'
 import {
     useCountTrainingBlock,
     useFindManyTrainingBlock,
@@ -18,6 +19,25 @@ import { BookPlus } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
+type TrainingBlockType = Prisma.TrainingBlockGetPayload<{
+    include: {
+        curriculumVersions: {
+            include: {
+                subjects: {
+                    include: {
+                        subject: {
+                            select: {
+                                credit: true
+                                period: true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}>
 
 export default function TrainingBlock() {
     const { can, canSome } = useAbility()
@@ -39,6 +59,16 @@ export default function TrainingBlock() {
             curriculumVersions: {
                 include: {
                     curriculumVersion: true,
+                    subjects: {
+                        include: {
+                            subject: {
+                                select: {
+                                    credit: true,
+                                    period: true,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -48,6 +78,8 @@ export default function TrainingBlock() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
+
+    console.log(trainingBlockData)
 
     const { data: count, refetch: refetchCount } = useCountTrainingBlock({
         where: {
@@ -99,6 +131,19 @@ export default function TrainingBlock() {
         } finally {
             hideSpinner()
         }
+    }
+
+    const calculateTotal = (record: TrainingBlockType, field: 'credit' | 'period') => {
+        const curriculumVersion = record.curriculumVersions?.[0]
+
+        if (!curriculumVersion?.subjects) {
+            return 0
+        }
+
+        return curriculumVersion.subjects.reduce((sum, tbs) => {
+            const value = field === 'credit' ? tbs.subject?.credit || 0 : tbs.subject?.period || 0
+            return sum + value
+        }, 0)
     }
 
     return (
@@ -153,6 +198,22 @@ export default function TrainingBlock() {
                                 dataIndex: 'name',
                                 align: 'center',
                                 type: 'input',
+                            },
+                            {
+                                title: 'Tổng số tín chỉ',
+                                width: 150,
+                                align: 'center',
+                                render: (_, record) => {
+                                    return calculateTotal(record as TrainingBlockType, 'credit')
+                                },
+                            },
+                            {
+                                title: 'Tổng số tiết',
+                                width: 150,
+                                align: 'center',
+                                render: (_, record) => {
+                                    return calculateTotal(record as TrainingBlockType, 'period')
+                                },
                             },
                             // {
                             //     title: 'Tổng tín chỉ',

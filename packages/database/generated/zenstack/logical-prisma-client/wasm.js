@@ -527,6 +527,7 @@ exports.Prisma.CurriculumVersionScalarFieldEnum = {
   numberOfSemesters: 'numberOfSemesters',
   yearCreation: 'yearCreation',
   yearApplication: 'yearApplication',
+  isLock: 'isLock',
   curriculumId: 'curriculumId',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingLevelId: 'trainingLevelId',

@@ -4678,6 +4678,17 @@ declare const metadata: {
                     type: string;
                     isOptional: boolean;
                 };
+                isLock: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
                 curriculum: {
                     name: string;
                     type: string;

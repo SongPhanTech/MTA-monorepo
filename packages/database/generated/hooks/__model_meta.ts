@@ -2430,6 +2430,10 @@ const metadata = {
                     name: "yearApplication",
                     type: "Int",
                     isOptional: true,
+                }, isLock: {
+                    name: "isLock",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, curriculum: {
                     name: "curriculum",
                     type: "Curriculum",
