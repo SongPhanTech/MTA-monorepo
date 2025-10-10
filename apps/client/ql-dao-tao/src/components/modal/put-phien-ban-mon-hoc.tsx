@@ -131,9 +131,7 @@ const PutVersionSubjectModal = () => {
                 learningOutcome: output.learningOutcome,
                 structure: output.structure,
                 guild: output.guild,
-                trainingObjectTypeId: output.trainingObjectTypeId
-                    ? output.trainingObjectTypeId
-                    : '',
+                trainingObjectTypeId: output.trainingObjectTypeId,
                 academicResults: output.academicResults,
                 materials: output.materials,
                 rules: output.rules,
@@ -455,7 +453,12 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col>
             <Col span={8}>
-                <FormItem form={form} name="trainingObjectTypeId" label="Đối tượng đào tạo">
+                <FormItem
+                    form={form}
+                    name="trainingObjectTypeId"
+                    label="Đối tượng đào tạo"
+                    required
+                >
                     <Select
                         placeholder="Chọn đối tượng đào tạo"
                         options={trainingObjectType?.map((item) => ({

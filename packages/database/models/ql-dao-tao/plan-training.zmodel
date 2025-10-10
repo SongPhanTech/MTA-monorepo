@@ -460,8 +460,8 @@ model SubjectVersion extends Base {
   subjectVersionCategory   SubjectVersionCategory? @relation(fields: [subjectVersionCategoryId], references: [id])
   subjectVersionCategoryId String?
 
-  trainingObjectType       TrainingObjectType?     @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId     String?
+  trainingObjectType       TrainingObjectType      @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId     String
   /// môn học khối kiến thức - CTĐT
   trainingBlocks           TrainingBlockSubject[]
 
