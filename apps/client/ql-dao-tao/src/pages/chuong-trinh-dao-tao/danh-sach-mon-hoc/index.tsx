@@ -25,6 +25,7 @@ import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 export default function SubjectList() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -47,6 +48,7 @@ export default function SubjectList() {
         numberOfOther: undefined,
         isTeaching: undefined,
     })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { getExamTypeLabel, options: examTypeFilters } = useExamTypeOptions()
 
     const { data: organization = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
@@ -69,6 +71,13 @@ export default function SubjectList() {
         }
 
         return {
+            ...(trainingObjectTypeId
+                ? {
+                      subjectVersion: {
+                          some: { trainingObjectTypeId },
+                      },
+                  }
+                : {}),
             ...(filters.searchText
                 ? { name: { contains: filters.searchText, mode: 'insensitive' as const } }
                 : {}),
@@ -91,7 +100,7 @@ export default function SubjectList() {
                 subjectVersion: { some: subjectVersionFilter },
             }),
         }
-    }, [filters])
+    }, [trainingObjectTypeId, filters])
 
     const { data: SubjectData, refetch } = useFindManySubject({
         where,
