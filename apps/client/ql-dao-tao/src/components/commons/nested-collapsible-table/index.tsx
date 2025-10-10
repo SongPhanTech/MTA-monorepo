@@ -67,7 +67,7 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
 
     const createDynamicColumns = (): ColumnType<any>[] => {
         // First column shows the hierarchy label for all levels
-        const firstColumn: ColumnType<any> = {
+        const sttColumn: ColumnType<any> = {
             title: 'STT',
             key: '_hierarchy',
             width: 300,
@@ -76,12 +76,12 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
                 const level = record._level ?? nestedKeys.length
                 if (level < nestedKeys.length) {
                     return {
-                        colSpan: renderParentActions ? columns.length - 1 : columns.length,
+                        colSpan: renderParentActions ? columns.length : columns.length + 1,
                     }
                 }
                 return {}
             },
-            render: (_, record) => {
+            render: (_, record, index) => {
                 const level = record._level ?? nestedKeys.length
                 const indentSize = 24 // pixels per level
                 const paddingLeft = level * indentSize
@@ -118,22 +118,9 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
                     )
                 }
 
-                const firstDataColumn = columns.find((col) => !col.hidden)
-                if (firstDataColumn?.dataIndex) {
-                    const value = record[firstDataColumn.dataIndex as string]
-                    const content = firstDataColumn.render
-                        ? firstDataColumn.render(value, record, 0)
-                        : value
-                    return (
-                        <span style={{ paddingLeft: `${paddingLeft}px`, display: 'inline-block' }}>
-                            {content}
-                        </span>
-                    )
-                }
-
                 return (
                     <span style={{ paddingLeft: `${paddingLeft}px`, display: 'inline-block' }}>
-                        {record.code || record.name || record.id || '-'}
+                        {index + 1}
                     </span>
                 )
             },
@@ -141,9 +128,8 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
 
         const dataColumns: ColumnType<any>[] = columns
             .filter((col) => !col.hidden)
-            .slice(1)
             .map((col, index) => {
-                const isLastColumn = index === columns.filter((c) => !c.hidden).length - 2
+                const isLastColumn = index === columns.filter((c) => !c.hidden).length - 1
                 const shouldRenderParentActions = isLastColumn && renderParentActions
 
                 return {
@@ -178,7 +164,7 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
                 }
             })
 
-        return [firstColumn, ...dataColumns]
+        return [sttColumn, ...dataColumns]
     }
 
     const transformedData = transformData(data)

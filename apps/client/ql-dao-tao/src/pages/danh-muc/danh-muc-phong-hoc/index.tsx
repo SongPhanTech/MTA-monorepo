@@ -1,4 +1,7 @@
-import { NestedCollapsibleTable, type NestedColumn } from '@components/commons/table-tree'
+import {
+    NestedCollapsibleTable,
+    type NestedColumn,
+} from '@components/commons/nested-collapsible-table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
