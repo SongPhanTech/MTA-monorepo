@@ -181,7 +181,8 @@ const ModalPrintToKQHT = () => {
                 .flatMap((block) => block.subjects)
                 .filter(
                     (subjectItem) =>
-                        subjectItem.print === true && subjectItem.useForFinalScore === true
+                        // subjectItem.print === true &&
+                        subjectItem.useForFinalScore === true
                 ) || []
 
         let totalWeightedScore = 0
@@ -317,7 +318,9 @@ const ModalPrintToKQHT = () => {
 
                                 subjectScoreData?.trainingBlocks.forEach((block) => {
                                     block.subjects
-                                        ?.filter((subjectItem: any) => subjectItem.print === true)
+                                        ?.filter(
+                                            (subjectItem) => subjectItem.useForFinalScore === true
+                                        )
                                         ?.forEach((subjectItem: any, index: number) => {
                                             if (subjectItem.graduation) {
                                                 graduationSubjects.push({
@@ -446,7 +449,7 @@ const ModalPrintToKQHT = () => {
                                         .flatMap((block) => block.subjects)
                                         .filter(
                                             (subjectItem) =>
-                                                subjectItem.print === true &&
+                                                // subjectItem.print === true &&
                                                 subjectItem.useForFinalScore === true
                                         )
                                         ?.reduce(

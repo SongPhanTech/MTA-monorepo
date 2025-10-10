@@ -234,6 +234,7 @@ model TrainingCourse extends Base {
   scoreToTakeGraduation      Float                      @default(5) // Điểm liệt môn tốt nghiệp
   scoreToPassGraduation      Float                      @default(5.5) // Điểm tối để qua môn tốt nghiệp
 
+  /// điểm giữ lại khi lưu ban
   scoreToRetain              Float                      @default(6.9)
 
   trainingObjectType         TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo

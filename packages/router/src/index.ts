@@ -235,10 +235,10 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOAI_HINH_DAO_TAO,
-                        label: 'Hình thức đào tạo',
+                        label: 'Loại hình đào tạo',
                         icon: PieChartOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOAI_HINH_DAO_TAO,
-                        description: 'Hình thức đào tạo',
+                        description: 'Loại hình đào tạo',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_TRINH_DO_DAO_TAO,
