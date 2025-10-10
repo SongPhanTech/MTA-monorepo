@@ -2926,6 +2926,10 @@ const metadata = {
                     name: "type",
                     type: "SubjectVersionType",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, onePoint: {
+                    name: "onePoint",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, credit: {
                     name: "credit",
                     type: "Int",

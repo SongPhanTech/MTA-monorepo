@@ -3,14 +3,14 @@ import { prisma } from '..'
 
 const getExamTypeVietNamese = (examType: ExamType) => {
     switch (examType) {
-        case ExamType.OfflineChoices:
-            return 'Trắc nghiệp Trực tiếp'
-        case ExamType.OnlineChoices:
-            return 'Trắc nghiệp Trực tuyến'
+        // case ExamType.OfflineChoices:
+        // return 'Trắc nghiệp Trực tiếp'
+        // case ExamType.OnlineChoices:
+        // return 'Trắc nghiệp Trực tuyến'
         case ExamType.OfflineWritten:
             return 'Tự luận Trực tiếp'
-        case ExamType.OnlineWritten:
-            return 'Tự luận Trực tuyến'
+        // case ExamType.OnlineWritten:
+        //     return 'Tự luận Trực tuyến'
         case ExamType.Oral:
             return 'Vấn đáp'
         case ExamType.Practice:

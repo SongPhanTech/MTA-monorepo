@@ -127,11 +127,7 @@ export default function SubjectClassScore() {
         try {
             showSpinner()
             const dataSubmit = form.getFieldsValue()
-            const error = dataSubmit?.list.find(
-                (i: any) =>
-                    i?.examScore > 10 ||
-                    i?.examScore < 0
-            )
+            const error = dataSubmit?.list.find((i: any) => i?.examScore > 10 || i?.examScore < 0)
             if (error) {
                 message.error('Bạn chưa nhập đúng điểm số')
                 return
@@ -476,9 +472,9 @@ export default function SubjectClassScore() {
                 dataDetailSubjectClass?.examScoreDeadline &&
                 dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
                 !dataDetailSubjectClass?.isLockExamScore &&
-                ((dataDetailSubjectClass?.examType === 'OnlineWritten' &&
+                ((dataDetailSubjectClass?.examType === 'OfflineWritten' &&
                     profileId === listUser.P13) ||
-                    (dataDetailSubjectClass?.examType !== 'OnlineWritten' &&
+                    (dataDetailSubjectClass?.examType !== 'OfflineWritten' &&
                         profileId !== listUser.P13))) ||
             false
         )

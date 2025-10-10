@@ -398,9 +398,9 @@ model Subject extends Base {
 // và gấp 1,5 lần số học viên dự thi đối với hình thức thi vấn đáp, thực hành.
 enum ExamType {
   OfflineWritten // thi viết (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
-  OnlineWritten // thi viết trực tuyến (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
-  OfflineChoices // thi trắc nghiệm
-  OnlineChoices // thi trắc nghiệm trực tuyến
+  // OnlineWritten // thi viết trực tuyến (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
+  // OfflineChoices // thi trắc nghiệm
+  // OnlineChoices // thi trắc nghiệm trực tuyến
   Oral // thi vấn đáp
   Practice // thi thực hành
   Project // thi đồ án
@@ -408,6 +408,7 @@ enum ExamType {
   @@schema("ql-dao-tao")
 }
 
+/// Nhóm phiên bản môn học
 model SubjectVersionCategory extends Base {
   name            String
   subjectVersions SubjectVersion[]
@@ -416,8 +417,9 @@ model SubjectVersionCategory extends Base {
 
 enum SubjectVersionType {
   Normal // Môn thường
+  Internship // Thực tập
   Research // Chuyên đề nghiên cứu
-  Project // Luân văn/Đồ án
+  Project // Luận văn/Đồ án
 
   @@schema("ql-dao-tao")
 }
@@ -428,6 +430,8 @@ model SubjectVersion extends Base {
   codeTkb                  String?
   examType                 ExamType
   type                     SubjectVersionType      @default(Normal) // loại môn học
+  /// 1 đầu điểm
+  onePoint                 Boolean                 @default(false)
   credit                   Int // số tín chỉ
   week                     Int? // số tuần
   /// số tiết
@@ -476,7 +480,6 @@ model SubjectVersion extends Base {
 
   // Nhóm môn tương đương
   equivalencyGroups        SubjectInGroup[]
-
 
   knowledgeBlocks          KnowledgeBlock[]
   subjectClass             SubjectClass[]

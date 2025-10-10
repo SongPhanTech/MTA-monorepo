@@ -18,7 +18,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Checkbox, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
@@ -45,7 +45,7 @@ export default function SubjectList() {
         numberOfReview: undefined,
         numberOfExam: undefined,
         numberOfOther: undefined,
-        isTeaching: undefined,
+        // isTeaching: undefined,
     })
     const { getExamTypeLabel, options: examTypeFilters } = useExamTypeOptions()
 
@@ -60,12 +60,12 @@ export default function SubjectList() {
             ...(filters.code && {
                 code: { contains: filters.code, mode: 'insensitive' as const },
             }),
-            ...(filters.isTeaching !== undefined &&
-                filters.isTeaching.length === 1 && {
-                    subjectClass: filters.isTeaching[0]
-                        ? { some: { active: true, deletedAt: null } }
-                        : { none: {} },
-                }),
+            // ...(filters.isTeaching !== undefined &&
+            //     filters.isTeaching.length === 1 && {
+            //         subjectClass: filters.isTeaching[0]
+            //             ? { some: { active: true, deletedAt: null } }
+            //             : { none: {} },
+            //     }),
         }
 
         return {
@@ -504,7 +504,7 @@ export default function SubjectList() {
                                 render: (record) => <div className="line-clamp-2">{record}</div>,
                             },
                             {
-                                title: 'Giảng dạy',
+                                title: 'Đã mở LMH',
                                 align: 'center',
                                 dataIndex: 'isTeaching',
                                 width: 120,
@@ -514,11 +514,7 @@ export default function SubjectList() {
                                     { value: true, label: 'Đã đưa vào giảng dạy' },
                                     { value: false, label: 'Chưa đưa vào giảng dạy' },
                                 ],
-                                render: (_, record) => {
-                                    const isTeaching =
-                                        record.subjectClass && record.subjectClass.length > 0
-                                    return <Checkbox checked={isTeaching} />
-                                },
+                                render: (_, record) => (record.subjectClass?.length ? '✅' : ''),
                             },
                             {
                                 title: 'Trạng thái',
@@ -550,19 +546,8 @@ export default function SubjectList() {
                                     'SUA',
                                     'XOA'
                                 ),
-                                render: (
-                                    _,
-                                    record: {
-                                        id?: string
-                                        subjectId?: string
-                                        trainingBlocks: any[]
-                                    }
-                                ) => {
-                                    const {
-                                        id: subjectVersionId,
-                                        subjectId,
-                                        trainingBlocks,
-                                    } = record
+                                render: (_, record) => {
+                                    const { id: subjectVersionId, subjectId, subjectClass } = record
                                     return subjectVersionId && subjectId ? (
                                         <Row className="justify-center gap-2">
                                             {can(
@@ -584,7 +569,7 @@ export default function SubjectList() {
                                                 'XOA'
                                             ) && (
                                                 <DeleteIcon
-                                                    disabled={trainingBlocks?.length > 0}
+                                                    disabled={subjectClass?.length > 0}
                                                     popConfirm={{
                                                         onConfirm: () =>
                                                             handleDelete(subjectVersionId),

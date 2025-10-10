@@ -12,7 +12,7 @@ import {
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Radio } from 'antd'
+import { Col, Form, Input, InputNumber, message, Radio, Switch } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -33,6 +33,8 @@ type PutSubjectVersionFormValues = PutSubjectVersion & {
 
 const subjectVersionTypeOptions = [
     { label: 'Môn thường', value: SubjectVersionType.Normal },
+    { label: 'Thực tập', value: SubjectVersionType.Internship },
+    { label: 'Chuyên đề nghiên cứu', value: SubjectVersionType.Research },
     { label: 'Đồ án tốt nghiệp', value: SubjectVersionType.Project },
 ]
 
@@ -250,6 +252,7 @@ const PutVersionSubjectModal = () => {
         } else {
             form.setFieldsValue({
                 active: true,
+                type: SubjectVersionType.Normal,
                 documentFiles: [],
             })
             setDocument([])
@@ -315,18 +318,6 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col> */}
             <Col span={8}>
-                <FormItem form={form} name="type" label="Loại môn học">
-                    <Select
-                        placeholder="Chọn loại hệ điểm"
-                        options={subjectVersionTypeOptions?.map((item) => ({
-                            label: item.label,
-                            value: item.value,
-                        }))}
-                        allowClear
-                    />
-                </FormItem>
-            </Col>
-            <Col span={8}>
                 <FormItem
                     form={form}
                     name="trainingObjectTypeId"
@@ -341,6 +332,23 @@ const PutVersionSubjectModal = () => {
                         }))}
                         allowClear
                     />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="type" label="Loại môn học">
+                    <Select
+                        placeholder="Chọn loại môn học"
+                        options={subjectVersionTypeOptions?.map((item) => ({
+                            label: item.label,
+                            value: item.value,
+                        }))}
+                        allowClear
+                    />
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="onePoint" label=" ">
+                    <Switch checkedChildren="1 đầu điểm" unCheckedChildren="3 đầu điểm" />
                 </FormItem>
             </Col>
             <Col span={8}>
@@ -456,11 +464,7 @@ const PutVersionSubjectModal = () => {
                     />
                 </Form.Item>
             </Col>
-            <Col span={8}>
-                <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea rows={3} placeholder="Nhập mô tả" />
-                </FormItem>
-            </Col>
+
             <Col span={8}>
                 <FormItem form={form} name={'active'} label="Trạng thái" required>
                     <Radio.Group buttonStyle="solid">
@@ -469,7 +473,11 @@ const PutVersionSubjectModal = () => {
                     </Radio.Group>
                 </FormItem>
             </Col>
-            {/*  */}
+            <Col span={24}>
+                <FormItem form={form} name="description" label="Mô tả">
+                    <Input.TextArea rows={3} placeholder="Nhập mô tả" />
+                </FormItem>
+            </Col>
             <Col span={24}>
                 <FormItem form={form} name="documentFiles" label="Tài liệu đính kèm">
                     <DocumentPaths

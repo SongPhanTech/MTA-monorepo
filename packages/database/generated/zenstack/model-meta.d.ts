@@ -5309,6 +5309,17 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                onePoint: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
                 credit: {
                     name: string;
                     type: string;

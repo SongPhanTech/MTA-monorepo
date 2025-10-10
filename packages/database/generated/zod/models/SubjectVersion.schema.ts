@@ -21,6 +21,7 @@ const baseSchema = z.object({
     codeTkb: z.string().nullish(),
     examType: ExamTypeSchema,
     type: SubjectVersionTypeSchema,
+    onePoint: z.boolean().default(false),
     credit: z.number(),
     week: z.number().nullish(),
     period: z.number().default(0),
@@ -102,6 +103,7 @@ export const SubjectVersionPrismaUpdateSchema = z.object({
     codeTkb: z.string().nullish(),
     examType: ExamTypeSchema,
     type: SubjectVersionTypeSchema,
+    onePoint: z.boolean().default(false),
     credit: z.union([z.number(), z.record(z.unknown())]),
     week: z.union([z.number().nullish(), z.record(z.unknown())]),
     period: z.union([z.number().default(0), z.record(z.unknown())]),
@@ -127,7 +129,7 @@ export const SubjectVersionPrismaUpdateSchema = z.object({
  * `SubjectVersion` schema for create operations excluding foreign keys and relations.
  */
 export const SubjectVersionCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, type: true, period: true
+    id: true, active: true, createdAt: true, updatedAt: true, type: true, onePoint: true, period: true
 });
 
 
