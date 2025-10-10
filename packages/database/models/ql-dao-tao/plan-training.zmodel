@@ -211,11 +211,11 @@ model TrainingCourse extends Base {
   admissionStartDate         DateTime?
   /// Ngày kết thúc
   admissionEndDate           DateTime?
-  /// Mã/số hiệu QĐ tuyển sinh
+  /// Số QĐ tuyển sinh
   admissionDecision          String?
-  /// Mã/số hiệu QĐ công nhận SV
+  /// Số QĐ công nhận SV
   studentRecognitionDecision String?
-  /// Mã/số hiệu quy chế đào tạo
+  /// Số quy chế đào tạo
   regulation                 String?
 
   trainingLanguage           TrainingLanguage?          @relation(fields: [trainingLanguageId], references: [id])
@@ -363,7 +363,7 @@ model CurriculumVersion extends Base {
   objectives            String? // II. Mục tiêu
   learningOutcome       String? // III. Chuẩn đầu ra
   inputStandard         String? // IV. Chuẩn đầu vào
-  time                  String? // V. Thời gian toàn khóa
+  time                  String? // V. Thời gian toàn khoá
   structure             String? // VI. Cấu trúc chương trình đào tạo
   matrixLearningOutcome String? // VII. Ma trận chuẩn đầu ra
   summary               String? // VIII. Mô tả tóm tắt nội dung các học phần
