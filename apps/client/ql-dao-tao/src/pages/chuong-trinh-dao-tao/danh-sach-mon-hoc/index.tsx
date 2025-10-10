@@ -13,12 +13,25 @@ import {
     useCountSubject,
     useFindManyDM_DonVi,
     useFindManySubject,
+    useFindUniqueTrainingObjectType,
     useUpdateSubject,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Checkbox, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import {
+    Button,
+    Checkbox,
+    Col,
+    Flex,
+    Form,
+    Input,
+    message,
+    Row,
+    Tag,
+    Tooltip,
+    Typography,
+} from 'antd'
 import _ from 'lodash'
 import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
@@ -49,6 +62,15 @@ export default function SubjectList() {
         isTeaching: undefined,
     })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { data: selectedTrainingObjectType } = useFindUniqueTrainingObjectType(
+        {
+            where: { id: trainingObjectTypeId },
+            select: { name: true },
+        },
+        {
+            enabled: !!trainingObjectTypeId,
+        }
+    )
     const { getExamTypeLabel, options: examTypeFilters } = useExamTypeOptions()
 
     const { data: organization = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
@@ -253,9 +275,16 @@ export default function SubjectList() {
             return newFilters
         })
     }
-
+    const pageTitle = selectedTrainingObjectType
+        ? `Danh sách môn học - ${selectedTrainingObjectType.name}`
+        : 'Danh sách môn học'
     return (
         <div>
+            <Row>
+                <Col span={24} className="mb-2">
+                    <Typography.Title level={4}>{pageTitle}</Typography.Title>
+                </Col>
+            </Row>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
