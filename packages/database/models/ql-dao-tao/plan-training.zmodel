@@ -606,11 +606,11 @@ enum PeriodType {
 model SubjectClass extends BaseNoCode {
   code                       String
   name                       String
-  startDate                  DateTime
+  startDate                  DateTime?
   endDate                    DateTime?
   subject                    SubjectVersion        @relation(fields: [subjectId], references: [id])
   subjectId                  String
-  schedule                   SubjectClassSchedule
+  schedule                   SubjectClassSchedule?
   maxStudent                 Int // Số SV tối đa
 
   // Đối tượng đào tạo
