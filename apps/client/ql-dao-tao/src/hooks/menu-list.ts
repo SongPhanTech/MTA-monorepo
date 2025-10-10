@@ -49,7 +49,7 @@ const useMenuList = () => {
         [isUpdateAbility, permissions, ability]
     )
 
-    return menus
+    return process.env.NODE_ENV === 'development' ? NAVIGATION.QL_DAO_TAO.menus : menus
 }
 
 export { useMenuList }

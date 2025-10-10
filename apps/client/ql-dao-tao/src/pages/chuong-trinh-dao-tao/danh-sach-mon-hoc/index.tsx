@@ -18,7 +18,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
@@ -45,6 +45,7 @@ export default function SubjectList() {
         numberOfReview: undefined,
         numberOfExam: undefined,
         numberOfOther: undefined,
+        isTeaching: undefined,
     })
     const { getExamTypeLabel, options: examTypeFilters } = useExamTypeOptions()
 
@@ -59,6 +60,12 @@ export default function SubjectList() {
             ...(filters.code && {
                 code: { contains: filters.code, mode: 'insensitive' as const },
             }),
+            ...(filters.isTeaching !== undefined &&
+                filters.isTeaching.length === 1 && {
+                    subjectClass: filters.isTeaching[0]
+                        ? { some: { active: true, deletedAt: null } }
+                        : { none: {} },
+                }),
         }
 
         return {
@@ -91,9 +98,6 @@ export default function SubjectList() {
         include: {
             _count: true,
             subjectVersion: {
-                include: {
-                    trainingBlocks: true,
-                },
                 orderBy: [
                     ...emptyObjectIf([{ credit: filters.credit }], !!filters.credit),
                     ...emptyObjectIf([{ period: filters.period }], !!filters.period),
@@ -129,6 +133,17 @@ export default function SubjectList() {
                         createdAt: 'desc',
                     },
                 ],
+                include: {
+                    subjectClass: {
+                        where: {
+                            active: true,
+                            deletedAt: null,
+                        },
+                        select: {
+                            id: true,
+                        },
+                    },
+                },
             },
             managementOrganization: true,
         },
@@ -487,6 +502,23 @@ export default function SubjectList() {
                                 dataIndex: 'description',
                                 width: 200,
                                 render: (record) => <div className="line-clamp-2">{record}</div>,
+                            },
+                            {
+                                title: 'Giảng dạy',
+                                align: 'center',
+                                dataIndex: 'isTeaching',
+                                width: 120,
+                                fixed: 'right',
+                                type: 'select',
+                                options: [
+                                    { value: true, label: 'Đã đưa vào giảng dạy' },
+                                    { value: false, label: 'Chưa đưa vào giảng dạy' },
+                                ],
+                                render: (_, record) => {
+                                    const isTeaching =
+                                        record.subjectClass && record.subjectClass.length > 0
+                                    return <Checkbox checked={isTeaching} />
+                                },
                             },
                             {
                                 title: 'Trạng thái',

@@ -1888,6 +1888,18 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'trainingLanguage',
+                }, isGeneralInfoLocked: {
+                    name: "isGeneralInfoLocked",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isRegulationLocked: {
+                    name: "isRegulationLocked",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isScoreConfigLocked: {
+                    name: "isScoreConfigLocked",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, baseScore: {
                     name: "baseScore",
                     type: "AcademicRankingBaseType",
@@ -2430,6 +2442,10 @@ const metadata = {
                     name: "yearApplication",
                     type: "Int",
                     isOptional: true,
+                }, isLock: {
+                    name: "isLock",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, curriculum: {
                     name: "curriculum",
                     type: "Curriculum",

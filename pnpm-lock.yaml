@@ -130,7 +130,7 @@ catalogs:
       specifier: ^1.2.2
       version: 1.2.21
     '@types/file-saver':
-      specifier: ^2.0.7
+      specifier: 2.0.7
       version: 2.0.7
     '@types/lodash':
       specifier: ^4.17.13
@@ -214,13 +214,13 @@ catalogs:
       specifier: 0.24.2
       version: 0.24.2
     exceljs:
-      specifier: ^4.4.0
+      specifier: 4.4.0
       version: 4.4.0
     fast-xml-parser:
       specifier: ^5.2.5
       version: 5.2.5
     file-saver:
-      specifier: ^2.0.5
+      specifier: 2.0.5
       version: 2.0.5
     glob:
       specifier: ^11.0.0
@@ -2028,6 +2028,12 @@ importers:
       docxtemplater:
         specifier: 'catalog:'
         version: 3.65.2
+      exceljs:
+        specifier: 'catalog:'
+        version: 4.4.0
+      file-saver:
+        specifier: 'catalog:'
+        version: 2.0.5
       pizzip:
         specifier: 'catalog:'
         version: 3.2.0
@@ -2038,6 +2044,9 @@ importers:
         specifier: 'catalog:'
         version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
     devDependencies:
+      '@types/file-saver':
+        specifier: 'catalog:'
+        version: 2.0.7
       '@types/node':
         specifier: 'catalog:'
         version: 20.19.11

@@ -20,6 +20,7 @@ const baseSchema = z.object({
     numberOfSemesters: z.number().nullish(),
     yearCreation: z.number().nullish(),
     yearApplication: z.number().nullish(),
+    isLock: z.boolean().default(false),
     requiredCredits: z.number().nullish(),
     electiveCredits: z.number().nullish(),
     jobPosition: z.string().nullish(),
@@ -95,6 +96,7 @@ export const CurriculumVersionPrismaUpdateSchema = z.object({
     numberOfSemesters: z.union([z.number().nullish(), z.record(z.unknown())]),
     yearCreation: z.union([z.number().nullish(), z.record(z.unknown())]),
     yearApplication: z.union([z.number().nullish(), z.record(z.unknown())]),
+    isLock: z.boolean().default(false),
     requiredCredits: z.union([z.number().nullish(), z.record(z.unknown())]),
     electiveCredits: z.union([z.number().nullish(), z.record(z.unknown())]),
     jobPosition: z.string().nullish(),
@@ -115,7 +117,7 @@ export const CurriculumVersionPrismaUpdateSchema = z.object({
  * `CurriculumVersion` schema for create operations excluding foreign keys and relations.
  */
 export const CurriculumVersionCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, isLock: true
 });
 
 

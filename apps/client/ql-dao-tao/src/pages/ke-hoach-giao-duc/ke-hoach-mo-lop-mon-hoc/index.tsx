@@ -1,16 +1,20 @@
-import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import type { TrainingCourse, TrainingMajor } from '@workspace/db'
-import { useFindManyTrainingCourse, useFindManyTrainingMajor } from '@workspace/db/hooks'
+import {
+    useFindManyTrainingCourse,
+    useFindManyTrainingMajor,
+    useFindUniqueSemester,
+} from '@workspace/db/hooks'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
+import { exportFromTemplate } from '@workspace/libs/template-excel'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Flex, Form, Input, Row } from 'antd'
+import { Button, Col, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { CalendarPlus } from 'lucide-react'
 import type React from 'react'
@@ -24,7 +28,7 @@ interface FilterProps {
 }
 
 export default function SubjectOpeningPlan() {
-    const { can, canSome } = useAbility()
+    const { canSome } = useAbility()
     const [form] = Form.useForm<FilterProps>()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -33,6 +37,21 @@ export default function SubjectOpeningPlan() {
     const trainingCourseId = Form.useWatch('trainingCourseId', form)
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
 
+    const { data: semesterData } = useFindUniqueSemester(
+        {
+            where: { id: semesterId },
+            select: {
+                id: true,
+                name: true,
+                schoolYear: {
+                    select: { id: true, name: true },
+                },
+            },
+        },
+        {
+            enabled: !!semesterId,
+        }
+    )
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: res, refetch } = useOpenSubjectClass(
         {
@@ -44,8 +63,7 @@ export default function SubjectOpeningPlan() {
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
         },
-        { query: { enabled: !!semesterId } },
-        queryClient
+        { query: { enabled: !!semesterId } }
     )
 
     const data = useMemo(
@@ -148,6 +166,80 @@ export default function SubjectOpeningPlan() {
                         </Col>
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
+                                <Button
+                                    type="primary"
+                                    onClick={() =>
+                                        exportFromTemplate({
+                                            templateUrl: '/lms/templates/ke-hoach-mo-lop.xlsx',
+                                            data: {
+                                                hoc_ky: semesterData?.name ?? '',
+                                                nam_hoc: semesterData?.schoolYear?.name ?? '',
+                                            },
+                                            tableStartCell: { row: 7, col: 1 },
+                                            rows: data.flatMap((item, index) =>
+                                                item.fixedClass.map((fc, idx) => {
+                                                    const rowSpan =
+                                                        idx === 0 ? item.fixedClass.length : 1
+                                                    return {
+                                                        cells: [
+                                                            {
+                                                                value: index + 1,
+                                                                align: 'center',
+                                                                rowSpan,
+                                                            },
+                                                            {
+                                                                value: item.subjectVersionCode,
+                                                                align: 'center',
+                                                                rowSpan,
+                                                            },
+                                                            {
+                                                                value: item.subjectVersionName,
+                                                                rowSpan,
+                                                            },
+                                                            {
+                                                                value: item.subjectVersionCredit,
+                                                                align: 'center',
+                                                                rowSpan,
+                                                            },
+                                                            {
+                                                                value: `${fc.fixedClassCode}`,
+                                                                align: 'center',
+                                                            },
+                                                            {
+                                                                value: `${fc.fixedClassSemester}`,
+                                                                align: 'center',
+                                                            },
+                                                            {
+                                                                value: `${fc.fixedClassCount}`,
+                                                                align: 'center',
+                                                            },
+                                                            {
+                                                                value: '',
+                                                                align: 'center',
+                                                                rowSpan,
+                                                            },
+                                                            {
+                                                                value: item.countStudent,
+                                                                align: 'center',
+                                                                rowSpan,
+                                                            },
+                                                            {
+                                                                value:
+                                                                    item.managementOrganizationCode ??
+                                                                    '',
+                                                                align: 'center',
+                                                                rowSpan,
+                                                            },
+                                                        ],
+                                                    }
+                                                })
+                                            ),
+                                            fileName: `ke-hoach-mo-lop-mon-hoc-${semesterData?.name}.xlsx`,
+                                        })
+                                    }
+                                >
+                                    Xuất kế hoạch môn dự kiến
+                                </Button>
                                 {/* <Button type="primary">Thêm mới</Button> */}
                                 {/* {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
@@ -215,15 +307,15 @@ export default function SubjectOpeningPlan() {
                             {
                                 title: 'Danh sách lớp MH',
                                 dataIndex: 'subjectClass',
-                                width: 250,
-                                align: 'left',
+                                width: 150,
+                                align: 'center',
                                 render: (__, record) => {
                                     return record?.subjectClass.length ? (
                                         <TextTruncate
                                             arr={record?.subjectClass.map((i: any) => {
                                                 return {
                                                     key: i?.subjectClassId,
-                                                    label: `${i.subjectClassName} ${i?.subjectClassCode}`,
+                                                    label: `${i?.subjectClassCode}`,
                                                 }
                                             })}
                                             key="subjectClass"
@@ -236,15 +328,15 @@ export default function SubjectOpeningPlan() {
                             {
                                 title: 'Danh sách lớp quản lý',
                                 dataIndex: 'fixedClass',
-                                width: 250,
-                                align: 'left',
+                                width: 180,
+                                align: 'center',
                                 render: (__, record) => {
                                     return record?.fixedClass.length ? (
                                         <TextTruncate
                                             arr={record?.fixedClass.map((i: any) => {
                                                 return {
                                                     key: i?.fixedClassId,
-                                                    label: i.fixedClassName,
+                                                    label: `Kì ${i.fixedClassSemester} - ${i.fixedClassCode} (${i.fixedClassCount})`,
                                                 }
                                             })}
                                             key="fixedClass"
@@ -256,7 +348,7 @@ export default function SubjectOpeningPlan() {
                             },
 
                             {
-                                title: 'Chương trình đào tạo',
+                                title: 'CTĐT',
                                 dataIndex: 'curriculumVersion',
                                 width: 200,
                                 align: 'center',
@@ -266,7 +358,7 @@ export default function SubjectOpeningPlan() {
                                             arr={record?.curriculumVersion.map((i: any) => {
                                                 return {
                                                     key: i?.curriculumVersionId,
-                                                    label: i.curriculumVersionName,
+                                                    label: `${i?.curriculumVersionCode} - ${i?.curriculumVersionName}`,
                                                 }
                                             })}
                                             key="curriculumVersion"
@@ -297,8 +389,8 @@ export default function SubjectOpeningPlan() {
                             },
                             {
                                 title: 'Đơn vị phụ trách',
-                                dataIndex: 'managementOrganizationName',
-                                width: 200,
+                                dataIndex: 'managementOrganizationCode',
+                                width: 150,
                                 align: 'center',
                             },
                             {

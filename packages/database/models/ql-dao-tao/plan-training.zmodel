@@ -239,6 +239,7 @@ model TrainingCourse extends Base {
   scoreToTakeGraduation      Float                      @default(5) // Điểm liệt môn tốt nghiệp
   scoreToPassGraduation      Float                      @default(5.5) // Điểm tối để qua môn tốt nghiệp
 
+  /// điểm giữ lại khi lưu ban
   scoreToRetain              Float                      @default(6.9)
 
   trainingObjectType         TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id]) // Đối tượng đào tạo
@@ -340,6 +341,7 @@ model CurriculumVersion extends Base {
   numberOfSemesters     Int? // Số kỳ học
   yearCreation          Int? // Năm tạo chương trình đào tạo
   yearApplication       Int? // Năm áp dụng chương trình đào tạo
+  isLock                Boolean                            @default(false) // khoá phiên bản chương trình đào tạo
   curriculum            Curriculum                         @relation(fields: [curriculumId], references: [id]) // Chương trình giảng dạy
   curriculumId          String
 

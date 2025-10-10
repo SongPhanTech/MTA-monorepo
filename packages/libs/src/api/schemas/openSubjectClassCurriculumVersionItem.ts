@@ -8,4 +8,5 @@
 export type OpenSubjectClassCurriculumVersionItem = {
     curriculumVersionId: string
     curriculumVersionName: string
+    curriculumVersionCode: string
 }
