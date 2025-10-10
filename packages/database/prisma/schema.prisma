@@ -1727,20 +1727,23 @@ model TrainingBlock {
 }
 
 model TrainingBlockOnCurriculumVersion {
-  id                      String                 @id() @default(cuid())
-  code                    String?                @unique()
-  active                  Boolean                @default(true)
-  description             String?                @db.Text()
+  id                      String                             @id() @default(cuid())
+  code                    String?                            @unique()
+  active                  Boolean                            @default(true)
+  description             String?                            @db.Text()
   deletedAt               DateTime?
-  createdAt               DateTime               @default(now())
-  updatedAt               DateTime               @default(now()) @updatedAt()
-  trainingBlock           TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
+  createdAt               DateTime                           @default(now())
+  updatedAt               DateTime                           @default(now()) @updatedAt()
+  trainingBlock           TrainingBlock                      @relation(fields: [trainingBlockId], references: [id])
   trainingBlockId         String
-  curriculumVersion       CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersion       CurriculumVersion                  @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId     String
+  parent                  TrainingBlockOnCurriculumVersion?  @relation("ParentChild", fields: [parentId], references: [id])
+  parentId                String?
+  children                TrainingBlockOnCurriculumVersion[] @relation("ParentChild")
   /// ưu tiên sắp xếp
-  priority                Int                    @default(0)
-  electiveCreditsRequired Int                    @default(0)
+  priority                Int                                @default(0)
+  electiveCreditsRequired Int                                @default(0)
   subjects                TrainingBlockSubject[]
 
   @@unique([trainingBlockId, curriculumVersionId])

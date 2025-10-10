@@ -210,14 +210,19 @@ model TrainingBlock extends Base {
 }
 
 model TrainingBlockOnCurriculumVersion extends Base {
-  trainingBlock           TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
+  trainingBlock           TrainingBlock                      @relation(fields: [trainingBlockId], references: [id])
   trainingBlockId         String
-  curriculumVersion       CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersion       CurriculumVersion                  @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId     String
 
+
+  parent                  TrainingBlockOnCurriculumVersion?  @relation("ParentChild", fields: [parentId], references: [id])
+  parentId                String?
+  children                TrainingBlockOnCurriculumVersion[] @relation("ParentChild")
+
   /// ưu tiên sắp xếp
-  priority                Int                    @default(0)
-  electiveCreditsRequired Int                    @default(0)
+  priority                Int                                @default(0)
+  electiveCreditsRequired Int                                @default(0)
   subjects                TrainingBlockSubject[]
 
   @@unique([trainingBlockId, curriculumVersionId])

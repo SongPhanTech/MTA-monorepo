@@ -5025,6 +5025,26 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'curriculumVersion',
+                }, parent: {
+                    name: "parent",
+                    type: "TrainingBlockOnCurriculumVersion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'children',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "parentId" },
+                }, parentId: {
+                    name: "parentId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'parent',
+                }, children: {
+                    name: "children",
+                    type: "TrainingBlockOnCurriculumVersion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'parent',
                 }, priority: {
                     name: "priority",
                     type: "Int",

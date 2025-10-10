@@ -949,6 +949,7 @@ exports.Prisma.TrainingBlockOnCurriculumVersionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   trainingBlockId: 'trainingBlockId',
   curriculumVersionId: 'curriculumVersionId',
+  parentId: 'parentId',
   priority: 'priority',
   electiveCreditsRequired: 'electiveCreditsRequired'
 };
@@ -4332,7 +4333,8 @@ exports.Prisma.TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   trainingBlockId: 'trainingBlockId',
-  curriculumVersionId: 'curriculumVersionId'
+  curriculumVersionId: 'curriculumVersionId',
+  parentId: 'parentId'
 };
 
 exports.Prisma.TrainingTimeOrderByRelevanceFieldEnum = {

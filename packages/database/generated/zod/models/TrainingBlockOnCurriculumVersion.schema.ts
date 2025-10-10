@@ -21,12 +21,15 @@ const baseSchema = z.object({
 const relationSchema = z.object({
     trainingBlock: z.record(z.unknown()),
     curriculumVersion: z.record(z.unknown()),
+    parent: z.record(z.unknown()).optional(),
+    children: z.array(z.unknown()).optional(),
     subjects: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     trainingBlockId: z.string(),
     curriculumVersionId: z.string(),
+    parentId: z.string().nullish(),
 }
 );
 
