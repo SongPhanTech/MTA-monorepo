@@ -512,14 +512,14 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
     } = c.req.valid('query')
 
     const semester = await prisma.semester.findUnique({
-        where: { id: semesterId },
+        where: { id: semesterId, deletedAt: null, active: true },
         include: {
             schoolYear: true,
         },
     })
 
     const subjectClass = await prisma.subjectClass.findUnique({
-        where: { id: subjectClassId },
+        where: { id: subjectClassId, deletedAt: null, active: true },
     })
 
     if (!subjectClass) {
@@ -572,6 +572,8 @@ app.openapi(fixedClassBySubjectClassSemester, async (c) => {
             id: {
                 in: res.map((e) => e.fixedClassId),
             },
+            deletedAt: null,
+            active: true,
         },
         include: {
             trainingCourse: {
@@ -638,14 +640,14 @@ app.openapi(studentBySubjectClassSemester, async (c) => {
     } = c.req.valid('query')
 
     const semester = await prisma.semester.findUnique({
-        where: { id: semesterId },
+        where: { id: semesterId, deletedAt: null, active: true },
         include: {
             schoolYear: true,
         },
     })
 
     const subjectClass = await prisma.subjectClass.findUnique({
-        where: { id: subjectClassId },
+        where: { id: subjectClassId, deletedAt: null, active: true },
     })
 
     if (!subjectClass) {
@@ -697,6 +699,7 @@ app.openapi(studentBySubjectClassSemester, async (c) => {
             fixedClassId: {
                 in: res.map((e) => e.fixedClassId),
             },
+            deletedAt: null,
             active: true,
         },
         include: {
@@ -778,6 +781,7 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
             },
             active: true,
             graduated: false,
+            deletedAt: null,
         },
         include: {
             students: {
@@ -789,7 +793,7 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
     })
 
     const subjectClass = await prisma.subjectClass.findUnique({
-        where: { id: subjectClassId },
+        where: { id: subjectClassId, deletedAt: null, active: true },
     })
 
     if (!subjectClass) {
@@ -806,6 +810,8 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
         await tx.subjectClass.update({
             where: {
                 id: subjectClassId,
+                deletedAt: null,
+                active: true,
             },
             data: {
                 fixedClasses: {
@@ -844,7 +850,7 @@ app.openapi(enrollStudentOnSubjectClass, async (c) => {
     const { subjectClassId, addStudentIds, removeStudentIds } = c.req.valid('json')
 
     const subjectClass = await prisma.subjectClass.findUnique({
-        where: { id: subjectClassId },
+        where: { id: subjectClassId, deletedAt: null, active: true },
     })
 
     if (!subjectClass) {
@@ -889,7 +895,7 @@ app.openapi(putManySubjectClass, async (c) => {
 
     const updates = classes.map(async (cls) => {
         await prisma.subjectClass.update({
-            where: { id: cls.id },
+            where: { id: cls.id, deletedAt: null, active: true },
             data: cls,
             select: { id: true },
         })
@@ -906,7 +912,7 @@ app.openapi(exportExcelListStudentSubjectClass, async (c) => {
     const { subjectClassId } = c.req.valid('query')
     const students = await listStudentInfo(subjectClassId)
     const subjectClass = await prisma.subjectClass.findUnique({
-        where: { id: subjectClassId }, // Tìm kiếm lớp quản lý
+        where: { id: subjectClassId, deletedAt: null, active: true }, // Tìm kiếm lớp quản lý
     })
     if (!subjectClass) {
         return c.json({ message: `Không tìm thấy lớp quản lý ${subjectClassId}` }, 404)

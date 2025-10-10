@@ -2,21 +2,14 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree, formatDate } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type {
-    SubjectClass,
-    SubjectClassSchedule,
-    SubjectClassTime,
-    SubjectVersion,
-    TrainingCourse,
-    TrainingMajor,
-} from '@workspace/db'
+import type { Prisma, SubjectClass, SubjectVersion, TrainingMajor } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useDeleteSubjectClass,
@@ -35,6 +28,43 @@ import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
+type DataSubmit = Prisma.SubjectClassGetPayload<{
+    include: {
+        semester: true
+        mainLecturer: {
+            include: {
+                userProfile: true
+            }
+        }
+        subject: {
+            include: {
+                managementOrganization: true
+            }
+        }
+        extraLecturer: {
+            include: {
+                userProfile: true
+            }
+        }
+        enterGradeLecturer: {
+            include: {
+                userProfile: true
+            }
+        }
+        room: {
+            include: {
+                building: {
+                    include: {
+                        trainingLocation: true
+                    }
+                }
+            }
+        }
+        subjectClassStudent: true
+        subjectClassTimes: true
+    }
+}>
 
 export default function TeachingAssignment() {
     const { can, canSome } = useAbility()
@@ -58,7 +88,6 @@ export default function TeachingAssignment() {
     })
     const { id: semesterId } = useSemesterStore()
     const [isEdit, setIsEdit] = useState(false)
-    const [dataSubmit, setDataSubmit] = useState<SubjectClass[]>([])
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
@@ -267,6 +296,7 @@ export default function TeachingAssignment() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
+    const [dataSubmit, setDataSubmit] = useState<DataSubmit[]>([])
 
     const { data: count } = useCountSubjectClass({
         where: {
@@ -329,7 +359,7 @@ export default function TeachingAssignment() {
             }
             await refetch()
             setIsEdit(false)
-            setDataSubmit([...data])
+            setDataSubmit(data)
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -366,10 +396,8 @@ export default function TeachingAssignment() {
         objectIdName: string,
         objectName: string
     ) => {
-        console.log(record)
         if (value) {
             const itemChange = lecturerData.find((i) => i?.id === value)
-
             setDataSubmit((prev) =>
                 prev.map((subjectClass) =>
                     subjectClass.id === record.id
@@ -400,20 +428,21 @@ export default function TeachingAssignment() {
         }
     }
 
-    const handleChangeEnterGradeLecturer = (record: SubjectClass, value: string | undefined) => {
+    const handleChangeEnterGradeLecturer = (record: SubjectClass, value?: string) => {
         if (value) {
             const itemChange = lecturerData.find((i) => i?.id === value)
-            setDataSubmit((prev) =>
-                prev.map((subjectClass) =>
-                    subjectClass.id === record.id
-                        ? {
-                              ...subjectClass,
-                              enterGradeLecturerId: value,
-                              enterGradeLecturer: itemChange,
-                          }
-                        : subjectClass
+            if (itemChange)
+                setDataSubmit((prev) =>
+                    prev.map((subjectClass) =>
+                        subjectClass.id === record.id
+                            ? {
+                                  ...subjectClass,
+                                  enterGradeLecturerId: value,
+                                  enterGradeLecturer: itemChange,
+                              }
+                            : subjectClass
+                    )
                 )
-            )
         } else {
             setDataSubmit((prev) =>
                 prev.map((subjectClass) =>
@@ -450,7 +479,6 @@ export default function TeachingAssignment() {
         setDataSubmit([...data])
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (data) {
             setDataSubmit([...data])
@@ -468,7 +496,7 @@ export default function TeachingAssignment() {
                                 <Col span={8}>
                                     <Select
                                         placeholder="Chọn khóa"
-                                        options={trainingCourseData.map((i: TrainingCourse) => {
+                                        options={trainingCourseData.map((i) => {
                                             return {
                                                 value: i.id,
                                                 label: i.name,
@@ -573,19 +601,17 @@ export default function TeachingAssignment() {
                         }}
                         columns={[
                             {
-                                title: 'STT',
-                                width: 50,
+                                title: 'TT',
+                                width: 35,
                                 align: 'center',
-                                fixed: 'left',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
                                 title: 'PCGD',
                                 align: 'center',
-                                width: 100,
+                                width: 80,
                                 dataIndex: 'lecturerId',
-                                fixed: 'left',
                                 type: 'select',
                                 options: [
                                     { value: true, label: 'Đã phân công giảng dạy' },
@@ -594,10 +620,16 @@ export default function TeachingAssignment() {
                                 render: (value) => <Checkbox checked={!!value} />,
                             },
                             {
-                                title: 'Mã lớp môn học',
+                                title: 'Hạn PCGD',
+                                dataIndex: 'lecturerAssignmentDeadline',
+                                width: 100,
+                                align: 'center',
+                                render: (value) => (value ? formatDate(value) : ''),
+                            },
+                            {
+                                title: 'Mã LMH',
                                 dataIndex: 'code',
-                                width: 150,
-                                fixed: 'left',
+                                width: 120,
                                 align: 'center',
                                 type: 'input',
                             },
@@ -605,56 +637,58 @@ export default function TeachingAssignment() {
                                 title: 'Tên môn học',
                                 dataIndex: 'name',
                                 width: 200,
-                                fixed: 'left',
                                 align: 'center',
                                 type: 'input',
                             },
                             {
-                                title: 'Số tín chỉ',
+                                title: 'Số TC',
                                 dataIndex: 'credit',
-                                width: 120,
+                                width: 80,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: ['maxStudent', 'subjectClassStudent'],
                                 render: (__, record: { subject?: SubjectVersion }) =>
                                     record.subject?.credit ? record.subject?.credit : '',
                             },
-                            {
-                                title: 'Số SV tối đa',
-                                dataIndex: 'maxStudent',
-                                width: 150,
-                                align: 'center',
-                                type: 'order',
-                                distinctFilters: ['credit', 'subjectClassStudent'],
-                            },
+                            // {
+                            //     title: 'Số SV tối đa',
+                            //     dataIndex: 'maxStudent',
+                            //     width: 150,
+                            //     align: 'center',
+                            //     type: 'order',
+                            //     distinctFilters: ['credit', 'subjectClassStudent'],
+                            // },
                             {
                                 title: 'Số SV',
                                 dataIndex: 'subjectClassStudent',
-                                width: 100,
+                                width: 80,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: ['maxStudent', 'credit'],
-                                render: (value) => (value?.length ? value?.length : ''),
+                                render: (value, record) =>
+                                    (record.subjectClassStudent
+                                        ? record.subjectClassStudent.length
+                                        : record.maxStudent) ?? 0,
                             },
-                            {
-                                title: 'Thời khoá biểu',
-                                width: 150,
-                                align: 'center',
-                                dataIndex: 'subjectClassTimes',
-                                render: (subjectClassTimes: SubjectClassTime[]) => {
-                                    return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
-                                        return (
-                                            <p>
-                                                {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
-                                                {tkb.startPeriod} - {tkb.endPeriod}
-                                            </p>
-                                        )
-                                    })
-                                },
-                            },
+                            // {
+                            //     title: 'Thời khoá biểu',
+                            //     width: 150,
+                            //     align: 'center',
+                            //     dataIndex: 'subjectClassTimes',
+                            //     render: (subjectClassTimes: SubjectClassTime[]) => {
+                            //         return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
+                            //             return (
+                            //                 <p>
+                            //                     {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
+                            //                     {tkb.startPeriod} - {tkb.endPeriod}
+                            //                 </p>
+                            //             )
+                            //         })
+                            //     },
+                            // },
                             {
                                 title: 'Giảng viên 1',
-                                width: 300,
+                                width: 250,
                                 align: 'center',
                                 type: 'input',
                                 dataIndex: 'mainLecturer',
@@ -688,7 +722,7 @@ export default function TeachingAssignment() {
                             },
                             {
                                 title: 'Giảng viên 2',
-                                width: 300,
+                                width: 250,
                                 align: 'center',
                                 type: 'input',
                                 dataIndex: 'extraLecturer',
@@ -729,26 +763,26 @@ export default function TeachingAssignment() {
                                 render: (__, record: { subject?: SubjectVersion }) =>
                                     getExamTypeLabel(record?.subject?.examType) || '',
                             },
-                            {
-                                title: 'Kíp học',
-                                dataIndex: 'schedule',
-                                align: 'center',
-                                width: 100,
-                                type: 'select',
+                            // {
+                            //     title: 'Kíp học',
+                            //     dataIndex: 'schedule',
+                            //     align: 'center',
+                            //     width: 100,
+                            //     type: 'select',
 
-                                options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
-                                    ([key, value_]) => {
-                                        return {
-                                            label: value_,
-                                            value: key,
-                                        }
-                                    }
-                                ),
-                                render: (value: SubjectClassSchedule) =>
-                                    SUBJECT_CLASS_SCHEDULE_TYPE[
-                                        value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
-                                    ],
-                            },
+                            //     options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
+                            //         ([key, value_]) => {
+                            //             return {
+                            //                 label: value_,
+                            //                 value: key,
+                            //             }
+                            //         }
+                            //     ),
+                            //     render: (value: SubjectClassSchedule) =>
+                            //         SUBJECT_CLASS_SCHEDULE_TYPE[
+                            //             value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                            //         ],
+                            // },
                             {
                                 title: 'Địa điểm',
                                 dataIndex: 'room',
@@ -761,8 +795,15 @@ export default function TeachingAssignment() {
                                         : '',
                             },
                             {
+                                title: 'Phòng học',
+                                dataIndex: 'room',
+                                align: 'center',
+                                width: 120,
+                                render: (value) => value?.name || '',
+                            },
+                            {
                                 title: 'Giảng viên nhập điểm',
-                                width: 300,
+                                width: 250,
                                 align: 'center',
                                 render: (record) => (
                                     <Select
@@ -807,52 +848,38 @@ export default function TeachingAssignment() {
                                     />
                                 ),
                             },
-                            {
-                                title: 'Phòng học',
-                                dataIndex: 'room',
-                                align: 'center',
-                                width: 120,
-                                render: (value) => value?.name || '',
-                            },
-                            {
-                                title: 'Ngày thi',
-                                dataIndex: 'examDate',
-                                align: 'center',
-                                width: 100,
-                                render: (value) => (value ? formatDate(value) : ''),
-                            },
 
+                            // {
+                            //     title: 'Ngày thi',
+                            //     dataIndex: 'examDate',
+                            //     align: 'center',
+                            //     width: 100,
+                            //     render: (value) => (value ? formatDate(value) : ''),
+                            // },
+
+                            // {
+                            //     title: 'Hạn nhập điểm CC/TX',
+                            //     dataIndex: 'scoreDeadline',
+                            //     width: 200,
+                            //     align: 'center',
+                            //     render: (value) => (value ? formatDate(value) : ''),
+                            // },
+                            // {
+                            //     title: 'Hạn nhập điểm thi',
+                            //     dataIndex: 'examScoreDeadline',
+                            //     width: 170,
+                            //     align: 'center',
+                            //     render: (value) => (value ? formatDate(value) : ''),
+                            // },
                             {
-                                title: 'Hạn PCGD',
-                                dataIndex: 'lecturerAssignmentDeadline',
-                                width: 120,
-                                align: 'center',
-                                render: (value) => (value ? formatDate(value) : ''),
-                            },
-                            {
-                                title: 'Hạn nhập điểm CC/TX',
-                                dataIndex: 'scoreDeadline',
-                                width: 200,
-                                align: 'center',
-                                render: (value) => (value ? formatDate(value) : ''),
-                            },
-                            {
-                                title: 'Hạn nhập điểm thi',
-                                dataIndex: 'examScoreDeadline',
-                                width: 170,
-                                align: 'center',
-                                render: (value) => (value ? formatDate(value) : ''),
-                            },
-                            {
-                                title: 'Đơn vị phụ trách',
+                                title: 'ĐV phụ trách',
                                 dataIndex: 'subject',
-                                width: 200,
+                                width: 150,
                                 align: 'center',
                                 type: 'tree_select',
                                 options: treeData,
-                                render: (value) => value?.managementOrganization?.sTen || '',
+                                render: (value) => value?.managementOrganization?.sMa || '',
                             },
-
                             // {
                             //     title: 'Điểm bằng nhau',
                             //     dataIndex: 'subject',

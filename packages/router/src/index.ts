@@ -145,13 +145,13 @@ const NAVIGATION: NavigationType = {
                 children: [
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
-                        label: 'Kế hoạch mở lớp môn học',
+                        label: 'Mở lớp môn học',
                         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
                         description: 'Kế hoạch mở lớp môn học',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                        label: 'Quản lý lớp môn học',
+                        label: 'Phân công giảng dạy',
                         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
                         description: 'Quản lý lớp môn học',
                     },
