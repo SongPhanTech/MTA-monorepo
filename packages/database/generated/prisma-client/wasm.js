@@ -608,6 +608,7 @@ exports.Prisma.SubjectVersionScalarFieldEnum = {
   rules: 'rules',
   managementOrganizationId: 'managementOrganizationId',
   subjectId: 'subjectId',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   subjectVersionCategoryId: 'subjectVersionCategoryId'
 };
 
@@ -4132,6 +4133,7 @@ exports.Prisma.SubjectVersionOrderByRelevanceFieldEnum = {
   rules: 'rules',
   managementOrganizationId: 'managementOrganizationId',
   subjectId: 'subjectId',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   subjectVersionCategoryId: 'subjectVersionCategoryId'
 };
 

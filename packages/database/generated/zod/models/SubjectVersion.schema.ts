@@ -44,6 +44,7 @@ const baseSchema = z.object({
 const relationSchema = z.object({
     managementOrganization: z.record(z.unknown()).optional(),
     subject: z.record(z.unknown()),
+    trainingObjectType: z.record(z.unknown()),
     subjectVersionCategory: z.record(z.unknown()).optional(),
     trainingBlocks: z.array(z.unknown()).optional(),
     prerequisiteSubject: z.array(z.unknown()).optional(),
@@ -61,6 +62,7 @@ const relationSchema = z.object({
 const fkSchema = z.object({
     managementOrganizationId: z.string().uuid().nullish(),
     subjectId: z.string(),
+    trainingObjectTypeId: z.string(),
     subjectVersionCategoryId: z.string().nullish(),
 }
 );

@@ -5459,6 +5459,29 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
+                trainingObjectType: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                trainingObjectTypeId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
                 subjectVersionCategory: {
                     name: string;
                     type: string;
@@ -7576,6 +7599,13 @@ declare const metadata: {
                     backLink: string;
                 };
                 graduationSession: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                subjectVersion: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
