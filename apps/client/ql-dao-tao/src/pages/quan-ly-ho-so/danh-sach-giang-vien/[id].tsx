@@ -140,7 +140,7 @@ export default function StudentDetailPage() {
                                 },
 
                                 {
-                                    title: 'Trình độ đào tạo',
+                                    title: 'Bậc đào tạo',
                                     align: 'center',
                                     width: 150,
                                     dataIndex: 'trainingLevel',

@@ -225,7 +225,7 @@ export type TrainingType = $Result.DefaultSelection<Prisma.$TrainingTypePayload>
 export type TrainingLevel = $Result.DefaultSelection<Prisma.$TrainingLevelPayload>
 /**
  * Model TrainingForm
- * hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
+ * hình thức đào tạo/hình thức huấn luyện (Trực tiếp, trực tuyến, kết hợp)
  */
 export type TrainingForm = $Result.DefaultSelection<Prisma.$TrainingFormPayload>
 /**
@@ -802,7 +802,7 @@ export type ApplicationCheckResult = $Result.DefaultSelection<Prisma.$Applicatio
 export type GraduationDecision = $Result.DefaultSelection<Prisma.$GraduationDecisionPayload>
 /**
  * Model AcademicRankingConvert
- * Xếp loại học tập
+ * Xếp loại học tập/Xếp loại tốt nghiệp
  */
 export type AcademicRankingConvert = $Result.DefaultSelection<Prisma.$AcademicRankingConvertPayload>
 /**
@@ -54264,6 +54264,9 @@ export namespace Prisma {
     studentRecognitionDecision: string | null
     regulation: string | null
     trainingLanguageId: string | null
+    isGeneralInfoLocked: boolean | null
+    isRegulationLocked: boolean | null
+    isScoreConfigLocked: boolean | null
     baseScore: $Enums.AcademicRankingBaseType | null
     coef_1: number | null
     coef_2: number | null
@@ -54298,6 +54301,9 @@ export namespace Prisma {
     studentRecognitionDecision: string | null
     regulation: string | null
     trainingLanguageId: string | null
+    isGeneralInfoLocked: boolean | null
+    isRegulationLocked: boolean | null
+    isScoreConfigLocked: boolean | null
     baseScore: $Enums.AcademicRankingBaseType | null
     coef_1: number | null
     coef_2: number | null
@@ -54332,6 +54338,9 @@ export namespace Prisma {
     studentRecognitionDecision: number
     regulation: number
     trainingLanguageId: number
+    isGeneralInfoLocked: number
+    isRegulationLocked: number
+    isScoreConfigLocked: number
     baseScore: number
     coef_1: number
     coef_2: number
@@ -54400,6 +54409,9 @@ export namespace Prisma {
     studentRecognitionDecision?: true
     regulation?: true
     trainingLanguageId?: true
+    isGeneralInfoLocked?: true
+    isRegulationLocked?: true
+    isScoreConfigLocked?: true
     baseScore?: true
     coef_1?: true
     coef_2?: true
@@ -54434,6 +54446,9 @@ export namespace Prisma {
     studentRecognitionDecision?: true
     regulation?: true
     trainingLanguageId?: true
+    isGeneralInfoLocked?: true
+    isRegulationLocked?: true
+    isScoreConfigLocked?: true
     baseScore?: true
     coef_1?: true
     coef_2?: true
@@ -54468,6 +54483,9 @@ export namespace Prisma {
     studentRecognitionDecision?: true
     regulation?: true
     trainingLanguageId?: true
+    isGeneralInfoLocked?: true
+    isRegulationLocked?: true
+    isScoreConfigLocked?: true
     baseScore?: true
     coef_1?: true
     coef_2?: true
@@ -54589,6 +54607,9 @@ export namespace Prisma {
     studentRecognitionDecision: string | null
     regulation: string | null
     trainingLanguageId: string | null
+    isGeneralInfoLocked: boolean
+    isRegulationLocked: boolean
+    isScoreConfigLocked: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1: number
     coef_2: number
@@ -54642,6 +54663,9 @@ export namespace Prisma {
     studentRecognitionDecision?: boolean
     regulation?: boolean
     trainingLanguageId?: boolean
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore?: boolean
     coef_1?: boolean
     coef_2?: boolean
@@ -54691,6 +54715,9 @@ export namespace Prisma {
     studentRecognitionDecision?: boolean
     regulation?: boolean
     trainingLanguageId?: boolean
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore?: boolean
     coef_1?: boolean
     coef_2?: boolean
@@ -54728,6 +54755,9 @@ export namespace Prisma {
     studentRecognitionDecision?: boolean
     regulation?: boolean
     trainingLanguageId?: boolean
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore?: boolean
     coef_1?: boolean
     coef_2?: boolean
@@ -54765,6 +54795,9 @@ export namespace Prisma {
     studentRecognitionDecision?: boolean
     regulation?: boolean
     trainingLanguageId?: boolean
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore?: boolean
     coef_1?: boolean
     coef_2?: boolean
@@ -54778,7 +54811,7 @@ export namespace Prisma {
     trainingObjectTypeId?: boolean
   }
 
-  export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "admissionQuota" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "trainingLanguageId" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>
+  export type TrainingCourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "semesterStartId" | "startYear" | "endYear" | "academicYear" | "maxTrainingTime" | "admissionQuota" | "admissionStartDate" | "admissionEndDate" | "admissionDecision" | "studentRecognitionDecision" | "regulation" | "trainingLanguageId" | "isGeneralInfoLocked" | "isRegulationLocked" | "isScoreConfigLocked" | "baseScore" | "coef_1" | "coef_2" | "coef_3" | "scoreToTakeExam" | "scoreToPass" | "scoreToPassConditional" | "scoreToTakeGraduation" | "scoreToPassGraduation" | "scoreToRetain" | "trainingObjectTypeId", ExtArgs["result"]["trainingCourse"]>
   export type TrainingCourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     semesterStart?: boolean | SemesterDefaultArgs<ExtArgs>
     trainingLanguage?: boolean | TrainingCourse$trainingLanguageArgs<ExtArgs>
@@ -54864,6 +54897,18 @@ export namespace Prisma {
        */
       regulation: string | null
       trainingLanguageId: string | null
+      /**
+       * khoá sửa tham số của "Thông tin chung"
+       */
+      isGeneralInfoLocked: boolean
+      /**
+       * khoá sửa tham số của "Quyết định/Quy chế"
+       */
+      isRegulationLocked: boolean
+      /**
+       * khoá sửa tham số của "Thông tin điểm và Tham số bổ sung"
+       */
+      isScoreConfigLocked: boolean
       baseScore: $Enums.AcademicRankingBaseType
       coef_1: number
       coef_2: number
@@ -54873,6 +54918,9 @@ export namespace Prisma {
       scoreToPassConditional: number
       scoreToTakeGraduation: number
       scoreToPassGraduation: number
+      /**
+       * điểm giữ lại khi lưu ban
+       */
       scoreToRetain: number
       trainingObjectTypeId: string
     }, ExtArgs["result"]["trainingCourse"]>
@@ -55332,6 +55380,9 @@ export namespace Prisma {
     readonly studentRecognitionDecision: FieldRef<"TrainingCourse", 'String'>
     readonly regulation: FieldRef<"TrainingCourse", 'String'>
     readonly trainingLanguageId: FieldRef<"TrainingCourse", 'String'>
+    readonly isGeneralInfoLocked: FieldRef<"TrainingCourse", 'Boolean'>
+    readonly isRegulationLocked: FieldRef<"TrainingCourse", 'Boolean'>
+    readonly isScoreConfigLocked: FieldRef<"TrainingCourse", 'Boolean'>
     readonly baseScore: FieldRef<"TrainingCourse", 'AcademicRankingBaseType'>
     readonly coef_1: FieldRef<"TrainingCourse", 'Float'>
     readonly coef_2: FieldRef<"TrainingCourse", 'Float'>
@@ -311239,6 +311290,9 @@ export namespace Prisma {
     studentRecognitionDecision: 'studentRecognitionDecision',
     regulation: 'regulation',
     trainingLanguageId: 'trainingLanguageId',
+    isGeneralInfoLocked: 'isGeneralInfoLocked',
+    isRegulationLocked: 'isRegulationLocked',
+    isScoreConfigLocked: 'isScoreConfigLocked',
     baseScore: 'baseScore',
     coef_1: 'coef_1',
     coef_2: 'coef_2',
@@ -321018,6 +321072,9 @@ export namespace Prisma {
     studentRecognitionDecision?: StringNullableFilter<"TrainingCourse"> | string | null
     regulation?: StringNullableFilter<"TrainingCourse"> | string | null
     trainingLanguageId?: StringNullableFilter<"TrainingCourse"> | string | null
+    isGeneralInfoLocked?: BoolFilter<"TrainingCourse"> | boolean
+    isRegulationLocked?: BoolFilter<"TrainingCourse"> | boolean
+    isScoreConfigLocked?: BoolFilter<"TrainingCourse"> | boolean
     baseScore?: EnumAcademicRankingBaseTypeFilter<"TrainingCourse"> | $Enums.AcademicRankingBaseType
     coef_1?: FloatFilter<"TrainingCourse"> | number
     coef_2?: FloatFilter<"TrainingCourse"> | number
@@ -321066,6 +321123,9 @@ export namespace Prisma {
     studentRecognitionDecision?: SortOrderInput | SortOrder
     regulation?: SortOrderInput | SortOrder
     trainingLanguageId?: SortOrderInput | SortOrder
+    isGeneralInfoLocked?: SortOrder
+    isRegulationLocked?: SortOrder
+    isScoreConfigLocked?: SortOrder
     baseScore?: SortOrder
     coef_1?: SortOrder
     coef_2?: SortOrder
@@ -321118,6 +321178,9 @@ export namespace Prisma {
     studentRecognitionDecision?: StringNullableFilter<"TrainingCourse"> | string | null
     regulation?: StringNullableFilter<"TrainingCourse"> | string | null
     trainingLanguageId?: StringNullableFilter<"TrainingCourse"> | string | null
+    isGeneralInfoLocked?: BoolFilter<"TrainingCourse"> | boolean
+    isRegulationLocked?: BoolFilter<"TrainingCourse"> | boolean
+    isScoreConfigLocked?: BoolFilter<"TrainingCourse"> | boolean
     baseScore?: EnumAcademicRankingBaseTypeFilter<"TrainingCourse"> | $Enums.AcademicRankingBaseType
     coef_1?: FloatFilter<"TrainingCourse"> | number
     coef_2?: FloatFilter<"TrainingCourse"> | number
@@ -321166,6 +321229,9 @@ export namespace Prisma {
     studentRecognitionDecision?: SortOrderInput | SortOrder
     regulation?: SortOrderInput | SortOrder
     trainingLanguageId?: SortOrderInput | SortOrder
+    isGeneralInfoLocked?: SortOrder
+    isRegulationLocked?: SortOrder
+    isScoreConfigLocked?: SortOrder
     baseScore?: SortOrder
     coef_1?: SortOrder
     coef_2?: SortOrder
@@ -321208,6 +321274,9 @@ export namespace Prisma {
     studentRecognitionDecision?: StringNullableWithAggregatesFilter<"TrainingCourse"> | string | null
     regulation?: StringNullableWithAggregatesFilter<"TrainingCourse"> | string | null
     trainingLanguageId?: StringNullableWithAggregatesFilter<"TrainingCourse"> | string | null
+    isGeneralInfoLocked?: BoolWithAggregatesFilter<"TrainingCourse"> | boolean
+    isRegulationLocked?: BoolWithAggregatesFilter<"TrainingCourse"> | boolean
+    isScoreConfigLocked?: BoolWithAggregatesFilter<"TrainingCourse"> | boolean
     baseScore?: EnumAcademicRankingBaseTypeWithAggregatesFilter<"TrainingCourse"> | $Enums.AcademicRankingBaseType
     coef_1?: FloatWithAggregatesFilter<"TrainingCourse"> | number
     coef_2?: FloatWithAggregatesFilter<"TrainingCourse"> | number
@@ -345157,6 +345226,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -345204,6 +345276,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -345247,6 +345322,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -345294,6 +345372,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -345339,6 +345420,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -345371,6 +345455,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -345404,6 +345491,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -372110,6 +372200,9 @@ export namespace Prisma {
     studentRecognitionDecision?: SortOrder
     regulation?: SortOrder
     trainingLanguageId?: SortOrder
+    isGeneralInfoLocked?: SortOrder
+    isRegulationLocked?: SortOrder
+    isScoreConfigLocked?: SortOrder
     baseScore?: SortOrder
     coef_1?: SortOrder
     coef_2?: SortOrder
@@ -372160,6 +372253,9 @@ export namespace Prisma {
     studentRecognitionDecision?: SortOrder
     regulation?: SortOrder
     trainingLanguageId?: SortOrder
+    isGeneralInfoLocked?: SortOrder
+    isRegulationLocked?: SortOrder
+    isScoreConfigLocked?: SortOrder
     baseScore?: SortOrder
     coef_1?: SortOrder
     coef_2?: SortOrder
@@ -372194,6 +372290,9 @@ export namespace Prisma {
     studentRecognitionDecision?: SortOrder
     regulation?: SortOrder
     trainingLanguageId?: SortOrder
+    isGeneralInfoLocked?: SortOrder
+    isRegulationLocked?: SortOrder
+    isScoreConfigLocked?: SortOrder
     baseScore?: SortOrder
     coef_1?: SortOrder
     coef_2?: SortOrder
@@ -415224,6 +415323,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -415269,6 +415371,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -415744,6 +415849,9 @@ export namespace Prisma {
     studentRecognitionDecision?: StringNullableFilter<"TrainingCourse"> | string | null
     regulation?: StringNullableFilter<"TrainingCourse"> | string | null
     trainingLanguageId?: StringNullableFilter<"TrainingCourse"> | string | null
+    isGeneralInfoLocked?: BoolFilter<"TrainingCourse"> | boolean
+    isRegulationLocked?: BoolFilter<"TrainingCourse"> | boolean
+    isScoreConfigLocked?: BoolFilter<"TrainingCourse"> | boolean
     baseScore?: EnumAcademicRankingBaseTypeFilter<"TrainingCourse"> | $Enums.AcademicRankingBaseType
     coef_1?: FloatFilter<"TrainingCourse"> | number
     coef_2?: FloatFilter<"TrainingCourse"> | number
@@ -416102,6 +416210,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -416147,6 +416258,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -417512,6 +417626,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -417558,6 +417675,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -417616,6 +417736,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -417662,6 +417785,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -417930,6 +418056,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -417976,6 +418105,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -418835,6 +418967,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -418881,6 +419016,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -423109,6 +423247,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -423155,6 +423296,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -426693,6 +426837,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -426739,6 +426886,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -431878,6 +432028,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -431924,6 +432077,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -431982,6 +432138,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -432028,6 +432187,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -435806,6 +435968,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -435852,6 +436017,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -484849,6 +485017,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -484895,6 +485066,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -485765,6 +485939,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -485811,6 +485988,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -486716,6 +486896,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -486762,6 +486945,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -486902,6 +487088,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -486948,6 +487137,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -488399,6 +488591,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -488445,6 +488640,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -488585,6 +488783,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -488631,6 +488832,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -491104,6 +491308,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -491150,6 +491357,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -491338,6 +491548,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -491384,6 +491597,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -496927,6 +497143,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -496973,6 +497192,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -504324,6 +504546,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -504370,6 +504595,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -504463,6 +504691,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -504509,6 +504740,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -507469,6 +507703,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -507753,6 +507990,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -507798,6 +508038,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -507842,6 +508085,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -508276,6 +508522,9 @@ export namespace Prisma {
     admissionDecision?: string | null
     studentRecognitionDecision?: string | null
     regulation?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -508342,6 +508591,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -508387,6 +508639,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -508431,6 +508686,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -511974,6 +512232,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -512020,6 +512281,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -512064,6 +512328,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -512860,6 +513127,9 @@ export namespace Prisma {
     studentRecognitionDecision?: string | null
     regulation?: string | null
     trainingLanguageId?: string | null
+    isGeneralInfoLocked?: boolean
+    isRegulationLocked?: boolean
+    isScoreConfigLocked?: boolean
     baseScore: $Enums.AcademicRankingBaseType
     coef_1?: number
     coef_2?: number
@@ -513042,6 +513312,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -513088,6 +513361,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -513132,6 +513408,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -518145,6 +518424,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -518191,6 +518473,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -518235,6 +518520,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -545911,6 +546199,9 @@ export namespace Prisma {
     admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -545957,6 +546248,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number
@@ -546001,6 +546295,9 @@ export namespace Prisma {
     studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
     regulation?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+    isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+    isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+    isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
     baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
     coef_1?: FloatFieldUpdateOperationsInput | number
     coef_2?: FloatFieldUpdateOperationsInput | number

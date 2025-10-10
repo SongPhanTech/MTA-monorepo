@@ -6,7 +6,7 @@ BGĐ cần một cái nhìn **tổng quan, chiến lược** về toàn bộ ho�
 
 * **Biểu đồ tròn/cột - Tỷ lệ phân bổ Sinh viên/Học viên:**
   * Phân bổ theo **Hệ đào tạo** (`TrainingObjectType`: Quân sự, Dân sự, Quốc tế).
-  * Phân bổ theo **Trình độ đào tạo** (`TrainingLevel`: Đại học, Thạc sĩ, Tiến sĩ).
+  * Phân bổ theo **Bậc đào tạo** (`TrainingLevel`: Đại học, Thạc sĩ, Tiến sĩ).
   * Phân bổ theo **Khóa học** (`TrainingCourse`).
   * *Nguồn dữ liệu:* `Student`, `TrainingObjectType`, `TrainingLevel`, `FixedClass`.
 

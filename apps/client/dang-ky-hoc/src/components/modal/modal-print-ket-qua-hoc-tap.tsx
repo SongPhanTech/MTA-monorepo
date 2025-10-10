@@ -166,7 +166,7 @@ const ModalPrintToKQHT = () => {
             ),
         },
         {
-            title: 'Trình độ đào tạo:',
+            title: 'Bậc đào tạo:',
             value: <span>{input?.dataStudent?.curriculumVersion?.trainingLevel?.name}</span>,
         },
         {
