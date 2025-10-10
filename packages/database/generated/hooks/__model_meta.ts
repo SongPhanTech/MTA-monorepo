@@ -2867,6 +2867,18 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'subject',
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    backLink: 'subjectVersion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
                 }, subjectVersionCategory: {
                     name: "subjectVersionCategory",
                     type: "SubjectVersionCategory",
@@ -3980,6 +3992,12 @@ const metadata = {
                 }, graduationSession: {
                     name: "graduationSession",
                     type: "GraduationSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
