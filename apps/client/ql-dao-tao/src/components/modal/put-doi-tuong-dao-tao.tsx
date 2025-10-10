@@ -6,8 +6,8 @@ import useSpinner from '@hooks/spinner'
 import type { TrainingObjectType } from '@workspace/db'
 import {
     useCreateTrainingObjectType,
+    useFindManyTrainingForm,
     useFindManyTrainingLevel,
-    useFindManyTrainingType,
     useFindUniqueTrainingObjectType,
     useUpdateTrainingObjectType,
 } from '@workspace/db/hooks'
@@ -37,7 +37,7 @@ const PutTrainingObjectTypeModal = () => {
         { select: { id: true, name: true } },
         { enabled: isOpen }
     )
-    const { data: trainingTypes } = useFindManyTrainingType(
+    const { data: trainingForms } = useFindManyTrainingForm(
         { select: { id: true, name: true } },
         { enabled: isOpen }
     )
@@ -131,7 +131,7 @@ const PutTrainingObjectTypeModal = () => {
                 <FormItem form={form} name="trainingFormId" label="Hình thức đào tạo" required>
                     <Select
                         placeholder="Chọn hình thức đào tạo"
-                        options={trainingTypes?.map((item) => ({
+                        options={trainingForms?.map((item) => ({
                             label: item.name,
                             value: item.id,
                         }))}

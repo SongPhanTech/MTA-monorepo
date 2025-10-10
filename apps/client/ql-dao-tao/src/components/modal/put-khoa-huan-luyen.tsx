@@ -720,7 +720,7 @@ const PutTrainingCourseModal = () => {
                                     <span>Sao chép quy chế</span>
                                     <Tooltip
                                         placement="topLeft"
-                                        title="Sao chép tham số bổ sung, bảng chuyển đổi điểm, xếp loại học lực, học bổng, cảnh cáo học tập, xử lý học tập từ khoá đã chọn sang khoá hiện tại"
+                                        title="Sao chép tài liệu đính kèm, tham số bổ sung, bảng chuyển đổi điểm, xếp loại học tập, học bổng, cảnh cáo học tập, xử lý học tập từ khoá đã chọn sang khoá hiện tại"
                                     >
                                         <BadgeHelpIcon size={16} style={{ margin: '0 0 -1px' }} />
                                     </Tooltip>
