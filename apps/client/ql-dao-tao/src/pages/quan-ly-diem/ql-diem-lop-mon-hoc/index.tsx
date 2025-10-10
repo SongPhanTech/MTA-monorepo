@@ -942,6 +942,8 @@ export default function SubjectClassScore() {
         return false
     }, [profileId, dataDetailSubjectClass])
 
+    
+
     return (
         <div className="flex gap-2 pr-2">
             <Col span={4} className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm">
@@ -1046,6 +1048,7 @@ export default function SubjectClassScore() {
                                                     <ExportScoreTemplate
                                                         selectedFixedClass={selectedFixedClass}
                                                         dataTable={dataTable}
+                                                        type={'thi'}
                                                     />
                                                 )}
                                             </Flex>

@@ -276,9 +276,14 @@ export default function SubjectClassScore() {
                                     align: 'center',
                                     type: 'date',
                                     render: (_, record) =>
-                                        record.scoreDeadline
+                                        <div className={`${dayjs().isBefore(record?.scoreDeadline) ? '' : 'text-red-500'}`}>
+                                            {
+                                                     record.scoreDeadline
                                             ? dayjs(record.scoreDeadline).format('DD/MM/YYYY')
-                                            : '',
+                                            : ''
+                                            }
+                                        </div>
+                                   ,
                                 },
                                 {
                                     title: 'Số ngày',
@@ -336,9 +341,15 @@ export default function SubjectClassScore() {
                                     align: 'center',
                                     type: 'date',
                                     render: (_, record) =>
-                                        record.examScoreDeadline
+
+                                          <div className={`${dayjs().isBefore(record?.examScoreDeadline) ? '' : 'text-red-500'}`}>
+                                            {
+                                              record.examScoreDeadline
                                             ? dayjs(record.examScoreDeadline).format('DD/MM/YYYY')
-                                            : '',
+                                            : ''
+                                            }
+                                        </div>
+                                       ,
                                 },
                                 {
                                     title: 'Giảng viên',
