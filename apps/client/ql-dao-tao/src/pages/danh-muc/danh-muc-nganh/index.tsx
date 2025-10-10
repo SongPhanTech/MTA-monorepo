@@ -6,6 +6,7 @@ import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
+import { getMinioUrl } from '@workspace/constant'
 import type { DM_DonVi, DocumentFile, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
@@ -125,6 +126,19 @@ export default function TrainingFieldPage() {
     const { onOpen } = useDisclosure<string>({
         tag: 'PutTrainingFieldModal',
     })
+    const onDownload = async (url: string, fileName: string) => {
+        console.log(url, fileName)
+        const response = await fetch(url)
+        if (!response.ok) return message.error('Lỗi khi tải file')
+        const blob = await response.blob()
+        const blobUrl = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = blobUrl
+        link.setAttribute('download', fileName)
+        document.body.appendChild(link)
+        link.click()
+        link.parentNode?.removeChild(link)
+    }
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -276,9 +290,30 @@ export default function TrainingFieldPage() {
                                 type: 'input',
                                 render: (__, record) =>
                                     record.documentFiles?.length > 0
-                                        ? record.documentFiles
-                                              .map((file: DocumentFile) => file.name)
-                                              .join(', ')
+                                        ? record.documentFiles.map(
+                                              (file: DocumentFile, index: number) => (
+                                                  // Dùng React.Fragment hoặc span để bọc và cung cấp key
+                                                  <span key={file.id || index}>
+                                                      {/** biome-ignore lint/a11y/useValidAnchor: <explanation> */}
+                                                      <a
+                                                          href="#"
+                                                          onClick={(e) => {
+                                                              e.preventDefault()
+                                                              onDownload(
+                                                                  getMinioUrl(file.path),
+                                                                  file.name
+                                                              )
+                                                          }}
+                                                      >
+                                                          {file.name}
+                                                      </a>
+                                                      {/* Thêm dấu phẩy nếu đây không phải là file cuối cùng */}
+                                                      {index < record.documentFiles.length - 1
+                                                          ? ', '
+                                                          : ''}
+                                                  </span>
+                                              )
+                                          )
                                         : '',
                             },
                             {
