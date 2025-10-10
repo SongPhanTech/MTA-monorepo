@@ -24115,10 +24115,12 @@ export namespace Prisma {
    */
 
   export type TrainingBlockOnCurriculumVersionCountOutputType = {
+    children: number
     subjects: number
   }
 
   export type TrainingBlockOnCurriculumVersionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    children?: boolean | TrainingBlockOnCurriculumVersionCountOutputTypeCountChildrenArgs
     subjects?: boolean | TrainingBlockOnCurriculumVersionCountOutputTypeCountSubjectsArgs
   }
 
@@ -24131,6 +24133,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the TrainingBlockOnCurriculumVersionCountOutputType
      */
     select?: TrainingBlockOnCurriculumVersionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TrainingBlockOnCurriculumVersionCountOutputType without action
+   */
+  export type TrainingBlockOnCurriculumVersionCountOutputTypeCountChildrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TrainingBlockOnCurriculumVersionWhereInput
   }
 
   /**
@@ -93328,6 +93337,7 @@ export namespace Prisma {
     updatedAt: Date | null
     trainingBlockId: string | null
     curriculumVersionId: string | null
+    parentId: string | null
     priority: number | null
     electiveCreditsRequired: number | null
   }
@@ -93342,6 +93352,7 @@ export namespace Prisma {
     updatedAt: Date | null
     trainingBlockId: string | null
     curriculumVersionId: string | null
+    parentId: string | null
     priority: number | null
     electiveCreditsRequired: number | null
   }
@@ -93356,6 +93367,7 @@ export namespace Prisma {
     updatedAt: number
     trainingBlockId: number
     curriculumVersionId: number
+    parentId: number
     priority: number
     electiveCreditsRequired: number
     _all: number
@@ -93382,6 +93394,7 @@ export namespace Prisma {
     updatedAt?: true
     trainingBlockId?: true
     curriculumVersionId?: true
+    parentId?: true
     priority?: true
     electiveCreditsRequired?: true
   }
@@ -93396,6 +93409,7 @@ export namespace Prisma {
     updatedAt?: true
     trainingBlockId?: true
     curriculumVersionId?: true
+    parentId?: true
     priority?: true
     electiveCreditsRequired?: true
   }
@@ -93410,6 +93424,7 @@ export namespace Prisma {
     updatedAt?: true
     trainingBlockId?: true
     curriculumVersionId?: true
+    parentId?: true
     priority?: true
     electiveCreditsRequired?: true
     _all?: true
@@ -93511,6 +93526,7 @@ export namespace Prisma {
     updatedAt: Date
     trainingBlockId: string
     curriculumVersionId: string
+    parentId: string | null
     priority: number
     electiveCreditsRequired: number
     _count: TrainingBlockOnCurriculumVersionCountAggregateOutputType | null
@@ -93544,10 +93560,13 @@ export namespace Prisma {
     updatedAt?: boolean
     trainingBlockId?: boolean
     curriculumVersionId?: boolean
+    parentId?: boolean
     priority?: boolean
     electiveCreditsRequired?: boolean
     trainingBlock?: boolean | TrainingBlockDefaultArgs<ExtArgs>
     curriculumVersion?: boolean | CurriculumVersionDefaultArgs<ExtArgs>
+    parent?: boolean | TrainingBlockOnCurriculumVersion$parentArgs<ExtArgs>
+    children?: boolean | TrainingBlockOnCurriculumVersion$childrenArgs<ExtArgs>
     subjects?: boolean | TrainingBlockOnCurriculumVersion$subjectsArgs<ExtArgs>
     _count?: boolean | TrainingBlockOnCurriculumVersionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trainingBlockOnCurriculumVersion"]>
@@ -93562,10 +93581,12 @@ export namespace Prisma {
     updatedAt?: boolean
     trainingBlockId?: boolean
     curriculumVersionId?: boolean
+    parentId?: boolean
     priority?: boolean
     electiveCreditsRequired?: boolean
     trainingBlock?: boolean | TrainingBlockDefaultArgs<ExtArgs>
     curriculumVersion?: boolean | CurriculumVersionDefaultArgs<ExtArgs>
+    parent?: boolean | TrainingBlockOnCurriculumVersion$parentArgs<ExtArgs>
   }, ExtArgs["result"]["trainingBlockOnCurriculumVersion"]>
 
   export type TrainingBlockOnCurriculumVersionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -93578,10 +93599,12 @@ export namespace Prisma {
     updatedAt?: boolean
     trainingBlockId?: boolean
     curriculumVersionId?: boolean
+    parentId?: boolean
     priority?: boolean
     electiveCreditsRequired?: boolean
     trainingBlock?: boolean | TrainingBlockDefaultArgs<ExtArgs>
     curriculumVersion?: boolean | CurriculumVersionDefaultArgs<ExtArgs>
+    parent?: boolean | TrainingBlockOnCurriculumVersion$parentArgs<ExtArgs>
   }, ExtArgs["result"]["trainingBlockOnCurriculumVersion"]>
 
   export type TrainingBlockOnCurriculumVersionSelectScalar = {
@@ -93594,24 +93617,29 @@ export namespace Prisma {
     updatedAt?: boolean
     trainingBlockId?: boolean
     curriculumVersionId?: boolean
+    parentId?: boolean
     priority?: boolean
     electiveCreditsRequired?: boolean
   }
 
-  export type TrainingBlockOnCurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "trainingBlockId" | "curriculumVersionId" | "priority" | "electiveCreditsRequired", ExtArgs["result"]["trainingBlockOnCurriculumVersion"]>
+  export type TrainingBlockOnCurriculumVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "trainingBlockId" | "curriculumVersionId" | "parentId" | "priority" | "electiveCreditsRequired", ExtArgs["result"]["trainingBlockOnCurriculumVersion"]>
   export type TrainingBlockOnCurriculumVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingBlock?: boolean | TrainingBlockDefaultArgs<ExtArgs>
     curriculumVersion?: boolean | CurriculumVersionDefaultArgs<ExtArgs>
+    parent?: boolean | TrainingBlockOnCurriculumVersion$parentArgs<ExtArgs>
+    children?: boolean | TrainingBlockOnCurriculumVersion$childrenArgs<ExtArgs>
     subjects?: boolean | TrainingBlockOnCurriculumVersion$subjectsArgs<ExtArgs>
     _count?: boolean | TrainingBlockOnCurriculumVersionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TrainingBlockOnCurriculumVersionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingBlock?: boolean | TrainingBlockDefaultArgs<ExtArgs>
     curriculumVersion?: boolean | CurriculumVersionDefaultArgs<ExtArgs>
+    parent?: boolean | TrainingBlockOnCurriculumVersion$parentArgs<ExtArgs>
   }
   export type TrainingBlockOnCurriculumVersionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingBlock?: boolean | TrainingBlockDefaultArgs<ExtArgs>
     curriculumVersion?: boolean | CurriculumVersionDefaultArgs<ExtArgs>
+    parent?: boolean | TrainingBlockOnCurriculumVersion$parentArgs<ExtArgs>
   }
 
   export type $TrainingBlockOnCurriculumVersionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -93619,6 +93647,8 @@ export namespace Prisma {
     objects: {
       trainingBlock: Prisma.$TrainingBlockPayload<ExtArgs>
       curriculumVersion: Prisma.$CurriculumVersionPayload<ExtArgs>
+      parent: Prisma.$TrainingBlockOnCurriculumVersionPayload<ExtArgs> | null
+      children: Prisma.$TrainingBlockOnCurriculumVersionPayload<ExtArgs>[]
       subjects: Prisma.$TrainingBlockSubjectPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -93631,6 +93661,7 @@ export namespace Prisma {
       updatedAt: Date
       trainingBlockId: string
       curriculumVersionId: string
+      parentId: string | null
       /**
        * ưu tiên sắp xếp
        */
@@ -94032,6 +94063,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     trainingBlock<T extends TrainingBlockDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlockDefaultArgs<ExtArgs>>): Prisma__TrainingBlockClient<$Result.GetResult<Prisma.$TrainingBlockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     curriculumVersion<T extends CurriculumVersionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CurriculumVersionDefaultArgs<ExtArgs>>): Prisma__CurriculumVersionClient<$Result.GetResult<Prisma.$CurriculumVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    parent<T extends TrainingBlockOnCurriculumVersion$parentArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlockOnCurriculumVersion$parentArgs<ExtArgs>>): Prisma__TrainingBlockOnCurriculumVersionClient<$Result.GetResult<Prisma.$TrainingBlockOnCurriculumVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    children<T extends TrainingBlockOnCurriculumVersion$childrenArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlockOnCurriculumVersion$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockOnCurriculumVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     subjects<T extends TrainingBlockOnCurriculumVersion$subjectsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingBlockOnCurriculumVersion$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TrainingBlockSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -94071,6 +94104,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"TrainingBlockOnCurriculumVersion", 'DateTime'>
     readonly trainingBlockId: FieldRef<"TrainingBlockOnCurriculumVersion", 'String'>
     readonly curriculumVersionId: FieldRef<"TrainingBlockOnCurriculumVersion", 'String'>
+    readonly parentId: FieldRef<"TrainingBlockOnCurriculumVersion", 'String'>
     readonly priority: FieldRef<"TrainingBlockOnCurriculumVersion", 'Int'>
     readonly electiveCreditsRequired: FieldRef<"TrainingBlockOnCurriculumVersion", 'Int'>
   }
@@ -94466,6 +94500,49 @@ export namespace Prisma {
      * Limit how many TrainingBlockOnCurriculumVersions to delete.
      */
     limit?: number
+  }
+
+  /**
+   * TrainingBlockOnCurriculumVersion.parent
+   */
+  export type TrainingBlockOnCurriculumVersion$parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingBlockOnCurriculumVersion
+     */
+    select?: TrainingBlockOnCurriculumVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingBlockOnCurriculumVersion
+     */
+    omit?: TrainingBlockOnCurriculumVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingBlockOnCurriculumVersionInclude<ExtArgs> | null
+    where?: TrainingBlockOnCurriculumVersionWhereInput
+  }
+
+  /**
+   * TrainingBlockOnCurriculumVersion.children
+   */
+  export type TrainingBlockOnCurriculumVersion$childrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TrainingBlockOnCurriculumVersion
+     */
+    select?: TrainingBlockOnCurriculumVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TrainingBlockOnCurriculumVersion
+     */
+    omit?: TrainingBlockOnCurriculumVersionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TrainingBlockOnCurriculumVersionInclude<ExtArgs> | null
+    where?: TrainingBlockOnCurriculumVersionWhereInput
+    orderBy?: TrainingBlockOnCurriculumVersionOrderByWithRelationInput | TrainingBlockOnCurriculumVersionOrderByWithRelationInput[]
+    cursor?: TrainingBlockOnCurriculumVersionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TrainingBlockOnCurriculumVersionScalarFieldEnum | TrainingBlockOnCurriculumVersionScalarFieldEnum[]
   }
 
   /**
@@ -311952,6 +312029,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     trainingBlockId: 'trainingBlockId',
     curriculumVersionId: 'curriculumVersionId',
+    parentId: 'parentId',
     priority: 'priority',
     electiveCreditsRequired: 'electiveCreditsRequired'
   };
@@ -316028,7 +316106,8 @@ export namespace Prisma {
     code: 'code',
     description: 'description',
     trainingBlockId: 'trainingBlockId',
-    curriculumVersionId: 'curriculumVersionId'
+    curriculumVersionId: 'curriculumVersionId',
+    parentId: 'parentId'
   };
 
   export type TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum = (typeof TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum)[keyof typeof TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum]
@@ -324555,10 +324634,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"TrainingBlockOnCurriculumVersion"> | Date | string
     trainingBlockId?: StringFilter<"TrainingBlockOnCurriculumVersion"> | string
     curriculumVersionId?: StringFilter<"TrainingBlockOnCurriculumVersion"> | string
+    parentId?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
     priority?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
     electiveCreditsRequired?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
     trainingBlock?: XOR<TrainingBlockScalarRelationFilter, TrainingBlockWhereInput>
     curriculumVersion?: XOR<CurriculumVersionScalarRelationFilter, CurriculumVersionWhereInput>
+    parent?: XOR<TrainingBlockOnCurriculumVersionNullableScalarRelationFilter, TrainingBlockOnCurriculumVersionWhereInput> | null
+    children?: TrainingBlockOnCurriculumVersionListRelationFilter
     subjects?: TrainingBlockSubjectListRelationFilter
   }
 
@@ -324572,10 +324654,13 @@ export namespace Prisma {
     updatedAt?: SortOrder
     trainingBlockId?: SortOrder
     curriculumVersionId?: SortOrder
+    parentId?: SortOrderInput | SortOrder
     priority?: SortOrder
     electiveCreditsRequired?: SortOrder
     trainingBlock?: TrainingBlockOrderByWithRelationInput
     curriculumVersion?: CurriculumVersionOrderByWithRelationInput
+    parent?: TrainingBlockOnCurriculumVersionOrderByWithRelationInput
+    children?: TrainingBlockOnCurriculumVersionOrderByRelationAggregateInput
     subjects?: TrainingBlockSubjectOrderByRelationAggregateInput
     _relevance?: TrainingBlockOnCurriculumVersionOrderByRelevanceInput
   }
@@ -324594,10 +324679,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"TrainingBlockOnCurriculumVersion"> | Date | string
     trainingBlockId?: StringFilter<"TrainingBlockOnCurriculumVersion"> | string
     curriculumVersionId?: StringFilter<"TrainingBlockOnCurriculumVersion"> | string
+    parentId?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
     priority?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
     electiveCreditsRequired?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
     trainingBlock?: XOR<TrainingBlockScalarRelationFilter, TrainingBlockWhereInput>
     curriculumVersion?: XOR<CurriculumVersionScalarRelationFilter, CurriculumVersionWhereInput>
+    parent?: XOR<TrainingBlockOnCurriculumVersionNullableScalarRelationFilter, TrainingBlockOnCurriculumVersionWhereInput> | null
+    children?: TrainingBlockOnCurriculumVersionListRelationFilter
     subjects?: TrainingBlockSubjectListRelationFilter
   }, "id" | "code" | "trainingBlockId_curriculumVersionId">
 
@@ -324611,6 +324699,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     trainingBlockId?: SortOrder
     curriculumVersionId?: SortOrder
+    parentId?: SortOrderInput | SortOrder
     priority?: SortOrder
     electiveCreditsRequired?: SortOrder
     _count?: TrainingBlockOnCurriculumVersionCountOrderByAggregateInput
@@ -324633,6 +324722,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"TrainingBlockOnCurriculumVersion"> | Date | string
     trainingBlockId?: StringWithAggregatesFilter<"TrainingBlockOnCurriculumVersion"> | string
     curriculumVersionId?: StringWithAggregatesFilter<"TrainingBlockOnCurriculumVersion"> | string
+    parentId?: StringNullableWithAggregatesFilter<"TrainingBlockOnCurriculumVersion"> | string | null
     priority?: IntWithAggregatesFilter<"TrainingBlockOnCurriculumVersion"> | number
     electiveCreditsRequired?: IntWithAggregatesFilter<"TrainingBlockOnCurriculumVersion"> | number
   }
@@ -349163,6 +349253,8 @@ export namespace Prisma {
     electiveCreditsRequired?: number
     trainingBlock: TrainingBlockCreateNestedOneWithoutCurriculumVersionsInput
     curriculumVersion: CurriculumVersionCreateNestedOneWithoutTrainingBlocksInput
+    parent?: TrainingBlockOnCurriculumVersionCreateNestedOneWithoutChildrenInput
+    children?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutParentInput
     subjects?: TrainingBlockSubjectCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
   }
 
@@ -349176,8 +349268,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     trainingBlockId: string
     curriculumVersionId: string
+    parentId?: string | null
     priority?: number
     electiveCreditsRequired?: number
+    children?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutParentInput
     subjects?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
   }
 
@@ -349193,6 +349287,8 @@ export namespace Prisma {
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
     trainingBlock?: TrainingBlockUpdateOneRequiredWithoutCurriculumVersionsNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneRequiredWithoutTrainingBlocksNestedInput
+    parent?: TrainingBlockOnCurriculumVersionUpdateOneWithoutChildrenNestedInput
+    children?: TrainingBlockOnCurriculumVersionUpdateManyWithoutParentNestedInput
     subjects?: TrainingBlockSubjectUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
   }
 
@@ -349206,8 +349302,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingBlockId?: StringFieldUpdateOperationsInput | string
     curriculumVersionId?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
+    children?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutParentNestedInput
     subjects?: TrainingBlockSubjectUncheckedUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
   }
 
@@ -349221,6 +349319,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     trainingBlockId: string
     curriculumVersionId: string
+    parentId?: string | null
     priority?: number
     electiveCreditsRequired?: number
   }
@@ -349247,6 +349346,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingBlockId?: StringFieldUpdateOperationsInput | string
     curriculumVersionId?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
   }
@@ -374791,6 +374891,11 @@ export namespace Prisma {
     isNot?: CurriculumVersionWhereInput
   }
 
+  export type TrainingBlockOnCurriculumVersionNullableScalarRelationFilter = {
+    is?: TrainingBlockOnCurriculumVersionWhereInput | null
+    isNot?: TrainingBlockOnCurriculumVersionWhereInput | null
+  }
+
   export type TrainingBlockOnCurriculumVersionOrderByRelevanceInput = {
     fields: TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum | TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -374812,6 +374917,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     trainingBlockId?: SortOrder
     curriculumVersionId?: SortOrder
+    parentId?: SortOrder
     priority?: SortOrder
     electiveCreditsRequired?: SortOrder
   }
@@ -374831,6 +374937,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     trainingBlockId?: SortOrder
     curriculumVersionId?: SortOrder
+    parentId?: SortOrder
     priority?: SortOrder
     electiveCreditsRequired?: SortOrder
   }
@@ -374845,6 +374952,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     trainingBlockId?: SortOrder
     curriculumVersionId?: SortOrder
+    parentId?: SortOrder
     priority?: SortOrder
     electiveCreditsRequired?: SortOrder
   }
@@ -393948,11 +394056,31 @@ export namespace Prisma {
     connect?: CurriculumVersionWhereUniqueInput
   }
 
+  export type TrainingBlockOnCurriculumVersionCreateNestedOneWithoutChildrenInput = {
+    create?: XOR<TrainingBlockOnCurriculumVersionCreateWithoutChildrenInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutChildrenInput>
+    connectOrCreate?: TrainingBlockOnCurriculumVersionCreateOrConnectWithoutChildrenInput
+    connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput
+  }
+
+  export type TrainingBlockOnCurriculumVersionCreateNestedManyWithoutParentInput = {
+    create?: XOR<TrainingBlockOnCurriculumVersionCreateWithoutParentInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutParentInput> | TrainingBlockOnCurriculumVersionCreateWithoutParentInput[] | TrainingBlockOnCurriculumVersionUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: TrainingBlockOnCurriculumVersionCreateOrConnectWithoutParentInput | TrainingBlockOnCurriculumVersionCreateOrConnectWithoutParentInput[]
+    createMany?: TrainingBlockOnCurriculumVersionCreateManyParentInputEnvelope
+    connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
+  }
+
   export type TrainingBlockSubjectCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput = {
     create?: XOR<TrainingBlockSubjectCreateWithoutTrainingBlockOnCurriculumVersionInput, TrainingBlockSubjectUncheckedCreateWithoutTrainingBlockOnCurriculumVersionInput> | TrainingBlockSubjectCreateWithoutTrainingBlockOnCurriculumVersionInput[] | TrainingBlockSubjectUncheckedCreateWithoutTrainingBlockOnCurriculumVersionInput[]
     connectOrCreate?: TrainingBlockSubjectCreateOrConnectWithoutTrainingBlockOnCurriculumVersionInput | TrainingBlockSubjectCreateOrConnectWithoutTrainingBlockOnCurriculumVersionInput[]
     createMany?: TrainingBlockSubjectCreateManyTrainingBlockOnCurriculumVersionInputEnvelope
     connect?: TrainingBlockSubjectWhereUniqueInput | TrainingBlockSubjectWhereUniqueInput[]
+  }
+
+  export type TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutParentInput = {
+    create?: XOR<TrainingBlockOnCurriculumVersionCreateWithoutParentInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutParentInput> | TrainingBlockOnCurriculumVersionCreateWithoutParentInput[] | TrainingBlockOnCurriculumVersionUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: TrainingBlockOnCurriculumVersionCreateOrConnectWithoutParentInput | TrainingBlockOnCurriculumVersionCreateOrConnectWithoutParentInput[]
+    createMany?: TrainingBlockOnCurriculumVersionCreateManyParentInputEnvelope
+    connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
   }
 
   export type TrainingBlockSubjectUncheckedCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput = {
@@ -393978,6 +394106,30 @@ export namespace Prisma {
     update?: XOR<XOR<CurriculumVersionUpdateToOneWithWhereWithoutTrainingBlocksInput, CurriculumVersionUpdateWithoutTrainingBlocksInput>, CurriculumVersionUncheckedUpdateWithoutTrainingBlocksInput>
   }
 
+  export type TrainingBlockOnCurriculumVersionUpdateOneWithoutChildrenNestedInput = {
+    create?: XOR<TrainingBlockOnCurriculumVersionCreateWithoutChildrenInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutChildrenInput>
+    connectOrCreate?: TrainingBlockOnCurriculumVersionCreateOrConnectWithoutChildrenInput
+    upsert?: TrainingBlockOnCurriculumVersionUpsertWithoutChildrenInput
+    disconnect?: TrainingBlockOnCurriculumVersionWhereInput | boolean
+    delete?: TrainingBlockOnCurriculumVersionWhereInput | boolean
+    connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput
+    update?: XOR<XOR<TrainingBlockOnCurriculumVersionUpdateToOneWithWhereWithoutChildrenInput, TrainingBlockOnCurriculumVersionUpdateWithoutChildrenInput>, TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutChildrenInput>
+  }
+
+  export type TrainingBlockOnCurriculumVersionUpdateManyWithoutParentNestedInput = {
+    create?: XOR<TrainingBlockOnCurriculumVersionCreateWithoutParentInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutParentInput> | TrainingBlockOnCurriculumVersionCreateWithoutParentInput[] | TrainingBlockOnCurriculumVersionUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: TrainingBlockOnCurriculumVersionCreateOrConnectWithoutParentInput | TrainingBlockOnCurriculumVersionCreateOrConnectWithoutParentInput[]
+    upsert?: TrainingBlockOnCurriculumVersionUpsertWithWhereUniqueWithoutParentInput | TrainingBlockOnCurriculumVersionUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: TrainingBlockOnCurriculumVersionCreateManyParentInputEnvelope
+    set?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
+    disconnect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
+    delete?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
+    connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
+    update?: TrainingBlockOnCurriculumVersionUpdateWithWhereUniqueWithoutParentInput | TrainingBlockOnCurriculumVersionUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutParentInput | TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: TrainingBlockOnCurriculumVersionScalarWhereInput | TrainingBlockOnCurriculumVersionScalarWhereInput[]
+  }
+
   export type TrainingBlockSubjectUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput = {
     create?: XOR<TrainingBlockSubjectCreateWithoutTrainingBlockOnCurriculumVersionInput, TrainingBlockSubjectUncheckedCreateWithoutTrainingBlockOnCurriculumVersionInput> | TrainingBlockSubjectCreateWithoutTrainingBlockOnCurriculumVersionInput[] | TrainingBlockSubjectUncheckedCreateWithoutTrainingBlockOnCurriculumVersionInput[]
     connectOrCreate?: TrainingBlockSubjectCreateOrConnectWithoutTrainingBlockOnCurriculumVersionInput | TrainingBlockSubjectCreateOrConnectWithoutTrainingBlockOnCurriculumVersionInput[]
@@ -393990,6 +394142,20 @@ export namespace Prisma {
     update?: TrainingBlockSubjectUpdateWithWhereUniqueWithoutTrainingBlockOnCurriculumVersionInput | TrainingBlockSubjectUpdateWithWhereUniqueWithoutTrainingBlockOnCurriculumVersionInput[]
     updateMany?: TrainingBlockSubjectUpdateManyWithWhereWithoutTrainingBlockOnCurriculumVersionInput | TrainingBlockSubjectUpdateManyWithWhereWithoutTrainingBlockOnCurriculumVersionInput[]
     deleteMany?: TrainingBlockSubjectScalarWhereInput | TrainingBlockSubjectScalarWhereInput[]
+  }
+
+  export type TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutParentNestedInput = {
+    create?: XOR<TrainingBlockOnCurriculumVersionCreateWithoutParentInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutParentInput> | TrainingBlockOnCurriculumVersionCreateWithoutParentInput[] | TrainingBlockOnCurriculumVersionUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: TrainingBlockOnCurriculumVersionCreateOrConnectWithoutParentInput | TrainingBlockOnCurriculumVersionCreateOrConnectWithoutParentInput[]
+    upsert?: TrainingBlockOnCurriculumVersionUpsertWithWhereUniqueWithoutParentInput | TrainingBlockOnCurriculumVersionUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: TrainingBlockOnCurriculumVersionCreateManyParentInputEnvelope
+    set?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
+    disconnect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
+    delete?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
+    connect?: TrainingBlockOnCurriculumVersionWhereUniqueInput | TrainingBlockOnCurriculumVersionWhereUniqueInput[]
+    update?: TrainingBlockOnCurriculumVersionUpdateWithWhereUniqueWithoutParentInput | TrainingBlockOnCurriculumVersionUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutParentInput | TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutParentInput[]
+    deleteMany?: TrainingBlockOnCurriculumVersionScalarWhereInput | TrainingBlockOnCurriculumVersionScalarWhereInput[]
   }
 
   export type TrainingBlockSubjectUncheckedUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput = {
@@ -420377,6 +420543,8 @@ export namespace Prisma {
     priority?: number
     electiveCreditsRequired?: number
     trainingBlock: TrainingBlockCreateNestedOneWithoutCurriculumVersionsInput
+    parent?: TrainingBlockOnCurriculumVersionCreateNestedOneWithoutChildrenInput
+    children?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutParentInput
     subjects?: TrainingBlockSubjectCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
   }
 
@@ -420389,8 +420557,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     trainingBlockId: string
+    parentId?: string | null
     priority?: number
     electiveCreditsRequired?: number
+    children?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutParentInput
     subjects?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
   }
 
@@ -420871,6 +421041,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"TrainingBlockOnCurriculumVersion"> | Date | string
     trainingBlockId?: StringFilter<"TrainingBlockOnCurriculumVersion"> | string
     curriculumVersionId?: StringFilter<"TrainingBlockOnCurriculumVersion"> | string
+    parentId?: StringNullableFilter<"TrainingBlockOnCurriculumVersion"> | string | null
     priority?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
     electiveCreditsRequired?: IntFilter<"TrainingBlockOnCurriculumVersion"> | number
   }
@@ -423217,6 +423388,8 @@ export namespace Prisma {
     electiveCreditsRequired?: number
     trainingBlock: TrainingBlockCreateNestedOneWithoutCurriculumVersionsInput
     curriculumVersion: CurriculumVersionCreateNestedOneWithoutTrainingBlocksInput
+    parent?: TrainingBlockOnCurriculumVersionCreateNestedOneWithoutChildrenInput
+    children?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutParentInput
   }
 
   export type TrainingBlockOnCurriculumVersionUncheckedCreateWithoutSubjectsInput = {
@@ -423229,8 +423402,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     trainingBlockId: string
     curriculumVersionId: string
+    parentId?: string | null
     priority?: number
     electiveCreditsRequired?: number
+    children?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutParentInput
   }
 
   export type TrainingBlockOnCurriculumVersionCreateOrConnectWithoutSubjectsInput = {
@@ -423364,6 +423539,8 @@ export namespace Prisma {
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
     trainingBlock?: TrainingBlockUpdateOneRequiredWithoutCurriculumVersionsNestedInput
     curriculumVersion?: CurriculumVersionUpdateOneRequiredWithoutTrainingBlocksNestedInput
+    parent?: TrainingBlockOnCurriculumVersionUpdateOneWithoutChildrenNestedInput
+    children?: TrainingBlockOnCurriculumVersionUpdateManyWithoutParentNestedInput
   }
 
   export type TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutSubjectsInput = {
@@ -423376,8 +423553,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingBlockId?: StringFieldUpdateOperationsInput | string
     curriculumVersionId?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
+    children?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutParentNestedInput
   }
 
   export type ClassRegisterSessionCreateWithoutCreditLimitInput = {
@@ -431867,6 +432046,8 @@ export namespace Prisma {
     priority?: number
     electiveCreditsRequired?: number
     curriculumVersion: CurriculumVersionCreateNestedOneWithoutTrainingBlocksInput
+    parent?: TrainingBlockOnCurriculumVersionCreateNestedOneWithoutChildrenInput
+    children?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutParentInput
     subjects?: TrainingBlockSubjectCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
   }
 
@@ -431879,8 +432060,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     curriculumVersionId: string
+    parentId?: string | null
     priority?: number
     electiveCreditsRequired?: number
+    children?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutParentInput
     subjects?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
   }
 
@@ -432020,6 +432203,85 @@ export namespace Prisma {
   export type CurriculumVersionCreateOrConnectWithoutTrainingBlocksInput = {
     where: CurriculumVersionWhereUniqueInput
     create: XOR<CurriculumVersionCreateWithoutTrainingBlocksInput, CurriculumVersionUncheckedCreateWithoutTrainingBlocksInput>
+  }
+
+  export type TrainingBlockOnCurriculumVersionCreateWithoutChildrenInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    priority?: number
+    electiveCreditsRequired?: number
+    trainingBlock: TrainingBlockCreateNestedOneWithoutCurriculumVersionsInput
+    curriculumVersion: CurriculumVersionCreateNestedOneWithoutTrainingBlocksInput
+    parent?: TrainingBlockOnCurriculumVersionCreateNestedOneWithoutChildrenInput
+    subjects?: TrainingBlockSubjectCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
+  }
+
+  export type TrainingBlockOnCurriculumVersionUncheckedCreateWithoutChildrenInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    trainingBlockId: string
+    curriculumVersionId: string
+    parentId?: string | null
+    priority?: number
+    electiveCreditsRequired?: number
+    subjects?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
+  }
+
+  export type TrainingBlockOnCurriculumVersionCreateOrConnectWithoutChildrenInput = {
+    where: TrainingBlockOnCurriculumVersionWhereUniqueInput
+    create: XOR<TrainingBlockOnCurriculumVersionCreateWithoutChildrenInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutChildrenInput>
+  }
+
+  export type TrainingBlockOnCurriculumVersionCreateWithoutParentInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    priority?: number
+    electiveCreditsRequired?: number
+    trainingBlock: TrainingBlockCreateNestedOneWithoutCurriculumVersionsInput
+    curriculumVersion: CurriculumVersionCreateNestedOneWithoutTrainingBlocksInput
+    children?: TrainingBlockOnCurriculumVersionCreateNestedManyWithoutParentInput
+    subjects?: TrainingBlockSubjectCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
+  }
+
+  export type TrainingBlockOnCurriculumVersionUncheckedCreateWithoutParentInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    trainingBlockId: string
+    curriculumVersionId: string
+    priority?: number
+    electiveCreditsRequired?: number
+    children?: TrainingBlockOnCurriculumVersionUncheckedCreateNestedManyWithoutParentInput
+    subjects?: TrainingBlockSubjectUncheckedCreateNestedManyWithoutTrainingBlockOnCurriculumVersionInput
+  }
+
+  export type TrainingBlockOnCurriculumVersionCreateOrConnectWithoutParentInput = {
+    where: TrainingBlockOnCurriculumVersionWhereUniqueInput
+    create: XOR<TrainingBlockOnCurriculumVersionCreateWithoutParentInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutParentInput>
+  }
+
+  export type TrainingBlockOnCurriculumVersionCreateManyParentInputEnvelope = {
+    data: TrainingBlockOnCurriculumVersionCreateManyParentInput | TrainingBlockOnCurriculumVersionCreateManyParentInput[]
+    skipDuplicates?: boolean
   }
 
   export type TrainingBlockSubjectCreateWithoutTrainingBlockOnCurriculumVersionInput = {
@@ -432184,6 +432446,65 @@ export namespace Prisma {
     documentFiles?: DocumentFileUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     fixedClasses?: FixedClassUncheckedUpdateManyWithoutCurriculumVersionNestedInput
     students?: StudentUncheckedUpdateManyWithoutCurriculumVersionNestedInput
+  }
+
+  export type TrainingBlockOnCurriculumVersionUpsertWithoutChildrenInput = {
+    update: XOR<TrainingBlockOnCurriculumVersionUpdateWithoutChildrenInput, TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutChildrenInput>
+    create: XOR<TrainingBlockOnCurriculumVersionCreateWithoutChildrenInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutChildrenInput>
+    where?: TrainingBlockOnCurriculumVersionWhereInput
+  }
+
+  export type TrainingBlockOnCurriculumVersionUpdateToOneWithWhereWithoutChildrenInput = {
+    where?: TrainingBlockOnCurriculumVersionWhereInput
+    data: XOR<TrainingBlockOnCurriculumVersionUpdateWithoutChildrenInput, TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutChildrenInput>
+  }
+
+  export type TrainingBlockOnCurriculumVersionUpdateWithoutChildrenInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    priority?: IntFieldUpdateOperationsInput | number
+    electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
+    trainingBlock?: TrainingBlockUpdateOneRequiredWithoutCurriculumVersionsNestedInput
+    curriculumVersion?: CurriculumVersionUpdateOneRequiredWithoutTrainingBlocksNestedInput
+    parent?: TrainingBlockOnCurriculumVersionUpdateOneWithoutChildrenNestedInput
+    subjects?: TrainingBlockSubjectUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
+  }
+
+  export type TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutChildrenInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    trainingBlockId?: StringFieldUpdateOperationsInput | string
+    curriculumVersionId?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    priority?: IntFieldUpdateOperationsInput | number
+    electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
+    subjects?: TrainingBlockSubjectUncheckedUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
+  }
+
+  export type TrainingBlockOnCurriculumVersionUpsertWithWhereUniqueWithoutParentInput = {
+    where: TrainingBlockOnCurriculumVersionWhereUniqueInput
+    update: XOR<TrainingBlockOnCurriculumVersionUpdateWithoutParentInput, TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutParentInput>
+    create: XOR<TrainingBlockOnCurriculumVersionCreateWithoutParentInput, TrainingBlockOnCurriculumVersionUncheckedCreateWithoutParentInput>
+  }
+
+  export type TrainingBlockOnCurriculumVersionUpdateWithWhereUniqueWithoutParentInput = {
+    where: TrainingBlockOnCurriculumVersionWhereUniqueInput
+    data: XOR<TrainingBlockOnCurriculumVersionUpdateWithoutParentInput, TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutParentInput>
+  }
+
+  export type TrainingBlockOnCurriculumVersionUpdateManyWithWhereWithoutParentInput = {
+    where: TrainingBlockOnCurriculumVersionScalarWhereInput
+    data: XOR<TrainingBlockOnCurriculumVersionUpdateManyMutationInput, TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutParentInput>
   }
 
   export type TrainingBlockSubjectUpsertWithWhereUniqueWithoutTrainingBlockOnCurriculumVersionInput = {
@@ -510795,6 +511116,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     trainingBlockId: string
+    parentId?: string | null
     priority?: number
     electiveCreditsRequired?: number
   }
@@ -510953,6 +511275,8 @@ export namespace Prisma {
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
     trainingBlock?: TrainingBlockUpdateOneRequiredWithoutCurriculumVersionsNestedInput
+    parent?: TrainingBlockOnCurriculumVersionUpdateOneWithoutChildrenNestedInput
+    children?: TrainingBlockOnCurriculumVersionUpdateManyWithoutParentNestedInput
     subjects?: TrainingBlockSubjectUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
   }
 
@@ -510965,8 +511289,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingBlockId?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
+    children?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutParentNestedInput
     subjects?: TrainingBlockSubjectUncheckedUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
   }
 
@@ -510979,6 +511305,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingBlockId?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
   }
@@ -517176,6 +517503,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     curriculumVersionId: string
+    parentId?: string | null
     priority?: number
     electiveCreditsRequired?: number
   }
@@ -517191,6 +517519,8 @@ export namespace Prisma {
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
     curriculumVersion?: CurriculumVersionUpdateOneRequiredWithoutTrainingBlocksNestedInput
+    parent?: TrainingBlockOnCurriculumVersionUpdateOneWithoutChildrenNestedInput
+    children?: TrainingBlockOnCurriculumVersionUpdateManyWithoutParentNestedInput
     subjects?: TrainingBlockSubjectUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
   }
 
@@ -517203,8 +517533,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     curriculumVersionId?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
+    children?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutParentNestedInput
     subjects?: TrainingBlockSubjectUncheckedUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
   }
 
@@ -517217,8 +517549,23 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     curriculumVersionId?: StringFieldUpdateOperationsInput | string
+    parentId?: NullableStringFieldUpdateOperationsInput | string | null
     priority?: IntFieldUpdateOperationsInput | number
     electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type TrainingBlockOnCurriculumVersionCreateManyParentInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    trainingBlockId: string
+    curriculumVersionId: string
+    priority?: number
+    electiveCreditsRequired?: number
   }
 
   export type TrainingBlockSubjectCreateManyTrainingBlockOnCurriculumVersionInput = {
@@ -517234,6 +517581,52 @@ export namespace Prisma {
     type?: $Enums.SubjectRequirementType
     useForFinalScore: boolean
     graduation: boolean
+  }
+
+  export type TrainingBlockOnCurriculumVersionUpdateWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    priority?: IntFieldUpdateOperationsInput | number
+    electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
+    trainingBlock?: TrainingBlockUpdateOneRequiredWithoutCurriculumVersionsNestedInput
+    curriculumVersion?: CurriculumVersionUpdateOneRequiredWithoutTrainingBlocksNestedInput
+    children?: TrainingBlockOnCurriculumVersionUpdateManyWithoutParentNestedInput
+    subjects?: TrainingBlockSubjectUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
+  }
+
+  export type TrainingBlockOnCurriculumVersionUncheckedUpdateWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    trainingBlockId?: StringFieldUpdateOperationsInput | string
+    curriculumVersionId?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
+    children?: TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutParentNestedInput
+    subjects?: TrainingBlockSubjectUncheckedUpdateManyWithoutTrainingBlockOnCurriculumVersionNestedInput
+  }
+
+  export type TrainingBlockOnCurriculumVersionUncheckedUpdateManyWithoutParentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    trainingBlockId?: StringFieldUpdateOperationsInput | string
+    curriculumVersionId?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    electiveCreditsRequired?: IntFieldUpdateOperationsInput | number
   }
 
   export type TrainingBlockSubjectUpdateWithoutTrainingBlockOnCurriculumVersionInput = {
