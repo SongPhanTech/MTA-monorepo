@@ -68,6 +68,7 @@ export default function TrainingCoursePage() {
         },
         include: {
             trainingObjectType: true,
+            trainingLanguage: true,
             semesterStart: {
                 include: {
                     schoolYear: true,
@@ -266,6 +267,12 @@ export default function TrainingCoursePage() {
                                 }),
                                 render: (value) =>
                                     value?.schoolYear?.name ? value?.schoolYear?.name : '',
+                            },
+                            {
+                                title: 'Ngôn ngữ ĐT',
+                                align: 'center',
+                                dataIndex: ['trainingLanguage', 'name'],
+                                width: 150,
                             },
                             {
                                 title: 'Niên khoá',

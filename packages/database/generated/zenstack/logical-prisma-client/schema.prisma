@@ -1886,6 +1886,9 @@ model TrainingBlock {
   name               String                             @unique()
   /// ưu tiên sắp xếp
   priority           Int                                @default(0)
+  parent             TrainingBlock?                     @relation("ParentChild", fields: [parentId], references: [id])
+  parentId           String?
+  children           TrainingBlock[]                    @relation("ParentChild")
   curriculumVersions TrainingBlockOnCurriculumVersion[]
 
   @@schema("ql-dao-tao")
@@ -1895,23 +1898,20 @@ model TrainingBlock {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model TrainingBlockOnCurriculumVersion {
-  id                      String                             @id() @default(cuid())
-  code                    String?                            @unique()
-  active                  Boolean                            @default(true)
-  description             String?                            @db.Text()
+  id                      String                 @id() @default(cuid())
+  code                    String?                @unique()
+  active                  Boolean                @default(true)
+  description             String?                @db.Text()
   deletedAt               DateTime?
-  createdAt               DateTime                           @default(now())
-  updatedAt               DateTime                           @default(now()) @updatedAt()
-  trainingBlock           TrainingBlock                      @relation(fields: [trainingBlockId], references: [id])
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @default(now()) @updatedAt()
+  trainingBlock           TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
   trainingBlockId         String
-  curriculumVersion       CurriculumVersion                  @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersion       CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId     String
-  parent                  TrainingBlockOnCurriculumVersion?  @relation("ParentChild", fields: [parentId], references: [id])
-  parentId                String?
-  children                TrainingBlockOnCurriculumVersion[] @relation("ParentChild")
   /// ưu tiên sắp xếp
-  priority                Int                                @default(0)
-  electiveCreditsRequired Int                                @default(0)
+  priority                Int                    @default(0)
+  electiveCreditsRequired Int                    @default(0)
   subjects                TrainingBlockSubject[]
 
   @@unique([trainingBlockId, curriculumVersionId])
