@@ -820,7 +820,7 @@ const Table = <T extends Record<string, unknown>>({
             id={id}
             rowKey={rowKey}
             size="small"
-            className="mt-4 custom-scrollbar"
+            className="mt-2 custom-scrollbar"
             rowSelection={rowSelection}
             columns={
                 columns.map((column) => ({
@@ -852,6 +852,7 @@ const Table = <T extends Record<string, unknown>>({
                     : false
             }
             expandable={expandable}
+            {...rest}
             onRow={(record) => ({
                 onClick: () => {
                     if (onRowClick) {
@@ -865,8 +866,8 @@ const Table = <T extends Record<string, unknown>>({
                 },
                 style: { cursor: 'pointer' },
                 className: record.id === selectedRow ? 'bg-blue-100' : '',
+                ...rest.onRow?.(record),
             })}
-            {...rest}
         />
     )
 }

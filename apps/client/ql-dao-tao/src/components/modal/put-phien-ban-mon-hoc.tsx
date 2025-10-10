@@ -7,6 +7,7 @@ import { type DocumentFile, type SubjectVersion, SubjectVersionType } from '@wor
 import {
     useCreateSubjectVersion,
     useFindManySubject,
+    useFindManyTrainingObjectType,
     useFindUniqueSubject,
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
@@ -82,6 +83,10 @@ const PutVersionSubjectModal = () => {
         },
     })
 
+    const { data: trainingObjectType = [] } = useFindManyTrainingObjectType({
+        select: { id: true, name: true },
+    })
+
     const treeData =
         subjectData
             .filter((subject) => subject.subjectVersion.length > 0)
@@ -126,6 +131,7 @@ const PutVersionSubjectModal = () => {
                 learningOutcome: output.learningOutcome,
                 structure: output.structure,
                 guild: output.guild,
+                trainingObjectTypeId: output.trainingObjectTypeId,
                 academicResults: output.academicResults,
                 materials: output.materials,
                 rules: output.rules,
@@ -309,32 +315,33 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col> */}
             <Col span={8}>
-                <Form.Item name="prerequisiteSubjectIds" label="Môn học tiên quyết">
-                    <TreeSelect
-                        treeData={treeData}
-                        // treeCheckable={true}
-                        multiple={true}
-                        treeDefaultExpandAll
-                        showSearch
-                        placeholder="Chọn môn học tiên quyết"
-                        style={{ width: '100%' }}
+                <FormItem form={form} name="type" label="Loại môn học">
+                    <Select
+                        placeholder="Chọn loại hệ điểm"
+                        options={subjectVersionTypeOptions?.map((item) => ({
+                            label: item.label,
+                            value: item.value,
+                        }))}
                         allowClear
                     />
-                </Form.Item>
+                </FormItem>
             </Col>
             <Col span={8}>
-                <Form.Item name="coRequisiteSubjectIds" label="Môn học song hành">
-                    <TreeSelect
-                        treeData={treeData}
-                        // treeCheckable={true}
-                        multiple={true}
-                        treeDefaultExpandAll
-                        showSearch
-                        placeholder="Chọn môn học song hành"
-                        style={{ width: '100%' }}
+                <FormItem
+                    form={form}
+                    name="trainingObjectTypeId"
+                    label="Đối tượng đào tạo"
+                    required
+                >
+                    <Select
+                        placeholder="Chọn đối tượng đào tạo"
+                        options={trainingObjectType?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
                         allowClear
                     />
-                </Form.Item>
+                </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="credit" label="Số tín chỉ" required>
@@ -422,6 +429,34 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col>
             <Col span={8}>
+                <Form.Item name="prerequisiteSubjectIds" label="Môn học tiên quyết">
+                    <TreeSelect
+                        treeData={treeData}
+                        // treeCheckable={true}
+                        multiple={true}
+                        treeDefaultExpandAll
+                        showSearch
+                        placeholder="Chọn môn học tiên quyết"
+                        style={{ width: '100%' }}
+                        allowClear
+                    />
+                </Form.Item>
+            </Col>
+            <Col span={8}>
+                <Form.Item name="coRequisiteSubjectIds" label="Môn học song hành">
+                    <TreeSelect
+                        treeData={treeData}
+                        // treeCheckable={true}
+                        multiple={true}
+                        treeDefaultExpandAll
+                        showSearch
+                        placeholder="Chọn môn học song hành"
+                        style={{ width: '100%' }}
+                        allowClear
+                    />
+                </Form.Item>
+            </Col>
+            <Col span={8}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea rows={3} placeholder="Nhập mô tả" />
                 </FormItem>
@@ -432,18 +467,6 @@ const PutVersionSubjectModal = () => {
                         <Radio value={true}>Đang hoạt động</Radio>
                         <Radio value={false}>Ngừng hoạt động</Radio>
                     </Radio.Group>
-                </FormItem>
-            </Col>
-            <Col span={8}>
-                <FormItem form={form} name="type" label="Loại môn học">
-                    <Select
-                        placeholder="Chọn loại hệ điểm"
-                        options={subjectVersionTypeOptions?.map((item) => ({
-                            label: item.label,
-                            value: item.value,
-                        }))}
-                        allowClear
-                    />
                 </FormItem>
             </Col>
             {/*  */}

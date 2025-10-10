@@ -448,6 +448,9 @@ exports.Prisma.TrainingCourseScalarFieldEnum = {
   studentRecognitionDecision: 'studentRecognitionDecision',
   regulation: 'regulation',
   trainingLanguageId: 'trainingLanguageId',
+  isGeneralInfoLocked: 'isGeneralInfoLocked',
+  isRegulationLocked: 'isRegulationLocked',
+  isScoreConfigLocked: 'isScoreConfigLocked',
   baseScore: 'baseScore',
   coef_1: 'coef_1',
   coef_2: 'coef_2',
@@ -527,6 +530,7 @@ exports.Prisma.CurriculumVersionScalarFieldEnum = {
   numberOfSemesters: 'numberOfSemesters',
   yearCreation: 'yearCreation',
   yearApplication: 'yearApplication',
+  isLock: 'isLock',
   curriculumId: 'curriculumId',
   trainingObjectTypeId: 'trainingObjectTypeId',
   trainingLevelId: 'trainingLevelId',
@@ -604,6 +608,7 @@ exports.Prisma.SubjectVersionScalarFieldEnum = {
   rules: 'rules',
   managementOrganizationId: 'managementOrganizationId',
   subjectId: 'subjectId',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   subjectVersionCategoryId: 'subjectVersionCategoryId'
 };
 
@@ -931,7 +936,8 @@ exports.Prisma.TrainingBlockScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   name: 'name',
-  priority: 'priority'
+  priority: 'priority',
+  parentId: 'parentId'
 };
 
 exports.Prisma.TrainingBlockOnCurriculumVersionScalarFieldEnum = {
@@ -4128,6 +4134,7 @@ exports.Prisma.SubjectVersionOrderByRelevanceFieldEnum = {
   rules: 'rules',
   managementOrganizationId: 'managementOrganizationId',
   subjectId: 'subjectId',
+  trainingObjectTypeId: 'trainingObjectTypeId',
   subjectVersionCategoryId: 'subjectVersionCategoryId'
 };
 
@@ -4318,7 +4325,8 @@ exports.Prisma.TrainingBlockOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  name: 'name'
+  name: 'name',
+  parentId: 'parentId'
 };
 
 exports.Prisma.TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum = {

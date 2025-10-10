@@ -120,7 +120,7 @@ enum RankingContext {
   @@schema("ql-dao-tao")
 }
 
-/// Xếp loại học tập
+/// Xếp loại học tập/Xếp loại tốt nghiệp
 model AcademicRankingConvert extends Base {
   classification     String           // Xếp loại: Xuất sắc; Giỏi; Khá; TBK; TB; Yếu
   context            RankingContext   // Bối cảnh áp dụng: Học tập hay Tốt nghiệp
