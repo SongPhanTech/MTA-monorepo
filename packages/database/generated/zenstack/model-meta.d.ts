@@ -3670,6 +3670,39 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
+                isGeneralInfoLocked: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                isRegulationLocked: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                isScoreConfigLocked: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
                 baseScore: {
                     name: string;
                     type: string;
@@ -4678,6 +4711,17 @@ declare const metadata: {
                     type: string;
                     isOptional: boolean;
                 };
+                isLock: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
                 curriculum: {
                     name: string;
                     type: string;
@@ -5410,6 +5454,29 @@ declare const metadata: {
                     };
                 };
                 subjectId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                trainingObjectType: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                trainingObjectTypeId: {
                     name: string;
                     type: string;
                     isForeignKey: boolean;
@@ -7532,6 +7599,13 @@ declare const metadata: {
                     backLink: string;
                 };
                 graduationSession: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                subjectVersion: {
                     name: string;
                     type: string;
                     isDataModel: boolean;

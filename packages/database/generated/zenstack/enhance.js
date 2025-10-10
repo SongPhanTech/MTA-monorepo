@@ -40,7 +40,7 @@ exports.enhance = enhance;
 const node_1 = require("@zenstackhq/runtime/enhancements/node");
 const model_meta_1 = __importDefault(require("./model-meta"));
 const policy_1 = __importDefault(require("./policy"));
-const zodSchemas = __importStar(require("../zod"));
+const zodSchemas = __importStar(require("@zenstackhq/runtime/zod"));
 const prisma_client_1 = require("../prisma-client");
 function enhance(prisma, context, options) {
     return (0, node_1.createEnhancement)(prisma, Object.assign({ modelMeta: model_meta_1.default,

@@ -1998,6 +1998,18 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'trainingLanguage',
+                }, isGeneralInfoLocked: {
+                    name: "isGeneralInfoLocked",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isRegulationLocked: {
+                    name: "isRegulationLocked",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, isScoreConfigLocked: {
+                    name: "isScoreConfigLocked",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, baseScore: {
                     name: "baseScore",
                     type: "AcademicRankingBaseType",
@@ -2567,6 +2579,10 @@ const metadata = {
                     name: "yearApplication",
                     type: "Int",
                     isOptional: true,
+                }, isLock: {
+                    name: "isLock",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, curriculum: {
                     name: "curriculum",
                     type: "Curriculum",
@@ -3010,6 +3026,19 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'subject',
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'subjectVersion',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
                 }, subjectVersionCategory: {
                     name: "subjectVersionCategory",
                     type: "SubjectVersionCategory",
@@ -4187,6 +4216,12 @@ const metadata = {
                 }, graduationSession: {
                     name: "graduationSession",
                     type: "GraduationSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',

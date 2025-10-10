@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const SubjectVersionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "name", "codeTkb", "examType", "type", "credit", "week", "period", "schedulePeriod", "numberOfTheory", "numberOfPractical", "numberOfSelfStudy", "numberOfPractice", "numberOfReview", "numberOfExam", "numberOfOther", "objectives", "learningOutcome", "structure", "guild", "academicResults", "materials", "rules", "managementOrganizationId", "subjectId", "subjectVersionCategoryId"])
+export const SubjectVersionScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "name", "codeTkb", "examType", "type", "credit", "week", "period", "schedulePeriod", "numberOfTheory", "numberOfPractical", "numberOfSelfStudy", "numberOfPractice", "numberOfReview", "numberOfExam", "numberOfOther", "objectives", "learningOutcome", "structure", "guild", "academicResults", "materials", "rules", "managementOrganizationId", "subjectId", "trainingObjectTypeId", "subjectVersionCategoryId"])

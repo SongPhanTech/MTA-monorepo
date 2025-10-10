@@ -117,7 +117,7 @@ app.openapi(
         },
         responses: {
             200: {
-                description: 'Phân bổ theo Trình độ đào tạo',
+                description: 'Phân bổ theo Bậc đào tạo',
                 content: {
                     'application/json': {
                         schema: StatBaseSchema.extend({
@@ -158,7 +158,7 @@ app.openapi(
                 count: 3,
                 summary: {},
                 preview: true,
-                labels: ['ID Trình độ đào tạo', 'Tên trình độ đào tạo', 'Số lượng'],
+                labels: ['ID Bậc đào tạo', 'Tên bậc đào tạo', 'Số lượng'],
             })
         }
 
@@ -186,7 +186,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
-            labels: ['ID Trình độ đào tạo', 'Tên trình độ đào tạo', 'Số lượng'],
+            labels: ['ID Bậc đào tạo', 'Tên bậc đào tạo', 'Số lượng'],
         })
     }
 )
@@ -936,7 +936,7 @@ app.openapi(
         },
         responses: {
             200: {
-                description: 'Phân bổ theo Trình độ đào tạo (lọc theo đơn vị quản lý)',
+                description: 'Phân bổ theo Bậc đào tạo (lọc theo đơn vị quản lý)',
                 content: {
                     'application/json': {
                         schema: StatBaseSchema.extend({
@@ -978,7 +978,7 @@ app.openapi(
                 count: data.length,
                 summary: {},
                 preview: true,
-                labels: ['ID Trình độ đào tạo', 'Tên trình độ đào tạo', 'Số lượng'],
+                labels: ['ID Bậc đào tạo', 'Tên bậc đào tạo', 'Số lượng'],
             })
         }
 
@@ -1024,7 +1024,7 @@ app.openapi(
             count: data.length,
             summary: {},
             preview: false,
-            labels: ['ID Trình độ đào tạo', 'Tên trình độ đào tạo', 'Số lượng'],
+            labels: ['ID Bậc đào tạo', 'Tên bậc đào tạo', 'Số lượng'],
         })
     }
 )

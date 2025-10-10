@@ -38,6 +38,7 @@ model TrainingObjectType extends Base {
   trainingScoreSession TrainingScoreSession[]
   subjectClass         SubjectClass[]
   graduationSession    GraduationSession[]
+  subjectVersion       SubjectVersion[]
 
   @@schema("ql-dao-tao")
 }
@@ -70,7 +71,7 @@ model TrainingLevel extends Base {
   @@schema("ql-dao-tao")
 }
 
-/// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
+/// hình thức đào tạo/hình thức huấn luyện (Trực tiếp, trực tuyến, kết hợp)
 model TrainingForm extends Base {
   name               String               @unique
 

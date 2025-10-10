@@ -6,8 +6,8 @@ import useSpinner from '@hooks/spinner'
 import type { TrainingObjectType } from '@workspace/db'
 import {
     useCreateTrainingObjectType,
+    useFindManyTrainingForm,
     useFindManyTrainingLevel,
-    useFindManyTrainingType,
     useFindUniqueTrainingObjectType,
     useUpdateTrainingObjectType,
 } from '@workspace/db/hooks'
@@ -37,7 +37,7 @@ const PutTrainingObjectTypeModal = () => {
         { select: { id: true, name: true } },
         { enabled: isOpen }
     )
-    const { data: trainingTypes } = useFindManyTrainingType(
+    const { data: trainingForms } = useFindManyTrainingForm(
         { select: { id: true, name: true } },
         { enabled: isOpen }
     )
