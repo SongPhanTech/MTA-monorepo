@@ -6585,6 +6585,7 @@ declare const metadata: {
                 startDate: {
                     name: string;
                     type: string;
+                    isOptional: boolean;
                 };
                 endDate: {
                     name: string;
@@ -6617,6 +6618,7 @@ declare const metadata: {
                 schedule: {
                     name: string;
                     type: string;
+                    isOptional: boolean;
                 };
                 maxStudent: {
                     name: string;

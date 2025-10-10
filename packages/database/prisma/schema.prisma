@@ -1367,11 +1367,11 @@ model SubjectClass {
   updatedAt                  DateTime              @default(now()) @updatedAt()
   code                       String
   name                       String
-  startDate                  DateTime
+  startDate                  DateTime?
   endDate                    DateTime?
   subject                    SubjectVersion        @relation(fields: [subjectId], references: [id])
   subjectId                  String
-  schedule                   SubjectClassSchedule
+  schedule                   SubjectClassSchedule?
   maxStudent                 Int
   trainingObjectType         TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId       String

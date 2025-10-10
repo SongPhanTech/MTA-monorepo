@@ -73256,10 +73256,10 @@ export namespace Prisma {
     updatedAt: Date
     code: string
     name: string
-    startDate: Date
+    startDate: Date | null
     endDate: Date | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -73552,10 +73552,10 @@ export namespace Prisma {
       updatedAt: Date
       code: string
       name: string
-      startDate: Date
+      startDate: Date | null
       endDate: Date | null
       subjectId: string
-      schedule: $Enums.SubjectClassSchedule
+      schedule: $Enums.SubjectClassSchedule | null
       maxStudent: number
       trainingObjectTypeId: string
       semesterId: string
@@ -322882,10 +322882,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"SubjectClass"> | Date | string
     code?: StringFilter<"SubjectClass"> | string
     name?: StringFilter<"SubjectClass"> | string
-    startDate?: DateTimeFilter<"SubjectClass"> | Date | string
+    startDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
     endDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
     subjectId?: StringFilter<"SubjectClass"> | string
-    schedule?: EnumSubjectClassScheduleFilter<"SubjectClass"> | $Enums.SubjectClassSchedule
+    schedule?: EnumSubjectClassScheduleNullableFilter<"SubjectClass"> | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFilter<"SubjectClass"> | number
     trainingObjectTypeId?: StringFilter<"SubjectClass"> | string
     semesterId?: StringFilter<"SubjectClass"> | string
@@ -322935,10 +322935,10 @@ export namespace Prisma {
     updatedAt?: SortOrder
     code?: SortOrder
     name?: SortOrder
-    startDate?: SortOrder
+    startDate?: SortOrderInput | SortOrder
     endDate?: SortOrderInput | SortOrder
     subjectId?: SortOrder
-    schedule?: SortOrder
+    schedule?: SortOrderInput | SortOrder
     maxStudent?: SortOrder
     trainingObjectTypeId?: SortOrder
     semesterId?: SortOrder
@@ -322992,10 +322992,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"SubjectClass"> | Date | string
     code?: StringFilter<"SubjectClass"> | string
     name?: StringFilter<"SubjectClass"> | string
-    startDate?: DateTimeFilter<"SubjectClass"> | Date | string
+    startDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
     endDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
     subjectId?: StringFilter<"SubjectClass"> | string
-    schedule?: EnumSubjectClassScheduleFilter<"SubjectClass"> | $Enums.SubjectClassSchedule
+    schedule?: EnumSubjectClassScheduleNullableFilter<"SubjectClass"> | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFilter<"SubjectClass"> | number
     trainingObjectTypeId?: StringFilter<"SubjectClass"> | string
     semesterId?: StringFilter<"SubjectClass"> | string
@@ -323045,10 +323045,10 @@ export namespace Prisma {
     updatedAt?: SortOrder
     code?: SortOrder
     name?: SortOrder
-    startDate?: SortOrder
+    startDate?: SortOrderInput | SortOrder
     endDate?: SortOrderInput | SortOrder
     subjectId?: SortOrder
-    schedule?: SortOrder
+    schedule?: SortOrderInput | SortOrder
     maxStudent?: SortOrder
     trainingObjectTypeId?: SortOrder
     semesterId?: SortOrder
@@ -323089,10 +323089,10 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"SubjectClass"> | Date | string
     code?: StringWithAggregatesFilter<"SubjectClass"> | string
     name?: StringWithAggregatesFilter<"SubjectClass"> | string
-    startDate?: DateTimeWithAggregatesFilter<"SubjectClass"> | Date | string
+    startDate?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
     endDate?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
     subjectId?: StringWithAggregatesFilter<"SubjectClass"> | string
-    schedule?: EnumSubjectClassScheduleWithAggregatesFilter<"SubjectClass"> | $Enums.SubjectClassSchedule
+    schedule?: EnumSubjectClassScheduleNullableWithAggregatesFilter<"SubjectClass"> | $Enums.SubjectClassSchedule | null
     maxStudent?: IntWithAggregatesFilter<"SubjectClass"> | number
     trainingObjectTypeId?: StringWithAggregatesFilter<"SubjectClass"> | string
     semesterId?: StringWithAggregatesFilter<"SubjectClass"> | string
@@ -347294,9 +347294,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -347339,10 +347339,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -347384,9 +347384,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -347429,10 +347429,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -347474,10 +347474,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -347510,9 +347510,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -347538,10 +347538,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -373634,11 +373634,11 @@ export namespace Prisma {
     _max?: NestedEnumClassRegisterStatusFilter<$PrismaModel>
   }
 
-  export type EnumSubjectClassScheduleFilter<$PrismaModel = never> = {
-    equals?: $Enums.SubjectClassSchedule | EnumSubjectClassScheduleFieldRefInput<$PrismaModel>
-    in?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel>
-    not?: NestedEnumSubjectClassScheduleFilter<$PrismaModel> | $Enums.SubjectClassSchedule
+  export type EnumSubjectClassScheduleNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubjectClassSchedule | EnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel> | $Enums.SubjectClassSchedule | null
   }
 
   export type EnumExamTypeNullableFilter<$PrismaModel = never> = {
@@ -373815,14 +373815,14 @@ export namespace Prisma {
     maxStudent?: SortOrder
   }
 
-  export type EnumSubjectClassScheduleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.SubjectClassSchedule | EnumSubjectClassScheduleFieldRefInput<$PrismaModel>
-    in?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel>
-    not?: NestedEnumSubjectClassScheduleWithAggregatesFilter<$PrismaModel> | $Enums.SubjectClassSchedule
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumSubjectClassScheduleFilter<$PrismaModel>
-    _max?: NestedEnumSubjectClassScheduleFilter<$PrismaModel>
+  export type EnumSubjectClassScheduleNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubjectClassSchedule | EnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumSubjectClassScheduleNullableWithAggregatesFilter<$PrismaModel> | $Enums.SubjectClassSchedule | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel>
+    _max?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel>
   }
 
   export type EnumExamTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -391806,8 +391806,8 @@ export namespace Prisma {
     connect?: SubjectClassTimeWhereUniqueInput | SubjectClassTimeWhereUniqueInput[]
   }
 
-  export type EnumSubjectClassScheduleFieldUpdateOperationsInput = {
-    set?: $Enums.SubjectClassSchedule
+  export type NullableEnumSubjectClassScheduleFieldUpdateOperationsInput = {
+    set?: $Enums.SubjectClassSchedule | null
   }
 
   export type NullableEnumExamTypeFieldUpdateOperationsInput = {
@@ -409294,11 +409294,11 @@ export namespace Prisma {
     _max?: NestedEnumClassRegisterStatusFilter<$PrismaModel>
   }
 
-  export type NestedEnumSubjectClassScheduleFilter<$PrismaModel = never> = {
-    equals?: $Enums.SubjectClassSchedule | EnumSubjectClassScheduleFieldRefInput<$PrismaModel>
-    in?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel>
-    not?: NestedEnumSubjectClassScheduleFilter<$PrismaModel> | $Enums.SubjectClassSchedule
+  export type NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubjectClassSchedule | EnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel> | $Enums.SubjectClassSchedule | null
   }
 
   export type NestedEnumExamTypeNullableFilter<$PrismaModel = never> = {
@@ -409308,14 +409308,14 @@ export namespace Prisma {
     not?: NestedEnumExamTypeNullableFilter<$PrismaModel> | $Enums.ExamType | null
   }
 
-  export type NestedEnumSubjectClassScheduleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.SubjectClassSchedule | EnumSubjectClassScheduleFieldRefInput<$PrismaModel>
-    in?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel>
-    not?: NestedEnumSubjectClassScheduleWithAggregatesFilter<$PrismaModel> | $Enums.SubjectClassSchedule
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumSubjectClassScheduleFilter<$PrismaModel>
-    _max?: NestedEnumSubjectClassScheduleFilter<$PrismaModel>
+  export type NestedEnumSubjectClassScheduleNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubjectClassSchedule | EnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
+    in?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumSubjectClassScheduleNullableWithAggregatesFilter<$PrismaModel> | $Enums.SubjectClassSchedule | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel>
+    _max?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumExamTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -411355,9 +411355,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -411399,10 +411399,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -411700,10 +411700,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"SubjectClass"> | Date | string
     code?: StringFilter<"SubjectClass"> | string
     name?: StringFilter<"SubjectClass"> | string
-    startDate?: DateTimeFilter<"SubjectClass"> | Date | string
+    startDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
     endDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
     subjectId?: StringFilter<"SubjectClass"> | string
-    schedule?: EnumSubjectClassScheduleFilter<"SubjectClass"> | $Enums.SubjectClassSchedule
+    schedule?: EnumSubjectClassScheduleNullableFilter<"SubjectClass"> | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFilter<"SubjectClass"> | number
     trainingObjectTypeId?: StringFilter<"SubjectClass"> | string
     semesterId?: StringFilter<"SubjectClass"> | string
@@ -413285,9 +413285,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -413329,10 +413329,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -413793,9 +413793,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -413837,10 +413837,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -415396,9 +415396,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -415440,10 +415440,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     cancelled?: boolean
@@ -418713,9 +418713,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -418757,10 +418757,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -422047,9 +422047,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -422091,9 +422091,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -423877,9 +423877,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -423921,10 +423921,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -424139,9 +424139,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -424183,10 +424183,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -426134,9 +426134,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -426178,10 +426178,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -426238,9 +426238,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -426282,10 +426282,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -426326,9 +426326,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -426370,10 +426370,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -426705,9 +426705,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -426749,10 +426749,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -427570,9 +427570,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -427614,10 +427614,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     semesterId: string
     cancelled?: boolean
@@ -429535,9 +429535,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -429579,10 +429579,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -429633,9 +429633,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -429677,10 +429677,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -477549,9 +477549,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -477593,10 +477593,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -477647,9 +477647,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -477691,10 +477691,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -477745,9 +477745,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -477789,10 +477789,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -480837,9 +480837,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -480881,10 +480881,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -481451,9 +481451,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -481495,10 +481495,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -483190,9 +483190,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -483234,10 +483234,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -497786,9 +497786,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     cancelled?: boolean
     lecturerAssignmentDeadline?: Date | string | null
@@ -497830,10 +497830,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -506618,10 +506618,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -506770,9 +506770,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -506814,10 +506814,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -506858,10 +506858,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -508156,10 +508156,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     cancelled?: boolean
@@ -508356,9 +508356,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -508400,10 +508400,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     cancelled?: BoolFieldUpdateOperationsInput | boolean
@@ -508444,10 +508444,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     cancelled?: BoolFieldUpdateOperationsInput | boolean
@@ -510261,9 +510261,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -510305,10 +510305,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -510349,10 +510349,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -511565,9 +511565,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -512298,9 +512298,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -512342,9 +512342,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -512386,9 +512386,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -513780,10 +513780,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     semesterId: string
     cancelled?: boolean
@@ -514355,9 +514355,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -514399,10 +514399,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     semesterId?: StringFieldUpdateOperationsInput | string
     cancelled?: BoolFieldUpdateOperationsInput | boolean
@@ -514443,10 +514443,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     semesterId?: StringFieldUpdateOperationsInput | string
     cancelled?: BoolFieldUpdateOperationsInput | boolean
@@ -515899,10 +515899,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -516077,9 +516077,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -516121,10 +516121,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -516165,10 +516165,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -516200,9 +516200,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -516244,10 +516244,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -516288,10 +516288,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -541341,10 +541341,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -541376,10 +541376,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -541411,10 +541411,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     code: string
     name: string
-    startDate: Date | string
+    startDate?: Date | string | null
     endDate?: Date | string | null
     subjectId: string
-    schedule: $Enums.SubjectClassSchedule
+    schedule?: $Enums.SubjectClassSchedule | null
     maxStudent: number
     trainingObjectTypeId: string
     semesterId: string
@@ -541634,9 +541634,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -541678,10 +541678,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -541722,10 +541722,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -541757,9 +541757,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -541801,10 +541801,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -541845,10 +541845,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -541880,9 +541880,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -541924,10 +541924,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -541968,10 +541968,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -543458,9 +543458,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -543502,10 +543502,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -543546,10 +543546,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -547105,9 +547105,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     cancelled?: BoolFieldUpdateOperationsInput | boolean
     lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -547149,10 +547149,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string
@@ -547193,10 +547193,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subjectId?: StringFieldUpdateOperationsInput | string
-    schedule?: EnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule
+    schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
     maxStudent?: IntFieldUpdateOperationsInput | number
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
     semesterId?: StringFieldUpdateOperationsInput | string

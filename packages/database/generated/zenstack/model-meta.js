@@ -3636,6 +3636,7 @@ const metadata = {
                 }, startDate: {
                     name: "startDate",
                     type: "DateTime",
+                    isOptional: true,
                 }, endDate: {
                     name: "endDate",
                     type: "DateTime",
@@ -3656,6 +3657,7 @@ const metadata = {
                 }, schedule: {
                     name: "schedule",
                     type: "SubjectClassSchedule",
+                    isOptional: true,
                 }, maxStudent: {
                     name: "maxStudent",
                     type: "Int",
