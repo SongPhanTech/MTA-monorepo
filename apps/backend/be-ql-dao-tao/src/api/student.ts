@@ -68,7 +68,7 @@ const tongKetHocKyHVSV = createRoute({
     request: {
         query: z.object({
             semesterId: z.string().openapi('semesterId', {
-                description: 'ID của kì học',
+                description: 'ID của kỳ học',
             }),
         }),
     },
@@ -114,7 +114,7 @@ const dsKetQuaHocKySinhVienJson = createRoute({
     request: {
         query: z.object({
             semesterId: z.string().openapi('semesterId', {
-                description: 'ID của kì học',
+                description: 'ID của kỳ học',
             }),
             type: z
                 .enum([

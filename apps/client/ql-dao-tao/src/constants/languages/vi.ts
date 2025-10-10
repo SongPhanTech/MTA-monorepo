@@ -67,7 +67,7 @@ export default {
         EDIT: 'Sửa',
         DELETE: 'Xóa',
         VIEW: 'Xem',
-        BLOCK: 'Khóa',
+        BLOCK: 'Khoá',
         GEN_SQL: 'Sinh SQL',
         SET_PERMISSION: 'Phân quyền',
         RECENT_POSTS: 'Bài viết mới',
@@ -434,7 +434,7 @@ export default {
         USER_NOT_VERIFIED: 'Tài khoản chưa được xác thực',
         USER_NOT_FOUND: 'Không tìm thấy tài khoản',
         DELETE_USERS_SUCCESS: 'Thực hiện xóa nhiều thành viên thành công',
-        EDIT_BLOCK_USERS_SUCCESS: 'Thực hiện khóa nhiều thành viên thành công',
+        EDIT_BLOCK_USERS_SUCCESS: 'Thực hiện khoá nhiều thành viên thành công',
         EDIT_ACTIVE_USERS_SUCCESS: 'Thực hiện kích hoạt nhiều thành viên thành công',
 
         // config

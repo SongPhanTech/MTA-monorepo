@@ -463,7 +463,7 @@ export default function SubjectOpeningPlan() {
                                                 arr={record?.fixedClass.map((i: any) => {
                                                     return {
                                                         key: i?.fixedClassId,
-                                                        label: `Kì ${i.fixedClassSemester} - ${i.fixedClassCode} (${i.fixedClassCount})`,
+                                                        label: `Kỳ ${i.fixedClassSemester} - ${i.fixedClassCode} (${i.fixedClassCount})`,
                                                     }
                                                 })}
                                                 key="fixedClass"

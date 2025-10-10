@@ -495,7 +495,7 @@ export default function TeachingAssignment() {
                             <Row gutter={[16, 16]} align="top">
                                 <Col span={8}>
                                     <Select
-                                        placeholder="Chọn khóa"
+                                        placeholder="Chọn khoá"
                                         options={trainingCourseData.map((i) => {
                                             return {
                                                 value: i.id,

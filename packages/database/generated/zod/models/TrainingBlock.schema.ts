@@ -19,7 +19,13 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    parent: z.record(z.unknown()).optional(),
+    children: z.array(z.unknown()).optional(),
     curriculumVersions: z.array(z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    parentId: z.string().nullish(),
 }
 );
 
@@ -32,7 +38,7 @@ export const TrainingBlockScalarSchema = baseSchema;
 /**
  * `TrainingBlock` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const TrainingBlockSchema = TrainingBlockScalarSchema.merge(relationSchema.partial());
+export const TrainingBlockSchema = TrainingBlockScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -70,9 +76,7 @@ export const TrainingBlockCreateScalarSchema = baseSchema.partial({
 /**
  * `TrainingBlock` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const TrainingBlockCreateSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, priority: true
-});
+export const TrainingBlockCreateSchema = TrainingBlockCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -84,5 +88,5 @@ export const TrainingBlockUpdateScalarSchema = baseSchema.partial();
 /**
  * `TrainingBlock` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const TrainingBlockUpdateSchema = TrainingBlockUpdateScalarSchema;
+export const TrainingBlockUpdateSchema = TrainingBlockUpdateScalarSchema.merge(fkSchema.partial());
 

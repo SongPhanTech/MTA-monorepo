@@ -62,7 +62,7 @@ export default function UserProfilePageDs() {
     const [importModalVisible, setImportModalVisible] = useState(false)
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
-    const where:any = useMemo(
+    const where: any = useMemo(
         () => ({
             // ...(filters.trainingObjectTypes && {
             //     trainingObjectTypeId: { in: filters.trainingObjectTypes },
@@ -76,7 +76,9 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
-            ...((filters.name && filters.name !== '') || (filters.rank && filters.rank !== '') || (filters.phone && filters.phone !== '')
+            ...((filters.name && filters.name !== '') ||
+            (filters.rank && filters.rank !== '') ||
+            (filters.phone && filters.phone !== '')
                 ? {
                       userProfile: {
                           OR: [
@@ -562,7 +564,7 @@ export default function UserProfilePageDs() {
                                 },
                             },
                             {
-                                title: 'Khóa',
+                                title: 'Khoá',
                                 align: 'center',
                                 width: 100,
                                 dataIndex: 'trainingCourse',

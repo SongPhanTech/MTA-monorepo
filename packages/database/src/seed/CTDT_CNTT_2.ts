@@ -14,8 +14,8 @@ async function main() {
         data: [
             {
                 id: 'K57',
-                name: 'Khóa 57',
-                description: 'Khóa 57 Quân sự',
+                name: 'Khoá 57',
+                description: 'Khoá 57 Quân sự',
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 semesterStartId: '550e8409-e29b-41d4-a716-446655440000',

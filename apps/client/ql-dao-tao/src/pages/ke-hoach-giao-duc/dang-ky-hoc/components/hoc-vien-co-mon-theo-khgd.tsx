@@ -172,7 +172,7 @@ export default function StudentCourseByPlan({ subjectClassId }: StudentCourseByP
                                     checked={isShowAllStudents}
                                     onChange={(e) => setIsShowAllStudents(e.target.checked)}
                                 >
-                                    Học viên có môn theo kì học dự kiến
+                                    Học viên có môn theo kỳ học dự kiến
                                 </Checkbox>
                             </Form.Item>
                         </Col>
@@ -254,7 +254,7 @@ export default function StudentCourseByPlan({ subjectClassId }: StudentCourseByP
                             },
                         },
                         {
-                            title: 'Khóa',
+                            title: 'Khoá',
                             align: 'center',
                             width: 100,
                             render: (record) => {

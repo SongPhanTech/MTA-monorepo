@@ -97,7 +97,7 @@ const ModalPrintSupervisorGuide = () => {
                         <div className="mt-4 text-[20px]">Quyết định</div>
                         <div className="font-semibold normal-case text-[20px] leading-none mx-[100px]">
                             Về việc giao nhiệm vụ hướng dẫn đồ án tốt nghiệp đại học cho ... học
-                            viên kỹ sư quân sự Khóa ...
+                            viên kỹ sư quân sự Khoá ...
                         </div>
                         <hr className="border-t-[1px] border-black w-[240px] mx-auto" />
 
@@ -120,7 +120,7 @@ const ModalPrintSupervisorGuide = () => {
                     <div className="text-[18px] mt-8 leading-5">
                         <div className="indent-6">
                             <strong>Điều 1.</strong> Giao nhiệm vụ hướng dẫn đồ án tốt nghiệp cho
-                            ... học viên kỹ sư quân sự Khóa ... như sau:
+                            ... học viên kỹ sư quân sự Khoá ... như sau:
                         </div>
                         <div className="flex justify-center my-4 italic">
                             (Có ... phụ lục kèm theo)

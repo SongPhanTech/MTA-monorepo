@@ -107,7 +107,7 @@ export default function QuaTrinhDiDaoTaoBoiDuongForm({ expland, setExpland }: Do
                             render: (_, __, index) => index + 1,
                         },
                         {
-                            title: 'Khóa đào tạo, bồi dưỡng tập huấn',
+                            title: 'Khoá đào tạo, bồi dưỡng tập huấn',
                             align: 'center',
                             width: 180,
                             fixed: 'left',

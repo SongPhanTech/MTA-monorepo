@@ -19,7 +19,7 @@ const dataQuaTrinhDaoTao = [
     },
     {
         id: '2',
-        khoaDaoTaoBoiDuong: 'Khóa đào tạo chuyên sâu CNTT',
+        khoaDaoTaoBoiDuong: 'Khoá đào tạo chuyên sâu CNTT',
         donViToChuc: 'Đại học Bách Khoa Hà Nội',
         loai: 'Đào tạo',
         tuNgay: '15/06/2021',
@@ -91,7 +91,7 @@ export default function QuaTrinhDaoTaoTab() {
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Khóa đào tạo, bồi dưỡng tập huấn',
+                                title: 'Khoá đào tạo, bồi dưỡng tập huấn',
                                 dataIndex: 'khoaDaoTaoBoiDuong',
                                 align: 'center',
                                 width: 300,

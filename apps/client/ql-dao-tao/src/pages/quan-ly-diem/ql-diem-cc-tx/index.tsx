@@ -660,7 +660,7 @@ export default function SubjectClassScore() {
                                                     <Checkbox
                                                         disabled={profileId !== listUser?.P13}
                                                     >
-                                                        Khóa điểm CC/TX
+                                                        Khoá điểm CC/TX
                                                     </Checkbox>
                                                 </Form.Item>
 
@@ -672,7 +672,7 @@ export default function SubjectClassScore() {
                                                     <Checkbox
                                                         disabled={profileId !== listUser?.P13}
                                                     >
-                                                        Khóa điểm thi
+                                                        Khoá điểm thi
                                                     </Checkbox>
                                                 </Form.Item>
 

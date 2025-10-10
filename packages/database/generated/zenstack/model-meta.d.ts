@@ -9482,6 +9482,48 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                parent: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: string;
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                parentId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                children: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
                 curriculumVersions: {
                     name: string;
                     type: string;
@@ -9628,48 +9670,6 @@ declare const metadata: {
                     type: string;
                     isForeignKey: boolean;
                     relationField: string;
-                };
-                parent: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: ({
-                            name: string;
-                            value: string;
-                        } | {
-                            name: string;
-                            value: null[];
-                        })[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                parentId: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                children: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: string;
-                        }[];
-                    }[];
-                    backLink: string;
                 };
                 priority: {
                     name: string;

@@ -4950,6 +4950,26 @@ const metadata = {
                     name: "priority",
                     type: "Int",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                }, parent: {
+                    name: "parent",
+                    type: "TrainingBlock",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'children',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "parentId" },
+                }, parentId: {
+                    name: "parentId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'parent',
+                }, children: {
+                    name: "children",
+                    type: "TrainingBlock",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'parent',
                 }, curriculumVersions: {
                     name: "curriculumVersions",
                     type: "TrainingBlockOnCurriculumVersion",
@@ -5025,26 +5045,6 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'curriculumVersion',
-                }, parent: {
-                    name: "parent",
-                    type: "TrainingBlockOnCurriculumVersion",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'children',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "parentId" },
-                }, parentId: {
-                    name: "parentId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'parent',
-                }, children: {
-                    name: "children",
-                    type: "TrainingBlockOnCurriculumVersion",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'parent',
                 }, priority: {
                     name: "priority",
                     type: "Int",
