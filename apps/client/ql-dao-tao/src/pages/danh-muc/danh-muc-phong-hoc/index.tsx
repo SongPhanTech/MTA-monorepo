@@ -1,5 +1,4 @@
-import { CaretRightOutlined } from '@ant-design/icons'
-import TableCollapse from '@components/commons/tableCollapse'
+import { NestedCollapsibleTable, type NestedColumn } from '@components/commons/table-tree'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
@@ -7,17 +6,15 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Room } from '@workspace/db'
 import {
     useCountTrainingLocation,
     useFindManyDM_Tinh_New,
-    useFindManyTrainingLocation,
     useUpdateBuilding,
     useUpdateTrainingLocation,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Collapse, Empty, Flex, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, message, Row, Tag, Tooltip } from 'antd'
 import _ from 'lodash'
 import { Building2Icon } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -26,6 +23,133 @@ import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function TrainingLocationPage() {
+    const columns: NestedColumn<any>[] = [
+        {
+            title: 'Mã toà nhà',
+            dataIndex: 'code',
+            width: 200,
+            align: 'center',
+            type: 'input',
+        },
+        {
+            title: 'Tên toà nhà',
+            dataIndex: 'name',
+            align: 'center',
+            type: 'input',
+        },
+        {
+            title: 'Số tầng',
+            dataIndex: 'floor',
+            align: 'center',
+            type: 'order',
+        },
+        {
+            title: 'Số phòng',
+            align: 'center',
+            dataIndex: '',
+            type: 'order',
+            render: (_, record: any) => {
+                return record?.rooms?.length ?? 0
+            },
+        },
+        {
+            title: 'Mô tả',
+            align: 'center',
+            dataIndex: 'description',
+            render: (text) => text || '-',
+        },
+        {
+            title: 'Trạng thái',
+            align: 'center',
+            width: 130,
+            fixed: 'right',
+            dataIndex: 'active',
+            type: 'select',
+            options: [
+                {
+                    value: true,
+                    label: 'Đang hoạt động',
+                },
+                {
+                    value: false,
+                    label: 'Không hoạt động',
+                },
+            ],
+            render: (_, record) => {
+                return !record?.active ? (
+                    <Tag color="error">Không hoạt động</Tag>
+                ) : (
+                    <Tag color="success">Đang hoạt động</Tag>
+                )
+            },
+        },
+        {
+            title: 'Thao tác',
+            width: 100,
+            align: 'center',
+            fixed: 'right',
+            render: (_, { id, trainingLocationId, rooms }) => {
+                if (id && trainingLocationId) {
+                    return (
+                        <Row className="justify-center gap-2">
+                            {can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                'SUA'
+                            ) && (
+                                <EditIcon
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        openPutBuilding({
+                                            trainingLocationId: trainingLocationId,
+                                            id,
+                                        })
+                                    }}
+                                    className="text-sm text-blue-700 cursor-pointer"
+                                />
+                            )}
+                            {can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                'XEM'
+                            ) && (
+                                <ViewIcon
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        if (id && trainingLocationId) {
+                                            router.push(
+                                                `${ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC_PHONG_HOC_ID.replace('[id]', id)}?trainingLocationId=${trainingLocationId}`
+                                            )
+                                        }
+                                    }}
+                                    className="text-sm text-blue-700 cursor-pointer"
+                                />
+                            )}
+                            {can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                'XOA'
+                            ) &&
+                                !rooms.length && (
+                                    <DeleteIcon
+                                        popConfirm={{
+                                            onConfirm: (e) => {
+                                                // handleDeleteBuilding(
+                                                //     id,
+                                                //     trainingLocationId
+                                                // )
+                                                e?.stopPropagation()
+                                            },
+                                            onCancel: (e) => {
+                                                e?.stopPropagation()
+                                            },
+                                        }}
+                                        onClick={(e) => e.stopPropagation()}
+                                    />
+                                )}
+                        </Row>
+                    )
+                }
+            },
+        },
+    ]
     const { can, canSome } = useAbility()
     const router = useRouter()
     const [currentPage, setCurrentPage] = useState(1)
@@ -37,7 +161,7 @@ export default function TrainingLocationPage() {
         roomNumber: undefined,
     })
 
-    const { data: dM_Tinh_New } = useFindManyDM_Tinh_New({
+    const { data = [], refetch } = useFindManyDM_Tinh_New({
         include: {
             trainingLocation: {
                 include: {
@@ -50,38 +174,39 @@ export default function TrainingLocationPage() {
             },
         },
     })
-    const { data = [], refetch } = useFindManyTrainingLocation({
-        where: {
-            name: {
-                contains: filters.name,
-                mode: 'insensitive',
-            },
-            code: {
-                contains: filters.code,
-                mode: 'insensitive',
-            },
-            ...(filters.active?.length === 1
-                ? {
-                      subjectVersion: {
-                          some: { active: filters.active[0] },
-                      },
-                  }
-                : {}),
-        },
-        include: {
-            _count: true,
-            buildings: {
-                include: {
-                    rooms: true,
-                },
-            },
-        },
-        orderBy: {
-            createdAt: 'desc',
-        },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
+    console.log(data)
+    // const { data = [], refetch } = useFindManyTrainingLocation({
+    //     where: {
+    //         name: {
+    //             contains: filters.name,
+    //             mode: 'insensitive',
+    //         },
+    //         code: {
+    //             contains: filters.code,
+    //             mode: 'insensitive',
+    //         },
+    //         ...(filters.active?.length === 1
+    //             ? {
+    //                   subjectVersion: {
+    //                       some: { active: filters.active[0] },
+    //                   },
+    //               }
+    //             : {}),
+    //     },
+    //     include: {
+    //         _count: true,
+    //         buildings: {
+    //             include: {
+    //                 rooms: true,
+    //             },
+    //         },
+    //     },
+    //     orderBy: {
+    //         createdAt: 'desc',
+    //     },
+    //     take: numberOfPages,
+    //     skip: (currentPage - 1) * numberOfPages,
+    // })
     const { data: count } = useCountTrainingLocation({
         where: {
             name: {
@@ -129,11 +254,9 @@ export default function TrainingLocationPage() {
     const { mutateAsync: updateBuilding } = useUpdateBuilding()
     const provincesWithLocations = useMemo(() => {
         return (
-            dM_Tinh_New?.filter(
-                (tinh) => tinh.trainingLocation && tinh.trainingLocation.length > 0
-            ) || []
+            data?.filter((tinh) => tinh.trainingLocation && tinh.trainingLocation.length > 0) || []
         )
-    }, [dM_Tinh_New])
+    }, [data])
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -192,19 +315,6 @@ export default function TrainingLocationPage() {
 
     return (
         <div>
-            <style>
-                {`
-                .ant-collapse-header-text {
-                    flex: unset !important;
-                }
-                .ant-collapse-header {
-                    padding-bottom: 0px !important;
-                }
-                    .ant-collapse-content-box {
-                    padding-bottom: 0px !important;
-                }
-                `}
-            </style>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="end">
@@ -222,238 +332,80 @@ export default function TrainingLocationPage() {
                         </Col>
                     </Row>
                 </Col>
-                <Col span={24} className="mt-4">
-                    <Collapse
-                        accordion
-                        bordered={false}
-                        style={collapseStyle}
-                        expandIcon={({ isActive }) => (
-                            <CaretRightOutlined rotate={isActive ? 90 : 0} />
-                        )}
-                    >
-                        {provincesWithLocations.length > 0 ? (
-                            provincesWithLocations?.map((tinh) => (
-                                <Collapse.Panel
-                                    header={
-                                        <strong style={{ fontSize: '16px' }}>
-                                            {`${tinh.sTen} (${tinh.trainingLocation.length} địa điểm)`}
-                                        </strong>
-                                    }
-                                    key={tinh.Id}
-                                    style={panelStyle}
-                                >
-                                    <TableCollapse
-                                        rowKey="id"
-                                        headerTitleKey={({ code, name, buildings }) =>
-                                            `${[code, name].filter(Boolean).join(' - ')} (${buildings.length})`
-                                        }
-                                        childrenFieldName="buildings"
-                                        onRowClick={(record) => {
-                                            if (record.id) {
-                                                router.push(
-                                                    `${ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC_PHONG_HOC_ID.replace('[id]', record.id)}`
-                                                )
-                                            }
-                                        }}
-                                        headerRight={(record) => (
-                                            <Row className="justify-center gap-2 mr-2">
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
-                                                    'THEM'
-                                                ) && (
-                                                    <Tooltip title="Thêm tòa nhà">
-                                                        <Building2Icon
-                                                            className="text-yellow-700 cursor-pointer"
-                                                            size={16}
-                                                            onClick={openPutBuilding.bind(null, {
-                                                                trainingLocationId: record.id,
-                                                            })}
-                                                        />
-                                                    </Tooltip>
-                                                )}
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
-                                                    'SUA'
-                                                ) && (
-                                                    <EditIcon
-                                                        onClick={onOpen.bind(null, record.id)}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                )}
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
-                                                    'XOA'
-                                                ) && (
-                                                    <DeleteIcon
-                                                        popConfirm={{
-                                                            onConfirm: (e) => {
-                                                                handleDelete(record.id)
-                                                                e?.stopPropagation()
-                                                            },
-                                                            onCancel: (e) => {
-                                                                e?.stopPropagation()
-                                                            },
-                                                        }}
-                                                        onClick={(e) => e.stopPropagation()}
-                                                    />
-                                                )}
-                                            </Row>
+                <Col span={24} className="mt-2">
+                    <NestedCollapsibleTable
+                        data={provincesWithLocations}
+                        columns={columns}
+                        nestedKeys={['trainingLocation', 'buildings']}
+                        defaultExpandAllRows={false}
+                        rowKey={(record) => record.id || record.Id}
+                        getParentLabel={(record, level) => {
+                            if (level === 0) {
+                                return `${record.sMa} - ${record.sTen}`
+                            }
+                            if (level === 1) {
+                                return `${record.code} - ${record.name}`
+                            }
+                            return ''
+                        }}
+                        getParentCount={(record, level) => {
+                            if (level === 0) {
+                                return record.trainingLocation?.length ?? 0
+                            }
+                            if (level === 1) {
+                                return record.buildings?.length ?? 0
+                            }
+                            return 0
+                        }}
+                        renderParentActions={(record, level, parentIndex) => {
+                            if (parentIndex.length === 2 && parentIndex[1] === 'buildings') {
+                                return (
+                                    <Row className="justify-center gap-2 mr-2">
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                            'THEM'
+                                        ) && (
+                                            <Tooltip title="Thêm tòa nhà">
+                                                <Building2Icon
+                                                    className="text-yellow-700 cursor-pointer"
+                                                    size={16}
+                                                    onClick={openPutBuilding.bind(null, {
+                                                        trainingLocationId: record.id,
+                                                    })}
+                                                />
+                                            </Tooltip>
                                         )}
-                                        defaultExpandAll
-                                        currentPage={currentPage}
-                                        columns={[
-                                            {
-                                                title: 'Mã toà nhà',
-                                                dataIndex: 'code',
-                                                width: 200,
-                                                align: 'center',
-                                                type: 'input',
-                                            },
-                                            {
-                                                title: 'Tên toà nhà',
-                                                dataIndex: 'name',
-                                                align: 'center',
-                                                type: 'input',
-                                            },
-                                            {
-                                                title: 'Số tầng',
-                                                dataIndex: 'floor',
-                                                align: 'center',
-                                                type: 'order',
-                                            },
-                                            {
-                                                title: 'Số phòng',
-                                                align: 'center',
-                                                dataIndex: '',
-                                                type: 'order',
-                                                render: (__, record: { rooms?: Room[] }) => {
-                                                    return record?.rooms?.length ?? 0
-                                                },
-                                            },
-                                            {
-                                                title: 'Mô tả',
-                                                align: 'center',
-                                                dataIndex: 'description',
-                                            },
-                                            {
-                                                title: 'Trạng thái',
-                                                align: 'center',
-                                                width: 130,
-                                                fixed: 'right',
-                                                dataIndex: 'active',
-                                                type: 'select',
-                                                options: [
-                                                    {
-                                                        value: true,
-                                                        label: 'Đang hoạt động',
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                            'SUA'
+                                        ) && (
+                                            <EditIcon
+                                                onClick={onOpen.bind(null, record.id)}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                        )}
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: (e) => {
+                                                        handleDelete(record.id)
+                                                        e?.stopPropagation()
                                                     },
-                                                    {
-                                                        value: false,
-                                                        label: 'Không hoạt động',
+                                                    onCancel: (e) => {
+                                                        e?.stopPropagation()
                                                     },
-                                                ],
-                                                render: (__, record) => {
-                                                    return !record?.active ? (
-                                                        <Tag color="error">Không hoạt động</Tag>
-                                                    ) : (
-                                                        <Tag color="success">Đang hoạt động</Tag>
-                                                    )
-                                                },
-                                            },
-                                            {
-                                                title: 'Thao tác',
-                                                width: 100,
-                                                align: 'center',
-                                                fixed: 'right',
-                                                hidden: !canSome(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
-                                                    'THEM'
-                                                ),
-                                                render: (_, { id, trainingLocationId, rooms }) => {
-                                                    if (id && trainingLocationId) {
-                                                        return (
-                                                            <Row className="justify-center gap-2">
-                                                                {can(
-                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
-                                                                    'SUA'
-                                                                ) && (
-                                                                    <EditIcon
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation()
-                                                                            openPutBuilding({
-                                                                                trainingLocationId,
-                                                                                id,
-                                                                            })
-                                                                        }}
-                                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                                    />
-                                                                )}
-                                                                {can(
-                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
-                                                                    'XEM'
-                                                                ) && (
-                                                                    <ViewIcon
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation()
-                                                                            if (id) {
-                                                                                router.push(
-                                                                                    `${ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC_PHONG_HOC_ID.replace('[id]', id)}`
-                                                                                )
-                                                                            }
-                                                                        }}
-                                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                                    />
-                                                                )}
-                                                                {can(
-                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_PHONG_HOC,
-                                                                    'XOA'
-                                                                ) &&
-                                                                    !rooms.length && (
-                                                                        <DeleteIcon
-                                                                            popConfirm={{
-                                                                                onConfirm: (e) => {
-                                                                                    handleDeleteBuilding(
-                                                                                        id
-                                                                                    )
-                                                                                    e?.stopPropagation()
-                                                                                },
-                                                                                onCancel: (e) => {
-                                                                                    e?.stopPropagation()
-                                                                                },
-                                                                            }}
-                                                                            onClick={(e) =>
-                                                                                e.stopPropagation()
-                                                                            }
-                                                                        />
-                                                                    )}
-                                                            </Row>
-                                                        )
-                                                    }
-                                                    return ''
-                                                },
-                                            },
-                                        ]}
-                                        data={tinh.trainingLocation}
-                                        pagination={{
-                                            current: currentPage,
-                                            pageSize: numberOfPages,
-                                            total: count,
-                                            onChange: (page, pageSize) => {
-                                                if (numberOfPages === pageSize) {
-                                                    setCurrentPage(page)
-                                                } else {
-                                                    setCurrentPage(1)
-                                                    setNumberOfPages(pageSize)
-                                                }
-                                            },
-                                        }}
-                                    />
-                                </Collapse.Panel>
-                            ))
-                        ) : (
-                            <Empty />
-                        )}
-                    </Collapse>
+                                                }}
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
+                                        )}
+                                    </Row>
+                                )
+                            }
+                        }}
+                    />
                 </Col>
             </Row>
         </div>
