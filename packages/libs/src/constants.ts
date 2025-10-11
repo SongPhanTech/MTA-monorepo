@@ -76,6 +76,10 @@ export type QuestionTypeOption = {
 export const questionTypeLabels: Record<QuestionType, string> = {
     [QuestionType.ESSAY]: 'Tự luận',
     [QuestionType.ORAL]: 'Vấn đáp',
+    [QuestionType.SINGLE_CHOICE]: 'Một lựa chọn',
+    [QuestionType.MULTIPLE_CHOICE]: 'Nhiều lựa chọn',
+    [QuestionType.FILL_IN_BLANK]: 'Điền trống',
+    [QuestionType.ORDERING]: 'Sắp xếp',
 }
 
 export const questionTypeOptions: QuestionTypeOption[] = Object.entries(questionTypeLabels).map(
