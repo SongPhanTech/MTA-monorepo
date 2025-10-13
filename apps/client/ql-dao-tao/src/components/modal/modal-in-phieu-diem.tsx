@@ -472,7 +472,7 @@ const ModalPrintStudentSubjectScore = () => {
                                             : ''}
                                     </td>
                                     <td className="border border-black text-center">
-                                        {item?.student?.fixedClass?.name}
+                                        {item?.student?.fixedClass?.code}
                                     </td>
                                     <td className="border border-black text-center">
                                         {item?.attendanceScore}
