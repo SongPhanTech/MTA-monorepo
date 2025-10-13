@@ -228,10 +228,18 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
         tag: 'PutFixedClassModal',
     })
 
+    const { onOpen: onOpenChuyenLop } = useDisclosure({
+        tag: 'ModalChuyenLop',
+    })
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
         onOpen()
+    }
+
+    const handleModalChuyenLop = () => {
+        onOpenChuyenLop()
     }
 
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
@@ -263,7 +271,14 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify={'end'}>
                         <Col span={4}>
-                            <Flex justify="end" gap={4}>
+                            <Flex justify="end">
+                                <Button
+                                    className="mr-3"
+                                    type="primary"
+                                    onClick={handleModalChuyenLop}
+                                >
+                                    Chuyển lớp
+                                </Button>
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
                                     'THEM'

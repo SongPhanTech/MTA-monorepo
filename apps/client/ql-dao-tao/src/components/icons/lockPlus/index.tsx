@@ -9,12 +9,12 @@ type LockIconProps = {
     React.RefAttributes<HTMLSpanElement>
 
 const LockPlusIcon = ({ popConfirm, isLocked, ...props }: LockIconProps) => {
-    const Icon = isLocked ? UnlockOutlined : LockOutlined
+    const Icon = isLocked ? LockOutlined : UnlockOutlined
     const title = isLocked ? 'Mở khoá' : 'Khoá'
     const confirmTitle = isLocked ? 'Xác nhận mở khoá?' : 'Xác nhận khoá?'
     const description = isLocked
-        ? 'CTĐT toàn khoá này sẽ được mở khoá và có thể chỉnh sửa'
-        : 'CTĐT toàn khoá này sẽ bị khoá và không thể chỉnh sửa'
+        ? 'CTĐT toàn khoá này sẽ được mở khoá'
+        : 'CTĐT toàn khoá này sẽ bị khoá'
 
     return (
         <Tooltip title={title} placement="top">
@@ -27,7 +27,7 @@ const LockPlusIcon = ({ popConfirm, isLocked, ...props }: LockIconProps) => {
                 {...popConfirm}
             >
                 <Icon
-                    className={`text-sm cursor-pointer ${isLocked ? 'text-green-600' : 'text-orange-600'}`}
+                    className={`text-sm cursor-pointer ${isLocked ? 'text-red-600' : 'text-green-600'}`}
                     {...props}
                 />
             </Popconfirm>

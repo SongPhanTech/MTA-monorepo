@@ -19,19 +19,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import {
-    Button,
-    Checkbox,
-    Col,
-    Flex,
-    Form,
-    Input,
-    message,
-    Row,
-    Tag,
-    Tooltip,
-    Typography,
-} from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip, Typography } from 'antd'
 import _ from 'lodash'
 import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
@@ -59,7 +47,7 @@ export default function SubjectList() {
         numberOfReview: undefined,
         numberOfExam: undefined,
         numberOfOther: undefined,
-        // isTeaching: undefined,
+        isTeaching: undefined,
     })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: selectedTrainingObjectType } = useFindUniqueTrainingObjectType(
@@ -84,12 +72,12 @@ export default function SubjectList() {
             ...(filters.code && {
                 code: { contains: filters.code, mode: 'insensitive' as const },
             }),
-            // ...(filters.isTeaching !== undefined &&
-            //     filters.isTeaching.length === 1 && {
-            //         subjectClass: filters.isTeaching[0]
-            //             ? { some: { active: true, deletedAt: null } }
-            //             : { none: {} },
-            //     }),
+            ...(filters.isTeaching !== undefined &&
+                filters.isTeaching.length === 1 && {
+                    subjectClass: filters.isTeaching[0]
+                        ? { some: { active: true, deletedAt: null } }
+                        : { none: {} },
+                }),
         }
 
         return {
