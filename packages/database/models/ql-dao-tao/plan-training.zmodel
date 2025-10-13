@@ -643,8 +643,12 @@ model SubjectClass extends BaseNoCode {
   exam                       Exam?                 @relation(fields: [examId], references: [id])
   examId                     String?
 
-  scoreDeadline              DateTime? // hạn nhập điểm CC/TX: default 10 ngày trước ngày thi
-  examScoreDeadline          DateTime? // hạn nhập điểm thi: default 10 ngày sau ngày thi
+  /// ngày bắt dầu nhập điểm CC/TX
+  scoreDeadLineStart         DateTime? // default 20 ngày trước ngày thi
+  /// ngày kết thúc nhập điểm CC/TX
+  scoreDeadline              DateTime? // default 10 ngày trước ngày thi
+  /// hạn nhập điểm thi
+  examScoreDeadline          DateTime? // : default 10 ngày sau ngày thi
 
   enteredScore               Boolean               @default(false)
   enteredExamScore           Boolean               @default(false)

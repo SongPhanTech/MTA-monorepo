@@ -313,6 +313,24 @@ const metadata = {
                     name: "isAutoGraded",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, multipleChoiceOptions: {
+                    name: "multipleChoiceOptions",
+                    type: "MultipleChoiceOption",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'question',
+                }, fillInBlankSlots: {
+                    name: "fillInBlankSlots",
+                    type: "FillInBlankSlot",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'question',
+                }, orderingItems: {
+                    name: "orderingItems",
+                    type: "OrderingItem",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'question',
                 }, questionBank: {
                     name: "questionBank",
                     type: "QuestionBank",
@@ -373,6 +391,199 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                },
+            },
+        },
+        multipleChoiceOption: {
+            name: 'MultipleChoiceOption', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, questionId: {
+                    name: "questionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'question',
+                }, question: {
+                    name: "question",
+                    type: "Question",
+                    isDataModel: true,
+                    backLink: 'multipleChoiceOptions',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "questionId" },
+                }, content: {
+                    name: "content",
+                    type: "String",
+                }, isCorrect: {
+                    name: "isCorrect",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        fillInBlankSlot: {
+            name: 'FillInBlankSlot', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, questionId: {
+                    name: "questionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'question',
+                }, question: {
+                    name: "question",
+                    type: "Question",
+                    isDataModel: true,
+                    backLink: 'fillInBlankSlots',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "questionId" },
+                }, order: {
+                    name: "order",
+                    type: "Int",
+                }, correctAnswer: {
+                    name: "correctAnswer",
+                    type: "String",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, questionId_order: {
+                    name: "questionId_order",
+                    fields: ["questionId", "order"]
+                },
+            },
+        },
+        orderingItem: {
+            name: 'OrderingItem', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, questionId: {
+                    name: "questionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'question',
+                }, question: {
+                    name: "question",
+                    type: "Question",
+                    isDataModel: true,
+                    backLink: 'orderingItems',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "questionId" },
+                }, content: {
+                    name: "content",
+                    type: "String",
+                }, correctOrder: {
+                    name: "correctOrder",
+                    type: "Int",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, questionId_correctOrder: {
+                    name: "questionId_correctOrder",
+                    fields: ["questionId", "correctOrder"]
                 },
             },
         },
@@ -3524,6 +3735,10 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'exam',
+                }, scoreDeadLineStart: {
+                    name: "scoreDeadLineStart",
+                    type: "DateTime",
+                    isOptional: true,
                 }, scoreDeadline: {
                     name: "scoreDeadline",
                     type: "DateTime",
@@ -20849,6 +21064,7 @@ const metadata = {
 
     },
     deleteCascade: {
+        question: ['MultipleChoiceOption', 'FillInBlankSlot', 'OrderingItem'],
         exam: ['ExamFax'],
         examBank: ['ExamBankQuestion'],
         examSession: ['Answer'],

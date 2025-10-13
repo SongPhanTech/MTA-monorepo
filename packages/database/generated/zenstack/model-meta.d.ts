@@ -622,6 +622,27 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                multipleChoiceOptions: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                fillInBlankSlots: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                orderingItems: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
                 questionBank: {
                     name: string;
                     type: string;
@@ -730,6 +751,412 @@ declare const metadata: {
                     value?: undefined;
                 })[];
             }[];
+        };
+        multipleChoiceOption: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                questionId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                question: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    onDeleteAction: string;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                content: {
+                    name: string;
+                    type: string;
+                };
+                isCorrect: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                order: {
+                    name: string;
+                    type: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
+        };
+        fillInBlankSlot: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                questionId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                question: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    onDeleteAction: string;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                order: {
+                    name: string;
+                    type: string;
+                };
+                correctAnswer: {
+                    name: string;
+                    type: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+                questionId_order: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
+        };
+        orderingItem: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                questionId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                question: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    onDeleteAction: string;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                content: {
+                    name: string;
+                    type: string;
+                };
+                correctOrder: {
+                    name: string;
+                    type: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+                questionId_correctOrder: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
         };
         answer: {
             name: string;
@@ -6731,6 +7158,11 @@ declare const metadata: {
                     isOptional: boolean;
                     isForeignKey: boolean;
                     relationField: string;
+                };
+                scoreDeadLineStart: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
                 };
                 scoreDeadline: {
                     name: string;
@@ -39868,6 +40300,7 @@ declare const metadata: {
         };
     };
     deleteCascade: {
+        question: string[];
         exam: string[];
         examBank: string[];
         examSession: string[];

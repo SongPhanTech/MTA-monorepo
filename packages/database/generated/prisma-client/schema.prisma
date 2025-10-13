@@ -1445,7 +1445,11 @@ model SubjectClass {
   examType                   ExamType?
   exam                       Exam?                 @relation(fields: [examId], references: [id])
   examId                     String?
+  /// ngày bắt dầu nhập điểm CC/TX
+  scoreDeadLineStart         DateTime?
+  /// ngày kết thúc nhập điểm CC/TX
   scoreDeadline              DateTime?
+  /// hạn nhập điểm thi
   examScoreDeadline          DateTime?
   enteredScore               Boolean               @default(false)
   enteredExamScore           Boolean               @default(false)
