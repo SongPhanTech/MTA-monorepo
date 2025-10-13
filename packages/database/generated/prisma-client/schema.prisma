@@ -823,6 +823,38 @@ model ExamSession {
   @@schema("khao-thi")
 }
 
+model PlanTrainingDelay {
+  id           String           @id() @default(cuid())
+  active       Boolean          @default(true)
+  description  String?          @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @default(now()) @updatedAt()
+  semester     Semester         @relation(fields: [semesterId], references: [id])
+  semesterId   String
+  fixedClasses FixedClass[]
+  subjects     SubjectVersion[]
+
+  @@schema("ql-dao-tao")
+}
+
+model PlanTraining {
+  id                   String             @id() @default(cuid())
+  active               Boolean            @default(true)
+  description          String?            @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @default(now()) @updatedAt()
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+  semester             Semester           @relation(fields: [semesterId], references: [id])
+  semesterId           String
+  fixedClasses         FixedClass[]
+  subjects             SubjectVersion[]
+
+  @@schema("ql-dao-tao")
+}
+
 /// Điểm môn học SV - lớp môn học
 model StudentSubjectScore {
   id                           String                                     @id() @default(cuid())
@@ -979,6 +1011,8 @@ model Semester {
   disciplinaryWarning     DisciplinaryWarning[]
   studentAcademicDecision StudentAcademicDecision[]
   classRegisterSession    ClassRegisterSession[]
+  planTraining            PlanTraining[]
+  planTrainingDelay       PlanTrainingDelay[]
 
   @@unique([schoolYearId, semesterType])
   @@schema("ql-dao-tao")
@@ -1102,35 +1136,37 @@ model TrainingCourseRegulation {
 
 /// lớp quản lý
 model FixedClass {
-  id                       String             @id() @default(cuid())
-  code                     String?            @unique()
-  active                   Boolean            @default(true)
-  description              String?            @db.Text()
+  id                       String              @id() @default(cuid())
+  code                     String?             @unique()
+  active                   Boolean             @default(true)
+  description              String?             @db.Text()
   deletedAt                DateTime?
-  createdAt                DateTime           @default(now())
-  updatedAt                DateTime           @default(now()) @updatedAt()
+  createdAt                DateTime            @default(now())
+  updatedAt                DateTime            @default(now()) @updatedAt()
   name                     String
   summary                  String?
   startYear                Int?
-  graduated                Boolean?           @default(false)
-  classMonitor             Student?           @relation("ClassMonitor", fields: [classMonitorId], references: [id])
-  classMonitorId           String?            @unique()
-  unionLeader              Student?           @relation("UnionLeader", fields: [unionLeaderId], references: [id])
-  unionLeaderId            String?            @unique()
-  trainingCourse           TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
+  graduated                Boolean?            @default(false)
+  classMonitor             Student?            @relation("ClassMonitor", fields: [classMonitorId], references: [id])
+  classMonitorId           String?             @unique()
+  unionLeader              Student?            @relation("UnionLeader", fields: [unionLeaderId], references: [id])
+  unionLeaderId            String?             @unique()
+  trainingCourse           TrainingCourse      @relation(fields: [trainingCourseId], references: [id])
   trainingCourseId         String
-  managementOrganization   DM_DonVi?          @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?            @db.Uuid()
-  lecturerManagement       Lecturer?          @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
+  managementOrganization   DM_DonVi?           @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?             @db.Uuid()
+  lecturerManagement       Lecturer?           @relation(name: "ManageLecturer", fields: [lecturerManagementId], references: [id])
   lecturerManagementId     String?
-  staffManagement          Staff?             @relation(name: "ManageStaff", fields: [staffManagementId], references: [id])
+  staffManagement          Staff?              @relation(name: "ManageStaff", fields: [staffManagementId], references: [id])
   staffManagementId        String?
-  initSize                 Int                @default(0)
+  initSize                 Int                 @default(0)
   students                 Student[]
-  curriculumVersion        CurriculumVersion? @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersion        CurriculumVersion?  @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId      String?
   subjectClasses           SubjectClass[]
   notifications            Notification[]
+  plans                    PlanTraining[]
+  planDelays               PlanTrainingDelay[]
   surveyObjectTypes        SurveyObjectType[]
 
   @@unique([name, trainingCourseId, curriculumVersionId])
@@ -1299,6 +1335,8 @@ model SubjectVersion {
   studentSubjectScore      StudentSubjectScore[]
   documentFiles            DocumentFile[]
   questionBanks            QuestionBank[]
+  plans                    PlanTraining[]
+  planDelays               PlanTrainingDelay[]
 
   @@schema("ql-dao-tao")
 }
@@ -1550,6 +1588,7 @@ model TrainingObjectType {
   subjectClass         SubjectClass[]
   graduationSession    GraduationSession[]
   subjectVersion       SubjectVersion[]
+  planTraining         PlanTraining[]
 
   @@schema("ql-dao-tao")
 }

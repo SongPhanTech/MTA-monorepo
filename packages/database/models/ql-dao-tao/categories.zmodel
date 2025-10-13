@@ -39,8 +39,10 @@ model TrainingObjectType extends Base {
   subjectClass         SubjectClass[]
   graduationSession    GraduationSession[]
   subjectVersion       SubjectVersion[]
+  planTraining         PlanTraining[]
 
   @@schema("ql-dao-tao")
+
 }
 
 /// đối tượng ưu tiên

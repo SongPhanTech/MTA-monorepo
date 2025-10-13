@@ -20,6 +20,8 @@ export * from './ExamBank.schema';
 export * from './ExamBankQuestion.schema';
 export * from './ExamFax.schema';
 export * from './ExamSession.schema';
+export * from './PlanTrainingDelay.schema';
+export * from './PlanTraining.schema';
 export * from './StudentSubjectScore.schema';
 export * from './ArchivedCertificateOnStudentSubjectScore.schema';
 export * from './ArchivedCertificate.schema';

@@ -144,6 +144,12 @@ const NAVIGATION: NavigationType = {
                 icon: CalendarRange,
                 children: [
                     {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_LAP_KE_HOACH,
+                        label: 'Lập kế hoạch',
+                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_LAP_KE_HOACH,
+                        description: 'Lập kế hoạch',
+                    },
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
                         label: 'Mở lớp môn học',
                         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,

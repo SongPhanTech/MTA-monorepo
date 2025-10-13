@@ -72,7 +72,7 @@ export default function SubjectOpeningPlan() {
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
         },
-        { query: { enabled: !!semesterId } }
+        { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
     )
 
     const data = useMemo(

@@ -333,6 +333,27 @@ exports.Prisma.ExamSessionScalarFieldEnum = {
   examFaxId: 'examFaxId'
 };
 
+exports.Prisma.PlanTrainingDelayScalarFieldEnum = {
+  id: 'id',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  semesterId: 'semesterId'
+};
+
+exports.Prisma.PlanTrainingScalarFieldEnum = {
+  id: 'id',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  semesterId: 'semesterId'
+};
+
 exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -4016,6 +4037,19 @@ exports.Prisma.ExamSessionOrderByRelevanceFieldEnum = {
   examFaxId: 'examFaxId'
 };
 
+exports.Prisma.PlanTrainingDelayOrderByRelevanceFieldEnum = {
+  id: 'id',
+  description: 'description',
+  semesterId: 'semesterId'
+};
+
+exports.Prisma.PlanTrainingOrderByRelevanceFieldEnum = {
+  id: 'id',
+  description: 'description',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  semesterId: 'semesterId'
+};
+
 exports.Prisma.StudentSubjectScoreOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6558,6 +6592,8 @@ exports.Prisma.ModelName = {
   ExamBankQuestion: 'ExamBankQuestion',
   ExamFax: 'ExamFax',
   ExamSession: 'ExamSession',
+  PlanTrainingDelay: 'PlanTrainingDelay',
+  PlanTraining: 'PlanTraining',
   StudentSubjectScore: 'StudentSubjectScore',
   ArchivedCertificateOnStudentSubjectScore: 'ArchivedCertificateOnStudentSubjectScore',
   ArchivedCertificate: 'ArchivedCertificate',

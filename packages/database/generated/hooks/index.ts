@@ -20,6 +20,8 @@ export * from './exam-bank';
 export * from './exam-bank-question';
 export * from './exam-fax';
 export * from './exam-session';
+export * from './plan-training-delay';
+export * from './plan-training';
 export * from './student-subject-score';
 export * from './archived-certificate-on-student-subject-score';
 export * from './archived-certificate';

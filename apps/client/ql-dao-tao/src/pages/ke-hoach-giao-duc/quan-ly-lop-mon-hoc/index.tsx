@@ -115,7 +115,7 @@ export default function TeachingAssignment() {
 
     const { id: semesterId } = useSemesterStore()
     const [isEdit, setIsEdit] = useState(false)
-    const { options } = useExamTypeOptions()
+    const { options, getExamTypeLabel } = useExamTypeOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const canXemTatCa = can(
         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
@@ -732,7 +732,7 @@ export default function TeachingAssignment() {
                                     width: 100,
                                     align: 'center',
                                     render: (_, record) =>
-                                        canXemTatCa ? (
+                                        canXemTatCa && isEdit ? (
                                             <FormItem
                                                 form={form}
                                                 name={[
@@ -745,7 +745,6 @@ export default function TeachingAssignment() {
                                                     suffixIcon={null}
                                                     className="px-1"
                                                     placeholder="Chọn ngày"
-                                                    disabled={!isEdit}
                                                 />
                                             </FormItem>
                                         ) : record.lecturerAssignmentDeadline ? (
@@ -825,25 +824,27 @@ export default function TeachingAssignment() {
                                     align: 'center',
                                     type: 'input',
                                     dataIndex: 'mainLecturer',
-                                    render: (__, record) => (
-                                        <FormItem
-                                            form={form}
-                                            name={['subjectClass', record.id, 'lecturerId']}
-                                        >
-                                            <LectureTreeSelect
-                                                placeholder="Chọn giảng viên"
-                                                ignoreLectureIds={
-                                                    record?.extraLecturerId
-                                                        ? [record?.extraLecturerId]
-                                                        : []
-                                                }
-                                                organizationId={
-                                                    record?.subject?.managementOrganizationId
-                                                }
-                                                disabled={!isEdit}
-                                            />
-                                        </FormItem>
-                                    ),
+                                    render: (__, record) =>
+                                        isEdit ? (
+                                            <FormItem
+                                                form={form}
+                                                name={['subjectClass', record.id, 'lecturerId']}
+                                            >
+                                                <LectureTreeSelect
+                                                    placeholder="Chọn giảng viên"
+                                                    ignoreLectureIds={
+                                                        record?.extraLecturerId
+                                                            ? [record?.extraLecturerId]
+                                                            : []
+                                                    }
+                                                    organizationId={
+                                                        record?.subject?.managementOrganizationId
+                                                    }
+                                                />
+                                            </FormItem>
+                                        ) : (
+                                            (record?.mainLecturer?.userProfile?.fullname ?? '-')
+                                        ),
                                 },
                                 {
                                     title: 'Giảng viên 2',
@@ -851,23 +852,31 @@ export default function TeachingAssignment() {
                                     align: 'center',
                                     type: 'input',
                                     dataIndex: 'extraLecturer',
-                                    render: (__, record) => (
-                                        <FormItem
-                                            form={form}
-                                            name={['subjectClass', record.id, 'extraLecturerId']}
-                                        >
-                                            <LectureTreeSelect
-                                                placeholder="Chọn giảng viên"
-                                                ignoreLectureIds={
-                                                    record?.lecturerId ? [record?.lecturerId] : []
-                                                }
-                                                organizationId={
-                                                    record?.subject?.managementOrganizationId
-                                                }
-                                                disabled={!isEdit}
-                                            />
-                                        </FormItem>
-                                    ),
+                                    render: (__, record) =>
+                                        isEdit ? (
+                                            <FormItem
+                                                form={form}
+                                                name={[
+                                                    'subjectClass',
+                                                    record.id,
+                                                    'extraLecturerId',
+                                                ]}
+                                            >
+                                                <LectureTreeSelect
+                                                    placeholder="Chọn giảng viên"
+                                                    ignoreLectureIds={
+                                                        record?.lecturerId
+                                                            ? [record?.lecturerId]
+                                                            : []
+                                                    }
+                                                    organizationId={
+                                                        record?.subject?.managementOrganizationId
+                                                    }
+                                                />
+                                            </FormItem>
+                                        ) : (
+                                            (record?.extraLecturer?.userProfile?.fullname ?? '-')
+                                        ),
                                 },
                                 {
                                     title: 'Hình thức thi',
@@ -876,14 +885,19 @@ export default function TeachingAssignment() {
                                     width: 160,
                                     type: 'select',
                                     options: options,
-                                    render: (__, record) => (
-                                        <FormItem
-                                            form={form}
-                                            name={['subjectClass', record.id, 'examType']}
-                                        >
-                                            <Select options={options} disabled={!isEdit} />
-                                        </FormItem>
-                                    ),
+                                    render: (__, record) =>
+                                        isEdit ? (
+                                            <FormItem
+                                                form={form}
+                                                name={['subjectClass', record.id, 'examType']}
+                                            >
+                                                <Select options={options} disabled={!isEdit} />
+                                            </FormItem>
+                                        ) : record.examType ? (
+                                            getExamTypeLabel(record.examType)
+                                        ) : (
+                                            '-'
+                                        ),
                                 },
                                 // {
                                 //     title: 'Kíp học',
@@ -927,24 +941,27 @@ export default function TeachingAssignment() {
                                     title: 'Giảng viên nhập điểm',
                                     width: 200,
                                     align: 'center',
-                                    render: (__, record) => (
-                                        <FormItem
-                                            form={form}
-                                            name={[
-                                                'subjectClass',
-                                                record.id,
-                                                'enterGradeLecturerId',
-                                            ]}
-                                        >
-                                            <LectureTreeSelect
-                                                placeholder="Chọn giảng viên"
-                                                organizationId={
-                                                    record?.subject?.managementOrganizationId
-                                                }
-                                                disabled={!isEdit}
-                                            />
-                                        </FormItem>
-                                    ),
+                                    render: (__, record) =>
+                                        isEdit ? (
+                                            <FormItem
+                                                form={form}
+                                                name={[
+                                                    'subjectClass',
+                                                    record.id,
+                                                    'enterGradeLecturerId',
+                                                ]}
+                                            >
+                                                <LectureTreeSelect
+                                                    placeholder="Chọn giảng viên"
+                                                    organizationId={
+                                                        record?.subject?.managementOrganizationId
+                                                    }
+                                                />
+                                            </FormItem>
+                                        ) : (
+                                            (record?.enterGradeLecturer?.userProfile?.fullname ??
+                                            '-')
+                                        ),
                                 },
 
                                 // {
