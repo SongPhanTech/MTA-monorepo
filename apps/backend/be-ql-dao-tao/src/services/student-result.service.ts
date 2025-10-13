@@ -91,7 +91,7 @@ const ThongTinTichLuy = async (
     semesterStartDate: Date
 ) => {
     try {
-        // Học kỳ bắt đầu của sinh viên (căn cứ theo khóa)
+        // Học kỳ bắt đầu của sinh viên (căn cứ theo khoá)
         const hocKyBatDau = await prisma.trainingCourse.findFirst({
             where: {
                 id: trainingCourseId,
@@ -104,8 +104,8 @@ const ThongTinTichLuy = async (
         })
 
         if (!hocKyBatDau?.semesterStartId) {
-            console.error('Không tìm thấy học kỳ bắt đầu cho khóa học:', trainingCourseId)
-            throw new Error('Không tìm thấy học kỳ bắt đầu cho khóa học.')
+            console.error('Không tìm thấy học kỳ bắt đầu cho khoá học:', trainingCourseId)
+            throw new Error('Không tìm thấy học kỳ bắt đầu cho khoá học.')
         }
 
         // Đếm xem giữa học kỳ bắt đầu và học kỳ đầu vào (semesterId) có bao nhiêu học kỳ
@@ -677,7 +677,7 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
                     select: {
                         id: true,
                         curriculumVersionId: true, // Lấy ID phiên bản chương trình đào tạo
-                        trainingCourseId: true, // Lấy ID khóa học
+                        trainingCourseId: true, // Lấy ID khoá học
                         classMonitorId: true, // Lấy ID lớp trưởng
                         unionLeaderId: true, // Lấy ID bí thư
                         trainingCourse: {
@@ -718,10 +718,10 @@ export const calculateStudentSemesterResult = async (semesterId: string): Promis
         // Kiểm tra xem có kết quả sinh viên trong học kỳ này không
         studentsIDs.forEach(async (student) => {
             const existingResult = await checkStudentSemesterResult(semesterId, student.id)
-            // lấy khóa học
+            // lấy khoá học
             const trainingCourseId = student.fixedClass?.trainingCourseId
             if (!trainingCourseId) {
-                console.log(`Không tìm thấy khóa học cho sinh viên ${student.id}`)
+                console.log(`Không tìm thấy khoá học cho sinh viên ${student.id}`)
                 return
             }
             // Lấy thông tin tích lũy của sinh viên
@@ -1655,10 +1655,10 @@ const getStudentResult = async (
             throw new Error(
                 `Không tìm thấy kết quả học kỳ cho sinh viên ${student.id} trong học kỳ ${semesterId}`
             )
-        // Lấy khóa học của sinh viên
+        // Lấy khoá học của sinh viên
         const trainingCourseId = studentSemesterResult.student.fixedClass?.trainingCourseId
         if (!trainingCourseId)
-            throw new Error(`Không tìm thấy khóa học cho sinh viên ${student.id}`)
+            throw new Error(`Không tìm thấy khoá học cho sinh viên ${student.id}`)
         // Kiểm tra loại kết quả cần lấy
         const scholarshipInfo =
             type === 'scholarship'
@@ -1771,14 +1771,14 @@ export const resultCourseStudentResult = async (
 ): Promise<CourseStudentResult[]> => {
     const courseMap: Record<string, CourseStudentResult> = {}
 
-    // DS khóa học
+    // DS khoá học
     const courseIds = new Set(students.map((student) => student.khoaId))
     console.log('courseIds', courseIds)
 
     // Ds tiêu chí học bổng
     const semesterScholarship = await prisma.scholarship.findMany({
         where: {
-            trainingCourseId: { in: Array.from(courseIds) }, // Lấy học bổng theo khóa học
+            trainingCourseId: { in: Array.from(courseIds) }, // Lấy học bổng theo khoá học
             deletedAt: null,
             active: true,
         },
@@ -1901,7 +1901,7 @@ export const resultCourseStudentResult = async (
             courseMap[courseId].students.push(studentResult)
         })
     )
-    // bỏ các khóa học không có sinh viên
+    // bỏ các khoá học không có sinh viên
     for (const courseId in courseMap) {
         if (courseMap[courseId] && courseMap[courseId].students.length === 0) {
             delete courseMap[courseId]
@@ -1978,7 +1978,7 @@ const checkStudentResultForRepeatGrade = async (
 
         if (!scoreToRetainList) {
             throw new Error(
-                `Không tìm thấy khóa học nào để xét điểm lưu ban cho sinh viên trong học kỳ ${semesterId}`
+                `Không tìm thấy khoá học nào để xét điểm lưu ban cho sinh viên trong học kỳ ${semesterId}`
             )
         }
 
@@ -2080,7 +2080,7 @@ const SaveStudentRepeatGrade = async (
 
         if (!scoreToRetainList) {
             throw new Error(
-                `Không tìm thấy khóa học nào để xét điểm lưu ban cho sinh viên trong học kỳ ${semesterId}`
+                `Không tìm thấy khoá học nào để xét điểm lưu ban cho sinh viên trong học kỳ ${semesterId}`
             )
         }
 

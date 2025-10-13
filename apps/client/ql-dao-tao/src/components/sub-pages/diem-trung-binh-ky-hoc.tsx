@@ -369,7 +369,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 align: 'center',
                             },
                             {
-                                title: 'Học kỳ thứ.../ toàn khóa',
+                                title: 'Học kỳ thứ.../ toàn khoá',
                                 dataIndex: ['studentSemesterResult', '0', 'semesterIndexInCourse'],
                                 width: 120,
                                 align: 'center',

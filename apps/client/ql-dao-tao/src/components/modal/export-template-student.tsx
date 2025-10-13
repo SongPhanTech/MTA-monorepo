@@ -166,7 +166,7 @@ const ExportTemplateStudent = () => {
         worksheet.getCell('H6').value = 'Đại học quân sự'
         worksheet.getCell('H6').style = headerSubtitleStyleLeft
 
-        worksheet.getCell('G7').value = 'Khóa học:'
+        worksheet.getCell('G7').value = 'Khoá học:'
         worksheet.getCell('G7').style = headerStyleNormal
 
         worksheet.getCell('H7').value = 'Khoá 59'

@@ -67,7 +67,7 @@ export default function RegisterClass() {
     }
 
     return (
-        <Row gutter={[16, 0]}>
+        <Row gutter={[1, 0]}>
             <Col span={24} className="!p-0">
                 <Flex>
                     <Col span={activeLeftTab === '3' ? 24 : 14}>
@@ -81,7 +81,6 @@ export default function RegisterClass() {
                             </Tabs>
                         </div>
                     </Col>
-
                     {activeLeftTab !== '3' && (
                         <Col span={10}>
                             <div className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4">

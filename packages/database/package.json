@@ -8,6 +8,7 @@
         "db:sync": "zenstack generate && prisma db push --skip-generate"
     },
     "exports": {
+        "./client": "./src/client/index.ts",
         ".": "./src/index.ts",
         "./sql": "./src/typedSql.ts",
         "./zod": "./generated/zod/index.ts",

@@ -10,11 +10,11 @@ type LockIconProps = {
 
 const LockPlusIcon = ({ popConfirm, isLocked, ...props }: LockIconProps) => {
     const Icon = isLocked ? UnlockOutlined : LockOutlined
-    const title = isLocked ? 'Mở khóa' : 'Khóa'
-    const confirmTitle = isLocked ? 'Xác nhận mở khóa?' : 'Xác nhận khóa?'
+    const title = isLocked ? 'Mở khoá' : 'Khoá'
+    const confirmTitle = isLocked ? 'Xác nhận mở khoá?' : 'Xác nhận khoá?'
     const description = isLocked
-        ? 'CTĐT toàn khóa này sẽ được mở khóa và có thể chỉnh sửa'
-        : 'CTĐT toàn khóa này sẽ bị khóa và không thể chỉnh sửa'
+        ? 'CTĐT toàn khoá này sẽ được mở khoá và có thể chỉnh sửa'
+        : 'CTĐT toàn khoá này sẽ bị khoá và không thể chỉnh sửa'
 
     return (
         <Tooltip title={title} placement="top">

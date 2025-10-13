@@ -186,6 +186,46 @@ exports.Prisma.QuestionScalarFieldEnum = {
   difficultyId: 'difficultyId'
 };
 
+exports.Prisma.MultipleChoiceOptionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  questionId: 'questionId',
+  content: 'content',
+  isCorrect: 'isCorrect',
+  order: 'order'
+};
+
+exports.Prisma.FillInBlankSlotScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  questionId: 'questionId',
+  order: 'order',
+  correctAnswer: 'correctAnswer'
+};
+
+exports.Prisma.OrderingItemScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  questionId: 'questionId',
+  content: 'content',
+  correctOrder: 'correctOrder'
+};
+
 exports.Prisma.AnswerScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -588,6 +628,7 @@ exports.Prisma.SubjectVersionScalarFieldEnum = {
   codeTkb: 'codeTkb',
   examType: 'examType',
   type: 'type',
+  onePoint: 'onePoint',
   credit: 'credit',
   week: 'week',
   period: 'period',
@@ -936,7 +977,8 @@ exports.Prisma.TrainingBlockScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   name: 'name',
-  priority: 'priority'
+  priority: 'priority',
+  parentId: 'parentId'
 };
 
 exports.Prisma.TrainingBlockOnCurriculumVersionScalarFieldEnum = {
@@ -949,7 +991,6 @@ exports.Prisma.TrainingBlockOnCurriculumVersionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   trainingBlockId: 'trainingBlockId',
   curriculumVersionId: 'curriculumVersionId',
-  parentId: 'parentId',
   priority: 'priority',
   electiveCreditsRequired: 'electiveCreditsRequired'
 };
@@ -3889,6 +3930,30 @@ exports.Prisma.QuestionOrderByRelevanceFieldEnum = {
   difficultyId: 'difficultyId'
 };
 
+exports.Prisma.MultipleChoiceOptionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  questionId: 'questionId',
+  content: 'content'
+};
+
+exports.Prisma.FillInBlankSlotOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  questionId: 'questionId',
+  correctAnswer: 'correctAnswer'
+};
+
+exports.Prisma.OrderingItemOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  questionId: 'questionId',
+  content: 'content'
+};
+
 exports.Prisma.AnswerOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -4325,7 +4390,8 @@ exports.Prisma.TrainingBlockOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  name: 'name'
+  name: 'name',
+  parentId: 'parentId'
 };
 
 exports.Prisma.TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum = {
@@ -4333,8 +4399,7 @@ exports.Prisma.TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   trainingBlockId: 'trainingBlockId',
-  curriculumVersionId: 'curriculumVersionId',
-  parentId: 'parentId'
+  curriculumVersionId: 'curriculumVersionId'
 };
 
 exports.Prisma.TrainingTimeOrderByRelevanceFieldEnum = {
@@ -6121,7 +6186,11 @@ exports.ConfigKey = exports.$Enums.ConfigKey = {
 
 exports.QuestionType = exports.$Enums.QuestionType = {
   ESSAY: 'ESSAY',
-  ORAL: 'ORAL'
+  ORAL: 'ORAL',
+  SINGLE_CHOICE: 'SINGLE_CHOICE',
+  MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
+  FILL_IN_BLANK: 'FILL_IN_BLANK',
+  ORDERING: 'ORDERING'
 };
 
 exports.ExamStatus = exports.$Enums.ExamStatus = {
@@ -6147,9 +6216,6 @@ exports.AcademicRankingBaseType = exports.$Enums.AcademicRankingBaseType = {
 
 exports.ExamType = exports.$Enums.ExamType = {
   OfflineWritten: 'OfflineWritten',
-  OnlineWritten: 'OnlineWritten',
-  OfflineChoices: 'OfflineChoices',
-  OnlineChoices: 'OnlineChoices',
   Oral: 'Oral',
   Practice: 'Practice',
   Project: 'Project',
@@ -6158,6 +6224,7 @@ exports.ExamType = exports.$Enums.ExamType = {
 
 exports.SubjectVersionType = exports.$Enums.SubjectVersionType = {
   Normal: 'Normal',
+  Internship: 'Internship',
   Research: 'Research',
   Project: 'Project'
 };
@@ -6480,6 +6547,9 @@ exports.Prisma.ModelName = {
   Difficulty: 'Difficulty',
   KnowledgeBlock: 'KnowledgeBlock',
   Question: 'Question',
+  MultipleChoiceOption: 'MultipleChoiceOption',
+  FillInBlankSlot: 'FillInBlankSlot',
+  OrderingItem: 'OrderingItem',
   Answer: 'Answer',
   Exam: 'Exam',
   TestStructureRule: 'TestStructureRule',

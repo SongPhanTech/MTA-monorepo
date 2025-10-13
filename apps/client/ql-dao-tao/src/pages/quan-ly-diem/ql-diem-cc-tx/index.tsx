@@ -1,7 +1,9 @@
 import FormItem from '@components/commons/form-item'
 import ImportScoreModal from '@components/commons/print/nhap-diem-tu-file'
+import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -37,7 +39,7 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Ellipsis, FileUp, Save } from 'lucide-react'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 type PutStudentSubjectScore = StudentSubjectScore & {}
 type FilterTable = FilterProps & {
@@ -69,7 +71,7 @@ export default function SubjectClassScore() {
     const [open, setOpen] = useState(false)
     const subjectClassId = router.query?.subjectClassId as string
     const [importModalVisible, setImportModalVisible] = useState(false)
-    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+    const [listChange, setListChange] = useState<string[]>([])
     const [filterTable, setFilterTable] = useState<FilterTable>({
         fullname: '',
         fixedClassName: '',
@@ -106,9 +108,7 @@ export default function SubjectClassScore() {
                     i?.attendanceScore > 10 ||
                     i?.attendanceScore < 0 ||
                     i?.midtermScore > 10 ||
-                    i?.midtermScore < 0 ||
-                    i?.examScore > 10 ||
-                    i?.examScore < 0
+                    i?.midtermScore < 0 
             )
             if (error) {
                 message.error('Bạn chưa nhập đúng điểm số')
@@ -171,7 +171,7 @@ export default function SubjectClassScore() {
                 message.success('Đã cập nhật điểm thi thành công!')
                 debouncedRefetch()
             }
-            setHasUnsavedChanges(false)
+            setListChange([])
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -204,13 +204,13 @@ export default function SubjectClassScore() {
             where: {
                 ...(semesterId ? { semesterId } : {}),
                 ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
-                // ...(!canReadAll
-                //     ? {
-                //           mainLecturer: {
-                //               userProfileId: profileId,
-                //           },
-                //       } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
-                //     : {}),
+                ...(!canReadAll
+                    ? {
+                          mainLecturer: {
+                              userProfileId: profileId,
+                          },
+                      } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
+                    : {}),
                 deletedAt: null,
                 active: true,
                 cancelled: false,
@@ -418,6 +418,8 @@ export default function SubjectClassScore() {
         { refetchOnWindowFocus: false }
     )
 
+        const selectedClassInfo = subjectClassData.find((item) => item.id === subjectClassId)
+
     // const statistics = getScoreStatistics(dataTable)
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen)
@@ -464,6 +466,18 @@ export default function SubjectClassScore() {
     }
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    const disabledForm: boolean = useMemo(() => {
+        return !(
+            (can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
+                dataDetailSubjectClass?.scoreDeadline &&
+                dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
+                !dataDetailSubjectClass?.isLockScore &&
+                profileId !== listUser.P13) ||
+            false
+        )
+    }, [dataDetailSubjectClass, subjectClassId])
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         if (subjectClassId) {
             form.setFieldsValue({
@@ -479,36 +493,30 @@ export default function SubjectClassScore() {
     useEffect(() => {
         if (subjectClassId) {
             console.log('subjectClassId', subjectClassId)
-
+            setListChange([])
             // setSubjectClassIdSelected(subjectClassId as string)
         }
     }, [subjectClassId])
 
     useEffect(() => {
-        if (!hasUnsavedChanges) return
+        if (listChange.length > 0) {
+            const handleRouteChange = (url: string) => {
+                if (
+                    router.pathname !== url &&
+                    !confirm('Bạn có thay đổi chưa được lưu. Bạn có chắc muốn rời đi?')
+                ) {
+                    router.events.emit('routeChangeError')
+                    throw 'Route change aborted'
+                }
+            }
 
-        const handleRouteChange = (url: string) => {
-            if (
-                router.pathname !== url &&
-                !confirm('Bạn có thay đổi chưa được lưu. Bạn có chắc muốn rời đi?')
-            ) {
-                router.events.emit('routeChangeError')
-                throw 'Route change aborted'
+            router.events.on('routeChangeStart', handleRouteChange)
+
+            return () => {
+                router.events.off('routeChangeStart', handleRouteChange)
             }
         }
-
-        router.events.on('routeChangeStart', handleRouteChange)
-
-        return () => {
-            router.events.off('routeChangeStart', handleRouteChange)
-        }
-    }, [
-        hasUnsavedChanges,
-        router.events.emit,
-        router.events.off,
-        router.events.on,
-        router.pathname,
-    ])
+    }, [listChange, router.events.emit, router.events.off, router.events.on, router.pathname])
 
     return (
         <div className="bg-white">
@@ -517,7 +525,7 @@ export default function SubjectClassScore() {
             ) : (
                 <Row gutter={[16, 16]}>
                     <Col span={24}>
-                        <Col span={8}>
+                        <Col span={6}>
                             <Form.Item name="searchText">
                                 <Select
                                     placeholder="Chọn lớp môn học"
@@ -530,7 +538,7 @@ export default function SubjectClassScore() {
                                     })}
                                     defaultValue={subjectClassId}
                                     onChange={(value) => {
-                                        setHasUnsavedChanges(false)
+                                        setListChange([])
                                         router.push(
                                             `/quan-ly-diem/ql-diem-cc-tx?subjectClassId=${value}`
                                         )
@@ -575,18 +583,23 @@ export default function SubjectClassScore() {
                                                                 'NHAP_EXCEL'
                                                             ) && (
                                                                 <>
-                                                                    <Button
-                                                                        onClick={() =>
-                                                                            setImportModalVisible(
-                                                                                true
-                                                                            )
-                                                                        }
-                                                                        disabled={!subjectClassId}
-                                                                        className="w-full flex justify-start"
-                                                                    >
-                                                                        <FileUp />
-                                                                        Nhập điểm từ file
-                                                                    </Button>
+                                                                    {!disabledForm && !dataDetailSubjectClass.enteredScore && (
+                                                                        <Button
+                                                                            onClick={() =>
+                                                                                setImportModalVisible(
+                                                                                    true
+                                                                                )
+                                                                            }
+                                                                            disabled={
+                                                                                !subjectClassId
+                                                                            }
+                                                                            className="w-full flex justify-start"
+                                                                        >
+                                                                            <FileUp />
+                                                                            Nhập điểm từ file
+                                                                        </Button>
+                                                                    )}
+
                                                                     <ImportScoreModal
                                                                         visible={importModalVisible}
                                                                         onCancel={() =>
@@ -601,15 +614,18 @@ export default function SubjectClassScore() {
                                                                     />
                                                                 </>
                                                             )}
-                                                            {/* {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                                    'XUAT_EXCEL'
-                                                ) && (
-                                                    <ExportScoreTemplate
-                                                        selectedFixedClass={selectedFixedClass}
-                                                        dataTable={dataTable}
-                                                    />
-                                                )} */}
+                                                            {can(
+                                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                                'XUAT_EXCEL'
+                                                            ) && (
+                                                                <ExportScoreTemplate
+                                                                    selectedFixedClass={
+                                                                        subjectClassId
+                                                                    }
+                                                                    dataTable={dataTable}
+                                                                    type="cc-tx"
+                                                                />
+                                                            )}
                                                         </Flex>
                                                     }
                                                     trigger="click"
@@ -623,20 +639,20 @@ export default function SubjectClassScore() {
                                                     </Button>
                                                 </Popover>
                                             )}
-                                            {/* {can(
+                                            {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                                     'IN_DS_THI'
                                 ) &&
                                     !!dataDetailSubjectClass?.enteredScore && (
                                         <ExportTemplateExam
-                                            selectedFixedClass={selectedFixedClass}
+                                            selectedFixedClass={subjectClassId}
                                             dataClass={selectedClassInfo}
                                             dataTable={dataTable}
                                         />
-                                    )} */}
+                                    )}
 
                                             <Button
-                                                disabled={!hasUnsavedChanges}
+                                                disabled={!listChange.length}
                                                 type="primary"
                                                 onClick={handleSave}
                                             >
@@ -660,7 +676,7 @@ export default function SubjectClassScore() {
                                                     <Checkbox
                                                         disabled={profileId !== listUser?.P13}
                                                     >
-                                                        Khóa điểm CC/TX
+                                                        Khoá điểm CC/TX
                                                     </Checkbox>
                                                 </Form.Item>
 
@@ -672,7 +688,7 @@ export default function SubjectClassScore() {
                                                     <Checkbox
                                                         disabled={profileId !== listUser?.P13}
                                                     >
-                                                        Khóa điểm thi
+                                                        Khoá điểm thi
                                                     </Checkbox>
                                                 </Form.Item>
 
@@ -720,16 +736,7 @@ export default function SubjectClassScore() {
                                             )}
                                         </div>
                                     )} */}
-                                    <Form
-                                        form={form}
-                                        onValuesChange={() => {
-                                            const current = form.getFieldsValue()
-                                            const changed =
-                                                JSON.stringify(current.list || []) !==
-                                                JSON.stringify(dataTable)
-                                            setHasUnsavedChanges(changed)
-                                        }}
-                                    >
+                                    <Form form={form}>
                                         <FormItem form={form} name="list">
                                             <Table
                                                 rowKey="id"
@@ -795,21 +802,6 @@ export default function SubjectClassScore() {
                                                         align: 'center',
                                                         type: 'order',
                                                         render: (_, record, index: number) => {
-                                                            const isEditable =
-                                                                can(
-                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                                                    'NHAP_DIEM'
-                                                                ) &&
-                                                                record.subjectClass
-                                                                    ?.scoreDeadline &&
-                                                                dayjs().isBefore(
-                                                                    record.subjectClass
-                                                                        .scoreDeadline
-                                                                )
-                                                            const openClock =
-                                                                record.subjectClass?.isLockScore
-
-                                                            // if (isEditable && openClock) {
                                                             return (
                                                                 <Form.Item
                                                                     className="w-full mb-0"
@@ -852,17 +844,78 @@ export default function SubjectClassScore() {
                                                                     ]}
                                                                 >
                                                                     <InputNumber
-                                                                        disabled={
-                                                                            !(
-                                                                                isEditable &&
-                                                                                !openClock
-                                                                            )
-                                                                        }
+                                                                        disabled={disabledForm}
                                                                         min={0}
                                                                         id={`score-cc-${record.id}`}
-                                                                        style={{ width: '100%' }}
-                                                                        step={0.5}
+                                                                        style={{
+                                                                            width: '100%',
+                                                                            borderColor:
+                                                                                listChange.includes(
+                                                                                    `${index}-cc`
+                                                                                )
+                                                                                    ? '#e2770ce0'
+                                                                                    : '',
+                                                                        }}
+                                                                        step={0}
                                                                         controls={false}
+                                                                        onChange={(value) => {
+                                                                            const currentList =
+                                                                                form.getFieldValue(
+                                                                                    'list'
+                                                                                ) || []
+                                                                            const oldValue =
+                                                                                record?.attendanceScore
+
+                                                                            if (
+                                                                                Number(value) <=
+                                                                                record?.student
+                                                                                    ?.fixedClass
+                                                                                    ?.trainingCourse
+                                                                                    ?.scoreToTakeExam
+                                                                            ) {
+                                                                                currentList[
+                                                                                    index
+                                                                                ].examBanned = true
+                                                                                form.setFieldsValue(
+                                                                                    {
+                                                                                        list: [
+                                                                                            ...currentList,
+                                                                                        ],
+                                                                                    }
+                                                                                )
+                                                                            }
+
+                                                                            setListChange(
+                                                                                (prev) => {
+                                                                                    const isChanged =
+                                                                                        Number(
+                                                                                            value
+                                                                                        ) !==
+                                                                                            Number(
+                                                                                                oldValue
+                                                                                            ) &&
+                                                                                        Number(
+                                                                                            value
+                                                                                        ) < 10 &&
+                                                                                        Number(
+                                                                                            value
+                                                                                        ) %
+                                                                                            0.5 ===
+                                                                                            0
+                                                                                    if (isChanged) {
+                                                                                        return [
+                                                                                            ...prev,
+                                                                                            `${index}-cc`,
+                                                                                        ]
+                                                                                    }
+                                                                                    return prev.filter(
+                                                                                        (i) =>
+                                                                                            i !==
+                                                                                            `${index}-cc`
+                                                                                    )
+                                                                                }
+                                                                            )
+                                                                        }}
                                                                         // status={isInvalid ? 'error' : undefined}
                                                                         onKeyDown={(e) =>
                                                                             handleScoreInputKeyDown(
@@ -876,8 +929,6 @@ export default function SubjectClassScore() {
                                                                 </Form.Item>
                                                             )
                                                         },
-                                                        // return Score !== null ? <span>{Score}</span> : null
-                                                        // },
                                                     },
                                                     // #region Điểm TX
                                                     {
@@ -887,19 +938,6 @@ export default function SubjectClassScore() {
                                                         align: 'center',
                                                         type: 'order',
                                                         render: (_, record, index: number) => {
-                                                            const isEditable =
-                                                                can(
-                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                                                    'NHAP_DIEM'
-                                                                ) &&
-                                                                record.subjectClass
-                                                                    ?.scoreDeadline &&
-                                                                dayjs().isBefore(
-                                                                    record.subjectClass
-                                                                        .scoreDeadline
-                                                                )
-                                                            const openClock =
-                                                                record.subjectClass?.isLockScore
                                                             return (
                                                                 <Form.Item
                                                                     className="w-full mb-0"
@@ -941,18 +979,79 @@ export default function SubjectClassScore() {
                                                                     ]}
                                                                 >
                                                                     <InputNumber
-                                                                        disabled={
-                                                                            !(
-                                                                                isEditable &&
-                                                                                !openClock
-                                                                            )
-                                                                        }
+                                                                        disabled={disabledForm}
                                                                         min={0}
                                                                         id={`score-tx-${record.id}`}
-                                                                        style={{ width: '100%' }}
-                                                                        step={0.5}
+                                                                        style={{
+                                                                            width: '100%',
+                                                                            borderColor:
+                                                                                listChange.includes(
+                                                                                    `${index}-tx`
+                                                                                )
+                                                                                    ? '#e2770ce0'
+                                                                                    : '',
+                                                                        }}
+                                                                        step={0}
                                                                         controls={false}
-                                                                        // status={isInvalid ? 'error' : undefined}
+                                                                        onChange={(value) => {
+                                                                            const currentList =
+                                                                                form.getFieldValue(
+                                                                                    'list'
+                                                                                ) || []
+                                                                            const oldValue =
+                                                                                record?.attendanceScore
+
+                                                                            if (
+                                                                                Number(value) <=
+                                                                                record?.student
+                                                                                    ?.fixedClass
+                                                                                    ?.trainingCourse
+                                                                                    ?.scoreToTakeExam
+                                                                            ) {
+                                                                                currentList[
+                                                                                    index
+                                                                                ].examBanned = true
+                                                                                form.setFieldsValue(
+                                                                                    {
+                                                                                        list: [
+                                                                                            ...currentList,
+                                                                                        ],
+                                                                                    }
+                                                                                )
+                                                                            }
+
+                                                                            setListChange(
+                                                                                (prev) => {
+                                                                                    const isChanged =
+                                                                                        Number(
+                                                                                            value
+                                                                                        ) !==
+                                                                                            Number(
+                                                                                                oldValue
+                                                                                            ) &&
+                                                                                        Number(
+                                                                                            value
+                                                                                        ) < 10 &&
+                                                                                        Number(
+                                                                                            value
+                                                                                        ) %
+                                                                                            0.5 ===
+                                                                                            0
+                                                                                    if (isChanged) {
+                                                                                        return [
+                                                                                            ...prev,
+                                                                                            `${index}-tx`,
+                                                                                        ]
+                                                                                    }
+                                                                                    return prev.filter(
+                                                                                        (i) =>
+                                                                                            i !==
+                                                                                            `${index}-tx`
+                                                                                    )
+                                                                                }
+                                                                            )
+                                                                        }}
+                                                                        // status={(listChange.includes(`${index}-tx`))?'warning':undefined}
                                                                         onKeyDown={(e) =>
                                                                             handleScoreInputKeyDown(
                                                                                 e,
@@ -976,25 +1075,26 @@ export default function SubjectClassScore() {
                                                         align: 'center',
                                                         render: (_, record, index: number) => {
                                                             return (
-                                                                <Form.Item
-                                                                    className="w-full mb-0"
-                                                                    name={[
-                                                                        'list',
-                                                                        index,
-                                                                        'examScore',
-                                                                    ]}
-                                                                    label=""
-                                                                    rules={[]}
-                                                                >
-                                                                    <InputNumber
-                                                                        disabled={true}
-                                                                        min={0}
-                                                                        id={`score-thi-${record.id}`}
-                                                                        style={{ width: '100%' }}
-                                                                        step={0.5}
-                                                                        controls={false}
-                                                                    />
-                                                                </Form.Item>
+                                                                record?.examScore || ''
+                                                                // <Form.Item
+                                                                //     className="w-full mb-0"
+                                                                //     name={[
+                                                                //         'list',
+                                                                //         index,
+                                                                //         'examScore',
+                                                                //     ]}
+                                                                //     label=""
+                                                                //     rules={[]}
+                                                                // >
+                                                                //     <InputNumber
+                                                                //         disabled={true}
+                                                                //         min={0}
+                                                                //         id={`score-thi-${record.id}`}
+                                                                //         style={{ width: '100%' }}
+                                                                //         step={0}
+                                                                //         controls={false}
+                                                                //     />
+                                                                // </Form.Item>
                                                             )
                                                         },
                                                     },
@@ -1036,11 +1136,7 @@ export default function SubjectClassScore() {
                                                                         prev.list?.[index]
                                                                             ?.attendanceScore !==
                                                                             cur.list?.[index]
-                                                                                ?.attendanceScore ||
-                                                                        prev.list?.[index]
-                                                                            ?.examScore !==
-                                                                            cur.list?.[index]
-                                                                                ?.examScore
+                                                                                ?.attendanceScore
                                                                     }
                                                                 >
                                                                     {({ getFieldValue }) => {
@@ -1080,19 +1176,6 @@ export default function SubjectClassScore() {
                                                         width: 80,
                                                         align: 'center',
                                                         render: (value, record, index: number) => {
-                                                            const isEditable =
-                                                                can(
-                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                                                    'NHAP_DIEM'
-                                                                ) &&
-                                                                record.subjectClass
-                                                                    ?.scoreDeadline &&
-                                                                dayjs().isBefore(
-                                                                    record.subjectClass
-                                                                        .scoreDeadline
-                                                                )
-                                                            const openClock =
-                                                                record.subjectClass?.isLockScore
                                                             return (
                                                                 <Form.Item
                                                                     className="w-full mb-0"
@@ -1105,12 +1188,7 @@ export default function SubjectClassScore() {
                                                                     valuePropName="checked"
                                                                 >
                                                                     <Checkbox
-                                                                        disabled={
-                                                                            !(
-                                                                                isEditable &&
-                                                                                !openClock
-                                                                            )
-                                                                        }
+                                                                        disabled={disabledForm}
                                                                     />
                                                                 </Form.Item>
                                                             )
@@ -1170,19 +1248,6 @@ export default function SubjectClassScore() {
                                                         width: 80,
                                                         align: 'center',
                                                         render: (value, record, index: number) => {
-                                                            const isEditable =
-                                                                can(
-                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                                                    'NHAP_DIEM'
-                                                                ) &&
-                                                                record.subjectClass
-                                                                    ?.scoreDeadline &&
-                                                                dayjs().isBefore(
-                                                                    record.subjectClass
-                                                                        .scoreDeadline
-                                                                )
-                                                            const openClock =
-                                                                record.subjectClass?.isLockScore
                                                             return (
                                                                 <Form.Item
                                                                     className="w-full mb-0"
@@ -1195,12 +1260,7 @@ export default function SubjectClassScore() {
                                                                     valuePropName="checked"
                                                                 >
                                                                     <Checkbox
-                                                                        disabled={
-                                                                            !(
-                                                                                isEditable &&
-                                                                                !openClock
-                                                                            )
-                                                                        }
+                                                                        disabled={disabledForm}
                                                                     />
                                                                 </Form.Item>
                                                             )
@@ -1260,39 +1320,12 @@ export default function SubjectClassScore() {
                                                         width: 80,
                                                         align: 'center',
                                                         render: (value, record, index: number) => {
-                                                            const isEditable =
-                                                                can(
-                                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                                                    'NHAP_DIEM'
-                                                                ) &&
-                                                                record.subjectClass
-                                                                    ?.scoreDeadline &&
-                                                                dayjs().isBefore(
-                                                                    record.subjectClass
-                                                                        .scoreDeadline
-                                                                )
-                                                            const openClock =
-                                                                record.subjectClass?.isLockScore
                                                             return (
-                                                                <Form.Item
-                                                                    className="w-full mb-0"
-                                                                    name={[
-                                                                        'list',
-                                                                        index,
-                                                                        'suspended',
-                                                                    ]}
-                                                                    label=""
-                                                                    valuePropName="checked"
-                                                                >
-                                                                    <Checkbox
-                                                                        disabled={
-                                                                            !(
-                                                                                isEditable &&
-                                                                                !openClock
-                                                                            )
+                                                                <Checkbox
+                                                                        checked={
+                                                                            record?.suspended
                                                                         }
                                                                     />
-                                                                </Form.Item>
                                                             )
                                                         },
                                                     },
@@ -1302,23 +1335,7 @@ export default function SubjectClassScore() {
                                                         dataIndex: 'suspendedReason',
                                                         width: 200,
                                                         render: (value, record, index: number) => {
-                                                            return (
-                                                                <Form.Item
-                                                                    noStyle
-                                                                    shouldUpdate={(prev, cur) =>
-                                                                        prev.list?.[index]
-                                                                            ?.suspended !==
-                                                                        cur.list?.[index]?.suspended
-                                                                    }
-                                                                >
-                                                                    {({ getFieldValue }) => {
-                                                                        const isBanned =
-                                                                            getFieldValue([
-                                                                                'list',
-                                                                                index,
-                                                                                'suspended',
-                                                                            ])
-                                                                        return (
+                                                                  return (
                                                                             <Form.Item
                                                                                 name={[
                                                                                     'list',
@@ -1331,15 +1348,12 @@ export default function SubjectClassScore() {
                                                                             >
                                                                                 <Input
                                                                                     disabled={
-                                                                                        !isBanned
+                                                                                       true
                                                                                     }
                                                                                     placeholder="Nhập lý do đình chỉ"
                                                                                 />
                                                                             </Form.Item>
                                                                         )
-                                                                    }}
-                                                                </Form.Item>
-                                                            )
                                                         },
                                                     },
 
@@ -1360,6 +1374,7 @@ export default function SubjectClassScore() {
                                                                     label=""
                                                                 >
                                                                     <Input
+                                                                        disabled={disabledForm}
                                                                         placeholder="Nhập ghi chú"
                                                                         style={{
                                                                             width: '100%',

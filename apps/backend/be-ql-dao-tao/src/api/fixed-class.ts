@@ -176,7 +176,7 @@ app.openapi(uploadExcelCreateFixedClass, async (c) => {
     // Chuyển đổi dữ liệu từ sheet thành JSON
     const rowData = utils.sheet_to_json<string[]>(sheet, { header: 1 })
 
-    // Kiểm tra mã khóa có trùng với đầu vào không để tránh nhập nhầm
+    // Kiểm tra mã khoá có trùng với đầu vào không để tránh nhập nhầm
     const cellAddress = 'C8'
     const cell = sheet[cellAddress]
     const cellValue = cell ? cell.v : null

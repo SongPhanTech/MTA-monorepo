@@ -56,9 +56,9 @@ const PutUploadFixedClassModal = () => {
             className="w-[30vw]"
         >
             <Col span={24}>
-                <FormItem form={form} name="trainingCourseId" label="Khóa" required>
+                <FormItem form={form} name="trainingCourseId" label="Khoá" required>
                     <Select
-                        placeholder="Chọn khóa"
+                        placeholder="Chọn khoá"
                         options={trainingCourseData.map((i: TrainingCourse) => ({
                             value: i.id,
                             label: i.name,

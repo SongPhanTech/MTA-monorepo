@@ -151,7 +151,7 @@ const PutCurriculumVersion = () => {
                 message.success('Cập nhật thành công')
             } else {
                 if (!input?.curriculumId) {
-                    message.error('Thiếu curriculumId, không thể tạo CTĐT toàn khóa')
+                    message.error('Thiếu curriculumId, không thể tạo CTĐT toàn khoá')
                     return
                 }
                 await createCurriculumVersion({
@@ -217,7 +217,7 @@ const PutCurriculumVersion = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={input?.versionId ? 'Sửa CTĐT toàn khóa' : 'Thêm CTĐT toàn khóa'}
+            title={input?.versionId ? 'Sửa CTĐT toàn khoá' : 'Thêm CTĐT toàn khoá'}
             className="w-[60vw]"
             style={{ top: 20 }}
         >
@@ -234,29 +234,29 @@ const PutCurriculumVersion = () => {
                                         <FormItem
                                             form={form}
                                             name="code"
-                                            label="Mã CTĐT toàn khóa"
+                                            label="Mã CTĐT toàn khoá"
                                             required
                                         >
-                                            <Input placeholder="Nhập mã CTĐT toàn khóa" />
+                                            <Input placeholder="Nhập mã CTĐT toàn khoá" />
                                         </FormItem>
                                     </Col>
                                     <Col span={12}>
                                         <FormItem
                                             form={form}
                                             name="name"
-                                            label="Tên CTĐT toàn khóa (tiếng việt)"
+                                            label="Tên CTĐT toàn khoá (tiếng việt)"
                                             required
                                         >
-                                            <Input placeholder="Nhập tên CTĐT toàn khóa (tiếng việt)" />
+                                            <Input placeholder="Nhập tên CTĐT toàn khoá (tiếng việt)" />
                                         </FormItem>
                                     </Col>
                                     <Col span={12}>
                                         <FormItem
                                             form={form}
                                             name="englishName"
-                                            label="Tên CTĐT toàn khóa (tiếng anh)"
+                                            label="Tên CTĐT toàn khoá (tiếng anh)"
                                         >
-                                            <Input placeholder="Nhập tên CTĐT toàn khóa (tiếng anh)" />
+                                            <Input placeholder="Nhập tên CTĐT toàn khoá (tiếng anh)" />
                                         </FormItem>
                                     </Col>
                                     <Col span={12}>
@@ -507,11 +507,11 @@ const PutCurriculumVersion = () => {
                     },
                     {
                         key: '6',
-                        label: 'Thời gian toàn khóa',
+                        label: 'Thời gian toàn khoá',
                         children: (
-                            <FormItem form={form} name="time" label="Thời gian toàn khóa">
+                            <FormItem form={form} name="time" label="Thời gian toàn khoá">
                                 <RichTextEditor />
-                                {/* <Input.TextArea placeholder="Nhập thời gian toàn khóa" /> */}
+                                {/* <Input.TextArea placeholder="Nhập thời gian toàn khoá" /> */}
                             </FormItem>
                         ),
                     },

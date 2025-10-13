@@ -317,7 +317,7 @@ export default function TrainingProgramCatalog() {
                     isLock: !isLocked,
                 },
             })
-            message.success(isLocked ? 'Mở khóa thành công' : 'Khóa thành công')
+            message.success(isLocked ? 'Mở khoá thành công' : 'Khoá thành công')
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
@@ -496,7 +496,7 @@ export default function TrainingProgramCatalog() {
                                 type: 'input',
                             },
                             {
-                                title: 'Tên CTĐT toàn khóa',
+                                title: 'Tên CTĐT toàn khoá',
                                 dataIndex: 'name',
                                 align: 'center',
                                 fixed: 'left',
@@ -779,7 +779,7 @@ export default function TrainingProgramCatalog() {
                                                 versionId: '',
                                             })
                                         }}
-                                        title="Thêm mới CTĐT toàn khóa"
+                                        title="Thêm mới CTĐT toàn khoá"
                                     />
                                 )}
                                 {can(

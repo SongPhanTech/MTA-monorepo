@@ -4,6 +4,7 @@
         "ignoreUnknown": true,
         "includes": [
             "**",
+            "!**/*.umd.js",
             "!**/apps/backup/**/*",
             "!**/.vscode",
             "!**/package.json",
