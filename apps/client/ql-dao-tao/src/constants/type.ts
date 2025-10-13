@@ -138,6 +138,7 @@ export type FilterProps = {
     order?: 'asc' | 'desc'
     subjectClassId?: string
     classRegisterStatus?: ClassRegisterStatus[]
+    isTeaching?: boolean[]
     subjectClassIds?:string[]
     trainingObjectTypeId?: string
 }

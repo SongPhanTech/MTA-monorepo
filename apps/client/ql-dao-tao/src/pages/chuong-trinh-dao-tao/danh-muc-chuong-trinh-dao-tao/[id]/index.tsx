@@ -26,7 +26,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Divider, Flex, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Divider, Flex, message, Row, Tag, Tooltip } from 'antd'
 import { BookPlus, CopyPlus, FileDown, FileUp } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -707,6 +707,16 @@ export default function TrainingProgramSubjects() {
                                 options: options,
                                 render: (__, record: { subject?: SubjectVersion }) =>
                                     getExamTypeLabel(record?.subject?.examType),
+                            },
+                            {
+                                title: 'Tính điểm TBC',
+                                align: 'center',
+                                fixed: 'right',
+                                dataIndex: 'useForFinalScore',
+                                width: 120,
+                                render: (value: boolean) => {
+                                    return <Checkbox checked={!!value} />
+                                },
                             },
                             {
                                 title: 'Trạng thái',

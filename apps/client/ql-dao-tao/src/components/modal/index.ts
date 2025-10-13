@@ -90,6 +90,7 @@ import PutDisciplinaryWarning from './put-xet-canh-cao-hoc-duong'
 import PutAcademicActionConfig from './put-xu-ly-hoc-tap'
 import PutAddOlympicScoreModal from './them-diem-cong'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
+import ModalChuyenLop from './modal-chuyen-lop'
 export {
     PutUpdateProfileModal,
     PutUploadProfileModal,
@@ -183,4 +184,5 @@ export {
     PutChuanDauRaModal,
     MoKhoaNhapDiem,
     PutTrainingLanguage,
+    ModalChuyenLop,
 }
