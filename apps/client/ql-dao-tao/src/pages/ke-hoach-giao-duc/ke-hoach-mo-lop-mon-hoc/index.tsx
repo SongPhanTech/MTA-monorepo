@@ -494,7 +494,6 @@ export default function SubjectOpeningPlan() {
                                         )
                                     },
                                 },
-
                                 {
                                     title: 'SV nợ',
                                     dataIndex: 'svNo',

@@ -15,7 +15,7 @@ import type {
     SubjectClassSchedule,
     ThesisProjectStatus,
     TrainingObjectTypes,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import type { ColumnsType } from 'antd/es/table'
 export type FilterProps = {
     searchText?: string

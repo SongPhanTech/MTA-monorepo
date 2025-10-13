@@ -1,8 +1,9 @@
+import { cn } from '@workspace/ui/lib/utils'
 import { Form, type FormInstance, type FormItemProps as FormItemAntDrops } from 'antd'
 
 type FormItemProps<T, K> = FormItemAntDrops & {
     form: FormInstance<T>
-    name: K
+    name: K | (string | number)[]
 }
 
 const FormItem = <T extends Record<string, unknown>, K extends keyof T>({
@@ -22,6 +23,7 @@ const FormItem = <T extends Record<string, unknown>, K extends keyof T>({
                     : []
             }
             {...rest}
+            className={cn('m-0', rest.className)}
         />
     )
 }

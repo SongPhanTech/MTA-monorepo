@@ -112,7 +112,7 @@ function buildOrgTree(
     parentId = '0'
 ): OrgTreeItem[] {
     return list
-        .filter((item) => (item.sParentId ?? '0') === parentId)
+        .filter((item) => (item.sParentId || '0') === parentId)
         .map((item) => ({
             label: [item.sMa, item.sTen].filter(Boolean).join(' - ') || '',
             value: item.Id,
