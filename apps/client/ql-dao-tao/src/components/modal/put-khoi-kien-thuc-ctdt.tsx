@@ -5,10 +5,11 @@ import useSpinner from '@hooks/spinner'
 import type { TrainingBlock } from '@workspace/db'
 import {
     useCreateTrainingBlock,
+    useFindManyTrainingBlock,
     useFindUniqueTrainingBlock,
     useUpdateTrainingBlock,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Radio } from 'antd'
+import { Col, Form, Input, message, Radio, Select } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -29,7 +30,7 @@ const PutTrainingBlock = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: trainingBlock } = useFindUniqueTrainingBlock({ where: { id } }, { enabled: !!id })
-
+    const { data: parentTrainingBlock } = useFindManyTrainingBlock({ where: { id: { not: id } } })
     useEffect(() => {
         if (trainingBlock) {
             form.setFieldsValue({
@@ -53,6 +54,7 @@ const PutTrainingBlock = () => {
                 code: output.code,
                 name: output.name.trim(),
                 active: output.active,
+                parentId: output.parentId,
             }
 
             if (id) {
@@ -101,6 +103,17 @@ const PutTrainingBlock = () => {
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên khối kiến thức" required>
                     <Input placeholder="Nhập tên khối kiến thức" />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="parentId" label="Khối kiến thức cha" required>
+                    <Select
+                        placeholder="Chọn khối kiến thức cha"
+                        options={parentTrainingBlock?.map((item) => ({
+                            value: item.id,
+                            label: item.name,
+                        }))}
+                    />
                 </FormItem>
             </Col>
             {/* <Col span={24}>

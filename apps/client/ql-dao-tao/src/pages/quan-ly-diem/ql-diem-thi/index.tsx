@@ -437,6 +437,7 @@ export default function SubjectClassScore() {
         },
         { refetchOnWindowFocus: false }
     )
+    
 
     const selectedClassInfo = subjectClassData.find((item) => item.id === subjectClassId)
 
@@ -802,6 +803,7 @@ export default function SubjectClassScore() {
                                     )}
                                     <Form form={form}>
                                         <FormItem form={form} name="list">
+                                            
                                             <Table
                                                 rowKey="id"
                                                 id="student-subject-score"

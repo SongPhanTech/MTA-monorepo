@@ -137,10 +137,13 @@ export type FilterProps = {
     role?: CouncilRole[]
     order?: 'asc' | 'desc'
     subjectClassId?: string
+    decisionNo?: string
     classRegisterStatus?: ClassRegisterStatus[]
     isTeaching?: boolean[]
-    subjectClassIds?:string[]
+    subjectClassIds?: string[]
     trainingObjectTypeId?: string
+    trainingFormId?: string[]
+    trainingLevelId?: string[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

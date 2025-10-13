@@ -1,5 +1,9 @@
+'use client'
+
+import type React from 'react'
 import { Table } from 'antd'
-import type { ColumnType, TableProps } from 'antd/es/table'
+import type { TableProps, ColumnType } from 'antd/es/table'
+import { FilterProps } from '@constants/type'
 
 export interface NestedColumn<T = any> extends Omit<ColumnType<T>, 'render'> {
     type?: 'input' | 'select' | 'order'
@@ -11,23 +15,35 @@ export interface NestedColumn<T = any> extends Omit<ColumnType<T>, 'render'> {
 export interface NestedCollapsibleTableProps<T = any> {
     data: T[]
     columns: NestedColumn<T>[]
-    nestedKeys: string[] // e.g., ['trainingLocation', 'buildings']
+    nestedKeys?: string[] // Optional now - for nested mode
+    mode?: 'nested' | 'tree' // New: specify data structure mode
+    childrenKey?: string // New: key for children in tree mode (default: 'children')
+    maxDepth?: number // New: maximum depth to display in tree mode
     defaultExpandAllRows?: boolean
     rowKey?: string | ((record: T) => string)
     expandable?: TableProps<T>['expandable']
     className?: string
     loading?: boolean
-    pagination?: TableProps<T>['pagination']
     scroll?: TableProps<T>['scroll']
     getParentLabel?: (record: T, level: number) => string
     getParentCount?: (record: T, level: number) => number
     renderParentActions?: (record: T, level: number, parentIndex: string[]) => React.ReactNode
+    showLeafOnly?: boolean // New: only show leaf nodes with full columns
+    filters?: FilterProps
+    setFilters?: (filters: object[]) => void
+    pagination?: object | false
+    buildFromParentId?: boolean
+    parentIdKey?: string
 }
 
 export function NestedCollapsibleTable<T extends Record<string, any>>({
     data,
     columns,
-    nestedKeys,
+    nestedKeys = [],
+    mode = 'nested',
+    childrenKey = 'children',
+    maxDepth,
+    filters,
     defaultExpandAllRows = false,
     rowKey = 'id',
     expandable,
@@ -38,8 +54,38 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
     getParentLabel,
     getParentCount,
     renderParentActions,
+    showLeafOnly = false,
+    buildFromParentId = false,
+    parentIdKey = 'parentId',
 }: NestedCollapsibleTableProps<T>) {
-    const transformData = (items: T[], currentLevel = 0): any[] => {
+    const transformTreeData = (items: T[], currentLevel = 0): any[] => {
+        return items.map((item) => {
+            const children = item[childrenKey]
+            const hasChildren = children && Array.isArray(children) && children.length > 0
+
+            const shouldStopExpanding = maxDepth !== undefined && currentLevel >= maxDepth
+
+            if (hasChildren && !shouldStopExpanding) {
+                return {
+                    ...item,
+                    children: transformTreeData(children, currentLevel + 1),
+                    _level: currentLevel,
+                    _isParent: true,
+                }
+            }
+            const leafNode = {
+                ...item,
+                _level: currentLevel,
+                _isParent: false,
+            }
+            if (Array.isArray(leafNode[childrenKey]) && leafNode[childrenKey].length === 0) {
+                delete leafNode[childrenKey]
+            }
+            return leafNode
+        })
+    }
+
+    const transformNestedData = (items: T[], currentLevel = 0): any[] => {
         if (currentLevel >= nestedKeys.length) {
             return items
         }
@@ -51,7 +97,7 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
             if (children && Array.isArray(children) && children.length > 0) {
                 return {
                     ...item,
-                    children: transformData(children, currentLevel + 1),
+                    children: transformNestedData(children, currentLevel + 1),
                     _level: currentLevel,
                     _isParent: true,
                 }
@@ -64,17 +110,51 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
             }
         })
     }
+    const buildTreeFromParentId = (items: T[], key = 'id', parentKey = 'parentId') => {
+        const map: Record<string, number> = {}
+        const roots: T[] = []
+
+        items.forEach((item, index) => {
+            map[item[key]] = index // Lưu vị trí của item trong mảng gốc
+            // @ts-ignore
+            items[index].children = [] as T[]
+        })
+
+        items.forEach((node) => {
+            const parentId = node[parentKey]
+            // Nếu có parentId và cha tồn tại trong map
+            if (parentId !== null && map[parentId] !== undefined) {
+                items[map[parentId]].children.push(node)
+            } else {
+                roots.push(node)
+            }
+        })
+
+        return roots
+    }
+
+    const transformData = mode === 'tree' ? transformTreeData : transformNestedData
 
     const createDynamicColumns = (): ColumnType<any>[] => {
-        // First column shows the hierarchy label for all levels
+        const getMaxLevel = (record: any): boolean => {
+            if (mode === 'tree') {
+                return record._isParent
+            }
+            const level = record._level ?? nestedKeys.length
+            return level < nestedKeys.length
+        }
+
         const sttColumn: ColumnType<any> = {
             title: 'STT',
             key: '_hierarchy',
-            width: 300,
             fixed: 'left',
             onCell: (record) => {
-                const level = record._level ?? nestedKeys.length
-                if (level < nestedKeys.length) {
+                if (mode === 'tree') {
+                    return {} // No colSpan in tree mode
+                }
+
+                const isParent = getMaxLevel(record)
+                if (isParent && !showLeafOnly) {
                     return {
                         colSpan: renderParentActions ? columns.length : columns.length + 1,
                     }
@@ -82,18 +162,26 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
                 return {}
             },
             render: (_, record, index) => {
-                const level = record._level ?? nestedKeys.length
-                const indentSize = 24 // pixels per level
+                const level = record._level ?? 0
+                const indentSize = 2
                 const paddingLeft = level * indentSize
-                // For parent levels, show custom label with count
-                if (level < nestedKeys.length) {
+
+                if (mode === 'tree') {
+                    return (
+                        <span style={{ paddingLeft: `${paddingLeft}px`, display: 'inline-block' }}>
+                            {index + 1}
+                        </span>
+                    )
+                }
+
+                const isParent = getMaxLevel(record)
+                if (isParent && !showLeafOnly) {
                     let label = ''
                     let count = 0
 
                     if (getParentLabel) {
                         label = getParentLabel(record, level)
                     } else {
-                        // Default label format: "code - name"
                         const code = record.code || record.sMa || record.Id || ''
                         const name = record.name || record.sTen || ''
                         label = `${code} - ${name}`
@@ -102,7 +190,6 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
                     if (getParentCount) {
                         count = getParentCount(record, level)
                     } else {
-                        // Default count: number of children
                         const childKey = nestedKeys[level]
                         const children = record[childKey]
                         count = Array.isArray(children) ? children.length : 0
@@ -136,9 +223,12 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
                     ...col,
                     key: (col.dataIndex as string) || col.key,
                     onCell: (record: any) => {
-                        const level = record._level ?? nestedKeys.length
-                        // Hide this cell for parent rows (colSpan: 0 makes it hidden)
-                        if (level < nestedKeys.length) {
+                        if (mode === 'tree') {
+                            return {} // No colSpan manipulation in tree mode
+                        }
+
+                        const isParent = getMaxLevel(record)
+                        if (isParent && !showLeafOnly) {
                             if (shouldRenderParentActions) {
                                 return {}
                             }
@@ -149,12 +239,15 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
                         return {}
                     },
                     render: (value: any, record: any, index: number) => {
-                        const level = record._level ?? nestedKeys.length
+                        if (mode === 'tree') {
+                            return col.render ? col.render(value, record, index) : value
+                        }
 
-                        if (level < nestedKeys.length) {
+                        const isParent = getMaxLevel(record)
+                        if (isParent && !showLeafOnly) {
                             if (shouldRenderParentActions) {
-                                const parentIndex = nestedKeys.slice(0, level + 1)
-                                return renderParentActions(record, level, parentIndex)
+                                const parentIndex = nestedKeys.slice(0, record._level + 1)
+                                return renderParentActions(record, record._level ?? 0, parentIndex)
                             }
                             return null
                         }
@@ -167,7 +260,12 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
         return [sttColumn, ...dataColumns]
     }
 
-    const transformedData = transformData(data)
+    const dataToTransform =
+        mode === 'tree' && buildFromParentId
+            ? buildTreeFromParentId(data, typeof rowKey === 'function' ? 'id' : rowKey, parentIdKey)
+            : data
+
+    const transformedData = transformData(dataToTransform)
     const tableColumns = createDynamicColumns()
 
     return (
@@ -177,7 +275,6 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
             rowKey={rowKey}
             className={className}
             loading={loading}
-            pagination={pagination}
             scroll={scroll}
             defaultExpandAllRows={defaultExpandAllRows}
             expandable={{
@@ -185,6 +282,25 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
                 ...expandable,
             }}
             bordered
+            // filters={filters}
+            pagination={pagination}
+            onRow={(record) => {
+                return {
+                    onClick: (event) => {
+                        if ((event.target as HTMLElement).closest('.no-row-click')) {
+                            return
+                        }
+                        const targetRow = event.currentTarget
+                        const expandButton = targetRow.querySelector(
+                            '.ant-table-row-expand-icon'
+                        ) as HTMLElement
+
+                        if (expandButton) {
+                            expandButton.click()
+                        }
+                    },
+                }
+            }}
         />
     )
 }
