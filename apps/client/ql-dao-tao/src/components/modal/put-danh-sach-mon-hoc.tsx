@@ -91,25 +91,25 @@ const PutSubjectListModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Sửa danh sách môn học' : 'Thêm danh sách môn học'}
+            title={id ? 'Sửa nhóm môn học' : 'Thêm nhóm môn học'}
             className="w-[60vw]"
         >
             <Col span={12}>
-                <FormItem form={form} name="name" label="Tên môn học" required>
+                <FormItem form={form} name="name" label="Tên nhóm môn học" required>
                     <Input placeholder="Nhập tên môn học" />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem form={form} name="code" label="Mã môn học" required>
                     <Input placeholder="Nhập mã môn học" />
                 </FormItem>
-            </Col>
+            </Col> */}
             {/* <Col span={12}>
                 <FormItem form={form} name="infomation" label="Thông tin">
                     <Input placeholder="Nhập thông tin" />
                 </FormItem>
             </Col> */}
-            <Col span={24}>
+            <Col span={12}>
                 <Form.Item name="managementOrganizationId" label="Đơn vị quản lý">
                     <TreeSelect
                         treeData={treeData}

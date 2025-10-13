@@ -344,8 +344,8 @@ export default function SubjectList() {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="key"
-                        headerTitleKey={({ code, name, managementOrganization }) =>
-                            `${[code, name, managementOrganization?.sTen].filter(Boolean).join(' - ')}`
+                        headerTitleKey={({ name, managementOrganization }) =>
+                            `${[name, managementOrganization?.sTen].filter(Boolean).join(' - ')}`
                         }
                         childrenFieldName="subjectVersion"
                         currentPage={currentPage}
