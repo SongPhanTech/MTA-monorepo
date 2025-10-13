@@ -214,9 +214,11 @@ export const parseCurriculumSheet = (file: ArrayBufferLike): ParseCurriculumShee
                     ? $Enums.SubjectRequirementType.Mandatory
                     : $Enums.SubjectRequirementType.Optional,
                 useForFinalScore,
-                print: useForFinalScore,
                 graduation,
-                project,
+                examType: $Enums.ExamType.OfflineWritten,
+                subjectVersionType: project
+                    ? $Enums.SubjectVersionType.Project
+                    : $Enums.SubjectVersionType.Normal,
             })
 
             continue
