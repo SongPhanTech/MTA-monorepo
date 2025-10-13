@@ -34,6 +34,7 @@ export default function TrainingFieldPage() {
         organization: undefined,
         publishDate: undefined,
         active: undefined,
+        decisionNo: '',
     })
 
     const where = useMemo(
@@ -58,6 +59,14 @@ export default function TrainingFieldPage() {
                 ? {
                       active: {
                           equals: filters.active[0],
+                      },
+                  }
+                : {}),
+            ...(filters.decisionNo && filters.decisionNo !== ''
+                ? {
+                      decisionNo: {
+                          contains: filters.decisionNo,
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -96,6 +105,7 @@ export default function TrainingFieldPage() {
             filters.organization,
             filters.publishDate,
             filters.active,
+            filters.decisionNo,
         ]
     )
     const { data = [] } = useFindManyTrainingField({
@@ -127,7 +137,6 @@ export default function TrainingFieldPage() {
         tag: 'PutTrainingFieldModal',
     })
     const onDownload = async (url: string, fileName: string) => {
-        console.log(url, fileName)
         const response = await fetch(url)
         if (!response.ok) return message.error('Lỗi khi tải file')
         const blob = await response.blob()
@@ -200,7 +209,6 @@ export default function TrainingFieldPage() {
                         data={data}
                         filters={filters}
                         setFilters={(value) => {
-                            console.log(value)
                             if (value.active?.length === 0 || value.active?.length === 2) {
                                 value.active = undefined
                             }
