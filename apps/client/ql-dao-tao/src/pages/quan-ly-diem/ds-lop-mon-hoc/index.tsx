@@ -1,40 +1,27 @@
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import type {SubjectClass, SubjectVersion } from '@workspace/db'
+import type { SubjectClass, SubjectVersion } from '@workspace/db'
 import {
     useCountSubjectClass,
     useFindManySubjectClass,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
+import { listUser } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Flex, Form, Input, message, Row, Tag } from 'antd'
+import { Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { CalendarPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-
-// const { Option } = Select;
-interface FilterProps {
-    schoolYearId: string | null //Năm học
-    KhoaId: string | null //Khoa
-    BoMonId: string | null //Bộ môn
-    trainingObjectId: string | null //Đối tượng đào tạo
-    examTypeId: string | null //Hình thức thi
-    LectureIds: string[] //Giảng viên
-    searchText: string | null
-    trainingObjectTypeId: string | null
-    subjectClassId: string | null
-    fixedClassIds: string[]
-    examDateRange?: [string, string] | null // Khoảng thời gian thi
-}
 
 export default function ClassSubject() {
     const { canSome, can } = useAbility()
@@ -45,21 +32,27 @@ export default function ClassSubject() {
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
-        trainingObjectTypeId: null,
-        subjectClassId: null,
-        schoolYearId: null,
-        KhoaId: null,
-        BoMonId: null,
-        trainingObjectId: null,
-        examTypeId: null,
-        LectureIds: [],
-        fixedClassIds: [],
-        examDateRange: undefined, // Khoảng thời gian thi
+        code: '',
+        name: '',
+        examType: undefined,
+        subjectClassId: undefined,
+        schoolYearId: undefined,
+        semesterId: undefined,
+        startDate: undefined,
+        endDate: undefined,
+        examDate: undefined,
+        credit: undefined,
+        mainLecturer: undefined,
+        enterGradeLecturer: undefined,
     })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
     const handleNavigate = (id: string) => {
-        router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC}?subjectId=${id}`)
+        router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_CC_TX}?subjectClassId=${id}`)
+    }
+
+        const handleNavigateThi = (id: string) => {
+        router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_THI}?subjectClassId=${id}`)
     }
 
     const handleFilterChange = (key: string, value: string) => {
@@ -82,52 +75,111 @@ export default function ClassSubject() {
     //#region Mới
     /* Mới */
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
-    const where:any=useMemo(()=>{
-        
-        return{
-                 ...(filters.searchText && filters.searchText !== ''
+    const where: any = useMemo(() => {
+        return {
+            ...(semesterId ? { semesterId } : {}),
+            ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
+            ...((filters.searchText && filters.searchText !== '') ||
+            (filters.code && filters.code !== '')
                 ? {
                       OR: [
                           {
                               name: {
-                                  contains: filters.searchText,
+                                  contains: filters.searchText || filters.name,
                                   mode: 'insensitive',
                               },
                           },
                           {
                               code: {
-                                  contains: filters.searchText,
+                                  contains: filters.searchText || filters.code,
                                   mode: 'insensitive',
                               },
                           },
                       ],
                   }
                 : {}),
-            ...(semesterId ? { semesterId } : {}),
-            ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
-            trainingObjectTypeId,
-            ...(filters.LectureIds.length > 0
+
+            ...(filters.examType
                 ? {
-                      OR: filters.LectureIds.map((id) => ({
-                          mainLecturer: { id },
-                      })),
-                  }
-                : {}),
-            ...(filters.BoMonId
-                ? {
-                      subject: {
-                          managementOrganizationId: filters.BoMonId,
+                      examType: {
+                          in: filters.examType,
                       },
                   }
                 : {}),
-            ...(filters.examDateRange
+            ...(filters.mainLecturer
+                ? {
+                      mainLecturer: {
+                          include: {
+                              userProfile: {
+                                  OR: [
+                                      {
+                                          firstName: {
+                                              contains: filters.mainLecturer,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      },
+                                      {
+                                          lastName: {
+                                              contains: filters.mainLecturer,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      },
+                                  ],
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.enterGradeLecturer
+                ? {
+                      enterGradeLecturer: {
+                          include: {
+                              userProfile: {
+                                  OR: [
+                                      {
+                                          firstName: {
+                                              contains: filters.enterGradeLecturer,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      },
+                                      {
+                                          lastName: {
+                                              contains: filters.enterGradeLecturer,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      },
+                                  ],
+                              },
+                          },
+                      },
+                  }
+                : {}),
+
+            ...(filters.startDate?.length === 2
+                ? {
+                      startDate: {
+                          gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.endDate?.length === 2
+                ? {
+                      endDate: {
+                          gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
+                      },
+                  }
+                : {}),
+            ...(filters.examDate?.length === 2
                 ? {
                       examDate: {
-                          gte: dayjs(filters.examDateRange?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.examDateRange?.[1], 'DD/MM/YYYY').toDate(),
+                          gte: dayjs(filters.examDate?.[0], 'DD/MM/YYYY').toDate(),
+                          lte: dayjs(filters.examDate?.[1], 'DD/MM/YYYY').toDate(),
                       },
                   }
                 : {}),
+
             ...(!canReadAll
                 ? {
                       mainLecturer: {
@@ -139,7 +191,7 @@ export default function ClassSubject() {
             deletedAt: null,
             cancelled: false,
         }
-    },[filters, semesterId, trainingObjectTypeId, canReadAll, profileId])
+    }, [filters, semesterId, trainingObjectTypeId, canReadAll, profileId])
 
     const { data: dataTable = [], refetch } = useFindManySubjectClass({
         where,
@@ -153,6 +205,9 @@ export default function ClassSubject() {
                 include: { userProfile: true },
             },
             extraLecturer: {
+                include: { userProfile: true },
+            },
+            enterGradeLecturer: {
                 include: { userProfile: true },
             },
             subjectClassStudent: {
@@ -176,7 +231,7 @@ export default function ClassSubject() {
     )
 
     const { data: count } = useCountSubjectClass({
-        where
+        where,
     })
     const handleFilterApply = (newFilters: Partial<FilterProps>) => {
         setFilters((prev) => {
@@ -265,6 +320,10 @@ export default function ClassSubject() {
             }
         })
     }
+    // const rowClassName = (record:any) => {
+    //     if (record.examType ==='OfflineWritten') return 'bg-red-50'
+    //     return ''
+    //     }
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -313,12 +372,9 @@ export default function ClassSubject() {
                                                 value: i.id,
                                                 label: i.name,
                                             }))}
-                                            // onChange={(val) =>
-                                            //     handleFilterChange(
-                                            //         'trainingObjectTypeId',
-                                            //         val
-                                            //     )
-                                            // }
+                                            onChange={(val) =>
+                                                handleFilterChange('subjectClassId', val)
+                                            }
                                             allowClear
                                         />
                                     </Form.Item>
@@ -344,7 +400,8 @@ export default function ClassSubject() {
                     <Table
                         rowKey="id"
                         id="training-category"
-                        rowSelection={rowSelection}
+                        // rowClassName={rowClassName}
+                        // rowSelection={rowSelection}
                         columns={[
                             {
                                 title: 'STT',
@@ -359,22 +416,25 @@ export default function ClassSubject() {
                                 dataIndex: 'code',
                                 align: 'center',
                                 width: 150,
-                                type:'input',
+                                type: 'input',
                             },
                             {
                                 title: 'Môn học',
                                 dataIndex: 'name',
                                 width: 180,
-                                type:'input',
-                                render: (text, record:{subject?:SubjectVersion}) => record.subject?.name || text,
+                                align: 'center',
+                                type: 'input',
+                                render: (text, record: { subject?: SubjectVersion }) =>
+                                    record.subject?.name || text,
                             },
                             {
                                 title: 'Số TC',
-                                dataIndex: 'stc',
+                                dataIndex: 'credit',
                                 width: 80,
                                 align: 'center',
-                                type:'order',
-                                render: (text, record:{subject?:SubjectVersion}) => record.subject?.credit || text,
+                                type: 'order',
+                                render: (text, record: { subject?: SubjectVersion }) =>
+                                    record.subject?.credit || text,
                             },
                             {
                                 title: 'Hình thức thi',
@@ -383,15 +443,20 @@ export default function ClassSubject() {
                                 width: 150,
                                 type: 'select',
                                 options: options,
-                                render: (__, record:{subject?:SubjectVersion}) =>{
-                                   return record?.subject?.examType ? getExamTypeLabel(record?.subject?.examType) : ''
-                                }
+                                render: (__, record: { subject?: SubjectVersion }) => {
+                                    return record?.subject?.examType ? (
+                                        <div className={`${record?.subject?.examType==='OfflineWritten'?'text-red-500':''}`}>{getExamTypeLabel(record?.subject?.examType)}</div>
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
                             {
                                 title: 'Ngày bắt đầu',
                                 dataIndex: 'startDate',
                                 width: 150,
-                                type:'date',
+                                align: 'center',
+                                type: 'date',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
@@ -400,7 +465,7 @@ export default function ClassSubject() {
                                 dataIndex: 'endDate',
                                 width: 150,
                                 align: 'center',
-                                type:'date',
+                                type: 'date',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
@@ -409,7 +474,7 @@ export default function ClassSubject() {
                                 dataIndex: 'examDate',
                                 width: 150,
                                 align: 'center',
-                                type:'date',
+                                type: 'date',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
@@ -424,19 +489,20 @@ export default function ClassSubject() {
                                 title: 'Giảng viên',
                                 width: 180,
                                 align: 'center',
-                                type:'input',
-                                render: (text, record:any) => {
+                                type: 'input',
+                                dataIndex: 'mainLecturer',
+                                render: (text, record: any) => {
                                     const mainLecturer = record.mainLecturer
                                         ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
-                                        : 'Chưa có giảng viên chính'
+                                        : ''
                                     const extraLecturer = record.extraLecturer
-                                        ? `, ${record.extraLecturer.userProfile.lastName} ${record.extraLecturer.userProfile.firstName}`
+                                        ? `${record.extraLecturer.userProfile.lastName} ${record.extraLecturer.userProfile.firstName}`
                                         : ''
                                     return (
-                                        <span>
-                                            {mainLecturer}
-                                            {extraLecturer}
-                                        </span>
+                                        <ul>
+                                            {mainLecturer && <li>- {mainLecturer}</li>}
+                                            {extraLecturer && <li>- {extraLecturer}</li>}
+                                        </ul>
                                     )
                                 },
                             },
@@ -444,12 +510,13 @@ export default function ClassSubject() {
                                 title: 'Giảng viên NĐ',
                                 width: 180,
                                 align: 'center',
-                                 type:'input',
-                                render: (text, record:any) => {
-                                    const mainLecturer = record.mainLecturer
-                                        ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
-                                        : 'Chưa có giảng viên chính'
-                                    return <span>{mainLecturer}</span>
+                                type: 'input',
+                                dataIndex: 'enterGradeLecturer',
+                                render: (text, record: any) => {
+                                    const enterGradeLecturer = record.enterGradeLecturer
+                                        ? `${record.enterGradeLecturer.userProfile.lastName} ${record.enterGradeLecturer.userProfile.firstName}`
+                                        : ''
+                                    return <span>{enterGradeLecturer}</span>
                                 },
                             },
 
@@ -464,11 +531,10 @@ export default function ClassSubject() {
                                 dataIndex: 'danhSachLop',
                                 width: 200,
                                 align: 'center',
-                                render: (text, record:any) => {
+                                render: (text, record: any) => {
                                     return (
                                         <span>
-                                            {record.subject?.managementOrganization?.sTen ||
-                                                'Chưa có bộ môn'}
+                                            {record.subject?.managementOrganization?.sTen || ''}
                                         </span>
                                     )
                                 },
@@ -484,11 +550,11 @@ export default function ClassSubject() {
                                 dataIndex: 'danhSachLop',
                                 width: 200,
                                 align: 'center',
-                                render: (text, record:any) => {
+                                render: (text, record: any) => {
                                     return (
                                         <span>
                                             {record.subject?.managementOrganization?.parent?.name ||
-                                                'Chưa có khoa'}
+                                                ''}
                                         </span>
                                     )
                                 },
@@ -522,10 +588,17 @@ export default function ClassSubject() {
                                         return (
                                             <Row
                                                 className="flex justify-center items-center gap-2 text-[#028850]"
-                                                onClick={() => handleNavigate(id)}
                                             >
-                                                <CalendarPlus size={16} strokeWidth={2} />
-                                                Nhập điểm
+                                                {
+                                                    profileId===listUser.P2 &&(  
+                                                <Tooltip title="Nhập điểm TX/CC" placement="top">
+                                                    <CalendarPlus size={16} onClick={() => handleNavigate(id)} strokeWidth={2} />
+                                                </Tooltip>)
+                                                }
+                                              
+                                                 <Tooltip title="Nhập điểm thi" placement="top">
+                                                    <CalendarPlus size={16} onClick={() => handleNavigateThi(id)} strokeWidth={2} />
+                                                </Tooltip>
                                             </Row>
                                         )
                                     }

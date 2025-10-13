@@ -133,22 +133,6 @@ export default function SubjectClassScore() {
                     },
                 ]
             }
-            //  const itemEnteredExamScore = dataSubmit?.list.find((i) => i?.examScore)
-            //     if (!itemEnteredExamScore && subjectClassId) {
-            //     listSqlTransaction = [
-            //         ...listSqlTransaction,
-            //         {
-            //             model: 'SubjectClass',
-            //             operation: 'update',
-            //             data: {
-            //                 where: {
-            //                     id: subjectClassId,
-            //                 },
-            //                 data: { enteredExamScore: true },
-            //             },
-            //         },
-            //     ]
-            // }
             if (dataSubmit?.list?.length > 0) {
                 listSqlTransaction = [
                     ...listSqlTransaction,
