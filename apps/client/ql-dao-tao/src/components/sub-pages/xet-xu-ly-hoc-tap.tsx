@@ -468,7 +468,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     render: (__, record) => record?.student?.fixedClass?.name,
                                 },
                                 {
-                                    title: 'Khóa',
+                                    title: 'Khoá',
                                     dataIndex: 'trainingCourse',
                                     width: 100,
                                     align: 'center',

@@ -13,18 +13,20 @@ import {
     useCountSubject,
     useFindManyDM_DonVi,
     useFindManySubject,
+    useFindUniqueTrainingObjectType,
     useUpdateSubject,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Checkbox, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip, Typography } from 'antd'
 import _ from 'lodash'
 import { BookPlus, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 export default function SubjectList() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -47,6 +49,16 @@ export default function SubjectList() {
         numberOfOther: undefined,
         isTeaching: undefined,
     })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { data: selectedTrainingObjectType } = useFindUniqueTrainingObjectType(
+        {
+            where: { id: trainingObjectTypeId },
+            select: { name: true },
+        },
+        {
+            enabled: !!trainingObjectTypeId,
+        }
+    )
     const { getExamTypeLabel, options: examTypeFilters } = useExamTypeOptions()
 
     const { data: organization = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
@@ -69,6 +81,13 @@ export default function SubjectList() {
         }
 
         return {
+            ...(trainingObjectTypeId
+                ? {
+                      subjectVersion: {
+                          some: { trainingObjectTypeId },
+                      },
+                  }
+                : {}),
             ...(filters.searchText
                 ? { name: { contains: filters.searchText, mode: 'insensitive' as const } }
                 : {}),
@@ -91,7 +110,7 @@ export default function SubjectList() {
                 subjectVersion: { some: subjectVersionFilter },
             }),
         }
-    }, [filters])
+    }, [trainingObjectTypeId, filters])
 
     const { data: SubjectData, refetch } = useFindManySubject({
         where,
@@ -244,9 +263,16 @@ export default function SubjectList() {
             return newFilters
         })
     }
-
+    const pageTitle = selectedTrainingObjectType
+        ? `Danh sách môn học - ${selectedTrainingObjectType.name}`
+        : 'Danh sách môn học'
     return (
         <div>
+            <Row>
+                <Col span={24} className="mb-2">
+                    <Typography.Title level={4}>{pageTitle}</Typography.Title>
+                </Col>
+            </Row>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     <Row gutter={[16, 16]} align="top" justify="space-between">
@@ -318,8 +344,8 @@ export default function SubjectList() {
                 <Col span={24}>
                     <TableCollapse
                         rowKey="key"
-                        headerTitleKey={({ code, name, managementOrganization }) =>
-                            `${[code, name, managementOrganization?.sTen].filter(Boolean).join(' - ')}`
+                        headerTitleKey={({ name, managementOrganization }) =>
+                            `${[name, managementOrganization?.sTen].filter(Boolean).join(' - ')}`
                         }
                         childrenFieldName="subjectVersion"
                         currentPage={currentPage}
@@ -504,7 +530,7 @@ export default function SubjectList() {
                                 render: (record) => <div className="line-clamp-2">{record}</div>,
                             },
                             {
-                                title: 'Giảng dạy',
+                                title: 'Đã mở LMH',
                                 align: 'center',
                                 dataIndex: 'isTeaching',
                                 width: 120,
@@ -514,11 +540,7 @@ export default function SubjectList() {
                                     { value: true, label: 'Đã đưa vào giảng dạy' },
                                     { value: false, label: 'Chưa đưa vào giảng dạy' },
                                 ],
-                                render: (_, record) => {
-                                    const isTeaching =
-                                        record.subjectClass && record.subjectClass.length > 0
-                                    return <Checkbox checked={isTeaching} />
-                                },
+                                render: (_, record) => (record.subjectClass?.length ? '✅' : ''),
                             },
                             {
                                 title: 'Trạng thái',
@@ -550,19 +572,8 @@ export default function SubjectList() {
                                     'SUA',
                                     'XOA'
                                 ),
-                                render: (
-                                    _,
-                                    record: {
-                                        id?: string
-                                        subjectId?: string
-                                        trainingBlocks: any[]
-                                    }
-                                ) => {
-                                    const {
-                                        id: subjectVersionId,
-                                        subjectId,
-                                        trainingBlocks,
-                                    } = record
+                                render: (_, record) => {
+                                    const { id: subjectVersionId, subjectId, subjectClass } = record
                                     return subjectVersionId && subjectId ? (
                                         <Row className="justify-center gap-2">
                                             {can(
@@ -584,7 +595,7 @@ export default function SubjectList() {
                                                 'XOA'
                                             ) && (
                                                 <DeleteIcon
-                                                    disabled={trainingBlocks?.length > 0}
+                                                    disabled={subjectClass?.length > 0}
                                                     popConfirm={{
                                                         onConfirm: () =>
                                                             handleDelete(subjectVersionId),

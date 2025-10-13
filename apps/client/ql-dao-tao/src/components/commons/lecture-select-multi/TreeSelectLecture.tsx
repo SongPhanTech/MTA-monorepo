@@ -1,12 +1,11 @@
-import { useFindManyDM_DonVi, useFindManyLecturer } from '@workspace/db/hooks'
-import type { SelectProps } from 'antd'
-import { message, TreeSelect as TreeSelectAnt } from 'antd'
-import type React from 'react'
-import { useEffect, useMemo, useState } from 'react'
 import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
-
+import { useFindManyDM_DonVi, useFindManyLecturer } from '@workspace/db/hooks'
+import { message, TreeSelect as TreeSelectAnt, type TreeSelectProps } from 'antd'
+import { UserIcon } from 'lucide-react'
+import type React from 'react'
+import { useEffect, useMemo } from 'react'
 // Hàm tạo cây đơn vị và giảng viên
-function buildOrgTree(
+function buildOrgAndLectureTree(
     list: Array<{ id: string; name: string | null; parentId: string | null }>,
     lecturers: Array<{
         id: string
@@ -20,7 +19,7 @@ function buildOrgTree(
         .map((item) => ({
             title: item.name || 'Đơn vị không tên',
             value: item.id,
-            selectable: item.parentId !== null,
+            selectable: false,
             children: [
                 ...lecturers
                     .filter((lecturer) => lecturer.organizationId === item.id)
@@ -29,38 +28,35 @@ function buildOrgTree(
                         value: `${lecturer.id}`,
                         selectable: true,
                         children: [],
+                        icon: <UserIcon size={16} className="pb-1" />,
                     })),
-                ...buildOrgTree(list, lecturers, item.id),
+                ...buildOrgAndLectureTree(list, lecturers, item.id),
             ],
         }))
 }
 
 // Define props for our custom component
-interface CustomTreeSelectProps {
-    placeholder?: string
-    style?: React.CSSProperties
-    dropdownStyle?: React.CSSProperties
-    defaultValue?: string[]
-    onChange?: (value: string[]) => void
-    onPopupScroll?: SelectProps['onPopupScroll']
-}
+type LectureTreeSelectProps = {
+    organizationId?: string // ID của tổ chức để lọc giảng viên
+    ignoreOrgIds?: string[] // Danh sách ID tổ chức để bỏ qua
+    ignoreLectureIds?: string[] // Danh sách ID giảng viên để bỏ qua
+} & TreeSelectProps
 
-const TreeSelect: React.FC<CustomTreeSelectProps> = ({
-    placeholder = 'Please select',
+const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
+    placeholder = 'Chọn giảng viên',
     style = { width: '100%' },
-    dropdownStyle = { maxHeight: 400, overflow: 'auto' },
-    defaultValue,
-    onChange,
-    onPopupScroll,
+    dropdownStyle = { maxHeight: 400, overflow: 'auto', width: 600 },
+    organizationId,
+    ...rest
 }) => {
-    const [value, setValue] = useState<string[] | undefined>(defaultValue)
-
     // Lấy danh sách Organization (Khoa và Bộ môn)
     const {
         data: organizations = [],
         isLoading: organizationsLoading,
         error: organizationsError,
-    } = useFindManyDM_DonVi()
+    } = useFindManyDM_DonVi({
+        where: {},
+    })
 
     // Lấy danh sách Lecturer
     const {
@@ -76,6 +72,7 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
             userProfile: {
                 active: true,
             },
+            active: true,
         },
     })
 
@@ -83,24 +80,30 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
     const treeData: TreeNodeType[] = useMemo(() => {
         if (!organizations.length) return []
 
-        return buildOrgTree(
-            organizations.map((org) => ({
-                id: org.Id,
-                name: org.sTen,
-                parentId: org.sParentId,
-            })),
-            lecturers.map((lec) => ({
-                id: lec.id,
-                userProfile: {
-                    fullName:
-                        `${lec.userProfile?.lastName ?? ''} ${lec.userProfile?.firstName ?? ''}`.trim() ||
-                        'Giảng viên không tên',
-                },
-                organizationId: lec.organizationId,
-            })),
-            null
+        return buildOrgAndLectureTree(
+            organizations
+                .filter((org) => (rest.ignoreOrgIds ? !rest.ignoreOrgIds.includes(org.Id) : true))
+                .map((org) => ({
+                    id: org.Id,
+                    name: org.sTen,
+                    parentId: org.sParentId,
+                })),
+            lecturers
+                .filter((lec) =>
+                    rest.ignoreLectureIds ? !rest.ignoreLectureIds.includes(lec.id) : true
+                )
+                .map((lec) => ({
+                    id: lec.id,
+                    userProfile: {
+                        fullName:
+                            `${lec.userProfile?.lastName ?? ''} ${lec.userProfile?.firstName ?? ''}`.trim() ||
+                            'Giảng viên không tên',
+                    },
+                    organizationId: lec.organizationId,
+                })),
+            organizationId ?? null
         )
-    }, [organizations, lecturers])
+    }, [organizations, lecturers, organizationId, rest.ignoreOrgIds, rest.ignoreLectureIds])
 
     // Xử lý lỗi
     useEffect(() => {
@@ -109,19 +112,6 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
         }
     }, [organizationsError, lecturersError])
 
-    const handleChange = (newValue: string[]) => {
-        setValue(newValue)
-        if (onChange) {
-            onChange(newValue)
-        }
-    }
-
-    const handlePopupScroll: SelectProps['onPopupScroll'] = (e) => {
-        if (onPopupScroll) {
-            onPopupScroll(e)
-        }
-    }
-
     // Hàm lọc tùy chỉnh cho tìm kiếm
     const filterTreeNode = (input: string, treeNode: any) => {
         return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
@@ -129,23 +119,25 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
 
     return (
         <TreeSelectAnt
-            multiple
-            treeCheckable
-            showSearch
+            // multiple
+            // treeCheckable
             style={style}
-            value={value}
             dropdownStyle={dropdownStyle}
-            placeholder={placeholder}
             allowClear
-            treeDefaultExpandAll
-            onChange={handleChange}
+            // showCheckedStrategy={TreeSelect.SHOW_PARENT}
+            // treeDefaultExpandAll
             treeData={treeData}
-            onPopupScroll={handlePopupScroll}
             filterTreeNode={filterTreeNode}
+            showSearch={true}
             treeNodeFilterProp="title"
+            treeExpandAction="click"
+            treeIcon
+            showCheckedStrategy="SHOW_CHILD"
+            placeholder="Chọn giảng viên"
             loading={organizationsLoading || lecturersLoading}
+            {...rest}
         />
     )
 }
 
-export default TreeSelect
+export default LectureTreeSelect

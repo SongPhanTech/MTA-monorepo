@@ -29,7 +29,7 @@ const fetchSession = async (): Promise<{
         }
     } catch (error) {
         // TODO!: toggle comment
-        if (process?.env?.NODE_ENV !== 'development') {
+        if (process.env.NODE_ENV !== 'development') {
             signIn()
         }
         return {

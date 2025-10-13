@@ -183,7 +183,7 @@ export default function AcademicActionConfig() {
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={4}>
                             <Select
-                                placeholder="Chọn khóa"
+                                placeholder="Chọn khoá"
                                 options={trainingCourseData.map((i: TrainingCourse) => {
                                     return {
                                         value: i.id,

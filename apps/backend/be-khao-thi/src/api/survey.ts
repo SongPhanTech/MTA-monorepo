@@ -314,7 +314,7 @@ app.openapi(getSurveyStatisticsBySemester, (c) => {
         { surveyType: 'Khảo sát chất lượng môn học', count: 15 },
         { surveyType: 'Khảo sát cơ sở vật chất', count: 2 },
         { surveyType: 'Khảo sát mức độ hài lòng của sinh viên', count: 4 },
-        { surveyType: 'Khảo sát hoạt động ngoại khóa', count: 1 },
+        { surveyType: 'Khảo sát hoạt động ngoại khoá', count: 1 },
     ]
 
     const totalSurveyCount = fakeDetails.reduce((sum, item) => sum + item.count, 0)

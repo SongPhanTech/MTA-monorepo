@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 
 // Hàm tạo cây đơn vị và giảng viên
-function buildOrgTree(
+function buildOrgAndLectureTree(
     list: Array<{ id: string; name: string | null; parentId: string | null }>,
     lecturers: Array<{
         id: string
@@ -30,13 +30,13 @@ function buildOrgTree(
                         selectable: true,
                         children: [],
                     })),
-                ...buildOrgTree(list, lecturers, item.id),
+                ...buildOrgAndLectureTree(list, lecturers, item.id),
             ],
         }))
 }
 
 // Define props for our custom component
-interface CustomTreeSelectProps {
+interface LectureTreeSelectProps {
     placeholder?: string
     style?: React.CSSProperties
     dropdownStyle?: React.CSSProperties
@@ -45,8 +45,8 @@ interface CustomTreeSelectProps {
     onPopupScroll?: SelectProps['onPopupScroll']
 }
 
-const TreeSelect: React.FC<CustomTreeSelectProps> = ({
-    placeholder = 'Please select',
+const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
+    placeholder = 'Chọn giảng viên',
     style = { width: '100%' },
     dropdownStyle = { maxHeight: 400, overflow: 'auto' },
     defaultValue,
@@ -60,7 +60,9 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
         data: organizations = [],
         isLoading: organizationsLoading,
         error: organizationsError,
-    } = useFindManyDM_DonVi()
+    } = useFindManyDM_DonVi({
+        where: {},
+    })
 
     // Lấy danh sách Lecturer
     const {
@@ -76,6 +78,7 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
             userProfile: {
                 active: true,
             },
+            active: true,
         },
     })
 
@@ -83,7 +86,7 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
     const treeData: TreeNodeType[] = useMemo(() => {
         if (!organizations.length) return []
 
-        return buildOrgTree(
+        return buildOrgAndLectureTree(
             organizations.map((org) => ({
                 id: org.Id,
                 name: org.sTen,
@@ -148,4 +151,4 @@ const TreeSelect: React.FC<CustomTreeSelectProps> = ({
     )
 }
 
-export default TreeSelect
+export default LectureTreeSelect

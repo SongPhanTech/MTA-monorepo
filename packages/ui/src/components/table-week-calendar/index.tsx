@@ -960,7 +960,7 @@ export function TableWeekCalendar({
                                                 }
                                             }}
                                             onClick={(e) => {
-                                                // Chỉ cho phép thao tác khi đã mở khóa
+                                                // Chỉ cho phép thao tác khi đã mở khoá
                                                 if (!isUnlocked) return
 
                                                 e.stopPropagation()
@@ -1025,7 +1025,7 @@ export function TableWeekCalendar({
                                             >
                                                 {dateStr}
                                             </div>
-                                            {/* Icon gợi ý cho việc thêm mới - chỉ hiển thị khi mở khóa */}
+                                            {/* Icon gợi ý cho việc thêm mới - chỉ hiển thị khi mở khoá */}
                                             {isUnlocked && (
                                                 <div
                                                     style={{

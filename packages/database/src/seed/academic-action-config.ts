@@ -274,7 +274,7 @@ export async function main() {
                     }
                 }
             }
-            console.log(`Đã seed ${definitions.length} cấu hình hành động cho khóa ${course.name}.`)
+            console.log(`Đã seed ${definitions.length} cấu hình hành động cho khoá ${course.name}.`)
         }
 
         // Chạy seed cho các khoá

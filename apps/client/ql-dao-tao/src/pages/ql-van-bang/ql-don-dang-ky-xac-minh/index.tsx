@@ -278,13 +278,13 @@ export default function QLDONDANGKY() {
                                 align: 'center',
                             },
                             {
-                                title: 'Năm khóa học bắt đầu',
+                                title: 'Năm khoá học bắt đầu',
                                 dataIndex: 'trainingCourseStartYear',
                                 width: 200,
                                 align: 'center',
                             },
                             {
-                                title: 'Năm khóa học kết thúc',
+                                title: 'Năm khoá học kết thúc',
                                 dataIndex: 'trainingCourseEndYear',
                                 width: 200,
                                 align: 'center',

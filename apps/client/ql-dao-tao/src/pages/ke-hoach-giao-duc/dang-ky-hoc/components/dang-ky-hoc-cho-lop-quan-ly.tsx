@@ -3,11 +3,9 @@ import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
-import type { SubjectClassTime } from '@workspace/db'
 import { useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Checkbox, Col, Flex, Form, Input, Row } from 'antd'
-import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
@@ -155,48 +153,46 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                         ),
                     },
                     {
-                        title: 'STT',
+                        title: 'TT',
                         dataIndex: '',
-                        width: 50,
+                        width: 35,
                         align: 'center',
-                        fixed: 'left',
                         render: (_, __, index) =>
                             index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                     },
                     {
-                        title: 'Lớp môn học',
-                        dataIndex: 'name',
-                        align: 'center',
-                        width: 200,
-                        fixed: 'left',
-                    },
-                    {
-                        title: 'Thời gian học',
-                        dataIndex: 'startDate',
+                        title: 'Mã LMH',
+                        dataIndex: 'code',
                         align: 'center',
                         width: 150,
-                        render: (record: string) =>
-                            record ? dayjs(record).format('DD/MM/YYYY') : '',
                     },
-                    {
-                        title: 'Thời khoá biểu',
-                        width: 150,
-                        align: 'center',
-                        render: (_, record) => {
-                            return record.subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
-                                return (
-                                    <p>
-                                        {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
-                                        {tkb.startPeriod} - {tkb.endPeriod}
-                                    </p>
-                                )
-                            })
-                        },
-                    },
+                    // {
+                    //     title: 'Thời gian học',
+                    //     dataIndex: 'startDate',
+                    //     align: 'center',
+                    //     width: 150,
+                    //     render: (record: string) =>
+                    //         record ? dayjs(record).format('DD/MM/YYYY') : '',
+                    // },
+                    // {
+                    //     title: 'Thời khoá biểu',
+                    //     width: 150,
+                    //     align: 'center',
+                    //     render: (_, record) => {
+                    //         return record.subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
+                    //             return (
+                    //                 <p>
+                    //                     {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
+                    //                     {tkb.startPeriod} - {tkb.endPeriod}
+                    //                 </p>
+                    //             )
+                    //         })
+                    //     },
+                    // },
                     {
                         title: 'Kíp học',
                         dataIndex: 'schedule',
-                        width: 150,
+                        width: 80,
                         align: 'center',
                         // filters: scheduleOptions.map((opt) => ({
                         //     text: opt.label,
@@ -205,37 +201,37 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                         filterSearch: true,
                         render: (value) => getScheduleLabel(value),
                     },
+                    // {
+                    //     title: 'Giảng viên 1',
+                    //     dataIndex: ['mainLecturer', 'userProfile'],
+                    //     width: 250,
+                    //     render: (record) => record && `${record?.code || ''} - ${record.fullname}`,
+                    // },
                     {
-                        title: 'Giảng viên 1',
-                        dataIndex: ['mainLecturer', 'userProfile'],
-                        width: 250,
-                        render: (record) => record && `${record?.code || ''} - ${record.fullname}`,
-                    },
-                    {
-                        title: 'Số tín chỉ',
+                        title: 'Số TC',
                         dataIndex: ['subject', 'credit'],
+                        align: 'center',
+                        width: 80,
+                    },
+                    // {
+                    //     title: 'Hình thức thi',
+                    //     dataIndex: ['subject', 'examType'],
+                    //     align: 'center',
+                    //     width: 180,
+                    //     render: (value) => getExamTypeLabel(value),
+                    // },
+                    {
+                        title: 'Khu vực',
+                        dataIndex: ['room', 'building', 'name'],
                         align: 'center',
                         width: 120,
                     },
-                    {
-                        title: 'Hình thức thi',
-                        dataIndex: ['subject', 'examType'],
-                        align: 'center',
-                        width: 180,
-                        render: (value) => getExamTypeLabel(value),
-                    },
-                    {
-                        title: 'Địa điểm',
-                        dataIndex: ['room', 'building', 'name'],
-                        align: 'center',
-                        width: 180,
-                    },
-                    {
-                        title: 'Phòng học',
-                        dataIndex: ['room', 'name'],
-                        align: 'center',
-                        width: 180,
-                    },
+                    // {
+                    //     title: 'Phòng học',
+                    //     dataIndex: ['room', 'name'],
+                    //     align: 'center',
+                    //     width: 100,
+                    // },
                     {
                         title: 'Số SV max',
                         dataIndex: 'maxStudent',
@@ -245,7 +241,7 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                     {
                         title: 'Số SV đã ĐK',
                         align: 'center',
-                        width: 120,
+                        width: 100,
                         render: (record: SubjectClassData) =>
                             record?.fixedClasses?.reduce(
                                 (acc: number, curr) => acc + (curr?._count?.students ?? 0),
@@ -255,12 +251,12 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                     {
                         title: 'Lớp QL đã ĐK',
                         align: 'center',
-                        width: 150,
+                        width: 120,
                         render: (__, record: any) => {
                             return record?.fixedClasses.length ? (
                                 <TextTruncate
                                     arr={record?.fixedClasses.map((i: any) => {
-                                        return { key: i?.id, label: i.name }
+                                        return { key: i?.id, label: i.code }
                                     })}
                                     key="fixedClasses"
                                 />

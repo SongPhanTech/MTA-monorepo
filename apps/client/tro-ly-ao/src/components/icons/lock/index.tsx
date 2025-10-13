@@ -8,11 +8,11 @@ type DeleteIconProps = {
     React.RefAttributes<HTMLSpanElement>
 const LockIcon = ({ popConfirm, ...props }: DeleteIconProps) => {
     return (
-        <Tooltip title="Khóa" placement="leftTop">
+        <Tooltip title="Khoá" placement="leftTop">
             <Popconfirm
                 placement="topLeft"
-                title="Xác nhận khóa tài khoản?"
-                description="Tài khoản này sẽ bị khóa"
+                title="Xác nhận khoá tài khoản?"
+                description="Tài khoản này sẽ bị khoá"
                 okText="Đồng ý"
                 cancelText="Hủy"
                 {...popConfirm}

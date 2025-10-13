@@ -26,7 +26,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Divider, Flex, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Checkbox, Col, Divider, Flex, message, Row, Tag, Tooltip } from 'antd'
 import { BookPlus, CopyPlus, FileDown, FileUp } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -365,7 +365,7 @@ export default function TrainingProgramSubjects() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                CTĐT toàn khóa:{' '}
+                CTĐT toàn khoá:{' '}
                 {[
                     initialValue?.code,
                     initialValue?.name,
@@ -709,6 +709,16 @@ export default function TrainingProgramSubjects() {
                                     getExamTypeLabel(record?.subject?.examType),
                             },
                             {
+                                title: 'Tính điểm TBC',
+                                align: 'center',
+                                fixed: 'right',
+                                dataIndex: 'useForFinalScore',
+                                width: 120,
+                                render: (value: boolean) => {
+                                    return <Checkbox checked={!!value} />
+                                },
+                            },
+                            {
                                 title: 'Trạng thái',
                                 align: 'center',
                                 width: 150,
@@ -798,7 +808,7 @@ TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement)
                     title: 'Danh mục CTĐT khung',
                     href: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                 },
-                { title: 'Chi tiết CTĐT toàn khóa' },
+                { title: 'Chi tiết CTĐT toàn khoá' },
             ]}
         >
             {page}

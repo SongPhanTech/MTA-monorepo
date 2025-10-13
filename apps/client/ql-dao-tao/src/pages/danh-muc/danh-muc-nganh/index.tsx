@@ -275,9 +275,9 @@ export default function TrainingFieldPage() {
                             },
                             {
                                 title: 'Số quyết định',
-                                fixed: 'left',
                                 dataIndex: 'decisionNo',
                                 align: 'center',
+                                width: 150,
                                 type: 'input',
                             },
                             {

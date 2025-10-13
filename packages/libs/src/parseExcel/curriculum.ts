@@ -20,10 +20,10 @@ type TrainingBlockResult = {
         period: number
         semester: number | null
         type: $Enums.SubjectRequirementType
+        subjectVersionType: $Enums.SubjectVersionType
+        examType: $Enums.ExamType
         useForFinalScore: boolean
         graduation: boolean // có phải là môn học tốt nghiệp hay không
-        project: boolean // có phải là môn học đồ án hay không
-        print: boolean
     }[]
 }
 
@@ -214,9 +214,11 @@ export const parseCurriculumSheet = (file: ArrayBufferLike): ParseCurriculumShee
                     ? $Enums.SubjectRequirementType.Mandatory
                     : $Enums.SubjectRequirementType.Optional,
                 useForFinalScore,
-                print: useForFinalScore,
                 graduation,
-                project,
+                examType: $Enums.ExamType.OfflineWritten,
+                subjectVersionType: project
+                    ? $Enums.SubjectVersionType.Project
+                    : $Enums.SubjectVersionType.Normal,
             })
 
             continue

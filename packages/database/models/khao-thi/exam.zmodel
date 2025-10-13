@@ -5,12 +5,12 @@ import '../ql-dao-tao/categories'
 
 /// Loại câu hỏi
 enum QuestionType {
-  ESSAY              // Tự luận
-  ORAL               // Vấn đáp
-  // SINGLE_CHOICE   // Trắc nghiệm một lựa chọn
-  // MULTIPLE_CHOICE // Trắc nghiệm nhiều lựa chọn
-  // FILL_IN_BLANK   // Điền vào chỗ trống
-  // ORDERING        // Sắp xếp thứ tự
+  ESSAY           // Tự luận
+  ORAL            // Vấn đáp
+  SINGLE_CHOICE   // Trắc nghiệm một lựa chọn
+  MULTIPLE_CHOICE // Trắc nghiệm nhiều lựa chọn
+  FILL_IN_BLANK   // Điền vào chỗ trống
+  ORDERING        // Sắp xếp thứ tự
 
   @@schema("khao-thi")
 }
@@ -40,7 +40,7 @@ model QuestionBank extends Base {
   @@schema("khao-thi")
 }
 
-/// Mức độ khó
+/// Mức độ
 model Difficulty extends Base {
   name      String     @unique // VD: "Nhận biết", "Thông hiểu", "Vận dụng", "Vận dụng cao"
   level     Int?       @unique // Mức độ ưu tiên hoặc sắp xếp, VD: 1, 2, 3, 4
@@ -67,67 +67,67 @@ model KnowledgeBlock extends Base {
 
 /// Câu hỏi
 model Question extends Base {
-  content          String // Nội dung câu hỏi. Với FILL_IN_BLANK, có thể chứa placeholder như {$1}
-  type             QuestionType       @default(ESSAY)
-  point            Float              @default(1) // Điểm số
-  explanation      String? // Giải thích đáp án
-  isAutoGraded     Boolean            @default(false)
+  content               String // Nội dung câu hỏi. Với FILL_IN_BLANK, có thể chứa placeholder như {$1}
+  type                  QuestionType           @default(ESSAY)
+  point                 Float                  @default(1) // Điểm số
+  explanation           String? // Giải thích đáp án
+  isAutoGraded          Boolean                @default(false)
 
-  // // Liên kết với các bảng dữ liệu chi tiết theo từng loại câu hỏi
-  // multipleChoiceOptions MultipleChoiceOption[]
-  // fillInBlankSlots      FillInBlankSlot[]
-  // orderingItems         OrderingItem[]
+  // Liên kết với các bảng dữ liệu chi tiết theo từng loại câu hỏi
+  multipleChoiceOptions MultipleChoiceOption[]
+  fillInBlankSlots      FillInBlankSlot[]
+  orderingItems         OrderingItem[]
 
-  questionBank     QuestionBank       @relation(fields: [questionBankId], references: [id])
-  questionBankId   String
-  knowledgeBlock   KnowledgeBlock?    @relation(fields: [knowledgeBlockId], references: [id])
-  knowledgeBlockId String?
-  difficulty       Difficulty?        @relation(fields: [difficultyId], references: [id])
-  difficultyId     String?
+  questionBank          QuestionBank           @relation(fields: [questionBankId], references: [id])
+  questionBankId        String
+  knowledgeBlock        KnowledgeBlock?        @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlockId      String?
+  difficulty            Difficulty?            @relation(fields: [difficultyId], references: [id])
+  difficultyId          String?
 
-  sessionQuestions ExamBankQuestion[]
+  sessionQuestions      ExamBankQuestion[]
   /// Câu trả lời của thí sinh trong các phiên thi
-  answers          Answer[]
+  answers               Answer[]
 
   @@schema("khao-thi")
 }
 
-// /// Lựa chọn cho câu hỏi trắc nghiệm (một hoặc nhiều đáp án)
-// model MultipleChoiceOption extends Base {
-//   questionId        String
-//   question          Question                       @relation(fields: [questionId], references: [id], onDelete: Cascade)
-//   content           String // Nội dung của lựa chọn (VD: "A. Paris")
-//   isCorrect         Boolean                        @default(false) // Đánh dấu đây có phải là đáp án đúng không
-//   order             Int // Thứ tự hiển thị của lựa chọn
+/// Lựa chọn cho câu hỏi trắc nghiệm (một hoặc nhiều đáp án)
+model MultipleChoiceOption extends Base {
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  content    String // Nội dung của lựa chọn (VD: "A. Paris")
+  isCorrect  Boolean  @default(false) // Đánh dấu đây có phải là đáp án đúng không
+  order      Int // Thứ tự hiển thị của lựa chọn
 
-//   selectedInAnswers SelectedMultipleChoiceOption[]
+  // selectedInAnswers SelectedMultipleChoiceOption[]
 
-//   @@schema("khao-thi")
-// }
+  @@schema("khao-thi")
+}
 
-// /// Chỗ trống cần điền cho câu hỏi điền khuyết
-// model FillInBlankSlot extends Base {
-//   questionId         String
-//   question           Question            @relation(fields: [questionId], references: [id], onDelete: Cascade)
-//   order              Int // Thứ tự của chỗ trống trong câu (VD: 1 cho {$1})
-//   correctAnswer      String // Đáp án đúng cho chỗ trống này
+/// Chỗ trống cần điền cho câu hỏi điền khuyết
+model FillInBlankSlot extends Base {
+  questionId    String
+  question      Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  order         Int // Thứ tự của chỗ trống trong câu (VD: 1 cho {$1})
+  correctAnswer String // Đáp án đúng cho chỗ trống này
 
-//   fillInBlankAnswers FillInBlankAnswer[]
-//   @@unique([questionId, order])
-//   @@schema("khao-thi")
-// }
+  // fillInBlankAnswers FillInBlankAnswer[]
+  @@unique([questionId, order])
+  @@schema("khao-thi")
+}
 
-// /// Mục cần sắp xếp cho câu hỏi sắp xếp thứ tự
-// model OrderingItem extends Base {
-//   questionId      String
-//   question        Question         @relation(fields: [questionId], references: [id], onDelete: Cascade)
-//   content         String // Nội dung của mục cần sắp xếp
-//   correctOrder    Int // Thứ tự đúng của mục này (VD: 1, 2, 3, ...)
+/// Mục cần sắp xếp cho câu hỏi sắp xếp thứ tự
+model OrderingItem extends Base {
+  questionId   String
+  question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  content      String // Nội dung của mục cần sắp xếp
+  correctOrder Int // Thứ tự đúng của mục này (VD: 1, 2, 3, ...)
 
-//   orderingAnswers OrderingAnswer[]
-//   @@unique([questionId, correctOrder])
-//   @@schema("khao-thi")
-// }
+  // orderingAnswers OrderingAnswer[]
+  @@unique([questionId, correctOrder])
+  @@schema("khao-thi")
+}
 
 /// Câu trả lời của thí sinh
 model Answer extends Base {

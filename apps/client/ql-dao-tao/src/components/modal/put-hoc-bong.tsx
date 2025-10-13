@@ -95,10 +95,10 @@ const PutHocBong = () => {
             title={id ? 'Chỉnh sửa học bổng' : 'Thêm mới học bổng'}
         >
             <Col span={12}>
-                <FormItem form={form} name="trainingCourseId" label="Khóa học" required>
+                <FormItem form={form} name="trainingCourseId" label="Khoá học" required>
                     <Select
                         maxTagCount={'responsive'}
-                        placeholder="Chọn khóa"
+                        placeholder="Chọn khoá"
                         options={trainingCourseData.map((i: TrainingCourse) => {
                             return {
                                 value: i.id,

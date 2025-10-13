@@ -72,8 +72,8 @@ export default function PutQuaTrinhCuDiBoiDuongModal() {
             layout="vertical"
         >
             <Col span={24}>
-                <FormItem label="Khóa đào tạo, bồi dưỡng tập huấn" name="ten" required form={form}>
-                    <Input placeholder="Nhập khóa đào tạo, bồi dưỡng tập huấn" />
+                <FormItem label="Khoá đào tạo, bồi dưỡng tập huấn" name="ten" required form={form}>
+                    <Input placeholder="Nhập khoá đào tạo, bồi dưỡng tập huấn" />
                 </FormItem>
             </Col>
 

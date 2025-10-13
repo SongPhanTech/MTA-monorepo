@@ -1,40 +1,93 @@
+import DatePicker from '@components/commons/date-picker'
+import FormItem from '@components/commons/form-item'
+import LectureTreeSelect from '@components/commons/lecture-select-multi/TreeSelectLecture'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { buildOrgTree, formatDate } from '@lib/utils'
+import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type {
-    SubjectClass,
-    SubjectClassSchedule,
-    SubjectClassTime,
-    SubjectVersion,
-    TrainingCourse,
-    TrainingMajor,
-} from '@workspace/db'
+import type { $Enums, Prisma, TrainingMajor } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useDeleteSubjectClass,
     useFindManyDM_DonVi,
-    useFindManyLecturer,
     useFindManySubjectClass,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
+    useUpdateManySubjectClass,
 } from '@workspace/db/hooks'
-import { putManySubjectClass } from '@workspace/libs/api/training'
-import { useAbility } from '@workspace/permissions/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { useAbility, useOrgPermissions } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, message, Row } from 'antd'
+import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Checkbox, Col, Flex, Form, message, Popover, Row, Switch } from 'antd'
+import { Dayjs } from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
+type DataSubmit = Prisma.SubjectClassGetPayload<{
+    include: {
+        semester: true
+        mainLecturer: {
+            include: {
+                userProfile: true
+            }
+        }
+        subject: {
+            include: {
+                managementOrganization: true
+            }
+        }
+        extraLecturer: {
+            include: {
+                userProfile: true
+            }
+        }
+        enterGradeLecturer: {
+            include: {
+                userProfile: true
+            }
+        }
+        room: {
+            include: {
+                building: {
+                    include: {
+                        trainingLocation: true
+                    }
+                }
+            }
+        }
+        subjectClassStudent: true
+        subjectClassTimes: true
+    }
+}> & { rowSpan?: number }
+
+type TeachingAssignmentForm = {
+    subjectClass: Record<
+        string,
+        {
+            lecturerId: string | null
+            extraLecturerId: string | null
+            enterGradeLecturerId: string | null
+            lecturerAssignmentDeadline: Dayjs | null
+            examType: $Enums.ExamType | null
+            roomId: string | null
+        }
+    >
+}
+
+type BaoDayForm = {
+    deadline: string
+    isOverride: boolean
+}
 
 export default function TeachingAssignment() {
     const { can, canSome } = useAbility()
@@ -56,223 +109,249 @@ export default function TeachingAssignment() {
         organization: undefined,
         room: undefined,
     })
+
+    const [form] = Form.useForm<TeachingAssignmentForm>()
+    const [formBaoDay] = Form.useForm<BaoDayForm>()
+
     const { id: semesterId } = useSemesterStore()
     const [isEdit, setIsEdit] = useState(false)
-    const [dataSubmit, setDataSubmit] = useState<SubjectClass[]>([])
-    const { options, getExamTypeLabel } = useExamTypeOptions()
+    const { options } = useExamTypeOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-
+    const canXemTatCa = can(
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+        'XEM_TAT_CA'
+    )
     const where = useMemo(
-        () => ({
-            ...(filters.name
-                ? {
-                      name: { contains: filters.name, mode: 'insensitive' as const },
-                  }
-                : {}),
-            ...(filters.code
-                ? {
-                      code: { contains: filters.code, mode: 'insensitive' as const },
-                  }
-                : {}),
+        () =>
+            ({
+                ...(filters.name
+                    ? {
+                          name: { contains: filters.name, mode: 'insensitive' as const },
+                      }
+                    : {}),
+                ...(filters.code
+                    ? {
+                          code: { contains: filters.code, mode: 'insensitive' as const },
+                      }
+                    : {}),
 
-            ...(filters.examType
-                ? {
-                      examType: {
-                          in: filters.examType,
-                      },
-                  }
-                : {}),
-            ...(filters.schedule
-                ? {
-                      schedule: {
-                          in: filters.schedule,
-                      },
-                  }
-                : {}),
-            ...(semesterId || filters.trainingCourseId
-                ? {
-                      semester: {
-                          ...(semesterId ? { id: semesterId } : {}),
-                          ...(filters.trainingCourseId
-                              ? {
-                                    trainingCoursesStart: {
-                                        some: { id: filters.trainingCourseId },
-                                    },
-                                }
-                              : {}),
-                      },
-                  }
-                : {}),
-            ...(filters.trainingMajorId
-                ? {
-                      subject: {
-                          managementOrganization: {
-                              trainingMajors: {
-                                  some: {
-                                      id: filters.trainingMajorId,
+                ...(filters.examType
+                    ? {
+                          examType: {
+                              in: filters.examType,
+                          },
+                      }
+                    : {}),
+                ...(filters.schedule
+                    ? {
+                          schedule: {
+                              in: filters.schedule,
+                          },
+                      }
+                    : {}),
+                ...(semesterId
+                    ? {
+                          semester: {
+                              id: semesterId,
+                          },
+                      }
+                    : {}),
+                ...(filters.trainingCourseId
+                    ? {
+                          subjectClassStudent: {
+                              some: {
+                                  student: {
+                                      fixedClass: {
+                                          trainingCourseId: filters.trainingCourseId,
+                                      },
                                   },
                               },
                           },
-                      },
-                  }
-                : {}),
-            ...(filters.organization
-                ? {
-                      managementOrganizationId: {
-                          in: filters.organization,
-                      },
-                  }
-                : {}),
-            ...(filters.lecturerId?.length === 1
-                ? {
-                      ...(filters.lecturerId[0]
-                          ? { lecturerId: { not: null } }
-                          : { lecturerId: null }),
-                  }
-                : {}),
-            ...(filters.mainLecturer
-                ? {
-                      mainLecturer: {
-                          userProfile: {
-                              OR: [
-                                  {
-                                      firstName: {
-                                          contains: filters.mainLecturer,
-                                          mode: 'insensitive' as const,
+                      }
+                    : {}),
+                ...(filters.trainingMajorId
+                    ? {
+                          subject: {
+                              managementOrganization: {
+                                  trainingMajors: {
+                                      some: {
+                                          id: filters.trainingMajorId,
                                       },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.mainLecturer,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                              ],
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.extraLecturer
-                ? {
-                      extraLecturer: {
-                          userProfile: {
-                              OR: [
-                                  {
-                                      firstName: {
-                                          contains: filters.extraLecturer,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                                  {
-                                      lastName: {
-                                          contains: filters.extraLecturer,
-                                          mode: 'insensitive' as const,
-                                      },
-                                  },
-                              ],
-                          },
-                      },
-                  }
-                : {}),
-            ...(filters.room
-                ? {
-                      room: {
-                          building: {
-                              trainingLocation: {
-                                  name: {
-                                      contains: filters.room,
-                                      mode: 'insensitive' as const,
                                   },
                               },
                           },
-                      },
-                  }
-                : {}),
-        }),
-        [filters, semesterId]
+                      }
+                    : {}),
+                ...(filters.organization
+                    ? {
+                          managementOrganizationId: {
+                              in: filters.organization,
+                          },
+                      }
+                    : {}),
+                ...(filters.lecturerId?.length === 1
+                    ? {
+                          ...(filters.lecturerId[0]
+                              ? { lecturerId: { not: null } }
+                              : { lecturerId: null }),
+                      }
+                    : {}),
+                ...(filters.mainLecturer
+                    ? {
+                          mainLecturer: {
+                              userProfile: {
+                                  OR: [
+                                      {
+                                          firstName: {
+                                              contains: filters.mainLecturer,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      },
+                                      {
+                                          lastName: {
+                                              contains: filters.mainLecturer,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      },
+                                  ],
+                              },
+                          },
+                      }
+                    : {}),
+                ...(filters.extraLecturer
+                    ? {
+                          extraLecturer: {
+                              userProfile: {
+                                  OR: [
+                                      {
+                                          firstName: {
+                                              contains: filters.extraLecturer,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      },
+                                      {
+                                          lastName: {
+                                              contains: filters.extraLecturer,
+                                              mode: 'insensitive' as const,
+                                          },
+                                      },
+                                  ],
+                              },
+                          },
+                      }
+                    : {}),
+                ...(filters.room
+                    ? {
+                          room: {
+                              building: {
+                                  trainingLocation: {
+                                      name: {
+                                          contains: filters.room,
+                                          mode: 'insensitive' as const,
+                                      },
+                                  },
+                              },
+                          },
+                      }
+                    : {}),
+                deletedAt: null,
+                active: true,
+                trainingObjectTypeId,
+                ...(!canXemTatCa
+                    ? {
+                          lecturerAssignmentDeadline: {
+                              not: null,
+                          },
+                      }
+                    : {}),
+            }) satisfies Prisma.SubjectClassWhereInput,
+        [filters, semesterId, trainingObjectTypeId, canXemTatCa]
     )
 
-    const { data = [], refetch } = useFindManySubjectClass({
-        where: {
-            ...where,
-            trainingObjectTypeId,
+    const { data = [], refetch } = useFindManySubjectClass(
+        {
+            where: {
+                ...where,
+            },
+            include: {
+                semester: true,
+                mainLecturer: {
+                    include: {
+                        userProfile: true,
+                    },
+                },
+                subject: {
+                    include: {
+                        managementOrganization: true,
+                    },
+                },
+                extraLecturer: {
+                    include: {
+                        userProfile: true,
+                    },
+                },
+                enterGradeLecturer: {
+                    include: {
+                        userProfile: true,
+                    },
+                },
+                room: {
+                    include: {
+                        building: {
+                            include: {
+                                trainingLocation: true,
+                            },
+                        },
+                    },
+                },
+                subjectClassStudent: true,
+                subjectClassTimes: true,
+            },
+            orderBy: [
+                ...emptyObjectIf(
+                    [
+                        {
+                            subject: {
+                                credit: filters.credit,
+                            },
+                        },
+                    ],
+                    !!filters.credit
+                ),
+                ...emptyObjectIf(
+                    [
+                        {
+                            maxStudent: filters.maxStudent,
+                        },
+                    ],
+                    !!filters.maxStudent
+                ),
+                ...emptyObjectIf(
+                    [
+                        {
+                            subjectClassStudent: {
+                                _count: filters.subjectClassStudent,
+                            },
+                        },
+                    ],
+                    !!filters.subjectClassStudent
+                ),
+                {
+                    code: 'asc',
+                },
+            ],
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
         },
-        include: {
-            semester: true,
-            mainLecturer: {
-                include: {
-                    userProfile: true,
-                },
-            },
-            subject: {
-                include: {
-                    managementOrganization: true,
-                },
-            },
-            extraLecturer: {
-                include: {
-                    userProfile: true,
-                },
-            },
-            enterGradeLecturer: {
-                include: {
-                    userProfile: true,
-                },
-            },
-            room: {
-                include: {
-                    building: {
-                        include: {
-                            trainingLocation: true,
-                        },
-                    },
-                },
-            },
-            subjectClassStudent: true,
-            subjectClassTimes: true,
-        },
-        orderBy: [
-            ...emptyObjectIf(
-                [
-                    {
-                        subject: {
-                            credit: filters.credit,
-                        },
-                    },
-                ],
-                !!filters.credit
-            ),
-            ...emptyObjectIf(
-                [
-                    {
-                        maxStudent: filters.maxStudent,
-                    },
-                ],
-                !!filters.maxStudent
-            ),
-            ...emptyObjectIf(
-                [
-                    {
-                        subjectClassStudent: {
-                            _count: filters.subjectClassStudent,
-                        },
-                    },
-                ],
-                !!filters.subjectClassStudent
-            ),
-            {
-                createdAt: 'desc',
-            },
-        ],
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-    })
+        {
+            enabled: !!semesterId && !!trainingObjectTypeId,
+            refetchOnWindowFocus: false,
+        }
+    )
 
     const { data: count } = useCountSubjectClass({
         where: {
             ...where,
-            trainingObjectTypeId,
-            deletedAt: null,
         },
     })
 
@@ -293,8 +372,40 @@ export default function TeachingAssignment() {
         })
     }
 
+    const { mutateAsync: updateManySubjectClass } = useUpdateManySubjectClass()
+
+    const guiBaoDay = async (values: BaoDayForm) => {
+        try {
+            setIsEdit(false)
+            showSpinner()
+            await updateManySubjectClass({
+                data: {
+                    lecturerAssignmentDeadline: values.deadline,
+                },
+                where: {
+                    trainingObjectTypeId,
+                    semesterId,
+                    ...(values.isOverride
+                        ? {}
+                        : {
+                              lecturerAssignmentDeadline: null,
+                          }),
+                },
+            })
+            message.success('Báo dạy thành công')
+            debouncedRefetch()
+            formBaoDay.resetFields()
+        } catch (error: any) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const orgId = useOrgPermissions()
+
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
-    const treeData = buildOrgTree(manageOrgData)
+    const treeData = buildOrgTree(manageOrgData, canXemTatCa ? '0' : orgId)
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
@@ -304,37 +415,41 @@ export default function TeachingAssignment() {
         where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 
-    const { data: lecturerData = [] } = useFindManyLecturer({
-        include: {
-            userProfile: true,
-        },
-    })
-    async function handleChangeData() {
+    async function handleSaveData(values: TeachingAssignmentForm) {
         try {
+            setIsEdit(false)
             showSpinner()
-            const res = await putManySubjectClass(
-                dataSubmit.map((subjectClass) => ({
-                    id: subjectClass.id,
-                    lecturerId: subjectClass.lecturerId ?? null,
-                    extraLecturerId: subjectClass.extraLecturerId ?? null,
-                    enterGradeLecturerId: subjectClass.enterGradeLecturerId ?? null,
+            await sqlTransaction(
+                Object.entries(values.subjectClass).map(([id, subjectClass]) => ({
+                    model: 'SubjectClass',
+                    operation: 'update',
+                    data: {
+                        where: { id },
+                        data: {
+                            lecturerId: subjectClass.lecturerId,
+                            extraLecturerId: subjectClass.extraLecturerId,
+                            enterGradeLecturerId: subjectClass.enterGradeLecturerId,
+                            lecturerAssignmentDeadline: subjectClass.lecturerAssignmentDeadline
+                                ? subjectClass.lecturerAssignmentDeadline?.toDate()
+                                : null,
+                        },
+                    },
                 }))
             )
-            if (res?.data?.failedIds?.length) {
-                message.error(
-                    `${res?.data?.failedIds?.length} lớp có lỗi khi phân công giảng dạy, vui lòng gửi lại`
-                )
-            } else {
-                message.success('Phân công giảng dạy thành công')
-            }
-            await refetch()
-            setIsEdit(false)
-            setDataSubmit([...data])
+            // await updateManySubjectClass({
+            //     data: Object.entries(values.subjectClass).map(([id, subjectClass]) => ({
+            //         id,
+            //         lecturerId: subjectClass.lecturerId,
+            //         extraLecturerId: subjectClass.extraLecturerId,
+            //         enterGradeLecturerId: subjectClass.enterGradeLecturerId,
+            //     })),
+            //     where: {
+            //         id: { in: data.map((subjectClass) => subjectClass.id) },
+            //     },
+            // })
+            debouncedRefetch()
+            message.success('Phân công giảng dạy thành công')
         } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -360,75 +475,6 @@ export default function TeachingAssignment() {
         }
     }
 
-    const handleChangeLecturer = (
-        record: SubjectClass,
-        value: string | undefined,
-        objectIdName: string,
-        objectName: string
-    ) => {
-        console.log(record)
-        if (value) {
-            const itemChange = lecturerData.find((i) => i?.id === value)
-
-            setDataSubmit((prev) =>
-                prev.map((subjectClass) =>
-                    subjectClass.id === record.id
-                        ? {
-                              ...subjectClass,
-                              [objectIdName]: value,
-                              [objectName]: itemChange,
-                              enterGradeLecturer: null,
-                              enterGradeLecturerId: null,
-                          }
-                        : subjectClass
-                )
-            )
-        } else {
-            setDataSubmit((prev) =>
-                prev.map((subjectClass) =>
-                    subjectClass.id === record.id
-                        ? {
-                              ...subjectClass,
-                              [objectIdName]: null,
-                              [objectName]: null,
-                              enterGradeLecturer: null,
-                              enterGradeLecturerId: null,
-                          }
-                        : subjectClass
-                )
-            )
-        }
-    }
-
-    const handleChangeEnterGradeLecturer = (record: SubjectClass, value: string | undefined) => {
-        if (value) {
-            const itemChange = lecturerData.find((i) => i?.id === value)
-            setDataSubmit((prev) =>
-                prev.map((subjectClass) =>
-                    subjectClass.id === record.id
-                        ? {
-                              ...subjectClass,
-                              enterGradeLecturerId: value,
-                              enterGradeLecturer: itemChange,
-                          }
-                        : subjectClass
-                )
-            )
-        } else {
-            setDataSubmit((prev) =>
-                prev.map((subjectClass) =>
-                    subjectClass.id === record.id
-                        ? {
-                              ...subjectClass,
-                              enterGradeLecturer: null,
-                              enterGradeLecturerId: null,
-                          }
-                        : subjectClass
-                )
-            )
-        }
-    }
-
     const { onOpen: onOpenModalNhapTKB } = useDisclosure<string>({
         tag: 'ModalNhapTKB',
     })
@@ -441,22 +487,60 @@ export default function TeachingAssignment() {
         tag: 'PutOneSubjectClassModal',
     })
 
+    const dataWithRowSpan = useMemo(() => {
+        if (data) {
+            const countSubjectClassBySubjectId: Record<string, number> = {}
+            data.forEach((subjectClass) => {
+                countSubjectClassBySubjectId[subjectClass.subjectId] =
+                    (countSubjectClassBySubjectId[subjectClass.subjectId] || 0) + 1
+            })
+            return data.map((subjectClass) => {
+                const cloneCount = countSubjectClassBySubjectId[subjectClass.subjectId]
+                countSubjectClassBySubjectId[subjectClass.subjectId] = 0
+                return {
+                    ...subjectClass,
+                    rowSpan: cloneCount,
+                }
+            })
+        }
+        return []
+    }, [data])
+
     const handleModal = () => {
         onOpen()
     }
 
     const handleCancel = () => {
         setIsEdit(false)
-        setDataSubmit([...data])
+        resetForm()
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
+    const resetForm = useCallback(() => {
+        form.setFieldsValue({
+            subjectClass: dataWithRowSpan.reduce(
+                (acc, curr) => {
+                    acc[curr.id] = {
+                        lecturerId: curr.lecturerId,
+                        extraLecturerId: curr.extraLecturerId,
+                        enterGradeLecturerId: curr.enterGradeLecturerId,
+                        lecturerAssignmentDeadline: curr.lecturerAssignmentDeadline
+                            ? dayjs(curr.lecturerAssignmentDeadline)
+                            : null,
+                        examType: curr.examType,
+                        roomId: curr.roomId,
+                    }
+                    return acc
+                },
+                {} as TeachingAssignmentForm['subjectClass']
+            ),
+        })
+    }, [dataWithRowSpan, form])
+
     useEffect(() => {
-        if (data) {
-            setDataSubmit([...data])
-            setIsEdit(false)
+        if (resetForm) {
+            resetForm()
         }
-    }, [data])
+    }, [resetForm])
 
     return (
         <div>
@@ -467,8 +551,8 @@ export default function TeachingAssignment() {
                             <Row gutter={[16, 16]} align="top">
                                 <Col span={8}>
                                     <Select
-                                        placeholder="Chọn khóa"
-                                        options={trainingCourseData.map((i: TrainingCourse) => {
+                                        placeholder="Chọn khoá"
+                                        options={trainingCourseData.map((i) => {
                                             return {
                                                 value: i.id,
                                                 label: i.name,
@@ -503,6 +587,51 @@ export default function TeachingAssignment() {
                             <Flex justify="end" gap={4}>
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                    'XEM_TAT_CA'
+                                ) && (
+                                    <Popover
+                                        content={
+                                            <Form
+                                                form={formBaoDay}
+                                                initialValues={{ isOverride: false }}
+                                                onFinish={guiBaoDay}
+                                            >
+                                                <FormItem
+                                                    form={formBaoDay}
+                                                    name={'deadline'}
+                                                    label="Hạn PCGD"
+                                                >
+                                                    <DatePicker />
+                                                </FormItem>
+                                                <FormItem
+                                                    form={formBaoDay}
+                                                    name={'isOverride'}
+                                                    label="Ghi đè PCGD"
+                                                    className="mt-2"
+                                                >
+                                                    <Switch />
+                                                </FormItem>
+                                                <Col span={24} className="text-right mt-4">
+                                                    <Button type="primary" htmlType="submit">
+                                                        Gửi báo dạy
+                                                    </Button>
+                                                </Col>
+                                            </Form>
+                                        }
+                                        title="Báo dạy cho Khoa/Viện/Bộ môn"
+                                        trigger="click"
+                                        placement="bottomRight"
+                                    >
+                                        <Button
+                                            // onClick={() => handleModal()}
+                                            type="primary"
+                                        >
+                                            Báo dạy
+                                        </Button>
+                                    </Popover>
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
                                     'THEM'
                                 ) && (
                                     <Button
@@ -528,16 +657,16 @@ export default function TeachingAssignment() {
                                 {isEdit ? (
                                     <>
                                         <Button
-                                            onClick={() => handleChangeData()}
+                                            onClick={() => form.submit()}
                                             type="primary"
-                                            disabled={!dataSubmit.length}
+                                            disabled={!data.length}
                                         >
                                             Lưu
                                         </Button>
                                         <Button
                                             onClick={() => handleCancel()}
                                             type="primary"
-                                            disabled={!dataSubmit.length}
+                                            disabled={!data.length}
                                         >
                                             Hủy
                                         </Button>
@@ -551,7 +680,7 @@ export default function TeachingAssignment() {
                                             onClick={() => setIsEdit(true)}
                                             //TODO: handle save
                                             type="primary"
-                                            disabled={!dataSubmit.length}
+                                            disabled={!data.length}
                                         >
                                             PCGD
                                         </Button>
@@ -561,377 +690,375 @@ export default function TeachingAssignment() {
                         </Col>
                     </Row>
                 </Col>
-
                 <Col span={24}>
-                    <Table
-                        rowKey="id"
-                        id="training-category"
-                        filters={filters}
-                        setFilters={(value) => {
-                            setFilters(value)
-                            setCurrentPage(1)
-                        }}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 50,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'PCGD',
-                                align: 'center',
-                                width: 100,
-                                dataIndex: 'lecturerId',
-                                fixed: 'left',
-                                type: 'select',
-                                options: [
-                                    { value: true, label: 'Đã phân công giảng dạy' },
-                                    { value: false, label: 'Chưa phân công giảng dạy' },
-                                ],
-                                render: (value) => <Checkbox checked={!!value} />,
-                            },
-                            {
-                                title: 'Mã lớp môn học',
-                                dataIndex: 'code',
-                                width: 150,
-                                fixed: 'left',
-                                align: 'center',
-                                type: 'input',
-                            },
-                            {
-                                title: 'Tên môn học',
-                                dataIndex: 'name',
-                                width: 200,
-                                fixed: 'left',
-                                align: 'center',
-                                type: 'input',
-                            },
-                            {
-                                title: 'Số tín chỉ',
-                                dataIndex: 'credit',
-                                width: 120,
-                                align: 'center',
-                                type: 'order',
-                                distinctFilters: ['maxStudent', 'subjectClassStudent'],
-                                render: (__, record: { subject?: SubjectVersion }) =>
-                                    record.subject?.credit ? record.subject?.credit : '',
-                            },
-                            {
-                                title: 'Số SV tối đa',
-                                dataIndex: 'maxStudent',
-                                width: 150,
-                                align: 'center',
-                                type: 'order',
-                                distinctFilters: ['credit', 'subjectClassStudent'],
-                            },
-                            {
-                                title: 'Số SV',
-                                dataIndex: 'subjectClassStudent',
-                                width: 100,
-                                align: 'center',
-                                type: 'order',
-                                distinctFilters: ['maxStudent', 'credit'],
-                                render: (value) => (value?.length ? value?.length : ''),
-                            },
-                            {
-                                title: 'Thời khoá biểu',
-                                width: 150,
-                                align: 'center',
-                                dataIndex: 'subjectClassTimes',
-                                render: (subjectClassTimes: SubjectClassTime[]) => {
-                                    return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
-                                        return (
-                                            <p>
-                                                {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
-                                                {tkb.startPeriod} - {tkb.endPeriod}
-                                            </p>
-                                        )
-                                    })
+                    <Form form={form} onFinish={handleSaveData}>
+                        {canXemTatCa && (
+                            <p className="mt-1">
+                                Khoa/Viện/Bộ môn chỉ có thể nhìn thấy lớp môn học có hạn phân công
+                                giảng dạy.
+                            </p>
+                        )}
+                        <Table
+                            rowKey="id"
+                            id="training-category"
+                            filters={filters}
+                            setFilters={(value) => {
+                                setFilters(value)
+                                setCurrentPage(1)
+                            }}
+                            columns={[
+                                {
+                                    title: 'TT',
+                                    width: 35,
+                                    align: 'center',
+                                    render: (_, __, index) =>
+                                        index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                                 },
-                            },
-                            {
-                                title: 'Giảng viên 1',
-                                width: 300,
-                                align: 'center',
-                                type: 'input',
-                                dataIndex: 'mainLecturer',
-                                render: (__, record) => (
-                                    <Select
-                                        style={{ width: '100%' }}
-                                        options={lecturerData
-                                            .filter(
-                                                (lecturer) =>
-                                                    lecturer?.id !== record?.extraLecturerId
-                                            )
-                                            .map((i) => {
-                                                return {
-                                                    value: i?.id,
-                                                    label: `${i.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
-                                                }
-                                            })}
-                                        value={record?.lecturerId}
-                                        placeholder="Chọn giảng viên"
-                                        onChange={(selectedValue) =>
-                                            handleChangeLecturer(
-                                                record as SubjectClass,
-                                                selectedValue,
-                                                'lecturerId',
-                                                'mainLecturer'
-                                            )
-                                        }
-                                        disabled={!isEdit}
-                                    />
-                                ),
-                            },
-                            {
-                                title: 'Giảng viên 2',
-                                width: 300,
-                                align: 'center',
-                                type: 'input',
-                                dataIndex: 'extraLecturer',
-                                render: (__, record) => (
-                                    <Select
-                                        style={{ width: '100%' }}
-                                        options={lecturerData
-                                            .filter(
-                                                (lecturer) => lecturer?.id !== record?.lecturerId
-                                            )
-                                            .map((i) => {
-                                                return {
-                                                    value: i?.id,
-                                                    label: `${i.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
-                                                }
-                                            })}
-                                        value={record?.extraLecturerId || undefined}
-                                        placeholder="Chọn giảng viên"
-                                        onChange={(selectedValue) =>
-                                            handleChangeLecturer(
-                                                record as SubjectClass,
-                                                selectedValue,
-                                                'extraLecturerId',
-                                                'extraLecturer'
-                                            )
-                                        }
-                                        disabled={!isEdit}
-                                    />
-                                ),
-                            },
-                            {
-                                title: 'Hình thức thi',
-                                dataIndex: 'examType',
-                                align: 'center',
-                                width: 150,
-                                type: 'select',
-                                options: options,
-                                render: (__, record: { subject?: SubjectVersion }) =>
-                                    getExamTypeLabel(record?.subject?.examType) || '',
-                            },
-                            {
-                                title: 'Kíp học',
-                                dataIndex: 'schedule',
-                                align: 'center',
-                                width: 100,
-                                type: 'select',
-
-                                options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
-                                    ([key, value_]) => {
-                                        return {
-                                            label: value_,
-                                            value: key,
-                                        }
-                                    }
-                                ),
-                                render: (value: SubjectClassSchedule) =>
-                                    SUBJECT_CLASS_SCHEDULE_TYPE[
-                                        value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                                {
+                                    title: 'PCGD',
+                                    align: 'center',
+                                    width: 80,
+                                    dataIndex: 'lecturerId',
+                                    type: 'select',
+                                    options: [
+                                        { value: true, label: 'Đã phân công giảng dạy' },
+                                        { value: false, label: 'Chưa phân công giảng dạy' },
                                     ],
-                            },
-                            {
-                                title: 'Địa điểm',
-                                dataIndex: 'room',
-                                align: 'center',
-                                width: 150,
-                                type: 'input',
-                                render: (value) =>
-                                    value?.building?.trainingLocation?.name
-                                        ? value?.building?.trainingLocation?.name
-                                        : '',
-                            },
-                            {
-                                title: 'Giảng viên nhập điểm',
-                                width: 300,
-                                align: 'center',
-                                render: (record) => (
-                                    <Select
-                                        style={{ width: '100%' }}
-                                        options={
-                                            record?.mainLecturer && record?.extraLecturer
-                                                ? [
-                                                      {
-                                                          label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
-                                                          value: record?.lecturerId,
-                                                      },
-                                                      {
-                                                          label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
-                                                          value: record?.extraLecturerId,
-                                                      },
-                                                  ]
-                                                : record?.mainLecturer
-                                                  ? [
-                                                        {
-                                                            label: `${record?.mainLecturer?.code} - ${record?.mainLecturer?.userProfile?.fullname}`,
-                                                            value: record?.lecturerId,
-                                                        },
-                                                    ]
-                                                  : record?.extraLecturer
-                                                    ? [
-                                                          {
-                                                              label: `${record?.extraLecturer?.code} - ${record?.extraLecturer?.userProfile?.fullname}`,
-                                                              value: record?.extraLecturerId,
-                                                          },
-                                                      ]
-                                                    : []
-                                        }
-                                        value={record?.enterGradeLecturerId || undefined}
-                                        placeholder="Chọn giảng viên"
-                                        onChange={(selectedValue) =>
-                                            handleChangeEnterGradeLecturer(
-                                                record as SubjectClass,
-                                                selectedValue
+                                    render: (value) => <Checkbox checked={!!value} />,
+                                },
+                                {
+                                    title: 'Hạn PCGD',
+                                    dataIndex: 'lecturerAssignmentDeadline',
+                                    width: 100,
+                                    align: 'center',
+                                    render: (_, record) =>
+                                        canXemTatCa ? (
+                                            <FormItem
+                                                form={form}
+                                                name={[
+                                                    'subjectClass',
+                                                    record.id,
+                                                    'lecturerAssignmentDeadline',
+                                                ]}
+                                            >
+                                                <DatePicker
+                                                    suffixIcon={null}
+                                                    className="px-1"
+                                                    placeholder="Chọn ngày"
+                                                    disabled={!isEdit}
+                                                />
+                                            </FormItem>
+                                        ) : record.lecturerAssignmentDeadline ? (
+                                            dayjs(record.lecturerAssignmentDeadline).format(
+                                                'DD/MM/YYYY'
+                                            )
+                                        ) : (
+                                            ''
+                                        ),
+                                },
+                                {
+                                    title: 'Mã LMH',
+                                    dataIndex: 'code',
+                                    width: 120,
+                                    align: 'center',
+                                    type: 'input',
+                                },
+                                {
+                                    title: 'Tên môn học',
+                                    dataIndex: 'name',
+                                    width: 200,
+                                    align: 'center',
+                                    type: 'input',
+                                    onCell: (record) => ({
+                                        rowSpan: record.rowSpan,
+                                    }),
+                                },
+                                {
+                                    title: 'STC',
+                                    dataIndex: 'credit',
+                                    width: 70,
+                                    align: 'center',
+                                    type: 'order',
+                                    distinctFilters: ['maxStudent', 'subjectClassStudent'],
+                                    render: (_, record) =>
+                                        record.subject?.credit ? record.subject?.credit : '',
+                                },
+                                // {
+                                //     title: 'Số SV tối đa',
+                                //     dataIndex: 'maxStudent',
+                                //     width: 150,
+                                //     align: 'center',
+                                //     type: 'order',
+                                //     distinctFilters: ['credit', 'subjectClassStudent'],
+                                // },
+                                {
+                                    title: 'Số SV',
+                                    dataIndex: 'subjectClassStudent',
+                                    width: 80,
+                                    align: 'center',
+                                    type: 'order',
+                                    distinctFilters: ['maxStudent', 'credit'],
+                                    render: (_, record) =>
+                                        (record.subjectClassStudent
+                                            ? record.subjectClassStudent.length
+                                            : record.maxStudent) ?? 0,
+                                },
+                                // {
+                                //     title: 'Thời khoá biểu',
+                                //     width: 150,
+                                //     align: 'center',
+                                //     dataIndex: 'subjectClassTimes',
+                                //     render: (subjectClassTimes: SubjectClassTime[]) => {
+                                //         return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
+                                //             return (
+                                //                 <p>
+                                //                     {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
+                                //                     {tkb.startPeriod} - {tkb.endPeriod}
+                                //                 </p>
+                                //             )
+                                //         })
+                                //     },
+                                // },
+                                {
+                                    title: 'Giảng viên 1',
+                                    width: 200,
+                                    align: 'center',
+                                    type: 'input',
+                                    dataIndex: 'mainLecturer',
+                                    render: (__, record) => (
+                                        <FormItem
+                                            form={form}
+                                            name={['subjectClass', record.id, 'lecturerId']}
+                                        >
+                                            <LectureTreeSelect
+                                                placeholder="Chọn giảng viên"
+                                                ignoreLectureIds={
+                                                    record?.extraLecturerId
+                                                        ? [record?.extraLecturerId]
+                                                        : []
+                                                }
+                                                organizationId={
+                                                    record?.subject?.managementOrganizationId
+                                                }
+                                                disabled={!isEdit}
+                                            />
+                                        </FormItem>
+                                    ),
+                                },
+                                {
+                                    title: 'Giảng viên 2',
+                                    width: 200,
+                                    align: 'center',
+                                    type: 'input',
+                                    dataIndex: 'extraLecturer',
+                                    render: (__, record) => (
+                                        <FormItem
+                                            form={form}
+                                            name={['subjectClass', record.id, 'extraLecturerId']}
+                                        >
+                                            <LectureTreeSelect
+                                                placeholder="Chọn giảng viên"
+                                                ignoreLectureIds={
+                                                    record?.lecturerId ? [record?.lecturerId] : []
+                                                }
+                                                organizationId={
+                                                    record?.subject?.managementOrganizationId
+                                                }
+                                                disabled={!isEdit}
+                                            />
+                                        </FormItem>
+                                    ),
+                                },
+                                {
+                                    title: 'Hình thức thi',
+                                    dataIndex: 'examType',
+                                    align: 'center',
+                                    width: 160,
+                                    type: 'select',
+                                    options: options,
+                                    render: (__, record) => (
+                                        <FormItem
+                                            form={form}
+                                            name={['subjectClass', record.id, 'examType']}
+                                        >
+                                            <Select options={options} disabled={!isEdit} />
+                                        </FormItem>
+                                    ),
+                                },
+                                // {
+                                //     title: 'Kíp học',
+                                //     dataIndex: 'schedule',
+                                //     align: 'center',
+                                //     width: 100,
+                                //     type: 'select',
+
+                                //     options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
+                                //         ([key, value_]) => {
+                                //             return {
+                                //                 label: value_,
+                                //                 value: key,
+                                //             }
+                                //         }
+                                //     ),
+                                //     render: (value: SubjectClassSchedule) =>
+                                //         SUBJECT_CLASS_SCHEDULE_TYPE[
+                                //             value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                                //         ],
+                                // },
+                                {
+                                    title: 'Khu vực',
+                                    dataIndex: 'room',
+                                    align: 'center',
+                                    width: 150,
+                                    type: 'input',
+                                    render: (value) =>
+                                        value?.building?.trainingLocation?.name
+                                            ? value?.building?.trainingLocation?.name
+                                            : '',
+                                },
+                                {
+                                    title: 'Phòng học',
+                                    dataIndex: 'room',
+                                    align: 'center',
+                                    width: 120,
+                                    render: (value) => value?.name || '',
+                                },
+                                {
+                                    title: 'Giảng viên nhập điểm',
+                                    width: 200,
+                                    align: 'center',
+                                    render: (__, record) => (
+                                        <FormItem
+                                            form={form}
+                                            name={[
+                                                'subjectClass',
+                                                record.id,
+                                                'enterGradeLecturerId',
+                                            ]}
+                                        >
+                                            <LectureTreeSelect
+                                                placeholder="Chọn giảng viên"
+                                                organizationId={
+                                                    record?.subject?.managementOrganizationId
+                                                }
+                                                disabled={!isEdit}
+                                            />
+                                        </FormItem>
+                                    ),
+                                },
+
+                                // {
+                                //     title: 'Ngày thi',
+                                //     dataIndex: 'examDate',
+                                //     align: 'center',
+                                //     width: 100,
+                                //     render: (value) => (value ? formatDate(value) : ''),
+                                // },
+
+                                // {
+                                //     title: 'Hạn nhập điểm CC/TX',
+                                //     dataIndex: 'scoreDeadline',
+                                //     width: 200,
+                                //     align: 'center',
+                                //     render: (value) => (value ? formatDate(value) : ''),
+                                // },
+                                // {
+                                //     title: 'Hạn nhập điểm thi',
+                                //     dataIndex: 'examScoreDeadline',
+                                //     width: 170,
+                                //     align: 'center',
+                                //     render: (value) => (value ? formatDate(value) : ''),
+                                // },
+                                {
+                                    title: 'ĐV phụ trách',
+                                    dataIndex: 'subject',
+                                    width: 150,
+                                    align: 'center',
+                                    type: 'tree_select',
+                                    options: treeData,
+                                    render: (value) => value?.managementOrganization?.sMa || '',
+                                },
+                                // {
+                                //     title: 'Điểm bằng nhau',
+                                //     dataIndex: 'subject',
+                                //     width: 150,
+                                //     align: 'center',
+                                //     render: (value) => (
+                                //         <Checkbox checked={value.subjectEquivalentType} disabled />
+                                //     ),
+                                // },
+                                // {
+                                //     title: 'Lớp liên kết',
+                                //     dataIndex: 'lopLienKet',
+                                //     width: 150,
+                                //     align: 'center',
+                                // },
+                                {
+                                    title: 'Thao tác',
+                                    width: 100,
+                                    align: 'center',
+                                    fixed: 'right',
+                                    hidden: !canSome(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                        'SUA',
+                                        'XOA'
+                                    ),
+                                    render: (record, { id }) => {
+                                        if (id) {
+                                            return (
+                                                <Row className="justify-center gap-2">
+                                                    {can(
+                                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                                        'SUA'
+                                                    ) && (
+                                                        <EditIcon
+                                                            onClick={onOpenEditSubjectClass.bind(
+                                                                null,
+                                                                id
+                                                            )}
+                                                            className="text-sm text-blue-700 cursor-pointer"
+                                                        />
+                                                    )}
+                                                    {can(
+                                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                                        'XOA'
+                                                    ) && (
+                                                        <DeleteIcon
+                                                            popConfirm={{
+                                                                onConfirm: () => handleDelete(id),
+                                                            }}
+                                                            disabled={
+                                                                record?.subjectClassStudent
+                                                                    ?.length > 0
+                                                            }
+                                                        />
+                                                    )}
+                                                </Row>
                                             )
                                         }
-                                        disabled={!isEdit && record?.lecturerId}
-                                    />
-                                ),
-                            },
-                            {
-                                title: 'Phòng học',
-                                dataIndex: 'room',
-                                align: 'center',
-                                width: 120,
-                                render: (value) => value?.name || '',
-                            },
-                            {
-                                title: 'Ngày thi',
-                                dataIndex: 'examDate',
-                                align: 'center',
-                                width: 100,
-                                render: (value) => (value ? formatDate(value) : ''),
-                            },
-
-                            {
-                                title: 'Hạn PCGD',
-                                dataIndex: 'lecturerAssignmentDeadline',
-                                width: 120,
-                                align: 'center',
-                                render: (value) => (value ? formatDate(value) : ''),
-                            },
-                            {
-                                title: 'Hạn nhập điểm CC/TX',
-                                dataIndex: 'scoreDeadline',
-                                width: 200,
-                                align: 'center',
-                                render: (value) => (value ? formatDate(value) : ''),
-                            },
-                            {
-                                title: 'Hạn nhập điểm thi',
-                                dataIndex: 'examScoreDeadline',
-                                width: 170,
-                                align: 'center',
-                                render: (value) => (value ? formatDate(value) : ''),
-                            },
-                            {
-                                title: 'Đơn vị phụ trách',
-                                dataIndex: 'subject',
-                                width: 200,
-                                align: 'center',
-                                type: 'tree_select',
-                                options: treeData,
-                                render: (value) => value?.managementOrganization?.sTen || '',
-                            },
-
-                            // {
-                            //     title: 'Điểm bằng nhau',
-                            //     dataIndex: 'subject',
-                            //     width: 150,
-                            //     align: 'center',
-                            //     render: (value) => (
-                            //         <Checkbox checked={value.subjectEquivalentType} disabled />
-                            //     ),
-                            // },
-                            // {
-                            //     title: 'Lớp liên kết',
-                            //     dataIndex: 'lopLienKet',
-                            //     width: 150,
-                            //     align: 'center',
-                            // },
-                            {
-                                title: 'Thao tác',
-                                width: 100,
-                                align: 'center',
-                                fixed: 'right',
-                                hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                    'SUA',
-                                    'XOA'
-                                ),
-                                render: (record, { id }) => {
-                                    if (id) {
-                                        return (
-                                            <Row className="justify-center gap-2">
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                                    'SUA'
-                                                ) && (
-                                                    <EditIcon
-                                                        onClick={onOpenEditSubjectClass.bind(
-                                                            null,
-                                                            id
-                                                        )}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                )}
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                                    'XOA'
-                                                ) && (
-                                                    <DeleteIcon
-                                                        popConfirm={{
-                                                            onConfirm: () => handleDelete(id),
-                                                        }}
-                                                        disabled={
-                                                            record?.subjectClassStudent?.length > 0
-                                                        }
-                                                    />
-                                                )}
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
+                                        return ''
+                                    },
                                 },
-                            },
-                        ]}
-                        data={dataSubmit}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
+                            ]}
+                            data={dataWithRowSpan}
+                            pagination={{
+                                current: currentPage,
+                                pageSize: numberOfPages,
+                                total: count,
 
-                            onChange: (page, pageSize) => {
-                                console.log(page, pageSize)
+                                onChange: (page, pageSize) => {
+                                    console.log(page, pageSize)
 
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
-                    />
+                                    if (numberOfPages === pageSize) {
+                                        setCurrentPage(page)
+                                    } else {
+                                        setCurrentPage(1)
+                                        setNumberOfPages(pageSize)
+                                    }
+                                },
+                            }}
+                        />
+                    </Form>
                 </Col>
             </Row>
         </div>

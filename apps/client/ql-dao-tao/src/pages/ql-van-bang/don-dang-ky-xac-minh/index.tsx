@@ -193,7 +193,7 @@ export default function ĐONANGKY() {
                             <FormItem
                                 form={form}
                                 name="trainingCourseStartYear"
-                                label="Năm khóa học bắt đầu"
+                                label="Năm khoá học bắt đầu"
                             >
                                 <Input placeholder="Nhập năm bắt đầu" />
                             </FormItem>
@@ -202,7 +202,7 @@ export default function ĐONANGKY() {
                             <FormItem
                                 form={form}
                                 name="trainingCourseEndYear"
-                                label="Năm khóa học kết thúc"
+                                label="Năm khoá học kết thúc"
                             >
                                 <Input placeholder="Nhập năm kết thúc" />
                             </FormItem>

@@ -3,7 +3,7 @@ import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse, TrainingMajor } from '@workspace/db'
+import { type TrainingMajor } from '@workspace/db'
 import {
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
@@ -14,10 +14,11 @@ import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { exportFromTemplate } from '@workspace/libs/template-excel'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, InputNumber, Row } from 'antd'
+import { cn } from '@workspace/ui/lib/utils'
+import { Button, Col, Flex, Form, Input, InputNumber, message, Popconfirm, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface OpenSubjectClassForm {
     searchText?: string
@@ -85,6 +86,36 @@ export default function SubjectOpeningPlan() {
         [res]
     )
 
+    useEffect(() => {
+        if (data) {
+            form.setFieldValue(
+                'subjectClassNumber',
+                data.reduce(
+                    (acc, cur) => {
+                        if (!acc) {
+                            return {
+                                [cur.subjectVersionId]: {
+                                    count: cur.subjectClass.length ?? 0,
+                                    name: cur.subjectVersionName,
+                                    code: cur.subjectVersionCode,
+                                    maxStudent: cur.countStudent,
+                                },
+                            }
+                        }
+                        acc[cur.subjectVersionId] = {
+                            count: cur.subjectClass.length ?? 0,
+                            name: cur.subjectVersionName,
+                            code: cur.subjectVersionCode,
+                            maxStudent: cur.countStudent,
+                        }
+                        return acc
+                    },
+                    {} as OpenSubjectClassForm['subjectClassNumber']
+                )
+            )
+        }
+    }, [data, form])
+
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
@@ -104,28 +135,41 @@ export default function SubjectOpeningPlan() {
     const onSubmit = async () => {
         try {
             if (!semesterId || !trainingObjectTypeId) return
-            // const prisma = new PrismaClient()
-            // prisma.subjectClass.deleteMany({
-            //     where: {
-            //         semesterId: semesterId,
-            //         trainingObjectTypeId: trainingObjectTypeId,
-            //     },
-            // })
-            // prisma.subjectClass.create({
-            //     data: Object.entries(subjectClassNumber)
-            //         .filter(([, subjectVersion]) => !!subjectVersion.count)
-            //         .flatMap(([subjectVersionId, subjectVersion]) =>
-            //             new Array(subjectVersion.count).fill(0).map((_, index) => ({
-            //                 subjectId: subjectVersionId,
-            //                 semesterId: semesterId,
-            //                 trainingObjectTypeId: trainingObjectTypeId,
-            //                 code: `${subjectVersion.code} ${String(index + 1)}`,
-            //                 name: subjectVersion.name,
-            //                 maxStudent: Math.ceil(subjectVersion.maxStudent / subjectVersion.count),
-            //             }))
-            //         ),
-            // })
+            const listSubjectVersionIds = Object.entries(subjectClassNumber)
+                .filter(([, subjectVersion]) => subjectVersion?.count !== undefined)
+                .map(([key]) => key)
+
             await sqlTransaction([
+                {
+                    model: 'ClassRegisterLogs',
+                    operation: 'deleteMany',
+                    data: {
+                        where: {
+                            subjectClass: {
+                                semesterId,
+                                trainingObjectTypeId,
+                                subjectId: {
+                                    in: listSubjectVersionIds,
+                                },
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'SubjectClassTime',
+                    operation: 'deleteMany',
+                    data: {
+                        where: {
+                            subjectClass: {
+                                semesterId,
+                                trainingObjectTypeId,
+                                subjectId: {
+                                    in: listSubjectVersionIds,
+                                },
+                            },
+                        },
+                    },
+                },
                 {
                     model: 'SubjectClass',
                     operation: 'deleteMany',
@@ -133,6 +177,9 @@ export default function SubjectOpeningPlan() {
                         where: {
                             semesterId: semesterId,
                             trainingObjectTypeId: trainingObjectTypeId,
+                            subjectId: {
+                                in: listSubjectVersionIds,
+                            },
                         },
                     },
                 },
@@ -157,7 +204,13 @@ export default function SubjectOpeningPlan() {
                     },
                 },
             ])
-        } catch (error) {}
+            message.success('Lưu kế hoạch mở lớp thành công')
+            form.resetFields()
+            debouncedRefetch()
+        } catch (error) {
+            message.error('Lưu kế hoạch mở lớp thất bại')
+            console.error(error)
+        }
     }
 
     return (
@@ -212,12 +265,10 @@ export default function SubjectOpeningPlan() {
                                         >
                                             <Select
                                                 placeholder="Khoá đào tạo"
-                                                options={trainingCourseData.map(
-                                                    (i: TrainingCourse) => ({
-                                                        value: i.id,
-                                                        label: i.name,
-                                                    })
-                                                )}
+                                                options={trainingCourseData.map((i) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                }))}
                                                 allowClear
                                             />
                                         </Form.Item>
@@ -300,9 +351,17 @@ export default function SubjectOpeningPlan() {
                                     >
                                         Xuất kế hoạch môn dự kiến
                                     </Button>
-                                    <Button type="primary" onClick={onSubmit}>
-                                        Lưu kế hoạch
-                                    </Button>
+                                    <Popconfirm
+                                        onConfirm={onSubmit}
+                                        title="Xác nhận lưu kế hoạch mở lớp?"
+                                        okText="Xác nhận"
+                                        cancelText="Hủy"
+                                        description={
+                                            'Sau khi lưu kế hoạch mở lớp, các môn học sẽ được tạo mới lại hoàn toàn theo kế hoạch.\nCác lớp học và lịch học đã được tạo trước đó sẽ bị xoá.\nBạn có chắc chắn muốn tiếp tục?'
+                                        }
+                                    >
+                                        <Button type="primary">Lưu kế hoạch</Button>
+                                    </Popconfirm>
                                     {/* <Button type="primary">Thêm mới</Button> */}
                                     {/* {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
@@ -338,9 +397,15 @@ export default function SubjectOpeningPlan() {
                             data={data}
                             onRow={(record) => {
                                 return {
-                                    className: subjectClassNumber?.[record.subjectVersionId]?.count
-                                        ? 'bg-yellow-200'
-                                        : '',
+                                    className: cn(
+                                        subjectClassNumber?.[record.subjectVersionId]?.count ===
+                                            record?.subjectClass?.length
+                                            ? ''
+                                            : 'bg-yellow-100',
+                                        subjectClassNumber?.[record.subjectVersionId]?.count
+                                            ? ''
+                                            : 'bg-red-100'
+                                    ),
                                 }
                             }}
                             columns={[
@@ -429,7 +494,6 @@ export default function SubjectOpeningPlan() {
                                         )
                                     },
                                 },
-
                                 {
                                     title: 'SV nợ',
                                     dataIndex: 'svNo',
@@ -466,22 +530,6 @@ export default function SubjectOpeningPlan() {
                                                     step={0}
                                                     id={`lmh-${record?.subjectVersionId}`}
                                                     controls={false}
-                                                    onChange={(e) => {
-                                                        form.setFieldsValue({
-                                                            subjectClassNumber: {
-                                                                ...subjectClassNumber,
-                                                                [record?.subjectVersionId as string]:
-                                                                    {
-                                                                        count: e,
-                                                                        name: record?.subjectVersionName,
-                                                                        code: record?.subjectVersionCode,
-                                                                        maxStudent:
-                                                                            record?.countStudent,
-                                                                    },
-                                                            },
-                                                        })
-                                                    }}
-                                                    defaultValue={record?.fixedClass.length || 0}
                                                     onKeyDown={(e) => {
                                                         if (
                                                             e.key === 'ArrowUp' ||

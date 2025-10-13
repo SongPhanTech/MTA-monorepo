@@ -136,6 +136,8 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
                 .filter((item: FixedClassBySubjectClassSemester) => item.checked)
                 .map((item: FixedClassBySubjectClassSemester) => item.id)
             setSelectedRowKeys(selectedKeys)
+        } else {
+            setSelectedRowKeys([])
         }
     }, [fixedClass?.data?.data])
 
@@ -213,7 +215,7 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
                                         setCurrentPage(1)
                                     }}
                                 >
-                                    Lớp quản lý có môn theo kỳ học dự kiến
+                                    Lớp có môn theo kỳ học dự kiến
                                 </Checkbox>
                             </Form.Item>
                         </Col>
@@ -232,35 +234,36 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
                     columns={[
                         {
                             title: 'STT',
-                            width: 60,
+                            width: 35,
                             align: 'center',
                             fixed: 'left',
                             render: (_, __, index) =>
                                 index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
-                            title: 'Tên lớp QL',
-                            dataIndex: 'name',
+                            title: 'Lớp QL',
+                            dataIndex: 'code',
                             align: 'center',
-                            width: 150,
+                            width: 100,
                         },
                         {
                             title: 'Khoá học',
                             dataIndex: 'trainingCourse',
-                            width: 150,
+                            width: 100,
+                            align: 'center',
                             render: (record) => (record.name ? record.name : ''),
                         },
                         {
                             title: 'Chuyên ngành',
-                            width: 240,
-                            render: (_, record) =>
-                                record?.curriculumVersion?.curriculum?.trainingMajor?.name || '',
+                            dataIndex: ['curriculumVersion', 'curriculum', 'trainingMajor', 'name'],
+                            width: 160,
+                            align: 'center',
                         },
                         {
                             title: 'Số HV, SV',
                             dataIndex: ['_count', 'students'],
                             align: 'center',
-                            width: 120,
+                            width: 80,
                         },
                     ]}
                     pagination={{
@@ -289,34 +292,36 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
                     columns={[
                         {
                             title: 'STT',
-                            width: 60,
+                            width: 35,
                             align: 'center',
                             fixed: 'left',
                             render: (_, __, index) =>
                                 index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                         },
                         {
-                            title: 'Tên lớp QL',
-                            dataIndex: 'name',
+                            title: 'Lớp QL',
+                            dataIndex: 'code',
                             align: 'center',
-                            width: 150,
+                            width: 100,
                         },
                         {
                             title: 'Khoá học',
                             dataIndex: 'trainingCourse',
-                            width: 150,
+                            width: 100,
+                            align: 'center',
                             render: (record) => (record.name ? record.name : ''),
                         },
                         {
                             title: 'Chuyên ngành',
-                            dataIndex: 'cn',
-                            width: 240,
+                            dataIndex: ['curriculumVersion', 'curriculum', 'trainingMajor', 'name'],
+                            width: 160,
+                            align: 'center',
                         },
                         {
                             title: 'Số HV, SV',
                             dataIndex: ['_count', 'students'],
                             align: 'center',
-                            width: 120,
+                            width: 80,
                         },
                     ]}
                     pagination={{

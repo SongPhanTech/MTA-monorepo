@@ -34,7 +34,7 @@ export type Config = $Result.DefaultSelection<Prisma.$ConfigPayload>;
 export type QuestionBank = $Result.DefaultSelection<Prisma.$QuestionBankPayload>;
 /**
  * Model Difficulty
- * Mức độ khó
+ * Mức độ
  * @
  * @allow ('all', auth() != null)
  * @
@@ -65,6 +65,39 @@ export type KnowledgeBlock = $Result.DefaultSelection<Prisma.$KnowledgeBlockPayl
  * @allow ('read', auth() != null)
  */
 export type Question = $Result.DefaultSelection<Prisma.$QuestionPayload>;
+/**
+ * Model MultipleChoiceOption
+ * Lựa chọn cho câu hỏi trắc nghiệm (một hoặc nhiều đáp án)
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type MultipleChoiceOption = $Result.DefaultSelection<Prisma.$MultipleChoiceOptionPayload>;
+/**
+ * Model FillInBlankSlot
+ * Chỗ trống cần điền cho câu hỏi điền khuyết
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type FillInBlankSlot = $Result.DefaultSelection<Prisma.$FillInBlankSlotPayload>;
+/**
+ * Model OrderingItem
+ * Mục cần sắp xếp cho câu hỏi sắp xếp thứ tự
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type OrderingItem = $Result.DefaultSelection<Prisma.$OrderingItemPayload>;
 /**
  * Model Answer
  * Câu trả lời của thí sinh
@@ -303,6 +336,7 @@ export type CurriculumVersion = $Result.DefaultSelection<Prisma.$CurriculumVersi
 export type Subject = $Result.DefaultSelection<Prisma.$SubjectPayload>;
 /**
  * Model SubjectVersionCategory
+ * Nhóm phiên bản môn học
  * @
  * @allow ('all', auth() != null)
  * @
@@ -2517,6 +2551,33 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      */
     get question(): Prisma.QuestionDelegate<ExtArgs, ClientOptions>;
     /**
+     * `prisma.multipleChoiceOption`: Exposes CRUD operations for the **MultipleChoiceOption** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more MultipleChoiceOptions
+     * const multipleChoiceOptions = await prisma.multipleChoiceOption.findMany()
+     * ```
+     */
+    get multipleChoiceOption(): Prisma.MultipleChoiceOptionDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.fillInBlankSlot`: Exposes CRUD operations for the **FillInBlankSlot** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more FillInBlankSlots
+     * const fillInBlankSlots = await prisma.fillInBlankSlot.findMany()
+     * ```
+     */
+    get fillInBlankSlot(): Prisma.FillInBlankSlotDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.orderingItem`: Exposes CRUD operations for the **OrderingItem** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more OrderingItems
+     * const orderingItems = await prisma.orderingItem.findMany()
+     * ```
+     */
+    get orderingItem(): Prisma.OrderingItemDelegate<ExtArgs, ClientOptions>;
+    /**
      * `prisma.answer`: Exposes CRUD operations for the **Answer** model.
      * Example usage:
      * ```ts
@@ -4678,7 +4739,11 @@ export namespace $Enums {
     export type ConfigKey = (typeof ConfigKey)[keyof typeof ConfigKey];
     export const QuestionType: {
         ESSAY: 'ESSAY',
-        ORAL: 'ORAL'
+        ORAL: 'ORAL',
+        SINGLE_CHOICE: 'SINGLE_CHOICE',
+        MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
+        FILL_IN_BLANK: 'FILL_IN_BLANK',
+        ORDERING: 'ORDERING'
     };
     export type QuestionType = (typeof QuestionType)[keyof typeof QuestionType];
     export const ExamStatus: {
@@ -4699,9 +4764,6 @@ export namespace $Enums {
     export type SemesterType = (typeof SemesterType)[keyof typeof SemesterType];
     export const ExamType: {
         OfflineWritten: 'OfflineWritten',
-        OnlineWritten: 'OnlineWritten',
-        OfflineChoices: 'OfflineChoices',
-        OnlineChoices: 'OnlineChoices',
         Oral: 'Oral',
         Practice: 'Practice',
         Project: 'Project',
@@ -4710,6 +4772,7 @@ export namespace $Enums {
     export type ExamType = (typeof ExamType)[keyof typeof ExamType];
     export const SubjectVersionType: {
         Normal: 'Normal',
+        Internship: 'Internship',
         Research: 'Research',
         Project: 'Project'
     };
@@ -5199,6 +5262,9 @@ export namespace Prisma {
         Difficulty: 'Difficulty',
         KnowledgeBlock: 'KnowledgeBlock',
         Question: 'Question',
+        MultipleChoiceOption: 'MultipleChoiceOption',
+        FillInBlankSlot: 'FillInBlankSlot',
+        OrderingItem: 'OrderingItem',
         Answer: 'Answer',
         Exam: 'Exam',
         TestStructureRule: 'TestStructureRule',
@@ -5493,6 +5559,43 @@ export namespace Prisma {
         questionBankId: 'questionBankId',
         knowledgeBlockId: 'knowledgeBlockId',
         difficultyId: 'difficultyId'
+    };
+    export const MultipleChoiceOptionScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        questionId: 'questionId',
+        content: 'content',
+        isCorrect: 'isCorrect',
+        order: 'order'
+    };
+    export const FillInBlankSlotScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        questionId: 'questionId',
+        order: 'order',
+        correctAnswer: 'correctAnswer'
+    };
+    export const OrderingItemScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        questionId: 'questionId',
+        content: 'content',
+        correctOrder: 'correctOrder'
     };
     export const AnswerScalarFieldEnum: {
         id: 'id',
@@ -5873,6 +5976,7 @@ export namespace Prisma {
         codeTkb: 'codeTkb',
         examType: 'examType',
         type: 'type',
+        onePoint: 'onePoint',
         credit: 'credit',
         week: 'week',
         period: 'period',
@@ -5993,6 +6097,7 @@ export namespace Prisma {
         examDate: 'examDate',
         examType: 'examType',
         examId: 'examId',
+        scoreDeadLineStart: 'scoreDeadLineStart',
         scoreDeadline: 'scoreDeadline',
         examScoreDeadline: 'examScoreDeadline',
         enteredScore: 'enteredScore',
@@ -8965,6 +9070,27 @@ export namespace Prisma {
         questionBankId: 'questionBankId',
         knowledgeBlockId: 'knowledgeBlockId',
         difficultyId: 'difficultyId'
+    };
+    export const MultipleChoiceOptionOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        questionId: 'questionId',
+        content: 'content'
+    };
+    export const FillInBlankSlotOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        questionId: 'questionId',
+        correctAnswer: 'correctAnswer'
+    };
+    export const OrderingItemOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        questionId: 'questionId',
+        content: 'content'
     };
     export const AnswerOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -12892,6 +13018,9 @@ export namespace Prisma {
      */
     export interface Prisma__QuestionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        multipleChoiceOptions<T extends Question$multipleChoiceOptionsArgs<ExtArgs> = {}>(args?: Subset<T, Question$multipleChoiceOptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MultipleChoiceOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        fillInBlankSlots<T extends Question$fillInBlankSlotsArgs<ExtArgs> = {}>(args?: Subset<T, Question$fillInBlankSlotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FillInBlankSlotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        orderingItems<T extends Question$orderingItemsArgs<ExtArgs> = {}>(args?: Subset<T, Question$orderingItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderingItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         questionBank<T extends QuestionBankDefaultArgs<ExtArgs> = {}>(args?: Subset<T, QuestionBankDefaultArgs<ExtArgs>>): Prisma__QuestionBankClient<$Result.GetResult<Prisma.$QuestionBankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         knowledgeBlock<T extends Question$knowledgeBlockArgs<ExtArgs> = {}>(args?: Subset<T, Question$knowledgeBlockArgs<ExtArgs>>): Prisma__KnowledgeBlockClient<$Result.GetResult<Prisma.$KnowledgeBlockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         difficulty<T extends Question$difficultyArgs<ExtArgs> = {}>(args?: Subset<T, Question$difficultyArgs<ExtArgs>>): Prisma__DifficultyClient<$Result.GetResult<Prisma.$DifficultyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -12938,6 +13067,1153 @@ export namespace Prisma {
         readonly questionBankId: FieldRef<"Question", 'String'>;
         readonly knowledgeBlockId: FieldRef<"Question", 'String'>;
         readonly difficultyId: FieldRef<"Question", 'String'>;
+    }
+
+    export interface MultipleChoiceOptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MultipleChoiceOption'], meta: { name: 'MultipleChoiceOption' } };
+        /**
+         * Fields of the MultipleChoiceOption model
+         */
+        readonly fields: MultipleChoiceOptionFieldRefs;
+        /**
+         * Find zero or one MultipleChoiceOption that matches the filter.
+         * @param {MultipleChoiceOptionFindUniqueArgs} args - Arguments to find a MultipleChoiceOption
+         * @example
+         * // Get one MultipleChoiceOption
+         * const multipleChoiceOption = await prisma.multipleChoiceOption.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends MultipleChoiceOptionFindUniqueArgs>(args: SelectSubset<T, MultipleChoiceOptionFindUniqueArgs<ExtArgs>>): Prisma__MultipleChoiceOptionClient<$Result.GetResult<Prisma.$MultipleChoiceOptionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one MultipleChoiceOption that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {MultipleChoiceOptionFindUniqueOrThrowArgs} args - Arguments to find a MultipleChoiceOption
+         * @example
+         * // Get one MultipleChoiceOption
+         * const multipleChoiceOption = await prisma.multipleChoiceOption.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends MultipleChoiceOptionFindUniqueOrThrowArgs>(args: SelectSubset<T, MultipleChoiceOptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MultipleChoiceOptionClient<$Result.GetResult<Prisma.$MultipleChoiceOptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first MultipleChoiceOption that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {MultipleChoiceOptionFindFirstArgs} args - Arguments to find a MultipleChoiceOption
+         * @example
+         * // Get one MultipleChoiceOption
+         * const multipleChoiceOption = await prisma.multipleChoiceOption.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends MultipleChoiceOptionFindFirstArgs>(args?: SelectSubset<T, MultipleChoiceOptionFindFirstArgs<ExtArgs>>): Prisma__MultipleChoiceOptionClient<$Result.GetResult<Prisma.$MultipleChoiceOptionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first MultipleChoiceOption that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {MultipleChoiceOptionFindFirstOrThrowArgs} args - Arguments to find a MultipleChoiceOption
+         * @example
+         * // Get one MultipleChoiceOption
+         * const multipleChoiceOption = await prisma.multipleChoiceOption.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends MultipleChoiceOptionFindFirstOrThrowArgs>(args?: SelectSubset<T, MultipleChoiceOptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__MultipleChoiceOptionClient<$Result.GetResult<Prisma.$MultipleChoiceOptionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more MultipleChoiceOptions that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {MultipleChoiceOptionFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all MultipleChoiceOptions
+         * const multipleChoiceOptions = await prisma.multipleChoiceOption.findMany()
+         *
+         * // Get first 10 MultipleChoiceOptions
+         * const multipleChoiceOptions = await prisma.multipleChoiceOption.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const multipleChoiceOptionWithIdOnly = await prisma.multipleChoiceOption.findMany({ select: { id: true } })
+         */
+        findMany<T extends MultipleChoiceOptionFindManyArgs>(args?: SelectSubset<T, MultipleChoiceOptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MultipleChoiceOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a MultipleChoiceOption.
+         * @param {MultipleChoiceOptionCreateArgs} args - Arguments to create a MultipleChoiceOption.
+         * @example
+         * // Create one MultipleChoiceOption
+         * const MultipleChoiceOption = await prisma.multipleChoiceOption.create({
+         *   data: {
+         *     // ... data to create a MultipleChoiceOption
+         *   }
+         * })
+         */
+        create<T extends MultipleChoiceOptionCreateArgs>(args: SelectSubset<T, MultipleChoiceOptionCreateArgs<ExtArgs>>): Prisma__MultipleChoiceOptionClient<$Result.GetResult<Prisma.$MultipleChoiceOptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many MultipleChoiceOptions.
+         * @param {MultipleChoiceOptionCreateManyArgs} args - Arguments to create many MultipleChoiceOptions.
+         * @example
+         * // Create many MultipleChoiceOptions
+         * const multipleChoiceOption = await prisma.multipleChoiceOption.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends MultipleChoiceOptionCreateManyArgs>(args?: SelectSubset<T, MultipleChoiceOptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many MultipleChoiceOptions and returns the data saved in the database.
+         * @param {MultipleChoiceOptionCreateManyAndReturnArgs} args - Arguments to create many MultipleChoiceOptions.
+         * @example
+         * // Create many MultipleChoiceOptions
+         * const multipleChoiceOption = await prisma.multipleChoiceOption.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many MultipleChoiceOptions and only return the `id`
+         * const multipleChoiceOptionWithIdOnly = await prisma.multipleChoiceOption.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends MultipleChoiceOptionCreateManyAndReturnArgs>(args?: SelectSubset<T, MultipleChoiceOptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MultipleChoiceOptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a MultipleChoiceOption.
+         * @param {MultipleChoiceOptionDeleteArgs} args - Arguments to delete one MultipleChoiceOption.
+         * @example
+         * // Delete one MultipleChoiceOption
+         * const MultipleChoiceOption = await prisma.multipleChoiceOption.delete({
+         *   where: {
+         *     // ... filter to delete one MultipleChoiceOption
+         *   }
+         * })
+         */
+        delete<T extends MultipleChoiceOptionDeleteArgs>(args: SelectSubset<T, MultipleChoiceOptionDeleteArgs<ExtArgs>>): Prisma__MultipleChoiceOptionClient<$Result.GetResult<Prisma.$MultipleChoiceOptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one MultipleChoiceOption.
+         * @param {MultipleChoiceOptionUpdateArgs} args - Arguments to update one MultipleChoiceOption.
+         * @example
+         * // Update one MultipleChoiceOption
+         * const multipleChoiceOption = await prisma.multipleChoiceOption.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends MultipleChoiceOptionUpdateArgs>(args: SelectSubset<T, MultipleChoiceOptionUpdateArgs<ExtArgs>>): Prisma__MultipleChoiceOptionClient<$Result.GetResult<Prisma.$MultipleChoiceOptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more MultipleChoiceOptions.
+         * @param {MultipleChoiceOptionDeleteManyArgs} args - Arguments to filter MultipleChoiceOptions to delete.
+         * @example
+         * // Delete a few MultipleChoiceOptions
+         * const { count } = await prisma.multipleChoiceOption.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends MultipleChoiceOptionDeleteManyArgs>(args?: SelectSubset<T, MultipleChoiceOptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more MultipleChoiceOptions.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {MultipleChoiceOptionUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many MultipleChoiceOptions
+         * const multipleChoiceOption = await prisma.multipleChoiceOption.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends MultipleChoiceOptionUpdateManyArgs>(args: SelectSubset<T, MultipleChoiceOptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more MultipleChoiceOptions and returns the data updated in the database.
+         * @param {MultipleChoiceOptionUpdateManyAndReturnArgs} args - Arguments to update many MultipleChoiceOptions.
+         * @example
+         * // Update many MultipleChoiceOptions
+         * const multipleChoiceOption = await prisma.multipleChoiceOption.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more MultipleChoiceOptions and only return the `id`
+         * const multipleChoiceOptionWithIdOnly = await prisma.multipleChoiceOption.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends MultipleChoiceOptionUpdateManyAndReturnArgs>(args: SelectSubset<T, MultipleChoiceOptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MultipleChoiceOptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one MultipleChoiceOption.
+         * @param {MultipleChoiceOptionUpsertArgs} args - Arguments to update or create a MultipleChoiceOption.
+         * @example
+         * // Update or create a MultipleChoiceOption
+         * const multipleChoiceOption = await prisma.multipleChoiceOption.upsert({
+         *   create: {
+         *     // ... data to create a MultipleChoiceOption
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the MultipleChoiceOption we want to update
+         *   }
+         * })
+         */
+        upsert<T extends MultipleChoiceOptionUpsertArgs>(args: SelectSubset<T, MultipleChoiceOptionUpsertArgs<ExtArgs>>): Prisma__MultipleChoiceOptionClient<$Result.GetResult<Prisma.$MultipleChoiceOptionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of MultipleChoiceOptions.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {MultipleChoiceOptionCountArgs} args - Arguments to filter MultipleChoiceOptions to count.
+         * @example
+         * // Count the number of MultipleChoiceOptions
+         * const count = await prisma.multipleChoiceOption.count({
+         *   where: {
+         *     // ... the filter for the MultipleChoiceOptions we want to count
+         *   }
+         * })
+         */
+        count<T extends MultipleChoiceOptionCountArgs>(args?: Subset<T, MultipleChoiceOptionCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], MultipleChoiceOptionCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a MultipleChoiceOption.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {MultipleChoiceOptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends MultipleChoiceOptionAggregateArgs>(args: Subset<T, MultipleChoiceOptionAggregateArgs>): Prisma.PrismaPromise<GetMultipleChoiceOptionAggregateType<T>>;
+        /**
+         * Group by MultipleChoiceOption.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {MultipleChoiceOptionGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends MultipleChoiceOptionGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MultipleChoiceOptionGroupByArgs['orderBy'] }
+        : { orderBy?: MultipleChoiceOptionGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, MultipleChoiceOptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMultipleChoiceOptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for MultipleChoiceOption.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__MultipleChoiceOptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        question<T extends QuestionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, QuestionDefaultArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the MultipleChoiceOption model
+     */
+    interface MultipleChoiceOptionFieldRefs {
+        readonly id: FieldRef<"MultipleChoiceOption", 'String'>;
+        readonly code: FieldRef<"MultipleChoiceOption", 'String'>;
+        readonly active: FieldRef<"MultipleChoiceOption", 'Boolean'>;
+        readonly description: FieldRef<"MultipleChoiceOption", 'String'>;
+        readonly deletedAt: FieldRef<"MultipleChoiceOption", 'DateTime'>;
+        readonly createdAt: FieldRef<"MultipleChoiceOption", 'DateTime'>;
+        readonly updatedAt: FieldRef<"MultipleChoiceOption", 'DateTime'>;
+        readonly questionId: FieldRef<"MultipleChoiceOption", 'String'>;
+        readonly content: FieldRef<"MultipleChoiceOption", 'String'>;
+        readonly isCorrect: FieldRef<"MultipleChoiceOption", 'Boolean'>;
+        readonly order: FieldRef<"MultipleChoiceOption", 'Int'>;
+    }
+
+    export interface FillInBlankSlotDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FillInBlankSlot'], meta: { name: 'FillInBlankSlot' } };
+        /**
+         * Fields of the FillInBlankSlot model
+         */
+        readonly fields: FillInBlankSlotFieldRefs;
+        /**
+         * Find zero or one FillInBlankSlot that matches the filter.
+         * @param {FillInBlankSlotFindUniqueArgs} args - Arguments to find a FillInBlankSlot
+         * @example
+         * // Get one FillInBlankSlot
+         * const fillInBlankSlot = await prisma.fillInBlankSlot.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends FillInBlankSlotFindUniqueArgs>(args: SelectSubset<T, FillInBlankSlotFindUniqueArgs<ExtArgs>>): Prisma__FillInBlankSlotClient<$Result.GetResult<Prisma.$FillInBlankSlotPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one FillInBlankSlot that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {FillInBlankSlotFindUniqueOrThrowArgs} args - Arguments to find a FillInBlankSlot
+         * @example
+         * // Get one FillInBlankSlot
+         * const fillInBlankSlot = await prisma.fillInBlankSlot.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends FillInBlankSlotFindUniqueOrThrowArgs>(args: SelectSubset<T, FillInBlankSlotFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FillInBlankSlotClient<$Result.GetResult<Prisma.$FillInBlankSlotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first FillInBlankSlot that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {FillInBlankSlotFindFirstArgs} args - Arguments to find a FillInBlankSlot
+         * @example
+         * // Get one FillInBlankSlot
+         * const fillInBlankSlot = await prisma.fillInBlankSlot.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends FillInBlankSlotFindFirstArgs>(args?: SelectSubset<T, FillInBlankSlotFindFirstArgs<ExtArgs>>): Prisma__FillInBlankSlotClient<$Result.GetResult<Prisma.$FillInBlankSlotPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first FillInBlankSlot that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {FillInBlankSlotFindFirstOrThrowArgs} args - Arguments to find a FillInBlankSlot
+         * @example
+         * // Get one FillInBlankSlot
+         * const fillInBlankSlot = await prisma.fillInBlankSlot.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends FillInBlankSlotFindFirstOrThrowArgs>(args?: SelectSubset<T, FillInBlankSlotFindFirstOrThrowArgs<ExtArgs>>): Prisma__FillInBlankSlotClient<$Result.GetResult<Prisma.$FillInBlankSlotPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more FillInBlankSlots that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {FillInBlankSlotFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all FillInBlankSlots
+         * const fillInBlankSlots = await prisma.fillInBlankSlot.findMany()
+         *
+         * // Get first 10 FillInBlankSlots
+         * const fillInBlankSlots = await prisma.fillInBlankSlot.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const fillInBlankSlotWithIdOnly = await prisma.fillInBlankSlot.findMany({ select: { id: true } })
+         */
+        findMany<T extends FillInBlankSlotFindManyArgs>(args?: SelectSubset<T, FillInBlankSlotFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FillInBlankSlotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a FillInBlankSlot.
+         * @param {FillInBlankSlotCreateArgs} args - Arguments to create a FillInBlankSlot.
+         * @example
+         * // Create one FillInBlankSlot
+         * const FillInBlankSlot = await prisma.fillInBlankSlot.create({
+         *   data: {
+         *     // ... data to create a FillInBlankSlot
+         *   }
+         * })
+         */
+        create<T extends FillInBlankSlotCreateArgs>(args: SelectSubset<T, FillInBlankSlotCreateArgs<ExtArgs>>): Prisma__FillInBlankSlotClient<$Result.GetResult<Prisma.$FillInBlankSlotPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many FillInBlankSlots.
+         * @param {FillInBlankSlotCreateManyArgs} args - Arguments to create many FillInBlankSlots.
+         * @example
+         * // Create many FillInBlankSlots
+         * const fillInBlankSlot = await prisma.fillInBlankSlot.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends FillInBlankSlotCreateManyArgs>(args?: SelectSubset<T, FillInBlankSlotCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many FillInBlankSlots and returns the data saved in the database.
+         * @param {FillInBlankSlotCreateManyAndReturnArgs} args - Arguments to create many FillInBlankSlots.
+         * @example
+         * // Create many FillInBlankSlots
+         * const fillInBlankSlot = await prisma.fillInBlankSlot.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many FillInBlankSlots and only return the `id`
+         * const fillInBlankSlotWithIdOnly = await prisma.fillInBlankSlot.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends FillInBlankSlotCreateManyAndReturnArgs>(args?: SelectSubset<T, FillInBlankSlotCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FillInBlankSlotPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a FillInBlankSlot.
+         * @param {FillInBlankSlotDeleteArgs} args - Arguments to delete one FillInBlankSlot.
+         * @example
+         * // Delete one FillInBlankSlot
+         * const FillInBlankSlot = await prisma.fillInBlankSlot.delete({
+         *   where: {
+         *     // ... filter to delete one FillInBlankSlot
+         *   }
+         * })
+         */
+        delete<T extends FillInBlankSlotDeleteArgs>(args: SelectSubset<T, FillInBlankSlotDeleteArgs<ExtArgs>>): Prisma__FillInBlankSlotClient<$Result.GetResult<Prisma.$FillInBlankSlotPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one FillInBlankSlot.
+         * @param {FillInBlankSlotUpdateArgs} args - Arguments to update one FillInBlankSlot.
+         * @example
+         * // Update one FillInBlankSlot
+         * const fillInBlankSlot = await prisma.fillInBlankSlot.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends FillInBlankSlotUpdateArgs>(args: SelectSubset<T, FillInBlankSlotUpdateArgs<ExtArgs>>): Prisma__FillInBlankSlotClient<$Result.GetResult<Prisma.$FillInBlankSlotPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more FillInBlankSlots.
+         * @param {FillInBlankSlotDeleteManyArgs} args - Arguments to filter FillInBlankSlots to delete.
+         * @example
+         * // Delete a few FillInBlankSlots
+         * const { count } = await prisma.fillInBlankSlot.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends FillInBlankSlotDeleteManyArgs>(args?: SelectSubset<T, FillInBlankSlotDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more FillInBlankSlots.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {FillInBlankSlotUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many FillInBlankSlots
+         * const fillInBlankSlot = await prisma.fillInBlankSlot.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends FillInBlankSlotUpdateManyArgs>(args: SelectSubset<T, FillInBlankSlotUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more FillInBlankSlots and returns the data updated in the database.
+         * @param {FillInBlankSlotUpdateManyAndReturnArgs} args - Arguments to update many FillInBlankSlots.
+         * @example
+         * // Update many FillInBlankSlots
+         * const fillInBlankSlot = await prisma.fillInBlankSlot.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more FillInBlankSlots and only return the `id`
+         * const fillInBlankSlotWithIdOnly = await prisma.fillInBlankSlot.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends FillInBlankSlotUpdateManyAndReturnArgs>(args: SelectSubset<T, FillInBlankSlotUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FillInBlankSlotPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one FillInBlankSlot.
+         * @param {FillInBlankSlotUpsertArgs} args - Arguments to update or create a FillInBlankSlot.
+         * @example
+         * // Update or create a FillInBlankSlot
+         * const fillInBlankSlot = await prisma.fillInBlankSlot.upsert({
+         *   create: {
+         *     // ... data to create a FillInBlankSlot
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the FillInBlankSlot we want to update
+         *   }
+         * })
+         */
+        upsert<T extends FillInBlankSlotUpsertArgs>(args: SelectSubset<T, FillInBlankSlotUpsertArgs<ExtArgs>>): Prisma__FillInBlankSlotClient<$Result.GetResult<Prisma.$FillInBlankSlotPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of FillInBlankSlots.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {FillInBlankSlotCountArgs} args - Arguments to filter FillInBlankSlots to count.
+         * @example
+         * // Count the number of FillInBlankSlots
+         * const count = await prisma.fillInBlankSlot.count({
+         *   where: {
+         *     // ... the filter for the FillInBlankSlots we want to count
+         *   }
+         * })
+         */
+        count<T extends FillInBlankSlotCountArgs>(args?: Subset<T, FillInBlankSlotCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], FillInBlankSlotCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a FillInBlankSlot.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {FillInBlankSlotAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends FillInBlankSlotAggregateArgs>(args: Subset<T, FillInBlankSlotAggregateArgs>): Prisma.PrismaPromise<GetFillInBlankSlotAggregateType<T>>;
+        /**
+         * Group by FillInBlankSlot.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {FillInBlankSlotGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends FillInBlankSlotGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FillInBlankSlotGroupByArgs['orderBy'] }
+        : { orderBy?: FillInBlankSlotGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, FillInBlankSlotGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFillInBlankSlotGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for FillInBlankSlot.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__FillInBlankSlotClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        question<T extends QuestionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, QuestionDefaultArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the FillInBlankSlot model
+     */
+    interface FillInBlankSlotFieldRefs {
+        readonly id: FieldRef<"FillInBlankSlot", 'String'>;
+        readonly code: FieldRef<"FillInBlankSlot", 'String'>;
+        readonly active: FieldRef<"FillInBlankSlot", 'Boolean'>;
+        readonly description: FieldRef<"FillInBlankSlot", 'String'>;
+        readonly deletedAt: FieldRef<"FillInBlankSlot", 'DateTime'>;
+        readonly createdAt: FieldRef<"FillInBlankSlot", 'DateTime'>;
+        readonly updatedAt: FieldRef<"FillInBlankSlot", 'DateTime'>;
+        readonly questionId: FieldRef<"FillInBlankSlot", 'String'>;
+        readonly order: FieldRef<"FillInBlankSlot", 'Int'>;
+        readonly correctAnswer: FieldRef<"FillInBlankSlot", 'String'>;
+    }
+
+    export interface OrderingItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OrderingItem'], meta: { name: 'OrderingItem' } };
+        /**
+         * Fields of the OrderingItem model
+         */
+        readonly fields: OrderingItemFieldRefs;
+        /**
+         * Find zero or one OrderingItem that matches the filter.
+         * @param {OrderingItemFindUniqueArgs} args - Arguments to find a OrderingItem
+         * @example
+         * // Get one OrderingItem
+         * const orderingItem = await prisma.orderingItem.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends OrderingItemFindUniqueArgs>(args: SelectSubset<T, OrderingItemFindUniqueArgs<ExtArgs>>): Prisma__OrderingItemClient<$Result.GetResult<Prisma.$OrderingItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one OrderingItem that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {OrderingItemFindUniqueOrThrowArgs} args - Arguments to find a OrderingItem
+         * @example
+         * // Get one OrderingItem
+         * const orderingItem = await prisma.orderingItem.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends OrderingItemFindUniqueOrThrowArgs>(args: SelectSubset<T, OrderingItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrderingItemClient<$Result.GetResult<Prisma.$OrderingItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first OrderingItem that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {OrderingItemFindFirstArgs} args - Arguments to find a OrderingItem
+         * @example
+         * // Get one OrderingItem
+         * const orderingItem = await prisma.orderingItem.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends OrderingItemFindFirstArgs>(args?: SelectSubset<T, OrderingItemFindFirstArgs<ExtArgs>>): Prisma__OrderingItemClient<$Result.GetResult<Prisma.$OrderingItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first OrderingItem that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {OrderingItemFindFirstOrThrowArgs} args - Arguments to find a OrderingItem
+         * @example
+         * // Get one OrderingItem
+         * const orderingItem = await prisma.orderingItem.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends OrderingItemFindFirstOrThrowArgs>(args?: SelectSubset<T, OrderingItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrderingItemClient<$Result.GetResult<Prisma.$OrderingItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more OrderingItems that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {OrderingItemFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all OrderingItems
+         * const orderingItems = await prisma.orderingItem.findMany()
+         *
+         * // Get first 10 OrderingItems
+         * const orderingItems = await prisma.orderingItem.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const orderingItemWithIdOnly = await prisma.orderingItem.findMany({ select: { id: true } })
+         */
+        findMany<T extends OrderingItemFindManyArgs>(args?: SelectSubset<T, OrderingItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderingItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a OrderingItem.
+         * @param {OrderingItemCreateArgs} args - Arguments to create a OrderingItem.
+         * @example
+         * // Create one OrderingItem
+         * const OrderingItem = await prisma.orderingItem.create({
+         *   data: {
+         *     // ... data to create a OrderingItem
+         *   }
+         * })
+         */
+        create<T extends OrderingItemCreateArgs>(args: SelectSubset<T, OrderingItemCreateArgs<ExtArgs>>): Prisma__OrderingItemClient<$Result.GetResult<Prisma.$OrderingItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many OrderingItems.
+         * @param {OrderingItemCreateManyArgs} args - Arguments to create many OrderingItems.
+         * @example
+         * // Create many OrderingItems
+         * const orderingItem = await prisma.orderingItem.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends OrderingItemCreateManyArgs>(args?: SelectSubset<T, OrderingItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many OrderingItems and returns the data saved in the database.
+         * @param {OrderingItemCreateManyAndReturnArgs} args - Arguments to create many OrderingItems.
+         * @example
+         * // Create many OrderingItems
+         * const orderingItem = await prisma.orderingItem.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many OrderingItems and only return the `id`
+         * const orderingItemWithIdOnly = await prisma.orderingItem.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends OrderingItemCreateManyAndReturnArgs>(args?: SelectSubset<T, OrderingItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderingItemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a OrderingItem.
+         * @param {OrderingItemDeleteArgs} args - Arguments to delete one OrderingItem.
+         * @example
+         * // Delete one OrderingItem
+         * const OrderingItem = await prisma.orderingItem.delete({
+         *   where: {
+         *     // ... filter to delete one OrderingItem
+         *   }
+         * })
+         */
+        delete<T extends OrderingItemDeleteArgs>(args: SelectSubset<T, OrderingItemDeleteArgs<ExtArgs>>): Prisma__OrderingItemClient<$Result.GetResult<Prisma.$OrderingItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one OrderingItem.
+         * @param {OrderingItemUpdateArgs} args - Arguments to update one OrderingItem.
+         * @example
+         * // Update one OrderingItem
+         * const orderingItem = await prisma.orderingItem.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends OrderingItemUpdateArgs>(args: SelectSubset<T, OrderingItemUpdateArgs<ExtArgs>>): Prisma__OrderingItemClient<$Result.GetResult<Prisma.$OrderingItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more OrderingItems.
+         * @param {OrderingItemDeleteManyArgs} args - Arguments to filter OrderingItems to delete.
+         * @example
+         * // Delete a few OrderingItems
+         * const { count } = await prisma.orderingItem.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends OrderingItemDeleteManyArgs>(args?: SelectSubset<T, OrderingItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more OrderingItems.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {OrderingItemUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many OrderingItems
+         * const orderingItem = await prisma.orderingItem.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends OrderingItemUpdateManyArgs>(args: SelectSubset<T, OrderingItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more OrderingItems and returns the data updated in the database.
+         * @param {OrderingItemUpdateManyAndReturnArgs} args - Arguments to update many OrderingItems.
+         * @example
+         * // Update many OrderingItems
+         * const orderingItem = await prisma.orderingItem.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more OrderingItems and only return the `id`
+         * const orderingItemWithIdOnly = await prisma.orderingItem.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends OrderingItemUpdateManyAndReturnArgs>(args: SelectSubset<T, OrderingItemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderingItemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one OrderingItem.
+         * @param {OrderingItemUpsertArgs} args - Arguments to update or create a OrderingItem.
+         * @example
+         * // Update or create a OrderingItem
+         * const orderingItem = await prisma.orderingItem.upsert({
+         *   create: {
+         *     // ... data to create a OrderingItem
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the OrderingItem we want to update
+         *   }
+         * })
+         */
+        upsert<T extends OrderingItemUpsertArgs>(args: SelectSubset<T, OrderingItemUpsertArgs<ExtArgs>>): Prisma__OrderingItemClient<$Result.GetResult<Prisma.$OrderingItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of OrderingItems.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {OrderingItemCountArgs} args - Arguments to filter OrderingItems to count.
+         * @example
+         * // Count the number of OrderingItems
+         * const count = await prisma.orderingItem.count({
+         *   where: {
+         *     // ... the filter for the OrderingItems we want to count
+         *   }
+         * })
+         */
+        count<T extends OrderingItemCountArgs>(args?: Subset<T, OrderingItemCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], OrderingItemCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a OrderingItem.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {OrderingItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends OrderingItemAggregateArgs>(args: Subset<T, OrderingItemAggregateArgs>): Prisma.PrismaPromise<GetOrderingItemAggregateType<T>>;
+        /**
+         * Group by OrderingItem.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {OrderingItemGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends OrderingItemGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrderingItemGroupByArgs['orderBy'] }
+        : { orderBy?: OrderingItemGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, OrderingItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrderingItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for OrderingItem.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__OrderingItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        question<T extends QuestionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, QuestionDefaultArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the OrderingItem model
+     */
+    interface OrderingItemFieldRefs {
+        readonly id: FieldRef<"OrderingItem", 'String'>;
+        readonly code: FieldRef<"OrderingItem", 'String'>;
+        readonly active: FieldRef<"OrderingItem", 'Boolean'>;
+        readonly description: FieldRef<"OrderingItem", 'String'>;
+        readonly deletedAt: FieldRef<"OrderingItem", 'DateTime'>;
+        readonly createdAt: FieldRef<"OrderingItem", 'DateTime'>;
+        readonly updatedAt: FieldRef<"OrderingItem", 'DateTime'>;
+        readonly questionId: FieldRef<"OrderingItem", 'String'>;
+        readonly content: FieldRef<"OrderingItem", 'String'>;
+        readonly correctOrder: FieldRef<"OrderingItem", 'Int'>;
     }
 
     export interface AnswerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -22289,6 +23565,7 @@ export namespace Prisma {
         readonly codeTkb: FieldRef<"SubjectVersion", 'String'>;
         readonly examType: FieldRef<"SubjectVersion", 'ExamType'>;
         readonly type: FieldRef<"SubjectVersion", 'SubjectVersionType'>;
+        readonly onePoint: FieldRef<"SubjectVersion", 'Boolean'>;
         readonly credit: FieldRef<"SubjectVersion", 'Int'>;
         readonly week: FieldRef<"SubjectVersion", 'Int'>;
         readonly period: FieldRef<"SubjectVersion", 'Int'>;
@@ -25022,6 +26299,7 @@ export namespace Prisma {
         readonly examDate: FieldRef<"SubjectClass", 'DateTime'>;
         readonly examType: FieldRef<"SubjectClass", 'ExamType'>;
         readonly examId: FieldRef<"SubjectClass", 'String'>;
+        readonly scoreDeadLineStart: FieldRef<"SubjectClass", 'DateTime'>;
         readonly scoreDeadline: FieldRef<"SubjectClass", 'DateTime'>;
         readonly examScoreDeadline: FieldRef<"SubjectClass", 'DateTime'>;
         readonly enteredScore: FieldRef<"SubjectClass", 'Boolean'>;
@@ -99610,7 +100888,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
+            modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -99981,6 +101259,228 @@ export namespace Prisma {
                     count: {
                         args: Prisma.QuestionCountArgs<ExtArgs>
                         result: $Utils.Optional<QuestionCountAggregateOutputType> | number
+                    }
+                }
+            }
+            MultipleChoiceOption: {
+                payload: Prisma.$MultipleChoiceOptionPayload<ExtArgs>
+                fields: Prisma.MultipleChoiceOptionFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.MultipleChoiceOptionFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$MultipleChoiceOptionPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.MultipleChoiceOptionFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$MultipleChoiceOptionPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.MultipleChoiceOptionFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$MultipleChoiceOptionPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.MultipleChoiceOptionFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$MultipleChoiceOptionPayload>
+                    }
+                    findMany: {
+                        args: Prisma.MultipleChoiceOptionFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$MultipleChoiceOptionPayload>[]
+                    }
+                    create: {
+                        args: Prisma.MultipleChoiceOptionCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$MultipleChoiceOptionPayload>
+                    }
+                    createMany: {
+                        args: Prisma.MultipleChoiceOptionCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.MultipleChoiceOptionCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$MultipleChoiceOptionPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.MultipleChoiceOptionDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$MultipleChoiceOptionPayload>
+                    }
+                    update: {
+                        args: Prisma.MultipleChoiceOptionUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$MultipleChoiceOptionPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.MultipleChoiceOptionDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.MultipleChoiceOptionUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.MultipleChoiceOptionUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$MultipleChoiceOptionPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.MultipleChoiceOptionUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$MultipleChoiceOptionPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.MultipleChoiceOptionAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateMultipleChoiceOption>
+                    }
+                    groupBy: {
+                        args: Prisma.MultipleChoiceOptionGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<MultipleChoiceOptionGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.MultipleChoiceOptionCountArgs<ExtArgs>
+                        result: $Utils.Optional<MultipleChoiceOptionCountAggregateOutputType> | number
+                    }
+                }
+            }
+            FillInBlankSlot: {
+                payload: Prisma.$FillInBlankSlotPayload<ExtArgs>
+                fields: Prisma.FillInBlankSlotFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.FillInBlankSlotFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$FillInBlankSlotPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.FillInBlankSlotFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$FillInBlankSlotPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.FillInBlankSlotFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$FillInBlankSlotPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.FillInBlankSlotFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$FillInBlankSlotPayload>
+                    }
+                    findMany: {
+                        args: Prisma.FillInBlankSlotFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$FillInBlankSlotPayload>[]
+                    }
+                    create: {
+                        args: Prisma.FillInBlankSlotCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$FillInBlankSlotPayload>
+                    }
+                    createMany: {
+                        args: Prisma.FillInBlankSlotCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.FillInBlankSlotCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$FillInBlankSlotPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.FillInBlankSlotDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$FillInBlankSlotPayload>
+                    }
+                    update: {
+                        args: Prisma.FillInBlankSlotUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$FillInBlankSlotPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.FillInBlankSlotDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.FillInBlankSlotUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.FillInBlankSlotUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$FillInBlankSlotPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.FillInBlankSlotUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$FillInBlankSlotPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.FillInBlankSlotAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateFillInBlankSlot>
+                    }
+                    groupBy: {
+                        args: Prisma.FillInBlankSlotGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<FillInBlankSlotGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.FillInBlankSlotCountArgs<ExtArgs>
+                        result: $Utils.Optional<FillInBlankSlotCountAggregateOutputType> | number
+                    }
+                }
+            }
+            OrderingItem: {
+                payload: Prisma.$OrderingItemPayload<ExtArgs>
+                fields: Prisma.OrderingItemFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.OrderingItemFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$OrderingItemPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.OrderingItemFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$OrderingItemPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.OrderingItemFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$OrderingItemPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.OrderingItemFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$OrderingItemPayload>
+                    }
+                    findMany: {
+                        args: Prisma.OrderingItemFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$OrderingItemPayload>[]
+                    }
+                    create: {
+                        args: Prisma.OrderingItemCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$OrderingItemPayload>
+                    }
+                    createMany: {
+                        args: Prisma.OrderingItemCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.OrderingItemCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$OrderingItemPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.OrderingItemDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$OrderingItemPayload>
+                    }
+                    update: {
+                        args: Prisma.OrderingItemUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$OrderingItemPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.OrderingItemDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.OrderingItemUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.OrderingItemUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$OrderingItemPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.OrderingItemUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$OrderingItemPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.OrderingItemAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateOrderingItem>
+                    }
+                    groupBy: {
+                        args: Prisma.OrderingItemGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<OrderingItemGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.OrderingItemCountArgs<ExtArgs>
+                        result: $Utils.Optional<OrderingItemCountAggregateOutputType> | number
                     }
                 }
             }
@@ -116522,6 +118022,9 @@ export namespace Prisma {
         difficulty?: DifficultyOmit
         knowledgeBlock?: KnowledgeBlockOmit
         question?: QuestionOmit
+        multipleChoiceOption?: MultipleChoiceOptionOmit
+        fillInBlankSlot?: FillInBlankSlotOmit
+        orderingItem?: OrderingItemOmit
         answer?: AnswerOmit
         exam?: ExamOmit
         testStructureRule?: TestStructureRuleOmit
@@ -116907,10 +118410,16 @@ export namespace Prisma {
      * Count Type QuestionCountOutputType
      */
     export type QuestionCountOutputType = {
+        multipleChoiceOptions: number
+        fillInBlankSlots: number
+        orderingItems: number
         sessionQuestions: number
         answers: number
     };
     export type QuestionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        multipleChoiceOptions?: boolean | QuestionCountOutputTypeCountMultipleChoiceOptionsArgs
+        fillInBlankSlots?: boolean | QuestionCountOutputTypeCountFillInBlankSlotsArgs
+        orderingItems?: boolean | QuestionCountOutputTypeCountOrderingItemsArgs
         sessionQuestions?: boolean | QuestionCountOutputTypeCountSessionQuestionsArgs
         answers?: boolean | QuestionCountOutputTypeCountAnswersArgs
     };
@@ -116922,6 +118431,24 @@ export namespace Prisma {
          * Select specific fields to fetch from the QuestionCountOutputType
          */
         select?: QuestionCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * QuestionCountOutputType without action
+     */
+    export type QuestionCountOutputTypeCountMultipleChoiceOptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: MultipleChoiceOptionWhereInput
+    };
+    /**
+     * QuestionCountOutputType without action
+     */
+    export type QuestionCountOutputTypeCountFillInBlankSlotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: FillInBlankSlotWhereInput
+    };
+    /**
+     * QuestionCountOutputType without action
+     */
+    export type QuestionCountOutputTypeCountOrderingItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: OrderingItemWhereInput
     };
     /**
      * QuestionCountOutputType without action
@@ -124821,6 +126348,9 @@ export namespace Prisma {
         questionBankId?: boolean
         knowledgeBlockId?: boolean
         difficultyId?: boolean
+        multipleChoiceOptions?: boolean | Question$multipleChoiceOptionsArgs<ExtArgs>
+        fillInBlankSlots?: boolean | Question$fillInBlankSlotsArgs<ExtArgs>
+        orderingItems?: boolean | Question$orderingItemsArgs<ExtArgs>
         questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
         knowledgeBlock?: boolean | Question$knowledgeBlockArgs<ExtArgs>
         difficulty?: boolean | Question$difficultyArgs<ExtArgs>
@@ -124887,6 +126417,9 @@ export namespace Prisma {
     };
     export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "content" | "type" | "point" | "explanation" | "isAutoGraded" | "questionBankId" | "knowledgeBlockId" | "difficultyId", ExtArgs["result"]["question"]>;
     export type QuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        multipleChoiceOptions?: boolean | Question$multipleChoiceOptionsArgs<ExtArgs>
+        fillInBlankSlots?: boolean | Question$fillInBlankSlotsArgs<ExtArgs>
+        orderingItems?: boolean | Question$orderingItemsArgs<ExtArgs>
         questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
         knowledgeBlock?: boolean | Question$knowledgeBlockArgs<ExtArgs>
         difficulty?: boolean | Question$difficultyArgs<ExtArgs>
@@ -124907,6 +126440,9 @@ export namespace Prisma {
     export type $QuestionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "Question"
         objects: {
+            multipleChoiceOptions: Prisma.$MultipleChoiceOptionPayload<ExtArgs>[]
+            fillInBlankSlots: Prisma.$FillInBlankSlotPayload<ExtArgs>[]
+            orderingItems: Prisma.$OrderingItemPayload<ExtArgs>[]
             questionBank: Prisma.$QuestionBankPayload<ExtArgs>
             knowledgeBlock: Prisma.$KnowledgeBlockPayload<ExtArgs> | null
             difficulty: Prisma.$DifficultyPayload<ExtArgs> | null
@@ -125317,6 +126853,75 @@ export namespace Prisma {
         limit?: number
     };
     /**
+     * Question.multipleChoiceOptions
+     */
+    export type Question$multipleChoiceOptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the MultipleChoiceOption
+         */
+        select?: MultipleChoiceOptionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the MultipleChoiceOption
+         */
+        omit?: MultipleChoiceOptionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: MultipleChoiceOptionInclude<ExtArgs> | null
+        where?: MultipleChoiceOptionWhereInput
+        orderBy?: MultipleChoiceOptionOrderByWithRelationInput | MultipleChoiceOptionOrderByWithRelationInput[]
+        cursor?: MultipleChoiceOptionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: MultipleChoiceOptionScalarFieldEnum | MultipleChoiceOptionScalarFieldEnum[]
+    };
+    /**
+     * Question.fillInBlankSlots
+     */
+    export type Question$fillInBlankSlotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FillInBlankSlot
+         */
+        select?: FillInBlankSlotSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FillInBlankSlot
+         */
+        omit?: FillInBlankSlotOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FillInBlankSlotInclude<ExtArgs> | null
+        where?: FillInBlankSlotWhereInput
+        orderBy?: FillInBlankSlotOrderByWithRelationInput | FillInBlankSlotOrderByWithRelationInput[]
+        cursor?: FillInBlankSlotWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: FillInBlankSlotScalarFieldEnum | FillInBlankSlotScalarFieldEnum[]
+    };
+    /**
+     * Question.orderingItems
+     */
+    export type Question$orderingItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OrderingItem
+         */
+        select?: OrderingItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the OrderingItem
+         */
+        omit?: OrderingItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OrderingItemInclude<ExtArgs> | null
+        where?: OrderingItemWhereInput
+        orderBy?: OrderingItemOrderByWithRelationInput | OrderingItemOrderByWithRelationInput[]
+        cursor?: OrderingItemWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: OrderingItemScalarFieldEnum | OrderingItemScalarFieldEnum[]
+    };
+    /**
      * Question.knowledgeBlock
      */
     export type Question$knowledgeBlockArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -125414,6 +127019,2067 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: QuestionInclude<ExtArgs> | null
+    };
+    /**
+     * Model MultipleChoiceOption
+     */
+    export type AggregateMultipleChoiceOption = {
+        _count: MultipleChoiceOptionCountAggregateOutputType | null
+        _avg: MultipleChoiceOptionAvgAggregateOutputType | null
+        _sum: MultipleChoiceOptionSumAggregateOutputType | null
+        _min: MultipleChoiceOptionMinAggregateOutputType | null
+        _max: MultipleChoiceOptionMaxAggregateOutputType | null
+    };
+    export type MultipleChoiceOptionAvgAggregateOutputType = {
+        order: number | null
+    };
+    export type MultipleChoiceOptionSumAggregateOutputType = {
+        order: number | null
+    };
+    export type MultipleChoiceOptionMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        questionId: string | null
+        content: string | null
+        isCorrect: boolean | null
+        order: number | null
+    };
+    export type MultipleChoiceOptionMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        questionId: string | null
+        content: string | null
+        isCorrect: boolean | null
+        order: number | null
+    };
+    export type MultipleChoiceOptionCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        questionId: number
+        content: number
+        isCorrect: number
+        order: number
+        _all: number
+    };
+    export type MultipleChoiceOptionAvgAggregateInputType = {
+        order?: true
+    };
+    export type MultipleChoiceOptionSumAggregateInputType = {
+        order?: true
+    };
+    export type MultipleChoiceOptionMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        questionId?: true
+        content?: true
+        isCorrect?: true
+        order?: true
+    };
+    export type MultipleChoiceOptionMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        questionId?: true
+        content?: true
+        isCorrect?: true
+        order?: true
+    };
+    export type MultipleChoiceOptionCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        questionId?: true
+        content?: true
+        isCorrect?: true
+        order?: true
+        _all?: true
+    };
+    export type MultipleChoiceOptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which MultipleChoiceOption to aggregate.
+         */
+        where?: MultipleChoiceOptionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of MultipleChoiceOptions to fetch.
+         */
+        orderBy?: MultipleChoiceOptionOrderByWithRelationInput | MultipleChoiceOptionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: MultipleChoiceOptionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` MultipleChoiceOptions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` MultipleChoiceOptions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned MultipleChoiceOptions
+        **/
+        _count?: true | MultipleChoiceOptionCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: MultipleChoiceOptionAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: MultipleChoiceOptionSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: MultipleChoiceOptionMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: MultipleChoiceOptionMaxAggregateInputType
+    };
+    export type GetMultipleChoiceOptionAggregateType<T extends MultipleChoiceOptionAggregateArgs> = {
+        [P in keyof T & keyof AggregateMultipleChoiceOption]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMultipleChoiceOption[P]>
+        : GetScalarType<T[P], AggregateMultipleChoiceOption[P]>
+    };
+    export type MultipleChoiceOptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: MultipleChoiceOptionWhereInput
+        orderBy?: MultipleChoiceOptionOrderByWithAggregationInput | MultipleChoiceOptionOrderByWithAggregationInput[]
+        by: MultipleChoiceOptionScalarFieldEnum[] | MultipleChoiceOptionScalarFieldEnum
+        having?: MultipleChoiceOptionScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: MultipleChoiceOptionCountAggregateInputType | true
+        _avg?: MultipleChoiceOptionAvgAggregateInputType
+        _sum?: MultipleChoiceOptionSumAggregateInputType
+        _min?: MultipleChoiceOptionMinAggregateInputType
+        _max?: MultipleChoiceOptionMaxAggregateInputType
+    };
+    export type MultipleChoiceOptionGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        questionId: string
+        content: string
+        isCorrect: boolean
+        order: number
+        _count: MultipleChoiceOptionCountAggregateOutputType | null
+        _avg: MultipleChoiceOptionAvgAggregateOutputType | null
+        _sum: MultipleChoiceOptionSumAggregateOutputType | null
+        _min: MultipleChoiceOptionMinAggregateOutputType | null
+        _max: MultipleChoiceOptionMaxAggregateOutputType | null
+    };
+    type GetMultipleChoiceOptionGroupByPayload<T extends MultipleChoiceOptionGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<MultipleChoiceOptionGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof MultipleChoiceOptionGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], MultipleChoiceOptionGroupByOutputType[P]>
+                : GetScalarType<T[P], MultipleChoiceOptionGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type MultipleChoiceOptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        questionId?: boolean
+        content?: boolean
+        isCorrect?: boolean
+        order?: boolean
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["multipleChoiceOption"]>;
+    export type MultipleChoiceOptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        questionId?: boolean
+        content?: boolean
+        isCorrect?: boolean
+        order?: boolean
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["multipleChoiceOption"]>;
+    export type MultipleChoiceOptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        questionId?: boolean
+        content?: boolean
+        isCorrect?: boolean
+        order?: boolean
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["multipleChoiceOption"]>;
+    export type MultipleChoiceOptionSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        questionId?: boolean
+        content?: boolean
+        isCorrect?: boolean
+        order?: boolean
+    };
+    export type MultipleChoiceOptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "questionId" | "content" | "isCorrect" | "order", ExtArgs["result"]["multipleChoiceOption"]>;
+    export type MultipleChoiceOptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    };
+    export type MultipleChoiceOptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    };
+    export type MultipleChoiceOptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    };
+    export type $MultipleChoiceOptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "MultipleChoiceOption"
+        objects: {
+            question: Prisma.$QuestionPayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            questionId: string
+            content: string
+            isCorrect: boolean
+            order: number
+        }, ExtArgs["result"]["multipleChoiceOption"]>
+        composites: {}
+    };
+    type MultipleChoiceOptionGetPayload<S extends boolean | null | undefined | MultipleChoiceOptionDefaultArgs> = $Result.GetResult<Prisma.$MultipleChoiceOptionPayload, S>;
+    type MultipleChoiceOptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<MultipleChoiceOptionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: MultipleChoiceOptionCountAggregateInputType | true
+    };
+    /**
+     * MultipleChoiceOption findUnique
+     */
+    export type MultipleChoiceOptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the MultipleChoiceOption
+         */
+        select?: MultipleChoiceOptionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the MultipleChoiceOption
+         */
+        omit?: MultipleChoiceOptionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: MultipleChoiceOptionInclude<ExtArgs> | null
+        /**
+         * Filter, which MultipleChoiceOption to fetch.
+         */
+        where: MultipleChoiceOptionWhereUniqueInput
+    };
+    /**
+     * MultipleChoiceOption findUniqueOrThrow
+     */
+    export type MultipleChoiceOptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the MultipleChoiceOption
+         */
+        select?: MultipleChoiceOptionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the MultipleChoiceOption
+         */
+        omit?: MultipleChoiceOptionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: MultipleChoiceOptionInclude<ExtArgs> | null
+        /**
+         * Filter, which MultipleChoiceOption to fetch.
+         */
+        where: MultipleChoiceOptionWhereUniqueInput
+    };
+    /**
+     * MultipleChoiceOption findFirst
+     */
+    export type MultipleChoiceOptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the MultipleChoiceOption
+         */
+        select?: MultipleChoiceOptionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the MultipleChoiceOption
+         */
+        omit?: MultipleChoiceOptionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: MultipleChoiceOptionInclude<ExtArgs> | null
+        /**
+         * Filter, which MultipleChoiceOption to fetch.
+         */
+        where?: MultipleChoiceOptionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of MultipleChoiceOptions to fetch.
+         */
+        orderBy?: MultipleChoiceOptionOrderByWithRelationInput | MultipleChoiceOptionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for MultipleChoiceOptions.
+         */
+        cursor?: MultipleChoiceOptionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` MultipleChoiceOptions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` MultipleChoiceOptions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of MultipleChoiceOptions.
+         */
+        distinct?: MultipleChoiceOptionScalarFieldEnum | MultipleChoiceOptionScalarFieldEnum[]
+    };
+    /**
+     * MultipleChoiceOption findFirstOrThrow
+     */
+    export type MultipleChoiceOptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the MultipleChoiceOption
+         */
+        select?: MultipleChoiceOptionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the MultipleChoiceOption
+         */
+        omit?: MultipleChoiceOptionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: MultipleChoiceOptionInclude<ExtArgs> | null
+        /**
+         * Filter, which MultipleChoiceOption to fetch.
+         */
+        where?: MultipleChoiceOptionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of MultipleChoiceOptions to fetch.
+         */
+        orderBy?: MultipleChoiceOptionOrderByWithRelationInput | MultipleChoiceOptionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for MultipleChoiceOptions.
+         */
+        cursor?: MultipleChoiceOptionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` MultipleChoiceOptions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` MultipleChoiceOptions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of MultipleChoiceOptions.
+         */
+        distinct?: MultipleChoiceOptionScalarFieldEnum | MultipleChoiceOptionScalarFieldEnum[]
+    };
+    /**
+     * MultipleChoiceOption findMany
+     */
+    export type MultipleChoiceOptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the MultipleChoiceOption
+         */
+        select?: MultipleChoiceOptionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the MultipleChoiceOption
+         */
+        omit?: MultipleChoiceOptionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: MultipleChoiceOptionInclude<ExtArgs> | null
+        /**
+         * Filter, which MultipleChoiceOptions to fetch.
+         */
+        where?: MultipleChoiceOptionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of MultipleChoiceOptions to fetch.
+         */
+        orderBy?: MultipleChoiceOptionOrderByWithRelationInput | MultipleChoiceOptionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing MultipleChoiceOptions.
+         */
+        cursor?: MultipleChoiceOptionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` MultipleChoiceOptions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` MultipleChoiceOptions.
+         */
+        skip?: number
+        distinct?: MultipleChoiceOptionScalarFieldEnum | MultipleChoiceOptionScalarFieldEnum[]
+    };
+    /**
+     * MultipleChoiceOption create
+     */
+    export type MultipleChoiceOptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the MultipleChoiceOption
+         */
+        select?: MultipleChoiceOptionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the MultipleChoiceOption
+         */
+        omit?: MultipleChoiceOptionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: MultipleChoiceOptionInclude<ExtArgs> | null
+        /**
+         * The data needed to create a MultipleChoiceOption.
+         */
+        data: XOR<MultipleChoiceOptionCreateInput, MultipleChoiceOptionUncheckedCreateInput>
+    };
+    /**
+     * MultipleChoiceOption createMany
+     */
+    export type MultipleChoiceOptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many MultipleChoiceOptions.
+         */
+        data: MultipleChoiceOptionCreateManyInput | MultipleChoiceOptionCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * MultipleChoiceOption createManyAndReturn
+     */
+    export type MultipleChoiceOptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the MultipleChoiceOption
+         */
+        select?: MultipleChoiceOptionSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the MultipleChoiceOption
+         */
+        omit?: MultipleChoiceOptionOmit<ExtArgs> | null
+        /**
+         * The data used to create many MultipleChoiceOptions.
+         */
+        data: MultipleChoiceOptionCreateManyInput | MultipleChoiceOptionCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: MultipleChoiceOptionIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * MultipleChoiceOption update
+     */
+    export type MultipleChoiceOptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the MultipleChoiceOption
+         */
+        select?: MultipleChoiceOptionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the MultipleChoiceOption
+         */
+        omit?: MultipleChoiceOptionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: MultipleChoiceOptionInclude<ExtArgs> | null
+        /**
+         * The data needed to update a MultipleChoiceOption.
+         */
+        data: XOR<MultipleChoiceOptionUpdateInput, MultipleChoiceOptionUncheckedUpdateInput>
+        /**
+         * Choose, which MultipleChoiceOption to update.
+         */
+        where: MultipleChoiceOptionWhereUniqueInput
+    };
+    /**
+     * MultipleChoiceOption updateMany
+     */
+    export type MultipleChoiceOptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update MultipleChoiceOptions.
+         */
+        data: XOR<MultipleChoiceOptionUpdateManyMutationInput, MultipleChoiceOptionUncheckedUpdateManyInput>
+        /**
+         * Filter which MultipleChoiceOptions to update
+         */
+        where?: MultipleChoiceOptionWhereInput
+        /**
+         * Limit how many MultipleChoiceOptions to update.
+         */
+        limit?: number
+    };
+    /**
+     * MultipleChoiceOption updateManyAndReturn
+     */
+    export type MultipleChoiceOptionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the MultipleChoiceOption
+         */
+        select?: MultipleChoiceOptionSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the MultipleChoiceOption
+         */
+        omit?: MultipleChoiceOptionOmit<ExtArgs> | null
+        /**
+         * The data used to update MultipleChoiceOptions.
+         */
+        data: XOR<MultipleChoiceOptionUpdateManyMutationInput, MultipleChoiceOptionUncheckedUpdateManyInput>
+        /**
+         * Filter which MultipleChoiceOptions to update
+         */
+        where?: MultipleChoiceOptionWhereInput
+        /**
+         * Limit how many MultipleChoiceOptions to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: MultipleChoiceOptionIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * MultipleChoiceOption upsert
+     */
+    export type MultipleChoiceOptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the MultipleChoiceOption
+         */
+        select?: MultipleChoiceOptionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the MultipleChoiceOption
+         */
+        omit?: MultipleChoiceOptionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: MultipleChoiceOptionInclude<ExtArgs> | null
+        /**
+         * The filter to search for the MultipleChoiceOption to update in case it exists.
+         */
+        where: MultipleChoiceOptionWhereUniqueInput
+        /**
+         * In case the MultipleChoiceOption found by the `where` argument doesn't exist, create a new MultipleChoiceOption with this data.
+         */
+        create: XOR<MultipleChoiceOptionCreateInput, MultipleChoiceOptionUncheckedCreateInput>
+        /**
+         * In case the MultipleChoiceOption was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<MultipleChoiceOptionUpdateInput, MultipleChoiceOptionUncheckedUpdateInput>
+    };
+    /**
+     * MultipleChoiceOption delete
+     */
+    export type MultipleChoiceOptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the MultipleChoiceOption
+         */
+        select?: MultipleChoiceOptionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the MultipleChoiceOption
+         */
+        omit?: MultipleChoiceOptionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: MultipleChoiceOptionInclude<ExtArgs> | null
+        /**
+         * Filter which MultipleChoiceOption to delete.
+         */
+        where: MultipleChoiceOptionWhereUniqueInput
+    };
+    /**
+     * MultipleChoiceOption deleteMany
+     */
+    export type MultipleChoiceOptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which MultipleChoiceOptions to delete
+         */
+        where?: MultipleChoiceOptionWhereInput
+        /**
+         * Limit how many MultipleChoiceOptions to delete.
+         */
+        limit?: number
+    };
+    /**
+     * MultipleChoiceOption without action
+     */
+    export type MultipleChoiceOptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the MultipleChoiceOption
+         */
+        select?: MultipleChoiceOptionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the MultipleChoiceOption
+         */
+        omit?: MultipleChoiceOptionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: MultipleChoiceOptionInclude<ExtArgs> | null
+    };
+    /**
+     * Model FillInBlankSlot
+     */
+    export type AggregateFillInBlankSlot = {
+        _count: FillInBlankSlotCountAggregateOutputType | null
+        _avg: FillInBlankSlotAvgAggregateOutputType | null
+        _sum: FillInBlankSlotSumAggregateOutputType | null
+        _min: FillInBlankSlotMinAggregateOutputType | null
+        _max: FillInBlankSlotMaxAggregateOutputType | null
+    };
+    export type FillInBlankSlotAvgAggregateOutputType = {
+        order: number | null
+    };
+    export type FillInBlankSlotSumAggregateOutputType = {
+        order: number | null
+    };
+    export type FillInBlankSlotMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        questionId: string | null
+        order: number | null
+        correctAnswer: string | null
+    };
+    export type FillInBlankSlotMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        questionId: string | null
+        order: number | null
+        correctAnswer: string | null
+    };
+    export type FillInBlankSlotCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        questionId: number
+        order: number
+        correctAnswer: number
+        _all: number
+    };
+    export type FillInBlankSlotAvgAggregateInputType = {
+        order?: true
+    };
+    export type FillInBlankSlotSumAggregateInputType = {
+        order?: true
+    };
+    export type FillInBlankSlotMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        questionId?: true
+        order?: true
+        correctAnswer?: true
+    };
+    export type FillInBlankSlotMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        questionId?: true
+        order?: true
+        correctAnswer?: true
+    };
+    export type FillInBlankSlotCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        questionId?: true
+        order?: true
+        correctAnswer?: true
+        _all?: true
+    };
+    export type FillInBlankSlotAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which FillInBlankSlot to aggregate.
+         */
+        where?: FillInBlankSlotWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of FillInBlankSlots to fetch.
+         */
+        orderBy?: FillInBlankSlotOrderByWithRelationInput | FillInBlankSlotOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: FillInBlankSlotWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` FillInBlankSlots from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` FillInBlankSlots.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned FillInBlankSlots
+        **/
+        _count?: true | FillInBlankSlotCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: FillInBlankSlotAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: FillInBlankSlotSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: FillInBlankSlotMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: FillInBlankSlotMaxAggregateInputType
+    };
+    export type GetFillInBlankSlotAggregateType<T extends FillInBlankSlotAggregateArgs> = {
+        [P in keyof T & keyof AggregateFillInBlankSlot]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFillInBlankSlot[P]>
+        : GetScalarType<T[P], AggregateFillInBlankSlot[P]>
+    };
+    export type FillInBlankSlotGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: FillInBlankSlotWhereInput
+        orderBy?: FillInBlankSlotOrderByWithAggregationInput | FillInBlankSlotOrderByWithAggregationInput[]
+        by: FillInBlankSlotScalarFieldEnum[] | FillInBlankSlotScalarFieldEnum
+        having?: FillInBlankSlotScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: FillInBlankSlotCountAggregateInputType | true
+        _avg?: FillInBlankSlotAvgAggregateInputType
+        _sum?: FillInBlankSlotSumAggregateInputType
+        _min?: FillInBlankSlotMinAggregateInputType
+        _max?: FillInBlankSlotMaxAggregateInputType
+    };
+    export type FillInBlankSlotGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        questionId: string
+        order: number
+        correctAnswer: string
+        _count: FillInBlankSlotCountAggregateOutputType | null
+        _avg: FillInBlankSlotAvgAggregateOutputType | null
+        _sum: FillInBlankSlotSumAggregateOutputType | null
+        _min: FillInBlankSlotMinAggregateOutputType | null
+        _max: FillInBlankSlotMaxAggregateOutputType | null
+    };
+    type GetFillInBlankSlotGroupByPayload<T extends FillInBlankSlotGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<FillInBlankSlotGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof FillInBlankSlotGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], FillInBlankSlotGroupByOutputType[P]>
+                : GetScalarType<T[P], FillInBlankSlotGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type FillInBlankSlotSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        questionId?: boolean
+        order?: boolean
+        correctAnswer?: boolean
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["fillInBlankSlot"]>;
+    export type FillInBlankSlotSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        questionId?: boolean
+        order?: boolean
+        correctAnswer?: boolean
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["fillInBlankSlot"]>;
+    export type FillInBlankSlotSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        questionId?: boolean
+        order?: boolean
+        correctAnswer?: boolean
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["fillInBlankSlot"]>;
+    export type FillInBlankSlotSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        questionId?: boolean
+        order?: boolean
+        correctAnswer?: boolean
+    };
+    export type FillInBlankSlotOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "questionId" | "order" | "correctAnswer", ExtArgs["result"]["fillInBlankSlot"]>;
+    export type FillInBlankSlotInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    };
+    export type FillInBlankSlotIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    };
+    export type FillInBlankSlotIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    };
+    export type $FillInBlankSlotPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "FillInBlankSlot"
+        objects: {
+            question: Prisma.$QuestionPayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            questionId: string
+            order: number
+            correctAnswer: string
+        }, ExtArgs["result"]["fillInBlankSlot"]>
+        composites: {}
+    };
+    type FillInBlankSlotGetPayload<S extends boolean | null | undefined | FillInBlankSlotDefaultArgs> = $Result.GetResult<Prisma.$FillInBlankSlotPayload, S>;
+    type FillInBlankSlotCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<FillInBlankSlotFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: FillInBlankSlotCountAggregateInputType | true
+    };
+    /**
+     * FillInBlankSlot findUnique
+     */
+    export type FillInBlankSlotFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FillInBlankSlot
+         */
+        select?: FillInBlankSlotSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FillInBlankSlot
+         */
+        omit?: FillInBlankSlotOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FillInBlankSlotInclude<ExtArgs> | null
+        /**
+         * Filter, which FillInBlankSlot to fetch.
+         */
+        where: FillInBlankSlotWhereUniqueInput
+    };
+    /**
+     * FillInBlankSlot findUniqueOrThrow
+     */
+    export type FillInBlankSlotFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FillInBlankSlot
+         */
+        select?: FillInBlankSlotSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FillInBlankSlot
+         */
+        omit?: FillInBlankSlotOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FillInBlankSlotInclude<ExtArgs> | null
+        /**
+         * Filter, which FillInBlankSlot to fetch.
+         */
+        where: FillInBlankSlotWhereUniqueInput
+    };
+    /**
+     * FillInBlankSlot findFirst
+     */
+    export type FillInBlankSlotFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FillInBlankSlot
+         */
+        select?: FillInBlankSlotSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FillInBlankSlot
+         */
+        omit?: FillInBlankSlotOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FillInBlankSlotInclude<ExtArgs> | null
+        /**
+         * Filter, which FillInBlankSlot to fetch.
+         */
+        where?: FillInBlankSlotWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of FillInBlankSlots to fetch.
+         */
+        orderBy?: FillInBlankSlotOrderByWithRelationInput | FillInBlankSlotOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for FillInBlankSlots.
+         */
+        cursor?: FillInBlankSlotWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` FillInBlankSlots from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` FillInBlankSlots.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of FillInBlankSlots.
+         */
+        distinct?: FillInBlankSlotScalarFieldEnum | FillInBlankSlotScalarFieldEnum[]
+    };
+    /**
+     * FillInBlankSlot findFirstOrThrow
+     */
+    export type FillInBlankSlotFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FillInBlankSlot
+         */
+        select?: FillInBlankSlotSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FillInBlankSlot
+         */
+        omit?: FillInBlankSlotOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FillInBlankSlotInclude<ExtArgs> | null
+        /**
+         * Filter, which FillInBlankSlot to fetch.
+         */
+        where?: FillInBlankSlotWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of FillInBlankSlots to fetch.
+         */
+        orderBy?: FillInBlankSlotOrderByWithRelationInput | FillInBlankSlotOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for FillInBlankSlots.
+         */
+        cursor?: FillInBlankSlotWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` FillInBlankSlots from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` FillInBlankSlots.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of FillInBlankSlots.
+         */
+        distinct?: FillInBlankSlotScalarFieldEnum | FillInBlankSlotScalarFieldEnum[]
+    };
+    /**
+     * FillInBlankSlot findMany
+     */
+    export type FillInBlankSlotFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FillInBlankSlot
+         */
+        select?: FillInBlankSlotSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FillInBlankSlot
+         */
+        omit?: FillInBlankSlotOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FillInBlankSlotInclude<ExtArgs> | null
+        /**
+         * Filter, which FillInBlankSlots to fetch.
+         */
+        where?: FillInBlankSlotWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of FillInBlankSlots to fetch.
+         */
+        orderBy?: FillInBlankSlotOrderByWithRelationInput | FillInBlankSlotOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing FillInBlankSlots.
+         */
+        cursor?: FillInBlankSlotWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` FillInBlankSlots from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` FillInBlankSlots.
+         */
+        skip?: number
+        distinct?: FillInBlankSlotScalarFieldEnum | FillInBlankSlotScalarFieldEnum[]
+    };
+    /**
+     * FillInBlankSlot create
+     */
+    export type FillInBlankSlotCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FillInBlankSlot
+         */
+        select?: FillInBlankSlotSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FillInBlankSlot
+         */
+        omit?: FillInBlankSlotOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FillInBlankSlotInclude<ExtArgs> | null
+        /**
+         * The data needed to create a FillInBlankSlot.
+         */
+        data: XOR<FillInBlankSlotCreateInput, FillInBlankSlotUncheckedCreateInput>
+    };
+    /**
+     * FillInBlankSlot createMany
+     */
+    export type FillInBlankSlotCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many FillInBlankSlots.
+         */
+        data: FillInBlankSlotCreateManyInput | FillInBlankSlotCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * FillInBlankSlot createManyAndReturn
+     */
+    export type FillInBlankSlotCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FillInBlankSlot
+         */
+        select?: FillInBlankSlotSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the FillInBlankSlot
+         */
+        omit?: FillInBlankSlotOmit<ExtArgs> | null
+        /**
+         * The data used to create many FillInBlankSlots.
+         */
+        data: FillInBlankSlotCreateManyInput | FillInBlankSlotCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FillInBlankSlotIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * FillInBlankSlot update
+     */
+    export type FillInBlankSlotUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FillInBlankSlot
+         */
+        select?: FillInBlankSlotSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FillInBlankSlot
+         */
+        omit?: FillInBlankSlotOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FillInBlankSlotInclude<ExtArgs> | null
+        /**
+         * The data needed to update a FillInBlankSlot.
+         */
+        data: XOR<FillInBlankSlotUpdateInput, FillInBlankSlotUncheckedUpdateInput>
+        /**
+         * Choose, which FillInBlankSlot to update.
+         */
+        where: FillInBlankSlotWhereUniqueInput
+    };
+    /**
+     * FillInBlankSlot updateMany
+     */
+    export type FillInBlankSlotUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update FillInBlankSlots.
+         */
+        data: XOR<FillInBlankSlotUpdateManyMutationInput, FillInBlankSlotUncheckedUpdateManyInput>
+        /**
+         * Filter which FillInBlankSlots to update
+         */
+        where?: FillInBlankSlotWhereInput
+        /**
+         * Limit how many FillInBlankSlots to update.
+         */
+        limit?: number
+    };
+    /**
+     * FillInBlankSlot updateManyAndReturn
+     */
+    export type FillInBlankSlotUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FillInBlankSlot
+         */
+        select?: FillInBlankSlotSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the FillInBlankSlot
+         */
+        omit?: FillInBlankSlotOmit<ExtArgs> | null
+        /**
+         * The data used to update FillInBlankSlots.
+         */
+        data: XOR<FillInBlankSlotUpdateManyMutationInput, FillInBlankSlotUncheckedUpdateManyInput>
+        /**
+         * Filter which FillInBlankSlots to update
+         */
+        where?: FillInBlankSlotWhereInput
+        /**
+         * Limit how many FillInBlankSlots to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FillInBlankSlotIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * FillInBlankSlot upsert
+     */
+    export type FillInBlankSlotUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FillInBlankSlot
+         */
+        select?: FillInBlankSlotSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FillInBlankSlot
+         */
+        omit?: FillInBlankSlotOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FillInBlankSlotInclude<ExtArgs> | null
+        /**
+         * The filter to search for the FillInBlankSlot to update in case it exists.
+         */
+        where: FillInBlankSlotWhereUniqueInput
+        /**
+         * In case the FillInBlankSlot found by the `where` argument doesn't exist, create a new FillInBlankSlot with this data.
+         */
+        create: XOR<FillInBlankSlotCreateInput, FillInBlankSlotUncheckedCreateInput>
+        /**
+         * In case the FillInBlankSlot was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<FillInBlankSlotUpdateInput, FillInBlankSlotUncheckedUpdateInput>
+    };
+    /**
+     * FillInBlankSlot delete
+     */
+    export type FillInBlankSlotDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FillInBlankSlot
+         */
+        select?: FillInBlankSlotSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FillInBlankSlot
+         */
+        omit?: FillInBlankSlotOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FillInBlankSlotInclude<ExtArgs> | null
+        /**
+         * Filter which FillInBlankSlot to delete.
+         */
+        where: FillInBlankSlotWhereUniqueInput
+    };
+    /**
+     * FillInBlankSlot deleteMany
+     */
+    export type FillInBlankSlotDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which FillInBlankSlots to delete
+         */
+        where?: FillInBlankSlotWhereInput
+        /**
+         * Limit how many FillInBlankSlots to delete.
+         */
+        limit?: number
+    };
+    /**
+     * FillInBlankSlot without action
+     */
+    export type FillInBlankSlotDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the FillInBlankSlot
+         */
+        select?: FillInBlankSlotSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the FillInBlankSlot
+         */
+        omit?: FillInBlankSlotOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: FillInBlankSlotInclude<ExtArgs> | null
+    };
+    /**
+     * Model OrderingItem
+     */
+    export type AggregateOrderingItem = {
+        _count: OrderingItemCountAggregateOutputType | null
+        _avg: OrderingItemAvgAggregateOutputType | null
+        _sum: OrderingItemSumAggregateOutputType | null
+        _min: OrderingItemMinAggregateOutputType | null
+        _max: OrderingItemMaxAggregateOutputType | null
+    };
+    export type OrderingItemAvgAggregateOutputType = {
+        correctOrder: number | null
+    };
+    export type OrderingItemSumAggregateOutputType = {
+        correctOrder: number | null
+    };
+    export type OrderingItemMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        questionId: string | null
+        content: string | null
+        correctOrder: number | null
+    };
+    export type OrderingItemMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        questionId: string | null
+        content: string | null
+        correctOrder: number | null
+    };
+    export type OrderingItemCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        questionId: number
+        content: number
+        correctOrder: number
+        _all: number
+    };
+    export type OrderingItemAvgAggregateInputType = {
+        correctOrder?: true
+    };
+    export type OrderingItemSumAggregateInputType = {
+        correctOrder?: true
+    };
+    export type OrderingItemMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        questionId?: true
+        content?: true
+        correctOrder?: true
+    };
+    export type OrderingItemMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        questionId?: true
+        content?: true
+        correctOrder?: true
+    };
+    export type OrderingItemCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        questionId?: true
+        content?: true
+        correctOrder?: true
+        _all?: true
+    };
+    export type OrderingItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which OrderingItem to aggregate.
+         */
+        where?: OrderingItemWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of OrderingItems to fetch.
+         */
+        orderBy?: OrderingItemOrderByWithRelationInput | OrderingItemOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: OrderingItemWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` OrderingItems from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` OrderingItems.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned OrderingItems
+        **/
+        _count?: true | OrderingItemCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: OrderingItemAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: OrderingItemSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: OrderingItemMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: OrderingItemMaxAggregateInputType
+    };
+    export type GetOrderingItemAggregateType<T extends OrderingItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrderingItem]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrderingItem[P]>
+        : GetScalarType<T[P], AggregateOrderingItem[P]>
+    };
+    export type OrderingItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: OrderingItemWhereInput
+        orderBy?: OrderingItemOrderByWithAggregationInput | OrderingItemOrderByWithAggregationInput[]
+        by: OrderingItemScalarFieldEnum[] | OrderingItemScalarFieldEnum
+        having?: OrderingItemScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: OrderingItemCountAggregateInputType | true
+        _avg?: OrderingItemAvgAggregateInputType
+        _sum?: OrderingItemSumAggregateInputType
+        _min?: OrderingItemMinAggregateInputType
+        _max?: OrderingItemMaxAggregateInputType
+    };
+    export type OrderingItemGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        questionId: string
+        content: string
+        correctOrder: number
+        _count: OrderingItemCountAggregateOutputType | null
+        _avg: OrderingItemAvgAggregateOutputType | null
+        _sum: OrderingItemSumAggregateOutputType | null
+        _min: OrderingItemMinAggregateOutputType | null
+        _max: OrderingItemMaxAggregateOutputType | null
+    };
+    type GetOrderingItemGroupByPayload<T extends OrderingItemGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<OrderingItemGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof OrderingItemGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], OrderingItemGroupByOutputType[P]>
+                : GetScalarType<T[P], OrderingItemGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type OrderingItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        questionId?: boolean
+        content?: boolean
+        correctOrder?: boolean
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["orderingItem"]>;
+    export type OrderingItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        questionId?: boolean
+        content?: boolean
+        correctOrder?: boolean
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["orderingItem"]>;
+    export type OrderingItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        questionId?: boolean
+        content?: boolean
+        correctOrder?: boolean
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["orderingItem"]>;
+    export type OrderingItemSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        questionId?: boolean
+        content?: boolean
+        correctOrder?: boolean
+    };
+    export type OrderingItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "questionId" | "content" | "correctOrder", ExtArgs["result"]["orderingItem"]>;
+    export type OrderingItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    };
+    export type OrderingItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    };
+    export type OrderingItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        question?: boolean | QuestionDefaultArgs<ExtArgs>
+    };
+    export type $OrderingItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "OrderingItem"
+        objects: {
+            question: Prisma.$QuestionPayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            questionId: string
+            content: string
+            correctOrder: number
+        }, ExtArgs["result"]["orderingItem"]>
+        composites: {}
+    };
+    type OrderingItemGetPayload<S extends boolean | null | undefined | OrderingItemDefaultArgs> = $Result.GetResult<Prisma.$OrderingItemPayload, S>;
+    type OrderingItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<OrderingItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: OrderingItemCountAggregateInputType | true
+    };
+    /**
+     * OrderingItem findUnique
+     */
+    export type OrderingItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OrderingItem
+         */
+        select?: OrderingItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the OrderingItem
+         */
+        omit?: OrderingItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OrderingItemInclude<ExtArgs> | null
+        /**
+         * Filter, which OrderingItem to fetch.
+         */
+        where: OrderingItemWhereUniqueInput
+    };
+    /**
+     * OrderingItem findUniqueOrThrow
+     */
+    export type OrderingItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OrderingItem
+         */
+        select?: OrderingItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the OrderingItem
+         */
+        omit?: OrderingItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OrderingItemInclude<ExtArgs> | null
+        /**
+         * Filter, which OrderingItem to fetch.
+         */
+        where: OrderingItemWhereUniqueInput
+    };
+    /**
+     * OrderingItem findFirst
+     */
+    export type OrderingItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OrderingItem
+         */
+        select?: OrderingItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the OrderingItem
+         */
+        omit?: OrderingItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OrderingItemInclude<ExtArgs> | null
+        /**
+         * Filter, which OrderingItem to fetch.
+         */
+        where?: OrderingItemWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of OrderingItems to fetch.
+         */
+        orderBy?: OrderingItemOrderByWithRelationInput | OrderingItemOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for OrderingItems.
+         */
+        cursor?: OrderingItemWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` OrderingItems from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` OrderingItems.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of OrderingItems.
+         */
+        distinct?: OrderingItemScalarFieldEnum | OrderingItemScalarFieldEnum[]
+    };
+    /**
+     * OrderingItem findFirstOrThrow
+     */
+    export type OrderingItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OrderingItem
+         */
+        select?: OrderingItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the OrderingItem
+         */
+        omit?: OrderingItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OrderingItemInclude<ExtArgs> | null
+        /**
+         * Filter, which OrderingItem to fetch.
+         */
+        where?: OrderingItemWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of OrderingItems to fetch.
+         */
+        orderBy?: OrderingItemOrderByWithRelationInput | OrderingItemOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for OrderingItems.
+         */
+        cursor?: OrderingItemWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` OrderingItems from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` OrderingItems.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of OrderingItems.
+         */
+        distinct?: OrderingItemScalarFieldEnum | OrderingItemScalarFieldEnum[]
+    };
+    /**
+     * OrderingItem findMany
+     */
+    export type OrderingItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OrderingItem
+         */
+        select?: OrderingItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the OrderingItem
+         */
+        omit?: OrderingItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OrderingItemInclude<ExtArgs> | null
+        /**
+         * Filter, which OrderingItems to fetch.
+         */
+        where?: OrderingItemWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of OrderingItems to fetch.
+         */
+        orderBy?: OrderingItemOrderByWithRelationInput | OrderingItemOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing OrderingItems.
+         */
+        cursor?: OrderingItemWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` OrderingItems from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` OrderingItems.
+         */
+        skip?: number
+        distinct?: OrderingItemScalarFieldEnum | OrderingItemScalarFieldEnum[]
+    };
+    /**
+     * OrderingItem create
+     */
+    export type OrderingItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OrderingItem
+         */
+        select?: OrderingItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the OrderingItem
+         */
+        omit?: OrderingItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OrderingItemInclude<ExtArgs> | null
+        /**
+         * The data needed to create a OrderingItem.
+         */
+        data: XOR<OrderingItemCreateInput, OrderingItemUncheckedCreateInput>
+    };
+    /**
+     * OrderingItem createMany
+     */
+    export type OrderingItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many OrderingItems.
+         */
+        data: OrderingItemCreateManyInput | OrderingItemCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * OrderingItem createManyAndReturn
+     */
+    export type OrderingItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OrderingItem
+         */
+        select?: OrderingItemSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the OrderingItem
+         */
+        omit?: OrderingItemOmit<ExtArgs> | null
+        /**
+         * The data used to create many OrderingItems.
+         */
+        data: OrderingItemCreateManyInput | OrderingItemCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OrderingItemIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * OrderingItem update
+     */
+    export type OrderingItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OrderingItem
+         */
+        select?: OrderingItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the OrderingItem
+         */
+        omit?: OrderingItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OrderingItemInclude<ExtArgs> | null
+        /**
+         * The data needed to update a OrderingItem.
+         */
+        data: XOR<OrderingItemUpdateInput, OrderingItemUncheckedUpdateInput>
+        /**
+         * Choose, which OrderingItem to update.
+         */
+        where: OrderingItemWhereUniqueInput
+    };
+    /**
+     * OrderingItem updateMany
+     */
+    export type OrderingItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update OrderingItems.
+         */
+        data: XOR<OrderingItemUpdateManyMutationInput, OrderingItemUncheckedUpdateManyInput>
+        /**
+         * Filter which OrderingItems to update
+         */
+        where?: OrderingItemWhereInput
+        /**
+         * Limit how many OrderingItems to update.
+         */
+        limit?: number
+    };
+    /**
+     * OrderingItem updateManyAndReturn
+     */
+    export type OrderingItemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OrderingItem
+         */
+        select?: OrderingItemSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the OrderingItem
+         */
+        omit?: OrderingItemOmit<ExtArgs> | null
+        /**
+         * The data used to update OrderingItems.
+         */
+        data: XOR<OrderingItemUpdateManyMutationInput, OrderingItemUncheckedUpdateManyInput>
+        /**
+         * Filter which OrderingItems to update
+         */
+        where?: OrderingItemWhereInput
+        /**
+         * Limit how many OrderingItems to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OrderingItemIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * OrderingItem upsert
+     */
+    export type OrderingItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OrderingItem
+         */
+        select?: OrderingItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the OrderingItem
+         */
+        omit?: OrderingItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OrderingItemInclude<ExtArgs> | null
+        /**
+         * The filter to search for the OrderingItem to update in case it exists.
+         */
+        where: OrderingItemWhereUniqueInput
+        /**
+         * In case the OrderingItem found by the `where` argument doesn't exist, create a new OrderingItem with this data.
+         */
+        create: XOR<OrderingItemCreateInput, OrderingItemUncheckedCreateInput>
+        /**
+         * In case the OrderingItem was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<OrderingItemUpdateInput, OrderingItemUncheckedUpdateInput>
+    };
+    /**
+     * OrderingItem delete
+     */
+    export type OrderingItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OrderingItem
+         */
+        select?: OrderingItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the OrderingItem
+         */
+        omit?: OrderingItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OrderingItemInclude<ExtArgs> | null
+        /**
+         * Filter which OrderingItem to delete.
+         */
+        where: OrderingItemWhereUniqueInput
+    };
+    /**
+     * OrderingItem deleteMany
+     */
+    export type OrderingItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which OrderingItems to delete
+         */
+        where?: OrderingItemWhereInput
+        /**
+         * Limit how many OrderingItems to delete.
+         */
+        limit?: number
+    };
+    /**
+     * OrderingItem without action
+     */
+    export type OrderingItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the OrderingItem
+         */
+        select?: OrderingItemSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the OrderingItem
+         */
+        omit?: OrderingItemOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: OrderingItemInclude<ExtArgs> | null
     };
     /**
      * Model Answer
@@ -138245,15 +141911,15 @@ export namespace Prisma {
              */
             admissionEndDate: Date | null
             /**
-             * Mã/số hiệu QĐ tuyển sinh
+             * Số QĐ tuyển sinh
              */
             admissionDecision: string | null
             /**
-             * Mã/số hiệu QĐ công nhận SV
+             * Số QĐ công nhận SV
              */
             studentRecognitionDecision: string | null
             /**
-             * Mã/số hiệu quy chế đào tạo
+             * Số quy chế đào tạo
              */
             regulation: string | null
             trainingLanguageId: string | null
@@ -143990,6 +147656,7 @@ export namespace Prisma {
         codeTkb: string | null
         examType: $Enums.ExamType | null
         type: $Enums.SubjectVersionType | null
+        onePoint: boolean | null
         credit: number | null
         week: number | null
         period: number | null
@@ -144025,6 +147692,7 @@ export namespace Prisma {
         codeTkb: string | null
         examType: $Enums.ExamType | null
         type: $Enums.SubjectVersionType | null
+        onePoint: boolean | null
         credit: number | null
         week: number | null
         period: number | null
@@ -144060,6 +147728,7 @@ export namespace Prisma {
         codeTkb: number
         examType: number
         type: number
+        onePoint: number
         credit: number
         week: number
         period: number
@@ -144122,6 +147791,7 @@ export namespace Prisma {
         codeTkb?: true
         examType?: true
         type?: true
+        onePoint?: true
         credit?: true
         week?: true
         period?: true
@@ -144157,6 +147827,7 @@ export namespace Prisma {
         codeTkb?: true
         examType?: true
         type?: true
+        onePoint?: true
         credit?: true
         week?: true
         period?: true
@@ -144192,6 +147863,7 @@ export namespace Prisma {
         codeTkb?: true
         examType?: true
         type?: true
+        onePoint?: true
         credit?: true
         week?: true
         period?: true
@@ -144308,6 +147980,7 @@ export namespace Prisma {
         codeTkb: string | null
         examType: $Enums.ExamType
         type: $Enums.SubjectVersionType
+        onePoint: boolean
         credit: number
         week: number | null
         period: number
@@ -144360,6 +148033,7 @@ export namespace Prisma {
         codeTkb?: boolean
         examType?: boolean
         type?: boolean
+        onePoint?: boolean
         credit?: boolean
         week?: boolean
         period?: boolean
@@ -144411,6 +148085,7 @@ export namespace Prisma {
         codeTkb?: boolean
         examType?: boolean
         type?: boolean
+        onePoint?: boolean
         credit?: boolean
         week?: boolean
         period?: boolean
@@ -144450,6 +148125,7 @@ export namespace Prisma {
         codeTkb?: boolean
         examType?: boolean
         type?: boolean
+        onePoint?: boolean
         credit?: boolean
         week?: boolean
         period?: boolean
@@ -144489,6 +148165,7 @@ export namespace Prisma {
         codeTkb?: boolean
         examType?: boolean
         type?: boolean
+        onePoint?: boolean
         credit?: boolean
         week?: boolean
         period?: boolean
@@ -144512,7 +148189,7 @@ export namespace Prisma {
         trainingObjectTypeId?: boolean
         subjectVersionCategoryId?: boolean
     };
-    export type SubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "codeTkb" | "examType" | "type" | "credit" | "week" | "period" | "schedulePeriod" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "objectives" | "learningOutcome" | "structure" | "guild" | "academicResults" | "materials" | "rules" | "managementOrganizationId" | "subjectId" | "trainingObjectTypeId" | "subjectVersionCategoryId", ExtArgs["result"]["subjectVersion"]>;
+    export type SubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "codeTkb" | "examType" | "type" | "onePoint" | "credit" | "week" | "period" | "schedulePeriod" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "objectives" | "learningOutcome" | "structure" | "guild" | "academicResults" | "materials" | "rules" | "managementOrganizationId" | "subjectId" | "trainingObjectTypeId" | "subjectVersionCategoryId", ExtArgs["result"]["subjectVersion"]>;
     export type SubjectVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         managementOrganization?: boolean | SubjectVersion$managementOrganizationArgs<ExtArgs>
         subject?: boolean | SubjectDefaultArgs<ExtArgs>
@@ -144580,6 +148257,10 @@ export namespace Prisma {
             codeTkb: string | null
             examType: $Enums.ExamType
             type: $Enums.SubjectVersionType
+            /**
+             * 1 đầu điểm
+             */
+            onePoint: boolean
             credit: number
             week: number | null
             /**
@@ -149525,6 +153206,7 @@ export namespace Prisma {
         examDate: Date | null
         examType: $Enums.ExamType | null
         examId: string | null
+        scoreDeadLineStart: Date | null
         scoreDeadline: Date | null
         examScoreDeadline: Date | null
         enteredScore: boolean | null
@@ -149560,6 +153242,7 @@ export namespace Prisma {
         examDate: Date | null
         examType: $Enums.ExamType | null
         examId: string | null
+        scoreDeadLineStart: Date | null
         scoreDeadline: Date | null
         examScoreDeadline: Date | null
         enteredScore: boolean | null
@@ -149595,6 +153278,7 @@ export namespace Prisma {
         examDate: number
         examType: number
         examId: number
+        scoreDeadLineStart: number
         scoreDeadline: number
         examScoreDeadline: number
         enteredScore: number
@@ -149637,6 +153321,7 @@ export namespace Prisma {
         examDate?: true
         examType?: true
         examId?: true
+        scoreDeadLineStart?: true
         scoreDeadline?: true
         examScoreDeadline?: true
         enteredScore?: true
@@ -149672,6 +153357,7 @@ export namespace Prisma {
         examDate?: true
         examType?: true
         examId?: true
+        scoreDeadLineStart?: true
         scoreDeadline?: true
         examScoreDeadline?: true
         enteredScore?: true
@@ -149707,6 +153393,7 @@ export namespace Prisma {
         examDate?: true
         examType?: true
         examId?: true
+        scoreDeadLineStart?: true
         scoreDeadline?: true
         examScoreDeadline?: true
         enteredScore?: true
@@ -149823,6 +153510,7 @@ export namespace Prisma {
         examDate: Date | null
         examType: $Enums.ExamType | null
         examId: string | null
+        scoreDeadLineStart: Date | null
         scoreDeadline: Date | null
         examScoreDeadline: Date | null
         enteredScore: boolean
@@ -149875,6 +153563,7 @@ export namespace Prisma {
         examDate?: boolean
         examType?: boolean
         examId?: boolean
+        scoreDeadLineStart?: boolean
         scoreDeadline?: boolean
         examScoreDeadline?: boolean
         enteredScore?: boolean
@@ -149928,6 +153617,7 @@ export namespace Prisma {
         examDate?: boolean
         examType?: boolean
         examId?: boolean
+        scoreDeadLineStart?: boolean
         scoreDeadline?: boolean
         examScoreDeadline?: boolean
         enteredScore?: boolean
@@ -149971,6 +153661,7 @@ export namespace Prisma {
         examDate?: boolean
         examType?: boolean
         examId?: boolean
+        scoreDeadLineStart?: boolean
         scoreDeadline?: boolean
         examScoreDeadline?: boolean
         enteredScore?: boolean
@@ -150014,6 +153705,7 @@ export namespace Prisma {
         examDate?: boolean
         examType?: boolean
         examId?: boolean
+        scoreDeadLineStart?: boolean
         scoreDeadline?: boolean
         examScoreDeadline?: boolean
         enteredScore?: boolean
@@ -150028,7 +153720,7 @@ export namespace Prisma {
         extraLecturerId?: boolean
         enterGradeLecturerId?: boolean
     };
-    export type SubjectClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "code" | "name" | "startDate" | "endDate" | "subjectId" | "schedule" | "maxStudent" | "trainingObjectTypeId" | "semesterId" | "cancelled" | "lecturerAssignmentDeadline" | "examDate" | "examType" | "examId" | "scoreDeadline" | "examScoreDeadline" | "enteredScore" | "enteredExamScore" | "issuedScoreAt" | "isLockScore" | "isLockExamScore" | "scoreSubmitted" | "scoreChecked" | "roomId" | "lecturerId" | "extraLecturerId" | "enterGradeLecturerId", ExtArgs["result"]["subjectClass"]>;
+    export type SubjectClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "code" | "name" | "startDate" | "endDate" | "subjectId" | "schedule" | "maxStudent" | "trainingObjectTypeId" | "semesterId" | "cancelled" | "lecturerAssignmentDeadline" | "examDate" | "examType" | "examId" | "scoreDeadLineStart" | "scoreDeadline" | "examScoreDeadline" | "enteredScore" | "enteredExamScore" | "issuedScoreAt" | "isLockScore" | "isLockExamScore" | "scoreSubmitted" | "scoreChecked" | "roomId" | "lecturerId" | "extraLecturerId" | "enterGradeLecturerId", ExtArgs["result"]["subjectClass"]>;
     export type SubjectClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subject?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -150111,7 +153803,17 @@ export namespace Prisma {
             examDate: Date | null
             examType: $Enums.ExamType | null
             examId: string | null
+            /**
+             * ngày bắt dầu nhập điểm CC/TX
+             */
+            scoreDeadLineStart: Date | null
+            /**
+             * ngày kết thúc nhập điểm CC/TX
+             */
             scoreDeadline: Date | null
+            /**
+             * hạn nhập điểm thi
+             */
             examScoreDeadline: Date | null
             enteredScore: boolean
             enteredExamScore: boolean
@@ -295133,6 +298835,9 @@ export namespace Prisma {
     export type DifficultyScalarFieldEnum = (typeof DifficultyScalarFieldEnum)[keyof typeof DifficultyScalarFieldEnum];
     export type KnowledgeBlockScalarFieldEnum = (typeof KnowledgeBlockScalarFieldEnum)[keyof typeof KnowledgeBlockScalarFieldEnum];
     export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum];
+    export type MultipleChoiceOptionScalarFieldEnum = (typeof MultipleChoiceOptionScalarFieldEnum)[keyof typeof MultipleChoiceOptionScalarFieldEnum];
+    export type FillInBlankSlotScalarFieldEnum = (typeof FillInBlankSlotScalarFieldEnum)[keyof typeof FillInBlankSlotScalarFieldEnum];
+    export type OrderingItemScalarFieldEnum = (typeof OrderingItemScalarFieldEnum)[keyof typeof OrderingItemScalarFieldEnum];
     export type AnswerScalarFieldEnum = (typeof AnswerScalarFieldEnum)[keyof typeof AnswerScalarFieldEnum];
     export type ExamScalarFieldEnum = (typeof ExamScalarFieldEnum)[keyof typeof ExamScalarFieldEnum];
     export type TestStructureRuleScalarFieldEnum = (typeof TestStructureRuleScalarFieldEnum)[keyof typeof TestStructureRuleScalarFieldEnum];
@@ -295364,6 +299069,9 @@ export namespace Prisma {
     export type DifficultyOrderByRelevanceFieldEnum = (typeof DifficultyOrderByRelevanceFieldEnum)[keyof typeof DifficultyOrderByRelevanceFieldEnum];
     export type KnowledgeBlockOrderByRelevanceFieldEnum = (typeof KnowledgeBlockOrderByRelevanceFieldEnum)[keyof typeof KnowledgeBlockOrderByRelevanceFieldEnum];
     export type QuestionOrderByRelevanceFieldEnum = (typeof QuestionOrderByRelevanceFieldEnum)[keyof typeof QuestionOrderByRelevanceFieldEnum];
+    export type MultipleChoiceOptionOrderByRelevanceFieldEnum = (typeof MultipleChoiceOptionOrderByRelevanceFieldEnum)[keyof typeof MultipleChoiceOptionOrderByRelevanceFieldEnum];
+    export type FillInBlankSlotOrderByRelevanceFieldEnum = (typeof FillInBlankSlotOrderByRelevanceFieldEnum)[keyof typeof FillInBlankSlotOrderByRelevanceFieldEnum];
+    export type OrderingItemOrderByRelevanceFieldEnum = (typeof OrderingItemOrderByRelevanceFieldEnum)[keyof typeof OrderingItemOrderByRelevanceFieldEnum];
     export type AnswerOrderByRelevanceFieldEnum = (typeof AnswerOrderByRelevanceFieldEnum)[keyof typeof AnswerOrderByRelevanceFieldEnum];
     export type ExamOrderByRelevanceFieldEnum = (typeof ExamOrderByRelevanceFieldEnum)[keyof typeof ExamOrderByRelevanceFieldEnum];
     export type TestStructureRuleOrderByRelevanceFieldEnum = (typeof TestStructureRuleOrderByRelevanceFieldEnum)[keyof typeof TestStructureRuleOrderByRelevanceFieldEnum];
@@ -296329,6 +300037,9 @@ export namespace Prisma {
         questionBankId?: StringFilter<"Question"> | string
         knowledgeBlockId?: StringNullableFilter<"Question"> | string | null
         difficultyId?: StringNullableFilter<"Question"> | string | null
+        multipleChoiceOptions?: MultipleChoiceOptionListRelationFilter
+        fillInBlankSlots?: FillInBlankSlotListRelationFilter
+        orderingItems?: OrderingItemListRelationFilter
         questionBank?: XOR<QuestionBankScalarRelationFilter, QuestionBankWhereInput>
         knowledgeBlock?: XOR<KnowledgeBlockNullableScalarRelationFilter, KnowledgeBlockWhereInput> | null
         difficulty?: XOR<DifficultyNullableScalarRelationFilter, DifficultyWhereInput> | null
@@ -296351,6 +300062,9 @@ export namespace Prisma {
         questionBankId?: SortOrder
         knowledgeBlockId?: SortOrderInput | SortOrder
         difficultyId?: SortOrderInput | SortOrder
+        multipleChoiceOptions?: MultipleChoiceOptionOrderByRelationAggregateInput
+        fillInBlankSlots?: FillInBlankSlotOrderByRelationAggregateInput
+        orderingItems?: OrderingItemOrderByRelationAggregateInput
         questionBank?: QuestionBankOrderByWithRelationInput
         knowledgeBlock?: KnowledgeBlockOrderByWithRelationInput
         difficulty?: DifficultyOrderByWithRelationInput
@@ -296377,6 +300091,9 @@ export namespace Prisma {
         questionBankId?: StringFilter<"Question"> | string
         knowledgeBlockId?: StringNullableFilter<"Question"> | string | null
         difficultyId?: StringNullableFilter<"Question"> | string | null
+        multipleChoiceOptions?: MultipleChoiceOptionListRelationFilter
+        fillInBlankSlots?: FillInBlankSlotListRelationFilter
+        orderingItems?: OrderingItemListRelationFilter
         questionBank?: XOR<QuestionBankScalarRelationFilter, QuestionBankWhereInput>
         knowledgeBlock?: XOR<KnowledgeBlockNullableScalarRelationFilter, KnowledgeBlockWhereInput> | null
         difficulty?: XOR<DifficultyNullableScalarRelationFilter, DifficultyWhereInput> | null
@@ -296424,6 +300141,247 @@ export namespace Prisma {
         questionBankId?: StringWithAggregatesFilter<"Question"> | string
         knowledgeBlockId?: StringNullableWithAggregatesFilter<"Question"> | string | null
         difficultyId?: StringNullableWithAggregatesFilter<"Question"> | string | null
+    };
+    export type MultipleChoiceOptionWhereInput = {
+        AND?: MultipleChoiceOptionWhereInput | MultipleChoiceOptionWhereInput[]
+        OR?: MultipleChoiceOptionWhereInput[]
+        NOT?: MultipleChoiceOptionWhereInput | MultipleChoiceOptionWhereInput[]
+        id?: StringFilter<"MultipleChoiceOption"> | string
+        code?: StringNullableFilter<"MultipleChoiceOption"> | string | null
+        active?: BoolFilter<"MultipleChoiceOption"> | boolean
+        description?: StringNullableFilter<"MultipleChoiceOption"> | string | null
+        deletedAt?: DateTimeNullableFilter<"MultipleChoiceOption"> | Date | string | null
+        createdAt?: DateTimeFilter<"MultipleChoiceOption"> | Date | string
+        updatedAt?: DateTimeFilter<"MultipleChoiceOption"> | Date | string
+        questionId?: StringFilter<"MultipleChoiceOption"> | string
+        content?: StringFilter<"MultipleChoiceOption"> | string
+        isCorrect?: BoolFilter<"MultipleChoiceOption"> | boolean
+        order?: IntFilter<"MultipleChoiceOption"> | number
+        question?: XOR<QuestionScalarRelationFilter, QuestionWhereInput>
+    };
+    export type MultipleChoiceOptionOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        content?: SortOrder
+        isCorrect?: SortOrder
+        order?: SortOrder
+        question?: QuestionOrderByWithRelationInput
+        _relevance?: MultipleChoiceOptionOrderByRelevanceInput
+    };
+    export type MultipleChoiceOptionWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: MultipleChoiceOptionWhereInput | MultipleChoiceOptionWhereInput[]
+        OR?: MultipleChoiceOptionWhereInput[]
+        NOT?: MultipleChoiceOptionWhereInput | MultipleChoiceOptionWhereInput[]
+        active?: BoolFilter<"MultipleChoiceOption"> | boolean
+        description?: StringNullableFilter<"MultipleChoiceOption"> | string | null
+        deletedAt?: DateTimeNullableFilter<"MultipleChoiceOption"> | Date | string | null
+        createdAt?: DateTimeFilter<"MultipleChoiceOption"> | Date | string
+        updatedAt?: DateTimeFilter<"MultipleChoiceOption"> | Date | string
+        questionId?: StringFilter<"MultipleChoiceOption"> | string
+        content?: StringFilter<"MultipleChoiceOption"> | string
+        isCorrect?: BoolFilter<"MultipleChoiceOption"> | boolean
+        order?: IntFilter<"MultipleChoiceOption"> | number
+        question?: XOR<QuestionScalarRelationFilter, QuestionWhereInput>
+    }, "id" | "code">;
+    export type MultipleChoiceOptionOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        content?: SortOrder
+        isCorrect?: SortOrder
+        order?: SortOrder
+        _count?: MultipleChoiceOptionCountOrderByAggregateInput
+        _avg?: MultipleChoiceOptionAvgOrderByAggregateInput
+        _max?: MultipleChoiceOptionMaxOrderByAggregateInput
+        _min?: MultipleChoiceOptionMinOrderByAggregateInput
+        _sum?: MultipleChoiceOptionSumOrderByAggregateInput
+    };
+    export type MultipleChoiceOptionScalarWhereWithAggregatesInput = {
+        AND?: MultipleChoiceOptionScalarWhereWithAggregatesInput | MultipleChoiceOptionScalarWhereWithAggregatesInput[]
+        OR?: MultipleChoiceOptionScalarWhereWithAggregatesInput[]
+        NOT?: MultipleChoiceOptionScalarWhereWithAggregatesInput | MultipleChoiceOptionScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"MultipleChoiceOption"> | string
+        code?: StringNullableWithAggregatesFilter<"MultipleChoiceOption"> | string | null
+        active?: BoolWithAggregatesFilter<"MultipleChoiceOption"> | boolean
+        description?: StringNullableWithAggregatesFilter<"MultipleChoiceOption"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"MultipleChoiceOption"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"MultipleChoiceOption"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"MultipleChoiceOption"> | Date | string
+        questionId?: StringWithAggregatesFilter<"MultipleChoiceOption"> | string
+        content?: StringWithAggregatesFilter<"MultipleChoiceOption"> | string
+        isCorrect?: BoolWithAggregatesFilter<"MultipleChoiceOption"> | boolean
+        order?: IntWithAggregatesFilter<"MultipleChoiceOption"> | number
+    };
+    export type FillInBlankSlotWhereInput = {
+        AND?: FillInBlankSlotWhereInput | FillInBlankSlotWhereInput[]
+        OR?: FillInBlankSlotWhereInput[]
+        NOT?: FillInBlankSlotWhereInput | FillInBlankSlotWhereInput[]
+        id?: StringFilter<"FillInBlankSlot"> | string
+        code?: StringNullableFilter<"FillInBlankSlot"> | string | null
+        active?: BoolFilter<"FillInBlankSlot"> | boolean
+        description?: StringNullableFilter<"FillInBlankSlot"> | string | null
+        deletedAt?: DateTimeNullableFilter<"FillInBlankSlot"> | Date | string | null
+        createdAt?: DateTimeFilter<"FillInBlankSlot"> | Date | string
+        updatedAt?: DateTimeFilter<"FillInBlankSlot"> | Date | string
+        questionId?: StringFilter<"FillInBlankSlot"> | string
+        order?: IntFilter<"FillInBlankSlot"> | number
+        correctAnswer?: StringFilter<"FillInBlankSlot"> | string
+        question?: XOR<QuestionScalarRelationFilter, QuestionWhereInput>
+    };
+    export type FillInBlankSlotOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        order?: SortOrder
+        correctAnswer?: SortOrder
+        question?: QuestionOrderByWithRelationInput
+        _relevance?: FillInBlankSlotOrderByRelevanceInput
+    };
+    export type FillInBlankSlotWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        questionId_order?: FillInBlankSlotQuestionIdOrderCompoundUniqueInput
+        AND?: FillInBlankSlotWhereInput | FillInBlankSlotWhereInput[]
+        OR?: FillInBlankSlotWhereInput[]
+        NOT?: FillInBlankSlotWhereInput | FillInBlankSlotWhereInput[]
+        active?: BoolFilter<"FillInBlankSlot"> | boolean
+        description?: StringNullableFilter<"FillInBlankSlot"> | string | null
+        deletedAt?: DateTimeNullableFilter<"FillInBlankSlot"> | Date | string | null
+        createdAt?: DateTimeFilter<"FillInBlankSlot"> | Date | string
+        updatedAt?: DateTimeFilter<"FillInBlankSlot"> | Date | string
+        questionId?: StringFilter<"FillInBlankSlot"> | string
+        order?: IntFilter<"FillInBlankSlot"> | number
+        correctAnswer?: StringFilter<"FillInBlankSlot"> | string
+        question?: XOR<QuestionScalarRelationFilter, QuestionWhereInput>
+    }, "id" | "code" | "questionId_order">;
+    export type FillInBlankSlotOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        order?: SortOrder
+        correctAnswer?: SortOrder
+        _count?: FillInBlankSlotCountOrderByAggregateInput
+        _avg?: FillInBlankSlotAvgOrderByAggregateInput
+        _max?: FillInBlankSlotMaxOrderByAggregateInput
+        _min?: FillInBlankSlotMinOrderByAggregateInput
+        _sum?: FillInBlankSlotSumOrderByAggregateInput
+    };
+    export type FillInBlankSlotScalarWhereWithAggregatesInput = {
+        AND?: FillInBlankSlotScalarWhereWithAggregatesInput | FillInBlankSlotScalarWhereWithAggregatesInput[]
+        OR?: FillInBlankSlotScalarWhereWithAggregatesInput[]
+        NOT?: FillInBlankSlotScalarWhereWithAggregatesInput | FillInBlankSlotScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"FillInBlankSlot"> | string
+        code?: StringNullableWithAggregatesFilter<"FillInBlankSlot"> | string | null
+        active?: BoolWithAggregatesFilter<"FillInBlankSlot"> | boolean
+        description?: StringNullableWithAggregatesFilter<"FillInBlankSlot"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"FillInBlankSlot"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"FillInBlankSlot"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"FillInBlankSlot"> | Date | string
+        questionId?: StringWithAggregatesFilter<"FillInBlankSlot"> | string
+        order?: IntWithAggregatesFilter<"FillInBlankSlot"> | number
+        correctAnswer?: StringWithAggregatesFilter<"FillInBlankSlot"> | string
+    };
+    export type OrderingItemWhereInput = {
+        AND?: OrderingItemWhereInput | OrderingItemWhereInput[]
+        OR?: OrderingItemWhereInput[]
+        NOT?: OrderingItemWhereInput | OrderingItemWhereInput[]
+        id?: StringFilter<"OrderingItem"> | string
+        code?: StringNullableFilter<"OrderingItem"> | string | null
+        active?: BoolFilter<"OrderingItem"> | boolean
+        description?: StringNullableFilter<"OrderingItem"> | string | null
+        deletedAt?: DateTimeNullableFilter<"OrderingItem"> | Date | string | null
+        createdAt?: DateTimeFilter<"OrderingItem"> | Date | string
+        updatedAt?: DateTimeFilter<"OrderingItem"> | Date | string
+        questionId?: StringFilter<"OrderingItem"> | string
+        content?: StringFilter<"OrderingItem"> | string
+        correctOrder?: IntFilter<"OrderingItem"> | number
+        question?: XOR<QuestionScalarRelationFilter, QuestionWhereInput>
+    };
+    export type OrderingItemOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        content?: SortOrder
+        correctOrder?: SortOrder
+        question?: QuestionOrderByWithRelationInput
+        _relevance?: OrderingItemOrderByRelevanceInput
+    };
+    export type OrderingItemWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        questionId_correctOrder?: OrderingItemQuestionIdCorrectOrderCompoundUniqueInput
+        AND?: OrderingItemWhereInput | OrderingItemWhereInput[]
+        OR?: OrderingItemWhereInput[]
+        NOT?: OrderingItemWhereInput | OrderingItemWhereInput[]
+        active?: BoolFilter<"OrderingItem"> | boolean
+        description?: StringNullableFilter<"OrderingItem"> | string | null
+        deletedAt?: DateTimeNullableFilter<"OrderingItem"> | Date | string | null
+        createdAt?: DateTimeFilter<"OrderingItem"> | Date | string
+        updatedAt?: DateTimeFilter<"OrderingItem"> | Date | string
+        questionId?: StringFilter<"OrderingItem"> | string
+        content?: StringFilter<"OrderingItem"> | string
+        correctOrder?: IntFilter<"OrderingItem"> | number
+        question?: XOR<QuestionScalarRelationFilter, QuestionWhereInput>
+    }, "id" | "code" | "questionId_correctOrder">;
+    export type OrderingItemOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        content?: SortOrder
+        correctOrder?: SortOrder
+        _count?: OrderingItemCountOrderByAggregateInput
+        _avg?: OrderingItemAvgOrderByAggregateInput
+        _max?: OrderingItemMaxOrderByAggregateInput
+        _min?: OrderingItemMinOrderByAggregateInput
+        _sum?: OrderingItemSumOrderByAggregateInput
+    };
+    export type OrderingItemScalarWhereWithAggregatesInput = {
+        AND?: OrderingItemScalarWhereWithAggregatesInput | OrderingItemScalarWhereWithAggregatesInput[]
+        OR?: OrderingItemScalarWhereWithAggregatesInput[]
+        NOT?: OrderingItemScalarWhereWithAggregatesInput | OrderingItemScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"OrderingItem"> | string
+        code?: StringNullableWithAggregatesFilter<"OrderingItem"> | string | null
+        active?: BoolWithAggregatesFilter<"OrderingItem"> | boolean
+        description?: StringNullableWithAggregatesFilter<"OrderingItem"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"OrderingItem"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"OrderingItem"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"OrderingItem"> | Date | string
+        questionId?: StringWithAggregatesFilter<"OrderingItem"> | string
+        content?: StringWithAggregatesFilter<"OrderingItem"> | string
+        correctOrder?: IntWithAggregatesFilter<"OrderingItem"> | number
     };
     export type AnswerWhereInput = {
         AND?: AnswerWhereInput | AnswerWhereInput[]
@@ -298912,6 +302870,7 @@ export namespace Prisma {
         codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
         examType?: EnumExamTypeFilter<"SubjectVersion"> | $Enums.ExamType
         type?: EnumSubjectVersionTypeFilter<"SubjectVersion"> | $Enums.SubjectVersionType
+        onePoint?: BoolFilter<"SubjectVersion"> | boolean
         credit?: IntFilter<"SubjectVersion"> | number
         week?: IntNullableFilter<"SubjectVersion"> | number | null
         period?: IntFilter<"SubjectVersion"> | number
@@ -298962,6 +302921,7 @@ export namespace Prisma {
         codeTkb?: SortOrderInput | SortOrder
         examType?: SortOrder
         type?: SortOrder
+        onePoint?: SortOrder
         credit?: SortOrder
         week?: SortOrderInput | SortOrder
         period?: SortOrder
@@ -299016,6 +302976,7 @@ export namespace Prisma {
         codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
         examType?: EnumExamTypeFilter<"SubjectVersion"> | $Enums.ExamType
         type?: EnumSubjectVersionTypeFilter<"SubjectVersion"> | $Enums.SubjectVersionType
+        onePoint?: BoolFilter<"SubjectVersion"> | boolean
         credit?: IntFilter<"SubjectVersion"> | number
         week?: IntNullableFilter<"SubjectVersion"> | number | null
         period?: IntFilter<"SubjectVersion"> | number
@@ -299066,6 +303027,7 @@ export namespace Prisma {
         codeTkb?: SortOrderInput | SortOrder
         examType?: SortOrder
         type?: SortOrder
+        onePoint?: SortOrder
         credit?: SortOrder
         week?: SortOrderInput | SortOrder
         period?: SortOrder
@@ -299109,6 +303071,7 @@ export namespace Prisma {
         codeTkb?: StringNullableWithAggregatesFilter<"SubjectVersion"> | string | null
         examType?: EnumExamTypeWithAggregatesFilter<"SubjectVersion"> | $Enums.ExamType
         type?: EnumSubjectVersionTypeWithAggregatesFilter<"SubjectVersion"> | $Enums.SubjectVersionType
+        onePoint?: BoolWithAggregatesFilter<"SubjectVersion"> | boolean
         credit?: IntWithAggregatesFilter<"SubjectVersion"> | number
         week?: IntNullableWithAggregatesFilter<"SubjectVersion"> | number | null
         period?: IntWithAggregatesFilter<"SubjectVersion"> | number
@@ -299660,6 +303623,7 @@ export namespace Prisma {
         examDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examType?: EnumExamTypeNullableFilter<"SubjectClass"> | $Enums.ExamType | null
         examId?: StringNullableFilter<"SubjectClass"> | string | null
+        scoreDeadLineStart?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         scoreDeadline?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examScoreDeadline?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         enteredScore?: BoolFilter<"SubjectClass"> | boolean
@@ -299712,6 +303676,7 @@ export namespace Prisma {
         examDate?: SortOrderInput | SortOrder
         examType?: SortOrderInput | SortOrder
         examId?: SortOrderInput | SortOrder
+        scoreDeadLineStart?: SortOrderInput | SortOrder
         scoreDeadline?: SortOrderInput | SortOrder
         examScoreDeadline?: SortOrderInput | SortOrder
         enteredScore?: SortOrder
@@ -299768,6 +303733,7 @@ export namespace Prisma {
         examDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examType?: EnumExamTypeNullableFilter<"SubjectClass"> | $Enums.ExamType | null
         examId?: StringNullableFilter<"SubjectClass"> | string | null
+        scoreDeadLineStart?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         scoreDeadline?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examScoreDeadline?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         enteredScore?: BoolFilter<"SubjectClass"> | boolean
@@ -299820,6 +303786,7 @@ export namespace Prisma {
         examDate?: SortOrderInput | SortOrder
         examType?: SortOrderInput | SortOrder
         examId?: SortOrderInput | SortOrder
+        scoreDeadLineStart?: SortOrderInput | SortOrder
         scoreDeadline?: SortOrderInput | SortOrder
         examScoreDeadline?: SortOrderInput | SortOrder
         enteredScore?: SortOrder
@@ -299863,6 +303830,7 @@ export namespace Prisma {
         examDate?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
         examType?: EnumExamTypeNullableWithAggregatesFilter<"SubjectClass"> | $Enums.ExamType | null
         examId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
+        scoreDeadLineStart?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
         scoreDeadline?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
         examScoreDeadline?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
         enteredScore?: BoolWithAggregatesFilter<"SubjectClass"> | boolean
@@ -319163,6 +323131,9 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
+        multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
         difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
@@ -319185,6 +323156,9 @@ export namespace Prisma {
         questionBankId: string
         knowledgeBlockId?: string | null
         difficultyId?: string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
         answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
     };
@@ -319201,6 +323175,9 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
         difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
@@ -319223,6 +323200,9 @@ export namespace Prisma {
         questionBankId?: StringFieldUpdateOperationsInput | string
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
         difficultyId?: NullableStringFieldUpdateOperationsInput | string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
         answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
     };
@@ -319273,6 +323253,262 @@ export namespace Prisma {
         questionBankId?: StringFieldUpdateOperationsInput | string
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
         difficultyId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type MultipleChoiceOptionCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        isCorrect?: boolean
+        order: number
+        question: QuestionCreateNestedOneWithoutMultipleChoiceOptionsInput
+    };
+    export type MultipleChoiceOptionUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        questionId: string
+        content: string
+        isCorrect?: boolean
+        order: number
+    };
+    export type MultipleChoiceOptionUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        isCorrect?: BoolFieldUpdateOperationsInput | boolean
+        order?: IntFieldUpdateOperationsInput | number
+        question?: QuestionUpdateOneRequiredWithoutMultipleChoiceOptionsNestedInput
+    };
+    export type MultipleChoiceOptionUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        questionId?: StringFieldUpdateOperationsInput | string
+        content?: StringFieldUpdateOperationsInput | string
+        isCorrect?: BoolFieldUpdateOperationsInput | boolean
+        order?: IntFieldUpdateOperationsInput | number
+    };
+    export type MultipleChoiceOptionCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        questionId: string
+        content: string
+        isCorrect?: boolean
+        order: number
+    };
+    export type MultipleChoiceOptionUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        isCorrect?: BoolFieldUpdateOperationsInput | boolean
+        order?: IntFieldUpdateOperationsInput | number
+    };
+    export type MultipleChoiceOptionUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        questionId?: StringFieldUpdateOperationsInput | string
+        content?: StringFieldUpdateOperationsInput | string
+        isCorrect?: BoolFieldUpdateOperationsInput | boolean
+        order?: IntFieldUpdateOperationsInput | number
+    };
+    export type FillInBlankSlotCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        order: number
+        correctAnswer: string
+        question: QuestionCreateNestedOneWithoutFillInBlankSlotsInput
+    };
+    export type FillInBlankSlotUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        questionId: string
+        order: number
+        correctAnswer: string
+    };
+    export type FillInBlankSlotUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        order?: IntFieldUpdateOperationsInput | number
+        correctAnswer?: StringFieldUpdateOperationsInput | string
+        question?: QuestionUpdateOneRequiredWithoutFillInBlankSlotsNestedInput
+    };
+    export type FillInBlankSlotUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        questionId?: StringFieldUpdateOperationsInput | string
+        order?: IntFieldUpdateOperationsInput | number
+        correctAnswer?: StringFieldUpdateOperationsInput | string
+    };
+    export type FillInBlankSlotCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        questionId: string
+        order: number
+        correctAnswer: string
+    };
+    export type FillInBlankSlotUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        order?: IntFieldUpdateOperationsInput | number
+        correctAnswer?: StringFieldUpdateOperationsInput | string
+    };
+    export type FillInBlankSlotUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        questionId?: StringFieldUpdateOperationsInput | string
+        order?: IntFieldUpdateOperationsInput | number
+        correctAnswer?: StringFieldUpdateOperationsInput | string
+    };
+    export type OrderingItemCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        correctOrder: number
+        question: QuestionCreateNestedOneWithoutOrderingItemsInput
+    };
+    export type OrderingItemUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        questionId: string
+        content: string
+        correctOrder: number
+    };
+    export type OrderingItemUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        correctOrder?: IntFieldUpdateOperationsInput | number
+        question?: QuestionUpdateOneRequiredWithoutOrderingItemsNestedInput
+    };
+    export type OrderingItemUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        questionId?: StringFieldUpdateOperationsInput | string
+        content?: StringFieldUpdateOperationsInput | string
+        correctOrder?: IntFieldUpdateOperationsInput | number
+    };
+    export type OrderingItemCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        questionId: string
+        content: string
+        correctOrder: number
+    };
+    export type OrderingItemUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        correctOrder?: IntFieldUpdateOperationsInput | number
+    };
+    export type OrderingItemUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        questionId?: StringFieldUpdateOperationsInput | string
+        content?: StringFieldUpdateOperationsInput | string
+        correctOrder?: IntFieldUpdateOperationsInput | number
     };
     export type AnswerCreateInput = {
         id?: string
@@ -322040,6 +326276,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -322086,6 +326323,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -322132,6 +326370,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -322178,6 +326417,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -322224,6 +326464,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -322259,6 +326500,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -322290,6 +326532,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -322869,6 +327112,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -322917,6 +327161,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -322957,6 +327202,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -323005,6 +327251,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -323049,6 +327296,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -323080,6 +327328,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -323111,6 +327360,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -344831,6 +349081,21 @@ export namespace Prisma {
         gte?: number | FloatFieldRefInput<$PrismaModel>
         not?: NestedFloatFilter<$PrismaModel> | number
     };
+    export type MultipleChoiceOptionListRelationFilter = {
+        every?: MultipleChoiceOptionWhereInput
+        some?: MultipleChoiceOptionWhereInput
+        none?: MultipleChoiceOptionWhereInput
+    };
+    export type FillInBlankSlotListRelationFilter = {
+        every?: FillInBlankSlotWhereInput
+        some?: FillInBlankSlotWhereInput
+        none?: FillInBlankSlotWhereInput
+    };
+    export type OrderingItemListRelationFilter = {
+        every?: OrderingItemWhereInput
+        some?: OrderingItemWhereInput
+        none?: OrderingItemWhereInput
+    };
     export type QuestionBankScalarRelationFilter = {
         is?: QuestionBankWhereInput
         isNot?: QuestionBankWhereInput
@@ -344852,6 +349117,15 @@ export namespace Prisma {
         every?: AnswerWhereInput
         some?: AnswerWhereInput
         none?: AnswerWhereInput
+    };
+    export type MultipleChoiceOptionOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type FillInBlankSlotOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type OrderingItemOrderByRelationAggregateInput = {
+        _count?: SortOrder
     };
     export type ExamBankQuestionOrderByRelationAggregateInput = {
         _count?: SortOrder
@@ -344945,6 +349219,187 @@ export namespace Prisma {
         _min?: NestedFloatFilter<$PrismaModel>
         _max?: NestedFloatFilter<$PrismaModel>
     };
+    export type IntFilter<$PrismaModel = never> = {
+        equals?: number | IntFieldRefInput<$PrismaModel>
+        in?: number[] | ListIntFieldRefInput<$PrismaModel>
+        notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+        lt?: number | IntFieldRefInput<$PrismaModel>
+        lte?: number | IntFieldRefInput<$PrismaModel>
+        gt?: number | IntFieldRefInput<$PrismaModel>
+        gte?: number | IntFieldRefInput<$PrismaModel>
+        not?: NestedIntFilter<$PrismaModel> | number
+    };
+    export type QuestionScalarRelationFilter = {
+        is?: QuestionWhereInput
+        isNot?: QuestionWhereInput
+    };
+    export type MultipleChoiceOptionOrderByRelevanceInput = {
+        fields: MultipleChoiceOptionOrderByRelevanceFieldEnum | MultipleChoiceOptionOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type MultipleChoiceOptionCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        content?: SortOrder
+        isCorrect?: SortOrder
+        order?: SortOrder
+    };
+    export type MultipleChoiceOptionAvgOrderByAggregateInput = {
+        order?: SortOrder
+    };
+    export type MultipleChoiceOptionMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        content?: SortOrder
+        isCorrect?: SortOrder
+        order?: SortOrder
+    };
+    export type MultipleChoiceOptionMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        content?: SortOrder
+        isCorrect?: SortOrder
+        order?: SortOrder
+    };
+    export type MultipleChoiceOptionSumOrderByAggregateInput = {
+        order?: SortOrder
+    };
+    export type IntWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: number | IntFieldRefInput<$PrismaModel>
+        in?: number[] | ListIntFieldRefInput<$PrismaModel>
+        notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+        lt?: number | IntFieldRefInput<$PrismaModel>
+        lte?: number | IntFieldRefInput<$PrismaModel>
+        gt?: number | IntFieldRefInput<$PrismaModel>
+        gte?: number | IntFieldRefInput<$PrismaModel>
+        not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+        _count?: NestedIntFilter<$PrismaModel>
+        _avg?: NestedFloatFilter<$PrismaModel>
+        _sum?: NestedIntFilter<$PrismaModel>
+        _min?: NestedIntFilter<$PrismaModel>
+        _max?: NestedIntFilter<$PrismaModel>
+    };
+    export type FillInBlankSlotOrderByRelevanceInput = {
+        fields: FillInBlankSlotOrderByRelevanceFieldEnum | FillInBlankSlotOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type FillInBlankSlotQuestionIdOrderCompoundUniqueInput = {
+        questionId: string
+        order: number
+    };
+    export type FillInBlankSlotCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        order?: SortOrder
+        correctAnswer?: SortOrder
+    };
+    export type FillInBlankSlotAvgOrderByAggregateInput = {
+        order?: SortOrder
+    };
+    export type FillInBlankSlotMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        order?: SortOrder
+        correctAnswer?: SortOrder
+    };
+    export type FillInBlankSlotMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        order?: SortOrder
+        correctAnswer?: SortOrder
+    };
+    export type FillInBlankSlotSumOrderByAggregateInput = {
+        order?: SortOrder
+    };
+    export type OrderingItemOrderByRelevanceInput = {
+        fields: OrderingItemOrderByRelevanceFieldEnum | OrderingItemOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type OrderingItemQuestionIdCorrectOrderCompoundUniqueInput = {
+        questionId: string
+        correctOrder: number
+    };
+    export type OrderingItemCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        content?: SortOrder
+        correctOrder?: SortOrder
+    };
+    export type OrderingItemAvgOrderByAggregateInput = {
+        correctOrder?: SortOrder
+    };
+    export type OrderingItemMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        content?: SortOrder
+        correctOrder?: SortOrder
+    };
+    export type OrderingItemMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        questionId?: SortOrder
+        content?: SortOrder
+        correctOrder?: SortOrder
+    };
+    export type OrderingItemSumOrderByAggregateInput = {
+        correctOrder?: SortOrder
+    };
     export type BoolNullableFilter<$PrismaModel = never> = {
         equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
         not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
@@ -344962,10 +349417,6 @@ export namespace Prisma {
     export type ExamSessionScalarRelationFilter = {
         is?: ExamSessionWhereInput
         isNot?: ExamSessionWhereInput
-    };
-    export type QuestionScalarRelationFilter = {
-        is?: QuestionWhereInput
-        isNot?: QuestionWhereInput
     };
     export type AnswerOrderByRelevanceInput = {
         fields: AnswerOrderByRelevanceFieldEnum | AnswerOrderByRelevanceFieldEnum[]
@@ -345054,16 +349505,6 @@ export namespace Prisma {
         in?: $Enums.ExamStatus[] | ListEnumExamStatusFieldRefInput<$PrismaModel>
         notIn?: $Enums.ExamStatus[] | ListEnumExamStatusFieldRefInput<$PrismaModel>
         not?: NestedEnumExamStatusFilter<$PrismaModel> | $Enums.ExamStatus
-    };
-    export type IntFilter<$PrismaModel = never> = {
-        equals?: number | IntFieldRefInput<$PrismaModel>
-        in?: number[] | ListIntFieldRefInput<$PrismaModel>
-        notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-        lt?: number | IntFieldRefInput<$PrismaModel>
-        lte?: number | IntFieldRefInput<$PrismaModel>
-        gt?: number | IntFieldRefInput<$PrismaModel>
-        gte?: number | IntFieldRefInput<$PrismaModel>
-        not?: NestedIntFilter<$PrismaModel> | number
     };
     export type RoomListRelationFilter = {
         every?: RoomWhereInput
@@ -345188,21 +349629,6 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumExamStatusFilter<$PrismaModel>
         _max?: NestedEnumExamStatusFilter<$PrismaModel>
-    };
-    export type IntWithAggregatesFilter<$PrismaModel = never> = {
-        equals?: number | IntFieldRefInput<$PrismaModel>
-        in?: number[] | ListIntFieldRefInput<$PrismaModel>
-        notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-        lt?: number | IntFieldRefInput<$PrismaModel>
-        lte?: number | IntFieldRefInput<$PrismaModel>
-        gt?: number | IntFieldRefInput<$PrismaModel>
-        gte?: number | IntFieldRefInput<$PrismaModel>
-        not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-        _count?: NestedIntFilter<$PrismaModel>
-        _avg?: NestedFloatFilter<$PrismaModel>
-        _sum?: NestedIntFilter<$PrismaModel>
-        _min?: NestedIntFilter<$PrismaModel>
-        _max?: NestedIntFilter<$PrismaModel>
     };
     export type ExamScalarRelationFilter = {
         is?: ExamWhereInput
@@ -346992,6 +351418,7 @@ export namespace Prisma {
         codeTkb?: SortOrder
         examType?: SortOrder
         type?: SortOrder
+        onePoint?: SortOrder
         credit?: SortOrder
         week?: SortOrder
         period?: SortOrder
@@ -347040,6 +351467,7 @@ export namespace Prisma {
         codeTkb?: SortOrder
         examType?: SortOrder
         type?: SortOrder
+        onePoint?: SortOrder
         credit?: SortOrder
         week?: SortOrder
         period?: SortOrder
@@ -347075,6 +351503,7 @@ export namespace Prisma {
         codeTkb?: SortOrder
         examType?: SortOrder
         type?: SortOrder
+        onePoint?: SortOrder
         credit?: SortOrder
         week?: SortOrder
         period?: SortOrder
@@ -347562,6 +351991,7 @@ export namespace Prisma {
         examDate?: SortOrder
         examType?: SortOrder
         examId?: SortOrder
+        scoreDeadLineStart?: SortOrder
         scoreDeadline?: SortOrder
         examScoreDeadline?: SortOrder
         enteredScore?: SortOrder
@@ -347600,6 +352030,7 @@ export namespace Prisma {
         examDate?: SortOrder
         examType?: SortOrder
         examId?: SortOrder
+        scoreDeadLineStart?: SortOrder
         scoreDeadline?: SortOrder
         examScoreDeadline?: SortOrder
         enteredScore?: SortOrder
@@ -347635,6 +352066,7 @@ export namespace Prisma {
         examDate?: SortOrder
         examType?: SortOrder
         examId?: SortOrder
+        scoreDeadLineStart?: SortOrder
         scoreDeadline?: SortOrder
         examScoreDeadline?: SortOrder
         enteredScore?: SortOrder
@@ -360157,6 +364589,24 @@ export namespace Prisma {
         updateMany?: TestStructureRuleUpdateManyWithWhereWithoutKnowledgeBlockInput | TestStructureRuleUpdateManyWithWhereWithoutKnowledgeBlockInput[]
         deleteMany?: TestStructureRuleScalarWhereInput | TestStructureRuleScalarWhereInput[]
     };
+    export type MultipleChoiceOptionCreateNestedManyWithoutQuestionInput = {
+        create?: XOR<MultipleChoiceOptionCreateWithoutQuestionInput, MultipleChoiceOptionUncheckedCreateWithoutQuestionInput> | MultipleChoiceOptionCreateWithoutQuestionInput[] | MultipleChoiceOptionUncheckedCreateWithoutQuestionInput[]
+        connectOrCreate?: MultipleChoiceOptionCreateOrConnectWithoutQuestionInput | MultipleChoiceOptionCreateOrConnectWithoutQuestionInput[]
+        createMany?: MultipleChoiceOptionCreateManyQuestionInputEnvelope
+        connect?: MultipleChoiceOptionWhereUniqueInput | MultipleChoiceOptionWhereUniqueInput[]
+    };
+    export type FillInBlankSlotCreateNestedManyWithoutQuestionInput = {
+        create?: XOR<FillInBlankSlotCreateWithoutQuestionInput, FillInBlankSlotUncheckedCreateWithoutQuestionInput> | FillInBlankSlotCreateWithoutQuestionInput[] | FillInBlankSlotUncheckedCreateWithoutQuestionInput[]
+        connectOrCreate?: FillInBlankSlotCreateOrConnectWithoutQuestionInput | FillInBlankSlotCreateOrConnectWithoutQuestionInput[]
+        createMany?: FillInBlankSlotCreateManyQuestionInputEnvelope
+        connect?: FillInBlankSlotWhereUniqueInput | FillInBlankSlotWhereUniqueInput[]
+    };
+    export type OrderingItemCreateNestedManyWithoutQuestionInput = {
+        create?: XOR<OrderingItemCreateWithoutQuestionInput, OrderingItemUncheckedCreateWithoutQuestionInput> | OrderingItemCreateWithoutQuestionInput[] | OrderingItemUncheckedCreateWithoutQuestionInput[]
+        connectOrCreate?: OrderingItemCreateOrConnectWithoutQuestionInput | OrderingItemCreateOrConnectWithoutQuestionInput[]
+        createMany?: OrderingItemCreateManyQuestionInputEnvelope
+        connect?: OrderingItemWhereUniqueInput | OrderingItemWhereUniqueInput[]
+    };
     export type QuestionBankCreateNestedOneWithoutQuestionsInput = {
         create?: XOR<QuestionBankCreateWithoutQuestionsInput, QuestionBankUncheckedCreateWithoutQuestionsInput>
         connectOrCreate?: QuestionBankCreateOrConnectWithoutQuestionsInput
@@ -360184,6 +364634,24 @@ export namespace Prisma {
         createMany?: AnswerCreateManyQuestionInputEnvelope
         connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
     };
+    export type MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput = {
+        create?: XOR<MultipleChoiceOptionCreateWithoutQuestionInput, MultipleChoiceOptionUncheckedCreateWithoutQuestionInput> | MultipleChoiceOptionCreateWithoutQuestionInput[] | MultipleChoiceOptionUncheckedCreateWithoutQuestionInput[]
+        connectOrCreate?: MultipleChoiceOptionCreateOrConnectWithoutQuestionInput | MultipleChoiceOptionCreateOrConnectWithoutQuestionInput[]
+        createMany?: MultipleChoiceOptionCreateManyQuestionInputEnvelope
+        connect?: MultipleChoiceOptionWhereUniqueInput | MultipleChoiceOptionWhereUniqueInput[]
+    };
+    export type FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput = {
+        create?: XOR<FillInBlankSlotCreateWithoutQuestionInput, FillInBlankSlotUncheckedCreateWithoutQuestionInput> | FillInBlankSlotCreateWithoutQuestionInput[] | FillInBlankSlotUncheckedCreateWithoutQuestionInput[]
+        connectOrCreate?: FillInBlankSlotCreateOrConnectWithoutQuestionInput | FillInBlankSlotCreateOrConnectWithoutQuestionInput[]
+        createMany?: FillInBlankSlotCreateManyQuestionInputEnvelope
+        connect?: FillInBlankSlotWhereUniqueInput | FillInBlankSlotWhereUniqueInput[]
+    };
+    export type OrderingItemUncheckedCreateNestedManyWithoutQuestionInput = {
+        create?: XOR<OrderingItemCreateWithoutQuestionInput, OrderingItemUncheckedCreateWithoutQuestionInput> | OrderingItemCreateWithoutQuestionInput[] | OrderingItemUncheckedCreateWithoutQuestionInput[]
+        connectOrCreate?: OrderingItemCreateOrConnectWithoutQuestionInput | OrderingItemCreateOrConnectWithoutQuestionInput[]
+        createMany?: OrderingItemCreateManyQuestionInputEnvelope
+        connect?: OrderingItemWhereUniqueInput | OrderingItemWhereUniqueInput[]
+    };
     export type ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput = {
         create?: XOR<ExamBankQuestionCreateWithoutQuestionInput, ExamBankQuestionUncheckedCreateWithoutQuestionInput> | ExamBankQuestionCreateWithoutQuestionInput[] | ExamBankQuestionUncheckedCreateWithoutQuestionInput[]
         connectOrCreate?: ExamBankQuestionCreateOrConnectWithoutQuestionInput | ExamBankQuestionCreateOrConnectWithoutQuestionInput[]
@@ -360205,6 +364673,45 @@ export namespace Prisma {
         decrement?: number
         multiply?: number
         divide?: number
+    };
+    export type MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput = {
+        create?: XOR<MultipleChoiceOptionCreateWithoutQuestionInput, MultipleChoiceOptionUncheckedCreateWithoutQuestionInput> | MultipleChoiceOptionCreateWithoutQuestionInput[] | MultipleChoiceOptionUncheckedCreateWithoutQuestionInput[]
+        connectOrCreate?: MultipleChoiceOptionCreateOrConnectWithoutQuestionInput | MultipleChoiceOptionCreateOrConnectWithoutQuestionInput[]
+        upsert?: MultipleChoiceOptionUpsertWithWhereUniqueWithoutQuestionInput | MultipleChoiceOptionUpsertWithWhereUniqueWithoutQuestionInput[]
+        createMany?: MultipleChoiceOptionCreateManyQuestionInputEnvelope
+        set?: MultipleChoiceOptionWhereUniqueInput | MultipleChoiceOptionWhereUniqueInput[]
+        disconnect?: MultipleChoiceOptionWhereUniqueInput | MultipleChoiceOptionWhereUniqueInput[]
+        delete?: MultipleChoiceOptionWhereUniqueInput | MultipleChoiceOptionWhereUniqueInput[]
+        connect?: MultipleChoiceOptionWhereUniqueInput | MultipleChoiceOptionWhereUniqueInput[]
+        update?: MultipleChoiceOptionUpdateWithWhereUniqueWithoutQuestionInput | MultipleChoiceOptionUpdateWithWhereUniqueWithoutQuestionInput[]
+        updateMany?: MultipleChoiceOptionUpdateManyWithWhereWithoutQuestionInput | MultipleChoiceOptionUpdateManyWithWhereWithoutQuestionInput[]
+        deleteMany?: MultipleChoiceOptionScalarWhereInput | MultipleChoiceOptionScalarWhereInput[]
+    };
+    export type FillInBlankSlotUpdateManyWithoutQuestionNestedInput = {
+        create?: XOR<FillInBlankSlotCreateWithoutQuestionInput, FillInBlankSlotUncheckedCreateWithoutQuestionInput> | FillInBlankSlotCreateWithoutQuestionInput[] | FillInBlankSlotUncheckedCreateWithoutQuestionInput[]
+        connectOrCreate?: FillInBlankSlotCreateOrConnectWithoutQuestionInput | FillInBlankSlotCreateOrConnectWithoutQuestionInput[]
+        upsert?: FillInBlankSlotUpsertWithWhereUniqueWithoutQuestionInput | FillInBlankSlotUpsertWithWhereUniqueWithoutQuestionInput[]
+        createMany?: FillInBlankSlotCreateManyQuestionInputEnvelope
+        set?: FillInBlankSlotWhereUniqueInput | FillInBlankSlotWhereUniqueInput[]
+        disconnect?: FillInBlankSlotWhereUniqueInput | FillInBlankSlotWhereUniqueInput[]
+        delete?: FillInBlankSlotWhereUniqueInput | FillInBlankSlotWhereUniqueInput[]
+        connect?: FillInBlankSlotWhereUniqueInput | FillInBlankSlotWhereUniqueInput[]
+        update?: FillInBlankSlotUpdateWithWhereUniqueWithoutQuestionInput | FillInBlankSlotUpdateWithWhereUniqueWithoutQuestionInput[]
+        updateMany?: FillInBlankSlotUpdateManyWithWhereWithoutQuestionInput | FillInBlankSlotUpdateManyWithWhereWithoutQuestionInput[]
+        deleteMany?: FillInBlankSlotScalarWhereInput | FillInBlankSlotScalarWhereInput[]
+    };
+    export type OrderingItemUpdateManyWithoutQuestionNestedInput = {
+        create?: XOR<OrderingItemCreateWithoutQuestionInput, OrderingItemUncheckedCreateWithoutQuestionInput> | OrderingItemCreateWithoutQuestionInput[] | OrderingItemUncheckedCreateWithoutQuestionInput[]
+        connectOrCreate?: OrderingItemCreateOrConnectWithoutQuestionInput | OrderingItemCreateOrConnectWithoutQuestionInput[]
+        upsert?: OrderingItemUpsertWithWhereUniqueWithoutQuestionInput | OrderingItemUpsertWithWhereUniqueWithoutQuestionInput[]
+        createMany?: OrderingItemCreateManyQuestionInputEnvelope
+        set?: OrderingItemWhereUniqueInput | OrderingItemWhereUniqueInput[]
+        disconnect?: OrderingItemWhereUniqueInput | OrderingItemWhereUniqueInput[]
+        delete?: OrderingItemWhereUniqueInput | OrderingItemWhereUniqueInput[]
+        connect?: OrderingItemWhereUniqueInput | OrderingItemWhereUniqueInput[]
+        update?: OrderingItemUpdateWithWhereUniqueWithoutQuestionInput | OrderingItemUpdateWithWhereUniqueWithoutQuestionInput[]
+        updateMany?: OrderingItemUpdateManyWithWhereWithoutQuestionInput | OrderingItemUpdateManyWithWhereWithoutQuestionInput[]
+        deleteMany?: OrderingItemScalarWhereInput | OrderingItemScalarWhereInput[]
     };
     export type QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput = {
         create?: XOR<QuestionBankCreateWithoutQuestionsInput, QuestionBankUncheckedCreateWithoutQuestionsInput>
@@ -360257,6 +364764,45 @@ export namespace Prisma {
         updateMany?: AnswerUpdateManyWithWhereWithoutQuestionInput | AnswerUpdateManyWithWhereWithoutQuestionInput[]
         deleteMany?: AnswerScalarWhereInput | AnswerScalarWhereInput[]
     };
+    export type MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput = {
+        create?: XOR<MultipleChoiceOptionCreateWithoutQuestionInput, MultipleChoiceOptionUncheckedCreateWithoutQuestionInput> | MultipleChoiceOptionCreateWithoutQuestionInput[] | MultipleChoiceOptionUncheckedCreateWithoutQuestionInput[]
+        connectOrCreate?: MultipleChoiceOptionCreateOrConnectWithoutQuestionInput | MultipleChoiceOptionCreateOrConnectWithoutQuestionInput[]
+        upsert?: MultipleChoiceOptionUpsertWithWhereUniqueWithoutQuestionInput | MultipleChoiceOptionUpsertWithWhereUniqueWithoutQuestionInput[]
+        createMany?: MultipleChoiceOptionCreateManyQuestionInputEnvelope
+        set?: MultipleChoiceOptionWhereUniqueInput | MultipleChoiceOptionWhereUniqueInput[]
+        disconnect?: MultipleChoiceOptionWhereUniqueInput | MultipleChoiceOptionWhereUniqueInput[]
+        delete?: MultipleChoiceOptionWhereUniqueInput | MultipleChoiceOptionWhereUniqueInput[]
+        connect?: MultipleChoiceOptionWhereUniqueInput | MultipleChoiceOptionWhereUniqueInput[]
+        update?: MultipleChoiceOptionUpdateWithWhereUniqueWithoutQuestionInput | MultipleChoiceOptionUpdateWithWhereUniqueWithoutQuestionInput[]
+        updateMany?: MultipleChoiceOptionUpdateManyWithWhereWithoutQuestionInput | MultipleChoiceOptionUpdateManyWithWhereWithoutQuestionInput[]
+        deleteMany?: MultipleChoiceOptionScalarWhereInput | MultipleChoiceOptionScalarWhereInput[]
+    };
+    export type FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput = {
+        create?: XOR<FillInBlankSlotCreateWithoutQuestionInput, FillInBlankSlotUncheckedCreateWithoutQuestionInput> | FillInBlankSlotCreateWithoutQuestionInput[] | FillInBlankSlotUncheckedCreateWithoutQuestionInput[]
+        connectOrCreate?: FillInBlankSlotCreateOrConnectWithoutQuestionInput | FillInBlankSlotCreateOrConnectWithoutQuestionInput[]
+        upsert?: FillInBlankSlotUpsertWithWhereUniqueWithoutQuestionInput | FillInBlankSlotUpsertWithWhereUniqueWithoutQuestionInput[]
+        createMany?: FillInBlankSlotCreateManyQuestionInputEnvelope
+        set?: FillInBlankSlotWhereUniqueInput | FillInBlankSlotWhereUniqueInput[]
+        disconnect?: FillInBlankSlotWhereUniqueInput | FillInBlankSlotWhereUniqueInput[]
+        delete?: FillInBlankSlotWhereUniqueInput | FillInBlankSlotWhereUniqueInput[]
+        connect?: FillInBlankSlotWhereUniqueInput | FillInBlankSlotWhereUniqueInput[]
+        update?: FillInBlankSlotUpdateWithWhereUniqueWithoutQuestionInput | FillInBlankSlotUpdateWithWhereUniqueWithoutQuestionInput[]
+        updateMany?: FillInBlankSlotUpdateManyWithWhereWithoutQuestionInput | FillInBlankSlotUpdateManyWithWhereWithoutQuestionInput[]
+        deleteMany?: FillInBlankSlotScalarWhereInput | FillInBlankSlotScalarWhereInput[]
+    };
+    export type OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput = {
+        create?: XOR<OrderingItemCreateWithoutQuestionInput, OrderingItemUncheckedCreateWithoutQuestionInput> | OrderingItemCreateWithoutQuestionInput[] | OrderingItemUncheckedCreateWithoutQuestionInput[]
+        connectOrCreate?: OrderingItemCreateOrConnectWithoutQuestionInput | OrderingItemCreateOrConnectWithoutQuestionInput[]
+        upsert?: OrderingItemUpsertWithWhereUniqueWithoutQuestionInput | OrderingItemUpsertWithWhereUniqueWithoutQuestionInput[]
+        createMany?: OrderingItemCreateManyQuestionInputEnvelope
+        set?: OrderingItemWhereUniqueInput | OrderingItemWhereUniqueInput[]
+        disconnect?: OrderingItemWhereUniqueInput | OrderingItemWhereUniqueInput[]
+        delete?: OrderingItemWhereUniqueInput | OrderingItemWhereUniqueInput[]
+        connect?: OrderingItemWhereUniqueInput | OrderingItemWhereUniqueInput[]
+        update?: OrderingItemUpdateWithWhereUniqueWithoutQuestionInput | OrderingItemUpdateWithWhereUniqueWithoutQuestionInput[]
+        updateMany?: OrderingItemUpdateManyWithWhereWithoutQuestionInput | OrderingItemUpdateManyWithWhereWithoutQuestionInput[]
+        deleteMany?: OrderingItemScalarWhereInput | OrderingItemScalarWhereInput[]
+    };
     export type ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput = {
         create?: XOR<ExamBankQuestionCreateWithoutQuestionInput, ExamBankQuestionUncheckedCreateWithoutQuestionInput> | ExamBankQuestionCreateWithoutQuestionInput[] | ExamBankQuestionUncheckedCreateWithoutQuestionInput[]
         connectOrCreate?: ExamBankQuestionCreateOrConnectWithoutQuestionInput | ExamBankQuestionCreateOrConnectWithoutQuestionInput[]
@@ -360282,6 +364828,49 @@ export namespace Prisma {
         update?: AnswerUpdateWithWhereUniqueWithoutQuestionInput | AnswerUpdateWithWhereUniqueWithoutQuestionInput[]
         updateMany?: AnswerUpdateManyWithWhereWithoutQuestionInput | AnswerUpdateManyWithWhereWithoutQuestionInput[]
         deleteMany?: AnswerScalarWhereInput | AnswerScalarWhereInput[]
+    };
+    export type QuestionCreateNestedOneWithoutMultipleChoiceOptionsInput = {
+        create?: XOR<QuestionCreateWithoutMultipleChoiceOptionsInput, QuestionUncheckedCreateWithoutMultipleChoiceOptionsInput>
+        connectOrCreate?: QuestionCreateOrConnectWithoutMultipleChoiceOptionsInput
+        connect?: QuestionWhereUniqueInput
+    };
+    export type IntFieldUpdateOperationsInput = {
+        set?: number
+        increment?: number
+        decrement?: number
+        multiply?: number
+        divide?: number
+    };
+    export type QuestionUpdateOneRequiredWithoutMultipleChoiceOptionsNestedInput = {
+        create?: XOR<QuestionCreateWithoutMultipleChoiceOptionsInput, QuestionUncheckedCreateWithoutMultipleChoiceOptionsInput>
+        connectOrCreate?: QuestionCreateOrConnectWithoutMultipleChoiceOptionsInput
+        upsert?: QuestionUpsertWithoutMultipleChoiceOptionsInput
+        connect?: QuestionWhereUniqueInput
+        update?: XOR<XOR<QuestionUpdateToOneWithWhereWithoutMultipleChoiceOptionsInput, QuestionUpdateWithoutMultipleChoiceOptionsInput>, QuestionUncheckedUpdateWithoutMultipleChoiceOptionsInput>
+    };
+    export type QuestionCreateNestedOneWithoutFillInBlankSlotsInput = {
+        create?: XOR<QuestionCreateWithoutFillInBlankSlotsInput, QuestionUncheckedCreateWithoutFillInBlankSlotsInput>
+        connectOrCreate?: QuestionCreateOrConnectWithoutFillInBlankSlotsInput
+        connect?: QuestionWhereUniqueInput
+    };
+    export type QuestionUpdateOneRequiredWithoutFillInBlankSlotsNestedInput = {
+        create?: XOR<QuestionCreateWithoutFillInBlankSlotsInput, QuestionUncheckedCreateWithoutFillInBlankSlotsInput>
+        connectOrCreate?: QuestionCreateOrConnectWithoutFillInBlankSlotsInput
+        upsert?: QuestionUpsertWithoutFillInBlankSlotsInput
+        connect?: QuestionWhereUniqueInput
+        update?: XOR<XOR<QuestionUpdateToOneWithWhereWithoutFillInBlankSlotsInput, QuestionUpdateWithoutFillInBlankSlotsInput>, QuestionUncheckedUpdateWithoutFillInBlankSlotsInput>
+    };
+    export type QuestionCreateNestedOneWithoutOrderingItemsInput = {
+        create?: XOR<QuestionCreateWithoutOrderingItemsInput, QuestionUncheckedCreateWithoutOrderingItemsInput>
+        connectOrCreate?: QuestionCreateOrConnectWithoutOrderingItemsInput
+        connect?: QuestionWhereUniqueInput
+    };
+    export type QuestionUpdateOneRequiredWithoutOrderingItemsNestedInput = {
+        create?: XOR<QuestionCreateWithoutOrderingItemsInput, QuestionUncheckedCreateWithoutOrderingItemsInput>
+        connectOrCreate?: QuestionCreateOrConnectWithoutOrderingItemsInput
+        upsert?: QuestionUpsertWithoutOrderingItemsInput
+        connect?: QuestionWhereUniqueInput
+        update?: XOR<XOR<QuestionUpdateToOneWithWhereWithoutOrderingItemsInput, QuestionUpdateWithoutOrderingItemsInput>, QuestionUncheckedUpdateWithoutOrderingItemsInput>
     };
     export type ExamSessionCreateNestedOneWithoutAnswersInput = {
         create?: XOR<ExamSessionCreateWithoutAnswersInput, ExamSessionUncheckedCreateWithoutAnswersInput>
@@ -360394,13 +364983,6 @@ export namespace Prisma {
     };
     export type EnumExamStatusFieldUpdateOperationsInput = {
         set?: $Enums.ExamStatus
-    };
-    export type IntFieldUpdateOperationsInput = {
-        set?: number
-        increment?: number
-        decrement?: number
-        multiply?: number
-        divide?: number
     };
     export type QuestionBankUpdateOneRequiredWithoutExamNestedInput = {
         create?: XOR<QuestionBankCreateWithoutExamInput, QuestionBankUncheckedCreateWithoutExamInput>
@@ -379273,6 +383855,21 @@ export namespace Prisma {
         _min?: NestedFloatFilter<$PrismaModel>
         _max?: NestedFloatFilter<$PrismaModel>
     };
+    export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: number | IntFieldRefInput<$PrismaModel>
+        in?: number[] | ListIntFieldRefInput<$PrismaModel>
+        notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+        lt?: number | IntFieldRefInput<$PrismaModel>
+        lte?: number | IntFieldRefInput<$PrismaModel>
+        gt?: number | IntFieldRefInput<$PrismaModel>
+        gte?: number | IntFieldRefInput<$PrismaModel>
+        not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+        _count?: NestedIntFilter<$PrismaModel>
+        _avg?: NestedFloatFilter<$PrismaModel>
+        _sum?: NestedIntFilter<$PrismaModel>
+        _min?: NestedIntFilter<$PrismaModel>
+        _max?: NestedIntFilter<$PrismaModel>
+    };
     export type NestedBoolNullableFilter<$PrismaModel = never> = {
         equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
         not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
@@ -379313,21 +383910,6 @@ export namespace Prisma {
         _count?: NestedIntFilter<$PrismaModel>
         _min?: NestedEnumExamStatusFilter<$PrismaModel>
         _max?: NestedEnumExamStatusFilter<$PrismaModel>
-    };
-    export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-        equals?: number | IntFieldRefInput<$PrismaModel>
-        in?: number[] | ListIntFieldRefInput<$PrismaModel>
-        notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-        lt?: number | IntFieldRefInput<$PrismaModel>
-        lte?: number | IntFieldRefInput<$PrismaModel>
-        gt?: number | IntFieldRefInput<$PrismaModel>
-        gte?: number | IntFieldRefInput<$PrismaModel>
-        not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-        _count?: NestedIntFilter<$PrismaModel>
-        _avg?: NestedFloatFilter<$PrismaModel>
-        _sum?: NestedIntFilter<$PrismaModel>
-        _min?: NestedIntFilter<$PrismaModel>
-        _max?: NestedIntFilter<$PrismaModel>
     };
     export type NestedDecimalNullableFilter<$PrismaModel = never> = {
         equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
@@ -380111,6 +384693,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -380156,6 +384739,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -380206,6 +384790,9 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
+        multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
         difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
@@ -380226,6 +384813,9 @@ export namespace Prisma {
         isAutoGraded?: boolean
         knowledgeBlockId?: string | null
         difficultyId?: string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
         answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
     };
@@ -380316,6 +384906,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -380361,6 +384952,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -380476,6 +385068,9 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
+        multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
@@ -380496,6 +385091,9 @@ export namespace Prisma {
         isAutoGraded?: boolean
         questionBankId: string
         knowledgeBlockId?: string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
         answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
     };
@@ -380532,6 +385130,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -380577,6 +385176,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -380627,6 +385227,9 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
+        multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
         difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
@@ -380647,6 +385250,9 @@ export namespace Prisma {
         isAutoGraded?: boolean
         questionBankId: string
         difficultyId?: string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
         answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
     };
@@ -380713,6 +385319,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -380758,6 +385365,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -380833,6 +385441,98 @@ export namespace Prisma {
         questionPoint?: FloatFilter<"TestStructureRule"> | number
         questionType?: EnumQuestionTypeFilter<"TestStructureRule"> | $Enums.QuestionType
         count?: IntFilter<"TestStructureRule"> | number
+    };
+    export type MultipleChoiceOptionCreateWithoutQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        isCorrect?: boolean
+        order: number
+    };
+    export type MultipleChoiceOptionUncheckedCreateWithoutQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        isCorrect?: boolean
+        order: number
+    };
+    export type MultipleChoiceOptionCreateOrConnectWithoutQuestionInput = {
+        where: MultipleChoiceOptionWhereUniqueInput
+        create: XOR<MultipleChoiceOptionCreateWithoutQuestionInput, MultipleChoiceOptionUncheckedCreateWithoutQuestionInput>
+    };
+    export type MultipleChoiceOptionCreateManyQuestionInputEnvelope = {
+        data: MultipleChoiceOptionCreateManyQuestionInput | MultipleChoiceOptionCreateManyQuestionInput[]
+        skipDuplicates?: boolean
+    };
+    export type FillInBlankSlotCreateWithoutQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        order: number
+        correctAnswer: string
+    };
+    export type FillInBlankSlotUncheckedCreateWithoutQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        order: number
+        correctAnswer: string
+    };
+    export type FillInBlankSlotCreateOrConnectWithoutQuestionInput = {
+        where: FillInBlankSlotWhereUniqueInput
+        create: XOR<FillInBlankSlotCreateWithoutQuestionInput, FillInBlankSlotUncheckedCreateWithoutQuestionInput>
+    };
+    export type FillInBlankSlotCreateManyQuestionInputEnvelope = {
+        data: FillInBlankSlotCreateManyQuestionInput | FillInBlankSlotCreateManyQuestionInput[]
+        skipDuplicates?: boolean
+    };
+    export type OrderingItemCreateWithoutQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        correctOrder: number
+    };
+    export type OrderingItemUncheckedCreateWithoutQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        correctOrder: number
+    };
+    export type OrderingItemCreateOrConnectWithoutQuestionInput = {
+        where: OrderingItemWhereUniqueInput
+        create: XOR<OrderingItemCreateWithoutQuestionInput, OrderingItemUncheckedCreateWithoutQuestionInput>
+    };
+    export type OrderingItemCreateManyQuestionInputEnvelope = {
+        data: OrderingItemCreateManyQuestionInput | OrderingItemCreateManyQuestionInput[]
+        skipDuplicates?: boolean
     };
     export type QuestionBankCreateWithoutQuestionsInput = {
         id?: string
@@ -380981,6 +385681,91 @@ export namespace Prisma {
     export type AnswerCreateManyQuestionInputEnvelope = {
         data: AnswerCreateManyQuestionInput | AnswerCreateManyQuestionInput[]
         skipDuplicates?: boolean
+    };
+    export type MultipleChoiceOptionUpsertWithWhereUniqueWithoutQuestionInput = {
+        where: MultipleChoiceOptionWhereUniqueInput
+        update: XOR<MultipleChoiceOptionUpdateWithoutQuestionInput, MultipleChoiceOptionUncheckedUpdateWithoutQuestionInput>
+        create: XOR<MultipleChoiceOptionCreateWithoutQuestionInput, MultipleChoiceOptionUncheckedCreateWithoutQuestionInput>
+    };
+    export type MultipleChoiceOptionUpdateWithWhereUniqueWithoutQuestionInput = {
+        where: MultipleChoiceOptionWhereUniqueInput
+        data: XOR<MultipleChoiceOptionUpdateWithoutQuestionInput, MultipleChoiceOptionUncheckedUpdateWithoutQuestionInput>
+    };
+    export type MultipleChoiceOptionUpdateManyWithWhereWithoutQuestionInput = {
+        where: MultipleChoiceOptionScalarWhereInput
+        data: XOR<MultipleChoiceOptionUpdateManyMutationInput, MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionInput>
+    };
+    export type MultipleChoiceOptionScalarWhereInput = {
+        AND?: MultipleChoiceOptionScalarWhereInput | MultipleChoiceOptionScalarWhereInput[]
+        OR?: MultipleChoiceOptionScalarWhereInput[]
+        NOT?: MultipleChoiceOptionScalarWhereInput | MultipleChoiceOptionScalarWhereInput[]
+        id?: StringFilter<"MultipleChoiceOption"> | string
+        code?: StringNullableFilter<"MultipleChoiceOption"> | string | null
+        active?: BoolFilter<"MultipleChoiceOption"> | boolean
+        description?: StringNullableFilter<"MultipleChoiceOption"> | string | null
+        deletedAt?: DateTimeNullableFilter<"MultipleChoiceOption"> | Date | string | null
+        createdAt?: DateTimeFilter<"MultipleChoiceOption"> | Date | string
+        updatedAt?: DateTimeFilter<"MultipleChoiceOption"> | Date | string
+        questionId?: StringFilter<"MultipleChoiceOption"> | string
+        content?: StringFilter<"MultipleChoiceOption"> | string
+        isCorrect?: BoolFilter<"MultipleChoiceOption"> | boolean
+        order?: IntFilter<"MultipleChoiceOption"> | number
+    };
+    export type FillInBlankSlotUpsertWithWhereUniqueWithoutQuestionInput = {
+        where: FillInBlankSlotWhereUniqueInput
+        update: XOR<FillInBlankSlotUpdateWithoutQuestionInput, FillInBlankSlotUncheckedUpdateWithoutQuestionInput>
+        create: XOR<FillInBlankSlotCreateWithoutQuestionInput, FillInBlankSlotUncheckedCreateWithoutQuestionInput>
+    };
+    export type FillInBlankSlotUpdateWithWhereUniqueWithoutQuestionInput = {
+        where: FillInBlankSlotWhereUniqueInput
+        data: XOR<FillInBlankSlotUpdateWithoutQuestionInput, FillInBlankSlotUncheckedUpdateWithoutQuestionInput>
+    };
+    export type FillInBlankSlotUpdateManyWithWhereWithoutQuestionInput = {
+        where: FillInBlankSlotScalarWhereInput
+        data: XOR<FillInBlankSlotUpdateManyMutationInput, FillInBlankSlotUncheckedUpdateManyWithoutQuestionInput>
+    };
+    export type FillInBlankSlotScalarWhereInput = {
+        AND?: FillInBlankSlotScalarWhereInput | FillInBlankSlotScalarWhereInput[]
+        OR?: FillInBlankSlotScalarWhereInput[]
+        NOT?: FillInBlankSlotScalarWhereInput | FillInBlankSlotScalarWhereInput[]
+        id?: StringFilter<"FillInBlankSlot"> | string
+        code?: StringNullableFilter<"FillInBlankSlot"> | string | null
+        active?: BoolFilter<"FillInBlankSlot"> | boolean
+        description?: StringNullableFilter<"FillInBlankSlot"> | string | null
+        deletedAt?: DateTimeNullableFilter<"FillInBlankSlot"> | Date | string | null
+        createdAt?: DateTimeFilter<"FillInBlankSlot"> | Date | string
+        updatedAt?: DateTimeFilter<"FillInBlankSlot"> | Date | string
+        questionId?: StringFilter<"FillInBlankSlot"> | string
+        order?: IntFilter<"FillInBlankSlot"> | number
+        correctAnswer?: StringFilter<"FillInBlankSlot"> | string
+    };
+    export type OrderingItemUpsertWithWhereUniqueWithoutQuestionInput = {
+        where: OrderingItemWhereUniqueInput
+        update: XOR<OrderingItemUpdateWithoutQuestionInput, OrderingItemUncheckedUpdateWithoutQuestionInput>
+        create: XOR<OrderingItemCreateWithoutQuestionInput, OrderingItemUncheckedCreateWithoutQuestionInput>
+    };
+    export type OrderingItemUpdateWithWhereUniqueWithoutQuestionInput = {
+        where: OrderingItemWhereUniqueInput
+        data: XOR<OrderingItemUpdateWithoutQuestionInput, OrderingItemUncheckedUpdateWithoutQuestionInput>
+    };
+    export type OrderingItemUpdateManyWithWhereWithoutQuestionInput = {
+        where: OrderingItemScalarWhereInput
+        data: XOR<OrderingItemUpdateManyMutationInput, OrderingItemUncheckedUpdateManyWithoutQuestionInput>
+    };
+    export type OrderingItemScalarWhereInput = {
+        AND?: OrderingItemScalarWhereInput | OrderingItemScalarWhereInput[]
+        OR?: OrderingItemScalarWhereInput[]
+        NOT?: OrderingItemScalarWhereInput | OrderingItemScalarWhereInput[]
+        id?: StringFilter<"OrderingItem"> | string
+        code?: StringNullableFilter<"OrderingItem"> | string | null
+        active?: BoolFilter<"OrderingItem"> | boolean
+        description?: StringNullableFilter<"OrderingItem"> | string | null
+        deletedAt?: DateTimeNullableFilter<"OrderingItem"> | Date | string | null
+        createdAt?: DateTimeFilter<"OrderingItem"> | Date | string
+        updatedAt?: DateTimeFilter<"OrderingItem"> | Date | string
+        questionId?: StringFilter<"OrderingItem"> | string
+        content?: StringFilter<"OrderingItem"> | string
+        correctOrder?: IntFilter<"OrderingItem"> | number
     };
     export type QuestionBankUpsertWithoutQuestionsInput = {
         update: XOR<QuestionBankUpdateWithoutQuestionsInput, QuestionBankUncheckedUpdateWithoutQuestionsInput>
@@ -381138,6 +385923,297 @@ export namespace Prisma {
         comment?: StringNullableFilter<"Answer"> | string | null
         essayAnswer?: StringFilter<"Answer"> | string
     };
+    export type QuestionCreateWithoutMultipleChoiceOptionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        type?: $Enums.QuestionType
+        point?: number
+        explanation?: string | null
+        isAutoGraded?: boolean
+        fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
+        questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
+        knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
+        difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
+        sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
+        answers?: AnswerCreateNestedManyWithoutQuestionInput
+    };
+    export type QuestionUncheckedCreateWithoutMultipleChoiceOptionsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        type?: $Enums.QuestionType
+        point?: number
+        explanation?: string | null
+        isAutoGraded?: boolean
+        questionBankId: string
+        knowledgeBlockId?: string | null
+        difficultyId?: string | null
+        fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
+        sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
+        answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
+    };
+    export type QuestionCreateOrConnectWithoutMultipleChoiceOptionsInput = {
+        where: QuestionWhereUniqueInput
+        create: XOR<QuestionCreateWithoutMultipleChoiceOptionsInput, QuestionUncheckedCreateWithoutMultipleChoiceOptionsInput>
+    };
+    export type QuestionUpsertWithoutMultipleChoiceOptionsInput = {
+        update: XOR<QuestionUpdateWithoutMultipleChoiceOptionsInput, QuestionUncheckedUpdateWithoutMultipleChoiceOptionsInput>
+        create: XOR<QuestionCreateWithoutMultipleChoiceOptionsInput, QuestionUncheckedCreateWithoutMultipleChoiceOptionsInput>
+        where?: QuestionWhereInput
+    };
+    export type QuestionUpdateToOneWithWhereWithoutMultipleChoiceOptionsInput = {
+        where?: QuestionWhereInput
+        data: XOR<QuestionUpdateWithoutMultipleChoiceOptionsInput, QuestionUncheckedUpdateWithoutMultipleChoiceOptionsInput>
+    };
+    export type QuestionUpdateWithoutMultipleChoiceOptionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+        point?: FloatFieldUpdateOperationsInput | number
+        explanation?: NullableStringFieldUpdateOperationsInput | string | null
+        isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
+        questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
+        knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
+        difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
+        sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
+        answers?: AnswerUpdateManyWithoutQuestionNestedInput
+    };
+    export type QuestionUncheckedUpdateWithoutMultipleChoiceOptionsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+        point?: FloatFieldUpdateOperationsInput | number
+        explanation?: NullableStringFieldUpdateOperationsInput | string | null
+        isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        questionBankId?: StringFieldUpdateOperationsInput | string
+        knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        difficultyId?: NullableStringFieldUpdateOperationsInput | string | null
+        fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
+        sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
+        answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
+    };
+    export type QuestionCreateWithoutFillInBlankSlotsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        type?: $Enums.QuestionType
+        point?: number
+        explanation?: string | null
+        isAutoGraded?: boolean
+        multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
+        questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
+        knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
+        difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
+        sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
+        answers?: AnswerCreateNestedManyWithoutQuestionInput
+    };
+    export type QuestionUncheckedCreateWithoutFillInBlankSlotsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        type?: $Enums.QuestionType
+        point?: number
+        explanation?: string | null
+        isAutoGraded?: boolean
+        questionBankId: string
+        knowledgeBlockId?: string | null
+        difficultyId?: string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
+        sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
+        answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
+    };
+    export type QuestionCreateOrConnectWithoutFillInBlankSlotsInput = {
+        where: QuestionWhereUniqueInput
+        create: XOR<QuestionCreateWithoutFillInBlankSlotsInput, QuestionUncheckedCreateWithoutFillInBlankSlotsInput>
+    };
+    export type QuestionUpsertWithoutFillInBlankSlotsInput = {
+        update: XOR<QuestionUpdateWithoutFillInBlankSlotsInput, QuestionUncheckedUpdateWithoutFillInBlankSlotsInput>
+        create: XOR<QuestionCreateWithoutFillInBlankSlotsInput, QuestionUncheckedCreateWithoutFillInBlankSlotsInput>
+        where?: QuestionWhereInput
+    };
+    export type QuestionUpdateToOneWithWhereWithoutFillInBlankSlotsInput = {
+        where?: QuestionWhereInput
+        data: XOR<QuestionUpdateWithoutFillInBlankSlotsInput, QuestionUncheckedUpdateWithoutFillInBlankSlotsInput>
+    };
+    export type QuestionUpdateWithoutFillInBlankSlotsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+        point?: FloatFieldUpdateOperationsInput | number
+        explanation?: NullableStringFieldUpdateOperationsInput | string | null
+        isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
+        questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
+        knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
+        difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
+        sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
+        answers?: AnswerUpdateManyWithoutQuestionNestedInput
+    };
+    export type QuestionUncheckedUpdateWithoutFillInBlankSlotsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+        point?: FloatFieldUpdateOperationsInput | number
+        explanation?: NullableStringFieldUpdateOperationsInput | string | null
+        isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        questionBankId?: StringFieldUpdateOperationsInput | string
+        knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        difficultyId?: NullableStringFieldUpdateOperationsInput | string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
+        sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
+        answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
+    };
+    export type QuestionCreateWithoutOrderingItemsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        type?: $Enums.QuestionType
+        point?: number
+        explanation?: string | null
+        isAutoGraded?: boolean
+        multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
+        questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
+        knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
+        difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
+        sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
+        answers?: AnswerCreateNestedManyWithoutQuestionInput
+    };
+    export type QuestionUncheckedCreateWithoutOrderingItemsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        type?: $Enums.QuestionType
+        point?: number
+        explanation?: string | null
+        isAutoGraded?: boolean
+        questionBankId: string
+        knowledgeBlockId?: string | null
+        difficultyId?: string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
+        sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
+        answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
+    };
+    export type QuestionCreateOrConnectWithoutOrderingItemsInput = {
+        where: QuestionWhereUniqueInput
+        create: XOR<QuestionCreateWithoutOrderingItemsInput, QuestionUncheckedCreateWithoutOrderingItemsInput>
+    };
+    export type QuestionUpsertWithoutOrderingItemsInput = {
+        update: XOR<QuestionUpdateWithoutOrderingItemsInput, QuestionUncheckedUpdateWithoutOrderingItemsInput>
+        create: XOR<QuestionCreateWithoutOrderingItemsInput, QuestionUncheckedCreateWithoutOrderingItemsInput>
+        where?: QuestionWhereInput
+    };
+    export type QuestionUpdateToOneWithWhereWithoutOrderingItemsInput = {
+        where?: QuestionWhereInput
+        data: XOR<QuestionUpdateWithoutOrderingItemsInput, QuestionUncheckedUpdateWithoutOrderingItemsInput>
+    };
+    export type QuestionUpdateWithoutOrderingItemsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+        point?: FloatFieldUpdateOperationsInput | number
+        explanation?: NullableStringFieldUpdateOperationsInput | string | null
+        isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
+        questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
+        knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
+        difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
+        sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
+        answers?: AnswerUpdateManyWithoutQuestionNestedInput
+    };
+    export type QuestionUncheckedUpdateWithoutOrderingItemsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+        point?: FloatFieldUpdateOperationsInput | number
+        explanation?: NullableStringFieldUpdateOperationsInput | string | null
+        isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        questionBankId?: StringFieldUpdateOperationsInput | string
+        knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        difficultyId?: NullableStringFieldUpdateOperationsInput | string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
+        sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
+        answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
+    };
     export type ExamSessionCreateWithoutAnswersInput = {
         id?: string
         code?: string | null
@@ -381187,6 +386263,9 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
+        multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
         difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
@@ -381208,6 +386287,9 @@ export namespace Prisma {
         questionBankId: string
         knowledgeBlockId?: string | null
         difficultyId?: string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutAnswersInput = {
@@ -381277,6 +386359,9 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
         difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
@@ -381298,6 +386383,9 @@ export namespace Prisma {
         questionBankId?: StringFieldUpdateOperationsInput | string
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
         difficultyId?: NullableStringFieldUpdateOperationsInput | string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionBankCreateWithoutExamInput = {
@@ -381393,6 +386481,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -381439,6 +386528,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -381711,6 +386801,7 @@ export namespace Prisma {
         examDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examType?: EnumExamTypeNullableFilter<"SubjectClass"> | $Enums.ExamType | null
         examId?: StringNullableFilter<"SubjectClass"> | string | null
+        scoreDeadLineStart?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         scoreDeadline?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examScoreDeadline?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         enteredScore?: BoolFilter<"SubjectClass"> | boolean
@@ -382249,6 +387340,9 @@ export namespace Prisma {
         point?: number
         explanation?: string | null
         isAutoGraded?: boolean
+        multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
         difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
@@ -382270,6 +387364,9 @@ export namespace Prisma {
         questionBankId: string
         knowledgeBlockId?: string | null
         difficultyId?: string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
+        orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
         answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutSessionQuestionsInput = {
@@ -382331,6 +387428,9 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
         difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
@@ -382352,6 +387452,9 @@ export namespace Prisma {
         questionBankId?: StringFieldUpdateOperationsInput | string
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
         difficultyId?: NullableStringFieldUpdateOperationsInput | string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
         answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type ExamCreateWithoutExamFaxInput = {
@@ -383171,6 +388274,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -383218,6 +388322,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -383256,6 +388361,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -383301,6 +388407,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -383650,6 +388757,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -383697,6 +388805,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -383740,6 +388849,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -383785,6 +388895,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -385132,6 +390243,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -385178,6 +390290,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -388217,6 +393330,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -388264,6 +393378,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -390344,6 +395459,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -390389,6 +395505,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -390541,6 +395658,7 @@ export namespace Prisma {
         codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
         examType?: EnumExamTypeFilter<"SubjectVersion"> | $Enums.ExamType
         type?: EnumSubjectVersionTypeFilter<"SubjectVersion"> | $Enums.SubjectVersionType
+        onePoint?: BoolFilter<"SubjectVersion"> | boolean
         credit?: IntFilter<"SubjectVersion"> | number
         week?: IntNullableFilter<"SubjectVersion"> | number | null
         period?: IntFilter<"SubjectVersion"> | number
@@ -390576,6 +395694,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -390621,6 +395740,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -390901,6 +396021,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -390946,6 +396067,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -390995,6 +396117,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -391040,6 +396163,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -391089,6 +396213,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -391134,6 +396259,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -391183,6 +396309,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -391228,6 +396355,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -391344,6 +396472,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -391390,6 +396519,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -392076,6 +397206,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -392121,6 +397252,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -392201,6 +397333,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -392246,6 +397379,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -392318,6 +397452,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -392363,6 +397498,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -392451,6 +397587,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -392496,6 +397633,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -393030,6 +398168,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -393077,6 +398216,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -393280,6 +398420,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -393327,6 +398468,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -393476,6 +398618,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -393521,6 +398664,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -394425,6 +399569,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -394470,6 +399615,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -395150,6 +400296,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -395197,6 +400344,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -395249,6 +400397,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -395296,6 +400445,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -395335,6 +400485,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -395382,6 +400533,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -395694,6 +400846,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -395741,6 +400894,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -396507,6 +401661,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -396553,6 +401708,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -396634,6 +401790,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -396679,6 +401836,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -398324,6 +403482,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -398371,6 +403530,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -398418,6 +403578,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -398465,6 +403626,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -412722,6 +417884,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -412767,6 +417930,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -444471,6 +449635,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -444518,6 +449683,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -444565,6 +449731,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -444612,6 +449779,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -444659,6 +449827,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -444706,6 +449875,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -447583,6 +452753,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -447630,6 +452801,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -448156,6 +453328,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -448203,6 +453376,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -449794,6 +454968,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -449841,6 +455016,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -452167,6 +457343,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -452212,6 +457389,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -453059,6 +458237,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -453104,6 +458283,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -463386,6 +468566,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -463433,6 +468614,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -471279,6 +476461,9 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
         difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
@@ -471299,6 +476484,9 @@ export namespace Prisma {
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
         difficultyId?: NullableStringFieldUpdateOperationsInput | string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
         answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
     };
@@ -471416,6 +476604,9 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
@@ -471436,6 +476627,9 @@ export namespace Prisma {
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
         questionBankId?: StringFieldUpdateOperationsInput | string
         knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
         answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
     };
@@ -471497,6 +476691,9 @@ export namespace Prisma {
         point?: FloatFieldUpdateOperationsInput | number
         explanation?: NullableStringFieldUpdateOperationsInput | string | null
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
+        multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
         difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
@@ -471517,6 +476714,9 @@ export namespace Prisma {
         isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
         questionBankId?: StringFieldUpdateOperationsInput | string
         difficultyId?: NullableStringFieldUpdateOperationsInput | string | null
+        multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
+        fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
+        orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
         answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
     };
@@ -471575,6 +476775,40 @@ export namespace Prisma {
         questionType?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
         count?: IntFieldUpdateOperationsInput | number
     };
+    export type MultipleChoiceOptionCreateManyQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        isCorrect?: boolean
+        order: number
+    };
+    export type FillInBlankSlotCreateManyQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        order: number
+        correctAnswer: string
+    };
+    export type OrderingItemCreateManyQuestionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        content: string
+        correctOrder: number
+    };
     export type ExamBankQuestionCreateManyQuestionInput = {
         id?: string
         code?: string | null
@@ -471599,6 +476833,108 @@ export namespace Prisma {
         score?: number | null
         comment?: string | null
         essayAnswer: string
+    };
+    export type MultipleChoiceOptionUpdateWithoutQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        isCorrect?: BoolFieldUpdateOperationsInput | boolean
+        order?: IntFieldUpdateOperationsInput | number
+    };
+    export type MultipleChoiceOptionUncheckedUpdateWithoutQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        isCorrect?: BoolFieldUpdateOperationsInput | boolean
+        order?: IntFieldUpdateOperationsInput | number
+    };
+    export type MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        isCorrect?: BoolFieldUpdateOperationsInput | boolean
+        order?: IntFieldUpdateOperationsInput | number
+    };
+    export type FillInBlankSlotUpdateWithoutQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        order?: IntFieldUpdateOperationsInput | number
+        correctAnswer?: StringFieldUpdateOperationsInput | string
+    };
+    export type FillInBlankSlotUncheckedUpdateWithoutQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        order?: IntFieldUpdateOperationsInput | number
+        correctAnswer?: StringFieldUpdateOperationsInput | string
+    };
+    export type FillInBlankSlotUncheckedUpdateManyWithoutQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        order?: IntFieldUpdateOperationsInput | number
+        correctAnswer?: StringFieldUpdateOperationsInput | string
+    };
+    export type OrderingItemUpdateWithoutQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        correctOrder?: IntFieldUpdateOperationsInput | number
+    };
+    export type OrderingItemUncheckedUpdateWithoutQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        correctOrder?: IntFieldUpdateOperationsInput | number
+    };
+    export type OrderingItemUncheckedUpdateManyWithoutQuestionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        content?: StringFieldUpdateOperationsInput | string
+        correctOrder?: IntFieldUpdateOperationsInput | number
     };
     export type ExamBankQuestionUpdateWithoutQuestionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -471695,6 +477031,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -471836,6 +477173,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -471882,6 +477220,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -471925,6 +477264,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -473148,6 +478488,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -473336,6 +478677,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -473382,6 +478724,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -473425,6 +478768,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -475161,6 +480505,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -475208,6 +480553,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -475251,6 +480597,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -476065,6 +481412,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -476099,6 +481447,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476144,6 +481493,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476189,6 +481539,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476223,6 +481574,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -476257,6 +481609,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476302,6 +481655,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476347,6 +481701,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476424,6 +481779,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -476557,6 +481913,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476602,6 +481959,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476647,6 +482005,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476682,6 +482041,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476727,6 +482087,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476772,6 +482133,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476807,6 +482169,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476852,6 +482215,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476897,6 +482261,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476932,6 +482297,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -476977,6 +482343,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -477022,6 +482389,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -477129,6 +482497,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -477175,6 +482544,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -477218,6 +482588,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -478549,6 +483920,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -478589,6 +483961,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -479100,6 +484473,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -479146,6 +484520,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -479189,6 +484564,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -479259,6 +484635,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -479304,6 +484681,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -479349,6 +484727,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -480600,6 +485979,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -480767,6 +486147,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -480814,6 +486195,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -480857,6 +486239,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -480887,6 +486270,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -480934,6 +486318,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -480977,6 +486362,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -488938,6 +494324,7 @@ export namespace Prisma {
         codeTkb?: string | null
         examType: $Enums.ExamType
         type?: $Enums.SubjectVersionType
+        onePoint?: boolean
         credit: number
         week?: number | null
         period?: number
@@ -489421,6 +494808,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -489466,6 +494854,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -489511,6 +494900,7 @@ export namespace Prisma {
         codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
         examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
         type?: EnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType
+        onePoint?: BoolFieldUpdateOperationsInput | boolean
         credit?: IntFieldUpdateOperationsInput | number
         week?: NullableIntFieldUpdateOperationsInput | number | null
         period?: IntFieldUpdateOperationsInput | number
@@ -505489,6 +510879,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -505523,6 +510914,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -505557,6 +510949,7 @@ export namespace Prisma {
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
+        scoreDeadLineStart?: Date | string | null
         scoreDeadline?: Date | string | null
         examScoreDeadline?: Date | string | null
         enteredScore?: boolean
@@ -505765,6 +511158,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -505812,6 +511206,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -505855,6 +511250,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -505885,6 +511281,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -505932,6 +511329,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -505975,6 +511373,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -506005,6 +511404,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -506052,6 +511452,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -506095,6 +511496,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -507513,6 +512915,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -507560,6 +512963,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -507603,6 +513007,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -510965,6 +516370,7 @@ export namespace Prisma {
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -511012,6 +516418,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean
@@ -511055,6 +516462,7 @@ export namespace Prisma {
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         enteredScore?: BoolFieldUpdateOperationsInput | boolean

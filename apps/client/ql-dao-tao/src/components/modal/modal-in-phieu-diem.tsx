@@ -17,12 +17,12 @@ dayjs.locale('vi')
 
 export enum EnumInPhieuDiem {
     PHIEU_DIEM_NHAP = 0, // In phiếu điểm nháp
-    PHIEU_DIEM_KHOA = 1, // In phiếu điểm và khóa
+    PHIEU_DIEM_KHOA = 1, // In phiếu điểm và khoá
 }
 
 type ModalPrintToKQHTInput = {
     dataTable: DataTable[]
-    type?: EnumInPhieuDiem // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
+    type?: EnumInPhieuDiem // 1: In phiếu điểm và khoá, 0: In phiếu điểm nháp
 }
 
 export type DataTable = Prisma.StudentSubjectScoreGetPayload<{
@@ -215,7 +215,7 @@ const ModalPrintStudentSubjectScore = () => {
             value: <span className="font-medium">{data?.code || '-'}</span>,
         },
         {
-            title: 'Khóa:',
+            title: 'Khoá:',
             value: <span>{trainingCourseSame || '-'}</span>,
         },
         {
@@ -287,16 +287,16 @@ const ModalPrintStudentSubjectScore = () => {
                     <span>
                         {input?.type === EnumInPhieuDiem.PHIEU_DIEM_NHAP
                             ? 'In phiếu điểm nháp'
-                            : 'In phiếu điểm và khóa'}
+                            : 'In phiếu điểm và khoá'}
                     </span>
                     <Button
                         icon={<PrinterOutlined />}
                         onClick={() => {
                             if (input?.type === EnumInPhieuDiem.PHIEU_DIEM_KHOA) {
                                 Modal.confirm({
-                                    title: 'Xác nhận khóa điểm',
+                                    title: 'Xác nhận khoá điểm',
                                     content:
-                                        'Bạn có chắc chắn muốn khóa điểm lớp môn học này không?',
+                                        'Bạn có chắc chắn muốn khoá điểm lớp môn học này không?',
                                     okText: 'Xác nhận',
                                     cancelText: 'Hủy',
                                     onOk: () => onOk(data as PutSubjectClass),
