@@ -365,7 +365,7 @@ export default function TrainingProgramSubjects() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                CTĐT toàn khóa:{' '}
+                CTĐT toàn khoá:{' '}
                 {[
                     initialValue?.code,
                     initialValue?.name,
@@ -798,7 +798,7 @@ TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement)
                     title: 'Danh mục CTĐT khung',
                     href: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                 },
-                { title: 'Chi tiết CTĐT toàn khóa' },
+                { title: 'Chi tiết CTĐT toàn khoá' },
             ]}
         >
             {page}

@@ -54,7 +54,7 @@ const LopBienCheItem: React.FC<LopBienCheItemProps> = ({
             if (children.length === 0) return null
 
             return {
-                title: course.name || `Khóa học ${course.id}`,
+                title: course.name || `Khoá học ${course.id}`,
                 key: `course-${course.id}`,
                 children,
             }

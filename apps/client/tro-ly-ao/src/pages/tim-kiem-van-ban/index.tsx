@@ -68,7 +68,7 @@ export default function Page() {
                 <div className="max-w-6xl mx-auto">
                     <div className="w-full">
                         <Input.Search
-                            placeholder="Nhập từ khóa cần tìm..."
+                            placeholder="Nhập từ khoá cần tìm..."
                             size="large"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
@@ -158,7 +158,7 @@ export default function Page() {
                             <div className="flex justify-center items-center h-64">
                                 <Empty
                                     image={Empty.PRESENTED_IMAGE_SIMPLE}
-                                    description="Nhập từ khóa để tìm kiếm tài liệu"
+                                    description="Nhập từ khoá để tìm kiếm tài liệu"
                                 />
                             </div>
                         )}

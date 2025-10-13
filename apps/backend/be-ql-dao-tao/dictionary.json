@@ -8,7 +8,6 @@
     "GT": ">",
     "LT": "<",
     "IN": "nằm trong",
-
     "SEMESTER_GPA": "Điểm trung bình học kỳ",
     "YEARLY_GPA": "Điểm trung bình năm học",
     "CUMULATIVE_GPA": "Điểm trung bình tích lũy",
@@ -20,8 +19,8 @@
     "SEMESTER_FAILED_CREDITS": "Số tín chỉ không đạt trong học kỳ",
     "YEAR_FAILED_CREDITS": "Tổng số tín chỉ không đạt trong năm học",
     "FAILED_CREDITS_PERCENT": "Tỷ lệ % tín chỉ không đạt",
-    "CUMULATIVE_PASSED_CREDITS": "Tổng số tín chỉ tích lũy từ đầu khóa học",
-    "CUMULATIVE_DEBT_CREDITS": "Tổng số tín chỉ còn nợ tích lũy từ đầu khóa học",
+    "CUMULATIVE_PASSED_CREDITS": "Tổng số tín chỉ tích lũy từ đầu khoá học",
+    "CUMULATIVE_DEBT_CREDITS": "Tổng số tín chỉ còn nợ tích lũy từ đầu khoá học",
     "CUMULATIVE_PROGRESS_PERCENT": "Tỷ lệ % tín chỉ đã tích lũy so với tổng tín chỉ yêu cầu của CTĐT",
     "ACADEMIC_WARNING_LEVEL": "Mức Cảnh báo học tập hiện tại của sinh viên",
     "DISCIPLINARY_WARNING_LEVEL": "Mức Cảnh cáo học đường hiện tại của sinh viên",

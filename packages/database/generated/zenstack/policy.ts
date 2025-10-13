@@ -157,6 +157,66 @@ const policy: PolicyDef = {
             },
 
         },
+        multipleChoiceOption: {
+            modelLevel: {
+                read: { guard: MultipleChoiceOption_read, },
+                create: { guard: MultipleChoiceOption_create, inputChecker: MultipleChoiceOption_create_input, },
+                update: { guard: MultipleChoiceOption_update, },
+                postUpdate: { guard: MultipleChoiceOption_postUpdate, },
+                delete: { guard: MultipleChoiceOption_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        fillInBlankSlot: {
+            modelLevel: {
+                read: { guard: FillInBlankSlot_read, },
+                create: { guard: FillInBlankSlot_create, inputChecker: FillInBlankSlot_create_input, },
+                update: { guard: FillInBlankSlot_update, },
+                postUpdate: { guard: FillInBlankSlot_postUpdate, },
+                delete: { guard: FillInBlankSlot_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        orderingItem: {
+            modelLevel: {
+                read: { guard: OrderingItem_read, },
+                create: { guard: OrderingItem_create, inputChecker: OrderingItem_create_input, },
+                update: { guard: OrderingItem_update, },
+                postUpdate: { guard: OrderingItem_postUpdate, },
+                delete: { guard: OrderingItem_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         answer: {
             modelLevel: {
                 read: { guard: Answer_read, },
@@ -4624,6 +4684,9 @@ const policy: PolicyDef = {
         difficulty: { hasValidation: false },
         knowledgeBlock: { hasValidation: false },
         question: { hasValidation: false },
+        multipleChoiceOption: { hasValidation: false },
+        fillInBlankSlot: { hasValidation: false },
+        orderingItem: { hasValidation: false },
         answer: { hasValidation: false },
         exam: { hasValidation: false },
         testStructureRule: { hasValidation: false },
@@ -5170,6 +5233,201 @@ function Question_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_Question_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function MultipleChoiceOption_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_MultipleChoiceOption_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function MultipleChoiceOption_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_MultipleChoiceOption_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function MultipleChoiceOption_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function MultipleChoiceOption_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_MultipleChoiceOption_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function MultipleChoiceOption_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_MultipleChoiceOption_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function MultipleChoiceOption_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_MultipleChoiceOption_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function FillInBlankSlot_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_FillInBlankSlot_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function FillInBlankSlot_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_FillInBlankSlot_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function FillInBlankSlot_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function FillInBlankSlot_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_FillInBlankSlot_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function FillInBlankSlot_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_FillInBlankSlot_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function FillInBlankSlot_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_FillInBlankSlot_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OrderingItem_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_OrderingItem_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OrderingItem_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OrderingItem_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OrderingItem_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function OrderingItem_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OrderingItem_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OrderingItem_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_OrderingItem_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function OrderingItem_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OrderingItem_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

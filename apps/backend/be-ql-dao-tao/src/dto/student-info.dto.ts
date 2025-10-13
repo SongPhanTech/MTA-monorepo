@@ -69,7 +69,7 @@ export const StudentAcademicWarning = z.object({
     hoTen: z.string().describe('Họ tên sinh viên'),
     maSinhVien: z.string().describe('Mã sinh viên'),
     doiTuong: z.string().describe('Đối tượng'),
-    khoa: z.string().describe('Khóa'),
+    khoa: z.string().describe('Khoá'),
     khoaId: z.string().describe('ID Khoá'),
     chuyenNganh: z.string().describe('Chuyên ngành'),
     chuyenNganhId: z.string().describe('ID Chuyên ngành'),
@@ -98,7 +98,7 @@ export const StudentAcademicAction = z.object({
     hoTen: z.string().describe('Họ tên sinh viên'),
     maSinhVien: z.string().describe('Mã sinh viên'),
     doiTuong: z.string().describe('Đối tượng'),
-    khoa: z.string().describe('Khóa'),
+    khoa: z.string().describe('Khoá'),
     khoaId: z.string().describe('ID Khoá'),
     chuyenNganh: z.string().describe('Chuyên ngành'),
     chuyenNganhId: z.string().describe('ID Chuyên ngành'),
@@ -194,9 +194,9 @@ export const StudentResult = z.object({
     reason: z.string().describe('Lý do'),
 })
 export const CourseStudentResult = z.object({
-    courseId: z.string().describe('ID khóa học'),
-    courseName: z.string().describe('Tên khóa học'),
-    students: z.array(StudentResult).describe('Danh sách sinh viên trong khóa học'),
+    courseId: z.string().describe('ID khoá học'),
+    courseName: z.string().describe('Tên khoá học'),
+    students: z.array(StudentResult).describe('Danh sách sinh viên trong khoá học'),
 })
 export const StudentTemplateData = z.object({
     date: z.string().describe('Ngày'),
@@ -206,25 +206,25 @@ export const StudentTemplateData = z.object({
 })
 
 export const CourseStudentScholarship = z.object({
-    courseId: z.string().describe('ID khóa học'),
-    courseName: z.string().describe('Tên khóa học'),
+    courseId: z.string().describe('ID khoá học'),
+    courseName: z.string().describe('Tên khoá học'),
     students: z
         .array(StudentScholarship)
-        .describe('Danh sách sinh viên đạt học bổng trong khóa học'),
+        .describe('Danh sách sinh viên đạt học bổng trong khoá học'),
 })
 export const CourseStudentAcademicWarning = z.object({
-    courseId: z.string().describe('ID khóa học'),
-    courseName: z.string().describe('Tên khóa học'),
+    courseId: z.string().describe('ID khoá học'),
+    courseName: z.string().describe('Tên khoá học'),
     students: z
         .array(StudentAcademicWarning)
-        .describe('Danh sách sinh viên có cảnh báo học vụ trong khóa học'),
+        .describe('Danh sách sinh viên có cảnh báo học vụ trong khoá học'),
 })
 export const CourseStudentAcademicAction = z.object({
-    courseId: z.string().describe('ID khóa học'),
-    courseName: z.string().describe('Tên khóa học'),
+    courseId: z.string().describe('ID khoá học'),
+    courseName: z.string().describe('Tên khoá học'),
     students: z
         .array(StudentAcademicAction)
-        .describe('Danh sách sinh viên lưu ban, thôi học trong khóa học'),
+        .describe('Danh sách sinh viên lưu ban, thôi học trong khoá học'),
 })
 
 export const StudentRepeatGrade = z.object({

@@ -92,13 +92,13 @@ const PutStudentModal = () => {
         })
     }, [fixedClassData, selectedTrainingCourseId, selectedCurriculumVersionId])
 
-    // Lọc khóa học dựa trên chương trình đào tạo đã chọn
+    // Lọc khoá học dựa trên chương trình đào tạo đã chọn
     const filteredTrainingCourses = useMemo(() => {
         if (!selectedCurriculumVersionId) {
             return trainingCourseData
         }
 
-        // Lấy danh sách khóa học có chứa chương trình đào tạo đã chọn
+        // Lấy danh sách khoá học có chứa chương trình đào tạo đã chọn
         const coursesWithCurriculum = fixedClassData
             .filter((cls) => cls.curriculumVersionId === selectedCurriculumVersionId)
             .map((cls) => cls.trainingCourseId)
@@ -114,7 +114,7 @@ const PutStudentModal = () => {
         if (selectedClass?.trainingCourseId) {
             const newCourse = selectedClass.trainingCourseId
 
-            // Tự động set khóa học tương ứng với lớp
+            // Tự động set khoá học tương ứng với lớp
             form.setFieldValue('trainingCourseId', newCourse)
         }
 
@@ -344,9 +344,9 @@ const PutStudentModal = () => {
                         </FormItem>
                     </Col>
                     <Col span={12}>
-                        <FormItem form={form} name="trainingCourseId" label="Khóa">
+                        <FormItem form={form} name="trainingCourseId" label="Khoá">
                             <Select
-                                placeholder="Chọn khóa"
+                                placeholder="Chọn khoá"
                                 options={filteredTrainingCourses.map((value) => ({
                                     value: value.id,
                                     label: value.name,

@@ -152,7 +152,7 @@ export default function ClassRegisterSession() {
                             <Row gutter={[16, 16]} align="top">
                                 <Col span={8}>
                                     <Select
-                                        placeholder="Chọn khóa"
+                                        placeholder="Chọn khoá"
                                         options={trainingCourseOptions}
                                         style={{ width: '100%' }}
                                         onChange={(val) =>
@@ -231,7 +231,7 @@ export default function ClassRegisterSession() {
                                         .join(' - '),
                             },
                             {
-                                title: 'Khóa học',
+                                title: 'Khoá học',
                                 align: 'center',
                                 width: 150,
                                 render: (_, record) => (

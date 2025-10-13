@@ -259,7 +259,7 @@ function Page() {
 
             {filteredList.length === 0 && (
                 <div className="text-center py-8 text-gray-500">
-                    Không tìm thấy prompt nào với từ khóa "{searchKeyword}"
+                    Không tìm thấy prompt nào với từ khoá "{searchKeyword}"
                 </div>
             )}
         </div>

@@ -38,6 +38,10 @@ enum ConfigKey {
 enum QuestionType {
   ESSAY
   ORAL
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  FILL_IN_BLANK
+  ORDERING
 
   @@schema("khao-thi")
 }
@@ -66,9 +70,6 @@ enum SemesterType {
 /// loại hình thi
 enum ExamType {
   OfflineWritten
-  OnlineWritten
-  OfflineChoices
-  OnlineChoices
   Oral
   Practice
   Project
@@ -79,6 +80,7 @@ enum ExamType {
 
 enum SubjectVersionType {
   Normal
+  Internship
   Research
   Project
 
@@ -544,7 +546,7 @@ model QuestionBank {
   @@schema("khao-thi")
 }
 
-/// Mức độ khó
+/// Mức độ
 model Difficulty {
   id          String     @id() @default(cuid())
   code        String?    @unique()
@@ -581,28 +583,85 @@ model KnowledgeBlock {
 
 /// Câu hỏi
 model Question {
-  id               String             @id() @default(cuid())
-  code             String?            @unique()
-  active           Boolean            @default(true)
-  description      String?            @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now()) @updatedAt()
-  content          String
-  type             QuestionType       @default(ESSAY)
-  point            Float              @default(1)
-  explanation      String?
-  isAutoGraded     Boolean            @default(false)
-  questionBank     QuestionBank       @relation(fields: [questionBankId], references: [id])
-  questionBankId   String
-  knowledgeBlock   KnowledgeBlock?    @relation(fields: [knowledgeBlockId], references: [id])
-  knowledgeBlockId String?
-  difficulty       Difficulty?        @relation(fields: [difficultyId], references: [id])
-  difficultyId     String?
-  sessionQuestions ExamBankQuestion[]
+  id                    String                 @id() @default(cuid())
+  code                  String?                @unique()
+  active                Boolean                @default(true)
+  description           String?                @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @default(now()) @updatedAt()
+  content               String
+  type                  QuestionType           @default(ESSAY)
+  point                 Float                  @default(1)
+  explanation           String?
+  isAutoGraded          Boolean                @default(false)
+  multipleChoiceOptions MultipleChoiceOption[]
+  fillInBlankSlots      FillInBlankSlot[]
+  orderingItems         OrderingItem[]
+  questionBank          QuestionBank           @relation(fields: [questionBankId], references: [id])
+  questionBankId        String
+  knowledgeBlock        KnowledgeBlock?        @relation(fields: [knowledgeBlockId], references: [id])
+  knowledgeBlockId      String?
+  difficulty            Difficulty?            @relation(fields: [difficultyId], references: [id])
+  difficultyId          String?
+  sessionQuestions      ExamBankQuestion[]
   /// Câu trả lời của thí sinh trong các phiên thi
-  answers          Answer[]
+  answers               Answer[]
 
+  @@schema("khao-thi")
+}
+
+/// Lựa chọn cho câu hỏi trắc nghiệm (một hoặc nhiều đáp án)
+model MultipleChoiceOption {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  questionId  String
+  question    Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  content     String
+  isCorrect   Boolean   @default(false)
+  order       Int
+
+  @@schema("khao-thi")
+}
+
+/// Chỗ trống cần điền cho câu hỏi điền khuyết
+model FillInBlankSlot {
+  id            String    @id() @default(cuid())
+  code          String?   @unique()
+  active        Boolean   @default(true)
+  description   String?   @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt()
+  questionId    String
+  question      Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  order         Int
+  correctAnswer String
+
+  @@unique([questionId, order])
+  @@schema("khao-thi")
+}
+
+/// Mục cần sắp xếp cho câu hỏi sắp xếp thứ tự
+model OrderingItem {
+  id           String    @id() @default(cuid())
+  code         String?   @unique()
+  active       Boolean   @default(true)
+  description  String?   @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt()
+  questionId   String
+  question     Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  content      String
+  correctOrder Int
+
+  @@unique([questionId, correctOrder])
   @@schema("khao-thi")
 }
 
@@ -982,11 +1041,11 @@ model TrainingCourse {
   admissionStartDate         DateTime?
   /// Ngày kết thúc
   admissionEndDate           DateTime?
-  /// Mã/số hiệu QĐ tuyển sinh
+  /// Số QĐ tuyển sinh
   admissionDecision          String?
-  /// Mã/số hiệu QĐ công nhận SV
+  /// Số QĐ công nhận SV
   studentRecognitionDecision String?
-  /// Mã/số hiệu quy chế đào tạo
+  /// Số quy chế đào tạo
   regulation                 String?
   trainingLanguage           TrainingLanguage?          @relation(fields: [trainingLanguageId], references: [id])
   trainingLanguageId         String?
@@ -1169,6 +1228,7 @@ model Subject {
   @@schema("ql-dao-tao")
 }
 
+/// Nhóm phiên bản môn học
 model SubjectVersionCategory {
   id              String           @id() @default(cuid())
   code            String?          @unique()
@@ -1196,6 +1256,8 @@ model SubjectVersion {
   codeTkb                  String?
   examType                 ExamType
   type                     SubjectVersionType      @default(Normal)
+  /// 1 đầu điểm
+  onePoint                 Boolean                 @default(false)
   credit                   Int
   week                     Int?
   /// số tiết
@@ -1721,29 +1783,29 @@ model TrainingBlock {
   name               String                             @unique()
   /// ưu tiên sắp xếp
   priority           Int                                @default(0)
+  parent             TrainingBlock?                     @relation("ParentChild", fields: [parentId], references: [id])
+  parentId           String?
+  children           TrainingBlock[]                    @relation("ParentChild")
   curriculumVersions TrainingBlockOnCurriculumVersion[]
 
   @@schema("ql-dao-tao")
 }
 
 model TrainingBlockOnCurriculumVersion {
-  id                      String                             @id() @default(cuid())
-  code                    String?                            @unique()
-  active                  Boolean                            @default(true)
-  description             String?                            @db.Text()
+  id                      String                 @id() @default(cuid())
+  code                    String?                @unique()
+  active                  Boolean                @default(true)
+  description             String?                @db.Text()
   deletedAt               DateTime?
-  createdAt               DateTime                           @default(now())
-  updatedAt               DateTime                           @default(now()) @updatedAt()
-  trainingBlock           TrainingBlock                      @relation(fields: [trainingBlockId], references: [id])
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @default(now()) @updatedAt()
+  trainingBlock           TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
   trainingBlockId         String
-  curriculumVersion       CurriculumVersion                  @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersion       CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
   curriculumVersionId     String
-  parent                  TrainingBlockOnCurriculumVersion?  @relation("ParentChild", fields: [parentId], references: [id])
-  parentId                String?
-  children                TrainingBlockOnCurriculumVersion[] @relation("ParentChild")
   /// ưu tiên sắp xếp
-  priority                Int                                @default(0)
-  electiveCreditsRequired Int                                @default(0)
+  priority                Int                    @default(0)
+  electiveCreditsRequired Int                    @default(0)
   subjects                TrainingBlockSubject[]
 
   @@unique([trainingBlockId, curriculumVersionId])

@@ -124,7 +124,7 @@ export default function StudentDetailPage() {
                                     render: (value) => (value?.sTen ? value?.sTen : ''),
                                 },
                                 {
-                                    title: 'Khóa',
+                                    title: 'Khoá',
                                     dataIndex: 'trainingCourse',
                                     align: 'center',
                                     width: 150,

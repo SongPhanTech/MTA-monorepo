@@ -1,11 +1,10 @@
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
-import FilterSubjectClass from '@components/filter/filter-lop-mon-hoc'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import type { ExamType, SubjectClass } from '@workspace/db'
+import type {SubjectClass, SubjectVersion } from '@workspace/db'
 import {
     useCountSubjectClass,
     useFindManySubjectClass,
@@ -20,7 +19,7 @@ import _ from 'lodash'
 import { CalendarPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 // const { Option } = Select;
 interface FilterProps {
@@ -43,6 +42,7 @@ export default function ClassSubject() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const { options, getExamTypeLabel } = useExamTypeOptions()
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         trainingObjectTypeId: null,
@@ -56,7 +56,6 @@ export default function ClassSubject() {
         fixedClassIds: [],
         examDateRange: undefined, // Khoảng thời gian thi
     })
-    const { getExamTypeLabel } = useExamTypeOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
     const handleNavigate = (id: string) => {
@@ -83,10 +82,10 @@ export default function ClassSubject() {
     //#region Mới
     /* Mới */
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
-
-    const { data: dataTable = [], refetch } = useFindManySubjectClass({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
+    const where:any=useMemo(()=>{
+        
+        return{
+                 ...(filters.searchText && filters.searchText !== ''
                 ? {
                       OR: [
                           {
@@ -139,7 +138,11 @@ export default function ClassSubject() {
             active: true,
             deletedAt: null,
             cancelled: false,
-        },
+        }
+    },[filters, semesterId, trainingObjectTypeId, canReadAll, profileId])
+
+    const { data: dataTable = [], refetch } = useFindManySubjectClass({
+        where,
         include: {
             subject: {
                 include: {
@@ -173,61 +176,7 @@ export default function ClassSubject() {
     )
 
     const { data: count } = useCountSubjectClass({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      OR: [
-                          {
-                              name: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                          {
-                              code: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                      ],
-                  }
-                : {}),
-            ...(semesterId ? { semesterId } : {}),
-            ...(filters.subjectClassId ? { id: filters.subjectClassId } : {}),
-            trainingObjectTypeId,
-            ...(filters.LectureIds.length > 0
-                ? {
-                      OR: filters.LectureIds.map((id) => ({
-                          mainLecturer: { id },
-                      })),
-                  }
-                : {}),
-            ...(filters.BoMonId
-                ? {
-                      subject: {
-                          managementOrganizationId: filters.BoMonId,
-                      },
-                  }
-                : {}),
-            ...(filters.examDateRange
-                ? {
-                      examDate: {
-                          gte: dayjs(filters.examDateRange?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.examDateRange?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(!canReadAll
-                ? {
-                      mainLecturer: {
-                          userProfileId: profileId,
-                      },
-                  } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
-                : {}),
-            active: true,
-            deletedAt: null,
-            cancelled: false,
-        },
+        where
     })
     const handleFilterApply = (newFilters: Partial<FilterProps>) => {
         setFilters((prev) => {
@@ -374,13 +323,6 @@ export default function ClassSubject() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={4} className="flex">
-                                    <FilterSubjectClass
-                                        filters={filters}
-                                        onFilterChange={handleFilterChange}
-                                        onApply={handleFilterApply}
-                                    />
-                                </Col>
                             </Flex>
                         </Col>
 
@@ -417,37 +359,39 @@ export default function ClassSubject() {
                                 dataIndex: 'code',
                                 align: 'center',
                                 width: 150,
-                            },
-                            {
-                                title: 'Tên lớp',
-                                dataIndex: 'name',
-                                width: 150,
+                                type:'input',
                             },
                             {
                                 title: 'Môn học',
-                                dataIndex: 'tenMonHoc',
+                                dataIndex: 'name',
                                 width: 180,
-                                render: (text, record) => record.subject?.name || text,
+                                type:'input',
+                                render: (text, record:{subject?:SubjectVersion}) => record.subject?.name || text,
                             },
                             {
                                 title: 'Số TC',
                                 dataIndex: 'stc',
                                 width: 80,
                                 align: 'center',
-                                render: (text, record) => record.subject?.credit || text,
+                                type:'order',
+                                render: (text, record:{subject?:SubjectVersion}) => record.subject?.credit || text,
                             },
                             {
                                 title: 'Hình thức thi',
-                                dataIndex: ['subject', 'examType'],
-                                width: 150,
+                                dataIndex: 'examType',
                                 align: 'center',
-                                filterSearch: true,
-                                render: (record: ExamType) => getExamTypeLabel(record),
+                                width: 150,
+                                type: 'select',
+                                options: options,
+                                render: (__, record:{subject?:SubjectVersion}) =>{
+                                   return record?.subject?.examType ? getExamTypeLabel(record?.subject?.examType) : ''
+                                }
                             },
                             {
                                 title: 'Ngày bắt đầu',
                                 dataIndex: 'startDate',
                                 width: 150,
+                                type:'date',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
@@ -456,6 +400,7 @@ export default function ClassSubject() {
                                 dataIndex: 'endDate',
                                 width: 150,
                                 align: 'center',
+                                type:'date',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
@@ -464,20 +409,23 @@ export default function ClassSubject() {
                                 dataIndex: 'examDate',
                                 width: 150,
                                 align: 'center',
+                                type:'date',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
-                            {
-                                title: 'Hạn ĐT',
-                                dataIndex: 'ngayDot',
-                                width: 100,
-                                align: 'center',
-                            },
+                            // {
+                            //     title: 'Hạn ĐT',
+                            //     dataIndex: 'ngayDot',
+                            //     width: 100,
+                            //     align: 'center',
+
+                            // },
                             {
                                 title: 'Giảng viên',
                                 width: 180,
                                 align: 'center',
-                                render: (text, record) => {
+                                type:'input',
+                                render: (text, record:any) => {
                                     const mainLecturer = record.mainLecturer
                                         ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
                                         : 'Chưa có giảng viên chính'
@@ -496,7 +444,8 @@ export default function ClassSubject() {
                                 title: 'Giảng viên NĐ',
                                 width: 180,
                                 align: 'center',
-                                render: (text, record) => {
+                                 type:'input',
+                                render: (text, record:any) => {
                                     const mainLecturer = record.mainLecturer
                                         ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
                                         : 'Chưa có giảng viên chính'
@@ -515,7 +464,7 @@ export default function ClassSubject() {
                                 dataIndex: 'danhSachLop',
                                 width: 200,
                                 align: 'center',
-                                render: (text, record) => {
+                                render: (text, record:any) => {
                                     return (
                                         <span>
                                             {record.subject?.managementOrganization?.sTen ||
@@ -535,7 +484,7 @@ export default function ClassSubject() {
                                 dataIndex: 'danhSachLop',
                                 width: 200,
                                 align: 'center',
-                                render: (text, record) => {
+                                render: (text, record:any) => {
                                     return (
                                         <span>
                                             {record.subject?.managementOrganization?.parent?.name ||

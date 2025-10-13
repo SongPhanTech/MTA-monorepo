@@ -507,7 +507,7 @@ const PutTrainingCourseModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa khóa' : 'Thêm mới khóa'}
+            title={id ? 'Chỉnh sửa khoá' : 'Thêm mới khoá'}
             className="w-[1000px]"
             formProps={{
                 onValuesChange(changedValues, values) {

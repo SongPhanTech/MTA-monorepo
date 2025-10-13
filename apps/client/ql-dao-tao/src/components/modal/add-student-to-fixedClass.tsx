@@ -359,7 +359,7 @@ const AddStudentToFixedClassModal = () => {
             onCancel={onClose}
             maskClosable={true}
             title={'Thêm sinh viên vào lớp'}
-            className="w-[80vw]"
+            className="w-[100vw]"
         >
             <Col span={24} className="my-2">
                 <Flex>
@@ -503,7 +503,7 @@ const AddStudentToFixedClassModal = () => {
                         }}
                     />
                 </Col>
-                <Col span={2} className="flex items-center justify-center">
+                <Col span={1} className="flex items-center justify-center">
                     <Flex align="center" justify="center" vertical>
                         <Tooltip title="Chỉnh sửa danh sách SV trong lớp" placement="top">
                             <Button
@@ -525,7 +525,7 @@ const AddStudentToFixedClassModal = () => {
                         </Tooltip>
                     </Flex>
                 </Col>
-                <Col span={11}>
+                <Col span={12}>
                     <Divider orientation="left" orientationMargin={0}>
                         Danh sách sinh viên trong lớp
                     </Divider>

@@ -228,7 +228,7 @@ const ExportTemplateExam = ({
         worksheet.getCell('C9').value = `${firstTrainingCourse?.coef_1 || ''}`
         worksheet.getCell('C9').style = headerSubtitleStyleLeft
 
-        worksheet.getCell('E6').value = 'Khóa: '
+        worksheet.getCell('E6').value = 'Khoá: '
         worksheet.getCell('E6').style = headerSubtitleStyleLeft
 
         worksheet.getCell('F6').value = `${trainingCourseSame || ''}`

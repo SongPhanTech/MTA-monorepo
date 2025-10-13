@@ -211,11 +211,11 @@ model TrainingCourse extends Base {
   admissionStartDate         DateTime?
   /// Ngày kết thúc
   admissionEndDate           DateTime?
-  /// Mã/số hiệu QĐ tuyển sinh
+  /// Số QĐ tuyển sinh
   admissionDecision          String?
-  /// Mã/số hiệu QĐ công nhận SV
+  /// Số QĐ công nhận SV
   studentRecognitionDecision String?
-  /// Mã/số hiệu quy chế đào tạo
+  /// Số quy chế đào tạo
   regulation                 String?
 
   trainingLanguage           TrainingLanguage?          @relation(fields: [trainingLanguageId], references: [id])
@@ -363,7 +363,7 @@ model CurriculumVersion extends Base {
   objectives            String? // II. Mục tiêu
   learningOutcome       String? // III. Chuẩn đầu ra
   inputStandard         String? // IV. Chuẩn đầu vào
-  time                  String? // V. Thời gian toàn khóa
+  time                  String? // V. Thời gian toàn khoá
   structure             String? // VI. Cấu trúc chương trình đào tạo
   matrixLearningOutcome String? // VII. Ma trận chuẩn đầu ra
   summary               String? // VIII. Mô tả tóm tắt nội dung các học phần
@@ -398,9 +398,9 @@ model Subject extends Base {
 // và gấp 1,5 lần số học viên dự thi đối với hình thức thi vấn đáp, thực hành.
 enum ExamType {
   OfflineWritten // thi viết (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
-  OnlineWritten // thi viết trực tuyến (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
-  OfflineChoices // thi trắc nghiệm
-  OnlineChoices // thi trắc nghiệm trực tuyến
+  // OnlineWritten // thi viết trực tuyến (trắc nghiệm hoặc tự luận, hoặc kết hợp trắc nghiệm và tự luận)
+  // OfflineChoices // thi trắc nghiệm
+  // OnlineChoices // thi trắc nghiệm trực tuyến
   Oral // thi vấn đáp
   Practice // thi thực hành
   Project // thi đồ án
@@ -408,6 +408,7 @@ enum ExamType {
   @@schema("ql-dao-tao")
 }
 
+/// Nhóm phiên bản môn học
 model SubjectVersionCategory extends Base {
   name            String
   subjectVersions SubjectVersion[]
@@ -416,8 +417,9 @@ model SubjectVersionCategory extends Base {
 
 enum SubjectVersionType {
   Normal // Môn thường
+  Internship // Thực tập
   Research // Chuyên đề nghiên cứu
-  Project // Luân văn/Đồ án
+  Project // Luận văn/Đồ án
 
   @@schema("ql-dao-tao")
 }
@@ -428,6 +430,8 @@ model SubjectVersion extends Base {
   codeTkb                  String?
   examType                 ExamType
   type                     SubjectVersionType      @default(Normal) // loại môn học
+  /// 1 đầu điểm
+  onePoint                 Boolean                 @default(false)
   credit                   Int // số tín chỉ
   week                     Int? // số tuần
   /// số tiết
@@ -476,7 +480,6 @@ model SubjectVersion extends Base {
 
   // Nhóm môn tương đương
   equivalencyGroups        SubjectInGroup[]
-
 
   knowledgeBlocks          KnowledgeBlock[]
   subjectClass             SubjectClass[]

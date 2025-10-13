@@ -133,7 +133,7 @@ function Page() {
                     <div className="flex flex-col sm:flex-row gap-4">
                         <div className="flex-1">
                             <Search
-                                placeholder="Nhập từ khóa cần tìm..."
+                                placeholder="Nhập từ khoá cần tìm..."
                                 size="large"
                                 value={searchTerm}
                                 onChange={(e) => handleSearch(e.target.value)}

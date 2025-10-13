@@ -191,7 +191,7 @@ const ModalTraCuuVanBang = () => {
                                                         </span>
                                                     </span>
                                                     <span>
-                                                        Niên khóa:{' '}
+                                                        Niên khoá:{' '}
                                                         <span className="font-bold">
                                                             {
                                                                 item?.student?.fixedClass
