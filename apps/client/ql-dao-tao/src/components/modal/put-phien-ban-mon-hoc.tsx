@@ -21,6 +21,7 @@ import DocumentPaths from '@components/commons/documentPaths'
 import Tabs from '@components/commons/tabar'
 import { useExamTypeOptions } from '@hooks/examType'
 import TreeSelect from '@/components/commons/tree-select'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutSubjectVersion = SubjectVersion & {
     documentFiles?: DocumentFile[]
 }
@@ -51,7 +52,7 @@ const PutVersionSubjectModal = () => {
 
     const subjectId = input?.subjectId
     const subjectVersionId = input?.subjectVersionId
-
+    const { id: selectedTrainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: subjectVersion } = useFindUniqueSubjectVersion(
         {
             where: { id: subjectVersionId },
@@ -254,10 +255,11 @@ const PutVersionSubjectModal = () => {
                 active: true,
                 type: SubjectVersionType.Normal,
                 documentFiles: [],
+                trainingObjectTypeId: selectedTrainingObjectTypeId,
             })
             setDocument([])
         }
-    }, [subjectVersion, form])
+    }, [subjectVersion, form, selectedTrainingObjectTypeId])
 
     return (
         <PutFormModal
