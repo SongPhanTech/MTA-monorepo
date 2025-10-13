@@ -326,10 +326,6 @@ export default function TrainingProgramCatalog() {
     }
 
     const handleRowClick = (record: { id?: string }) => {
-        if ((record as CurriculumVersion)?.isLock) {
-            return
-        }
-
         if (
             record?.id &&
             can(
@@ -694,6 +690,9 @@ export default function TrainingProgramCatalog() {
                                                     <CopyPlusIcon
                                                         onClick={(e) => {
                                                             e.stopPropagation()
+                                                            if (isLocked) {
+                                                                return
+                                                            }
                                                             handleCloneCurriculumVersion(
                                                                 record as CurriculumVersion & {
                                                                     trainingBlocks: TrainingBlockOnCurriculumVersion[]
@@ -711,6 +710,9 @@ export default function TrainingProgramCatalog() {
                                                         title="Sửa thông tin chung"
                                                         onClick={(e) => {
                                                             e.stopPropagation()
+                                                            if (isLocked) {
+                                                                return
+                                                            }
                                                             onOpenCurriculumVersion({
                                                                 curriculumId: (
                                                                     record as CurriculumVersion
@@ -723,7 +725,7 @@ export default function TrainingProgramCatalog() {
                                                 )}
                                                 {/* TODO: CẦN THÊM MỘT QUYỀN ĐỂ LOCK/UNLOCK*/}
                                                 <LockPlusIcon
-                                                    isLocked={(record as CurriculumVersion)?.isLock}
+                                                    isLocked={isLocked}
                                                     popConfirm={{
                                                         onConfirm: (e) => {
                                                             handleToggleLock(
@@ -746,6 +748,10 @@ export default function TrainingProgramCatalog() {
                                                     <DeleteIcon
                                                         popConfirm={{
                                                             onConfirm: (e) => {
+                                                                if (isLocked) {
+                                                                    e?.stopPropagation()
+                                                                    return
+                                                                }
                                                                 handleDeleteCurriculumVersion(
                                                                     record?.id
                                                                 )
@@ -753,6 +759,9 @@ export default function TrainingProgramCatalog() {
                                                             },
                                                             onCancel: (e) => {
                                                                 e?.stopPropagation()
+                                                            },
+                                                            okButtonProps: {
+                                                                disabled: isLocked,
                                                             },
                                                         }}
                                                         onClick={(e) => e.stopPropagation()}

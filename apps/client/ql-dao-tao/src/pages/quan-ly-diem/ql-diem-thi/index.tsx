@@ -133,6 +133,26 @@ export default function SubjectClassScore() {
                 return
             }
             let listSqlTransaction: any = []
+                if (subjectClassId) {
+                    listSqlTransaction = [
+                        ...listSqlTransaction,
+                        {
+                            model: 'SubjectClass',
+                            operation: 'update',
+                            data: {
+                                where: {
+                                    id: subjectClassId,
+                                },
+                                data: { 
+                                    isLockScore:dataSubmit?.isLockScore,
+                                    isLockExamScore: dataSubmit?.isLockExamScore,
+                                    scoreSubmitted: dataSubmit?.scoreSubmitted,
+                                    scoreChecked: dataSubmit?.scoreChecked 
+                                },
+                            },
+                        },
+                    ]
+                }
             const itemEnteredExamScore = dataSubmit?.list.find((i) => i?.examScore)
             if (!itemEnteredExamScore && subjectClassId) {
                 listSqlTransaction = [
