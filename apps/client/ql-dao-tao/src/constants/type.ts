@@ -137,6 +137,7 @@ export type FilterProps = {
     role?: CouncilRole[]
     order?: 'asc' | 'desc'
     subjectClassId?: string
+    decisionNo?: string
     classRegisterStatus?: ClassRegisterStatus[]
     isTeaching?: boolean[]
     subjectClassIds?: string[]
