@@ -138,6 +138,8 @@ export type FilterProps = {
     order?: 'asc' | 'desc'
     subjectClassId?: string
     classRegisterStatus?: ClassRegisterStatus[]
+    subjectClassIds?:string[]
+    trainingObjectTypeId?: string
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
