@@ -139,8 +139,10 @@ export type FilterProps = {
     subjectClassId?: string
     classRegisterStatus?: ClassRegisterStatus[]
     isTeaching?: boolean[]
-    subjectClassIds?:string[]
+    subjectClassIds?: string[]
     trainingObjectTypeId?: string
+    trainingFormId?: string[]
+    trainingLevelId?: string[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string
