@@ -3,7 +3,6 @@ import { Col, Flex, Row, Tabs } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
 import RegisterClassManager from './_components/dang-ky-hoc-cho-lop-quan-ly'
-import StudentCourseByPlan from './_components/hoc-vien-co-mon-theo-khgd'
 import RegisterResult from './_components/ket-qua-dang-ky-hoc-lop-quan-ly'
 import FixedClass from './_components/lop-co-mon-theo-khgd'
 
