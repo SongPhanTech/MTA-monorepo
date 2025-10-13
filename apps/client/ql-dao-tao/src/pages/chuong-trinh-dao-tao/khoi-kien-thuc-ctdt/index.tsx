@@ -56,6 +56,7 @@ export default function TrainingBlock() {
             ...(filters.active?.length === 1 ? { active: filters.active[0] } : {}),
         },
         include: {
+            parent: true,
             curriculumVersions: {
                 include: {
                     curriculumVersion: true,

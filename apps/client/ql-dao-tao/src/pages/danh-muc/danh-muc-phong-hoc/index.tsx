@@ -177,7 +177,6 @@ export default function TrainingLocationPage() {
             },
         },
     })
-    console.log(data)
     // const { data = [], refetch } = useFindManyTrainingLocation({
     //     where: {
     //         name: {
