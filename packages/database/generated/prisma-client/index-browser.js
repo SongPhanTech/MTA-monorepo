@@ -756,6 +756,7 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   examDate: 'examDate',
   examType: 'examType',
   examId: 'examId',
+  scoreDeadLineStart: 'scoreDeadLineStart',
   scoreDeadline: 'scoreDeadline',
   examScoreDeadline: 'examScoreDeadline',
   enteredScore: 'enteredScore',

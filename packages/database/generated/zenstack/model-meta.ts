@@ -3944,6 +3944,10 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'exam',
+                }, scoreDeadLineStart: {
+                    name: "scoreDeadLineStart",
+                    type: "DateTime",
+                    isOptional: true,
                 }, scoreDeadline: {
                     name: "scoreDeadline",
                     type: "DateTime",

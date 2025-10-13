@@ -24,6 +24,9 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    multipleChoiceOptions: z.array(z.unknown()).optional(),
+    fillInBlankSlots: z.array(z.unknown()).optional(),
+    orderingItems: z.array(z.unknown()).optional(),
     questionBank: z.record(z.unknown()),
     knowledgeBlock: z.record(z.unknown()).optional(),
     difficulty: z.record(z.unknown()).optional(),
