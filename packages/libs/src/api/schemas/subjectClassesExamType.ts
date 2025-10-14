@@ -15,9 +15,6 @@ export type SubjectClassesExamType =
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SubjectClassesExamType = {
     OfflineWritten: 'OfflineWritten',
-    OnlineWritten: 'OnlineWritten',
-    OfflineChoices: 'OfflineChoices',
-    OnlineChoices: 'OnlineChoices',
     Oral: 'Oral',
     Practice: 'Practice',
     Project: 'Project',
