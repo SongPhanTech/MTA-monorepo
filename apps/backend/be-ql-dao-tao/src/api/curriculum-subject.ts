@@ -10,7 +10,7 @@ const app = new OpenAPIHono({ strict: false })
 const importCurriculumVersion = createRoute({
     operationId: 'import-phien-ban-CTDT-Subject',
     tags: ['Curriculum'],
-    path: '/import-phien-ban-ctdt',
+    path: '/import-phien-ban-ctdt-subject',
     method: 'post',
     request: {
         body: {
@@ -21,7 +21,7 @@ const importCurriculumVersion = createRoute({
                         curriculumVersionId: z.string(),
                         createNewSubjects: z.coerce.boolean().default(false),
                         timeout: z.coerce.number().default(30),
-                    }).openapi('importPhienBanCTĐT'),
+                    }).openapi('importPhienBanCTDTSubject'),
                 },
             },
         },

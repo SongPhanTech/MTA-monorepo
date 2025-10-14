@@ -13,6 +13,7 @@ import type {
 } from '@workspace/db'
 import {
     useCreateCurriculumVersion,
+    useDeleteCurriculumVersion,
     useFindManyDiplomaType,
     useFindManyTrainingLanguage,
     useFindManyTrainingLevel,
@@ -32,7 +33,7 @@ import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Tabs from '@components/commons/tabar'
 import type { SubjectResult } from '@workspace/libs/parseExcel'
 import { parseSheetSubject } from '@workspace/libs/parseExcel'
-import { useImportPhienBanCTDTSubject } from '@workspace/libs/api/training'
+import { importPhienBanCTDTSubject } from '@workspace/libs/api/training'
 
 export type PutCurriculumVersion = CurriculumVersion & {
     documentFiles?: DocumentFile[]
@@ -94,8 +95,7 @@ const PutCurriculumVersion = () => {
 
     const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
     const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
-
-    const { mutateAsync: importPhienBanCTDTSubject } = useImportPhienBanCTDTSubject()
+    const { mutateAsync: deleteCurriculumVersion } = useDeleteCurriculumVersion()
 
     const handleFileSelect = () => {
         const fileInput = window.document.createElement('input')
@@ -234,14 +234,18 @@ const PutCurriculumVersion = () => {
                     importFile
                 ) {
                     // TODO: call api here
-                    await importPhienBanCTDTSubject({
-                        data: {
-                            curriculumVersionId: newCurriculumVersion.id,
-                            trainingObjectTypeId: output.trainingObjectTypeId,
-                            file: importFile,
-                            createNewSubjects: true,
-                        },
+                    const res = await importPhienBanCTDTSubject({
+                        curriculumVersionId: newCurriculumVersion.id,
+                        trainingObjectTypeId: output.trainingObjectTypeId,
+                        file: importFile,
+                        createNewSubjects: true,
                     })
+                    if (res.status !== 200) {
+                        await deleteCurriculumVersion({
+                            where: { id: newCurriculumVersion.id },
+                        })
+                        throw new Error(res.data?.message || 'Lỗi khi nhập dữ liệu từ file')
+                    }
                 }
 
                 message.success('Thêm mới thành công')
@@ -251,8 +255,8 @@ const PutCurriculumVersion = () => {
             })
             onClose()
         } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
+            if (error?.info?.message || error?.message) {
+                message.error(error?.info?.message || error?.message)
                 return
             }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')

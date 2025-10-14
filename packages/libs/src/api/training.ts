@@ -60,9 +60,9 @@ import type {
     ImportPhanCongGiangDay400,
     ImportPhienBanCTDT200,
     ImportPhienBanCTDT400,
+    ImportPhienBanCTDTSubject,
     ImportPhienBanCTDTSubject200,
     ImportPhienBanCTDTSubject400,
-    ImportPhienBanCTDTSubjectBody,
     ImportPhienBanCTĐT,
     ListOfEnrollFixedClassOnSubjectClass,
     ListOfFixedClassBySubjectClassSemester,
@@ -3371,39 +3371,28 @@ export type importPhienBanCTDTSubjectResponse = importPhienBanCTDTSubjectRespons
 }
 
 export const getImportPhienBanCTDTSubjectUrl = () => {
-    return '/api/curriculum-subject/import-phien-ban-ctdt'
+    return '/api/curriculum-subject/import-phien-ban-ctdt-subject'
 }
 
 export const importPhienBanCTDTSubject = async (
-    importPhienBanCTDTSubjectBody: ImportPhienBanCTDTSubjectBody,
+    importPhienBanCTDTSubject: ImportPhienBanCTDTSubject,
     options?: RequestInit
 ): Promise<importPhienBanCTDTSubjectResponse> => {
     const formData = new FormData()
-    formData.append('file', importPhienBanCTDTSubjectBody.file)
+    formData.append('file', importPhienBanCTDTSubject.file)
+    formData.append('trainingObjectTypeId', importPhienBanCTDTSubject.trainingObjectTypeId)
+    formData.append('curriculumVersionId', importPhienBanCTDTSubject.curriculumVersionId)
     if (
-        importPhienBanCTDTSubjectBody.timeout !== undefined &&
-        importPhienBanCTDTSubjectBody.timeout !== null
+        importPhienBanCTDTSubject.createNewSubjects !== undefined &&
+        importPhienBanCTDTSubject.createNewSubjects !== null
     ) {
-        formData.append('timeout', importPhienBanCTDTSubjectBody.timeout.toString())
-    }
-
-    formData.append('file', importPhienBanCTDTSubjectBody.file)
-    formData.append('trainingObjectTypeId', importPhienBanCTDTSubjectBody.trainingObjectTypeId)
-    formData.append('curriculumVersionId', importPhienBanCTDTSubjectBody.curriculumVersionId)
-    if (
-        importPhienBanCTDTSubjectBody.createNewSubjects !== undefined &&
-        importPhienBanCTDTSubjectBody.createNewSubjects !== null
-    ) {
-        formData.append(
-            'createNewSubjects',
-            importPhienBanCTDTSubjectBody.createNewSubjects.toString()
-        )
+        formData.append('createNewSubjects', importPhienBanCTDTSubject.createNewSubjects.toString())
     }
     if (
-        importPhienBanCTDTSubjectBody.timeout !== undefined &&
-        importPhienBanCTDTSubjectBody.timeout !== null
+        importPhienBanCTDTSubject.timeout !== undefined &&
+        importPhienBanCTDTSubject.timeout !== null
     ) {
-        formData.append('timeout', importPhienBanCTDTSubjectBody.timeout.toString())
+        formData.append('timeout', importPhienBanCTDTSubject.timeout.toString())
     }
 
     return customTrainingFetch<importPhienBanCTDTSubjectResponse>(
@@ -3423,14 +3412,14 @@ export const getImportPhienBanCTDTSubjectMutationOptions = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
         TError,
-        { data: ImportPhienBanCTDTSubjectBody },
+        { data: ImportPhienBanCTDTSubject },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
     Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
     TError,
-    { data: ImportPhienBanCTDTSubjectBody },
+    { data: ImportPhienBanCTDTSubject },
     TContext
 > => {
     const mutationKey = ['importPhienBanCTDTSubject']
@@ -3442,7 +3431,7 @@ export const getImportPhienBanCTDTSubjectMutationOptions = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
-        { data: ImportPhienBanCTDTSubjectBody }
+        { data: ImportPhienBanCTDTSubject }
     > = (props) => {
         const { data } = props ?? {}
 
@@ -3455,7 +3444,7 @@ export const getImportPhienBanCTDTSubjectMutationOptions = <
 export type ImportPhienBanCTDTSubjectMutationResult = NonNullable<
     Awaited<ReturnType<typeof importPhienBanCTDTSubject>>
 >
-export type ImportPhienBanCTDTSubjectMutationBody = ImportPhienBanCTDTSubjectBody
+export type ImportPhienBanCTDTSubjectMutationBody = ImportPhienBanCTDTSubject
 export type ImportPhienBanCTDTSubjectMutationError = ImportPhienBanCTDTSubject400
 
 export const useImportPhienBanCTDTSubject = <
@@ -3466,7 +3455,7 @@ export const useImportPhienBanCTDTSubject = <
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
             TError,
-            { data: ImportPhienBanCTDTSubjectBody },
+            { data: ImportPhienBanCTDTSubject },
             TContext
         >
         request?: SecondParameter<typeof customTrainingFetch>
@@ -3475,7 +3464,7 @@ export const useImportPhienBanCTDTSubject = <
 ): UseMutationResult<
     Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
     TError,
-    { data: ImportPhienBanCTDTSubjectBody },
+    { data: ImportPhienBanCTDTSubject },
     TContext
 > => {
     const mutationOptions = getImportPhienBanCTDTSubjectMutationOptions(options)
