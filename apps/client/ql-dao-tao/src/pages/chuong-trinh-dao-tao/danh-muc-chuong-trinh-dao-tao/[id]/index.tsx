@@ -291,6 +291,7 @@ export default function TrainingProgramSubjects() {
     // })
 
     const { onOpen: onOpenTrainingBlockSubject, onClose } = useDisclosure<{
+        curriculumVersionId: string
         trainingBlockOnCurriculumVersionId: string
         trainingBlockSubjectId: string
     }>({
@@ -740,13 +741,14 @@ export default function TrainingProgramSubjects() {
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                                     'SUA'
                                 ),
-                                render: (__, record: any) => {
+                                render: (_, record) => {
                                     if (record.trainingBlockOnCurriculumVersionId) {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
                                                     onClick={(_e) => {
                                                         onOpenTrainingBlockSubject({
+                                                            curriculumVersionId: id,
                                                             trainingBlockOnCurriculumVersionId:
                                                                 record?.trainingBlockOnCurriculumVersionId,
                                                             trainingBlockSubjectId: record?.id,
@@ -777,6 +779,7 @@ export default function TrainingProgramSubjects() {
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         onOpenTrainingBlockSubject({
+                                            curriculumVersionId: id,
                                             trainingBlockOnCurriculumVersionId: id,
                                             trainingBlockSubjectId: '',
                                         })
