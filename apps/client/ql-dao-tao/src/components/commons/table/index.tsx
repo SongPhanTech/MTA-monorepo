@@ -862,7 +862,8 @@ const Table = <T extends Record<string, unknown>>({
                     }
                 },
                 style: { cursor: 'pointer' },
-                className: record.id === selectedRow ? 'bg-blue-100' : '',
+                className:
+                    record.id && selectedRow && record.id === selectedRow ? 'bg-blue-200' : '',
                 ...rest.onRow?.(record),
             })}
         />

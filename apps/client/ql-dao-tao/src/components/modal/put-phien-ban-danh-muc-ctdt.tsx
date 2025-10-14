@@ -1,7 +1,11 @@
+import { CloseCircleOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
+import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Select from '@components/commons/select'
+import Tabs from '@components/commons/tabar'
 import useSpinner from '@hooks/spinner'
 import type {
     CurriculumVersion,
@@ -22,18 +26,16 @@ import {
     useFindUniqueCurriculumVersion,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
-import { Button, Col, Form, Input, InputNumber, message, Radio, Row } from 'antd'
-import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
-import './index.css'
-import DocumentPaths from '@components/commons/documentPaths'
-import { RichTextEditor } from '@components/commons/rich-text-editor'
-import Tabs from '@components/commons/tabar'
+import { importPhienBanCTDTSubject } from '@workspace/libs/api/training'
 import type { SubjectResult } from '@workspace/libs/parseExcel'
 import { parseSheetSubject } from '@workspace/libs/parseExcel'
-import { importPhienBanCTDTSubject } from '@workspace/libs/api/training'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Form, Input, InputNumber, message, Radio, Row } from 'antd'
+import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
+import { useEffect, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import './index.css'
 
 export type PutCurriculumVersion = CurriculumVersion & {
     documentFiles?: DocumentFile[]
@@ -54,7 +56,7 @@ type ModalPreviewUploadInput = {
 const PutCurriculumVersion = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutCurriculumVersion>()
-
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     // Import Excel states
     const [importFileName, setImportFileName] = useState<string>('')
     const [filteredSubjects, setFilteredSubjects] = useState<SubjectResult[]>([])
@@ -75,8 +77,6 @@ const PutCurriculumVersion = () => {
             setFilteredSubjects(previewInput.previewData)
         }
     }, [previewInput?.previewData])
-
-    console.log(importFile)
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -101,28 +101,24 @@ const PutCurriculumVersion = () => {
         const fileInput = window.document.createElement('input')
         fileInput.type = 'file'
         fileInput.accept = '.xlsx,.xls'
-        fileInput.onchange = (e: Event) => {
+        fileInput.onchange = async (e: Event) => {
             const file = (e.target as HTMLInputElement).files?.[0]
             if (!file) return
-
             setImportFileName(file.name)
             setImportFile(file)
-
-            const reader = new FileReader()
-            reader.onload = (e) => {
-                const { subjects, errors } = parseSheetSubject(e.target?.result as ArrayBuffer)
-
-                openPreviewModal({
-                    previewData: subjects,
-                    errorData: errors,
-                })
-            }
-            reader.readAsArrayBuffer(file)
+            const { subjects, errors } = parseSheetSubject(
+                (await file.arrayBuffer()) as ArrayBuffer
+            )
+            openPreviewModal({
+                previewData: subjects,
+                errorData: errors,
+            })
+            // const reader = new FileReader()
+            // reader.onload = async (e) => {}
+            // reader.readAsArrayBuffer(file)
         }
         fileInput.click()
     }
-
-    console.log(importFile)
 
     async function onOk(output?: PutCurriculumVersion) {
         if (!output) return
@@ -301,6 +297,11 @@ const PutCurriculumVersion = () => {
             title={input?.versionId ? 'Sửa CTĐT toàn khoá' : 'Thêm CTĐT toàn khoá'}
             className="w-[60vw]"
             style={{ top: 20 }}
+            formProps={{
+                initialValues: {
+                    trainingObjectTypeId,
+                },
+            }}
         >
             <Tabs
                 className="w-full"
@@ -540,8 +541,30 @@ const PutCurriculumVersion = () => {
                                                     Chọn file Excel
                                                 </Button>
                                                 {importFileName && (
-                                                    <span className="text-sm text-gray-600">
+                                                    <span
+                                                        className="text-sm text-primary cursor-pointer flex items-center gap-1"
+                                                        onClick={async () => {
+                                                            if (!importFile) return
+                                                            const { subjects, errors } =
+                                                                parseSheetSubject(
+                                                                    (await importFile.arrayBuffer()) as ArrayBuffer
+                                                                )
+                                                            openPreviewModal({
+                                                                previewData: subjects,
+                                                                errorData: errors,
+                                                            })
+                                                        }}
+                                                    >
                                                         {importFileName}
+                                                        <CloseCircleOutlined
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                setImportFileName('')
+                                                                setImportFile(null)
+                                                                setFilteredSubjects([])
+                                                            }}
+                                                            className="text-red-500"
+                                                        />
                                                     </span>
                                                 )}
                                             </div>
