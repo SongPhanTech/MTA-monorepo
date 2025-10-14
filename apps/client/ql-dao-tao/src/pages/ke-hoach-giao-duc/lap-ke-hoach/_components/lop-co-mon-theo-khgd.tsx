@@ -171,17 +171,19 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
 
     return (
         <div>
-            <Divider orientation="left" orientationMargin={0}>
-                {[
-                    selectedSubjectClass?.code,
-                    selectedSubjectClass?.name,
-                    selectedSubjectClass?.schedule &&
-                        getScheduleLabel(selectedSubjectClass.schedule),
-                    selectedSubjectClass?.mainLecturer?.userProfile?.fullname,
-                ]
-                    .filter(Boolean)
-                    .join(' - ')}
-            </Divider>
+            {selectedSubjectClass && (
+                <Divider orientation="left" orientationMargin={0}>
+                    {[
+                        selectedSubjectClass?.code,
+                        selectedSubjectClass?.name,
+                        selectedSubjectClass?.schedule &&
+                            getScheduleLabel(selectedSubjectClass.schedule),
+                        selectedSubjectClass?.mainLecturer?.userProfile?.fullname,
+                    ]
+                        .filter(Boolean)
+                        .join(' - ')}
+                </Divider>
+            )}
             <Row gutter={[16, 16]} align="top" justify="space-between">
                 <Col span={24}>
                     <Flex>

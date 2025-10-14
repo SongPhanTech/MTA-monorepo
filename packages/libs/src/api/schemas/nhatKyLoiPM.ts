@@ -70,7 +70,11 @@ export type NhatKyLoiPM = BaseEntity & {
     /** @nullable */
     sExceptionType?: string | null
     /** @nullable */
-    sIPAdress?: string | null
+    sIPAddress?: string | null
+    /** @nullable */
+    sServiceName?: string | null
+    /** @nullable */
+    sAppCode?: string | null
     /** @nullable */
     sRawUserAgent?: string | null
 }
