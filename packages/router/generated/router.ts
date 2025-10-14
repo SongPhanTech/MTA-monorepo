@@ -95,6 +95,7 @@ export default {
     "QUAN_LY_DIEM_QL_DIEM_CONG": "/quan-ly-diem/ql-diem-cong",
     "QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC": "/quan-ly-diem/ql-diem-lop-mon-hoc",
     "QUAN_LY_DIEM_QL_DIEM_THI": "/quan-ly-diem/ql-diem-thi",
+    "QUAN_LY_DIEM_SV_HV_CHUYEN_TRUONG": "/quan-ly-diem/sv-hv-chuyen-truong",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN_ID": "/quan-ly-do-an/danh-muc-do-an/[id]",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN_CAU_HINH_HOI_DONG": "/quan-ly-do-an/danh-muc-do-an/cau-hinh-hoi-dong",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN": "/quan-ly-do-an/danh-muc-do-an",
