@@ -344,6 +344,17 @@ exports.Prisma.PlanTrainingDelayScalarFieldEnum = {
   semesterId: 'semesterId'
 };
 
+exports.Prisma.PlanTrainingDelaySubjectScalarFieldEnum = {
+  id: 'id',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  planTrainingDelayId: 'planTrainingDelayId',
+  subjectVersionId: 'subjectVersionId'
+};
+
 exports.Prisma.PlanTrainingScalarFieldEnum = {
   id: 'id',
   active: 'active',
@@ -353,6 +364,17 @@ exports.Prisma.PlanTrainingScalarFieldEnum = {
   updatedAt: 'updatedAt',
   trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId'
+};
+
+exports.Prisma.PlanTrainingSubjectScalarFieldEnum = {
+  id: 'id',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  planTrainingId: 'planTrainingId',
+  subjectVersionId: 'subjectVersionId'
 };
 
 exports.Prisma.StudentScoreConvertScalarFieldEnum = {
@@ -4071,11 +4093,25 @@ exports.Prisma.PlanTrainingDelayOrderByRelevanceFieldEnum = {
   semesterId: 'semesterId'
 };
 
+exports.Prisma.PlanTrainingDelaySubjectOrderByRelevanceFieldEnum = {
+  id: 'id',
+  description: 'description',
+  planTrainingDelayId: 'planTrainingDelayId',
+  subjectVersionId: 'subjectVersionId'
+};
+
 exports.Prisma.PlanTrainingOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
   trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId'
+};
+
+exports.Prisma.PlanTrainingSubjectOrderByRelevanceFieldEnum = {
+  id: 'id',
+  description: 'description',
+  planTrainingId: 'planTrainingId',
+  subjectVersionId: 'subjectVersionId'
 };
 
 exports.Prisma.StudentScoreConvertOrderByRelevanceFieldEnum = {
@@ -6643,7 +6679,9 @@ exports.Prisma.ModelName = {
   ExamFax: 'ExamFax',
   ExamSession: 'ExamSession',
   PlanTrainingDelay: 'PlanTrainingDelay',
+  PlanTrainingDelaySubject: 'PlanTrainingDelaySubject',
   PlanTraining: 'PlanTraining',
+  PlanTrainingSubject: 'PlanTrainingSubject',
   StudentScoreConvert: 'StudentScoreConvert',
   SubjectScoreConvert: 'SubjectScoreConvert',
   StudentSubjectScore: 'StudentSubjectScore',

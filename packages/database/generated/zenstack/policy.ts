@@ -378,6 +378,26 @@ const policy: PolicyDef = {
             },
 
         },
+        planTrainingDelaySubject: {
+            modelLevel: {
+                read: { guard: PlanTrainingDelaySubject_read, },
+                create: { guard: PlanTrainingDelaySubject_create, inputChecker: PlanTrainingDelaySubject_create_input, },
+                update: { guard: PlanTrainingDelaySubject_update, },
+                postUpdate: { guard: PlanTrainingDelaySubject_postUpdate, },
+                delete: { guard: PlanTrainingDelaySubject_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         planTraining: {
             modelLevel: {
                 read: { guard: PlanTraining_read, },
@@ -385,6 +405,26 @@ const policy: PolicyDef = {
                 update: { guard: PlanTraining_update, },
                 postUpdate: { guard: PlanTraining_postUpdate, },
                 delete: { guard: PlanTraining_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        planTrainingSubject: {
+            modelLevel: {
+                read: { guard: PlanTrainingSubject_read, },
+                create: { guard: PlanTrainingSubject_create, inputChecker: PlanTrainingSubject_create_input, },
+                update: { guard: PlanTrainingSubject_update, },
+                postUpdate: { guard: PlanTrainingSubject_postUpdate, },
+                delete: { guard: PlanTrainingSubject_delete, }
             },
             fieldLevel: {
                 read:
@@ -4776,7 +4816,9 @@ const policy: PolicyDef = {
         examFax: { hasValidation: false },
         examSession: { hasValidation: false },
         planTrainingDelay: { hasValidation: false },
+        planTrainingDelaySubject: { hasValidation: false },
         planTraining: { hasValidation: false },
+        planTrainingSubject: { hasValidation: false },
         studentScoreConvert: { hasValidation: false },
         subjectScoreConvert: { hasValidation: false },
         studentSubjectScore: { hasValidation: true },
@@ -6039,6 +6081,71 @@ function $check_PlanTrainingDelay_delete(input: any, context: QueryContext): any
     return false;
 }
 
+function PlanTrainingDelaySubject_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_PlanTrainingDelaySubject_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PlanTrainingDelaySubject_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PlanTrainingDelaySubject_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PlanTrainingDelaySubject_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function PlanTrainingDelaySubject_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PlanTrainingDelaySubject_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PlanTrainingDelaySubject_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_PlanTrainingDelaySubject_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function PlanTrainingDelaySubject_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PlanTrainingDelaySubject_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
 function PlanTraining_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
@@ -6098,6 +6205,71 @@ function PlanTraining_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_PlanTraining_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PlanTrainingSubject_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_PlanTrainingSubject_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PlanTrainingSubject_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PlanTrainingSubject_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PlanTrainingSubject_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function PlanTrainingSubject_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PlanTrainingSubject_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PlanTrainingSubject_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_PlanTrainingSubject_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function PlanTrainingSubject_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PlanTrainingSubject_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

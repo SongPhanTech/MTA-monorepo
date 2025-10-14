@@ -1,7 +1,9 @@
+import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
 import { type TrainingMajor } from '@workspace/db'
 import { PlanTraining, PlanTrainingDelay } from '@workspace/db/client'
 import {
@@ -82,7 +84,6 @@ export default function MonTheoKeHoachDuKien() {
         },
         {
             enabled: !!semesterId && !!trainingObjectTypeId,
-            refetchOnWindowFocus: false,
         }
     )
 
@@ -109,6 +110,8 @@ export default function MonTheoKeHoachDuKien() {
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
         }, 500),
         []
     )
@@ -122,13 +125,21 @@ export default function MonTheoKeHoachDuKien() {
         where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 
+    const { showSpinner, hideSpinner } = useSpinner()
+
     const onSubmit = async () => {
         try {
             if (!semesterId || !trainingObjectTypeId) return
-
+            showSpinner()
             const delaySubject = data.filter(
                 (subject) => !subjectSelected.includes(subject.subjectVersionId)
             )
+
+            const fixedClasses = data.filter((subject) =>
+                subjectSelected.includes(subject.subjectVersionId)
+            )
+            const fixedClassDelay = delaySubject.flatMap((subject) => subject.fixedClass)
+
             let planTraining = await sqlTransaction([
                 {
                     model: 'PlanTraining',
@@ -185,15 +196,7 @@ export default function MonTheoKeHoachDuKien() {
                 throw new Error('Kế hoạch đào tạo môn chậm tiến độ không tồn tại')
             }
 
-            const subjectPlanTrainingData = subjectSelected.map((subjectVersionId) => ({
-                id: subjectVersionId,
-            }))
-
-            const delaySubjectPlanTrainingData = delaySubject.map((subject) => ({
-                subjectVersionId: subject.id,
-            }))
-
-            await sqlTransaction([
+            const res = await sqlTransaction([
                 {
                     model: 'PlanTraining',
                     operation: 'update',
@@ -201,7 +204,16 @@ export default function MonTheoKeHoachDuKien() {
                         where: { id: planTrainingId },
                         data: {
                             subjects: {
-                                set: subjectPlanTrainingData,
+                                set: subjectSelected.map((subjectVersionId) => ({
+                                    id: subjectVersionId,
+                                })),
+                            },
+                            fixedClasses: {
+                                set: fixedClasses.flatMap((subject) =>
+                                    subject.fixedClass.map((fc) => ({
+                                        id: fc.fixedClassId,
+                                    }))
+                                ),
                             },
                         },
                     },
@@ -213,13 +225,22 @@ export default function MonTheoKeHoachDuKien() {
                         where: { id: planTrainingDelayId },
                         data: {
                             subjects: {
-                                set: delaySubjectPlanTrainingData,
+                                set: delaySubject.map((subject) => ({
+                                    id: subject.id,
+                                })),
+                            },
+                            fixedClasses: {
+                                set: fixedClassDelay.map((fc) => ({
+                                    id: fc.fixedClassId,
+                                })),
                             },
                         },
                     },
                 },
             ])
-
+            if (res.status !== 200) {
+                throw new Error('Lỗi khi lưu kế hoạch đào tạo')
+            }
             message.success('Thêm môn học vào kế hoạch thành công')
             form.resetFields()
             debouncedRefetch()
@@ -227,6 +248,7 @@ export default function MonTheoKeHoachDuKien() {
             message.error('Lưu kế hoạch mở lớp thất bại')
             console.error(error)
         }
+        hideSpinner()
     }
 
     return (
@@ -358,12 +380,8 @@ export default function MonTheoKeHoachDuKien() {
                             >
                                 Xuất kế hoạch môn dự kiến
                             </Button>
-                            <Button
-                                onClick={onSubmit}
-                                disabled={!subjectSelected.length}
-                                type="primary"
-                            >
-                                Thêm môn học vào kế hoạch
+                            <Button onClick={onSubmit} type="primary">
+                                Lưu kế hoạch
                             </Button>
                         </Flex>
                     </Col>
@@ -379,6 +397,7 @@ export default function MonTheoKeHoachDuKien() {
                                 onChange: (selectedRowKeys) => {
                                     form.setFieldValue('subjectSelected', selectedRowKeys)
                                 },
+                                columnWidth: 15,
                             }}
                             onRow={(record) => {
                                 return {
@@ -422,8 +441,10 @@ export default function MonTheoKeHoachDuKien() {
                                     align: 'center',
                                     render: (__, record) => {
                                         return (
-                                            `${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
-                                            ''
+                                            <div className="text-left">
+                                                {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
+                                                    ''}
+                                            </div>
                                         )
                                     },
                                 },

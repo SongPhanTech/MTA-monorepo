@@ -214,6 +214,19 @@ const policy = {
                 update: {},
             },
         },
+        planTrainingDelaySubject: {
+            modelLevel: {
+                read: { guard: PlanTrainingDelaySubject_read, },
+                create: { guard: PlanTrainingDelaySubject_create, inputChecker: PlanTrainingDelaySubject_create_input, },
+                update: { guard: PlanTrainingDelaySubject_update, },
+                postUpdate: { guard: PlanTrainingDelaySubject_postUpdate, },
+                delete: { guard: PlanTrainingDelaySubject_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         planTraining: {
             modelLevel: {
                 read: { guard: PlanTraining_read, },
@@ -221,6 +234,19 @@ const policy = {
                 update: { guard: PlanTraining_update, },
                 postUpdate: { guard: PlanTraining_postUpdate, },
                 delete: { guard: PlanTraining_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        planTrainingSubject: {
+            modelLevel: {
+                read: { guard: PlanTrainingSubject_read, },
+                create: { guard: PlanTrainingSubject_create, inputChecker: PlanTrainingSubject_create_input, },
+                update: { guard: PlanTrainingSubject_update, },
+                postUpdate: { guard: PlanTrainingSubject_postUpdate, },
+                delete: { guard: PlanTrainingSubject_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -3079,7 +3105,9 @@ const policy = {
         examFax: { hasValidation: false },
         examSession: { hasValidation: false },
         planTrainingDelay: { hasValidation: false },
+        planTrainingDelaySubject: { hasValidation: false },
         planTraining: { hasValidation: false },
+        planTrainingSubject: { hasValidation: false },
         studentScoreConvert: { hasValidation: false },
         subjectScoreConvert: { hasValidation: false },
         studentSubjectScore: { hasValidation: true },
@@ -4548,6 +4576,84 @@ function $check_PlanTrainingDelay_delete(input, context) {
     }
     return false;
 }
+function PlanTrainingDelaySubject_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_PlanTrainingDelaySubject_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingDelaySubject_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingDelaySubject_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingDelaySubject_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function PlanTrainingDelaySubject_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingDelaySubject_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingDelaySubject_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_PlanTrainingDelaySubject_postUpdate(input, context) {
+    return true;
+}
+function PlanTrainingDelaySubject_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingDelaySubject_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
 function PlanTraining_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
@@ -4619,6 +4725,84 @@ function PlanTraining_delete(context, db) {
     return { OR: [] };
 }
 function $check_PlanTraining_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingSubject_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_PlanTrainingSubject_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingSubject_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingSubject_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingSubject_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function PlanTrainingSubject_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingSubject_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingSubject_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_PlanTrainingSubject_postUpdate(input, context) {
+    return true;
+}
+function PlanTrainingSubject_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingSubject_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

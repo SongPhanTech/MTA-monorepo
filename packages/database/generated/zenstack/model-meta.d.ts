@@ -2525,15 +2525,137 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
-                fixedClasses: {
+                planTrainingDelaySubjects: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
                     isArray: boolean;
                     backLink: string;
-                    isRelationOwner: boolean;
                 };
-                subjects: {
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
+        };
+        planTrainingDelaySubject: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                planTrainingDelay: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                planTrainingDelayId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                subjectVersion: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                subjectVersionId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                fixedClasses: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -2664,15 +2786,137 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
-                fixedClasses: {
+                planTrainingSubjects: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
                     isArray: boolean;
                     backLink: string;
-                    isRelationOwner: boolean;
                 };
-                subjects: {
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
+        };
+        planTrainingSubject: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                planTraining: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                planTrainingId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                subjectVersion: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                subjectVersionId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                fixedClasses: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -4207,14 +4451,14 @@ declare const metadata: {
                     isArray: boolean;
                     backLink: string;
                 };
-                planTraining: {
+                planTrainingDelay: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
                     isArray: boolean;
                     backLink: string;
                 };
-                planTrainingDelay: {
+                planTraining: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -5364,23 +5608,23 @@ declare const metadata: {
                     backLink: string;
                     isRelationOwner: boolean;
                 };
-                plans: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                    isRelationOwner: boolean;
-                };
-                planDelays: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                    isRelationOwner: boolean;
-                };
                 surveyObjectTypes: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                    isRelationOwner: boolean;
+                };
+                planTrainingSubject: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                    isRelationOwner: boolean;
+                };
+                planTrainingDelaySubject: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -6635,23 +6879,21 @@ declare const metadata: {
                     isArray: boolean;
                     backLink: string;
                 };
-                plans: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                    isRelationOwner: boolean;
-                };
-                planDelays: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                    isRelationOwner: boolean;
-                };
                 subjectScoreConvert: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                planTrainingDelaySubject: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                planTrainingSubject: {
                     name: string;
                     type: string;
                     isDataModel: boolean;

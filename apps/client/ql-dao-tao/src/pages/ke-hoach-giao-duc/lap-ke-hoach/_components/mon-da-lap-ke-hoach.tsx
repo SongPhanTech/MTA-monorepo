@@ -104,6 +104,8 @@ export default function MonDaLapKeHoach() {
                 rowSelection={{
                     selectedRowKeys,
                     onChange: setSelectedRowKeys,
+                    type: 'checkbox',
+                    columnWidth: 15,
                 }}
                 data={planTraining?.subjects ?? []}
                 columns={[
@@ -126,6 +128,11 @@ export default function MonDaLapKeHoach() {
                         dataIndex: 'name',
                         width: 100,
                         align: 'center',
+                        render: (text, record) => (
+                            <div className="text-left">
+                                {text} ({record.credit})
+                            </div>
+                        ),
                     },
                 ]}
                 pagination={{

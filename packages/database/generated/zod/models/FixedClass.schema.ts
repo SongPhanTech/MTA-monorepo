@@ -32,9 +32,9 @@ const relationSchema = z.object({
     curriculumVersion: z.record(z.unknown()).optional(),
     subjectClasses: z.array(z.unknown()).optional(),
     notifications: z.array(z.unknown()).optional(),
-    plans: z.array(z.unknown()).optional(),
-    planDelays: z.array(z.unknown()).optional(),
     surveyObjectTypes: z.array(z.unknown()).optional(),
+    planTrainingSubject: z.array(z.unknown()).optional(),
+    planTrainingDelaySubject: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

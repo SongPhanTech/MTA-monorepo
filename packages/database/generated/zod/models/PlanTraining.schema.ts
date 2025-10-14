@@ -18,8 +18,7 @@ const baseSchema = z.object({
 const relationSchema = z.object({
     trainingObjectType: z.record(z.unknown()),
     semester: z.record(z.unknown()),
-    fixedClasses: z.array(z.unknown()).optional(),
-    subjects: z.array(z.unknown()).optional(),
+    planTrainingSubjects: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
