@@ -16,6 +16,7 @@ interface CitationTooltipProps {
 
 export default function CitationTooltip({ citation }: CitationTooltipProps) {
     const [isHovered, setIsHovered] = useState(false)
+    const [isVisible, setIsVisible] = useState(false)
     const [position, setPosition] = useState({
         top: 0,
         left: 0,
@@ -85,9 +86,11 @@ export default function CitationTooltip({ citation }: CitationTooltipProps) {
             clearTimeout(timeoutRef.current)
         }
         setIsHovered(true)
+        setIsVisible(true)
     }
 
     const handleMouseLeave = () => {
+        setIsVisible(false)
         timeoutRef.current = setTimeout(() => {
             setIsHovered(false)
         }, 150)
@@ -96,15 +99,15 @@ export default function CitationTooltip({ citation }: CitationTooltipProps) {
     const tooltipContent = isHovered ? (
         <div
             ref={tooltipRef}
-            className="fixed z-[9999] bg-white rounded-lg shadow-lg border border-gray-200 w-[400px] max-w-[calc(100vw-48px)] transition-opacity duration-200 ease-in-out"
+            className="fixed z-[9999] rounded-lg shadow-lg border border-gray-200 w-[400px] max-w-[calc(100vw-48px)] transition-opacity duration-150 ease-in-out"
             style={{
                 top: `${position.top}px`,
                 left: `${position.left}px`,
                 transform:
-                    position.placement === 'top'
-                        ? 'translate(-50%, -100%)'
-                        : 'translate(-50%, 0)',
-                opacity: 1,
+                    position.placement === 'top' ? 'translate(-50%, -100%)' : 'translate(-50%, 0)',
+                opacity: isVisible ? 1 : 0,
+                fontFamily: '"Noto Serif", serif',
+                backgroundColor: '#F0F2F7',
             }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -114,10 +117,10 @@ export default function CitationTooltip({ citation }: CitationTooltipProps) {
                 style={{
                     maxHeight: position.maxHeight,
                     scrollbarWidth: 'thin',
-                    scrollbarColor: '#108850 rgba(70, 137, 81, 0.1)',
+                    // scrollbarColor: '#108850 rgba(70, 137, 81, 0.1)',
                 }}
             >
-                <p className="text-base text-gray-800 leading-relaxed whitespace-pre-wrap break-words">
+                <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap break-words">
                     {citation.content}
                 </p>
 
@@ -144,7 +147,9 @@ export default function CitationTooltip({ citation }: CitationTooltipProps) {
                         {document?.topic?.name && (
                             <div className="text-xs text-gray-500 flex items-center gap-1">
                                 <span>Chủ đề:</span>
-                                <span className="font-medium text-gray-700">{document.topic.name}</span>
+                                <span className="font-medium text-gray-700">
+                                    {document.topic.name}
+                                </span>
                             </div>
                         )}
                     </div>
@@ -156,7 +161,7 @@ export default function CitationTooltip({ citation }: CitationTooltipProps) {
     ) : null
 
     return (
-        <>
+        <div>
             <span
                 ref={triggerRef}
                 className="inline-flex items-center justify-center w-5 h-5 ml-0.5 text-xs font-semibold text-[#108850] bg-[#e8f5f0] rounded cursor-pointer hover:bg-[#108850] hover:text-white transition-all border border-[#108850]"
@@ -169,6 +174,6 @@ export default function CitationTooltip({ citation }: CitationTooltipProps) {
             {typeof window !== 'undefined' &&
                 tooltipContent &&
                 createPortal(tooltipContent, window.document.body)}
-        </>
+        </div>
     )
 }
