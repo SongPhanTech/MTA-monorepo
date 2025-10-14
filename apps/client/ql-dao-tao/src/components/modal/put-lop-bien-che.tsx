@@ -30,6 +30,7 @@ import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
 import { buildOrgTree } from '@lib/utils'
 import TreeSelect from '@/components/commons/tree-select'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutFixedClass = FixedClass & {
     trainingObjectTypeId: string | null
     trainingMajorId: string | null
@@ -58,6 +59,9 @@ const PutFixedClassModal = () => {
 
     const trainingObjectTypeForm = Form.useWatch('trainingObjectTypeId', form)
     const curriculumVersionIdForm = Form.useWatch('curriculumVersionId', form)
+
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
     const { data: trainingCourseData = [], refetch: refetchTrainingCourse } =
         useFindManyTrainingCourse({
             where: trainingObjectTypeForm
@@ -99,6 +103,7 @@ const PutFixedClassModal = () => {
                             },
                         },
                     ],
+                    trainingObjectTypeId,
                 },
             },
         },
@@ -117,6 +122,9 @@ const PutFixedClassModal = () => {
                         },
                     },
                     trainingObjectType: true,
+                },
+                where: {
+                    trainingObjectTypeId,
                 },
             },
         },
@@ -393,20 +401,11 @@ const PutFixedClassModal = () => {
             maskClosable={true}
             title={id ? 'Chỉnh sửa lớp quản lý' : 'Thêm mới lớp quản lý'}
             className="w-[45vw]"
-            // formProps={{
-            //     onValuesChange(changedValues, values) {
-            //         if (changedValues.trainingCourseId) {
-            //             form.setFieldValue(
-            //                 'startYear',
-            //                 trainingCourseData
-            //                     .find(
-            //                         (i: TrainingCourse) => i.id === changedValues?.trainingCourseId
-            //                     )
-            //                     ?.semesterStart?.schoolYear?.startDate?.getFullYear?.()
-            //             )
-            //         }
-            //     },
-            // }}
+            formProps={{
+                initialValues: {
+                    trainingObjectTypeId,
+                },
+            }}
         >
             <Col span={12}>
                 <FormItem form={form} name="trainingCourseId" label="Khoá" required>
