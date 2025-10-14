@@ -32,6 +32,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { env } from '@/env'
 import CreateIcon from '../../../../components/icons/create'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
@@ -290,6 +291,7 @@ export default function TrainingProgramSubjects() {
     // })
 
     const { onOpen: onOpenTrainingBlockSubject, onClose } = useDisclosure<{
+        curriculumVersionId: string
         trainingBlockOnCurriculumVersionId: string
         trainingBlockSubjectId: string
     }>({
@@ -386,18 +388,18 @@ export default function TrainingProgramSubjects() {
                                 ) && (
                                     <>
                                         <Button
+                                            href={`${env.NEXT_PUBLIC_BASE_PATH}/templates/Mẫu nhập CTĐT.xlsx`}
+                                            className="text-primary border-primary mr-2"
+                                        >
+                                            <FileDown />
+                                            Tải file mẫu excel
+                                        </Button>
+                                        <Button
                                             onClick={() => setImportModalVisible(true)}
                                             className="text-primary border-primary mr-2"
                                         >
                                             <FileUp />
                                             Nhập dữ liệu bằng excel
-                                        </Button>
-                                        <Button
-                                            onClick={() => onOpenTrainingBlock()}
-                                            className="text-primary border-primary mr-2"
-                                        >
-                                            <FileDown />
-                                            Tải file mẫu excel
                                         </Button>
 
                                         <ImportCurriculumVersionModal
@@ -739,13 +741,14 @@ export default function TrainingProgramSubjects() {
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                                     'SUA'
                                 ),
-                                render: (__, record: any) => {
+                                render: (_, record) => {
                                     if (record.trainingBlockOnCurriculumVersionId) {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
                                                     onClick={(_e) => {
                                                         onOpenTrainingBlockSubject({
+                                                            curriculumVersionId: id,
                                                             trainingBlockOnCurriculumVersionId:
                                                                 record?.trainingBlockOnCurriculumVersionId,
                                                             trainingBlockSubjectId: record?.id,
@@ -776,6 +779,7 @@ export default function TrainingProgramSubjects() {
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         onOpenTrainingBlockSubject({
+                                            curriculumVersionId: id,
                                             trainingBlockOnCurriculumVersionId: id,
                                             trainingBlockSubjectId: '',
                                         })
