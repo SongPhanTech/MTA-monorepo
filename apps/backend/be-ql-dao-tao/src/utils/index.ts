@@ -297,7 +297,11 @@ type SubjectData = {
     numberOfExam?: number
 }
 
-export const buildSubjectMapOrThrow = async (prisma: PrismaClient, subjects: SubjectData[]) => {
+export const buildSubjectMapOrThrow = async (
+    prisma: PrismaClient,
+    subjects: SubjectData[],
+    createNewSubject = false
+) => {
     const subjectSet = new Set<string>(subjects.map((s) => JSON.stringify(subjects)))
 
     const uniqueTuples = Array.from(subjectSet).map((s) => JSON.parse(s) as SubjectData)
@@ -325,12 +329,12 @@ export const buildSubjectMapOrThrow = async (prisma: PrismaClient, subjects: Sub
         ({ name }) => !existing.some((version) => version.name === name)
     )
 
-    const orgMap = await buildOrgCodeMapOrThrow(
-        prisma,
-        subjects.map((s) => s.organizationCode || null)
-    )
+    if (missing.length && createNewSubject) {
+        const orgMap = await buildOrgCodeMapOrThrow(
+            prisma,
+            subjects.map((s) => s.organizationCode || null)
+        )
 
-    if (missing.length) {
         for (const subject of missing) {
             const managementOrganizationId = orgMap.get(subject.name) || null
 
@@ -357,7 +361,7 @@ export const buildSubjectMapOrThrow = async (prisma: PrismaClient, subjects: Sub
                 select: { id: true, name: true },
             })
         }
-
+    } else if (missing.length && !createNewSubject) {
         throw new HTTPException(400, {
             message: `Phiên bản môn học không tồn tại: ${missing
                 .map(
