@@ -3,7 +3,7 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { TrainingBlock, TrainingBlockOnCurriculumVersion } from '@workspace/db'
 import { useFindManyTrainingBlock, useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
-import { Col, Form, message, Row, Select,TreeSelect } from 'antd'
+import { Col, Form, message, Row, TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
@@ -56,7 +56,6 @@ const PutTrainingBlockOnCurriculumVersion = () => {
     )
 
     const { data: trainingBlockData = [] } = useFindManyTrainingBlock()
-    console.log('trainingBlockData', trainingBlockData)
 
     useEffect(() => {
         if (initialValue) {
@@ -70,7 +69,7 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             setItems(initialItems)
 
             form.setFieldsValue({
-                trainingBlockIds: initialItems.map(item => item.value),
+                trainingBlockIds: initialItems.map((item) => item.value),
             })
         }
     }, [initialValue, form.setFieldsValue])
@@ -229,13 +228,14 @@ const PutTrainingBlockOnCurriculumVersion = () => {
         )
     }
 
-    const hanldeOnchange = (value: ItemProps[]) => {
+    const handleOnChange = (value: string[], label: React.ReactNode[]) => {
         if (value?.length) {
             setItems(
-                value.map((i: ItemProps) => {
+                value.map((i, idx) => {
                     return {
-                        value: i?.value,
-                        label: i?.label,
+                        value: i,
+                        label: label?.[idx]?.toString() || '',
+                        isParent: !trainingBlockData.find((tb) => tb.id === i)?.parentId,
                     }
                 })
             )
@@ -278,14 +278,14 @@ const PutTrainingBlockOnCurriculumVersion = () => {
             })
             // Lọc bỏ các children rỗng để giao diện đẹp hơn
             const cleanEmptyChildren = (nodes: TreeNode[]) => {
-                nodes.forEach(node => {
+                nodes.forEach((node) => {
                     if (node.children && node.children.length > 0) {
-                        cleanEmptyChildren(node.children);
+                        cleanEmptyChildren(node.children)
                     } else {
-                        delete node.children;
+                        delete node.children
                     }
-                });
-                return nodes;
+                })
+                return nodes
             }
 
             return cleanEmptyChildren(roots)
@@ -304,16 +304,17 @@ const PutTrainingBlockOnCurriculumVersion = () => {
         >
             <Col span={24}>
                 <FormItem form={form} name="trainingBlockIds" label="Khối kiến thức" required>
-                <TreeSelect
+                    <TreeSelect
                         treeData={treeData}
                         multiple
                         allowClear
                         treeCheckable={true} // Cho phép checkbox để chọn
-                        treeCheckStrictly 
+                        // treeCheckStrictly
+                        showCheckedStrategy="SHOW_ALL"
                         placeholder="Chọn khối kiến thức"
                         maxTagCount={'responsive'}
                         treeDefaultExpandAll // Mặc định mở rộng tất cả các node
-                        onChange={hanldeOnchange}
+                        onChange={handleOnChange}
                         style={{ width: '100%' }}
                     />
                 </FormItem>
@@ -326,14 +327,16 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                     <Col span={24}>
                         <DndProvider backend={HTML5Backend}>
                             <div className=" mt-6">
-                                {items.map((item: Item, index: number) => (
-                                    <DraggableItem
-                                        key={item.value}
-                                        item={item}
-                                        index={index}
-                                        moveItem={moveItem}
-                                    />
-                                ))}
+                                {items
+                                    .filter((e) => !!e.isParent)
+                                    .map((item: Item, index: number) => (
+                                        <DraggableItem
+                                            key={item.value}
+                                            item={item}
+                                            index={index}
+                                            moveItem={moveItem}
+                                        />
+                                    ))}
                             </div>
                         </DndProvider>
                     </Col>

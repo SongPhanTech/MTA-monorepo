@@ -195,6 +195,8 @@ export function getScoreStatistics(
 export type ItemProps = {
     value: string
     label: string
+    title?: string
+    isParent?: boolean
 }
 export function diffArrays<T, K extends keyof T>(a: T[], b: T[], key: K) {
     const onlyInA = a.filter((itemA) => !b.some((itemB) => itemA[key] === itemB[key]))
