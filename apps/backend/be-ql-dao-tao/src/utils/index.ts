@@ -336,7 +336,7 @@ export const buildSubjectMapOrThrow = async (
 
         const newSubjects = []
         for (const subject of missing) {
-            const managementOrganizationId = orgMap.get(subject.name) || null
+            const managementOrganizationId = orgMap.get(subject.organizationCode || null)
 
             const newSubject = await prisma.subjectVersion.create({
                 data: {
@@ -344,6 +344,16 @@ export const buildSubjectMapOrThrow = async (
                     name: subject.name,
                     examType: subject.examType,
                     credit: subject.credit,
+                    type: subject.type,
+                    onePoint: subject.onePoint,
+                    schedulePeriod: subject.schedulePeriod,
+                    numberOfTheory: subject.numberOfTheory,
+                    numberOfPractical: subject.numberOfPractical,
+                    numberOfSelfStudy: subject.numberOfSelfStudy,
+                    numberOfPractice: subject.numberOfPractice,
+                    numberOfReview: subject.numberOfReview,
+                    numberOfExam: subject.numberOfExam,
+                    code: subject.code,
                     ...(managementOrganizationId
                         ? {
                               managementOrganization: {

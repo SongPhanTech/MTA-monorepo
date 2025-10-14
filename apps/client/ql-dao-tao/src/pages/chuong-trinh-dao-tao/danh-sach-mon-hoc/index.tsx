@@ -19,6 +19,7 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip, Typography } from 'antd'
 import _ from 'lodash'
 import { BookPlus, Search, Upload } from 'lucide-react'
@@ -26,8 +27,6 @@ import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
-import ImportSubjectModal from '@components/modal/import-excel-subject'
 export default function SubjectList() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -676,13 +675,6 @@ export default function SubjectList() {
                     />
                 </Col>
             </Row>
-            <ImportSubjectModal
-                visible={showImportModal}
-                onCancel={() => {
-                    setShowImportModal(false)
-                    refetch()
-                }}
-            />
         </div>
     )
 }

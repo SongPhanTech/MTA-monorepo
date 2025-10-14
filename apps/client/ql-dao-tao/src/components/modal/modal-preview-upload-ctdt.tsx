@@ -1,5 +1,5 @@
-import type { ParsedSubject } from '@workspace/libs/parseExcel'
 import { useFindManySubject, useFindManySubjectVersion } from '@workspace/db/hooks'
+import type { SubjectResult } from '@workspace/libs/parseExcel'
 import { Button, Collapse, Modal, Table, Tag } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -7,7 +7,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 const { Panel } = Collapse
 
 type ModalPreviewUploadInput = {
-    previewData: ParsedSubject[]
+    previewData: SubjectResult[]
     errorData: any[]
 }
 
@@ -35,7 +35,7 @@ const ModalPreviewUpload = () => {
         )
         const existingSubjectNames = new Set(existingSubjects.map((s) => s.name?.toLowerCase()))
 
-        const filtered: Array<ParsedSubject & { status: 'new' | 'new-version' | 'duplicate' }> = []
+        const filtered: Array<SubjectResult & { status: 'new' | 'new-version' | 'duplicate' }> = []
         const duplicates: any[] = []
 
         for (const subject of rawPreviewData) {
@@ -325,7 +325,7 @@ const ModalPreviewUpload = () => {
                     showTotal: (total) => `Tổng ${total} môn học`,
                     pageSizeOptions: ['10', '20', '50', '100'],
                 }}
-                rowKey={(record: ParsedSubject, index?: number) => record.code || `row-${index}`}
+                rowKey={(record: SubjectResult, index?: number) => record.code || `row-${index}`}
                 scroll={{ x: 3000, y: 500 }}
                 size="small"
             />
