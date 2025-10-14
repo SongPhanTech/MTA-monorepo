@@ -340,8 +340,7 @@ exports.Prisma.PlanTrainingDelayScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  trainingObjectTypeId: 'trainingObjectTypeId',
-  semesterId: 'semesterId'
+  trainingObjectTypeId: 'trainingObjectTypeId'
 };
 
 exports.Prisma.PlanTrainingDelaySubjectScalarFieldEnum = {
@@ -4127,8 +4126,7 @@ exports.Prisma.ExamSessionOrderByRelevanceFieldEnum = {
 exports.Prisma.PlanTrainingDelayOrderByRelevanceFieldEnum = {
   id: 'id',
   description: 'description',
-  trainingObjectTypeId: 'trainingObjectTypeId',
-  semesterId: 'semesterId'
+  trainingObjectTypeId: 'trainingObjectTypeId'
 };
 
 exports.Prisma.PlanTrainingDelaySubjectOrderByRelevanceFieldEnum = {

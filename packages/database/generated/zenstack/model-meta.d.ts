@@ -2502,29 +2502,6 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
-                semester: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                semesterId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
                 planTrainingDelaySubjects: {
                     name: string;
                     type: string;
@@ -2669,8 +2646,12 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
+                planTrainingDelayId_subjectVersionId: {
+                    name: string;
+                    fields: string[];
+                };
             };
-            attributes: {
+            attributes: ({
                 name: string;
                 args: ({
                     name: string;
@@ -2679,7 +2660,13 @@ declare const metadata: {
                     name: string;
                     value?: undefined;
                 })[];
-            }[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
         };
         planTraining: {
             name: string;
@@ -4692,13 +4679,6 @@ declare const metadata: {
                     backLink: string;
                 };
                 classRegisterSession: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                planTrainingDelay: {
                     name: string;
                     type: string;
                     isDataModel: boolean;

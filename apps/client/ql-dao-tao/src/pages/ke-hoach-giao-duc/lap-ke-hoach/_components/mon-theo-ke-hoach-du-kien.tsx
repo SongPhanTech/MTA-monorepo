@@ -135,10 +135,9 @@ export default function MonTheoKeHoachDuKien() {
                 (subject) => !subjectSelected.includes(subject.subjectVersionId)
             )
 
-            const fixedClasses = data.filter((subject) =>
+            const subject = data.filter((subject) =>
                 subjectSelected.includes(subject.subjectVersionId)
             )
-            const fixedClassDelay = delaySubject.flatMap((subject) => subject.fixedClass)
 
             let planTraining = await sqlTransaction([
                 {
@@ -154,7 +153,7 @@ export default function MonTheoKeHoachDuKien() {
                     model: 'PlanTrainingDelay',
                     operation: 'findFirst',
                     data: {
-                        where: { semesterId, trainingObjectTypeId },
+                        where: { trainingObjectTypeId },
                     },
                 },
             ])
@@ -177,7 +176,7 @@ export default function MonTheoKeHoachDuKien() {
                         model: 'PlanTrainingDelay',
                         operation: 'create',
                         data: {
-                            data: { semesterId, trainingObjectTypeId },
+                            data: { trainingObjectTypeId },
                         },
                     },
                 ])
@@ -196,6 +195,31 @@ export default function MonTheoKeHoachDuKien() {
                 throw new Error('Kế hoạch đào tạo môn chậm tiến độ không tồn tại')
             }
 
+            // new PrismaClient().planTrainingDelay.update({
+            //     where: { id: planTrainingDelayId },
+            //     data: {
+            //         planTrainingDelaySubjects: {
+            //             upsert: delaySubject.map((subject) => ({
+            //                 where: {
+            //                     planTrainingDelayId_subjectVersionId: {
+            //                         planTrainingDelayId,
+            //                         subjectVersionId: subject.subjectVersionId,
+            //                     },
+            //                 },
+            //                 create: {
+            //                     subjectVersionId: subject.subjectVersionId,
+            //                     fixedClasses: {
+            //                         connect: subject.fixedClass.map((fc) => ({
+            //                             id: fc.fixedClassId,
+            //                         })),
+            //                     },
+            //                 },
+            //                 update: {},
+            //             })),
+            //         },
+            //     },
+            // })
+
             const res = await sqlTransaction([
                 {
                     model: 'PlanTraining',
@@ -203,17 +227,8 @@ export default function MonTheoKeHoachDuKien() {
                     data: {
                         where: { id: planTrainingId },
                         data: {
-                            subjects: {
-                                set: subjectSelected.map((subjectVersionId) => ({
-                                    id: subjectVersionId,
-                                })),
-                            },
-                            fixedClasses: {
-                                set: fixedClasses.flatMap((subject) =>
-                                    subject.fixedClass.map((fc) => ({
-                                        id: fc.fixedClassId,
-                                    }))
-                                ),
+                            planTrainingSubjects: {
+                                deleteMany: {},
                             },
                         },
                     },
@@ -224,14 +239,54 @@ export default function MonTheoKeHoachDuKien() {
                     data: {
                         where: { id: planTrainingDelayId },
                         data: {
-                            subjects: {
-                                set: delaySubject.map((subject) => ({
-                                    id: subject.id,
+                            planTrainingDelaySubjects: {
+                                deleteMany: subjectSelected.map((id) => ({ subjectVersionId: id })),
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'PlanTraining',
+                    operation: 'update',
+                    data: {
+                        where: { id: planTrainingId },
+                        data: {
+                            planTrainingSubjects: {
+                                create: subject.map((subject) => ({
+                                    subjectVersionId: subject.subjectVersionId,
+                                    fixedClasses: {
+                                        connect: subject.fixedClass.map((fc) => ({
+                                            id: fc.fixedClassId,
+                                        })),
+                                    },
                                 })),
                             },
-                            fixedClasses: {
-                                set: fixedClassDelay.map((fc) => ({
-                                    id: fc.fixedClassId,
+                        },
+                    },
+                },
+                {
+                    model: 'PlanTrainingDelay',
+                    operation: 'update',
+                    data: {
+                        where: { id: planTrainingDelayId },
+                        data: {
+                            planTrainingDelaySubjects: {
+                                upsert: delaySubject.map((subject) => ({
+                                    where: {
+                                        planTrainingDelayId_subjectVersionId: {
+                                            planTrainingDelayId,
+                                            subjectVersionId: subject.subjectVersionId,
+                                        },
+                                    },
+                                    create: {
+                                        subjectVersionId: subject.subjectVersionId,
+                                        fixedClasses: {
+                                            connect: subject.fixedClass.map((fc) => ({
+                                                id: fc.fixedClassId,
+                                            })),
+                                        },
+                                    },
+                                    update: {},
                                 })),
                             },
                         },
@@ -245,7 +300,7 @@ export default function MonTheoKeHoachDuKien() {
             form.resetFields()
             debouncedRefetch()
         } catch (error) {
-            message.error('Lưu kế hoạch mở lớp thất bại')
+            message.error('Lưu kế hoạch môn thất bại')
             console.error(error)
         }
         hideSpinner()
@@ -470,7 +525,6 @@ export default function MonTheoKeHoachDuKien() {
                                         )
                                     },
                                 },
-
                                 {
                                     title: 'CTĐT',
                                     dataIndex: 'curriculumVersion',

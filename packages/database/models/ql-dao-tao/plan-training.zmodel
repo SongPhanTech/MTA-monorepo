@@ -23,8 +23,6 @@ import "../khao-thi/survey"
 model PlanTrainingDelay extends BaseNoCode {
   trainingObjectType        TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId      String
-  semester                  Semester                   @relation(fields: [semesterId], references: [id])
-  semesterId                String
 
   planTrainingDelaySubjects PlanTrainingDelaySubject[] // Môn học bị trì hoãn
 
@@ -37,7 +35,8 @@ model PlanTrainingDelaySubject extends BaseNoCode {
 
   subjectVersion      SubjectVersion    @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId    String
-  fixedClasses        FixedClass[] // Lớp niên chế  
+  fixedClasses        FixedClass[] // Lớp niên chế
+  @@unique([planTrainingDelayId, subjectVersionId])
   @@schema("ql-dao-tao")
 }
 
@@ -290,8 +289,6 @@ model Semester extends Base {
 
   @@unique([schoolYearId, semesterType]) // mỗi năm học chỉ có một kỳ học chính (kỳ 1 hoặc kỳ 2)
   @@schema("ql-dao-tao")
-
-  planTrainingDelay       PlanTrainingDelay[]
 
   planTraining            PlanTraining[]
 }
