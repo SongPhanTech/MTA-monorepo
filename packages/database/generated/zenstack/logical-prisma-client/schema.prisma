@@ -57,6 +57,14 @@ enum ExamStatus {
   @@schema("khao-thi")
 }
 
+enum ScoreConvertStatus {
+  PENDING
+  APPROVED
+  REJECTED
+
+  @@schema("ql-dao-tao")
+}
+
 enum SemesterType {
   FIRST
   FIRST_SUPPLEMENTARY
@@ -906,6 +914,46 @@ model PlanTraining {
   @@schema("ql-dao-tao")
 }
 
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model StudentScoreConvert {
+  id                  String                @id() @default(cuid())
+  code                String?               @unique()
+  active              Boolean               @default(true)
+  description         String?               @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @default(now()) @updatedAt()
+  student             Student               @relation(fields: [studentId], references: [id])
+  studentId           String
+  documentFiles       DocumentFile[]
+  subjectScoreConvert SubjectScoreConvert[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model SubjectScoreConvert {
+  id                    String              @id() @default(cuid())
+  code                  String?             @unique()
+  active                Boolean             @default(true)
+  description           String?             @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @default(now()) @updatedAt()
+  studentScoreConvert   StudentScoreConvert @relation(fields: [studentScoreConvertId], references: [id])
+  studentScoreConvertId String
+  subjectVersion        SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId      String
+  status                ScoreConvertStatus  @default(PENDING)
+  score                 Float
+
+  @@schema("ql-dao-tao")
+}
+
 /// Điểm môn học SV - lớp môn học
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
@@ -1451,6 +1499,7 @@ model SubjectVersion {
   questionBanks            QuestionBank[]
   plans                    PlanTraining[]
   planDelays               PlanTrainingDelay[]
+  subjectScoreConvert      SubjectScoreConvert[]
 
   @@schema("ql-dao-tao")
 }
@@ -2182,6 +2231,7 @@ model Student {
   thesisRegistrations            StudentThesisRegistration[]
   examSession                    ExamSession[]
   diplomaVerificationApplication DiplomaVerificationApplication[]
+  studentScoreConvert            StudentScoreConvert[]
   classRegisterLogs              ClassRegisterLogs[]
   notes                          Note[]
   noteFolders                    NoteFolder[]
@@ -4606,6 +4656,8 @@ model DocumentFile {
   diplomaVerificationBackId  String?                         @unique()
   trainingField              TrainingField?                  @relation(fields: [trainingFieldId], references: [id])
   trainingFieldId            String?
+  studentScoreConvert        StudentScoreConvert?            @relation(fields: [studentScoreConvertId], references: [id])
+  studentScoreConvertId      String?
   note                       Note?                           @relation(fields: [noteId], references: [id])
   noteId                     String?
 

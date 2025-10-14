@@ -1441,6 +1441,154 @@ const metadata = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
+        studentScoreConvert: {
+            name: 'StudentScoreConvert', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentScoreConvert',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, documentFiles: {
+                    name: "documentFiles",
+                    type: "DocumentFile",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'studentScoreConvert',
+                }, subjectScoreConvert: {
+                    name: "subjectScoreConvert",
+                    type: "SubjectScoreConvert",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'studentScoreConvert',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        subjectScoreConvert: {
+            name: 'SubjectScoreConvert', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, studentScoreConvert: {
+                    name: "studentScoreConvert",
+                    type: "StudentScoreConvert",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'subjectScoreConvert',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentScoreConvertId" },
+                }, studentScoreConvertId: {
+                    name: "studentScoreConvertId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'studentScoreConvert',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'subjectScoreConvert',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                }, status: {
+                    name: "status",
+                    type: "ScoreConvertStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, score: {
+                    name: "score",
+                    type: "Float",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
         studentSubjectScore: {
             name: 'StudentSubjectScore', fields: {
                 id: {
@@ -3532,6 +3680,12 @@ const metadata = {
                     isArray: true,
                     backLink: 'subjects',
                     isRelationOwner: true,
+                }, subjectScoreConvert: {
+                    name: "subjectScoreConvert",
+                    type: "SubjectScoreConvert",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectVersion',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -6378,6 +6532,12 @@ const metadata = {
                 }, diplomaVerificationApplication: {
                     name: "diplomaVerificationApplication",
                     type: "DiplomaVerificationApplication",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
+                }, studentScoreConvert: {
+                    name: "studentScoreConvert",
+                    type: "StudentScoreConvert",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'student',
@@ -15967,6 +16127,21 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'trainingField',
+                }, studentScoreConvert: {
+                    name: "studentScoreConvert",
+                    type: "StudentScoreConvert",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'documentFiles',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentScoreConvertId" },
+                }, studentScoreConvertId: {
+                    name: "studentScoreConvertId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'studentScoreConvert',
                 }, note: {
                     name: "note",
                     type: "Note",

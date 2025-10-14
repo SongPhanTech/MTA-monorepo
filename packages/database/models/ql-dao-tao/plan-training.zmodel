@@ -45,6 +45,42 @@ model PlanTraining extends BaseNoCode {
 }
 
 
+
+model StudentScoreConvert extends Base {
+  student             Student               @relation(fields: [studentId], references: [id])
+  studentId           String
+
+  documentFiles       DocumentFile[]
+  subjectScoreConvert SubjectScoreConvert[]
+
+  @@schema("ql-dao-tao")
+}
+
+enum ScoreConvertStatus {
+  PENDING
+  APPROVED
+  REJECTED
+
+  @@schema("ql-dao-tao")
+}
+
+model SubjectScoreConvert extends Base {
+  studentScoreConvert   StudentScoreConvert @relation(fields: [studentScoreConvertId], references: [id])
+  studentScoreConvertId String
+
+  subjectVersion        SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId      String
+
+  // APPROVED => create(Many) StudentSubjectScore from SubjectScoreConvert => StudentSubjectScore.manualScore = SubjectScoreConvert.score
+  // khi APPROVED thì không cho sửa
+  status                ScoreConvertStatus  @default(PENDING)
+
+  score                 Float
+
+  @@schema("ql-dao-tao")
+}
+
+
 /// Điểm môn học SV - lớp môn học
 // Phòng đào tạo có thể trực tiếp tạo Điểm môn học SV - khi HV/SV chuyển trường, đổi điểm chứng chỉ
 // Lấy bản ghi có finalScore cao nhất làm kết quả cuối cùng
@@ -518,6 +554,7 @@ model SubjectVersion extends Base {
   questionBanks            QuestionBank[]
   plans                    PlanTraining[]
   planDelays               PlanTrainingDelay[] // Những môn học bị trì hoãn
+  subjectScoreConvert      SubjectScoreConvert[]
 
   @@schema("ql-dao-tao")
 }

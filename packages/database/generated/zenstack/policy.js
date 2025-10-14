@@ -227,6 +227,32 @@ const policy = {
                 update: {},
             },
         },
+        studentScoreConvert: {
+            modelLevel: {
+                read: { guard: StudentScoreConvert_read, },
+                create: { guard: StudentScoreConvert_create, inputChecker: StudentScoreConvert_create_input, },
+                update: { guard: StudentScoreConvert_update, },
+                postUpdate: { guard: StudentScoreConvert_postUpdate, },
+                delete: { guard: StudentScoreConvert_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        subjectScoreConvert: {
+            modelLevel: {
+                read: { guard: SubjectScoreConvert_read, },
+                create: { guard: SubjectScoreConvert_create, inputChecker: SubjectScoreConvert_create_input, },
+                update: { guard: SubjectScoreConvert_update, },
+                postUpdate: { guard: SubjectScoreConvert_postUpdate, },
+                delete: { guard: SubjectScoreConvert_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         studentSubjectScore: {
             modelLevel: {
                 read: { guard: StudentSubjectScore_read, },
@@ -3054,6 +3080,8 @@ const policy = {
         examSession: { hasValidation: false },
         planTrainingDelay: { hasValidation: false },
         planTraining: { hasValidation: false },
+        studentScoreConvert: { hasValidation: false },
+        subjectScoreConvert: { hasValidation: false },
         studentSubjectScore: { hasValidation: true },
         archivedCertificateOnStudentSubjectScore: { hasValidation: false },
         archivedCertificate: { hasValidation: true },
@@ -4591,6 +4619,162 @@ function PlanTraining_delete(context, db) {
     return { OR: [] };
 }
 function $check_PlanTraining_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentScoreConvert_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_StudentScoreConvert_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentScoreConvert_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentScoreConvert_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentScoreConvert_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function StudentScoreConvert_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentScoreConvert_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentScoreConvert_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_StudentScoreConvert_postUpdate(input, context) {
+    return true;
+}
+function StudentScoreConvert_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentScoreConvert_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectScoreConvert_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_SubjectScoreConvert_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectScoreConvert_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectScoreConvert_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectScoreConvert_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function SubjectScoreConvert_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectScoreConvert_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectScoreConvert_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_SubjectScoreConvert_postUpdate(input, context) {
+    return true;
+}
+function SubjectScoreConvert_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectScoreConvert_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
