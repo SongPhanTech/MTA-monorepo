@@ -22,6 +22,8 @@ export * from './ExamFax.schema';
 export * from './ExamSession.schema';
 export * from './PlanTrainingDelay.schema';
 export * from './PlanTraining.schema';
+export * from './StudentScoreConvert.schema';
+export * from './SubjectScoreConvert.schema';
 export * from './StudentSubjectScore.schema';
 export * from './ArchivedCertificateOnStudentSubjectScore.schema';
 export * from './ArchivedCertificate.schema';

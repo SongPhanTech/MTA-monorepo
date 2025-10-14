@@ -11,6 +11,7 @@ import { type PolicyDef, type PermissionCheckerConstraint } from "@zenstackhq/ru
 import { ConfigKey } from "../prisma-client";
 import { QuestionType } from "../prisma-client";
 import { ExamStatus } from "../prisma-client";
+import { ScoreConvertStatus } from "../prisma-client";
 import { SemesterType } from "../prisma-client";
 import { ExamType } from "../prisma-client";
 import { SubjectVersionType } from "../prisma-client";
@@ -384,6 +385,46 @@ const policy: PolicyDef = {
                 update: { guard: PlanTraining_update, },
                 postUpdate: { guard: PlanTraining_postUpdate, },
                 delete: { guard: PlanTraining_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        studentScoreConvert: {
+            modelLevel: {
+                read: { guard: StudentScoreConvert_read, },
+                create: { guard: StudentScoreConvert_create, inputChecker: StudentScoreConvert_create_input, },
+                update: { guard: StudentScoreConvert_update, },
+                postUpdate: { guard: StudentScoreConvert_postUpdate, },
+                delete: { guard: StudentScoreConvert_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        subjectScoreConvert: {
+            modelLevel: {
+                read: { guard: SubjectScoreConvert_read, },
+                create: { guard: SubjectScoreConvert_create, inputChecker: SubjectScoreConvert_create_input, },
+                update: { guard: SubjectScoreConvert_update, },
+                postUpdate: { guard: SubjectScoreConvert_postUpdate, },
+                delete: { guard: SubjectScoreConvert_delete, }
             },
             fieldLevel: {
                 read:
@@ -4736,6 +4777,8 @@ const policy: PolicyDef = {
         examSession: { hasValidation: false },
         planTrainingDelay: { hasValidation: false },
         planTraining: { hasValidation: false },
+        studentScoreConvert: { hasValidation: false },
+        subjectScoreConvert: { hasValidation: false },
         studentSubjectScore: { hasValidation: true },
         archivedCertificateOnStudentSubjectScore: { hasValidation: false },
         archivedCertificate: { hasValidation: true },
@@ -6055,6 +6098,136 @@ function PlanTraining_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_PlanTraining_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentScoreConvert_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_StudentScoreConvert_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentScoreConvert_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentScoreConvert_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentScoreConvert_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function StudentScoreConvert_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentScoreConvert_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentScoreConvert_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_StudentScoreConvert_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function StudentScoreConvert_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentScoreConvert_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectScoreConvert_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_SubjectScoreConvert_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectScoreConvert_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectScoreConvert_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectScoreConvert_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function SubjectScoreConvert_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectScoreConvert_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectScoreConvert_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_SubjectScoreConvert_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function SubjectScoreConvert_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectScoreConvert_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

@@ -355,6 +355,31 @@ exports.Prisma.PlanTrainingScalarFieldEnum = {
   semesterId: 'semesterId'
 };
 
+exports.Prisma.StudentScoreConvertScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  studentId: 'studentId'
+};
+
+exports.Prisma.SubjectScoreConvertScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  studentScoreConvertId: 'studentScoreConvertId',
+  subjectVersionId: 'subjectVersionId',
+  status: 'status',
+  score: 'score'
+};
+
 exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -2746,6 +2771,7 @@ exports.Prisma.DocumentFileScalarFieldEnum = {
   diplomaVerificationFrontId: 'diplomaVerificationFrontId',
   diplomaVerificationBackId: 'diplomaVerificationBackId',
   trainingFieldId: 'trainingFieldId',
+  studentScoreConvertId: 'studentScoreConvertId',
   noteId: 'noteId'
 };
 
@@ -4050,6 +4076,21 @@ exports.Prisma.PlanTrainingOrderByRelevanceFieldEnum = {
   description: 'description',
   trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId'
+};
+
+exports.Prisma.StudentScoreConvertOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  studentId: 'studentId'
+};
+
+exports.Prisma.SubjectScoreConvertOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  studentScoreConvertId: 'studentScoreConvertId',
+  subjectVersionId: 'subjectVersionId'
 };
 
 exports.Prisma.StudentSubjectScoreOrderByRelevanceFieldEnum = {
@@ -5512,6 +5553,7 @@ exports.Prisma.DocumentFileOrderByRelevanceFieldEnum = {
   diplomaVerificationFrontId: 'diplomaVerificationFrontId',
   diplomaVerificationBackId: 'diplomaVerificationBackId',
   trainingFieldId: 'trainingFieldId',
+  studentScoreConvertId: 'studentScoreConvertId',
   noteId: 'noteId'
 };
 
@@ -6238,6 +6280,12 @@ exports.ExamStatus = exports.$Enums.ExamStatus = {
   ARCHIVED: 'ARCHIVED'
 };
 
+exports.ScoreConvertStatus = exports.$Enums.ScoreConvertStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
 exports.SemesterType = exports.$Enums.SemesterType = {
   FIRST: 'FIRST',
   FIRST_SUPPLEMENTARY: 'FIRST_SUPPLEMENTARY',
@@ -6596,6 +6644,8 @@ exports.Prisma.ModelName = {
   ExamSession: 'ExamSession',
   PlanTrainingDelay: 'PlanTrainingDelay',
   PlanTraining: 'PlanTraining',
+  StudentScoreConvert: 'StudentScoreConvert',
+  SubjectScoreConvert: 'SubjectScoreConvert',
   StudentSubjectScore: 'StudentSubjectScore',
   ArchivedCertificateOnStudentSubjectScore: 'ArchivedCertificateOnStudentSubjectScore',
   ArchivedCertificate: 'ArchivedCertificate',

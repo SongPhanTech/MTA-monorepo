@@ -60,6 +60,7 @@ const relationSchema = z.object({
     questionBanks: z.array(z.unknown()).optional(),
     plans: z.array(z.unknown()).optional(),
     planDelays: z.array(z.unknown()).optional(),
+    subjectScoreConvert: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

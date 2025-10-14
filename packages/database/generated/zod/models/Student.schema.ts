@@ -61,6 +61,7 @@ const relationSchema = z.object({
     thesisRegistrations: z.array(z.unknown()).optional(),
     examSession: z.array(z.unknown()).optional(),
     diplomaVerificationApplication: z.array(z.unknown()).optional(),
+    studentScoreConvert: z.array(z.unknown()).optional(),
     classRegisterLogs: z.array(z.unknown()).optional(),
     notes: z.array(z.unknown()).optional(),
     noteFolders: z.array(z.unknown()).optional(),
