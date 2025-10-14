@@ -81,7 +81,6 @@ export default function TrainingProgramSubjects() {
         },
         { enabled: !!id }
     )
-
     const { options, getExamTypeLabel } = useExamTypeOptions()
 
     const isFiltering = useMemo(() => {
@@ -284,6 +283,7 @@ export default function TrainingProgramSubjects() {
             priority: 'asc',
         },
     })
+    console.log('data', data)
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     // const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
