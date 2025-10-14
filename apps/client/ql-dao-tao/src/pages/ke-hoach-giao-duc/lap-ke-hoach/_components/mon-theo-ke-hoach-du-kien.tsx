@@ -75,9 +75,9 @@ export default function MonTheoKeHoachDuKien() {
                 trainingObjectTypeId,
             },
             select: {
-                subjects: {
+                planTrainingSubjects: {
                     select: {
-                        id: true,
+                        subjectVersionId: true,
                     },
                 },
             },
@@ -102,7 +102,7 @@ export default function MonTheoKeHoachDuKien() {
         if (planTrainingData) {
             form.setFieldValue(
                 'subjectSelected',
-                planTrainingData.subjects.map((subject) => subject.id)
+                planTrainingData.planTrainingSubjects.map((subject) => subject.subjectVersionId)
             )
         }
     }, [planTrainingData, form])

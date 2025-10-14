@@ -41,39 +41,45 @@ export default function MonCham() {
                 trainingObjectTypeId,
             },
             include: {
-                subjects: {
+                planTrainingDelaySubjects: {
                     include: {
-                        managementOrganization: {
-                            select: { sMa: true },
+                        subjectVersion: {
+                            include: {
+                                managementOrganization: {
+                                    select: { sMa: true },
+                                },
+                            },
                         },
+                        fixedClasses: true,
                     },
                     where: {
-                        ...(searchText && searchText !== ''
-                            ? {
-                                  name: {
-                                      contains: searchText,
-                                      mode: 'insensitive',
-                                  },
-                              }
-                            : {}),
-                        ...(trainingCourseId
-                            ? {
-                                  trainingCourseId,
-                              }
-                            : {}),
-                        ...(trainingMajorId
-                            ? {
-                                  trainingMajorId,
-                              }
-                            : {}),
+                        subjectVersion: {
+                            ...(searchText && searchText !== ''
+                                ? {
+                                      name: {
+                                          contains: searchText,
+                                          mode: 'insensitive',
+                                      },
+                                  }
+                                : {}),
+                            ...(trainingCourseId
+                                ? {
+                                      trainingCourseId,
+                                  }
+                                : {}),
+                            ...(trainingMajorId
+                                ? {
+                                      trainingMajorId,
+                                  }
+                                : {}),
+                        },
                     },
                     take: numberOfPages,
                     skip: (currentPage - 1) * numberOfPages,
                 },
                 _count: {
-                    select: { subjects: true },
+                    select: { planTrainingDelaySubjects: true },
                 },
-                fixedClasses: true,
             },
         },
         {
@@ -288,7 +294,7 @@ export default function MonCham() {
                         <Form.Item hidden name="subjectSelected" />
                         <Table
                             rowKey="id"
-                            data={planTrainingDelayData?.subjects ?? []}
+                            data={planTrainingDelayData?.planTrainingDelaySubjects ?? []}
                             rowSelection={{
                                 type: 'checkbox',
                                 checkStrictly: true,
@@ -330,7 +336,7 @@ export default function MonCham() {
                                 },
                                 {
                                     title: 'Mã MH',
-                                    dataIndex: 'code',
+                                    dataIndex: ['subjectVersion', 'code'],
                                     align: 'center',
                                     width: 100,
                                 },
@@ -340,14 +346,15 @@ export default function MonCham() {
                                     render: (_, record) => {
                                         return (
                                             <div className="text-left">
-                                                {`${record?.name} (${record?.credit})` || ''}
+                                                {`${record?.subjectVersion?.name} (${record?.subjectVersion?.credit})` ||
+                                                    ''}
                                             </div>
                                         )
                                     },
                                 },
                                 {
                                     title: 'Đơn vị phụ trách',
-                                    dataIndex: ['managementOrganization', 'sMa'],
+                                    dataIndex: ['subjectVersion', 'managementOrganization', 'sMa'],
                                     width: 150,
                                     align: 'center',
                                 },
@@ -355,7 +362,7 @@ export default function MonCham() {
                             pagination={{
                                 current: currentPage,
                                 pageSize: numberOfPages,
-                                total: planTrainingDelayData?._count.subjects ?? 0,
+                                total: planTrainingDelayData?._count.planTrainingDelaySubjects ?? 0,
                                 onChange: (page, pageSize) => {
                                     if (numberOfPages === pageSize) {
                                         setCurrentPage(page)

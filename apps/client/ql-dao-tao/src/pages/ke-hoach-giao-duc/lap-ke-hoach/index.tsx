@@ -23,7 +23,7 @@ export default function PlanTraining() {
         select: {
             _count: {
                 select: {
-                    subjects: true,
+                    planTrainingDelaySubjects: true,
                 },
             },
         },
@@ -37,7 +37,7 @@ export default function PlanTraining() {
         },
         {
             key: '2',
-            label: `Môn học chậm tiến độ ${countDelay?._count?.subjects ? `(${countDelay?._count?.subjects})` : ''}`,
+            label: `Môn học chậm tiến độ ${countDelay?._count?.planTrainingDelaySubjects ? `(${countDelay?._count?.planTrainingDelaySubjects})` : ''}`,
             content: <MonCham />,
         },
         {

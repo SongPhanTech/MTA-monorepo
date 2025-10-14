@@ -31,23 +31,29 @@ export default function MonDaLapKeHoach() {
                 trainingObjectTypeId,
             },
             include: {
-                subjects: {
+                planTrainingSubjects: {
                     take: numberOfPages,
                     skip: (currentPage - 1) * numberOfPages,
+                    include: {
+                        fixedClasses: true,
+                        subjectVersion: true,
+                    },
                     where: {
-                        ...(filters.searchText && filters.searchText !== ''
-                            ? {
-                                  name: {
-                                      contains: filters.searchText,
-                                      mode: 'insensitive',
-                                  },
-                              }
-                            : {}),
+                        subjectVersion: {
+                            ...(filters.searchText && filters.searchText !== ''
+                                ? {
+                                      name: {
+                                          contains: filters.searchText,
+                                          mode: 'insensitive',
+                                      },
+                                  }
+                                : {}),
+                        },
                     },
                 },
-                fixedClasses: true,
+
                 _count: {
-                    select: { subjects: true },
+                    select: { planTrainingSubjects: true },
                 },
             },
         },
@@ -107,7 +113,7 @@ export default function MonDaLapKeHoach() {
                     type: 'checkbox',
                     columnWidth: 15,
                 }}
-                data={planTraining?.subjects ?? []}
+                data={planTraining?.planTrainingSubjects ?? []}
                 columns={[
                     {
                         title: 'STT',
@@ -119,18 +125,18 @@ export default function MonDaLapKeHoach() {
                     },
                     {
                         title: 'Mã MH',
-                        dataIndex: 'code',
+                        dataIndex: ['subjectVersion', 'code'],
                         align: 'center',
                         width: 100,
                     },
                     {
                         title: 'Tên môn',
-                        dataIndex: 'name',
+                        dataIndex: ['subjectVersion', 'name'],
                         width: 100,
                         align: 'center',
                         render: (text, record) => (
                             <div className="text-left">
-                                {text} ({record.credit})
+                                {text} ({record.subjectVersion.credit})
                             </div>
                         ),
                     },
@@ -138,7 +144,7 @@ export default function MonDaLapKeHoach() {
                 pagination={{
                     current: currentPage,
                     pageSize: numberOfPages,
-                    total: planTraining?._count.subjects ?? 0,
+                    total: planTraining?._count.planTrainingSubjects ?? 0,
                     onChange: (page, pageSize) => {
                         if (numberOfPages === pageSize) {
                             setCurrentPage(page)

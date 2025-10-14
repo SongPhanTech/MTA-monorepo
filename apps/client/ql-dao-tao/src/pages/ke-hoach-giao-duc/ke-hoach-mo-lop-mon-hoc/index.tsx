@@ -31,6 +31,7 @@ interface OpenSubjectClassForm {
             name: string
             code: string
             maxStudent: number
+            countOld: number
         }
     >
 }
@@ -59,6 +60,7 @@ export default function SubjectOpeningPlan() {
         },
         {
             enabled: !!semesterId,
+            refetchOnWindowFocus: false,
         }
     )
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -72,7 +74,7 @@ export default function SubjectOpeningPlan() {
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
         },
-        { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
+        { query: { enabled: !!semesterId && !!trainingObjectTypeId, refetchOnWindowFocus: false } }
     )
 
     const data = useMemo(
@@ -99,6 +101,7 @@ export default function SubjectOpeningPlan() {
                                     name: cur.subjectVersionName,
                                     code: cur.subjectVersionCode,
                                     maxStudent: cur.countStudent,
+                                    countOld: cur.subjectClass.length ?? 0,
                                 },
                             }
                         }
@@ -107,6 +110,7 @@ export default function SubjectOpeningPlan() {
                             name: cur.subjectVersionName,
                             code: cur.subjectVersionCode,
                             maxStudent: cur.countStudent,
+                            countOld: cur.subjectClass.length ?? 0,
                         }
                         return acc
                     },
@@ -136,7 +140,7 @@ export default function SubjectOpeningPlan() {
         try {
             if (!semesterId || !trainingObjectTypeId) return
             const listSubjectVersionIds = Object.entries(subjectClassNumber)
-                .filter(([, subjectVersion]) => subjectVersion?.count !== undefined)
+                .filter(([, subjectVersion]) => subjectVersion.count !== subjectVersion.countOld)
                 .map(([key]) => key)
 
             await sqlTransaction([
@@ -188,7 +192,10 @@ export default function SubjectOpeningPlan() {
                     operation: 'createMany',
                     data: {
                         data: Object.entries(subjectClassNumber)
-                            .filter(([, subjectVersion]) => !!subjectVersion.count)
+                            .filter(
+                                ([, subjectVersion]) =>
+                                    subjectVersion.count !== subjectVersion.countOld
+                            )
                             .flatMap(([subjectVersionId, subjectVersion]) =>
                                 new Array(subjectVersion.count).fill(0).map((_, index) => ({
                                     subjectId: subjectVersionId,
@@ -222,6 +229,8 @@ export default function SubjectOpeningPlan() {
                     onValuesChange={(filter: OpenSubjectClassForm) => {
                         if (!filter.subjectClassNumber) {
                             debouncedRefetch()
+                        } else {
+                            console.log(filter.subjectClassNumber)
                         }
                     }}
                 >
@@ -398,13 +407,13 @@ export default function SubjectOpeningPlan() {
                             onRow={(record) => {
                                 return {
                                     className: cn(
-                                        subjectClassNumber?.[record.subjectVersionId]?.count ===
-                                            record?.subjectClass?.length
-                                            ? ''
-                                            : 'bg-yellow-100',
                                         subjectClassNumber?.[record.subjectVersionId]?.count
                                             ? ''
-                                            : 'bg-red-100'
+                                            : 'bg-red-100',
+                                        subjectClassNumber?.[record.subjectVersionId]?.count ===
+                                            subjectClassNumber?.[record.subjectVersionId]?.countOld
+                                            ? ''
+                                            : 'bg-yellow-100'
                                     ),
                                 }
                             }}
@@ -590,6 +599,14 @@ export default function SubjectOpeningPlan() {
                                                     'subjectClassNumber',
                                                     record?.subjectVersionId,
                                                     'maxStudent',
+                                                ]}
+                                                hidden
+                                            />
+                                            <Form.Item
+                                                name={[
+                                                    'subjectClassNumber',
+                                                    record?.subjectVersionId,
+                                                    'countOld',
                                                 ]}
                                                 hidden
                                             />
