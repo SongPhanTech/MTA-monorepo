@@ -10,14 +10,13 @@ import type {
     TrainingForm,
     TrainingObjectType,
     TrainingTime,
-    Prisma,
 } from '@workspace/db'
 import {
     useCreateCurriculumVersion,
-    useCreateSubjectVersion,
-    useCreateTrainingBlock,
     useCreateManyTrainingBlockOnCurriculumVersion,
     useCreateManyTrainingBlockSubject,
+    useCreateSubjectVersion,
+    useCreateTrainingBlock,
     useFindManyDiplomaType,
     useFindManyDM_DonVi,
     useFindManySubjectVersion,
@@ -29,7 +28,7 @@ import {
     useFindUniqueCurriculumVersion,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Radio, Row, Button } from 'antd'
+import { Button, Col, Form, Input, InputNumber, message, Radio, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -38,11 +37,9 @@ import './index.css'
 import DocumentPaths from '@components/commons/documentPaths'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Tabs from '@components/commons/tabar'
-import type { ParsedSubject } from '@workspace/libs/parseExcel'
-import { parseSheetSubject } from '@workspace/libs/parseExcel'
-import { createId } from '@workspace/db'
 import { $Enums } from '@workspace/db/client'
-import { sqlTransaction } from '@workspace/libs/api/model'
+import type { SubjectResult } from '@workspace/libs/parseExcel'
+import { parseSheetSubject } from '@workspace/libs/parseExcel'
 
 export type PutCurriculumVersion = CurriculumVersion & {
     documentFiles?: DocumentFile[]
@@ -56,7 +53,7 @@ type CurriculumVersionInput = {
 }
 
 type ModalPreviewUploadInput = {
-    previewData: ParsedSubject[]
+    previewData: SubjectResult[]
     errorData: any[]
 }
 
@@ -66,7 +63,7 @@ const PutCurriculumVersion = () => {
 
     // Import Excel states
     const [importFileName, setImportFileName] = useState<string>('')
-    const [filteredSubjects, setFilteredSubjects] = useState<ParsedSubject[]>([])
+    const [filteredSubjects, setFilteredSubjects] = useState<SubjectResult[]>([])
 
     const { isOpen, onClose, input } = useDisclosure<CurriculumVersionInput>({
         tag: 'PutCurriculumVersion',
@@ -197,82 +194,6 @@ const PutCurriculumVersion = () => {
         return blockNameToId
     }
 
-    // Helper function tương tự buildSubjectMapOrThrow
-    const buildSubjectMap = async (
-        subjects: Array<
-            ParsedSubject & {
-                status: 'new' | 'new-version' | 'duplicate'
-                trainingObjectTypeId: string
-            }
-        >
-    ) => {
-        const subjectNameToVersionId = new Map<string, string>()
-
-        // Build organization code map trước
-        const orgMap = buildOrgCodeMap(subjects.map((s) => s.managementOrganization))
-
-        for (const subject of subjects) {
-            if (subject.status === 'duplicate') {
-                // Nếu đã tồn tại, tìm SubjectVersion theo code và connect
-                const existingVersion = existingSubjectVersions.find(
-                    (sv) => sv.code?.toLowerCase() === subject.code?.toLowerCase()
-                )
-
-                if (existingVersion?.id) {
-                    subjectNameToVersionId.set(subject.name, existingVersion.id)
-                }
-            } else {
-                // Trường hợp 'new' hoặc 'new-version': Tạo SubjectVersion mới
-                const managementOrganizationId = subject.managementOrganization
-                    ? orgMap.get(subject.managementOrganization)
-                    : undefined
-
-                const newVersion = await createSubjectVersion({
-                    data: {
-                        code: subject.code,
-                        name: subject.name,
-                        credit: subject.credit || 0,
-                        period: subject.periodCtdt || 0,
-                        schedulePeriod: subject.periodTkb,
-                        numberOfTheory: subject.theory,
-                        numberOfPractical: subject.practice,
-                        numberOfPractice: subject.experiment,
-                        numberOfReview: subject.review,
-                        numberOfExam: subject.exam,
-                        examType: mapExamType(subject.examType) as any,
-                        type: mapSubjectVersionType(subject.type) as any,
-                        onePoint: subject.gradePoints === 'X',
-                        trainingObjectType: {
-                            connect: { id: subject.trainingObjectTypeId },
-                        },
-                        ...(managementOrganizationId
-                            ? {
-                                  managementOrganization: {
-                                      connect: { Id: managementOrganizationId },
-                                  },
-                              }
-                            : {}),
-                        subject: {
-                            connectOrCreate: {
-                                where: { name: subject.name },
-                                create: {
-                                    name: subject.name,
-                                    englishName: subject.name,
-                                    managementOrganizationId,
-                                },
-                            },
-                        },
-                    },
-                })
-
-                if (newVersion?.id) {
-                    subjectNameToVersionId.set(subject.name, newVersion.id)
-                }
-            }
-        }
-
-        return subjectNameToVersionId
-    }
     async function onOk(output?: PutCurriculumVersion) {
         if (!output) return
         try {
@@ -381,106 +302,7 @@ const PutCurriculumVersion = () => {
                     newCurriculumVersion?.id &&
                     output.trainingObjectTypeId
                 ) {
-                    try {
-                        // Nhóm môn học theo knowledgeBlock
-                        const subjectsByBlock = filteredSubjects.reduce(
-                            (acc, subject) => {
-                                const blockName = subject.knowledgeBlock || 'Chưa phân loại'
-                                if (!acc[blockName]) {
-                                    acc[blockName] = []
-                                }
-                                acc[blockName].push(subject)
-                                return acc
-                            },
-                            {} as Record<string, typeof filteredSubjects>
-                        )
-
-                        // Bước 1: Build TrainingBlock Map (tương tự buildTrainingBlockMapOrThrow)
-                        const blockNames = Object.keys(subjectsByBlock)
-                        const trainingBlockMap = await buildTrainingBlockMap(blockNames)
-
-                        // Bước 2: Build Subject Map (tương tự buildSubjectMapOrThrow)
-                        const subjectsWithType = filteredSubjects.map((s: any) => {
-                            // Đảm bảo có status, nếu không có thì check duplicate
-                            let status: 'new' | 'new-version' | 'duplicate' = s.status || 'new'
-
-                            // Nếu không có status, tự động check duplicate
-                            if (!s.status && s.code) {
-                                const isDuplicate = existingSubjectVersions.some(
-                                    (sv) => sv.code?.toLowerCase() === s.code?.toLowerCase()
-                                )
-                                if (isDuplicate) {
-                                    status = 'duplicate'
-                                }
-                            }
-
-                            return {
-                                ...s,
-                                status,
-                                trainingObjectTypeId: output.trainingObjectTypeId,
-                            }
-                        })
-
-                        const subjectMap = await buildSubjectMap(subjectsWithType)
-
-                        // Bước 3: Tạo TrainingBlockOnCurriculumVersion với ID
-                        const trainingBlocksWithId = blockNames.map((name, index) => ({
-                            id: createId(),
-                            name,
-                            priority: index + 1,
-                            subjects: subjectsByBlock[name],
-                        }))
-
-                        //Bước 4: Chuẩn bị dữ liệu cho createMany TrainingBlockOnCurriculumVersion
-                        const trainingBlockOnCurriculumVersionData: Prisma.TrainingBlockOnCurriculumVersionCreateManyInput[] =
-                            trainingBlocksWithId.map(({ id, name, priority }) => ({
-                                id,
-                                curriculumVersionId: newCurriculumVersion.id,
-                                trainingBlockId: trainingBlockMap.get(name) || '',
-                                priority,
-                            }))
-
-                        // Bước 5: Chuẩn bị dữ liệu cho createMany TrainingBlockSubject
-                        const trainingBlockSubjectsData: Prisma.TrainingBlockSubjectCreateManyInput[] =
-                            trainingBlocksWithId.flatMap(({ id, subjects }) =>
-                                subjects.reduce<Prisma.TrainingBlockSubjectCreateManyInput[]>(
-                                    (acc, subject) => {
-                                        const subjectVersionId = subjectMap.get(subject.name)
-
-                                        if (subjectVersionId) {
-                                            acc.push({
-                                                id: createId(),
-                                                trainingBlockOnCurriculumVersionId: id,
-                                                subjectId: subjectVersionId,
-                                                semester: subject.semester
-                                                    ? Number(subject.semester)
-                                                    : undefined,
-                                                type: subject.required ? 'Mandatory' : 'Optional',
-                                                useForFinalScore: true,
-                                                graduation: false,
-                                            })
-                                        }
-
-                                        return acc
-                                    },
-                                    []
-                                )
-                            )
-                        await sqlTransaction([
-                            {
-                                model: 'TrainingBlockOnCurriculumVersion',
-                                operation: 'createMany',
-                                data: trainingBlockOnCurriculumVersionData,
-                            },
-                            {
-                                model: 'TrainingBlockSubject',
-                                operation: 'createMany',
-                                data: trainingBlockSubjectsData,
-                            },
-                        ])
-                    } catch (error: any) {
-                        console.error('Lỗi khi import môn học:', error)
-                    }
+                    // TODO: call api here
                 }
 
                 message.success('Thêm mới thành công')
