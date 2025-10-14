@@ -16,11 +16,7 @@ interface FilterProps {
     searchText: string | null
 }
 
-interface RegisterClassProps {
-    setSubjectClassId?: (id: string | null) => void
-}
-
-export default function RegisterResult({ setSubjectClassId }: RegisterClassProps) {
+export default function RegisterResult() {
     const [currentPage, _setCurrentPage] = useState(1)
     const [selectedRowKey, _setSelectedRowKey] = useState<string | null>(null)
     const [filters, setFilters] = useState<FilterProps>({

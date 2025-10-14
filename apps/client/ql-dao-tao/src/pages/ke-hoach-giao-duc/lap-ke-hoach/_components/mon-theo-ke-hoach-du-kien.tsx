@@ -3,11 +3,12 @@ import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { type TrainingMajor } from '@workspace/db'
+import { PlanTraining, PlanTrainingDelay } from '@workspace/db/client'
 import {
+    useFindFirstPlanTraining,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
     useFindUniqueSemester,
-    useUpsertPlanTraining,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
@@ -16,7 +17,7 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -25,7 +26,7 @@ interface SubjectBySemesterForm {
     subjectSelected?: Array<string>
 }
 
-export default function SubjectBySemester() {
+export default function MonTheoKeHoachDuKien() {
     const { canSome } = useAbility()
     const [form] = Form.useForm<SubjectBySemesterForm>()
     const [currentPage, setCurrentPage] = useState(1)
@@ -65,6 +66,26 @@ export default function SubjectBySemester() {
         { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
     )
 
+    const { data: planTrainingData } = useFindFirstPlanTraining(
+        {
+            where: {
+                semesterId: semesterId as string,
+                trainingObjectTypeId,
+            },
+            select: {
+                subjects: {
+                    select: {
+                        id: true,
+                    },
+                },
+            },
+        },
+        {
+            enabled: !!semesterId && !!trainingObjectTypeId,
+            refetchOnWindowFocus: false,
+        }
+    )
+
     const data = useMemo(
         () =>
             res?.status === 200
@@ -75,6 +96,15 @@ export default function SubjectBySemester() {
                 : [],
         [res]
     )
+
+    useEffect(() => {
+        if (planTrainingData) {
+            form.setFieldValue(
+                'subjectSelected',
+                planTrainingData.subjects.map((subject) => subject.id)
+            )
+        }
+    }, [planTrainingData, form])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -92,8 +122,6 @@ export default function SubjectBySemester() {
         where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 
-    const { mutate: createPlanTraining } = useUpsertPlanTraining()
-
     const onSubmit = async () => {
         try {
             if (!semesterId || !trainingObjectTypeId) return
@@ -101,8 +129,7 @@ export default function SubjectBySemester() {
             const delaySubject = data.filter(
                 (subject) => !subjectSelected.includes(subject.subjectVersionId)
             )
-
-            const exist = await sqlTransaction([
+            let planTraining = await sqlTransaction([
                 {
                     model: 'PlanTraining',
                     operation: 'findFirst',
@@ -111,8 +138,89 @@ export default function SubjectBySemester() {
                     },
                 },
             ])
+            let planTrainingDelay = await sqlTransaction([
+                {
+                    model: 'PlanTrainingDelay',
+                    operation: 'findFirst',
+                    data: {
+                        where: { semesterId, trainingObjectTypeId },
+                    },
+                },
+            ])
 
-            message.success('Lưu kế hoạch mở lớp thành công')
+            if (planTraining.status === 200 && !planTraining?.data?.[0]) {
+                planTraining = await sqlTransaction([
+                    {
+                        model: 'PlanTraining',
+                        operation: 'create',
+                        data: {
+                            data: { semesterId, trainingObjectTypeId },
+                        },
+                    },
+                ])
+            }
+
+            if (planTrainingDelay.status === 200 && !planTrainingDelay?.data?.[0]) {
+                planTrainingDelay = await sqlTransaction([
+                    {
+                        model: 'PlanTrainingDelay',
+                        operation: 'create',
+                        data: {
+                            data: { semesterId, trainingObjectTypeId },
+                        },
+                    },
+                ])
+            }
+
+            if (planTraining.status !== 200 || planTrainingDelay.status !== 200) {
+                throw new Error('Lỗi khi tạo kế hoạch đào tạo')
+            }
+
+            const planTrainingId = (planTraining?.data?.[0] as PlanTraining)?.id
+            if (!planTrainingId) {
+                throw new Error('Kế hoạch đào tạo không tồn tại')
+            }
+            const planTrainingDelayId = (planTrainingDelay?.data?.[0] as PlanTrainingDelay)?.id
+            if (!planTrainingDelayId) {
+                throw new Error('Kế hoạch đào tạo môn chậm tiến độ không tồn tại')
+            }
+
+            const subjectPlanTrainingData = subjectSelected.map((subjectVersionId) => ({
+                id: subjectVersionId,
+            }))
+
+            const delaySubjectPlanTrainingData = delaySubject.map((subject) => ({
+                subjectVersionId: subject.id,
+            }))
+
+            await sqlTransaction([
+                {
+                    model: 'PlanTraining',
+                    operation: 'update',
+                    data: {
+                        where: { id: planTrainingId },
+                        data: {
+                            subjects: {
+                                set: subjectPlanTrainingData,
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'PlanTrainingDelay',
+                    operation: 'update',
+                    data: {
+                        where: { id: planTrainingDelayId },
+                        data: {
+                            subjects: {
+                                set: delaySubjectPlanTrainingData,
+                            },
+                        },
+                    },
+                },
+            ])
+
+            message.success('Thêm môn học vào kế hoạch thành công')
             form.resetFields()
             debouncedRefetch()
         } catch (error) {

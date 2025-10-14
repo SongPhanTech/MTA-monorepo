@@ -2,9 +2,9 @@ import DefaultLayout from '@layouts/default-layout'
 import { Col, Row, Tabs } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
-import SubjectBySemester from './_components/mon-theo-ke-hoach-du-kien'
+import MonTheoKeHoachDuKien from './_components/mon-theo-ke-hoach-du-kien'
 import RegisterResult from './_components/ket-qua-dang-ky-hoc-lop-quan-ly'
-import FixedClass from './_components/lop-co-mon-theo-khgd'
+import MonDaLapKeHoach from './_components/mon-da-lap-ke-hoach'
 
 interface TabItem {
     key: string
@@ -14,17 +14,16 @@ interface TabItem {
 
 export default function PlanTraining() {
     const [activeLeftTab, setActiveLeftTab] = useState('1')
-    const [subjectClassId, setSubjectClassId] = useState<string | null>(null)
     const leftTabs: TabItem[] = [
         {
             key: '1',
             label: 'Môn theo kế hoạch giảng dạy',
-            content: <SubjectBySemester />,
+            content: <MonTheoKeHoachDuKien />,
         },
         {
             key: '2',
             label: 'Môn học chậm tiến độ',
-            content: <SubjectBySemester />,
+            content: <MonTheoKeHoachDuKien />,
         },
         {
             key: '3',
@@ -37,12 +36,12 @@ export default function PlanTraining() {
         {
             key: '1',
             label: 'Môn học đã lập kế hoạch',
-            content: <FixedClass subjectClassId={subjectClassId} />,
+            content: <MonDaLapKeHoach />,
         },
     ]
 
     return (
-        <Row gutter={[8, 0]} className="bg-white">
+        <Row gutter={[12, 0]} className="bg-white">
             <Col span={14}>
                 <Tabs activeKey={activeLeftTab} onChange={setActiveLeftTab}>
                     {leftTabs.map((tab) => (

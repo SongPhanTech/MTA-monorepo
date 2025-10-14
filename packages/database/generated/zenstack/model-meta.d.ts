@@ -2479,6 +2479,29 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                trainingObjectType: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                trainingObjectTypeId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
                 semester: {
                     name: string;
                     type: string;
@@ -8359,6 +8382,13 @@ declare const metadata: {
                     backLink: string;
                 };
                 planTraining: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                planTrainingDelay: {
                     name: string;
                     type: string;
                     isDataModel: boolean;

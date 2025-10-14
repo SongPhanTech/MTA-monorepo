@@ -43,6 +43,8 @@ model TrainingObjectType extends Base {
 
   @@schema("ql-dao-tao")
 
+
+  planTrainingDelay    PlanTrainingDelay[]
 }
 
 /// đối tượng ưu tiên

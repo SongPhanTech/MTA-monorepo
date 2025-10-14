@@ -824,16 +824,18 @@ model ExamSession {
 }
 
 model PlanTrainingDelay {
-  id           String           @id() @default(cuid())
-  active       Boolean          @default(true)
-  description  String?          @db.Text()
-  deletedAt    DateTime?
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @default(now()) @updatedAt()
-  semester     Semester         @relation(fields: [semesterId], references: [id])
-  semesterId   String
-  fixedClasses FixedClass[]
-  subjects     SubjectVersion[]
+  id                   String             @id() @default(cuid())
+  active               Boolean            @default(true)
+  description          String?            @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @default(now()) @updatedAt()
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+  semester             Semester           @relation(fields: [semesterId], references: [id])
+  semesterId           String
+  fixedClasses         FixedClass[]
+  subjects             SubjectVersion[]
 
   @@schema("ql-dao-tao")
 }
@@ -1589,6 +1591,7 @@ model TrainingObjectType {
   graduationSession    GraduationSession[]
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
+  planTrainingDelay    PlanTrainingDelay[]
 
   @@schema("ql-dao-tao")
 }

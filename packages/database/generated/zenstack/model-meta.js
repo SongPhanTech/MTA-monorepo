@@ -1328,6 +1328,19 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'planTrainingDelay',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
                 }, semester: {
                     name: "semester",
                     type: "Semester",
@@ -4642,6 +4655,12 @@ const metadata = {
                 }, planTraining: {
                     name: "planTraining",
                     type: "PlanTraining",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, planTrainingDelay: {
+                    name: "planTrainingDelay",
+                    type: "PlanTrainingDelay",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',

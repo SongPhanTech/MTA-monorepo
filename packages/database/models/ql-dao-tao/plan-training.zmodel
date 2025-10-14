@@ -21,12 +21,14 @@ import "../khao-thi/survey"
 
 // Kế hoạch đào tạo bị chậm tiến độ so với kế hoạch chung của khoá học
 model PlanTrainingDelay extends BaseNoCode {
-  semester     Semester         @relation(fields: [semesterId], references: [id])
-  semesterId   String
+  trainingObjectType   TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId String
+  semester             Semester           @relation(fields: [semesterId], references: [id])
+  semesterId           String
 
-  fixedClasses FixedClass[] // Lớp niên chế
+  fixedClasses         FixedClass[] // Lớp niên chế
 
-  subjects     SubjectVersion[] // Môn học bị trì hoãn
+  subjects             SubjectVersion[] // Môn học bị trì hoãn
 
   @@schema("ql-dao-tao")
 }
