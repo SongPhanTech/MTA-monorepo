@@ -944,10 +944,15 @@ model StudentSubjectScore {
   subjectVersionId             String
   student                      Student                                    @relation(fields: [studentId], references: [id])
   studentId                    String
+  /// điểm chuyên cần
   attendanceScore              Float?
+  /// điểm giữa kỳ
   midtermScore                 Float?
+  /// điểm cuối kỳ
   examScore                    Float?
+  /// điểm tổng kết
   finalScore                   Decimal?                                   @db.Decimal(5, 1)
+  /// điểm tổng kết chuyển trường
   manualFinalScore             Float?
   examPostponed                Boolean                                    @default(false)
   examPostponedReason          String?
@@ -983,10 +988,15 @@ model StudentSubjectScoreHistory {
   updatedAt             DateTime            @default(now()) @updatedAt()
   studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String
+  /// điểm chuyên cần
   attendanceScore       Float?
+  /// điểm giữa kỳ
   midtermScore          Float?
+  /// điểm cuối kỳ
   examScore             Float?
+  /// điểm tổng kết
   finalScore            Decimal?            @db.Decimal(5, 1)
+  /// điểm tổng kết chuyển trường
   manualFinalScore      Float?
   examPostponedReason   Boolean?
   examPostponed         String?
@@ -2365,17 +2375,36 @@ model Conversation {
 }
 
 model Message {
-  id             String        @id() @default(cuid())
-  code           String?       @unique()
-  active         Boolean       @default(true)
-  description    String?       @db.Text()
+  id             String            @id() @default(cuid())
+  code           String?           @unique()
+  active         Boolean           @default(true)
+  description    String?           @db.Text()
   deletedAt      DateTime?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @default(now()) @updatedAt()
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @default(now()) @updatedAt()
   conversationId String?
   content        String?
   sender         MessageSender
-  conversation   Conversation? @relation(fields: [conversationId], references: [id])
+  citations      CitationMessage[]
+  conversation   Conversation?     @relation(fields: [conversationId], references: [id])
+
+  @@schema("tro-ly-ao")
+}
+
+model CitationMessage {
+  id           String    @id() @default(cuid())
+  code         String?   @unique()
+  active       Boolean   @default(true)
+  description  String?   @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt()
+  content      String?
+  index        Int?
+  documentId   String?
+  documentType String?
+  messageId    String?
+  message      Message?  @relation(fields: [messageId], references: [id])
 
   @@schema("tro-ly-ao")
 }

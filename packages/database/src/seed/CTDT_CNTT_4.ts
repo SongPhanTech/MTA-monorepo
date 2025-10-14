@@ -81,8 +81,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -93,8 +91,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -105,8 +101,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -117,8 +111,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -129,8 +121,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -141,8 +131,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -153,8 +141,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -165,8 +151,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -177,8 +161,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -189,8 +171,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -201,8 +181,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -213,8 +191,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -225,8 +201,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -237,8 +211,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -249,8 +221,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -261,8 +231,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -273,8 +241,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -285,8 +251,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -297,8 +261,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -309,8 +271,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -321,8 +281,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -333,8 +291,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -345,8 +301,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -357,8 +311,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -369,8 +321,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -381,8 +331,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -393,8 +341,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -405,8 +351,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -417,8 +361,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -429,8 +371,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -441,8 +381,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -453,8 +391,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -465,8 +401,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -477,8 +411,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -489,8 +421,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -501,8 +431,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -513,8 +441,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -525,8 +451,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -537,8 +461,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -549,8 +471,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -561,8 +481,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -573,8 +491,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -585,8 +501,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -597,8 +511,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -609,8 +521,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -621,8 +531,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -633,8 +541,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -645,8 +551,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -657,8 +561,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -669,8 +571,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -681,8 +581,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -693,8 +591,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -705,8 +601,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -717,8 +611,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -729,8 +621,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -741,8 +631,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -753,8 +641,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -765,8 +651,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -777,8 +661,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -789,8 +671,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -801,8 +681,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -813,8 +691,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -825,8 +701,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -837,8 +711,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -849,8 +721,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -861,8 +731,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -873,8 +741,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -885,8 +751,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -897,8 +761,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -909,8 +771,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -921,8 +781,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -933,8 +791,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -945,8 +801,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -957,8 +811,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -969,8 +821,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -981,8 +831,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -993,8 +841,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -1005,8 +851,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -1017,8 +861,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -1029,8 +871,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
             {
@@ -1041,8 +881,6 @@ async function main() {
                 createdAt: '2025-07-20T16:36:00.000Z',
                 updatedAt: '2025-07-20T16:36:00.000Z',
                 useForFinalScore: true,
-                project: true,
-                print: true,
                 semester: 1,
             },
         ],

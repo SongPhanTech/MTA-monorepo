@@ -1401,6 +1401,21 @@ exports.Prisma.MessageScalarFieldEnum = {
   sender: 'sender'
 };
 
+exports.Prisma.CitationMessageScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  content: 'content',
+  index: 'index',
+  documentId: 'documentId',
+  documentType: 'documentType',
+  messageId: 'messageId'
+};
+
 exports.Prisma.TopicScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -4714,6 +4729,16 @@ exports.Prisma.MessageOrderByRelevanceFieldEnum = {
   content: 'content'
 };
 
+exports.Prisma.CitationMessageOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  content: 'content',
+  documentId: 'documentId',
+  documentType: 'documentType',
+  messageId: 'messageId'
+};
+
 exports.Prisma.TopicOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6777,6 +6802,7 @@ exports.Prisma.ModelName = {
   Prompt: 'Prompt',
   Conversation: 'Conversation',
   Message: 'Message',
+  CitationMessage: 'CitationMessage',
   Topic: 'Topic',
   DM_CapBac: 'DM_CapBac',
   DM_ChucDanh: 'DM_ChucDanh',

@@ -11,6 +11,7 @@ import {
     useCreateManyTrainingBlockSubject,
     useFindManyDM_DonVi,
     useFindManySubjectVersion,
+    useFindManyTrainingBlockOnCurriculumVersion,
     useFindUniqueTrainingBlockSubject,
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
@@ -27,6 +28,7 @@ export type PutTrainingBlockSubject = TrainingBlockSubject
 dayjs.locale('vi')
 
 type TrainingBlockOnCurriculumVersionInput = {
+    curriculumVersionId: string
     trainingBlockOnCurriculumVersionId: string
     trainingBlockSubjectId: string
 }
@@ -48,11 +50,18 @@ const PutTrainingBlockSubject = () => {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
+    // for update
     const { data: initialValue } = useFindUniqueTrainingBlockSubject(
-        {
-            where: { id: input?.trainingBlockSubjectId },
-        },
+        { where: { id: input?.trainingBlockSubjectId } },
         { enabled: !!input?.trainingBlockSubjectId }
+    )
+
+    const { data: trainingBlockOnCurriculumVersion } = useFindManyTrainingBlockOnCurriculumVersion(
+        {
+            where: { curriculumVersionId: input?.curriculumVersionId },
+            include: { trainingBlock: true },
+        },
+        { enabled: !!input?.curriculumVersionId }
     )
 
     const { data: subjectVersionData = [], refetch } = useFindManySubjectVersion({
@@ -204,6 +213,24 @@ const PutTrainingBlockSubject = () => {
                     />
                 </FormItem>
             </Col>
+            {input?.trainingBlockSubjectId && (
+                <Col span={24}>
+                    <FormItem
+                        form={form}
+                        name="trainingBlockOnCurriculumVersionId"
+                        label="Khối kiến thức"
+                    >
+                        <Select
+                            placeholder="Chọn khối kiến thức"
+                            showSearch
+                            onChange={(val) => handleFilterChange('managementOrganizationId', val)}
+                            options={trainingBlockOnCurriculumVersion?.map((item) => {
+                                return { label: item.trainingBlock.name, value: item.id }
+                            })}
+                        />
+                    </FormItem>
+                </Col>
+            )}
             <Col span={24}>
                 <FormItem form={form} name="semester" label="Kỳ học dự kiến">
                     <InputNumber

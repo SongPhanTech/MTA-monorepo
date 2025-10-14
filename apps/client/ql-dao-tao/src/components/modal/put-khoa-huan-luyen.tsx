@@ -469,6 +469,12 @@ const PutTrainingCourseModal = () => {
         if (trainingCourse) {
             form.setFieldsValue({
                 ...trainingCourse,
+                admissionStartDate: trainingCourse.admissionStartDate
+                    ? dayjs(trainingCourse.admissionStartDate)
+                    : undefined,
+                admissionEndDate: trainingCourse.admissionEndDate
+                    ? dayjs(trainingCourse.admissionEndDate)
+                    : undefined,
                 schoolYearId: trainingCourse.semesterStart?.schoolYearId,
             })
             setDocument(trainingCourse?.documentFiles)
@@ -483,11 +489,6 @@ const PutTrainingCourseModal = () => {
                 scoreToTakeGraduation: selectedTrainingCourse.scoreToTakeGraduation,
                 scoreToPassGraduation: selectedTrainingCourse.scoreToPassGraduation,
                 maxTrainingTime: selectedTrainingCourse.maxTrainingTime,
-                admissionQuota: selectedTrainingCourse.admissionQuota,
-                admissionStartDate: selectedTrainingCourse.admissionStartDate,
-                admissionEndDate: selectedTrainingCourse.admissionEndDate,
-                admissionDecision: selectedTrainingCourse.admissionDecision,
-                studentRecognitionDecision: selectedTrainingCourse.studentRecognitionDecision,
                 regulation: selectedTrainingCourse.regulation,
                 trainingCourseRegulation: selectedTrainingCourse.trainingCourseRegulation,
                 baseScore: selectedTrainingCourse.baseScore,
