@@ -303,28 +303,39 @@ export const buildSubjectMapOrThrow = async (
     createNewSubject = false
 ) => {
     const subjectSet = new Set<string>(subjects.map((s) => JSON.stringify(s)))
-    const uniqueTuples = Array.from(subjectSet).map((s) => JSON.parse(s) as SubjectData)
+    const uniqueSubject = Array.from(subjectSet).map((s) => JSON.parse(s) as SubjectData)
 
     const existing = await prisma.subjectVersion.findMany({
         where: {
-            OR: uniqueTuples.map(({ name, organizationCode, credit }) => ({
-                name,
-                ...(organizationCode
+            OR: uniqueSubject.map((s) => ({
+                name: s.name,
+                trainingObjectTypeId: s.trainingObjectTypeId,
+                ...(s.code ? { code: s.code } : {}),
+                ...(s.organizationCode
                     ? {
                           subject: {
                               managementOrganization: {
-                                  sMa: organizationCode,
+                                  sMa: s.organizationCode,
                               },
                           },
                       }
                     : {}),
-                ...(credit ? { credit } : {}),
+                credit: s.credit,
+                examType: s.examType,
+                type: s.type,
+                ...(s.schedulePeriod ? { schedulePeriod: s.schedulePeriod } : {}),
+                ...(s.numberOfTheory ? { numberOfTheory: s.numberOfTheory } : {}),
+                ...(s.numberOfPractical ? { numberOfPractical: s.numberOfPractical } : {}),
+                ...(s.numberOfSelfStudy ? { numberOfSelfStudy: s.numberOfSelfStudy } : {}),
+                ...(s.numberOfPractice ? { numberOfPractice: s.numberOfPractice } : {}),
+                ...(s.numberOfReview ? { numberOfReview: s.numberOfReview } : {}),
+                ...(s.numberOfExam ? { numberOfExam: s.numberOfExam } : {}),
             })),
         },
         select: { id: true, name: true },
     })
 
-    const missing = uniqueTuples.filter(
+    const missing = uniqueSubject.filter(
         ({ name }) => !existing.some((version) => version.name === name)
     )
 
@@ -334,16 +345,19 @@ export const buildSubjectMapOrThrow = async (
             subjects.map((s) => s.organizationCode || null)
         )
 
+        console.log(missing)
+
         const newSubjects = []
         for (const subject of missing) {
             const managementOrganizationId = orgMap.get(subject.organizationCode || null)
 
             const newSubject = await prisma.subjectVersion.create({
                 data: {
-                    trainingObjectType: { connect: { id: subject.trainingObjectTypeId } },
                     name: subject.name,
-                    examType: subject.examType,
+                    trainingObjectType: { connect: { id: subject.trainingObjectTypeId } },
                     credit: subject.credit,
+                    code: subject.code,
+                    examType: subject.examType,
                     type: subject.type,
                     onePoint: subject.onePoint,
                     schedulePeriod: subject.schedulePeriod,
@@ -353,7 +367,6 @@ export const buildSubjectMapOrThrow = async (
                     numberOfPractice: subject.numberOfPractice,
                     numberOfReview: subject.numberOfReview,
                     numberOfExam: subject.numberOfExam,
-                    code: subject.code,
                     ...(managementOrganizationId
                         ? {
                               managementOrganization: {

@@ -608,11 +608,10 @@ model SubjectVersion extends Base {
   questionBanks            QuestionBank[]
   subjectScoreConvert      SubjectScoreConvert[]
 
-  @@schema("ql-dao-tao")
-
   planTrainingDelaySubject PlanTrainingDelaySubject[]
-
   planTrainingSubject      PlanTrainingSubject[]
+
+  @@schema("ql-dao-tao")
 }
 
 /// Đại diện cho MỘT quy tắc tương đương, ví dụ: (A + B) <=> (C)
