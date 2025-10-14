@@ -5,8 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
+/**
+ * @nullable
+ */
 export type SubjectClassesSchedule =
-    (typeof SubjectClassesSchedule)[keyof typeof SubjectClassesSchedule]
+    | (typeof SubjectClassesSchedule)[keyof typeof SubjectClassesSchedule]
+    | null
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SubjectClassesSchedule = {
