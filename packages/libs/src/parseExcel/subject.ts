@@ -103,7 +103,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
 
     // Parse exam type từ text
     const parseExamType = (value: string | null | undefined): $Enums.ExamType => {
-        const trimmed = value?.trim().toLowerCase()
+        const trimmed = value?.trim()
         if (!trimmed) return $Enums.ExamType.OfflineWritten
 
         if (trimmed === 'Thi viết') {
@@ -160,7 +160,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
         const semester = parseIntField(row[cols.semester]) || null
 
         // Parse loại bắt buộc
-        const requiredText = row[cols.required]?.trim().toLowerCase()
+        const requiredText = row[cols.required]?.trim()
         const type =
             requiredText === 'Tự chọn'
                 ? $Enums.SubjectRequirementType.Optional

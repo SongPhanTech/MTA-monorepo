@@ -13,14 +13,7 @@ import type {
 } from '@workspace/db'
 import {
     useCreateCurriculumVersion,
-    useCreateManyTrainingBlockOnCurriculumVersion,
-    useCreateManyTrainingBlockSubject,
-    useCreateSubjectVersion,
-    useCreateTrainingBlock,
     useFindManyDiplomaType,
-    useFindManyDM_DonVi,
-    useFindManySubjectVersion,
-    useFindManyTrainingBlock,
     useFindManyTrainingLanguage,
     useFindManyTrainingLevel,
     useFindManyTrainingObjectType,
@@ -37,9 +30,9 @@ import './index.css'
 import DocumentPaths from '@components/commons/documentPaths'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Tabs from '@components/commons/tabar'
-import { $Enums } from '@workspace/db/client'
 import type { SubjectResult } from '@workspace/libs/parseExcel'
 import { parseSheetSubject } from '@workspace/libs/parseExcel'
+import { useImportPhienBanCTDTSubject } from '@workspace/libs/api/training'
 
 export type PutCurriculumVersion = CurriculumVersion & {
     documentFiles?: DocumentFile[]
@@ -64,6 +57,7 @@ const PutCurriculumVersion = () => {
     // Import Excel states
     const [importFileName, setImportFileName] = useState<string>('')
     const [filteredSubjects, setFilteredSubjects] = useState<SubjectResult[]>([])
+    const [importFile, setImportFile] = useState<File | null>(null)
 
     const { isOpen, onClose, input } = useDisclosure<CurriculumVersionInput>({
         tag: 'PutCurriculumVersion',
@@ -80,6 +74,8 @@ const PutCurriculumVersion = () => {
             setFilteredSubjects(previewInput.previewData)
         }
     }, [previewInput?.previewData])
+
+    console.log(importFile)
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -98,101 +94,35 @@ const PutCurriculumVersion = () => {
 
     const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
     const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
-    const { mutateAsync: createTrainingBlock } = useCreateTrainingBlock()
-    const { mutateAsync: createManyTrainingBlockOnCurriculumVersion } =
-        useCreateManyTrainingBlockOnCurriculumVersion()
-    const { mutateAsync: createSubjectVersion } = useCreateSubjectVersion()
-    const { mutateAsync: createManyTrainingBlockSubject } = useCreateManyTrainingBlockSubject()
 
-    const { data: existingTrainingBlocks = [] } = useFindManyTrainingBlock({
-        select: { id: true, name: true },
-    })
+    const { mutateAsync: importPhienBanCTDTSubject } = useImportPhienBanCTDTSubject()
 
-    const { data: existingOrganizations = [] } = useFindManyDM_DonVi({
-        select: { Id: true, sMa: true },
-    })
+    const handleFileSelect = () => {
+        const fileInput = window.document.createElement('input')
+        fileInput.type = 'file'
+        fileInput.accept = '.xlsx,.xls'
+        fileInput.onchange = (e: Event) => {
+            const file = (e.target as HTMLInputElement).files?.[0]
+            if (!file) return
 
-    const { data: existingSubjectVersions = [] } = useFindManySubjectVersion({
-        select: { id: true, code: true, name: true },
-    })
+            setImportFileName(file.name)
+            setImportFile(file)
 
-    // Helper function để map loại thi từ tiếng Việt sang ExamType enum
-    const mapExamType = (vietnameseType?: string): string => {
-        if (!vietnameseType) return 'Other'
+            const reader = new FileReader()
+            reader.onload = (e) => {
+                const { subjects, errors } = parseSheetSubject(e.target?.result as ArrayBuffer)
 
-        const mapping: Record<string, string> = {
-            'Thi viết': $Enums.ExamType.OfflineWritten,
-            'Thi vấn đáp': $Enums.ExamType.Oral,
-            'Thi thực hành': $Enums.ExamType.Practice,
-            'Thi đồ án': $Enums.ExamType.Project,
-            'Loại khác': $Enums.ExamType.Other,
-        }
-
-        return mapping[vietnameseType] || $Enums.ExamType.Other
-    }
-
-    // Helper function để map loại môn học từ tiếng Việt sang SubjectVersionType enum
-    const mapSubjectVersionType = (vietnameseType?: string): string => {
-        if (!vietnameseType) return 'Normal'
-
-        const mapping: Record<string, string> = {
-            'Môn thường': $Enums.SubjectVersionType.Normal,
-            'Thực tập': $Enums.SubjectVersionType.Internship,
-            'Chuyên đề nghiên cứu': $Enums.SubjectVersionType.Research,
-            'Luận văn/Đồ án': $Enums.SubjectVersionType.Project,
-            'Luận văn': $Enums.SubjectVersionType.Project,
-            'Đồ án': $Enums.SubjectVersionType.Project,
-        }
-
-        return mapping[vietnameseType] || $Enums.SubjectVersionType.Normal
-    }
-
-    // Helper function tương tự buildOrgCodeMapOrThrow
-    const buildOrgCodeMap = (orgCodes: (string | undefined)[]) => {
-        const uniqCodes = Array.from(
-            new Set(orgCodes.filter((code): code is string => Boolean(code)))
-        )
-        const orgCodeToId = new Map<string, string>()
-
-        for (const orgCode of uniqCodes) {
-            const existing = existingOrganizations.find(
-                (org) => org.sMa?.toLowerCase() === orgCode.toLowerCase()
-            )
-
-            if (existing?.Id) {
-                orgCodeToId.set(orgCode, existing.Id)
-            }
-        }
-
-        return orgCodeToId
-    }
-
-    // Helper function tương tự buildTrainingBlockMapOrThrow
-    const buildTrainingBlockMap = async (blockNames: string[]) => {
-        const uniqNames = Array.from(new Set(blockNames.filter((name) => Boolean(name))))
-        const blockNameToId = new Map<string, string>()
-
-        // Tạo các block chưa tồn tại
-        for (const blockName of uniqNames) {
-            const existing = existingTrainingBlocks.find(
-                (b) => b.name?.toLowerCase() === blockName.toLowerCase()
-            )
-
-            if (existing) {
-                blockNameToId.set(blockName, existing.id)
-            } else {
-                // Tạo mới TrainingBlock
-                const newBlock = await createTrainingBlock({
-                    data: { name: blockName, priority: 0 },
+                openPreviewModal({
+                    previewData: subjects,
+                    errorData: errors,
                 })
-                if (newBlock?.id) {
-                    blockNameToId.set(blockName, newBlock.id)
-                }
             }
+            reader.readAsArrayBuffer(file)
         }
-
-        return blockNameToId
+        fileInput.click()
     }
+
+    console.log(importFile)
 
     async function onOk(output?: PutCurriculumVersion) {
         if (!output) return
@@ -300,9 +230,18 @@ const PutCurriculumVersion = () => {
                 if (
                     filteredSubjects.length > 0 &&
                     newCurriculumVersion?.id &&
-                    output.trainingObjectTypeId
+                    output.trainingObjectTypeId &&
+                    importFile
                 ) {
                     // TODO: call api here
+                    await importPhienBanCTDTSubject({
+                        data: {
+                            curriculumVersionId: newCurriculumVersion.id,
+                            trainingObjectTypeId: output.trainingObjectTypeId,
+                            file: importFile,
+                            createNewSubjects: true,
+                        },
+                    })
                 }
 
                 message.success('Thêm mới thành công')
@@ -347,30 +286,6 @@ const PutCurriculumVersion = () => {
             setDocument([])
         }
     }, [initialValue])
-
-    const handleFileSelect = () => {
-        const fileInput = window.document.createElement('input')
-        fileInput.type = 'file'
-        fileInput.accept = '.xlsx,.xls'
-        fileInput.onchange = (e: Event) => {
-            const file = (e.target as HTMLInputElement).files?.[0]
-            if (!file) return
-
-            setImportFileName(file.name)
-
-            const reader = new FileReader()
-            reader.onload = (e) => {
-                const { subjects, errors } = parseSheetSubject(e.target?.result as ArrayBuffer)
-
-                openPreviewModal({
-                    previewData: subjects,
-                    errorData: errors,
-                })
-            }
-            reader.readAsArrayBuffer(file)
-        }
-        fileInput.click()
-    }
 
     return (
         <PutFormModal

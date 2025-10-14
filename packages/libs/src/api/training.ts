@@ -60,6 +60,9 @@ import type {
     ImportPhanCongGiangDay400,
     ImportPhienBanCTDT200,
     ImportPhienBanCTDT400,
+    ImportPhienBanCTDTSubject200,
+    ImportPhienBanCTDTSubject400,
+    ImportPhienBanCTDTSubjectBody,
     ImportPhienBanCTĐT,
     ListOfEnrollFixedClassOnSubjectClass,
     ListOfFixedClassBySubjectClassSemester,
@@ -3345,6 +3348,137 @@ export const useImportPhienBanCTDT = <TError = ImportPhienBanCTDT400, TContext =
     TContext
 > => {
     const mutationOptions = getImportPhienBanCTDTMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type importPhienBanCTDTSubjectResponse200 = {
+    data: ImportPhienBanCTDTSubject200
+    status: 200
+}
+
+export type importPhienBanCTDTSubjectResponse400 = {
+    data: ImportPhienBanCTDTSubject400
+    status: 400
+}
+
+export type importPhienBanCTDTSubjectResponseComposite =
+    | importPhienBanCTDTSubjectResponse200
+    | importPhienBanCTDTSubjectResponse400
+
+export type importPhienBanCTDTSubjectResponse = importPhienBanCTDTSubjectResponseComposite & {
+    headers: Headers
+}
+
+export const getImportPhienBanCTDTSubjectUrl = () => {
+    return '/api/curriculum-subject/import-phien-ban-ctdt'
+}
+
+export const importPhienBanCTDTSubject = async (
+    importPhienBanCTDTSubjectBody: ImportPhienBanCTDTSubjectBody,
+    options?: RequestInit
+): Promise<importPhienBanCTDTSubjectResponse> => {
+    const formData = new FormData()
+    formData.append('file', importPhienBanCTDTSubjectBody.file)
+    if (
+        importPhienBanCTDTSubjectBody.timeout !== undefined &&
+        importPhienBanCTDTSubjectBody.timeout !== null
+    ) {
+        formData.append('timeout', importPhienBanCTDTSubjectBody.timeout.toString())
+    }
+
+    formData.append('file', importPhienBanCTDTSubjectBody.file)
+    formData.append('trainingObjectTypeId', importPhienBanCTDTSubjectBody.trainingObjectTypeId)
+    formData.append('curriculumVersionId', importPhienBanCTDTSubjectBody.curriculumVersionId)
+    if (
+        importPhienBanCTDTSubjectBody.createNewSubjects !== undefined &&
+        importPhienBanCTDTSubjectBody.createNewSubjects !== null
+    ) {
+        formData.append(
+            'createNewSubjects',
+            importPhienBanCTDTSubjectBody.createNewSubjects.toString()
+        )
+    }
+    if (
+        importPhienBanCTDTSubjectBody.timeout !== undefined &&
+        importPhienBanCTDTSubjectBody.timeout !== null
+    ) {
+        formData.append('timeout', importPhienBanCTDTSubjectBody.timeout.toString())
+    }
+
+    return customTrainingFetch<importPhienBanCTDTSubjectResponse>(
+        getImportPhienBanCTDTSubjectUrl(),
+        {
+            ...options,
+            method: 'POST',
+            body: formData,
+        }
+    )
+}
+
+export const getImportPhienBanCTDTSubjectMutationOptions = <
+    TError = ImportPhienBanCTDTSubject400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
+        TError,
+        { data: ImportPhienBanCTDTSubjectBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
+    TError,
+    { data: ImportPhienBanCTDTSubjectBody },
+    TContext
+> => {
+    const mutationKey = ['importPhienBanCTDTSubject']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
+        { data: ImportPhienBanCTDTSubjectBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return importPhienBanCTDTSubject(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ImportPhienBanCTDTSubjectMutationResult = NonNullable<
+    Awaited<ReturnType<typeof importPhienBanCTDTSubject>>
+>
+export type ImportPhienBanCTDTSubjectMutationBody = ImportPhienBanCTDTSubjectBody
+export type ImportPhienBanCTDTSubjectMutationError = ImportPhienBanCTDTSubject400
+
+export const useImportPhienBanCTDTSubject = <
+    TError = ImportPhienBanCTDTSubject400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
+            TError,
+            { data: ImportPhienBanCTDTSubjectBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof importPhienBanCTDTSubject>>,
+    TError,
+    { data: ImportPhienBanCTDTSubjectBody },
+    TContext
+> => {
+    const mutationOptions = getImportPhienBanCTDTSubjectMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
