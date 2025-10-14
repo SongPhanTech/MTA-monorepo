@@ -1,14 +1,17 @@
 import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
+import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { type TrainingMajor } from '@workspace/db'
+import { PlanTraining } from '@workspace/db/client'
 import {
     useFindFirstPlanTrainingDelay,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
@@ -19,7 +22,7 @@ interface SubjectBySemesterForm {
     searchText?: string
     trainingCourseId?: string
     trainingMajorId?: string
-    subjectSelected?: Array<string>
+    subjectDelaySelected?: Array<string>
 }
 
 export default function MonCham() {
@@ -31,7 +34,7 @@ export default function MonCham() {
     const searchText = Form.useWatch('searchText', form)
     const trainingCourseId = Form.useWatch('trainingCourseId', form)
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
-    const subjectSelected = Form.useWatch('subjectSelected', form) || []
+    const subjectDelaySelected = Form.useWatch('subjectDelaySelected', form) || []
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
@@ -50,7 +53,20 @@ export default function MonCham() {
                                 },
                             },
                         },
-                        fixedClasses: true,
+                        fixedClasses: {
+                            include: {
+                                _count: {
+                                    select: {
+                                        students: {
+                                            where: {
+                                                active: true,
+                                                status: 'ENROLLED',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
                     },
                     where: {
                         subjectVersion: {
@@ -110,121 +126,88 @@ export default function MonCham() {
         try {
             if (!semesterId || !trainingObjectTypeId) return
             showSpinner()
-            // const delaySubject = data.filter(
-            //     (subject) => !subjectSelected.includes(subject.subjectVersionId)
-            // )
+            const subject = planTrainingDelayData?.planTrainingDelaySubjects.filter((subject) =>
+                subjectDelaySelected.includes(subject.subjectVersionId)
+            )
 
-            // const fixedClasses = data.filter((subject) =>
-            //     subjectSelected.includes(subject.subjectVersionId)
-            // )
-            // const fixedClassDelay = delaySubject.flatMap((subject) => subject.fixedClass)
+            let planTraining = await sqlTransaction([
+                {
+                    model: 'PlanTraining',
+                    operation: 'findFirst',
+                    data: {
+                        where: { semesterId, trainingObjectTypeId },
+                    },
+                },
+            ])
 
-            // let planTraining = await sqlTransaction([
-            //     {
-            //         model: 'PlanTraining',
-            //         operation: 'findFirst',
-            //         data: {
-            //             where: { semesterId, trainingObjectTypeId },
-            //         },
-            //     },
-            // ])
-            // let planTrainingDelay = await sqlTransaction([
-            //     {
-            //         model: 'PlanTrainingDelay',
-            //         operation: 'findFirst',
-            //         data: {
-            //             where: { semesterId, trainingObjectTypeId },
-            //         },
-            //     },
-            // ])
+            if (planTraining.status === 200 && !planTraining?.data?.[0]) {
+                planTraining = await sqlTransaction([
+                    {
+                        model: 'PlanTraining',
+                        operation: 'create',
+                        data: {
+                            data: { semesterId, trainingObjectTypeId },
+                        },
+                    },
+                ])
+            }
 
-            // if (planTraining.status === 200 && !planTraining?.data?.[0]) {
-            //     planTraining = await sqlTransaction([
-            //         {
-            //             model: 'PlanTraining',
-            //             operation: 'create',
-            //             data: {
-            //                 data: { semesterId, trainingObjectTypeId },
-            //             },
-            //         },
-            //     ])
-            // }
+            if (planTraining.status !== 200 || !subject) {
+                throw new Error('Lỗi khi tạo kế hoạch đào tạo')
+            }
 
-            // if (planTrainingDelay.status === 200 && !planTrainingDelay?.data?.[0]) {
-            //     planTrainingDelay = await sqlTransaction([
-            //         {
-            //             model: 'PlanTrainingDelay',
-            //             operation: 'create',
-            //             data: {
-            //                 data: { semesterId, trainingObjectTypeId },
-            //             },
-            //         },
-            //     ])
-            // }
+            const planTrainingId = (planTraining?.data?.[0] as PlanTraining)?.id
+            if (!planTrainingId) {
+                throw new Error('Kế hoạch đào tạo không tồn tại')
+            }
+            const planTrainingDelayId = planTrainingDelayData?.id
+            if (!planTrainingDelayId) {
+                throw new Error('Kế hoạch đào tạo môn chậm tiến độ không tồn tại')
+            }
 
-            // if (planTraining.status !== 200 || planTrainingDelay.status !== 200) {
-            //     throw new Error('Lỗi khi tạo kế hoạch đào tạo')
-            // }
-
-            // const planTrainingId = (planTraining?.data?.[0] as PlanTraining)?.id
-            // if (!planTrainingId) {
-            //     throw new Error('Kế hoạch đào tạo không tồn tại')
-            // }
-            // const planTrainingDelayId = (planTrainingDelay?.data?.[0] as PlanTrainingDelay)?.id
-            // if (!planTrainingDelayId) {
-            //     throw new Error('Kế hoạch đào tạo môn chậm tiến độ không tồn tại')
-            // }
-
-            // const res = await sqlTransaction([
-            //     {
-            //         model: 'PlanTraining',
-            //         operation: 'update',
-            //         data: {
-            //             where: { id: planTrainingId },
-            //             data: {
-            //                 subjects: {
-            //                     set: subjectSelected.map((subjectVersionId) => ({
-            //                         id: subjectVersionId,
-            //                     })),
-            //                 },
-            //                 fixedClasses: {
-            //                     set: fixedClasses.flatMap((subject) =>
-            //                         subject.fixedClass.map((fc) => ({
-            //                             id: fc.fixedClassId,
-            //                         }))
-            //                     ),
-            //                 },
-            //             },
-            //         },
-            //     },
-            //     {
-            //         model: 'PlanTrainingDelay',
-            //         operation: 'update',
-            //         data: {
-            //             where: { id: planTrainingDelayId },
-            //             data: {
-            //                 subjects: {
-            //                     set: delaySubject.map((subject) => ({
-            //                         id: subject.id,
-            //                     })),
-            //                 },
-            //                 fixedClasses: {
-            //                     set: fixedClassDelay.map((fc) => ({
-            //                         id: fc.fixedClassId,
-            //                     })),
-            //                 },
-            //             },
-            //         },
-            //     },
-            // ])
-            // if (res.status !== 200) {
-            //     throw new Error('Lỗi khi lưu kế hoạch đào tạo')
-            // }
+            const res = await sqlTransaction([
+                {
+                    model: 'PlanTraining',
+                    operation: 'update',
+                    data: {
+                        where: { id: planTrainingId },
+                        data: {
+                            planTrainingSubjects: {
+                                create: subject.map((subject) => ({
+                                    subjectVersionId: subject.subjectVersionId,
+                                    fixedClasses: {
+                                        connect: subject.fixedClasses.map((fc) => ({
+                                            id: fc.id,
+                                        })),
+                                    },
+                                })),
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'PlanTrainingDelay',
+                    operation: 'update',
+                    data: {
+                        where: { id: planTrainingDelayId },
+                        data: {
+                            planTrainingDelaySubjects: {
+                                deleteMany: subjectDelaySelected.map((id) => ({
+                                    subjectVersionId: id,
+                                })),
+                            },
+                        },
+                    },
+                },
+            ])
+            if (res.status !== 200) {
+                throw new Error('Lỗi khi lưu kế hoạch đào tạo')
+            }
             message.success('Thêm môn học vào kế hoạch thành công')
             form.resetFields()
             debouncedRefetch()
         } catch (error) {
-            message.error('Lưu kế hoạch mở lớp thất bại')
+            message.error('Lưu kế hoạch môn thất bại')
             console.error(error)
         }
         hideSpinner()
@@ -237,7 +220,7 @@ export default function MonCham() {
                     className="w-full"
                     form={form}
                     onValuesChange={(filter: SubjectBySemesterForm) => {
-                        if (!filter.subjectSelected) {
+                        if (!filter.subjectDelaySelected) {
                             debouncedRefetch()
                         }
                     }}
@@ -291,35 +274,35 @@ export default function MonCham() {
                         </Flex>
                     </Col>
                     <Col span={24}>
-                        <Form.Item hidden name="subjectSelected" />
+                        <Form.Item hidden name="subjectDelaySelected" />
                         <Table
-                            rowKey="id"
+                            rowKey="subjectVersionId"
                             data={planTrainingDelayData?.planTrainingDelaySubjects ?? []}
                             rowSelection={{
                                 type: 'checkbox',
                                 checkStrictly: true,
-                                selectedRowKeys: subjectSelected,
+                                selectedRowKeys: subjectDelaySelected,
                                 onChange: (selectedRowKeys) => {
-                                    form.setFieldValue('subjectSelected', selectedRowKeys)
+                                    form.setFieldValue('subjectDelaySelected', selectedRowKeys)
                                 },
                                 columnWidth: 15,
                             }}
                             onRow={(record) => {
                                 return {
                                     onClick: () => {
-                                        const isSelected = subjectSelected.includes(
+                                        const isSelected = subjectDelaySelected.includes(
                                             record.subjectVersionId
                                         )
                                         if (isSelected) {
                                             form.setFieldValue(
-                                                'subjectSelected',
-                                                subjectSelected.filter(
+                                                'subjectDelaySelected',
+                                                subjectDelaySelected.filter(
                                                     (id) => id !== record.subjectVersionId
                                                 )
                                             )
                                         } else {
-                                            form.setFieldValue('subjectSelected', [
-                                                ...subjectSelected,
+                                            form.setFieldValue('subjectDelaySelected', [
+                                                ...subjectDelaySelected,
                                                 record.subjectVersionId,
                                             ])
                                         }
@@ -349,6 +332,27 @@ export default function MonCham() {
                                                 {`${record?.subjectVersion?.name} (${record?.subjectVersion?.credit})` ||
                                                     ''}
                                             </div>
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Danh sách lớp quản lý',
+                                    dataIndex: 'fixedClass',
+                                    align: 'center',
+                                    width: 180,
+                                    render: (__, record) => {
+                                        return record?.fixedClasses.length ? (
+                                            <TextTruncate
+                                                arr={record?.fixedClasses.map((i: any) => {
+                                                    return {
+                                                        key: i?.id,
+                                                        label: ` ${i.code} (${i._count?.students})`,
+                                                    }
+                                                })}
+                                                key="fixedClass"
+                                            />
+                                        ) : (
+                                            ''
                                         )
                                     },
                                 },

@@ -1,13 +1,44 @@
-import type { ParsedSubject } from '@workspace/libs/parseExcel'
+import { $Enums } from '@workspace/db/client'
 import { useFindManySubject, useFindManySubjectVersion } from '@workspace/db/hooks'
+import type { SubjectResult } from '@workspace/libs/parseExcel'
 import { Button, Collapse, Modal, Table, Tag } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const { Panel } = Collapse
 
+// Map ExamType sang tiếng Việt
+const mapExamType = (examType: $Enums.ExamType): string => {
+    const examTypeMap: Partial<Record<$Enums.ExamType, string>> = {
+        OfflineWritten: 'Thi viết',
+        Oral: 'Thi vấn đáp',
+        Other: 'Khác',
+    }
+    return examTypeMap[examType] || examType
+}
+
+const mapSubjectRequirementType = (type: $Enums.SubjectRequirementType): string => {
+    const typeMap: Partial<Record<$Enums.SubjectRequirementType, string>> = {
+        None: 'Không',
+        Mandatory: 'Bắt buộc',
+        Optional: 'Tự chọn',
+    }
+    return typeMap[type] || type
+}
+
+// Map SubjectVersionType sang tiếng Việt
+const mapSubjectVersionType = (type: $Enums.SubjectVersionType): string => {
+    const typeMap: Partial<Record<$Enums.SubjectVersionType, string>> = {
+        Normal: 'Bình thường',
+        Internship: 'Thực tập',
+        Research: 'Nghiên cứu',
+        Project: 'Đồ án',
+    }
+    return typeMap[type] || type
+}
+
 type ModalPreviewUploadInput = {
-    previewData: ParsedSubject[]
+    previewData: SubjectResult[]
     errorData: any[]
 }
 
@@ -35,7 +66,7 @@ const ModalPreviewUpload = () => {
         )
         const existingSubjectNames = new Set(existingSubjects.map((s) => s.name?.toLowerCase()))
 
-        const filtered: Array<ParsedSubject & { status: 'new' | 'new-version' | 'duplicate' }> = []
+        const filtered: Array<SubjectResult & { status: 'new' | 'new-version' | 'duplicate' }> = []
         const duplicates: any[] = []
 
         for (const subject of rawPreviewData) {
@@ -182,7 +213,7 @@ const ModalPreviewUpload = () => {
                     },
                     {
                         title: 'Khối kiến thức',
-                        dataIndex: 'knowledgeBlock',
+                        dataIndex: 'trainingBlockName',
                         key: 'knowledgeBlock',
                         fixed: 'left',
                         width: 250,
@@ -196,9 +227,10 @@ const ModalPreviewUpload = () => {
                     },
                     {
                         title: 'Bắt buộc',
-                        dataIndex: 'required',
+                        dataIndex: 'type',
                         key: 'required',
                         width: 150,
+                        render: (value) => mapSubjectRequirementType(value),
                     },
                     {
                         title: 'HP điều kiện',
@@ -212,6 +244,7 @@ const ModalPreviewUpload = () => {
                         dataIndex: 'type',
                         key: 'type',
                         width: 270,
+                        render: (value) => mapSubjectVersionType(value),
                     },
                     {
                         title: 'Mã học phần',
@@ -221,7 +254,7 @@ const ModalPreviewUpload = () => {
                     },
                     {
                         title: 'Khoa, Viện phụ trách',
-                        dataIndex: 'managementOrganization',
+                        dataIndex: 'organizationCode',
                         key: 'managementOrganization',
                         align: 'center',
                         width: 150,
@@ -235,56 +268,56 @@ const ModalPreviewUpload = () => {
                     },
                     {
                         title: 'Số tiết CTĐT',
-                        dataIndex: 'periodCtdt',
+                        dataIndex: 'period',
                         key: 'periodCtdt',
                         width: 120,
                         align: 'center',
                     },
                     {
                         title: 'Số tiết TKB',
-                        dataIndex: 'periodTkb',
+                        dataIndex: 'period',
                         key: 'periodTkb',
                         width: 120,
                         align: 'center',
                     },
                     {
                         title: 'LT',
-                        dataIndex: 'theory',
+                        dataIndex: 'numberOfTheory',
                         key: 'theory',
                         width: 100,
                         align: 'center',
                     },
                     {
                         title: 'TL,BT',
-                        dataIndex: 'practice',
+                        dataIndex: 'numberOfPractical',
                         key: 'practice',
                         width: 100,
                         align: 'center',
                     },
                     {
                         title: 'ThL',
-                        dataIndex: 'discussion',
+                        dataIndex: 'numberOfSelfStudy',
                         key: 'discussion',
                         width: 100,
                         align: 'center',
                     },
                     {
                         title: 'TN,TH',
-                        dataIndex: 'experiment',
+                        dataIndex: 'numberOfPractice',
                         key: 'experiment',
                         width: 100,
                         align: 'center',
                     },
                     {
                         title: 'Ôn',
-                        dataIndex: 'review',
+                        dataIndex: 'numberOfReview',
                         key: 'review',
                         width: 100,
                         align: 'center',
                     },
                     {
                         title: 'KT,Thi',
-                        dataIndex: 'exam',
+                        dataIndex: 'numberOfExam',
                         key: 'exam',
                         width: 80,
                         align: 'center',
@@ -302,10 +335,11 @@ const ModalPreviewUpload = () => {
                         key: 'examType',
                         align: 'center',
                         width: 170,
+                        render: (value) => mapExamType(value),
                     },
                     {
                         title: 'Một đầu điểm',
-                        dataIndex: 'gradePoints',
+                        dataIndex: '',
                         key: 'gradePoints',
                         align: 'center',
                         width: 170,
@@ -325,7 +359,7 @@ const ModalPreviewUpload = () => {
                     showTotal: (total) => `Tổng ${total} môn học`,
                     pageSizeOptions: ['10', '20', '50', '100'],
                 }}
-                rowKey={(record: ParsedSubject, index?: number) => record.code || `row-${index}`}
+                rowKey={(record: SubjectResult, index?: number) => record.code || `row-${index}`}
                 scroll={{ x: 3000, y: 500 }}
                 size="small"
             />

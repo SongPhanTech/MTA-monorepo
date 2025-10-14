@@ -10,18 +10,11 @@ import type {
     TrainingForm,
     TrainingObjectType,
     TrainingTime,
-    Prisma,
 } from '@workspace/db'
 import {
     useCreateCurriculumVersion,
-    useCreateSubjectVersion,
-    useCreateTrainingBlock,
-    useCreateManyTrainingBlockOnCurriculumVersion,
-    useCreateManyTrainingBlockSubject,
+    useDeleteCurriculumVersion,
     useFindManyDiplomaType,
-    useFindManyDM_DonVi,
-    useFindManySubjectVersion,
-    useFindManyTrainingBlock,
     useFindManyTrainingLanguage,
     useFindManyTrainingLevel,
     useFindManyTrainingObjectType,
@@ -29,7 +22,7 @@ import {
     useFindUniqueCurriculumVersion,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Radio, Row, Button } from 'antd'
+import { Button, Col, Form, Input, InputNumber, message, Radio, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -38,11 +31,9 @@ import './index.css'
 import DocumentPaths from '@components/commons/documentPaths'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Tabs from '@components/commons/tabar'
-import type { ParsedSubject } from '@workspace/libs/parseExcel'
+import type { SubjectResult } from '@workspace/libs/parseExcel'
 import { parseSheetSubject } from '@workspace/libs/parseExcel'
-import { createId } from '@workspace/db'
-import { $Enums } from '@workspace/db/client'
-import { sqlTransaction } from '@workspace/libs/api/model'
+import { importPhienBanCTDTSubject } from '@workspace/libs/api/training'
 
 export type PutCurriculumVersion = CurriculumVersion & {
     documentFiles?: DocumentFile[]
@@ -56,7 +47,7 @@ type CurriculumVersionInput = {
 }
 
 type ModalPreviewUploadInput = {
-    previewData: ParsedSubject[]
+    previewData: SubjectResult[]
     errorData: any[]
 }
 
@@ -66,7 +57,8 @@ const PutCurriculumVersion = () => {
 
     // Import Excel states
     const [importFileName, setImportFileName] = useState<string>('')
-    const [filteredSubjects, setFilteredSubjects] = useState<ParsedSubject[]>([])
+    const [filteredSubjects, setFilteredSubjects] = useState<SubjectResult[]>([])
+    const [importFile, setImportFile] = useState<File | null>(null)
 
     const { isOpen, onClose, input } = useDisclosure<CurriculumVersionInput>({
         tag: 'PutCurriculumVersion',
@@ -83,6 +75,8 @@ const PutCurriculumVersion = () => {
             setFilteredSubjects(previewInput.previewData)
         }
     }, [previewInput?.previewData])
+
+    console.log(importFile)
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -101,178 +95,35 @@ const PutCurriculumVersion = () => {
 
     const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
     const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
-    const { mutateAsync: createTrainingBlock } = useCreateTrainingBlock()
-    const { mutateAsync: createManyTrainingBlockOnCurriculumVersion } =
-        useCreateManyTrainingBlockOnCurriculumVersion()
-    const { mutateAsync: createSubjectVersion } = useCreateSubjectVersion()
-    const { mutateAsync: createManyTrainingBlockSubject } = useCreateManyTrainingBlockSubject()
+    const { mutateAsync: deleteCurriculumVersion } = useDeleteCurriculumVersion()
 
-    const { data: existingTrainingBlocks = [] } = useFindManyTrainingBlock({
-        select: { id: true, name: true },
-    })
+    const handleFileSelect = () => {
+        const fileInput = window.document.createElement('input')
+        fileInput.type = 'file'
+        fileInput.accept = '.xlsx,.xls'
+        fileInput.onchange = (e: Event) => {
+            const file = (e.target as HTMLInputElement).files?.[0]
+            if (!file) return
 
-    const { data: existingOrganizations = [] } = useFindManyDM_DonVi({
-        select: { Id: true, sMa: true },
-    })
+            setImportFileName(file.name)
+            setImportFile(file)
 
-    const { data: existingSubjectVersions = [] } = useFindManySubjectVersion({
-        select: { id: true, code: true, name: true },
-    })
+            const reader = new FileReader()
+            reader.onload = (e) => {
+                const { subjects, errors } = parseSheetSubject(e.target?.result as ArrayBuffer)
 
-    // Helper function để map loại thi từ tiếng Việt sang ExamType enum
-    const mapExamType = (vietnameseType?: string): string => {
-        if (!vietnameseType) return 'Other'
-
-        const mapping: Record<string, string> = {
-            'Thi viết': $Enums.ExamType.OfflineWritten,
-            'Thi vấn đáp': $Enums.ExamType.Oral,
-            'Thi thực hành': $Enums.ExamType.Practice,
-            'Thi đồ án': $Enums.ExamType.Project,
-            'Loại khác': $Enums.ExamType.Other,
-        }
-
-        return mapping[vietnameseType] || $Enums.ExamType.Other
-    }
-
-    // Helper function để map loại môn học từ tiếng Việt sang SubjectVersionType enum
-    const mapSubjectVersionType = (vietnameseType?: string): string => {
-        if (!vietnameseType) return 'Normal'
-
-        const mapping: Record<string, string> = {
-            'Môn thường': $Enums.SubjectVersionType.Normal,
-            'Thực tập': $Enums.SubjectVersionType.Internship,
-            'Chuyên đề nghiên cứu': $Enums.SubjectVersionType.Research,
-            'Luận văn/Đồ án': $Enums.SubjectVersionType.Project,
-            'Luận văn': $Enums.SubjectVersionType.Project,
-            'Đồ án': $Enums.SubjectVersionType.Project,
-        }
-
-        return mapping[vietnameseType] || $Enums.SubjectVersionType.Normal
-    }
-
-    // Helper function tương tự buildOrgCodeMapOrThrow
-    const buildOrgCodeMap = (orgCodes: (string | undefined)[]) => {
-        const uniqCodes = Array.from(
-            new Set(orgCodes.filter((code): code is string => Boolean(code)))
-        )
-        const orgCodeToId = new Map<string, string>()
-
-        for (const orgCode of uniqCodes) {
-            const existing = existingOrganizations.find(
-                (org) => org.sMa?.toLowerCase() === orgCode.toLowerCase()
-            )
-
-            if (existing?.Id) {
-                orgCodeToId.set(orgCode, existing.Id)
-            }
-        }
-
-        return orgCodeToId
-    }
-
-    // Helper function tương tự buildTrainingBlockMapOrThrow
-    const buildTrainingBlockMap = async (blockNames: string[]) => {
-        const uniqNames = Array.from(new Set(blockNames.filter((name) => Boolean(name))))
-        const blockNameToId = new Map<string, string>()
-
-        // Tạo các block chưa tồn tại
-        for (const blockName of uniqNames) {
-            const existing = existingTrainingBlocks.find(
-                (b) => b.name?.toLowerCase() === blockName.toLowerCase()
-            )
-
-            if (existing) {
-                blockNameToId.set(blockName, existing.id)
-            } else {
-                // Tạo mới TrainingBlock
-                const newBlock = await createTrainingBlock({
-                    data: { name: blockName, priority: 0 },
+                openPreviewModal({
+                    previewData: subjects,
+                    errorData: errors,
                 })
-                if (newBlock?.id) {
-                    blockNameToId.set(blockName, newBlock.id)
-                }
             }
+            reader.readAsArrayBuffer(file)
         }
-
-        return blockNameToId
+        fileInput.click()
     }
 
-    // Helper function tương tự buildSubjectMapOrThrow
-    const buildSubjectMap = async (
-        subjects: Array<
-            ParsedSubject & {
-                status: 'new' | 'new-version' | 'duplicate'
-                trainingObjectTypeId: string
-            }
-        >
-    ) => {
-        const subjectNameToVersionId = new Map<string, string>()
+    console.log(importFile)
 
-        // Build organization code map trước
-        const orgMap = buildOrgCodeMap(subjects.map((s) => s.managementOrganization))
-
-        for (const subject of subjects) {
-            if (subject.status === 'duplicate') {
-                // Nếu đã tồn tại, tìm SubjectVersion theo code và connect
-                const existingVersion = existingSubjectVersions.find(
-                    (sv) => sv.code?.toLowerCase() === subject.code?.toLowerCase()
-                )
-
-                if (existingVersion?.id) {
-                    subjectNameToVersionId.set(subject.name, existingVersion.id)
-                }
-            } else {
-                // Trường hợp 'new' hoặc 'new-version': Tạo SubjectVersion mới
-                const managementOrganizationId = subject.managementOrganization
-                    ? orgMap.get(subject.managementOrganization)
-                    : undefined
-
-                const newVersion = await createSubjectVersion({
-                    data: {
-                        code: subject.code,
-                        name: subject.name,
-                        credit: subject.credit || 0,
-                        period: subject.periodCtdt || 0,
-                        schedulePeriod: subject.periodTkb,
-                        numberOfTheory: subject.theory,
-                        numberOfPractical: subject.practice,
-                        numberOfPractice: subject.experiment,
-                        numberOfReview: subject.review,
-                        numberOfExam: subject.exam,
-                        examType: mapExamType(subject.examType) as any,
-                        type: mapSubjectVersionType(subject.type) as any,
-                        onePoint: subject.gradePoints === 'X',
-                        trainingObjectType: {
-                            connect: { id: subject.trainingObjectTypeId },
-                        },
-                        ...(managementOrganizationId
-                            ? {
-                                  managementOrganization: {
-                                      connect: { Id: managementOrganizationId },
-                                  },
-                              }
-                            : {}),
-                        subject: {
-                            connectOrCreate: {
-                                where: { name: subject.name },
-                                create: {
-                                    name: subject.name,
-                                    englishName: subject.name,
-                                    managementOrganizationId,
-                                },
-                            },
-                        },
-                    },
-                })
-
-                if (newVersion?.id) {
-                    subjectNameToVersionId.set(subject.name, newVersion.id)
-                }
-            }
-        }
-
-        return subjectNameToVersionId
-    }
     async function onOk(output?: PutCurriculumVersion) {
         if (!output) return
         try {
@@ -379,107 +230,21 @@ const PutCurriculumVersion = () => {
                 if (
                     filteredSubjects.length > 0 &&
                     newCurriculumVersion?.id &&
-                    output.trainingObjectTypeId
+                    output.trainingObjectTypeId &&
+                    importFile
                 ) {
-                    try {
-                        // Nhóm môn học theo knowledgeBlock
-                        const subjectsByBlock = filteredSubjects.reduce(
-                            (acc, subject) => {
-                                const blockName = subject.knowledgeBlock || 'Chưa phân loại'
-                                if (!acc[blockName]) {
-                                    acc[blockName] = []
-                                }
-                                acc[blockName].push(subject)
-                                return acc
-                            },
-                            {} as Record<string, typeof filteredSubjects>
-                        )
-
-                        // Bước 1: Build TrainingBlock Map (tương tự buildTrainingBlockMapOrThrow)
-                        const blockNames = Object.keys(subjectsByBlock)
-                        const trainingBlockMap = await buildTrainingBlockMap(blockNames)
-
-                        // Bước 2: Build Subject Map (tương tự buildSubjectMapOrThrow)
-                        const subjectsWithType = filteredSubjects.map((s: any) => {
-                            // Đảm bảo có status, nếu không có thì check duplicate
-                            let status: 'new' | 'new-version' | 'duplicate' = s.status || 'new'
-
-                            // Nếu không có status, tự động check duplicate
-                            if (!s.status && s.code) {
-                                const isDuplicate = existingSubjectVersions.some(
-                                    (sv) => sv.code?.toLowerCase() === s.code?.toLowerCase()
-                                )
-                                if (isDuplicate) {
-                                    status = 'duplicate'
-                                }
-                            }
-
-                            return {
-                                ...s,
-                                status,
-                                trainingObjectTypeId: output.trainingObjectTypeId,
-                            }
+                    // TODO: call api here
+                    const res = await importPhienBanCTDTSubject({
+                        curriculumVersionId: newCurriculumVersion.id,
+                        trainingObjectTypeId: output.trainingObjectTypeId,
+                        file: importFile,
+                        createNewSubjects: true,
+                    })
+                    if (res.status !== 200) {
+                        await deleteCurriculumVersion({
+                            where: { id: newCurriculumVersion.id },
                         })
-
-                        const subjectMap = await buildSubjectMap(subjectsWithType)
-
-                        // Bước 3: Tạo TrainingBlockOnCurriculumVersion với ID
-                        const trainingBlocksWithId = blockNames.map((name, index) => ({
-                            id: createId(),
-                            name,
-                            priority: index + 1,
-                            subjects: subjectsByBlock[name],
-                        }))
-
-                        //Bước 4: Chuẩn bị dữ liệu cho createMany TrainingBlockOnCurriculumVersion
-                        const trainingBlockOnCurriculumVersionData: Prisma.TrainingBlockOnCurriculumVersionCreateManyInput[] =
-                            trainingBlocksWithId.map(({ id, name, priority }) => ({
-                                id,
-                                curriculumVersionId: newCurriculumVersion.id,
-                                trainingBlockId: trainingBlockMap.get(name) || '',
-                                priority,
-                            }))
-
-                        // Bước 5: Chuẩn bị dữ liệu cho createMany TrainingBlockSubject
-                        const trainingBlockSubjectsData: Prisma.TrainingBlockSubjectCreateManyInput[] =
-                            trainingBlocksWithId.flatMap(({ id, subjects }) =>
-                                subjects.reduce<Prisma.TrainingBlockSubjectCreateManyInput[]>(
-                                    (acc, subject) => {
-                                        const subjectVersionId = subjectMap.get(subject.name)
-
-                                        if (subjectVersionId) {
-                                            acc.push({
-                                                id: createId(),
-                                                trainingBlockOnCurriculumVersionId: id,
-                                                subjectId: subjectVersionId,
-                                                semester: subject.semester
-                                                    ? Number(subject.semester)
-                                                    : undefined,
-                                                type: subject.required ? 'Mandatory' : 'Optional',
-                                                useForFinalScore: true,
-                                                graduation: false,
-                                            })
-                                        }
-
-                                        return acc
-                                    },
-                                    []
-                                )
-                            )
-                        await sqlTransaction([
-                            {
-                                model: 'TrainingBlockOnCurriculumVersion',
-                                operation: 'createMany',
-                                data: trainingBlockOnCurriculumVersionData,
-                            },
-                            {
-                                model: 'TrainingBlockSubject',
-                                operation: 'createMany',
-                                data: trainingBlockSubjectsData,
-                            },
-                        ])
-                    } catch (error: any) {
-                        console.error('Lỗi khi import môn học:', error)
+                        throw new Error(res.data?.message || 'Lỗi khi nhập dữ liệu từ file')
                     }
                 }
 
@@ -490,8 +255,8 @@ const PutCurriculumVersion = () => {
             })
             onClose()
         } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
+            if (error?.info?.message || error?.message) {
+                message.error(error?.info?.message || error?.message)
                 return
             }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -525,30 +290,6 @@ const PutCurriculumVersion = () => {
             setDocument([])
         }
     }, [initialValue])
-
-    const handleFileSelect = () => {
-        const fileInput = window.document.createElement('input')
-        fileInput.type = 'file'
-        fileInput.accept = '.xlsx,.xls'
-        fileInput.onchange = (e: Event) => {
-            const file = (e.target as HTMLInputElement).files?.[0]
-            if (!file) return
-
-            setImportFileName(file.name)
-
-            const reader = new FileReader()
-            reader.onload = (e) => {
-                const { subjects, errors } = parseSheetSubject(e.target?.result as ArrayBuffer)
-
-                openPreviewModal({
-                    previewData: subjects,
-                    errorData: errors,
-                })
-            }
-            reader.readAsArrayBuffer(file)
-        }
-        fileInput.click()
-    }
 
     return (
         <PutFormModal

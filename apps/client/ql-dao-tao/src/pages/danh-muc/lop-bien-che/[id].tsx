@@ -17,8 +17,10 @@ import {
     useUpdateManyStudent,
     useUpdateStudent,
 } from '@workspace/db/hooks'
+import { Docxtemplater, exportFile, loadFile } from '@workspace/libs/docxjs'
+import { saveAs } from 'file-saver'
 import { ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Divider, Flex, message, Popconfirm, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Divider, Dropdown, Flex, message, Popconfirm, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { BookCheckIcon } from 'lucide-react'
@@ -26,6 +28,7 @@ import { useRouter } from 'next/router'
 
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 
 dayjs.locale('vi')
 
@@ -58,6 +61,7 @@ export default function StudentFixedClassPage() {
         orderBy: { name: 'asc' },
     })
 
+    const { getLabel: getLabelTrainingObjectType } = useTrainingObjectTypeStore()
     const { data: genderData = [] } = useFindManyDM_GioiTinh()
 
     const { data: fixedClass } = useFindUniqueFixedClass(
@@ -66,6 +70,16 @@ export default function StudentFixedClassPage() {
                 id: fixedClassId,
             },
             include: {
+                _count: {
+                    select: {
+                        students: {
+                            where: {
+                                active: true,
+                                status: 'ENROLLED',
+                            },
+                        },
+                    },
+                },
                 trainingCourse: {
                     include: {
                         trainingObjectType: true,
@@ -80,6 +94,34 @@ export default function StudentFixedClassPage() {
                                         trainingField: true,
                                     },
                                 },
+                            },
+                        },
+                        trainingBlocks: {
+                            include: {
+                                subjects: {
+                                    include: {
+                                        subject: {
+                                            include: {
+                                                managementOrganization: true,
+                                            },
+                                        },
+                                        trainingBlockOnCurriculumVersion: {
+                                            select: {
+                                                trainingBlock: {
+                                                    select: {
+                                                        name: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                    orderBy: {
+                                        semester: 'asc',
+                                    },
+                                },
+                            },
+                            orderBy: {
+                                priority: 'asc',
                             },
                         },
                     },
@@ -372,6 +414,505 @@ export default function StudentFixedClassPage() {
                         {/* Hàng chứa các button */}
                         <Col xs={12}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
+                                <Dropdown
+                                    menu={{
+                                        items: [
+                                            {
+                                                label: 'CTTK dài hạn',
+                                                key: 'CTTK-dai-han',
+                                                onClick: async () => {
+                                                    const res = await loadFile(
+                                                        '/lms/templates/chuong-trinh-dao-tao/CTTK-dai-han.docx'
+                                                    )
+                                                    const doc = new Docxtemplater(res, {
+                                                        linebreaks: true,
+                                                        paragraphLoop: true,
+                                                    })
+                                                    await doc.renderAsync({
+                                                        d: dayjs().format('DD'),
+                                                        m: dayjs().format('MM'),
+                                                        y: dayjs().format('YYYY'),
+                                                        TEN_CTDT:
+                                                            fixedClass?.curriculumVersion?.name?.toUpperCase(),
+                                                        KHOA_HOC:
+                                                            fixedClass?.trainingCourse?.name?.toUpperCase(),
+                                                        lop_quan_ly: fixedClass?.name,
+                                                        mon_hoc:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .map((e, index) => ({
+                                                                    tt: index + 1,
+                                                                    ten_mon: e.subject.name,
+                                                                    trong_so: e.subject.credit,
+                                                                    so_tiet: e.subject.period,
+                                                                    dv_phu_trach:
+                                                                        e.subject
+                                                                            ?.managementOrganization
+                                                                            ?.sMa ?? '',
+                                                                    ghi_chu:
+                                                                        e.trainingBlockOnCurriculumVersion?.trainingBlock?.name?.firstCase() ??
+                                                                        '',
+                                                                    ky_1:
+                                                                        e.semester === 1 &&
+                                                                        e.subject.period
+                                                                            ? e.subject.period
+                                                                            : '',
+                                                                    ky_2:
+                                                                        e.semester === 2 &&
+                                                                        e.subject.period
+                                                                            ? e.subject.period
+                                                                            : '',
+                                                                    ky_3:
+                                                                        e.semester === 3 &&
+                                                                        e.subject.period
+                                                                            ? e.subject.period
+                                                                            : '',
+                                                                })),
+                                                        tong_trong_so:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.subject.credit || 0),
+                                                                    0
+                                                                ),
+                                                        tong_so_tiet:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                ?.flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.subject.period || 0),
+                                                                    0
+                                                                ),
+                                                        tong_ky_1:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.semester === 1
+                                                                            ? curr.subject.period ||
+                                                                              0
+                                                                            : 0),
+                                                                    0
+                                                                ),
+                                                        tong_ky_2:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.semester === 2
+                                                                            ? curr.subject.period ||
+                                                                              0
+                                                                            : 0),
+                                                                    0
+                                                                ),
+                                                        tong_ky_3:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.semester === 3
+                                                                            ? curr.subject.period ||
+                                                                              0
+                                                                            : 0),
+                                                                    0
+                                                                ),
+                                                    })
+                                                    const blob = exportFile(doc.getZip())
+                                                    saveAs(
+                                                        blob,
+                                                        `CTTK-dai-han.${dayjs().format('DDMMYY')}.docx`
+                                                    )
+                                                },
+                                            },
+                                            {
+                                                label: 'CTTK ngắn hạn',
+                                                key: 'CTTK-ngan-han',
+                                                onClick: async () => {
+                                                    const res = await loadFile(
+                                                        '/lms/templates/chuong-trinh-dao-tao/CTTK-ngan-han.docx'
+                                                    )
+                                                    const doc = new Docxtemplater(res, {
+                                                        linebreaks: true,
+                                                        paragraphLoop: true,
+                                                    })
+                                                    await doc.renderAsync({
+                                                        d: dayjs().format('DD'),
+                                                        m: dayjs().format('MM'),
+                                                        y: dayjs().format('YYYY'),
+                                                        TEN_CTDT:
+                                                            fixedClass?.curriculumVersion?.name?.toUpperCase(),
+                                                        KHOA_HOC:
+                                                            fixedClass?.trainingCourse?.name?.toUpperCase(),
+                                                        lop_quan_ly: fixedClass?.name,
+                                                        mon_hoc:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .map((e, index) => ({
+                                                                    tt: index + 1,
+                                                                    ten_mon: e.subject.name,
+                                                                    trong_so: e.subject.credit,
+                                                                    so_tiet: e.subject.period,
+                                                                    dv_phu_trach:
+                                                                        e.subject
+                                                                            ?.managementOrganization
+                                                                            ?.sMa ?? '',
+                                                                    ghi_chu:
+                                                                        e.trainingBlockOnCurriculumVersion?.trainingBlock?.name?.firstCase() ??
+                                                                        '',
+                                                                    ky_1:
+                                                                        e.semester === 1 &&
+                                                                        e.subject.period
+                                                                            ? e.subject.period
+                                                                            : '',
+                                                                    ky_2:
+                                                                        e.semester === 2 &&
+                                                                        e.subject.period
+                                                                            ? e.subject.period
+                                                                            : '',
+                                                                })),
+                                                        tong_trong_so:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.subject.credit || 0),
+                                                                    0
+                                                                ),
+                                                        tong_so_tiet:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                ?.flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.subject.period || 0),
+                                                                    0
+                                                                ),
+                                                        tong_ky_1:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.semester === 1
+                                                                            ? curr.subject.period ||
+                                                                              0
+                                                                            : 0),
+                                                                    0
+                                                                ),
+                                                        tong_ky_2:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.semester === 2
+                                                                            ? curr.subject.period ||
+                                                                              0
+                                                                            : 0),
+                                                                    0
+                                                                ),
+                                                    })
+                                                    const blob = exportFile(doc.getZip())
+                                                    saveAs(
+                                                        blob,
+                                                        `CTTK-ngan-han.${dayjs().format('DDMMYY')}.docx`
+                                                    )
+                                                },
+                                            },
+                                            {
+                                                label: 'KHTK định hướng nghiên cứu',
+                                                key: 'KHTK-ding-huong-nghien-cuu',
+                                                onClick: async () => {
+                                                    const res = await loadFile(
+                                                        '/lms/templates/chuong-trinh-dao-tao/KHTK-ding-huong-nghien-cuu.docx'
+                                                    )
+                                                    const doc = new Docxtemplater(res, {
+                                                        linebreaks: true,
+                                                        paragraphLoop: true,
+                                                    })
+                                                    await doc.renderAsync({
+                                                        d: dayjs().format('DD'),
+                                                        m: dayjs().format('MM'),
+                                                        y: dayjs().format('YYYY'),
+                                                        HE: getLabelTrainingObjectType(
+                                                            fixedClass?.trainingCourse
+                                                                .trainingObjectType.type
+                                                        ).toUpperCase(),
+                                                        KHOA_HOC:
+                                                            fixedClass?.trainingCourse?.name?.toUpperCase(),
+                                                        ten_lop: fixedClass?.name,
+                                                        chuyen_nganh:
+                                                            fixedClass?.curriculumVersion
+                                                                ?.curriculum?.trainingMajor?.name ??
+                                                            '',
+                                                        ma_nganh:
+                                                            fixedClass?.curriculumVersion
+                                                                ?.curriculum?.trainingMajor?.code ??
+                                                            '',
+                                                        quan_so: fixedClass?._count.students ?? 0,
+                                                        mon_hoc:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .map((e, index) => ({
+                                                                    tt: index + 1,
+                                                                    ten_mon: e.subject.name,
+                                                                    trong_so: e.subject.credit,
+                                                                    so_tiet: e.subject.period,
+                                                                    dv_phu_trach:
+                                                                        e.subject
+                                                                            ?.managementOrganization
+                                                                            ?.sMa ?? '',
+                                                                    ghi_chu:
+                                                                        e.trainingBlockOnCurriculumVersion?.trainingBlock?.name?.firstCase() ??
+                                                                        '',
+                                                                    ky_1:
+                                                                        e.semester === 1 &&
+                                                                        e.subject.period
+                                                                            ? e.subject.period
+                                                                            : '',
+                                                                    ky_2:
+                                                                        e.semester === 2 &&
+                                                                        e.subject.period
+                                                                            ? e.subject.period
+                                                                            : '',
+                                                                    ky_3:
+                                                                        e.semester === 3 &&
+                                                                        e.subject.period
+                                                                            ? e.subject.period
+                                                                            : '',
+                                                                    ky_4:
+                                                                        e.semester === 4 &&
+                                                                        e.subject.period
+                                                                            ? e.subject.period
+                                                                            : '',
+                                                                })),
+                                                        tong_trong_so:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.subject.credit || 0),
+                                                                    0
+                                                                ),
+                                                        tong_so_tiet:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                ?.flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.subject.period || 0),
+                                                                    0
+                                                                ),
+                                                        tong_ky_1:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.semester === 1
+                                                                            ? curr.subject.period ||
+                                                                              0
+                                                                            : 0),
+                                                                    0
+                                                                ),
+                                                        tong_ky_2:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.semester === 2
+                                                                            ? curr.subject.period ||
+                                                                              0
+                                                                            : 0),
+                                                                    0
+                                                                ),
+                                                        tong_ky_3:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.semester === 3
+                                                                            ? curr.subject.period ||
+                                                                              0
+                                                                            : 0),
+                                                                    0
+                                                                ),
+                                                        tong_ky_4:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.semester === 4
+                                                                            ? curr.subject.period ||
+                                                                              0
+                                                                            : 0),
+                                                                    0
+                                                                ),
+                                                    })
+                                                    const blob = exportFile(doc.getZip())
+                                                    saveAs(
+                                                        blob,
+                                                        `KHTK-ding-huong-nghien-cuu.${dayjs().format('DDMMYY')}.docx`
+                                                    )
+                                                },
+                                            },
+                                            {
+                                                label: 'KHTK định hướng ứng dụng',
+                                                key: 'KHTK-ding-huong-ung-dung',
+                                                onClick: async () => {
+                                                    const res = await loadFile(
+                                                        '/lms/templates/chuong-trinh-dao-tao/KHTK-ding-huong-ung-dung.docx'
+                                                    )
+                                                    const doc = new Docxtemplater(res, {
+                                                        linebreaks: true,
+                                                        paragraphLoop: true,
+                                                    })
+                                                    await doc.renderAsync({
+                                                        d: dayjs().format('DD'),
+                                                        m: dayjs().format('MM'),
+                                                        y: dayjs().format('YYYY'),
+                                                        HE: getLabelTrainingObjectType(
+                                                            fixedClass?.trainingCourse
+                                                                .trainingObjectType.type
+                                                        ).toUpperCase(),
+                                                        KHOA_HOC:
+                                                            fixedClass?.trainingCourse?.name?.toUpperCase(),
+                                                        ten_lop: fixedClass?.name,
+                                                        chuyen_nganh:
+                                                            fixedClass?.curriculumVersion
+                                                                ?.curriculum?.trainingMajor?.name ??
+                                                            '',
+                                                        ma_nganh:
+                                                            fixedClass?.curriculumVersion
+                                                                ?.curriculum?.trainingMajor?.code ??
+                                                            '',
+                                                        quan_so: fixedClass?._count.students ?? 0,
+                                                        mon_hoc:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .map((e, index) => ({
+                                                                    tt: index + 1,
+                                                                    ten_mon: e.subject.name,
+                                                                    trong_so: e.subject.credit,
+                                                                    so_tiet: e.subject.period,
+                                                                    dv_phu_trach:
+                                                                        e.subject
+                                                                            ?.managementOrganization
+                                                                            ?.sMa ?? '',
+                                                                    ghi_chu:
+                                                                        e.trainingBlockOnCurriculumVersion?.trainingBlock?.name?.firstCase() ??
+                                                                        '',
+                                                                    ky_1:
+                                                                        e.semester === 1 &&
+                                                                        e.subject.period
+                                                                            ? e.subject.period
+                                                                            : '',
+                                                                    ky_2:
+                                                                        e.semester === 2 &&
+                                                                        e.subject.period
+                                                                            ? e.subject.period
+                                                                            : '',
+                                                                    ky_3:
+                                                                        e.semester === 3 &&
+                                                                        e.subject.period
+                                                                            ? e.subject.period
+                                                                            : '',
+                                                                    ky_4:
+                                                                        e.semester === 4 &&
+                                                                        e.subject.period
+                                                                            ? e.subject.period
+                                                                            : '',
+                                                                })),
+                                                        tong_trong_so:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.subject.credit || 0),
+                                                                    0
+                                                                ),
+                                                        tong_so_tiet:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                ?.flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.subject.period || 0),
+                                                                    0
+                                                                ),
+                                                        tong_ky_1:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.semester === 1
+                                                                            ? curr.subject.period ||
+                                                                              0
+                                                                            : 0),
+                                                                    0
+                                                                ),
+                                                        tong_ky_2:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.semester === 2
+                                                                            ? curr.subject.period ||
+                                                                              0
+                                                                            : 0),
+                                                                    0
+                                                                ),
+                                                        tong_ky_3:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.semester === 3
+                                                                            ? curr.subject.period ||
+                                                                              0
+                                                                            : 0),
+                                                                    0
+                                                                ),
+                                                        tong_ky_4:
+                                                            fixedClass?.curriculumVersion?.trainingBlocks
+                                                                .flatMap((e) => e.subjects)
+                                                                .reduce(
+                                                                    (total, curr) =>
+                                                                        total +
+                                                                        (curr.semester === 4
+                                                                            ? curr.subject.period ||
+                                                                              0
+                                                                            : 0),
+                                                                    0
+                                                                ),
+                                                    })
+                                                    const blob = exportFile(doc.getZip())
+                                                    saveAs(
+                                                        blob,
+                                                        `KHTK-ding-huong-ung-dung.${dayjs().format('DDMMYY')}.docx`
+                                                    )
+                                                },
+                                            },
+                                        ],
+                                    }}
+                                >
+                                    <Button type="primary">Xuất mẫu</Button>
+                                </Dropdown>
                                 <Popconfirm
                                     title="Xác nhận xóa dữ liệu?"
                                     description="Bạn có chắc chắn muốn xoá những sinh viên đã chọn ra khỏi lớp này không?"

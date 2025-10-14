@@ -840,8 +840,6 @@ model PlanTrainingDelay {
   updatedAt                 DateTime                   @default(now()) @updatedAt()
   trainingObjectType        TrainingObjectType         @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId      String
-  semester                  Semester                   @relation(fields: [semesterId], references: [id])
-  semesterId                String
   planTrainingDelaySubjects PlanTrainingDelaySubject[]
 
   @@schema("ql-dao-tao")
@@ -860,6 +858,7 @@ model PlanTrainingDelaySubject {
   subjectVersionId    String
   fixedClasses        FixedClass[]
 
+  @@unique([planTrainingDelayId, subjectVersionId])
   @@schema("ql-dao-tao")
 }
 
@@ -1123,7 +1122,6 @@ model Semester {
   disciplinaryWarning     DisciplinaryWarning[]
   studentAcademicDecision StudentAcademicDecision[]
   classRegisterSession    ClassRegisterSession[]
-  planTrainingDelay       PlanTrainingDelay[]
   planTraining            PlanTraining[]
 
   @@unique([schoolYearId, semesterType])

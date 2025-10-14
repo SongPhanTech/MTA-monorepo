@@ -10,7 +10,7 @@ const app = new OpenAPIHono({ strict: false })
 const importCurriculumVersion = createRoute({
     operationId: 'import-phien-ban-CTDT-Subject',
     tags: ['Curriculum'],
-    path: '/import-phien-ban-ctdt',
+    path: '/import-phien-ban-ctdt-subject',
     method: 'post',
     request: {
         body: {
@@ -21,7 +21,7 @@ const importCurriculumVersion = createRoute({
                         curriculumVersionId: z.string(),
                         createNewSubjects: z.coerce.boolean().default(false),
                         timeout: z.coerce.number().default(30),
-                    }).openapi('importPhienBanCTĐT'),
+                    }).openapi('importPhienBanCTDTSubject'),
                 },
             },
         },
@@ -50,64 +50,67 @@ const importCurriculumVersion = createRoute({
 })
 
 app.openapi(importCurriculumVersion, async (c) => {
-    const { curriculumVersionId, trainingObjectTypeId } = c.req.valid('form')
-
-    const { file, timeout } = c.req.valid('form')
+    const { curriculumVersionId, trainingObjectTypeId, file, timeout, createNewSubjects } =
+        c.req.valid('form')
 
     const buf = await file.arrayBuffer()
-    console.log(buf)
     const data = parseSheetSubject(buf)
-    console.log(data)
 
     if (data.errors.length) {
         return c.json({ message: 'Lỗi khi đọc file', errors: data.errors }, 400)
     }
 
-    const trainingBlockMap = await buildTrainingBlockMapOrThrow(
-        prisma,
-        data.trainingBlocks.map(({ name }) => name)
-    )
+    const uniqueTrainingBlockNames = [
+        ...new Set(data.subjects.map(({ trainingBlockName }) => trainingBlockName)),
+    ]
+
+    const trainingBlockMap = await buildTrainingBlockMapOrThrow(prisma, uniqueTrainingBlockNames)
 
     const subjectMap = await buildSubjectMapOrThrow(
         prisma,
-        data.trainingBlocks.flatMap(({ subjects }) =>
-            subjects.map((s) => ({
-                trainingObjectTypeId,
-                ...s,
-                type: s.subjectVersionType,
-            }))
-        )
+        data.subjects.map((s) => ({
+            trainingObjectTypeId,
+            ...s,
+            type: s.subjectVersionType,
+        })),
+        createNewSubjects
     )
 
-    const trainingBlocksWithId = data.trainingBlocks.map((trainingBlock) => ({
-        id: createId(),
-        ...trainingBlock,
-    }))
+    console.log(subjectMap)
+
+    const curriculumTrainingBlock = new Map(
+        uniqueTrainingBlockNames.map((trainingBlock) => [trainingBlock, createId()])
+    )
+    // electiveCreditsRequired: 0 // TODO: read sheet 2
 
     const trainingBlockOnCurriculumVersion: Prisma.TrainingBlockOnCurriculumVersionCreateManyInput[] =
-        trainingBlocksWithId.map(({ id, name, priority }) => ({
+        Array.from(curriculumTrainingBlock.entries()).map(([name, id]) => ({
             id,
             curriculumVersionId,
             trainingBlockId: trainingBlockMap.get(name) as string,
-            priority,
+            // priority,
         }))
 
-    const trainingBlockSubjects: Prisma.TrainingBlockSubjectCreateManyInput[] =
-        trainingBlocksWithId.flatMap(({ id, subjects }) =>
-            subjects.map(({ name, credit, period, organizationCode, ...subjectType }) => ({
-                id: createId(),
-                trainingBlockOnCurriculumVersionId: id,
-                subjectId: subjectMap.get(name) as string,
-                ...subjectType,
-            }))
-        )
+    const trainingBlockSubjects: Prisma.TrainingBlockSubjectCreateManyInput[] = data.subjects.map(
+        ({ name, trainingBlockName, semester, type, useForFinalScore, graduation }) => ({
+            id: createId(),
+            trainingBlockOnCurriculumVersionId: curriculumTrainingBlock.get(
+                trainingBlockName
+            ) as string,
+            subjectId: subjectMap.get(name) as string,
+            semester,
+            type,
+            useForFinalScore,
+            graduation,
+        })
+    )
 
     await prisma.$transaction(
         async (tx) => {
             await tx.trainingBlockOnCurriculumVersion.deleteMany({
                 where: { curriculumVersionId },
             })
-            await tx.trainingBlockOnCurriculumVersion.createMany({
+            const d = await tx.trainingBlockOnCurriculumVersion.createMany({
                 data: trainingBlockOnCurriculumVersion,
             })
 
@@ -120,7 +123,7 @@ app.openapi(importCurriculumVersion, async (c) => {
 
     return c.json(
         {
-            message: `Import training blocks successfully: ${data.trainingBlocks.length}`,
+            message: `Import training blocks successfully: ${uniqueTrainingBlockNames.length}`,
         },
         200
     )

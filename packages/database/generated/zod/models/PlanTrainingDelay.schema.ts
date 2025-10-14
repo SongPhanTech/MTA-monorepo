@@ -17,13 +17,11 @@ const baseSchema = z.object({
 ).strict();
 const relationSchema = z.object({
     trainingObjectType: z.record(z.unknown()),
-    semester: z.record(z.unknown()),
     planTrainingDelaySubjects: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     trainingObjectTypeId: z.string(),
-    semesterId: z.string(),
 }
 );
 

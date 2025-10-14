@@ -81,7 +81,6 @@ export default function TrainingProgramSubjects() {
         },
         { enabled: !!id }
     )
-
     const { options, getExamTypeLabel } = useExamTypeOptions()
 
     const isFiltering = useMemo(() => {
@@ -464,7 +463,7 @@ export default function TrainingProgramSubjects() {
                     <TableCollapse
                         rowKey="key"
                         headerTitleKey={({ trainingBlock }) =>
-                            `Khối kiến thức: ${[trainingBlock?.name].filter(Boolean).join(' - ')}`
+                            `${[trainingBlock?.name].filter(Boolean).join(' - ')}`
                         }
                         childrenFieldName="subjects"
                         defaultExpandAll

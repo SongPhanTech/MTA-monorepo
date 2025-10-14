@@ -302,8 +302,7 @@ export const buildSubjectMapOrThrow = async (
     subjects: SubjectData[],
     createNewSubject = false
 ) => {
-    const subjectSet = new Set<string>(subjects.map((s) => JSON.stringify(subjects)))
-
+    const subjectSet = new Set<string>(subjects.map((s) => JSON.stringify(s)))
     const uniqueTuples = Array.from(subjectSet).map((s) => JSON.parse(s) as SubjectData)
 
     const existing = await prisma.subjectVersion.findMany({
@@ -335,15 +334,26 @@ export const buildSubjectMapOrThrow = async (
             subjects.map((s) => s.organizationCode || null)
         )
 
+        const newSubjects = []
         for (const subject of missing) {
-            const managementOrganizationId = orgMap.get(subject.name) || null
+            const managementOrganizationId = orgMap.get(subject.organizationCode || null)
 
-            const a = await prisma.subjectVersion.create({
+            const newSubject = await prisma.subjectVersion.create({
                 data: {
                     trainingObjectType: { connect: { id: subject.trainingObjectTypeId } },
                     name: subject.name,
                     examType: subject.examType,
                     credit: subject.credit,
+                    type: subject.type,
+                    onePoint: subject.onePoint,
+                    schedulePeriod: subject.schedulePeriod,
+                    numberOfTheory: subject.numberOfTheory,
+                    numberOfPractical: subject.numberOfPractical,
+                    numberOfSelfStudy: subject.numberOfSelfStudy,
+                    numberOfPractice: subject.numberOfPractice,
+                    numberOfReview: subject.numberOfReview,
+                    numberOfExam: subject.numberOfExam,
+                    code: subject.code,
                     ...(managementOrganizationId
                         ? {
                               managementOrganization: {
@@ -360,8 +370,13 @@ export const buildSubjectMapOrThrow = async (
                 },
                 select: { id: true, name: true },
             })
+
+            newSubjects.push(newSubject)
         }
-    } else if (missing.length && !createNewSubject) {
+        return new Map([...existing, ...newSubjects].map(({ name, id }) => [name, id]))
+    }
+
+    if (missing.length && !createNewSubject) {
         throw new HTTPException(400, {
             message: `Phiên bản môn học không tồn tại: ${missing
                 .map(

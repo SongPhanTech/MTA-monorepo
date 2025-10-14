@@ -23997,7 +23997,6 @@ export namespace Prisma {
     disciplinaryWarning: number
     studentAcademicDecision: number
     classRegisterSession: number
-    planTrainingDelay: number
     planTraining: number
   }
 
@@ -24011,7 +24010,6 @@ export namespace Prisma {
     disciplinaryWarning?: boolean | SemesterCountOutputTypeCountDisciplinaryWarningArgs
     studentAcademicDecision?: boolean | SemesterCountOutputTypeCountStudentAcademicDecisionArgs
     classRegisterSession?: boolean | SemesterCountOutputTypeCountClassRegisterSessionArgs
-    planTrainingDelay?: boolean | SemesterCountOutputTypeCountPlanTrainingDelayArgs
     planTraining?: boolean | SemesterCountOutputTypeCountPlanTrainingArgs
   }
 
@@ -24087,13 +24085,6 @@ export namespace Prisma {
    */
   export type SemesterCountOutputTypeCountClassRegisterSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ClassRegisterSessionWhereInput
-  }
-
-  /**
-   * SemesterCountOutputType without action
-   */
-  export type SemesterCountOutputTypeCountPlanTrainingDelayArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PlanTrainingDelayWhereInput
   }
 
   /**
@@ -47997,7 +47988,6 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     trainingObjectTypeId: string | null
-    semesterId: string | null
   }
 
   export type PlanTrainingDelayMaxAggregateOutputType = {
@@ -48008,7 +47998,6 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     trainingObjectTypeId: string | null
-    semesterId: string | null
   }
 
   export type PlanTrainingDelayCountAggregateOutputType = {
@@ -48019,7 +48008,6 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     trainingObjectTypeId: number
-    semesterId: number
     _all: number
   }
 
@@ -48032,7 +48020,6 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     trainingObjectTypeId?: true
-    semesterId?: true
   }
 
   export type PlanTrainingDelayMaxAggregateInputType = {
@@ -48043,7 +48030,6 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     trainingObjectTypeId?: true
-    semesterId?: true
   }
 
   export type PlanTrainingDelayCountAggregateInputType = {
@@ -48054,7 +48040,6 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     trainingObjectTypeId?: true
-    semesterId?: true
     _all?: true
   }
 
@@ -48138,7 +48123,6 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     trainingObjectTypeId: string
-    semesterId: string
     _count: PlanTrainingDelayCountAggregateOutputType | null
     _min: PlanTrainingDelayMinAggregateOutputType | null
     _max: PlanTrainingDelayMaxAggregateOutputType | null
@@ -48166,9 +48150,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     trainingObjectTypeId?: boolean
-    semesterId?: boolean
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    semester?: boolean | SemesterDefaultArgs<ExtArgs>
     planTrainingDelaySubjects?: boolean | PlanTrainingDelay$planTrainingDelaySubjectsArgs<ExtArgs>
     _count?: boolean | PlanTrainingDelayCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["planTrainingDelay"]>
@@ -48181,9 +48163,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     trainingObjectTypeId?: boolean
-    semesterId?: boolean
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    semester?: boolean | SemesterDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["planTrainingDelay"]>
 
   export type PlanTrainingDelaySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -48194,9 +48174,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     trainingObjectTypeId?: boolean
-    semesterId?: boolean
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    semester?: boolean | SemesterDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["planTrainingDelay"]>
 
   export type PlanTrainingDelaySelectScalar = {
@@ -48207,30 +48185,25 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     trainingObjectTypeId?: boolean
-    semesterId?: boolean
   }
 
-  export type PlanTrainingDelayOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "trainingObjectTypeId" | "semesterId", ExtArgs["result"]["planTrainingDelay"]>
+  export type PlanTrainingDelayOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "trainingObjectTypeId", ExtArgs["result"]["planTrainingDelay"]>
   export type PlanTrainingDelayInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    semester?: boolean | SemesterDefaultArgs<ExtArgs>
     planTrainingDelaySubjects?: boolean | PlanTrainingDelay$planTrainingDelaySubjectsArgs<ExtArgs>
     _count?: boolean | PlanTrainingDelayCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PlanTrainingDelayIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    semester?: boolean | SemesterDefaultArgs<ExtArgs>
   }
   export type PlanTrainingDelayIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
-    semester?: boolean | SemesterDefaultArgs<ExtArgs>
   }
 
   export type $PlanTrainingDelayPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PlanTrainingDelay"
     objects: {
       trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs>
-      semester: Prisma.$SemesterPayload<ExtArgs>
       planTrainingDelaySubjects: Prisma.$PlanTrainingDelaySubjectPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -48241,7 +48214,6 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       trainingObjectTypeId: string
-      semesterId: string
     }, ExtArgs["result"]["planTrainingDelay"]>
     composites: {}
   }
@@ -48637,7 +48609,6 @@ export namespace Prisma {
   export interface Prisma__PlanTrainingDelayClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     trainingObjectType<T extends TrainingObjectTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectTypeDefaultArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    semester<T extends SemesterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SemesterDefaultArgs<ExtArgs>>): Prisma__SemesterClient<$Result.GetResult<Prisma.$SemesterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     planTrainingDelaySubjects<T extends PlanTrainingDelay$planTrainingDelaySubjectsArgs<ExtArgs> = {}>(args?: Subset<T, PlanTrainingDelay$planTrainingDelaySubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanTrainingDelaySubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -48675,7 +48646,6 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"PlanTrainingDelay", 'DateTime'>
     readonly updatedAt: FieldRef<"PlanTrainingDelay", 'DateTime'>
     readonly trainingObjectTypeId: FieldRef<"PlanTrainingDelay", 'String'>
-    readonly semesterId: FieldRef<"PlanTrainingDelay", 'String'>
   }
     
 
@@ -63862,7 +63832,6 @@ export namespace Prisma {
     disciplinaryWarning?: boolean | Semester$disciplinaryWarningArgs<ExtArgs>
     studentAcademicDecision?: boolean | Semester$studentAcademicDecisionArgs<ExtArgs>
     classRegisterSession?: boolean | Semester$classRegisterSessionArgs<ExtArgs>
-    planTrainingDelay?: boolean | Semester$planTrainingDelayArgs<ExtArgs>
     planTraining?: boolean | Semester$planTrainingArgs<ExtArgs>
     _count?: boolean | SemesterCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["semester"]>
@@ -63929,7 +63898,6 @@ export namespace Prisma {
     disciplinaryWarning?: boolean | Semester$disciplinaryWarningArgs<ExtArgs>
     studentAcademicDecision?: boolean | Semester$studentAcademicDecisionArgs<ExtArgs>
     classRegisterSession?: boolean | Semester$classRegisterSessionArgs<ExtArgs>
-    planTrainingDelay?: boolean | Semester$planTrainingDelayArgs<ExtArgs>
     planTraining?: boolean | Semester$planTrainingArgs<ExtArgs>
     _count?: boolean | SemesterCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -63953,7 +63921,6 @@ export namespace Prisma {
       disciplinaryWarning: Prisma.$DisciplinaryWarningPayload<ExtArgs>[]
       studentAcademicDecision: Prisma.$StudentAcademicDecisionPayload<ExtArgs>[]
       classRegisterSession: Prisma.$ClassRegisterSessionPayload<ExtArgs>[]
-      planTrainingDelay: Prisma.$PlanTrainingDelayPayload<ExtArgs>[]
       planTraining: Prisma.$PlanTrainingPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -64374,7 +64341,6 @@ export namespace Prisma {
     disciplinaryWarning<T extends Semester$disciplinaryWarningArgs<ExtArgs> = {}>(args?: Subset<T, Semester$disciplinaryWarningArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DisciplinaryWarningPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     studentAcademicDecision<T extends Semester$studentAcademicDecisionArgs<ExtArgs> = {}>(args?: Subset<T, Semester$studentAcademicDecisionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentAcademicDecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     classRegisterSession<T extends Semester$classRegisterSessionArgs<ExtArgs> = {}>(args?: Subset<T, Semester$classRegisterSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    planTrainingDelay<T extends Semester$planTrainingDelayArgs<ExtArgs> = {}>(args?: Subset<T, Semester$planTrainingDelayArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanTrainingDelayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     planTraining<T extends Semester$planTrainingArgs<ExtArgs> = {}>(args?: Subset<T, Semester$planTrainingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanTrainingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -65027,30 +64993,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ClassRegisterSessionScalarFieldEnum | ClassRegisterSessionScalarFieldEnum[]
-  }
-
-  /**
-   * Semester.planTrainingDelay
-   */
-  export type Semester$planTrainingDelayArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PlanTrainingDelay
-     */
-    select?: PlanTrainingDelaySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PlanTrainingDelay
-     */
-    omit?: PlanTrainingDelayOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PlanTrainingDelayInclude<ExtArgs> | null
-    where?: PlanTrainingDelayWhereInput
-    orderBy?: PlanTrainingDelayOrderByWithRelationInput | PlanTrainingDelayOrderByWithRelationInput[]
-    cursor?: PlanTrainingDelayWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PlanTrainingDelayScalarFieldEnum | PlanTrainingDelayScalarFieldEnum[]
   }
 
   /**
@@ -326099,8 +326041,7 @@ export namespace Prisma {
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    trainingObjectTypeId: 'trainingObjectTypeId',
-    semesterId: 'semesterId'
+    trainingObjectTypeId: 'trainingObjectTypeId'
   };
 
   export type PlanTrainingDelayScalarFieldEnum = (typeof PlanTrainingDelayScalarFieldEnum)[keyof typeof PlanTrainingDelayScalarFieldEnum]
@@ -330612,8 +330553,7 @@ export namespace Prisma {
   export const PlanTrainingDelayOrderByRelevanceFieldEnum: {
     id: 'id',
     description: 'description',
-    trainingObjectTypeId: 'trainingObjectTypeId',
-    semesterId: 'semesterId'
+    trainingObjectTypeId: 'trainingObjectTypeId'
   };
 
   export type PlanTrainingDelayOrderByRelevanceFieldEnum = (typeof PlanTrainingDelayOrderByRelevanceFieldEnum)[keyof typeof PlanTrainingDelayOrderByRelevanceFieldEnum]
@@ -335685,9 +335625,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"PlanTrainingDelay"> | Date | string
     updatedAt?: DateTimeFilter<"PlanTrainingDelay"> | Date | string
     trainingObjectTypeId?: StringFilter<"PlanTrainingDelay"> | string
-    semesterId?: StringFilter<"PlanTrainingDelay"> | string
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
-    semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
     planTrainingDelaySubjects?: PlanTrainingDelaySubjectListRelationFilter
   }
 
@@ -335699,9 +335637,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     trainingObjectTypeId?: SortOrder
-    semesterId?: SortOrder
     trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
-    semester?: SemesterOrderByWithRelationInput
     planTrainingDelaySubjects?: PlanTrainingDelaySubjectOrderByRelationAggregateInput
     _relevance?: PlanTrainingDelayOrderByRelevanceInput
   }
@@ -335717,9 +335653,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"PlanTrainingDelay"> | Date | string
     updatedAt?: DateTimeFilter<"PlanTrainingDelay"> | Date | string
     trainingObjectTypeId?: StringFilter<"PlanTrainingDelay"> | string
-    semesterId?: StringFilter<"PlanTrainingDelay"> | string
     trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
-    semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
     planTrainingDelaySubjects?: PlanTrainingDelaySubjectListRelationFilter
   }, "id">
 
@@ -335731,7 +335665,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     trainingObjectTypeId?: SortOrder
-    semesterId?: SortOrder
     _count?: PlanTrainingDelayCountOrderByAggregateInput
     _max?: PlanTrainingDelayMaxOrderByAggregateInput
     _min?: PlanTrainingDelayMinOrderByAggregateInput
@@ -335748,7 +335681,6 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"PlanTrainingDelay"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PlanTrainingDelay"> | Date | string
     trainingObjectTypeId?: StringWithAggregatesFilter<"PlanTrainingDelay"> | string
-    semesterId?: StringWithAggregatesFilter<"PlanTrainingDelay"> | string
   }
 
   export type PlanTrainingDelaySubjectWhereInput = {
@@ -335785,6 +335717,7 @@ export namespace Prisma {
 
   export type PlanTrainingDelaySubjectWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    planTrainingDelayId_subjectVersionId?: PlanTrainingDelaySubjectPlanTrainingDelayIdSubjectVersionIdCompoundUniqueInput
     AND?: PlanTrainingDelaySubjectWhereInput | PlanTrainingDelaySubjectWhereInput[]
     OR?: PlanTrainingDelaySubjectWhereInput[]
     NOT?: PlanTrainingDelaySubjectWhereInput | PlanTrainingDelaySubjectWhereInput[]
@@ -335798,7 +335731,7 @@ export namespace Prisma {
     planTrainingDelay?: XOR<PlanTrainingDelayScalarRelationFilter, PlanTrainingDelayWhereInput>
     subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
     fixedClasses?: FixedClassListRelationFilter
-  }, "id">
+  }, "id" | "planTrainingDelayId_subjectVersionId">
 
   export type PlanTrainingDelaySubjectOrderByWithAggregationInput = {
     id?: SortOrder
@@ -336918,7 +336851,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningListRelationFilter
     studentAcademicDecision?: StudentAcademicDecisionListRelationFilter
     classRegisterSession?: ClassRegisterSessionListRelationFilter
-    planTrainingDelay?: PlanTrainingDelayListRelationFilter
     planTraining?: PlanTrainingListRelationFilter
   }
 
@@ -336946,7 +336878,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningOrderByRelationAggregateInput
     studentAcademicDecision?: StudentAcademicDecisionOrderByRelationAggregateInput
     classRegisterSession?: ClassRegisterSessionOrderByRelationAggregateInput
-    planTrainingDelay?: PlanTrainingDelayOrderByRelationAggregateInput
     planTraining?: PlanTrainingOrderByRelationAggregateInput
     _relevance?: SemesterOrderByRelevanceInput
   }
@@ -336979,7 +336910,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningListRelationFilter
     studentAcademicDecision?: StudentAcademicDecisionListRelationFilter
     classRegisterSession?: ClassRegisterSessionListRelationFilter
-    planTrainingDelay?: PlanTrainingDelayListRelationFilter
     planTraining?: PlanTrainingListRelationFilter
   }, "id" | "code" | "schoolYearId_semesterType">
 
@@ -360792,7 +360722,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutPlanTrainingDelayInput
-    semester: SemesterCreateNestedOneWithoutPlanTrainingDelayInput
     planTrainingDelaySubjects?: PlanTrainingDelaySubjectCreateNestedManyWithoutPlanTrainingDelayInput
   }
 
@@ -360804,7 +360733,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     trainingObjectTypeId: string
-    semesterId: string
     planTrainingDelaySubjects?: PlanTrainingDelaySubjectUncheckedCreateNestedManyWithoutPlanTrainingDelayInput
   }
 
@@ -360816,7 +360744,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutPlanTrainingDelayNestedInput
-    semester?: SemesterUpdateOneRequiredWithoutPlanTrainingDelayNestedInput
     planTrainingDelaySubjects?: PlanTrainingDelaySubjectUpdateManyWithoutPlanTrainingDelayNestedInput
   }
 
@@ -360828,7 +360755,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    semesterId?: StringFieldUpdateOperationsInput | string
     planTrainingDelaySubjects?: PlanTrainingDelaySubjectUncheckedUpdateManyWithoutPlanTrainingDelayNestedInput
   }
 
@@ -360840,7 +360766,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     trainingObjectTypeId: string
-    semesterId: string
   }
 
   export type PlanTrainingDelayUpdateManyMutationInput = {
@@ -360860,7 +360785,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    semesterId?: StringFieldUpdateOperationsInput | string
   }
 
   export type PlanTrainingDelaySubjectCreateInput = {
@@ -362148,7 +362072,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
   }
 
@@ -362175,7 +362098,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
   }
 
@@ -362202,7 +362124,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
   }
 
@@ -362229,7 +362150,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
@@ -388995,11 +388915,6 @@ export namespace Prisma {
     isNot?: TrainingObjectTypeWhereInput
   }
 
-  export type SemesterScalarRelationFilter = {
-    is?: SemesterWhereInput
-    isNot?: SemesterWhereInput
-  }
-
   export type PlanTrainingDelaySubjectListRelationFilter = {
     every?: PlanTrainingDelaySubjectWhereInput
     some?: PlanTrainingDelaySubjectWhereInput
@@ -389024,7 +388939,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     trainingObjectTypeId?: SortOrder
-    semesterId?: SortOrder
   }
 
   export type PlanTrainingDelayMaxOrderByAggregateInput = {
@@ -389035,7 +388949,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     trainingObjectTypeId?: SortOrder
-    semesterId?: SortOrder
   }
 
   export type PlanTrainingDelayMinOrderByAggregateInput = {
@@ -389046,7 +388959,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     trainingObjectTypeId?: SortOrder
-    semesterId?: SortOrder
   }
 
   export type PlanTrainingDelayScalarRelationFilter = {
@@ -389068,6 +388980,11 @@ export namespace Prisma {
     fields: PlanTrainingDelaySubjectOrderByRelevanceFieldEnum | PlanTrainingDelaySubjectOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
+  }
+
+  export type PlanTrainingDelaySubjectPlanTrainingDelayIdSubjectVersionIdCompoundUniqueInput = {
+    planTrainingDelayId: string
+    subjectVersionId: string
   }
 
   export type PlanTrainingDelaySubjectCountOrderByAggregateInput = {
@@ -389101,6 +389018,11 @@ export namespace Prisma {
     updatedAt?: SortOrder
     planTrainingDelayId?: SortOrder
     subjectVersionId?: SortOrder
+  }
+
+  export type SemesterScalarRelationFilter = {
+    is?: SemesterWhereInput
+    isNot?: SemesterWhereInput
   }
 
   export type PlanTrainingSubjectListRelationFilter = {
@@ -389954,12 +389876,6 @@ export namespace Prisma {
     none?: ClassRegisterSessionWhereInput
   }
 
-  export type PlanTrainingDelayListRelationFilter = {
-    every?: PlanTrainingDelayWhereInput
-    some?: PlanTrainingDelayWhereInput
-    none?: PlanTrainingDelayWhereInput
-  }
-
   export type PlanTrainingListRelationFilter = {
     every?: PlanTrainingWhereInput
     some?: PlanTrainingWhereInput
@@ -389991,10 +389907,6 @@ export namespace Prisma {
   }
 
   export type ClassRegisterSessionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type PlanTrainingDelayOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -392034,6 +391946,12 @@ export namespace Prisma {
     none?: GraduationSessionWhereInput
   }
 
+  export type PlanTrainingDelayListRelationFilter = {
+    every?: PlanTrainingDelayWhereInput
+    some?: PlanTrainingDelayWhereInput
+    none?: PlanTrainingDelayWhereInput
+  }
+
   export type TrainingMajorOnTrainingObjectTypeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -392043,6 +391961,10 @@ export namespace Prisma {
   }
 
   export type GraduationSessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PlanTrainingDelayOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -406725,12 +406647,6 @@ export namespace Prisma {
     connect?: TrainingObjectTypeWhereUniqueInput
   }
 
-  export type SemesterCreateNestedOneWithoutPlanTrainingDelayInput = {
-    create?: XOR<SemesterCreateWithoutPlanTrainingDelayInput, SemesterUncheckedCreateWithoutPlanTrainingDelayInput>
-    connectOrCreate?: SemesterCreateOrConnectWithoutPlanTrainingDelayInput
-    connect?: SemesterWhereUniqueInput
-  }
-
   export type PlanTrainingDelaySubjectCreateNestedManyWithoutPlanTrainingDelayInput = {
     create?: XOR<PlanTrainingDelaySubjectCreateWithoutPlanTrainingDelayInput, PlanTrainingDelaySubjectUncheckedCreateWithoutPlanTrainingDelayInput> | PlanTrainingDelaySubjectCreateWithoutPlanTrainingDelayInput[] | PlanTrainingDelaySubjectUncheckedCreateWithoutPlanTrainingDelayInput[]
     connectOrCreate?: PlanTrainingDelaySubjectCreateOrConnectWithoutPlanTrainingDelayInput | PlanTrainingDelaySubjectCreateOrConnectWithoutPlanTrainingDelayInput[]
@@ -406751,14 +406667,6 @@ export namespace Prisma {
     upsert?: TrainingObjectTypeUpsertWithoutPlanTrainingDelayInput
     connect?: TrainingObjectTypeWhereUniqueInput
     update?: XOR<XOR<TrainingObjectTypeUpdateToOneWithWhereWithoutPlanTrainingDelayInput, TrainingObjectTypeUpdateWithoutPlanTrainingDelayInput>, TrainingObjectTypeUncheckedUpdateWithoutPlanTrainingDelayInput>
-  }
-
-  export type SemesterUpdateOneRequiredWithoutPlanTrainingDelayNestedInput = {
-    create?: XOR<SemesterCreateWithoutPlanTrainingDelayInput, SemesterUncheckedCreateWithoutPlanTrainingDelayInput>
-    connectOrCreate?: SemesterCreateOrConnectWithoutPlanTrainingDelayInput
-    upsert?: SemesterUpsertWithoutPlanTrainingDelayInput
-    connect?: SemesterWhereUniqueInput
-    update?: XOR<XOR<SemesterUpdateToOneWithWhereWithoutPlanTrainingDelayInput, SemesterUpdateWithoutPlanTrainingDelayInput>, SemesterUncheckedUpdateWithoutPlanTrainingDelayInput>
   }
 
   export type PlanTrainingDelaySubjectUpdateManyWithoutPlanTrainingDelayNestedInput = {
@@ -407898,13 +407806,6 @@ export namespace Prisma {
     connect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
   }
 
-  export type PlanTrainingDelayCreateNestedManyWithoutSemesterInput = {
-    create?: XOR<PlanTrainingDelayCreateWithoutSemesterInput, PlanTrainingDelayUncheckedCreateWithoutSemesterInput> | PlanTrainingDelayCreateWithoutSemesterInput[] | PlanTrainingDelayUncheckedCreateWithoutSemesterInput[]
-    connectOrCreate?: PlanTrainingDelayCreateOrConnectWithoutSemesterInput | PlanTrainingDelayCreateOrConnectWithoutSemesterInput[]
-    createMany?: PlanTrainingDelayCreateManySemesterInputEnvelope
-    connect?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
-  }
-
   export type PlanTrainingCreateNestedManyWithoutSemesterInput = {
     create?: XOR<PlanTrainingCreateWithoutSemesterInput, PlanTrainingUncheckedCreateWithoutSemesterInput> | PlanTrainingCreateWithoutSemesterInput[] | PlanTrainingUncheckedCreateWithoutSemesterInput[]
     connectOrCreate?: PlanTrainingCreateOrConnectWithoutSemesterInput | PlanTrainingCreateOrConnectWithoutSemesterInput[]
@@ -407973,13 +407874,6 @@ export namespace Prisma {
     connectOrCreate?: ClassRegisterSessionCreateOrConnectWithoutSemesterInput | ClassRegisterSessionCreateOrConnectWithoutSemesterInput[]
     createMany?: ClassRegisterSessionCreateManySemesterInputEnvelope
     connect?: ClassRegisterSessionWhereUniqueInput | ClassRegisterSessionWhereUniqueInput[]
-  }
-
-  export type PlanTrainingDelayUncheckedCreateNestedManyWithoutSemesterInput = {
-    create?: XOR<PlanTrainingDelayCreateWithoutSemesterInput, PlanTrainingDelayUncheckedCreateWithoutSemesterInput> | PlanTrainingDelayCreateWithoutSemesterInput[] | PlanTrainingDelayUncheckedCreateWithoutSemesterInput[]
-    connectOrCreate?: PlanTrainingDelayCreateOrConnectWithoutSemesterInput | PlanTrainingDelayCreateOrConnectWithoutSemesterInput[]
-    createMany?: PlanTrainingDelayCreateManySemesterInputEnvelope
-    connect?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
   }
 
   export type PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput = {
@@ -408127,20 +408021,6 @@ export namespace Prisma {
     deleteMany?: ClassRegisterSessionScalarWhereInput | ClassRegisterSessionScalarWhereInput[]
   }
 
-  export type PlanTrainingDelayUpdateManyWithoutSemesterNestedInput = {
-    create?: XOR<PlanTrainingDelayCreateWithoutSemesterInput, PlanTrainingDelayUncheckedCreateWithoutSemesterInput> | PlanTrainingDelayCreateWithoutSemesterInput[] | PlanTrainingDelayUncheckedCreateWithoutSemesterInput[]
-    connectOrCreate?: PlanTrainingDelayCreateOrConnectWithoutSemesterInput | PlanTrainingDelayCreateOrConnectWithoutSemesterInput[]
-    upsert?: PlanTrainingDelayUpsertWithWhereUniqueWithoutSemesterInput | PlanTrainingDelayUpsertWithWhereUniqueWithoutSemesterInput[]
-    createMany?: PlanTrainingDelayCreateManySemesterInputEnvelope
-    set?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
-    disconnect?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
-    delete?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
-    connect?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
-    update?: PlanTrainingDelayUpdateWithWhereUniqueWithoutSemesterInput | PlanTrainingDelayUpdateWithWhereUniqueWithoutSemesterInput[]
-    updateMany?: PlanTrainingDelayUpdateManyWithWhereWithoutSemesterInput | PlanTrainingDelayUpdateManyWithWhereWithoutSemesterInput[]
-    deleteMany?: PlanTrainingDelayScalarWhereInput | PlanTrainingDelayScalarWhereInput[]
-  }
-
   export type PlanTrainingUpdateManyWithoutSemesterNestedInput = {
     create?: XOR<PlanTrainingCreateWithoutSemesterInput, PlanTrainingUncheckedCreateWithoutSemesterInput> | PlanTrainingCreateWithoutSemesterInput[] | PlanTrainingUncheckedCreateWithoutSemesterInput[]
     connectOrCreate?: PlanTrainingCreateOrConnectWithoutSemesterInput | PlanTrainingCreateOrConnectWithoutSemesterInput[]
@@ -408279,20 +408159,6 @@ export namespace Prisma {
     update?: ClassRegisterSessionUpdateWithWhereUniqueWithoutSemesterInput | ClassRegisterSessionUpdateWithWhereUniqueWithoutSemesterInput[]
     updateMany?: ClassRegisterSessionUpdateManyWithWhereWithoutSemesterInput | ClassRegisterSessionUpdateManyWithWhereWithoutSemesterInput[]
     deleteMany?: ClassRegisterSessionScalarWhereInput | ClassRegisterSessionScalarWhereInput[]
-  }
-
-  export type PlanTrainingDelayUncheckedUpdateManyWithoutSemesterNestedInput = {
-    create?: XOR<PlanTrainingDelayCreateWithoutSemesterInput, PlanTrainingDelayUncheckedCreateWithoutSemesterInput> | PlanTrainingDelayCreateWithoutSemesterInput[] | PlanTrainingDelayUncheckedCreateWithoutSemesterInput[]
-    connectOrCreate?: PlanTrainingDelayCreateOrConnectWithoutSemesterInput | PlanTrainingDelayCreateOrConnectWithoutSemesterInput[]
-    upsert?: PlanTrainingDelayUpsertWithWhereUniqueWithoutSemesterInput | PlanTrainingDelayUpsertWithWhereUniqueWithoutSemesterInput[]
-    createMany?: PlanTrainingDelayCreateManySemesterInputEnvelope
-    set?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
-    disconnect?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
-    delete?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
-    connect?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
-    update?: PlanTrainingDelayUpdateWithWhereUniqueWithoutSemesterInput | PlanTrainingDelayUpdateWithWhereUniqueWithoutSemesterInput[]
-    updateMany?: PlanTrainingDelayUpdateManyWithWhereWithoutSemesterInput | PlanTrainingDelayUpdateManyWithWhereWithoutSemesterInput[]
-    deleteMany?: PlanTrainingDelayScalarWhereInput | PlanTrainingDelayScalarWhereInput[]
   }
 
   export type PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput = {
@@ -433271,63 +433137,6 @@ export namespace Prisma {
     create: XOR<TrainingObjectTypeCreateWithoutPlanTrainingDelayInput, TrainingObjectTypeUncheckedCreateWithoutPlanTrainingDelayInput>
   }
 
-  export type SemesterCreateWithoutPlanTrainingDelayInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    name: string
-    shortName?: string | null
-    semesterType?: $Enums.SemesterType | null
-    startDate: Date | string
-    endDate?: Date | string | null
-    schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
-    subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
-    trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
-    trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutSemesterInput
-    studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutSemesterInput
-    scholarshipAward?: ScholarshipAwardCreateNestedManyWithoutSemesterInput
-    academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
-    disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
-    studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
-    classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
-    planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
-  }
-
-  export type SemesterUncheckedCreateWithoutPlanTrainingDelayInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    name: string
-    shortName?: string | null
-    semesterType?: $Enums.SemesterType | null
-    schoolYearId: string
-    startDate: Date | string
-    endDate?: Date | string | null
-    subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
-    trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
-    trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
-    studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutSemesterInput
-    scholarshipAward?: ScholarshipAwardUncheckedCreateNestedManyWithoutSemesterInput
-    academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
-    disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
-    studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
-    classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
-    planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
-  }
-
-  export type SemesterCreateOrConnectWithoutPlanTrainingDelayInput = {
-    where: SemesterWhereUniqueInput
-    create: XOR<SemesterCreateWithoutPlanTrainingDelayInput, SemesterUncheckedCreateWithoutPlanTrainingDelayInput>
-  }
-
   export type PlanTrainingDelaySubjectCreateWithoutPlanTrainingDelayInput = {
     id?: string
     active?: boolean
@@ -433419,69 +433228,6 @@ export namespace Prisma {
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
-  export type SemesterUpsertWithoutPlanTrainingDelayInput = {
-    update: XOR<SemesterUpdateWithoutPlanTrainingDelayInput, SemesterUncheckedUpdateWithoutPlanTrainingDelayInput>
-    create: XOR<SemesterCreateWithoutPlanTrainingDelayInput, SemesterUncheckedCreateWithoutPlanTrainingDelayInput>
-    where?: SemesterWhereInput
-  }
-
-  export type SemesterUpdateToOneWithWhereWithoutPlanTrainingDelayInput = {
-    where?: SemesterWhereInput
-    data: XOR<SemesterUpdateWithoutPlanTrainingDelayInput, SemesterUncheckedUpdateWithoutPlanTrainingDelayInput>
-  }
-
-  export type SemesterUpdateWithoutPlanTrainingDelayInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
-    subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
-    trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
-    trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutSemesterNestedInput
-    studentSemesterResult?: StudentSemesterResultUpdateManyWithoutSemesterNestedInput
-    scholarshipAward?: ScholarshipAwardUpdateManyWithoutSemesterNestedInput
-    academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
-    disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
-    studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
-    classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
-    planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
-  }
-
-  export type SemesterUncheckedUpdateWithoutPlanTrainingDelayInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    shortName?: NullableStringFieldUpdateOperationsInput | string | null
-    semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
-    schoolYearId?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
-    trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
-    trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
-    studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutSemesterNestedInput
-    scholarshipAward?: ScholarshipAwardUncheckedUpdateManyWithoutSemesterNestedInput
-    academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
-    disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
-    studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
-    classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
-    planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
-  }
-
   export type PlanTrainingDelaySubjectUpsertWithWhereUniqueWithoutPlanTrainingDelayInput = {
     where: PlanTrainingDelaySubjectWhereUniqueInput
     update: XOR<PlanTrainingDelaySubjectUpdateWithoutPlanTrainingDelayInput, PlanTrainingDelaySubjectUncheckedUpdateWithoutPlanTrainingDelayInput>
@@ -433520,7 +433266,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutPlanTrainingDelayInput
-    semester: SemesterCreateNestedOneWithoutPlanTrainingDelayInput
   }
 
   export type PlanTrainingDelayUncheckedCreateWithoutPlanTrainingDelaySubjectsInput = {
@@ -433531,7 +433276,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     trainingObjectTypeId: string
-    semesterId: string
   }
 
   export type PlanTrainingDelayCreateOrConnectWithoutPlanTrainingDelaySubjectsInput = {
@@ -433722,7 +433466,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutPlanTrainingDelayNestedInput
-    semester?: SemesterUpdateOneRequiredWithoutPlanTrainingDelayNestedInput
   }
 
   export type PlanTrainingDelayUncheckedUpdateWithoutPlanTrainingDelaySubjectsInput = {
@@ -433733,7 +433476,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    semesterId?: StringFieldUpdateOperationsInput | string
   }
 
   export type SubjectVersionUpsertWithoutPlanTrainingDelaySubjectInput = {
@@ -433964,7 +433706,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterUncheckedCreateWithoutPlanTrainingInput = {
@@ -433990,7 +433731,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutSemesterInput
   }
 
   export type SemesterCreateOrConnectWithoutPlanTrainingInput = {
@@ -434123,7 +433863,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutSemesterNestedInput
   }
 
   export type SemesterUncheckedUpdateWithoutPlanTrainingInput = {
@@ -434149,7 +433888,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
   export type PlanTrainingSubjectUpsertWithWhereUniqueWithoutPlanTrainingInput = {
@@ -437844,7 +437582,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
   }
 
@@ -437870,7 +437607,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
   }
 
@@ -438780,38 +438516,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type PlanTrainingDelayCreateWithoutSemesterInput = {
-    id?: string
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutPlanTrainingDelayInput
-    planTrainingDelaySubjects?: PlanTrainingDelaySubjectCreateNestedManyWithoutPlanTrainingDelayInput
-  }
-
-  export type PlanTrainingDelayUncheckedCreateWithoutSemesterInput = {
-    id?: string
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    trainingObjectTypeId: string
-    planTrainingDelaySubjects?: PlanTrainingDelaySubjectUncheckedCreateNestedManyWithoutPlanTrainingDelayInput
-  }
-
-  export type PlanTrainingDelayCreateOrConnectWithoutSemesterInput = {
-    where: PlanTrainingDelayWhereUniqueInput
-    create: XOR<PlanTrainingDelayCreateWithoutSemesterInput, PlanTrainingDelayUncheckedCreateWithoutSemesterInput>
-  }
-
-  export type PlanTrainingDelayCreateManySemesterInputEnvelope = {
-    data: PlanTrainingDelayCreateManySemesterInput | PlanTrainingDelayCreateManySemesterInput[]
-    skipDuplicates?: boolean
-  }
-
   export type PlanTrainingCreateWithoutSemesterInput = {
     id?: string
     active?: boolean
@@ -439203,36 +438907,6 @@ export namespace Prisma {
     endDate?: DateTimeFilter<"ClassRegisterSession"> | Date | string
     semesterId?: StringFilter<"ClassRegisterSession"> | string
     tuitionPerCredit?: FloatFilter<"ClassRegisterSession"> | number
-  }
-
-  export type PlanTrainingDelayUpsertWithWhereUniqueWithoutSemesterInput = {
-    where: PlanTrainingDelayWhereUniqueInput
-    update: XOR<PlanTrainingDelayUpdateWithoutSemesterInput, PlanTrainingDelayUncheckedUpdateWithoutSemesterInput>
-    create: XOR<PlanTrainingDelayCreateWithoutSemesterInput, PlanTrainingDelayUncheckedCreateWithoutSemesterInput>
-  }
-
-  export type PlanTrainingDelayUpdateWithWhereUniqueWithoutSemesterInput = {
-    where: PlanTrainingDelayWhereUniqueInput
-    data: XOR<PlanTrainingDelayUpdateWithoutSemesterInput, PlanTrainingDelayUncheckedUpdateWithoutSemesterInput>
-  }
-
-  export type PlanTrainingDelayUpdateManyWithWhereWithoutSemesterInput = {
-    where: PlanTrainingDelayScalarWhereInput
-    data: XOR<PlanTrainingDelayUpdateManyMutationInput, PlanTrainingDelayUncheckedUpdateManyWithoutSemesterInput>
-  }
-
-  export type PlanTrainingDelayScalarWhereInput = {
-    AND?: PlanTrainingDelayScalarWhereInput | PlanTrainingDelayScalarWhereInput[]
-    OR?: PlanTrainingDelayScalarWhereInput[]
-    NOT?: PlanTrainingDelayScalarWhereInput | PlanTrainingDelayScalarWhereInput[]
-    id?: StringFilter<"PlanTrainingDelay"> | string
-    active?: BoolFilter<"PlanTrainingDelay"> | boolean
-    description?: StringNullableFilter<"PlanTrainingDelay"> | string | null
-    deletedAt?: DateTimeNullableFilter<"PlanTrainingDelay"> | Date | string | null
-    createdAt?: DateTimeFilter<"PlanTrainingDelay"> | Date | string
-    updatedAt?: DateTimeFilter<"PlanTrainingDelay"> | Date | string
-    trainingObjectTypeId?: StringFilter<"PlanTrainingDelay"> | string
-    semesterId?: StringFilter<"PlanTrainingDelay"> | string
   }
 
   export type PlanTrainingUpsertWithWhereUniqueWithoutSemesterInput = {
@@ -439630,7 +439304,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
   }
 
@@ -439656,7 +439329,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
   }
 
@@ -440311,7 +439983,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
   }
 
@@ -440337,7 +440008,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
@@ -446815,7 +446485,6 @@ export namespace Prisma {
     academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
     disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
   }
 
@@ -446841,7 +446510,6 @@ export namespace Prisma {
     academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
     disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
   }
 
@@ -447054,7 +446722,6 @@ export namespace Prisma {
     academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
     disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
   }
 
@@ -447080,7 +446747,6 @@ export namespace Prisma {
     academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
     disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
@@ -447862,7 +447528,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
   }
 
@@ -447888,7 +447553,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
   }
 
@@ -448903,7 +448567,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
   }
 
@@ -448929,7 +448592,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
@@ -451245,7 +450907,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    semester: SemesterCreateNestedOneWithoutPlanTrainingDelayInput
     planTrainingDelaySubjects?: PlanTrainingDelaySubjectCreateNestedManyWithoutPlanTrainingDelayInput
   }
 
@@ -451256,7 +450917,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    semesterId: string
     planTrainingDelaySubjects?: PlanTrainingDelaySubjectUncheckedCreateNestedManyWithoutPlanTrainingDelayInput
   }
 
@@ -451565,6 +451225,19 @@ export namespace Prisma {
   export type PlanTrainingDelayUpdateManyWithWhereWithoutTrainingObjectTypeInput = {
     where: PlanTrainingDelayScalarWhereInput
     data: XOR<PlanTrainingDelayUpdateManyMutationInput, PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeInput>
+  }
+
+  export type PlanTrainingDelayScalarWhereInput = {
+    AND?: PlanTrainingDelayScalarWhereInput | PlanTrainingDelayScalarWhereInput[]
+    OR?: PlanTrainingDelayScalarWhereInput[]
+    NOT?: PlanTrainingDelayScalarWhereInput | PlanTrainingDelayScalarWhereInput[]
+    id?: StringFilter<"PlanTrainingDelay"> | string
+    active?: BoolFilter<"PlanTrainingDelay"> | boolean
+    description?: StringNullableFilter<"PlanTrainingDelay"> | string | null
+    deletedAt?: DateTimeNullableFilter<"PlanTrainingDelay"> | Date | string | null
+    createdAt?: DateTimeFilter<"PlanTrainingDelay"> | Date | string
+    updatedAt?: DateTimeFilter<"PlanTrainingDelay"> | Date | string
+    trainingObjectTypeId?: StringFilter<"PlanTrainingDelay"> | string
   }
 
   export type StudentCreateWithoutPriorityObjectInput = {
@@ -459702,7 +459375,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
   }
 
@@ -459728,7 +459400,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
   }
 
@@ -459891,7 +459562,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
   }
 
@@ -459917,7 +459587,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
@@ -512389,7 +512058,6 @@ export namespace Prisma {
     academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
     disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
   }
 
@@ -512415,7 +512083,6 @@ export namespace Prisma {
     academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
     disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
   }
 
@@ -512720,7 +512387,6 @@ export namespace Prisma {
     academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
     disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
   }
 
@@ -512746,7 +512412,6 @@ export namespace Prisma {
     academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
     disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
@@ -512870,7 +512535,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
   }
 
@@ -512896,7 +512560,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
   }
 
@@ -513027,7 +512690,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
   }
 
@@ -513053,7 +512715,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
@@ -514003,7 +513664,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
   }
 
@@ -514029,7 +513689,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
   }
 
@@ -514233,7 +513892,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
   }
 
@@ -514259,7 +513917,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
@@ -529891,7 +529548,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
   }
 
@@ -529917,7 +529573,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
   }
 
@@ -530123,7 +529778,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
   }
 
@@ -530149,7 +529803,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
@@ -530306,7 +529959,6 @@ export namespace Prisma {
     academicWarning?: AcademicWarningCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingCreateNestedManyWithoutSemesterInput
   }
 
@@ -530332,7 +529984,6 @@ export namespace Prisma {
     academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutSemesterInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutSemesterInput
     classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutSemesterInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutSemesterInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutSemesterInput
   }
 
@@ -530524,7 +530175,6 @@ export namespace Prisma {
     academicWarning?: AcademicWarningUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
   }
 
@@ -530550,7 +530200,6 @@ export namespace Prisma {
     academicWarning?: AcademicWarningUncheckedUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
@@ -533093,7 +532742,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutSemesterNestedInput
   }
 
@@ -533119,7 +532767,6 @@ export namespace Prisma {
     disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutSemesterNestedInput
     studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutSemesterNestedInput
     classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutSemesterNestedInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutSemesterNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutSemesterNestedInput
   }
 
@@ -533525,16 +533172,6 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     tuitionPerCredit?: number
-  }
-
-  export type PlanTrainingDelayCreateManySemesterInput = {
-    id?: string
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    trainingObjectTypeId: string
   }
 
   export type PlanTrainingCreateManySemesterInput = {
@@ -534202,38 +533839,6 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     tuitionPerCredit?: FloatFieldUpdateOperationsInput | number
-  }
-
-  export type PlanTrainingDelayUpdateWithoutSemesterInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutPlanTrainingDelayNestedInput
-    planTrainingDelaySubjects?: PlanTrainingDelaySubjectUpdateManyWithoutPlanTrainingDelayNestedInput
-  }
-
-  export type PlanTrainingDelayUncheckedUpdateWithoutSemesterInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
-    planTrainingDelaySubjects?: PlanTrainingDelaySubjectUncheckedUpdateManyWithoutPlanTrainingDelayNestedInput
-  }
-
-  export type PlanTrainingDelayUncheckedUpdateManyWithoutSemesterInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
   }
 
   export type PlanTrainingUpdateWithoutSemesterInput = {
@@ -539443,7 +539048,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    semesterId: string
   }
 
   export type TrainingCourseUpdateWithoutTrainingObjectTypeInput = {
@@ -540286,7 +539890,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    semester?: SemesterUpdateOneRequiredWithoutPlanTrainingDelayNestedInput
     planTrainingDelaySubjects?: PlanTrainingDelaySubjectUpdateManyWithoutPlanTrainingDelayNestedInput
   }
 
@@ -540297,7 +539900,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    semesterId?: StringFieldUpdateOperationsInput | string
     planTrainingDelaySubjects?: PlanTrainingDelaySubjectUncheckedUpdateManyWithoutPlanTrainingDelayNestedInput
   }
 
@@ -540308,7 +539910,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    semesterId?: StringFieldUpdateOperationsInput | string
   }
 
   export type StudentUpdateWithoutPriorityObjectInput = {
