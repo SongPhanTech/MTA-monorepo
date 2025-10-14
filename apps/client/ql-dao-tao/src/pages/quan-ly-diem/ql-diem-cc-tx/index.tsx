@@ -453,11 +453,10 @@ export default function SubjectClassScore() {
     const disabledForm: boolean = useMemo(() => {
         return !(
             (can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
-             dataDetailSubjectClass?.scoreDeadLineStart &&
-                dayjs().isAfter(dataDetailSubjectClass?.scoreDeadLineStart) &&    
-            dataDetailSubjectClass?.scoreDeadline &&
+                dataDetailSubjectClass?.scoreDeadLineStart &&
+                dayjs().isAfter(dataDetailSubjectClass?.scoreDeadLineStart) &&
+                dataDetailSubjectClass?.scoreDeadline &&
                 dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
-                
                 !dataDetailSubjectClass?.isLockScore &&
                 profileId !== listUser.P13) ||
             false
@@ -786,8 +785,7 @@ export default function SubjectClassScore() {
                                                         align: 'center',
                                                         type: 'input',
                                                         render: (_, record) =>
-                                                            record.student?.fixedClass?.code ||
-                                                            '',
+                                                            record.student?.fixedClass?.code || '',
                                                     },
                                                     // #region Điểm CC
                                                     {

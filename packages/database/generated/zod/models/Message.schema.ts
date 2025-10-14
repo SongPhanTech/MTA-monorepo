@@ -20,6 +20,7 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    citations: z.array(z.unknown()).optional(),
     conversation: z.record(z.unknown()).optional(),
 }
 );

@@ -404,12 +404,16 @@ export default function ClassSubject() {
                 },
             ])
             if (res?.status === 200 && res?.data.length > 0) {
-                const list:any = res?.data[0]
+                const list: any = res?.data[0]
                 let listTransaction: any = []
-                listTransaction = list.map((i:SubjectClass) => {
+                listTransaction = list.map((i: SubjectClass) => {
                     if (i?.examDate && values?.beforeDays && values?.fromDays) {
-                        const scoreDeadLineStart = dayjs(i?.examDate).subtract(values?.fromDays, 'day').toDate()
-                        const scoreDeadline = dayjs(scoreDeadLineStart).add(values?.beforeDays, 'day').toDate()
+                        const scoreDeadLineStart = dayjs(i?.examDate)
+                            .subtract(values?.fromDays, 'day')
+                            .toDate()
+                        const scoreDeadline = dayjs(scoreDeadLineStart)
+                            .add(values?.beforeDays, 'day')
+                            .toDate()
                         return {
                             model: 'SubjectClass',
                             operation: 'update',
@@ -417,34 +421,32 @@ export default function ClassSubject() {
                                 where: { id: i.id },
                                 data: {
                                     scoreDeadLineStart,
-                                    scoreDeadline
+                                    scoreDeadline,
                                 },
                             },
                         }
                     }
-                        return {
-                            model: 'SubjectClass',
-                            operation: 'update',
+                    return {
+                        model: 'SubjectClass',
+                        operation: 'update',
+                        data: {
+                            where: { id: i.id },
                             data: {
-                                where: { id: i.id },
-                                data: {
-                                    scoreDeadLineStart: values?.time[0].toDate(),
-                                    scoreDeadline: values?.time[1].toDate()
-                                },
+                                scoreDeadLineStart: values?.time[0].toDate(),
+                                scoreDeadline: values?.time[1].toDate(),
                             },
-                        }
-             
+                        },
+                    }
                 })
-                if(listTransaction?.length>0){
-                       const resUpdate = await sqlTransaction(listTransaction)
-                       if(resUpdate?.status===200){
-                            message.success('Cập nhật thời gian nhập điểm TX/CC thành công')
-                            debouncedRefetch()
-                            form.resetFields()
-                            setOpen(false)
-                       }
+                if (listTransaction?.length > 0) {
+                    const resUpdate = await sqlTransaction(listTransaction)
+                    if (resUpdate?.status === 200) {
+                        message.success('Cập nhật thời gian nhập điểm TX/CC thành công')
+                        debouncedRefetch()
+                        form.resetFields()
+                        setOpen(false)
+                    }
                 }
-              
             }
         } catch (error: any) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -456,7 +458,7 @@ export default function ClassSubject() {
     const handleUpdateTimeScore = async (values: TimeScoreExam) => {
         try {
             showSpinner()
-               showSpinner()
+            showSpinner()
             const res = await sqlTransaction([
                 {
                     model: 'SubjectClass',
@@ -467,44 +469,44 @@ export default function ClassSubject() {
                 },
             ])
             if (res?.status === 200 && res?.data.length > 0) {
-                const list:any = res?.data[0]
+                const list: any = res?.data[0]
                 let listTransaction: any = []
-                listTransaction = list.map((i:SubjectClass) => {
+                listTransaction = list.map((i: SubjectClass) => {
                     if (i?.examDate && values?.beforeDays) {
-                        const examScoreDeadline = dayjs(i?.examDate).add(values?.beforeDays, 'day').toDate()
+                        const examScoreDeadline = dayjs(i?.examDate)
+                            .add(values?.beforeDays, 'day')
+                            .toDate()
                         return {
                             model: 'SubjectClass',
                             operation: 'update',
                             data: {
                                 where: { id: i.id },
                                 data: {
-                                    examScoreDeadline
+                                    examScoreDeadline,
                                 },
                             },
                         }
                     }
-                        return {
-                            model: 'SubjectClass',
-                            operation: 'update',
+                    return {
+                        model: 'SubjectClass',
+                        operation: 'update',
+                        data: {
+                            where: { id: i.id },
                             data: {
-                                where: { id: i.id },
-                                data: {
-                                    examScoreDeadline: values?.examScoreDeadline,
-                                },
+                                examScoreDeadline: values?.examScoreDeadline,
                             },
-                        }
-             
+                        },
+                    }
                 })
-                if(listTransaction?.length>0){
-                       const resUpdate = await sqlTransaction(listTransaction)
-                       if(resUpdate?.status===200){
-                            message.success('Cập nhật thời gian nhập điểm TX/CC thành công')
-                            debouncedRefetch()
-                            form.resetFields()
-                            setOpen(false)
-                       }
+                if (listTransaction?.length > 0) {
+                    const resUpdate = await sqlTransaction(listTransaction)
+                    if (resUpdate?.status === 200) {
+                        message.success('Cập nhật thời gian nhập điểm TX/CC thành công')
+                        debouncedRefetch()
+                        form.resetFields()
+                        setOpen(false)
+                    }
                 }
-              
             }
         } catch (error: any) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -642,7 +644,7 @@ export default function ClassSubject() {
                                                     initialValues={{ isOverride: false }}
                                                     onFinish={handleUpdateTimeScore}
                                                 >
-                                                                  <FormItem
+                                                    <FormItem
                                                         form={form}
                                                         name={'beforeDays'}
                                                         label="Số ngày nhập điểm TX,CC"
@@ -762,7 +764,7 @@ export default function ClassSubject() {
                             //     render: (record: string) =>
                             //         record ? dayjs(record).format('DD/MM/YYYY') : '',
                             // },
-                               {
+                            {
                                 title: 'Số ngày',
                                 width: 100,
                                 align: 'center',
@@ -781,8 +783,7 @@ export default function ClassSubject() {
                                     if (today?.isBefore(scoreDeadline)) {
                                         daysRemaining = scoreDeadline?.diff(today, 'day')
                                         deadlineType = 'ĐQT'
-                                    }
-                                    else if (today?.isBefore(examScoreDeadline)) {
+                                    } else if (today?.isBefore(examScoreDeadline)) {
                                         daysRemaining = examScoreDeadline?.diff(today, 'day')
                                         deadlineType = 'ĐT'
                                     } else {
@@ -790,8 +791,7 @@ export default function ClassSubject() {
                                     }
 
                                     return (
-                                 
-                                            <Tooltip
+                                        <Tooltip
                                             title={`Còn ${daysRemaining} ngày trước hạn ${deadlineType}`}
                                         >
                                             <span
@@ -905,7 +905,7 @@ export default function ClassSubject() {
                                     )
                                 },
                             },
-                         
+
                             {
                                 title: 'Giảng viên',
                                 width: 150,
