@@ -458,6 +458,26 @@ const policy: PolicyDef = {
             },
 
         },
+        studentSubjectScoreHistory: {
+            modelLevel: {
+                read: { guard: StudentSubjectScoreHistory_read, },
+                create: { guard: StudentSubjectScoreHistory_create, inputChecker: StudentSubjectScoreHistory_create_input, },
+                update: { guard: StudentSubjectScoreHistory_update, },
+                postUpdate: { guard: StudentSubjectScoreHistory_postUpdate, },
+                delete: { guard: StudentSubjectScoreHistory_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         archivedCertificateOnStudentSubjectScore: {
             modelLevel: {
                 read: { guard: ArchivedCertificateOnStudentSubjectScore_read, },
@@ -4780,6 +4800,7 @@ const policy: PolicyDef = {
         studentScoreConvert: { hasValidation: false },
         subjectScoreConvert: { hasValidation: false },
         studentSubjectScore: { hasValidation: true },
+        studentSubjectScoreHistory: { hasValidation: true },
         archivedCertificateOnStudentSubjectScore: { hasValidation: false },
         archivedCertificate: { hasValidation: true },
         archivedAwardOnStudentSubjectScore: { hasValidation: false },
@@ -6293,6 +6314,71 @@ function StudentSubjectScore_delete(context: QueryContext, db: CrudContract): an
 }
 
 function $check_StudentSubjectScore_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentSubjectScoreHistory_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_StudentSubjectScoreHistory_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentSubjectScoreHistory_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentSubjectScoreHistory_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentSubjectScoreHistory_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function StudentSubjectScoreHistory_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentSubjectScoreHistory_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentSubjectScoreHistory_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_StudentSubjectScoreHistory_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function StudentSubjectScoreHistory_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentSubjectScoreHistory_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

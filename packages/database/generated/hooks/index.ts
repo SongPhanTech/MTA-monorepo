@@ -25,6 +25,7 @@ export * from './plan-training';
 export * from './student-score-convert';
 export * from './subject-score-convert';
 export * from './student-subject-score';
+export * from './student-subject-score-history';
 export * from './archived-certificate-on-student-subject-score';
 export * from './archived-certificate';
 export * from './archived-award-on-student-subject-score';

@@ -96,9 +96,12 @@ model StudentSubjectScore extends Base {
   student                      Student                                    @relation(fields: [studentId], references: [id])
   studentId                    String
 
-  attendanceScore              Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm chuyên cần
-  midtermScore                 Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm giữa kỳ
-  examScore                    Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm cuối kỳ
+  /// điểm chuyên cần
+  attendanceScore              Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
+  /// điểm giữa kỳ
+  midtermScore                 Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
+  /// điểm cuối kỳ
+  examScore                    Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') 
 
   // dùng hàm `calcFinalScore` từ @workspace/libs/utils
   // cần cập nhật khi: thay đổi điểm CC | TX | thi | điểm cộng
@@ -107,9 +110,11 @@ model StudentSubjectScore extends Base {
   // maxCertFinalScore = Math.max(.certificates.archivedCertificate.finalScore)
   // bonusScore = sum(.awards.archivedAward.bonusScore)
   // finalScore = Math.max(computedFinalScore, maxCertFinalScore) + bonusScore
-  finalScore                   Decimal?                                   @db.Decimal(5, 1) @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')  // điểm tổng kết
+  /// điểm tổng kết
+  finalScore                   Decimal?                                   @db.Decimal(5, 1) @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')  
   // TODO?: phòng đào tạo có thể tạo và nhập trực tiếp manualFinalScore khi SV chuyển trường khác (phiên điểm từ chứng chỉ !?)
-  manualFinalScore             Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm tổng kết chuyển trường
+  /// điểm tổng kết chuyển trường
+  manualFinalScore             Float?                                     @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') 
 
   // Điểm I là điểm sử dụng trong trường hợp học viên không thể dự thi kết thúc học phần do bị ốm,
   // gặp tai nạn hoặc vì những lý do khách quan khác (Điều 26).
@@ -144,7 +149,38 @@ model StudentSubjectScore extends Base {
   certificates                 ArchivedCertificateOnStudentSubjectScore[]
   awards                       ArchivedAwardOnStudentSubjectScore[]
   studentThesisRegistration    StudentThesisRegistration[]                @relation("ScoreToRegistration")
+  studentSubjectScoreHistory   StudentSubjectScoreHistory[]
+
   @@unique([subjectClassId, studentId])
+  @@schema("ql-dao-tao")
+}
+
+model StudentSubjectScoreHistory extends Base {
+  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String
+  /// điểm chuyên cần
+  attendanceScore       Float?              @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
+  /// điểm giữa kỳ
+  midtermScore          Float?              @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
+  /// điểm cuối kỳ
+  examScore             Float?              @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
+  /// điểm tổng kết
+  finalScore            Decimal?            @db.Decimal(5, 1) @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
+  /// điểm tổng kết chuyển trường
+  manualFinalScore      Float?              @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
+
+  examPostponedReason   Boolean?
+  examPostponed         String?
+
+  examBanned            Boolean
+  examBannedReason      String?
+
+  suspended             Boolean?
+  suspendedReason       String?
+
+  updatedBy             UserProfile         @relation(fields: [updatedById], references: [id])
+  updatedById           String
+
   @@schema("ql-dao-tao")
 }
 

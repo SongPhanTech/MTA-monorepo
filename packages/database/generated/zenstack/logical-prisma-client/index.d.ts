@@ -226,6 +226,16 @@ export type SubjectScoreConvert = $Result.DefaultSelection<Prisma.$SubjectScoreC
  */
 export type StudentSubjectScore = $Result.DefaultSelection<Prisma.$StudentSubjectScorePayload>;
 /**
+ * Model StudentSubjectScoreHistory
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type StudentSubjectScoreHistory = $Result.DefaultSelection<Prisma.$StudentSubjectScoreHistoryPayload>;
+/**
  * Model ArchivedCertificateOnStudentSubjectScore
  * @
  * @allow ('all', auth() != null)
@@ -2726,6 +2736,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      * ```
      */
     get studentSubjectScore(): Prisma.StudentSubjectScoreDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.studentSubjectScoreHistory`: Exposes CRUD operations for the **StudentSubjectScoreHistory** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more StudentSubjectScoreHistories
+     * const studentSubjectScoreHistories = await prisma.studentSubjectScoreHistory.findMany()
+     * ```
+     */
+    get studentSubjectScoreHistory(): Prisma.StudentSubjectScoreHistoryDelegate<ExtArgs, ClientOptions>;
     /**
      * `prisma.archivedCertificateOnStudentSubjectScore`: Exposes CRUD operations for the **ArchivedCertificateOnStudentSubjectScore** model.
      * Example usage:
@@ -5361,6 +5380,7 @@ export namespace Prisma {
         StudentScoreConvert: 'StudentScoreConvert',
         SubjectScoreConvert: 'SubjectScoreConvert',
         StudentSubjectScore: 'StudentSubjectScore',
+        StudentSubjectScoreHistory: 'StudentSubjectScoreHistory',
         ArchivedCertificateOnStudentSubjectScore: 'ArchivedCertificateOnStudentSubjectScore',
         ArchivedCertificate: 'ArchivedCertificate',
         ArchivedAwardOnStudentSubjectScore: 'ArchivedAwardOnStudentSubjectScore',
@@ -5854,6 +5874,28 @@ export namespace Prisma {
         suspendedReason: 'suspendedReason',
         repeated: 'repeated',
         repeatedReason: 'repeatedReason'
+    };
+    export const StudentSubjectScoreHistoryScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        studentSubjectScoreId: 'studentSubjectScoreId',
+        attendanceScore: 'attendanceScore',
+        midtermScore: 'midtermScore',
+        examScore: 'examScore',
+        finalScore: 'finalScore',
+        manualFinalScore: 'manualFinalScore',
+        examPostponedReason: 'examPostponedReason',
+        examPostponed: 'examPostponed',
+        examBanned: 'examBanned',
+        examBannedReason: 'examBannedReason',
+        suspended: 'suspended',
+        suspendedReason: 'suspendedReason',
+        updatedById: 'updatedById'
     };
     export const ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum: {
         id: 'id',
@@ -9314,6 +9356,16 @@ export namespace Prisma {
         examBannedReason: 'examBannedReason',
         suspendedReason: 'suspendedReason',
         repeatedReason: 'repeatedReason'
+    };
+    export const StudentSubjectScoreHistoryOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        studentSubjectScoreId: 'studentSubjectScoreId',
+        examPostponed: 'examPostponed',
+        examBannedReason: 'examBannedReason',
+        suspendedReason: 'suspendedReason',
+        updatedById: 'updatedById'
     };
     export const ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -18964,6 +19016,7 @@ export namespace Prisma {
         certificates<T extends StudentSubjectScore$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedCertificateOnStudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         awards<T extends StudentSubjectScore$awardsArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$awardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedAwardOnStudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         studentThesisRegistration<T extends StudentSubjectScore$studentThesisRegistrationArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$studentThesisRegistrationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentThesisRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        studentSubjectScoreHistory<T extends StudentSubjectScore$studentSubjectScoreHistoryArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$studentSubjectScoreHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19015,6 +19068,399 @@ export namespace Prisma {
         readonly suspendedReason: FieldRef<"StudentSubjectScore", 'String'>;
         readonly repeated: FieldRef<"StudentSubjectScore", 'Boolean'>;
         readonly repeatedReason: FieldRef<"StudentSubjectScore", 'String'>;
+    }
+
+    export interface StudentSubjectScoreHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StudentSubjectScoreHistory'], meta: { name: 'StudentSubjectScoreHistory' } };
+        /**
+         * Fields of the StudentSubjectScoreHistory model
+         */
+        readonly fields: StudentSubjectScoreHistoryFieldRefs;
+        /**
+         * Find zero or one StudentSubjectScoreHistory that matches the filter.
+         * @param {StudentSubjectScoreHistoryFindUniqueArgs} args - Arguments to find a StudentSubjectScoreHistory
+         * @example
+         * // Get one StudentSubjectScoreHistory
+         * const studentSubjectScoreHistory = await prisma.studentSubjectScoreHistory.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends StudentSubjectScoreHistoryFindUniqueArgs>(args: SelectSubset<T, StudentSubjectScoreHistoryFindUniqueArgs<ExtArgs>>): Prisma__StudentSubjectScoreHistoryClient<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one StudentSubjectScoreHistory that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {StudentSubjectScoreHistoryFindUniqueOrThrowArgs} args - Arguments to find a StudentSubjectScoreHistory
+         * @example
+         * // Get one StudentSubjectScoreHistory
+         * const studentSubjectScoreHistory = await prisma.studentSubjectScoreHistory.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends StudentSubjectScoreHistoryFindUniqueOrThrowArgs>(args: SelectSubset<T, StudentSubjectScoreHistoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StudentSubjectScoreHistoryClient<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first StudentSubjectScoreHistory that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentSubjectScoreHistoryFindFirstArgs} args - Arguments to find a StudentSubjectScoreHistory
+         * @example
+         * // Get one StudentSubjectScoreHistory
+         * const studentSubjectScoreHistory = await prisma.studentSubjectScoreHistory.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends StudentSubjectScoreHistoryFindFirstArgs>(args?: SelectSubset<T, StudentSubjectScoreHistoryFindFirstArgs<ExtArgs>>): Prisma__StudentSubjectScoreHistoryClient<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first StudentSubjectScoreHistory that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentSubjectScoreHistoryFindFirstOrThrowArgs} args - Arguments to find a StudentSubjectScoreHistory
+         * @example
+         * // Get one StudentSubjectScoreHistory
+         * const studentSubjectScoreHistory = await prisma.studentSubjectScoreHistory.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends StudentSubjectScoreHistoryFindFirstOrThrowArgs>(args?: SelectSubset<T, StudentSubjectScoreHistoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__StudentSubjectScoreHistoryClient<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more StudentSubjectScoreHistories that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentSubjectScoreHistoryFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all StudentSubjectScoreHistories
+         * const studentSubjectScoreHistories = await prisma.studentSubjectScoreHistory.findMany()
+         *
+         * // Get first 10 StudentSubjectScoreHistories
+         * const studentSubjectScoreHistories = await prisma.studentSubjectScoreHistory.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const studentSubjectScoreHistoryWithIdOnly = await prisma.studentSubjectScoreHistory.findMany({ select: { id: true } })
+         */
+        findMany<T extends StudentSubjectScoreHistoryFindManyArgs>(args?: SelectSubset<T, StudentSubjectScoreHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a StudentSubjectScoreHistory.
+         * @param {StudentSubjectScoreHistoryCreateArgs} args - Arguments to create a StudentSubjectScoreHistory.
+         * @example
+         * // Create one StudentSubjectScoreHistory
+         * const StudentSubjectScoreHistory = await prisma.studentSubjectScoreHistory.create({
+         *   data: {
+         *     // ... data to create a StudentSubjectScoreHistory
+         *   }
+         * })
+         */
+        create<T extends StudentSubjectScoreHistoryCreateArgs>(args: SelectSubset<T, StudentSubjectScoreHistoryCreateArgs<ExtArgs>>): Prisma__StudentSubjectScoreHistoryClient<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many StudentSubjectScoreHistories.
+         * @param {StudentSubjectScoreHistoryCreateManyArgs} args - Arguments to create many StudentSubjectScoreHistories.
+         * @example
+         * // Create many StudentSubjectScoreHistories
+         * const studentSubjectScoreHistory = await prisma.studentSubjectScoreHistory.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends StudentSubjectScoreHistoryCreateManyArgs>(args?: SelectSubset<T, StudentSubjectScoreHistoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many StudentSubjectScoreHistories and returns the data saved in the database.
+         * @param {StudentSubjectScoreHistoryCreateManyAndReturnArgs} args - Arguments to create many StudentSubjectScoreHistories.
+         * @example
+         * // Create many StudentSubjectScoreHistories
+         * const studentSubjectScoreHistory = await prisma.studentSubjectScoreHistory.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many StudentSubjectScoreHistories and only return the `id`
+         * const studentSubjectScoreHistoryWithIdOnly = await prisma.studentSubjectScoreHistory.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends StudentSubjectScoreHistoryCreateManyAndReturnArgs>(args?: SelectSubset<T, StudentSubjectScoreHistoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a StudentSubjectScoreHistory.
+         * @param {StudentSubjectScoreHistoryDeleteArgs} args - Arguments to delete one StudentSubjectScoreHistory.
+         * @example
+         * // Delete one StudentSubjectScoreHistory
+         * const StudentSubjectScoreHistory = await prisma.studentSubjectScoreHistory.delete({
+         *   where: {
+         *     // ... filter to delete one StudentSubjectScoreHistory
+         *   }
+         * })
+         */
+        delete<T extends StudentSubjectScoreHistoryDeleteArgs>(args: SelectSubset<T, StudentSubjectScoreHistoryDeleteArgs<ExtArgs>>): Prisma__StudentSubjectScoreHistoryClient<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one StudentSubjectScoreHistory.
+         * @param {StudentSubjectScoreHistoryUpdateArgs} args - Arguments to update one StudentSubjectScoreHistory.
+         * @example
+         * // Update one StudentSubjectScoreHistory
+         * const studentSubjectScoreHistory = await prisma.studentSubjectScoreHistory.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends StudentSubjectScoreHistoryUpdateArgs>(args: SelectSubset<T, StudentSubjectScoreHistoryUpdateArgs<ExtArgs>>): Prisma__StudentSubjectScoreHistoryClient<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more StudentSubjectScoreHistories.
+         * @param {StudentSubjectScoreHistoryDeleteManyArgs} args - Arguments to filter StudentSubjectScoreHistories to delete.
+         * @example
+         * // Delete a few StudentSubjectScoreHistories
+         * const { count } = await prisma.studentSubjectScoreHistory.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends StudentSubjectScoreHistoryDeleteManyArgs>(args?: SelectSubset<T, StudentSubjectScoreHistoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more StudentSubjectScoreHistories.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentSubjectScoreHistoryUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many StudentSubjectScoreHistories
+         * const studentSubjectScoreHistory = await prisma.studentSubjectScoreHistory.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends StudentSubjectScoreHistoryUpdateManyArgs>(args: SelectSubset<T, StudentSubjectScoreHistoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more StudentSubjectScoreHistories and returns the data updated in the database.
+         * @param {StudentSubjectScoreHistoryUpdateManyAndReturnArgs} args - Arguments to update many StudentSubjectScoreHistories.
+         * @example
+         * // Update many StudentSubjectScoreHistories
+         * const studentSubjectScoreHistory = await prisma.studentSubjectScoreHistory.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more StudentSubjectScoreHistories and only return the `id`
+         * const studentSubjectScoreHistoryWithIdOnly = await prisma.studentSubjectScoreHistory.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends StudentSubjectScoreHistoryUpdateManyAndReturnArgs>(args: SelectSubset<T, StudentSubjectScoreHistoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one StudentSubjectScoreHistory.
+         * @param {StudentSubjectScoreHistoryUpsertArgs} args - Arguments to update or create a StudentSubjectScoreHistory.
+         * @example
+         * // Update or create a StudentSubjectScoreHistory
+         * const studentSubjectScoreHistory = await prisma.studentSubjectScoreHistory.upsert({
+         *   create: {
+         *     // ... data to create a StudentSubjectScoreHistory
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the StudentSubjectScoreHistory we want to update
+         *   }
+         * })
+         */
+        upsert<T extends StudentSubjectScoreHistoryUpsertArgs>(args: SelectSubset<T, StudentSubjectScoreHistoryUpsertArgs<ExtArgs>>): Prisma__StudentSubjectScoreHistoryClient<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of StudentSubjectScoreHistories.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentSubjectScoreHistoryCountArgs} args - Arguments to filter StudentSubjectScoreHistories to count.
+         * @example
+         * // Count the number of StudentSubjectScoreHistories
+         * const count = await prisma.studentSubjectScoreHistory.count({
+         *   where: {
+         *     // ... the filter for the StudentSubjectScoreHistories we want to count
+         *   }
+         * })
+         */
+        count<T extends StudentSubjectScoreHistoryCountArgs>(args?: Subset<T, StudentSubjectScoreHistoryCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], StudentSubjectScoreHistoryCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a StudentSubjectScoreHistory.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentSubjectScoreHistoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends StudentSubjectScoreHistoryAggregateArgs>(args: Subset<T, StudentSubjectScoreHistoryAggregateArgs>): Prisma.PrismaPromise<GetStudentSubjectScoreHistoryAggregateType<T>>;
+        /**
+         * Group by StudentSubjectScoreHistory.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {StudentSubjectScoreHistoryGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends StudentSubjectScoreHistoryGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StudentSubjectScoreHistoryGroupByArgs['orderBy'] }
+        : { orderBy?: StudentSubjectScoreHistoryGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, StudentSubjectScoreHistoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStudentSubjectScoreHistoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for StudentSubjectScoreHistory.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__StudentSubjectScoreHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        studentSubjectScore<T extends StudentSubjectScoreDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScoreDefaultArgs<ExtArgs>>): Prisma__StudentSubjectScoreClient<$Result.GetResult<Prisma.$StudentSubjectScorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        updatedBy<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the StudentSubjectScoreHistory model
+     */
+    interface StudentSubjectScoreHistoryFieldRefs {
+        readonly id: FieldRef<"StudentSubjectScoreHistory", 'String'>;
+        readonly code: FieldRef<"StudentSubjectScoreHistory", 'String'>;
+        readonly active: FieldRef<"StudentSubjectScoreHistory", 'Boolean'>;
+        readonly description: FieldRef<"StudentSubjectScoreHistory", 'String'>;
+        readonly deletedAt: FieldRef<"StudentSubjectScoreHistory", 'DateTime'>;
+        readonly createdAt: FieldRef<"StudentSubjectScoreHistory", 'DateTime'>;
+        readonly updatedAt: FieldRef<"StudentSubjectScoreHistory", 'DateTime'>;
+        readonly studentSubjectScoreId: FieldRef<"StudentSubjectScoreHistory", 'String'>;
+        readonly attendanceScore: FieldRef<"StudentSubjectScoreHistory", 'Float'>;
+        readonly midtermScore: FieldRef<"StudentSubjectScoreHistory", 'Float'>;
+        readonly examScore: FieldRef<"StudentSubjectScoreHistory", 'Float'>;
+        readonly finalScore: FieldRef<"StudentSubjectScoreHistory", 'Decimal'>;
+        readonly manualFinalScore: FieldRef<"StudentSubjectScoreHistory", 'Float'>;
+        readonly examPostponedReason: FieldRef<"StudentSubjectScoreHistory", 'Boolean'>;
+        readonly examPostponed: FieldRef<"StudentSubjectScoreHistory", 'String'>;
+        readonly examBanned: FieldRef<"StudentSubjectScoreHistory", 'Boolean'>;
+        readonly examBannedReason: FieldRef<"StudentSubjectScoreHistory", 'String'>;
+        readonly suspended: FieldRef<"StudentSubjectScoreHistory", 'Boolean'>;
+        readonly suspendedReason: FieldRef<"StudentSubjectScoreHistory", 'String'>;
+        readonly updatedById: FieldRef<"StudentSubjectScoreHistory", 'String'>;
     }
 
     export interface ArchivedCertificateOnStudentSubjectScoreDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -52517,6 +52963,7 @@ export namespace Prisma {
         educationAndTraining<T extends UserProfile$educationAndTrainingArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$educationAndTrainingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         lecturer<T extends UserProfile$lecturerArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$lecturerArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         lecturerHistory<T extends UserProfile$lecturerHistoryArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$lecturerHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LecturerHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        studentSubjectScoreHistory<T extends UserProfile$studentSubjectScoreHistoryArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$studentSubjectScoreHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         staffs<T extends UserProfile$staffsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$staffsArgs<ExtArgs>>): Prisma__StaffClient<$Result.GetResult<Prisma.$StaffPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         staffHistory<T extends UserProfile$staffHistoryArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$staffHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StaffHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         evidenceFiles<T extends UserProfile$evidenceFilesArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$evidenceFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EvidenceFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -102590,7 +103037,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "planTrainingDelay" | "planTraining" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
+            modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "planTrainingDelay" | "planTraining" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -104071,6 +104518,80 @@ export namespace Prisma {
                     count: {
                         args: Prisma.StudentSubjectScoreCountArgs<ExtArgs>
                         result: $Utils.Optional<StudentSubjectScoreCountAggregateOutputType> | number
+                    }
+                }
+            }
+            StudentSubjectScoreHistory: {
+                payload: Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>
+                fields: Prisma.StudentSubjectScoreHistoryFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.StudentSubjectScoreHistoryFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentSubjectScoreHistoryPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.StudentSubjectScoreHistoryFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentSubjectScoreHistoryPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.StudentSubjectScoreHistoryFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentSubjectScoreHistoryPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.StudentSubjectScoreHistoryFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentSubjectScoreHistoryPayload>
+                    }
+                    findMany: {
+                        args: Prisma.StudentSubjectScoreHistoryFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentSubjectScoreHistoryPayload>[]
+                    }
+                    create: {
+                        args: Prisma.StudentSubjectScoreHistoryCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentSubjectScoreHistoryPayload>
+                    }
+                    createMany: {
+                        args: Prisma.StudentSubjectScoreHistoryCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.StudentSubjectScoreHistoryCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentSubjectScoreHistoryPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.StudentSubjectScoreHistoryDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentSubjectScoreHistoryPayload>
+                    }
+                    update: {
+                        args: Prisma.StudentSubjectScoreHistoryUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentSubjectScoreHistoryPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.StudentSubjectScoreHistoryDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.StudentSubjectScoreHistoryUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.StudentSubjectScoreHistoryUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentSubjectScoreHistoryPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.StudentSubjectScoreHistoryUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$StudentSubjectScoreHistoryPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.StudentSubjectScoreHistoryAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateStudentSubjectScoreHistory>
+                    }
+                    groupBy: {
+                        args: Prisma.StudentSubjectScoreHistoryGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<StudentSubjectScoreHistoryGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.StudentSubjectScoreHistoryCountArgs<ExtArgs>
+                        result: $Utils.Optional<StudentSubjectScoreHistoryCountAggregateOutputType> | number
                     }
                 }
             }
@@ -120035,6 +120556,7 @@ export namespace Prisma {
         studentScoreConvert?: StudentScoreConvertOmit
         subjectScoreConvert?: SubjectScoreConvertOmit
         studentSubjectScore?: StudentSubjectScoreOmit
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryOmit
         archivedCertificateOnStudentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreOmit
         archivedCertificate?: ArchivedCertificateOmit
         archivedAwardOnStudentSubjectScore?: ArchivedAwardOnStudentSubjectScoreOmit
@@ -120689,6 +121211,7 @@ export namespace Prisma {
         certificates: number
         awards: number
         studentThesisRegistration: number
+        studentSubjectScoreHistory: number
     };
     export type StudentSubjectScoreCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         graduationGpaScores?: boolean | StudentSubjectScoreCountOutputTypeCountGraduationGpaScoresArgs
@@ -120696,6 +121219,7 @@ export namespace Prisma {
         certificates?: boolean | StudentSubjectScoreCountOutputTypeCountCertificatesArgs
         awards?: boolean | StudentSubjectScoreCountOutputTypeCountAwardsArgs
         studentThesisRegistration?: boolean | StudentSubjectScoreCountOutputTypeCountStudentThesisRegistrationArgs
+        studentSubjectScoreHistory?: boolean | StudentSubjectScoreCountOutputTypeCountStudentSubjectScoreHistoryArgs
     };
     /**
      * StudentSubjectScoreCountOutputType without action
@@ -120735,6 +121259,12 @@ export namespace Prisma {
      */
     export type StudentSubjectScoreCountOutputTypeCountStudentThesisRegistrationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: StudentThesisRegistrationWhereInput
+    };
+    /**
+     * StudentSubjectScoreCountOutputType without action
+     */
+    export type StudentSubjectScoreCountOutputTypeCountStudentSubjectScoreHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: StudentSubjectScoreHistoryWhereInput
     };
     /**
      * Count Type ArchivedCertificateCountOutputType
@@ -123366,6 +123896,7 @@ export namespace Prisma {
         QuaTrinhLuong: number
         educationAndTraining: number
         lecturerHistory: number
+        studentSubjectScoreHistory: number
         staffHistory: number
         evidenceFiles: number
         documentsUploaded: number
@@ -123401,6 +123932,7 @@ export namespace Prisma {
         QuaTrinhLuong?: boolean | UserProfileCountOutputTypeCountQuaTrinhLuongArgs
         educationAndTraining?: boolean | UserProfileCountOutputTypeCountEducationAndTrainingArgs
         lecturerHistory?: boolean | UserProfileCountOutputTypeCountLecturerHistoryArgs
+        studentSubjectScoreHistory?: boolean | UserProfileCountOutputTypeCountStudentSubjectScoreHistoryArgs
         staffHistory?: boolean | UserProfileCountOutputTypeCountStaffHistoryArgs
         evidenceFiles?: boolean | UserProfileCountOutputTypeCountEvidenceFilesArgs
         documentsUploaded?: boolean | UserProfileCountOutputTypeCountDocumentsUploadedArgs
@@ -123573,6 +124105,12 @@ export namespace Prisma {
      */
     export type UserProfileCountOutputTypeCountLecturerHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: LecturerHistoryWhereInput
+    };
+    /**
+     * UserProfileCountOutputType without action
+     */
+    export type UserProfileCountOutputTypeCountStudentSubjectScoreHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: StudentSubjectScoreHistoryWhereInput
     };
     /**
      * UserProfileCountOutputType without action
@@ -139691,6 +140229,7 @@ export namespace Prisma {
         certificates?: boolean | StudentSubjectScore$certificatesArgs<ExtArgs>
         awards?: boolean | StudentSubjectScore$awardsArgs<ExtArgs>
         studentThesisRegistration?: boolean | StudentSubjectScore$studentThesisRegistrationArgs<ExtArgs>
+        studentSubjectScoreHistory?: boolean | StudentSubjectScore$studentSubjectScoreHistoryArgs<ExtArgs>
         _count?: boolean | StudentSubjectScoreCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["studentSubjectScore"]>;
     export type StudentSubjectScoreSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -139790,6 +140329,7 @@ export namespace Prisma {
         certificates?: boolean | StudentSubjectScore$certificatesArgs<ExtArgs>
         awards?: boolean | StudentSubjectScore$awardsArgs<ExtArgs>
         studentThesisRegistration?: boolean | StudentSubjectScore$studentThesisRegistrationArgs<ExtArgs>
+        studentSubjectScoreHistory?: boolean | StudentSubjectScore$studentSubjectScoreHistoryArgs<ExtArgs>
         _count?: boolean | StudentSubjectScoreCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type StudentSubjectScoreIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -139813,6 +140353,7 @@ export namespace Prisma {
             certificates: Prisma.$ArchivedCertificateOnStudentSubjectScorePayload<ExtArgs>[]
             awards: Prisma.$ArchivedAwardOnStudentSubjectScorePayload<ExtArgs>[]
             studentThesisRegistration: Prisma.$StudentThesisRegistrationPayload<ExtArgs>[]
+            studentSubjectScoreHistory: Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -140387,6 +140928,29 @@ export namespace Prisma {
         distinct?: StudentThesisRegistrationScalarFieldEnum | StudentThesisRegistrationScalarFieldEnum[]
     };
     /**
+     * StudentSubjectScore.studentSubjectScoreHistory
+     */
+    export type StudentSubjectScore$studentSubjectScoreHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryInclude<ExtArgs> | null
+        where?: StudentSubjectScoreHistoryWhereInput
+        orderBy?: StudentSubjectScoreHistoryOrderByWithRelationInput | StudentSubjectScoreHistoryOrderByWithRelationInput[]
+        cursor?: StudentSubjectScoreHistoryWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: StudentSubjectScoreHistoryScalarFieldEnum | StudentSubjectScoreHistoryScalarFieldEnum[]
+    };
+    /**
      * StudentSubjectScore without action
      */
     export type StudentSubjectScoreDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -140402,6 +140966,852 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: StudentSubjectScoreInclude<ExtArgs> | null
+    };
+    /**
+     * Model StudentSubjectScoreHistory
+     */
+    export type AggregateStudentSubjectScoreHistory = {
+        _count: StudentSubjectScoreHistoryCountAggregateOutputType | null
+        _avg: StudentSubjectScoreHistoryAvgAggregateOutputType | null
+        _sum: StudentSubjectScoreHistorySumAggregateOutputType | null
+        _min: StudentSubjectScoreHistoryMinAggregateOutputType | null
+        _max: StudentSubjectScoreHistoryMaxAggregateOutputType | null
+    };
+    export type StudentSubjectScoreHistoryAvgAggregateOutputType = {
+        attendanceScore: number | null
+        midtermScore: number | null
+        examScore: number | null
+        finalScore: Decimal | null
+        manualFinalScore: number | null
+    };
+    export type StudentSubjectScoreHistorySumAggregateOutputType = {
+        attendanceScore: number | null
+        midtermScore: number | null
+        examScore: number | null
+        finalScore: Decimal | null
+        manualFinalScore: number | null
+    };
+    export type StudentSubjectScoreHistoryMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        studentSubjectScoreId: string | null
+        attendanceScore: number | null
+        midtermScore: number | null
+        examScore: number | null
+        finalScore: Decimal | null
+        manualFinalScore: number | null
+        examPostponedReason: boolean | null
+        examPostponed: string | null
+        examBanned: boolean | null
+        examBannedReason: string | null
+        suspended: boolean | null
+        suspendedReason: string | null
+        updatedById: string | null
+    };
+    export type StudentSubjectScoreHistoryMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        studentSubjectScoreId: string | null
+        attendanceScore: number | null
+        midtermScore: number | null
+        examScore: number | null
+        finalScore: Decimal | null
+        manualFinalScore: number | null
+        examPostponedReason: boolean | null
+        examPostponed: string | null
+        examBanned: boolean | null
+        examBannedReason: string | null
+        suspended: boolean | null
+        suspendedReason: string | null
+        updatedById: string | null
+    };
+    export type StudentSubjectScoreHistoryCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        studentSubjectScoreId: number
+        attendanceScore: number
+        midtermScore: number
+        examScore: number
+        finalScore: number
+        manualFinalScore: number
+        examPostponedReason: number
+        examPostponed: number
+        examBanned: number
+        examBannedReason: number
+        suspended: number
+        suspendedReason: number
+        updatedById: number
+        _all: number
+    };
+    export type StudentSubjectScoreHistoryAvgAggregateInputType = {
+        attendanceScore?: true
+        midtermScore?: true
+        examScore?: true
+        finalScore?: true
+        manualFinalScore?: true
+    };
+    export type StudentSubjectScoreHistorySumAggregateInputType = {
+        attendanceScore?: true
+        midtermScore?: true
+        examScore?: true
+        finalScore?: true
+        manualFinalScore?: true
+    };
+    export type StudentSubjectScoreHistoryMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        studentSubjectScoreId?: true
+        attendanceScore?: true
+        midtermScore?: true
+        examScore?: true
+        finalScore?: true
+        manualFinalScore?: true
+        examPostponedReason?: true
+        examPostponed?: true
+        examBanned?: true
+        examBannedReason?: true
+        suspended?: true
+        suspendedReason?: true
+        updatedById?: true
+    };
+    export type StudentSubjectScoreHistoryMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        studentSubjectScoreId?: true
+        attendanceScore?: true
+        midtermScore?: true
+        examScore?: true
+        finalScore?: true
+        manualFinalScore?: true
+        examPostponedReason?: true
+        examPostponed?: true
+        examBanned?: true
+        examBannedReason?: true
+        suspended?: true
+        suspendedReason?: true
+        updatedById?: true
+    };
+    export type StudentSubjectScoreHistoryCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        studentSubjectScoreId?: true
+        attendanceScore?: true
+        midtermScore?: true
+        examScore?: true
+        finalScore?: true
+        manualFinalScore?: true
+        examPostponedReason?: true
+        examPostponed?: true
+        examBanned?: true
+        examBannedReason?: true
+        suspended?: true
+        suspendedReason?: true
+        updatedById?: true
+        _all?: true
+    };
+    export type StudentSubjectScoreHistoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which StudentSubjectScoreHistory to aggregate.
+         */
+        where?: StudentSubjectScoreHistoryWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of StudentSubjectScoreHistories to fetch.
+         */
+        orderBy?: StudentSubjectScoreHistoryOrderByWithRelationInput | StudentSubjectScoreHistoryOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: StudentSubjectScoreHistoryWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` StudentSubjectScoreHistories from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` StudentSubjectScoreHistories.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned StudentSubjectScoreHistories
+        **/
+        _count?: true | StudentSubjectScoreHistoryCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: StudentSubjectScoreHistoryAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: StudentSubjectScoreHistorySumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: StudentSubjectScoreHistoryMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: StudentSubjectScoreHistoryMaxAggregateInputType
+    };
+    export type GetStudentSubjectScoreHistoryAggregateType<T extends StudentSubjectScoreHistoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateStudentSubjectScoreHistory]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStudentSubjectScoreHistory[P]>
+        : GetScalarType<T[P], AggregateStudentSubjectScoreHistory[P]>
+    };
+    export type StudentSubjectScoreHistoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: StudentSubjectScoreHistoryWhereInput
+        orderBy?: StudentSubjectScoreHistoryOrderByWithAggregationInput | StudentSubjectScoreHistoryOrderByWithAggregationInput[]
+        by: StudentSubjectScoreHistoryScalarFieldEnum[] | StudentSubjectScoreHistoryScalarFieldEnum
+        having?: StudentSubjectScoreHistoryScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: StudentSubjectScoreHistoryCountAggregateInputType | true
+        _avg?: StudentSubjectScoreHistoryAvgAggregateInputType
+        _sum?: StudentSubjectScoreHistorySumAggregateInputType
+        _min?: StudentSubjectScoreHistoryMinAggregateInputType
+        _max?: StudentSubjectScoreHistoryMaxAggregateInputType
+    };
+    export type StudentSubjectScoreHistoryGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        studentSubjectScoreId: string
+        attendanceScore: number | null
+        midtermScore: number | null
+        examScore: number | null
+        finalScore: Decimal | null
+        manualFinalScore: number | null
+        examPostponedReason: boolean | null
+        examPostponed: string | null
+        examBanned: boolean
+        examBannedReason: string | null
+        suspended: boolean | null
+        suspendedReason: string | null
+        updatedById: string
+        _count: StudentSubjectScoreHistoryCountAggregateOutputType | null
+        _avg: StudentSubjectScoreHistoryAvgAggregateOutputType | null
+        _sum: StudentSubjectScoreHistorySumAggregateOutputType | null
+        _min: StudentSubjectScoreHistoryMinAggregateOutputType | null
+        _max: StudentSubjectScoreHistoryMaxAggregateOutputType | null
+    };
+    type GetStudentSubjectScoreHistoryGroupByPayload<T extends StudentSubjectScoreHistoryGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<StudentSubjectScoreHistoryGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof StudentSubjectScoreHistoryGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], StudentSubjectScoreHistoryGroupByOutputType[P]>
+                : GetScalarType<T[P], StudentSubjectScoreHistoryGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type StudentSubjectScoreHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        studentSubjectScoreId?: boolean
+        attendanceScore?: boolean
+        midtermScore?: boolean
+        examScore?: boolean
+        finalScore?: boolean
+        manualFinalScore?: boolean
+        examPostponedReason?: boolean
+        examPostponed?: boolean
+        examBanned?: boolean
+        examBannedReason?: boolean
+        suspended?: boolean
+        suspendedReason?: boolean
+        updatedById?: boolean
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        updatedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["studentSubjectScoreHistory"]>;
+    export type StudentSubjectScoreHistorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        studentSubjectScoreId?: boolean
+        attendanceScore?: boolean
+        midtermScore?: boolean
+        examScore?: boolean
+        finalScore?: boolean
+        manualFinalScore?: boolean
+        examPostponedReason?: boolean
+        examPostponed?: boolean
+        examBanned?: boolean
+        examBannedReason?: boolean
+        suspended?: boolean
+        suspendedReason?: boolean
+        updatedById?: boolean
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        updatedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["studentSubjectScoreHistory"]>;
+    export type StudentSubjectScoreHistorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        studentSubjectScoreId?: boolean
+        attendanceScore?: boolean
+        midtermScore?: boolean
+        examScore?: boolean
+        finalScore?: boolean
+        manualFinalScore?: boolean
+        examPostponedReason?: boolean
+        examPostponed?: boolean
+        examBanned?: boolean
+        examBannedReason?: boolean
+        suspended?: boolean
+        suspendedReason?: boolean
+        updatedById?: boolean
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        updatedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["studentSubjectScoreHistory"]>;
+    export type StudentSubjectScoreHistorySelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        studentSubjectScoreId?: boolean
+        attendanceScore?: boolean
+        midtermScore?: boolean
+        examScore?: boolean
+        finalScore?: boolean
+        manualFinalScore?: boolean
+        examPostponedReason?: boolean
+        examPostponed?: boolean
+        examBanned?: boolean
+        examBannedReason?: boolean
+        suspended?: boolean
+        suspendedReason?: boolean
+        updatedById?: boolean
+    };
+    export type StudentSubjectScoreHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "studentSubjectScoreId" | "attendanceScore" | "midtermScore" | "examScore" | "finalScore" | "manualFinalScore" | "examPostponedReason" | "examPostponed" | "examBanned" | "examBannedReason" | "suspended" | "suspendedReason" | "updatedById", ExtArgs["result"]["studentSubjectScoreHistory"]>;
+    export type StudentSubjectScoreHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        updatedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
+    };
+    export type StudentSubjectScoreHistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        updatedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
+    };
+    export type StudentSubjectScoreHistoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        updatedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
+    };
+    export type $StudentSubjectScoreHistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "StudentSubjectScoreHistory"
+        objects: {
+            studentSubjectScore: Prisma.$StudentSubjectScorePayload<ExtArgs>
+            updatedBy: Prisma.$UserProfilePayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            studentSubjectScoreId: string
+            /**
+             * @gte(0, 'Điểm tối thiểu là 0')
+             * @lte(10, 'Điểm tối đa là 10')
+             */
+            attendanceScore: number | null
+            /**
+             * @gte(0, 'Điểm tối thiểu là 0')
+             * @lte(10, 'Điểm tối đa là 10')
+             */
+            midtermScore: number | null
+            /**
+             * @gte(0, 'Điểm tối thiểu là 0')
+             * @lte(10, 'Điểm tối đa là 10')
+             */
+            examScore: number | null
+            /**
+             * @gte(0, 'Điểm tối thiểu là 0')
+             * @lte(10, 'Điểm tối đa là 10')
+             */
+            finalScore: Prisma.Decimal | null
+            /**
+             * @gte(0, 'Điểm tối thiểu là 0')
+             * @lte(10, 'Điểm tối đa là 10')
+             */
+            manualFinalScore: number | null
+            examPostponedReason: boolean | null
+            examPostponed: string | null
+            examBanned: boolean
+            examBannedReason: string | null
+            suspended: boolean | null
+            suspendedReason: string | null
+            updatedById: string
+        }, ExtArgs["result"]["studentSubjectScoreHistory"]>
+        composites: {}
+    };
+    type StudentSubjectScoreHistoryGetPayload<S extends boolean | null | undefined | StudentSubjectScoreHistoryDefaultArgs> = $Result.GetResult<Prisma.$StudentSubjectScoreHistoryPayload, S>;
+    type StudentSubjectScoreHistoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<StudentSubjectScoreHistoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: StudentSubjectScoreHistoryCountAggregateInputType | true
+    };
+    /**
+     * StudentSubjectScoreHistory findUnique
+     */
+    export type StudentSubjectScoreHistoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryInclude<ExtArgs> | null
+        /**
+         * Filter, which StudentSubjectScoreHistory to fetch.
+         */
+        where: StudentSubjectScoreHistoryWhereUniqueInput
+    };
+    /**
+     * StudentSubjectScoreHistory findUniqueOrThrow
+     */
+    export type StudentSubjectScoreHistoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryInclude<ExtArgs> | null
+        /**
+         * Filter, which StudentSubjectScoreHistory to fetch.
+         */
+        where: StudentSubjectScoreHistoryWhereUniqueInput
+    };
+    /**
+     * StudentSubjectScoreHistory findFirst
+     */
+    export type StudentSubjectScoreHistoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryInclude<ExtArgs> | null
+        /**
+         * Filter, which StudentSubjectScoreHistory to fetch.
+         */
+        where?: StudentSubjectScoreHistoryWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of StudentSubjectScoreHistories to fetch.
+         */
+        orderBy?: StudentSubjectScoreHistoryOrderByWithRelationInput | StudentSubjectScoreHistoryOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for StudentSubjectScoreHistories.
+         */
+        cursor?: StudentSubjectScoreHistoryWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` StudentSubjectScoreHistories from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` StudentSubjectScoreHistories.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of StudentSubjectScoreHistories.
+         */
+        distinct?: StudentSubjectScoreHistoryScalarFieldEnum | StudentSubjectScoreHistoryScalarFieldEnum[]
+    };
+    /**
+     * StudentSubjectScoreHistory findFirstOrThrow
+     */
+    export type StudentSubjectScoreHistoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryInclude<ExtArgs> | null
+        /**
+         * Filter, which StudentSubjectScoreHistory to fetch.
+         */
+        where?: StudentSubjectScoreHistoryWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of StudentSubjectScoreHistories to fetch.
+         */
+        orderBy?: StudentSubjectScoreHistoryOrderByWithRelationInput | StudentSubjectScoreHistoryOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for StudentSubjectScoreHistories.
+         */
+        cursor?: StudentSubjectScoreHistoryWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` StudentSubjectScoreHistories from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` StudentSubjectScoreHistories.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of StudentSubjectScoreHistories.
+         */
+        distinct?: StudentSubjectScoreHistoryScalarFieldEnum | StudentSubjectScoreHistoryScalarFieldEnum[]
+    };
+    /**
+     * StudentSubjectScoreHistory findMany
+     */
+    export type StudentSubjectScoreHistoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryInclude<ExtArgs> | null
+        /**
+         * Filter, which StudentSubjectScoreHistories to fetch.
+         */
+        where?: StudentSubjectScoreHistoryWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of StudentSubjectScoreHistories to fetch.
+         */
+        orderBy?: StudentSubjectScoreHistoryOrderByWithRelationInput | StudentSubjectScoreHistoryOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing StudentSubjectScoreHistories.
+         */
+        cursor?: StudentSubjectScoreHistoryWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` StudentSubjectScoreHistories from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` StudentSubjectScoreHistories.
+         */
+        skip?: number
+        distinct?: StudentSubjectScoreHistoryScalarFieldEnum | StudentSubjectScoreHistoryScalarFieldEnum[]
+    };
+    /**
+     * StudentSubjectScoreHistory create
+     */
+    export type StudentSubjectScoreHistoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryInclude<ExtArgs> | null
+        /**
+         * The data needed to create a StudentSubjectScoreHistory.
+         */
+        data: XOR<StudentSubjectScoreHistoryCreateInput, StudentSubjectScoreHistoryUncheckedCreateInput>
+    };
+    /**
+     * StudentSubjectScoreHistory createMany
+     */
+    export type StudentSubjectScoreHistoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many StudentSubjectScoreHistories.
+         */
+        data: StudentSubjectScoreHistoryCreateManyInput | StudentSubjectScoreHistoryCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * StudentSubjectScoreHistory createManyAndReturn
+     */
+    export type StudentSubjectScoreHistoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * The data used to create many StudentSubjectScoreHistories.
+         */
+        data: StudentSubjectScoreHistoryCreateManyInput | StudentSubjectScoreHistoryCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * StudentSubjectScoreHistory update
+     */
+    export type StudentSubjectScoreHistoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryInclude<ExtArgs> | null
+        /**
+         * The data needed to update a StudentSubjectScoreHistory.
+         */
+        data: XOR<StudentSubjectScoreHistoryUpdateInput, StudentSubjectScoreHistoryUncheckedUpdateInput>
+        /**
+         * Choose, which StudentSubjectScoreHistory to update.
+         */
+        where: StudentSubjectScoreHistoryWhereUniqueInput
+    };
+    /**
+     * StudentSubjectScoreHistory updateMany
+     */
+    export type StudentSubjectScoreHistoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update StudentSubjectScoreHistories.
+         */
+        data: XOR<StudentSubjectScoreHistoryUpdateManyMutationInput, StudentSubjectScoreHistoryUncheckedUpdateManyInput>
+        /**
+         * Filter which StudentSubjectScoreHistories to update
+         */
+        where?: StudentSubjectScoreHistoryWhereInput
+        /**
+         * Limit how many StudentSubjectScoreHistories to update.
+         */
+        limit?: number
+    };
+    /**
+     * StudentSubjectScoreHistory updateManyAndReturn
+     */
+    export type StudentSubjectScoreHistoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * The data used to update StudentSubjectScoreHistories.
+         */
+        data: XOR<StudentSubjectScoreHistoryUpdateManyMutationInput, StudentSubjectScoreHistoryUncheckedUpdateManyInput>
+        /**
+         * Filter which StudentSubjectScoreHistories to update
+         */
+        where?: StudentSubjectScoreHistoryWhereInput
+        /**
+         * Limit how many StudentSubjectScoreHistories to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * StudentSubjectScoreHistory upsert
+     */
+    export type StudentSubjectScoreHistoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryInclude<ExtArgs> | null
+        /**
+         * The filter to search for the StudentSubjectScoreHistory to update in case it exists.
+         */
+        where: StudentSubjectScoreHistoryWhereUniqueInput
+        /**
+         * In case the StudentSubjectScoreHistory found by the `where` argument doesn't exist, create a new StudentSubjectScoreHistory with this data.
+         */
+        create: XOR<StudentSubjectScoreHistoryCreateInput, StudentSubjectScoreHistoryUncheckedCreateInput>
+        /**
+         * In case the StudentSubjectScoreHistory was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<StudentSubjectScoreHistoryUpdateInput, StudentSubjectScoreHistoryUncheckedUpdateInput>
+    };
+    /**
+     * StudentSubjectScoreHistory delete
+     */
+    export type StudentSubjectScoreHistoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryInclude<ExtArgs> | null
+        /**
+         * Filter which StudentSubjectScoreHistory to delete.
+         */
+        where: StudentSubjectScoreHistoryWhereUniqueInput
+    };
+    /**
+     * StudentSubjectScoreHistory deleteMany
+     */
+    export type StudentSubjectScoreHistoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which StudentSubjectScoreHistories to delete
+         */
+        where?: StudentSubjectScoreHistoryWhereInput
+        /**
+         * Limit how many StudentSubjectScoreHistories to delete.
+         */
+        limit?: number
+    };
+    /**
+     * StudentSubjectScoreHistory without action
+     */
+    export type StudentSubjectScoreHistoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryInclude<ExtArgs> | null
     };
     /**
      * Model ArchivedCertificateOnStudentSubjectScore
@@ -209630,6 +211040,7 @@ export namespace Prisma {
         educationAndTraining?: boolean | UserProfile$educationAndTrainingArgs<ExtArgs>
         lecturer?: boolean | UserProfile$lecturerArgs<ExtArgs>
         lecturerHistory?: boolean | UserProfile$lecturerHistoryArgs<ExtArgs>
+        studentSubjectScoreHistory?: boolean | UserProfile$studentSubjectScoreHistoryArgs<ExtArgs>
         staffs?: boolean | UserProfile$staffsArgs<ExtArgs>
         staffHistory?: boolean | UserProfile$staffHistoryArgs<ExtArgs>
         evidenceFiles?: boolean | UserProfile$evidenceFilesArgs<ExtArgs>
@@ -210128,6 +211539,7 @@ export namespace Prisma {
         educationAndTraining?: boolean | UserProfile$educationAndTrainingArgs<ExtArgs>
         lecturer?: boolean | UserProfile$lecturerArgs<ExtArgs>
         lecturerHistory?: boolean | UserProfile$lecturerHistoryArgs<ExtArgs>
+        studentSubjectScoreHistory?: boolean | UserProfile$studentSubjectScoreHistoryArgs<ExtArgs>
         staffs?: boolean | UserProfile$staffsArgs<ExtArgs>
         staffHistory?: boolean | UserProfile$staffHistoryArgs<ExtArgs>
         evidenceFiles?: boolean | UserProfile$evidenceFilesArgs<ExtArgs>
@@ -210283,6 +211695,10 @@ export namespace Prisma {
              */
             lecturer: Prisma.$LecturerPayload<ExtArgs> | null
             lecturerHistory: Prisma.$LecturerHistoryPayload<ExtArgs>[]
+            /**
+             * người cập nhật điểm
+             */
+            studentSubjectScoreHistory: Prisma.$StudentSubjectScoreHistoryPayload<ExtArgs>[]
             /**
              * hồ sơ cán bộ
              */
@@ -212041,6 +213457,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: LecturerHistoryScalarFieldEnum | LecturerHistoryScalarFieldEnum[]
+    };
+    /**
+     * UserProfile.studentSubjectScoreHistory
+     */
+    export type UserProfile$studentSubjectScoreHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScoreHistory
+         */
+        select?: StudentSubjectScoreHistorySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScoreHistory
+         */
+        omit?: StudentSubjectScoreHistoryOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreHistoryInclude<ExtArgs> | null
+        where?: StudentSubjectScoreHistoryWhereInput
+        orderBy?: StudentSubjectScoreHistoryOrderByWithRelationInput | StudentSubjectScoreHistoryOrderByWithRelationInput[]
+        cursor?: StudentSubjectScoreHistoryWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: StudentSubjectScoreHistoryScalarFieldEnum | StudentSubjectScoreHistoryScalarFieldEnum[]
     };
     /**
      * UserProfile.staffs
@@ -304090,6 +305529,7 @@ export namespace Prisma {
     export type StudentScoreConvertScalarFieldEnum = (typeof StudentScoreConvertScalarFieldEnum)[keyof typeof StudentScoreConvertScalarFieldEnum];
     export type SubjectScoreConvertScalarFieldEnum = (typeof SubjectScoreConvertScalarFieldEnum)[keyof typeof SubjectScoreConvertScalarFieldEnum];
     export type StudentSubjectScoreScalarFieldEnum = (typeof StudentSubjectScoreScalarFieldEnum)[keyof typeof StudentSubjectScoreScalarFieldEnum];
+    export type StudentSubjectScoreHistoryScalarFieldEnum = (typeof StudentSubjectScoreHistoryScalarFieldEnum)[keyof typeof StudentSubjectScoreHistoryScalarFieldEnum];
     export type ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum = (typeof ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum)[keyof typeof ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum];
     export type ArchivedCertificateScalarFieldEnum = (typeof ArchivedCertificateScalarFieldEnum)[keyof typeof ArchivedCertificateScalarFieldEnum];
     export type ArchivedAwardOnStudentSubjectScoreScalarFieldEnum = (typeof ArchivedAwardOnStudentSubjectScoreScalarFieldEnum)[keyof typeof ArchivedAwardOnStudentSubjectScoreScalarFieldEnum];
@@ -304328,6 +305768,7 @@ export namespace Prisma {
     export type StudentScoreConvertOrderByRelevanceFieldEnum = (typeof StudentScoreConvertOrderByRelevanceFieldEnum)[keyof typeof StudentScoreConvertOrderByRelevanceFieldEnum];
     export type SubjectScoreConvertOrderByRelevanceFieldEnum = (typeof SubjectScoreConvertOrderByRelevanceFieldEnum)[keyof typeof SubjectScoreConvertOrderByRelevanceFieldEnum];
     export type StudentSubjectScoreOrderByRelevanceFieldEnum = (typeof StudentSubjectScoreOrderByRelevanceFieldEnum)[keyof typeof StudentSubjectScoreOrderByRelevanceFieldEnum];
+    export type StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = (typeof StudentSubjectScoreHistoryOrderByRelevanceFieldEnum)[keyof typeof StudentSubjectScoreHistoryOrderByRelevanceFieldEnum];
     export type ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum = (typeof ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum)[keyof typeof ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum];
     export type ArchivedCertificateOrderByRelevanceFieldEnum = (typeof ArchivedCertificateOrderByRelevanceFieldEnum)[keyof typeof ArchivedCertificateOrderByRelevanceFieldEnum];
     export type ArchivedAwardOnStudentSubjectScoreOrderByRelevanceFieldEnum = (typeof ArchivedAwardOnStudentSubjectScoreOrderByRelevanceFieldEnum)[keyof typeof ArchivedAwardOnStudentSubjectScoreOrderByRelevanceFieldEnum];
@@ -306664,6 +308105,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreListRelationFilter
         awards?: ArchivedAwardOnStudentSubjectScoreListRelationFilter
         studentThesisRegistration?: StudentThesisRegistrationListRelationFilter
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryListRelationFilter
     };
     export type StudentSubjectScoreOrderByWithRelationInput = {
         id?: SortOrder
@@ -306699,6 +308141,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreOrderByRelationAggregateInput
         awards?: ArchivedAwardOnStudentSubjectScoreOrderByRelationAggregateInput
         studentThesisRegistration?: StudentThesisRegistrationOrderByRelationAggregateInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryOrderByRelationAggregateInput
         _relevance?: StudentSubjectScoreOrderByRelevanceInput
     };
     export type StudentSubjectScoreWhereUniqueInput = Prisma.AtLeast<{
@@ -306739,6 +308182,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreListRelationFilter
         awards?: ArchivedAwardOnStudentSubjectScoreListRelationFilter
         studentThesisRegistration?: StudentThesisRegistrationListRelationFilter
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryListRelationFilter
     }, "id" | "code" | "subjectClassId_studentId">;
     export type StudentSubjectScoreOrderByWithAggregationInput = {
         id?: SortOrder
@@ -306801,6 +308245,137 @@ export namespace Prisma {
         suspendedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScore"> | string | null
         repeated?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
         repeatedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScore"> | string | null
+    };
+    export type StudentSubjectScoreHistoryWhereInput = {
+        AND?: StudentSubjectScoreHistoryWhereInput | StudentSubjectScoreHistoryWhereInput[]
+        OR?: StudentSubjectScoreHistoryWhereInput[]
+        NOT?: StudentSubjectScoreHistoryWhereInput | StudentSubjectScoreHistoryWhereInput[]
+        id?: StringFilter<"StudentSubjectScoreHistory"> | string
+        code?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        active?: BoolFilter<"StudentSubjectScoreHistory"> | boolean
+        description?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        deletedAt?: DateTimeNullableFilter<"StudentSubjectScoreHistory"> | Date | string | null
+        createdAt?: DateTimeFilter<"StudentSubjectScoreHistory"> | Date | string
+        updatedAt?: DateTimeFilter<"StudentSubjectScoreHistory"> | Date | string
+        studentSubjectScoreId?: StringFilter<"StudentSubjectScoreHistory"> | string
+        attendanceScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
+        midtermScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
+        examScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
+        finalScore?: DecimalNullableFilter<"StudentSubjectScoreHistory"> | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
+        examPostponedReason?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
+        examPostponed?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        examBanned?: BoolFilter<"StudentSubjectScoreHistory"> | boolean
+        examBannedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        suspended?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
+        suspendedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        updatedById?: StringFilter<"StudentSubjectScoreHistory"> | string
+        studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
+        updatedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    };
+    export type StudentSubjectScoreHistoryOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        attendanceScore?: SortOrderInput | SortOrder
+        midtermScore?: SortOrderInput | SortOrder
+        examScore?: SortOrderInput | SortOrder
+        finalScore?: SortOrderInput | SortOrder
+        manualFinalScore?: SortOrderInput | SortOrder
+        examPostponedReason?: SortOrderInput | SortOrder
+        examPostponed?: SortOrderInput | SortOrder
+        examBanned?: SortOrder
+        examBannedReason?: SortOrderInput | SortOrder
+        suspended?: SortOrderInput | SortOrder
+        suspendedReason?: SortOrderInput | SortOrder
+        updatedById?: SortOrder
+        studentSubjectScore?: StudentSubjectScoreOrderByWithRelationInput
+        updatedBy?: UserProfileOrderByWithRelationInput
+        _relevance?: StudentSubjectScoreHistoryOrderByRelevanceInput
+    };
+    export type StudentSubjectScoreHistoryWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: StudentSubjectScoreHistoryWhereInput | StudentSubjectScoreHistoryWhereInput[]
+        OR?: StudentSubjectScoreHistoryWhereInput[]
+        NOT?: StudentSubjectScoreHistoryWhereInput | StudentSubjectScoreHistoryWhereInput[]
+        active?: BoolFilter<"StudentSubjectScoreHistory"> | boolean
+        description?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        deletedAt?: DateTimeNullableFilter<"StudentSubjectScoreHistory"> | Date | string | null
+        createdAt?: DateTimeFilter<"StudentSubjectScoreHistory"> | Date | string
+        updatedAt?: DateTimeFilter<"StudentSubjectScoreHistory"> | Date | string
+        studentSubjectScoreId?: StringFilter<"StudentSubjectScoreHistory"> | string
+        attendanceScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
+        midtermScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
+        examScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
+        finalScore?: DecimalNullableFilter<"StudentSubjectScoreHistory"> | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
+        examPostponedReason?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
+        examPostponed?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        examBanned?: BoolFilter<"StudentSubjectScoreHistory"> | boolean
+        examBannedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        suspended?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
+        suspendedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        updatedById?: StringFilter<"StudentSubjectScoreHistory"> | string
+        studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
+        updatedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    }, "id" | "code">;
+    export type StudentSubjectScoreHistoryOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        attendanceScore?: SortOrderInput | SortOrder
+        midtermScore?: SortOrderInput | SortOrder
+        examScore?: SortOrderInput | SortOrder
+        finalScore?: SortOrderInput | SortOrder
+        manualFinalScore?: SortOrderInput | SortOrder
+        examPostponedReason?: SortOrderInput | SortOrder
+        examPostponed?: SortOrderInput | SortOrder
+        examBanned?: SortOrder
+        examBannedReason?: SortOrderInput | SortOrder
+        suspended?: SortOrderInput | SortOrder
+        suspendedReason?: SortOrderInput | SortOrder
+        updatedById?: SortOrder
+        _count?: StudentSubjectScoreHistoryCountOrderByAggregateInput
+        _avg?: StudentSubjectScoreHistoryAvgOrderByAggregateInput
+        _max?: StudentSubjectScoreHistoryMaxOrderByAggregateInput
+        _min?: StudentSubjectScoreHistoryMinOrderByAggregateInput
+        _sum?: StudentSubjectScoreHistorySumOrderByAggregateInput
+    };
+    export type StudentSubjectScoreHistoryScalarWhereWithAggregatesInput = {
+        AND?: StudentSubjectScoreHistoryScalarWhereWithAggregatesInput | StudentSubjectScoreHistoryScalarWhereWithAggregatesInput[]
+        OR?: StudentSubjectScoreHistoryScalarWhereWithAggregatesInput[]
+        NOT?: StudentSubjectScoreHistoryScalarWhereWithAggregatesInput | StudentSubjectScoreHistoryScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"StudentSubjectScoreHistory"> | string
+        code?: StringNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | string | null
+        active?: BoolWithAggregatesFilter<"StudentSubjectScoreHistory"> | boolean
+        description?: StringNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"StudentSubjectScoreHistory"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"StudentSubjectScoreHistory"> | Date | string
+        studentSubjectScoreId?: StringWithAggregatesFilter<"StudentSubjectScoreHistory"> | string
+        attendanceScore?: FloatNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | number | null
+        midtermScore?: FloatNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | number | null
+        examScore?: FloatNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | number | null
+        finalScore?: DecimalNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: FloatNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | number | null
+        examPostponedReason?: BoolNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | boolean | null
+        examPostponed?: StringNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | string | null
+        examBanned?: BoolWithAggregatesFilter<"StudentSubjectScoreHistory"> | boolean
+        examBannedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | string | null
+        suspended?: BoolNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | boolean | null
+        suspendedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | string | null
+        updatedById?: StringWithAggregatesFilter<"StudentSubjectScoreHistory"> | string
     };
     export type ArchivedCertificateOnStudentSubjectScoreWhereInput = {
         AND?: ArchivedCertificateOnStudentSubjectScoreWhereInput | ArchivedCertificateOnStudentSubjectScoreWhereInput[]
@@ -316227,6 +317802,7 @@ export namespace Prisma {
         educationAndTraining?: StudentListRelationFilter
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         lecturerHistory?: LecturerHistoryListRelationFilter
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryListRelationFilter
         staffs?: XOR<StaffNullableScalarRelationFilter, StaffWhereInput> | null
         staffHistory?: StaffHistoryListRelationFilter
         evidenceFiles?: EvidenceFileListRelationFilter
@@ -316415,6 +317991,7 @@ export namespace Prisma {
         educationAndTraining?: StudentOrderByRelationAggregateInput
         lecturer?: LecturerOrderByWithRelationInput
         lecturerHistory?: LecturerHistoryOrderByRelationAggregateInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryOrderByRelationAggregateInput
         staffs?: StaffOrderByWithRelationInput
         staffHistory?: StaffHistoryOrderByRelationAggregateInput
         evidenceFiles?: EvidenceFileOrderByRelationAggregateInput
@@ -316607,6 +318184,7 @@ export namespace Prisma {
         educationAndTraining?: StudentListRelationFilter
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         lecturerHistory?: LecturerHistoryListRelationFilter
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryListRelationFilter
         staffs?: XOR<StaffNullableScalarRelationFilter, StaffWhereInput> | null
         staffHistory?: StaffHistoryListRelationFilter
         evidenceFiles?: EvidenceFileListRelationFilter
@@ -330187,6 +331765,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateInput = {
         id?: string
@@ -330219,6 +331798,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -330251,6 +331831,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -330283,6 +331864,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreCreateManyInput = {
         id?: string
@@ -330361,6 +331943,158 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type StudentSubjectScoreHistoryCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponedReason?: boolean | null
+        examPostponed?: string | null
+        examBanned: boolean
+        examBannedReason?: string | null
+        suspended?: boolean | null
+        suspendedReason?: string | null
+        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutStudentSubjectScoreHistoryInput
+        updatedBy: UserProfileCreateNestedOneWithoutStudentSubjectScoreHistoryInput
+    };
+    export type StudentSubjectScoreHistoryUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentSubjectScoreId: string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponedReason?: boolean | null
+        examPostponed?: string | null
+        examBanned: boolean
+        examBannedReason?: string | null
+        suspended?: boolean | null
+        suspendedReason?: string | null
+        updatedById: string
+    };
+    export type StudentSubjectScoreHistoryUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutStudentSubjectScoreHistoryNestedInput
+        updatedBy?: UserProfileUpdateOneRequiredWithoutStudentSubjectScoreHistoryNestedInput
+    };
+    export type StudentSubjectScoreHistoryUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        updatedById?: StringFieldUpdateOperationsInput | string
+    };
+    export type StudentSubjectScoreHistoryCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentSubjectScoreId: string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponedReason?: boolean | null
+        examPostponed?: string | null
+        examBanned: boolean
+        examBannedReason?: string | null
+        suspended?: boolean | null
+        suspendedReason?: string | null
+        updatedById: string
+    };
+    export type StudentSubjectScoreHistoryUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type StudentSubjectScoreHistoryUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        updatedById?: StringFieldUpdateOperationsInput | string
     };
     export type ArchivedCertificateOnStudentSubjectScoreCreateInput = {
         id?: string
@@ -341187,6 +342921,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -341340,6 +343075,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -341493,6 +343229,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -341646,6 +343383,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -356161,6 +357899,11 @@ export namespace Prisma {
         some?: StudentThesisRegistrationWhereInput
         none?: StudentThesisRegistrationWhereInput
     };
+    export type StudentSubjectScoreHistoryListRelationFilter = {
+        every?: StudentSubjectScoreHistoryWhereInput
+        some?: StudentSubjectScoreHistoryWhereInput
+        none?: StudentSubjectScoreHistoryWhereInput
+    };
     export type StudentGraduationApplicationOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -356171,6 +357914,9 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type StudentThesisRegistrationOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type StudentSubjectScoreHistoryOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type StudentSubjectScoreOrderByRelevanceInput = {
@@ -356280,6 +358026,95 @@ export namespace Prisma {
     export type StudentSubjectScoreScalarRelationFilter = {
         is?: StudentSubjectScoreWhereInput
         isNot?: StudentSubjectScoreWhereInput
+    };
+    export type UserProfileScalarRelationFilter = {
+        is?: UserProfileWhereInput
+        isNot?: UserProfileWhereInput
+    };
+    export type StudentSubjectScoreHistoryOrderByRelevanceInput = {
+        fields: StudentSubjectScoreHistoryOrderByRelevanceFieldEnum | StudentSubjectScoreHistoryOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type StudentSubjectScoreHistoryCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        attendanceScore?: SortOrder
+        midtermScore?: SortOrder
+        examScore?: SortOrder
+        finalScore?: SortOrder
+        manualFinalScore?: SortOrder
+        examPostponedReason?: SortOrder
+        examPostponed?: SortOrder
+        examBanned?: SortOrder
+        examBannedReason?: SortOrder
+        suspended?: SortOrder
+        suspendedReason?: SortOrder
+        updatedById?: SortOrder
+    };
+    export type StudentSubjectScoreHistoryAvgOrderByAggregateInput = {
+        attendanceScore?: SortOrder
+        midtermScore?: SortOrder
+        examScore?: SortOrder
+        finalScore?: SortOrder
+        manualFinalScore?: SortOrder
+    };
+    export type StudentSubjectScoreHistoryMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        attendanceScore?: SortOrder
+        midtermScore?: SortOrder
+        examScore?: SortOrder
+        finalScore?: SortOrder
+        manualFinalScore?: SortOrder
+        examPostponedReason?: SortOrder
+        examPostponed?: SortOrder
+        examBanned?: SortOrder
+        examBannedReason?: SortOrder
+        suspended?: SortOrder
+        suspendedReason?: SortOrder
+        updatedById?: SortOrder
+    };
+    export type StudentSubjectScoreHistoryMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        attendanceScore?: SortOrder
+        midtermScore?: SortOrder
+        examScore?: SortOrder
+        finalScore?: SortOrder
+        manualFinalScore?: SortOrder
+        examPostponedReason?: SortOrder
+        examPostponed?: SortOrder
+        examBanned?: SortOrder
+        examBannedReason?: SortOrder
+        suspended?: SortOrder
+        suspendedReason?: SortOrder
+        updatedById?: SortOrder
+    };
+    export type StudentSubjectScoreHistorySumOrderByAggregateInput = {
+        attendanceScore?: SortOrder
+        midtermScore?: SortOrder
+        examScore?: SortOrder
+        finalScore?: SortOrder
+        manualFinalScore?: SortOrder
     };
     export type ArchivedCertificateScalarRelationFilter = {
         is?: ArchivedCertificateWhereInput
@@ -359394,10 +361229,6 @@ export namespace Prisma {
     export type FixedClassNullableScalarRelationFilter = {
         is?: FixedClassWhereInput | null
         isNot?: FixedClassWhereInput | null
-    };
-    export type UserProfileScalarRelationFilter = {
-        is?: UserProfileWhereInput
-        isNot?: UserProfileWhereInput
     };
     export type TrainingObjectTypeNullableScalarRelationFilter = {
         is?: TrainingObjectTypeWhereInput | null
@@ -371955,6 +373786,12 @@ export namespace Prisma {
         createMany?: StudentThesisRegistrationCreateManyStudentSubjectScoreInputEnvelope
         connect?: StudentThesisRegistrationWhereUniqueInput | StudentThesisRegistrationWhereUniqueInput[]
     };
+    export type StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput = {
+        create?: XOR<StudentSubjectScoreHistoryCreateWithoutStudentSubjectScoreInput, StudentSubjectScoreHistoryUncheckedCreateWithoutStudentSubjectScoreInput> | StudentSubjectScoreHistoryCreateWithoutStudentSubjectScoreInput[] | StudentSubjectScoreHistoryUncheckedCreateWithoutStudentSubjectScoreInput[]
+        connectOrCreate?: StudentSubjectScoreHistoryCreateOrConnectWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryCreateOrConnectWithoutStudentSubjectScoreInput[]
+        createMany?: StudentSubjectScoreHistoryCreateManyStudentSubjectScoreInputEnvelope
+        connect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+    };
     export type StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput = {
         create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
         connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput | StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput[]
@@ -371982,6 +373819,12 @@ export namespace Prisma {
         connectOrCreate?: StudentThesisRegistrationCreateOrConnectWithoutStudentSubjectScoreInput | StudentThesisRegistrationCreateOrConnectWithoutStudentSubjectScoreInput[]
         createMany?: StudentThesisRegistrationCreateManyStudentSubjectScoreInputEnvelope
         connect?: StudentThesisRegistrationWhereUniqueInput | StudentThesisRegistrationWhereUniqueInput[]
+    };
+    export type StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput = {
+        create?: XOR<StudentSubjectScoreHistoryCreateWithoutStudentSubjectScoreInput, StudentSubjectScoreHistoryUncheckedCreateWithoutStudentSubjectScoreInput> | StudentSubjectScoreHistoryCreateWithoutStudentSubjectScoreInput[] | StudentSubjectScoreHistoryUncheckedCreateWithoutStudentSubjectScoreInput[]
+        connectOrCreate?: StudentSubjectScoreHistoryCreateOrConnectWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryCreateOrConnectWithoutStudentSubjectScoreInput[]
+        createMany?: StudentSubjectScoreHistoryCreateManyStudentSubjectScoreInputEnvelope
+        connect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
     };
     export type SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput = {
         create?: XOR<SubjectClassCreateWithoutSubjectClassStudentInput, SubjectClassUncheckedCreateWithoutSubjectClassStudentInput>
@@ -372069,6 +373912,19 @@ export namespace Prisma {
         updateMany?: StudentThesisRegistrationUpdateManyWithWhereWithoutStudentSubjectScoreInput | StudentThesisRegistrationUpdateManyWithWhereWithoutStudentSubjectScoreInput[]
         deleteMany?: StudentThesisRegistrationScalarWhereInput | StudentThesisRegistrationScalarWhereInput[]
     };
+    export type StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput = {
+        create?: XOR<StudentSubjectScoreHistoryCreateWithoutStudentSubjectScoreInput, StudentSubjectScoreHistoryUncheckedCreateWithoutStudentSubjectScoreInput> | StudentSubjectScoreHistoryCreateWithoutStudentSubjectScoreInput[] | StudentSubjectScoreHistoryUncheckedCreateWithoutStudentSubjectScoreInput[]
+        connectOrCreate?: StudentSubjectScoreHistoryCreateOrConnectWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryCreateOrConnectWithoutStudentSubjectScoreInput[]
+        upsert?: StudentSubjectScoreHistoryUpsertWithWhereUniqueWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryUpsertWithWhereUniqueWithoutStudentSubjectScoreInput[]
+        createMany?: StudentSubjectScoreHistoryCreateManyStudentSubjectScoreInputEnvelope
+        set?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        disconnect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        delete?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        connect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        update?: StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutStudentSubjectScoreInput[]
+        updateMany?: StudentSubjectScoreHistoryUpdateManyWithWhereWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryUpdateManyWithWhereWithoutStudentSubjectScoreInput[]
+        deleteMany?: StudentSubjectScoreHistoryScalarWhereInput | StudentSubjectScoreHistoryScalarWhereInput[]
+    };
     export type StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput = {
         create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
         connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput | StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput[]
@@ -372131,6 +373987,43 @@ export namespace Prisma {
         update?: StudentThesisRegistrationUpdateWithWhereUniqueWithoutStudentSubjectScoreInput | StudentThesisRegistrationUpdateWithWhereUniqueWithoutStudentSubjectScoreInput[]
         updateMany?: StudentThesisRegistrationUpdateManyWithWhereWithoutStudentSubjectScoreInput | StudentThesisRegistrationUpdateManyWithWhereWithoutStudentSubjectScoreInput[]
         deleteMany?: StudentThesisRegistrationScalarWhereInput | StudentThesisRegistrationScalarWhereInput[]
+    };
+    export type StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput = {
+        create?: XOR<StudentSubjectScoreHistoryCreateWithoutStudentSubjectScoreInput, StudentSubjectScoreHistoryUncheckedCreateWithoutStudentSubjectScoreInput> | StudentSubjectScoreHistoryCreateWithoutStudentSubjectScoreInput[] | StudentSubjectScoreHistoryUncheckedCreateWithoutStudentSubjectScoreInput[]
+        connectOrCreate?: StudentSubjectScoreHistoryCreateOrConnectWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryCreateOrConnectWithoutStudentSubjectScoreInput[]
+        upsert?: StudentSubjectScoreHistoryUpsertWithWhereUniqueWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryUpsertWithWhereUniqueWithoutStudentSubjectScoreInput[]
+        createMany?: StudentSubjectScoreHistoryCreateManyStudentSubjectScoreInputEnvelope
+        set?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        disconnect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        delete?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        connect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        update?: StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutStudentSubjectScoreInput[]
+        updateMany?: StudentSubjectScoreHistoryUpdateManyWithWhereWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryUpdateManyWithWhereWithoutStudentSubjectScoreInput[]
+        deleteMany?: StudentSubjectScoreHistoryScalarWhereInput | StudentSubjectScoreHistoryScalarWhereInput[]
+    };
+    export type StudentSubjectScoreCreateNestedOneWithoutStudentSubjectScoreHistoryInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutStudentSubjectScoreHistoryInput, StudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreHistoryInput>
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutStudentSubjectScoreHistoryInput
+        connect?: StudentSubjectScoreWhereUniqueInput
+    };
+    export type UserProfileCreateNestedOneWithoutStudentSubjectScoreHistoryInput = {
+        create?: XOR<UserProfileCreateWithoutStudentSubjectScoreHistoryInput, UserProfileUncheckedCreateWithoutStudentSubjectScoreHistoryInput>
+        connectOrCreate?: UserProfileCreateOrConnectWithoutStudentSubjectScoreHistoryInput
+        connect?: UserProfileWhereUniqueInput
+    };
+    export type StudentSubjectScoreUpdateOneRequiredWithoutStudentSubjectScoreHistoryNestedInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutStudentSubjectScoreHistoryInput, StudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreHistoryInput>
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutStudentSubjectScoreHistoryInput
+        upsert?: StudentSubjectScoreUpsertWithoutStudentSubjectScoreHistoryInput
+        connect?: StudentSubjectScoreWhereUniqueInput
+        update?: XOR<XOR<StudentSubjectScoreUpdateToOneWithWhereWithoutStudentSubjectScoreHistoryInput, StudentSubjectScoreUpdateWithoutStudentSubjectScoreHistoryInput>, StudentSubjectScoreUncheckedUpdateWithoutStudentSubjectScoreHistoryInput>
+    };
+    export type UserProfileUpdateOneRequiredWithoutStudentSubjectScoreHistoryNestedInput = {
+        create?: XOR<UserProfileCreateWithoutStudentSubjectScoreHistoryInput, UserProfileUncheckedCreateWithoutStudentSubjectScoreHistoryInput>
+        connectOrCreate?: UserProfileCreateOrConnectWithoutStudentSubjectScoreHistoryInput
+        upsert?: UserProfileUpsertWithoutStudentSubjectScoreHistoryInput
+        connect?: UserProfileWhereUniqueInput
+        update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutStudentSubjectScoreHistoryInput, UserProfileUpdateWithoutStudentSubjectScoreHistoryInput>, UserProfileUncheckedUpdateWithoutStudentSubjectScoreHistoryInput>
     };
     export type StudentSubjectScoreCreateNestedOneWithoutCertificatesInput = {
         create?: XOR<StudentSubjectScoreCreateWithoutCertificatesInput, StudentSubjectScoreUncheckedCreateWithoutCertificatesInput>
@@ -381794,6 +383687,12 @@ export namespace Prisma {
         createMany?: LecturerHistoryCreateManyUserProfileInputEnvelope
         connect?: LecturerHistoryWhereUniqueInput | LecturerHistoryWhereUniqueInput[]
     };
+    export type StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput = {
+        create?: XOR<StudentSubjectScoreHistoryCreateWithoutUpdatedByInput, StudentSubjectScoreHistoryUncheckedCreateWithoutUpdatedByInput> | StudentSubjectScoreHistoryCreateWithoutUpdatedByInput[] | StudentSubjectScoreHistoryUncheckedCreateWithoutUpdatedByInput[]
+        connectOrCreate?: StudentSubjectScoreHistoryCreateOrConnectWithoutUpdatedByInput | StudentSubjectScoreHistoryCreateOrConnectWithoutUpdatedByInput[]
+        createMany?: StudentSubjectScoreHistoryCreateManyUpdatedByInputEnvelope
+        connect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+    };
     export type StaffCreateNestedOneWithoutUserProfileInput = {
         create?: XOR<StaffCreateWithoutUserProfileInput, StaffUncheckedCreateWithoutUserProfileInput>
         connectOrCreate?: StaffCreateOrConnectWithoutUserProfileInput
@@ -382001,6 +383900,12 @@ export namespace Prisma {
         connectOrCreate?: LecturerHistoryCreateOrConnectWithoutUserProfileInput | LecturerHistoryCreateOrConnectWithoutUserProfileInput[]
         createMany?: LecturerHistoryCreateManyUserProfileInputEnvelope
         connect?: LecturerHistoryWhereUniqueInput | LecturerHistoryWhereUniqueInput[]
+    };
+    export type StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput = {
+        create?: XOR<StudentSubjectScoreHistoryCreateWithoutUpdatedByInput, StudentSubjectScoreHistoryUncheckedCreateWithoutUpdatedByInput> | StudentSubjectScoreHistoryCreateWithoutUpdatedByInput[] | StudentSubjectScoreHistoryUncheckedCreateWithoutUpdatedByInput[]
+        connectOrCreate?: StudentSubjectScoreHistoryCreateOrConnectWithoutUpdatedByInput | StudentSubjectScoreHistoryCreateOrConnectWithoutUpdatedByInput[]
+        createMany?: StudentSubjectScoreHistoryCreateManyUpdatedByInputEnvelope
+        connect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
     };
     export type StaffUncheckedCreateNestedOneWithoutUserProfileInput = {
         create?: XOR<StaffCreateWithoutUserProfileInput, StaffUncheckedCreateWithoutUserProfileInput>
@@ -382711,6 +384616,19 @@ export namespace Prisma {
         updateMany?: LecturerHistoryUpdateManyWithWhereWithoutUserProfileInput | LecturerHistoryUpdateManyWithWhereWithoutUserProfileInput[]
         deleteMany?: LecturerHistoryScalarWhereInput | LecturerHistoryScalarWhereInput[]
     };
+    export type StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput = {
+        create?: XOR<StudentSubjectScoreHistoryCreateWithoutUpdatedByInput, StudentSubjectScoreHistoryUncheckedCreateWithoutUpdatedByInput> | StudentSubjectScoreHistoryCreateWithoutUpdatedByInput[] | StudentSubjectScoreHistoryUncheckedCreateWithoutUpdatedByInput[]
+        connectOrCreate?: StudentSubjectScoreHistoryCreateOrConnectWithoutUpdatedByInput | StudentSubjectScoreHistoryCreateOrConnectWithoutUpdatedByInput[]
+        upsert?: StudentSubjectScoreHistoryUpsertWithWhereUniqueWithoutUpdatedByInput | StudentSubjectScoreHistoryUpsertWithWhereUniqueWithoutUpdatedByInput[]
+        createMany?: StudentSubjectScoreHistoryCreateManyUpdatedByInputEnvelope
+        set?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        disconnect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        delete?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        connect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        update?: StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutUpdatedByInput | StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutUpdatedByInput[]
+        updateMany?: StudentSubjectScoreHistoryUpdateManyWithWhereWithoutUpdatedByInput | StudentSubjectScoreHistoryUpdateManyWithWhereWithoutUpdatedByInput[]
+        deleteMany?: StudentSubjectScoreHistoryScalarWhereInput | StudentSubjectScoreHistoryScalarWhereInput[]
+    };
     export type StaffUpdateOneWithoutUserProfileNestedInput = {
         create?: XOR<StaffCreateWithoutUserProfileInput, StaffUncheckedCreateWithoutUserProfileInput>
         connectOrCreate?: StaffCreateOrConnectWithoutUserProfileInput
@@ -383157,6 +385075,19 @@ export namespace Prisma {
         update?: LecturerHistoryUpdateWithWhereUniqueWithoutUserProfileInput | LecturerHistoryUpdateWithWhereUniqueWithoutUserProfileInput[]
         updateMany?: LecturerHistoryUpdateManyWithWhereWithoutUserProfileInput | LecturerHistoryUpdateManyWithWhereWithoutUserProfileInput[]
         deleteMany?: LecturerHistoryScalarWhereInput | LecturerHistoryScalarWhereInput[]
+    };
+    export type StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput = {
+        create?: XOR<StudentSubjectScoreHistoryCreateWithoutUpdatedByInput, StudentSubjectScoreHistoryUncheckedCreateWithoutUpdatedByInput> | StudentSubjectScoreHistoryCreateWithoutUpdatedByInput[] | StudentSubjectScoreHistoryUncheckedCreateWithoutUpdatedByInput[]
+        connectOrCreate?: StudentSubjectScoreHistoryCreateOrConnectWithoutUpdatedByInput | StudentSubjectScoreHistoryCreateOrConnectWithoutUpdatedByInput[]
+        upsert?: StudentSubjectScoreHistoryUpsertWithWhereUniqueWithoutUpdatedByInput | StudentSubjectScoreHistoryUpsertWithWhereUniqueWithoutUpdatedByInput[]
+        createMany?: StudentSubjectScoreHistoryCreateManyUpdatedByInputEnvelope
+        set?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        disconnect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        delete?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        connect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+        update?: StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutUpdatedByInput | StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutUpdatedByInput[]
+        updateMany?: StudentSubjectScoreHistoryUpdateManyWithWhereWithoutUpdatedByInput | StudentSubjectScoreHistoryUpdateManyWithWhereWithoutUpdatedByInput[]
+        deleteMany?: StudentSubjectScoreHistoryScalarWhereInput | StudentSubjectScoreHistoryScalarWhereInput[]
     };
     export type StaffUncheckedUpdateOneWithoutUserProfileNestedInput = {
         create?: XOR<StaffCreateWithoutUserProfileInput, StaffUncheckedCreateWithoutUserProfileInput>
@@ -397176,6 +399107,56 @@ export namespace Prisma {
         data: StudentThesisRegistrationCreateManyStudentSubjectScoreInput | StudentThesisRegistrationCreateManyStudentSubjectScoreInput[]
         skipDuplicates?: boolean
     };
+    export type StudentSubjectScoreHistoryCreateWithoutStudentSubjectScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponedReason?: boolean | null
+        examPostponed?: string | null
+        examBanned: boolean
+        examBannedReason?: string | null
+        suspended?: boolean | null
+        suspendedReason?: string | null
+        updatedBy: UserProfileCreateNestedOneWithoutStudentSubjectScoreHistoryInput
+    };
+    export type StudentSubjectScoreHistoryUncheckedCreateWithoutStudentSubjectScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponedReason?: boolean | null
+        examPostponed?: string | null
+        examBanned: boolean
+        examBannedReason?: string | null
+        suspended?: boolean | null
+        suspendedReason?: string | null
+        updatedById: string
+    };
+    export type StudentSubjectScoreHistoryCreateOrConnectWithoutStudentSubjectScoreInput = {
+        where: StudentSubjectScoreHistoryWhereUniqueInput
+        create: XOR<StudentSubjectScoreHistoryCreateWithoutStudentSubjectScoreInput, StudentSubjectScoreHistoryUncheckedCreateWithoutStudentSubjectScoreInput>
+    };
+    export type StudentSubjectScoreHistoryCreateManyStudentSubjectScoreInputEnvelope = {
+        data: StudentSubjectScoreHistoryCreateManyStudentSubjectScoreInput | StudentSubjectScoreHistoryCreateManyStudentSubjectScoreInput[]
+        skipDuplicates?: boolean
+    };
     export type SubjectClassUpsertWithoutSubjectClassStudentInput = {
         update: XOR<SubjectClassUpdateWithoutSubjectClassStudentInput, SubjectClassUncheckedUpdateWithoutSubjectClassStudentInput>
         create: XOR<SubjectClassCreateWithoutSubjectClassStudentInput, SubjectClassUncheckedCreateWithoutSubjectClassStudentInput>
@@ -397629,6 +399610,810 @@ export namespace Prisma {
         reviewedById?: StringNullableFilter<"StudentThesisRegistration"> | string | null
         reviewNote?: StringNullableFilter<"StudentThesisRegistration"> | string | null
     };
+    export type StudentSubjectScoreHistoryUpsertWithWhereUniqueWithoutStudentSubjectScoreInput = {
+        where: StudentSubjectScoreHistoryWhereUniqueInput
+        update: XOR<StudentSubjectScoreHistoryUpdateWithoutStudentSubjectScoreInput, StudentSubjectScoreHistoryUncheckedUpdateWithoutStudentSubjectScoreInput>
+        create: XOR<StudentSubjectScoreHistoryCreateWithoutStudentSubjectScoreInput, StudentSubjectScoreHistoryUncheckedCreateWithoutStudentSubjectScoreInput>
+    };
+    export type StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutStudentSubjectScoreInput = {
+        where: StudentSubjectScoreHistoryWhereUniqueInput
+        data: XOR<StudentSubjectScoreHistoryUpdateWithoutStudentSubjectScoreInput, StudentSubjectScoreHistoryUncheckedUpdateWithoutStudentSubjectScoreInput>
+    };
+    export type StudentSubjectScoreHistoryUpdateManyWithWhereWithoutStudentSubjectScoreInput = {
+        where: StudentSubjectScoreHistoryScalarWhereInput
+        data: XOR<StudentSubjectScoreHistoryUpdateManyMutationInput, StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreInput>
+    };
+    export type StudentSubjectScoreHistoryScalarWhereInput = {
+        AND?: StudentSubjectScoreHistoryScalarWhereInput | StudentSubjectScoreHistoryScalarWhereInput[]
+        OR?: StudentSubjectScoreHistoryScalarWhereInput[]
+        NOT?: StudentSubjectScoreHistoryScalarWhereInput | StudentSubjectScoreHistoryScalarWhereInput[]
+        id?: StringFilter<"StudentSubjectScoreHistory"> | string
+        code?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        active?: BoolFilter<"StudentSubjectScoreHistory"> | boolean
+        description?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        deletedAt?: DateTimeNullableFilter<"StudentSubjectScoreHistory"> | Date | string | null
+        createdAt?: DateTimeFilter<"StudentSubjectScoreHistory"> | Date | string
+        updatedAt?: DateTimeFilter<"StudentSubjectScoreHistory"> | Date | string
+        studentSubjectScoreId?: StringFilter<"StudentSubjectScoreHistory"> | string
+        attendanceScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
+        midtermScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
+        examScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
+        finalScore?: DecimalNullableFilter<"StudentSubjectScoreHistory"> | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
+        examPostponedReason?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
+        examPostponed?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        examBanned?: BoolFilter<"StudentSubjectScoreHistory"> | boolean
+        examBannedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        suspended?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
+        suspendedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
+        updatedById?: StringFilter<"StudentSubjectScoreHistory"> | string
+    };
+    export type StudentSubjectScoreCreateWithoutStudentSubjectScoreHistoryInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
+        subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
+        student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+    };
+    export type StudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreHistoryInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        subjectClassId?: string | null
+        subjectVersionId: string
+        studentId: string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+    };
+    export type StudentSubjectScoreCreateOrConnectWithoutStudentSubjectScoreHistoryInput = {
+        where: StudentSubjectScoreWhereUniqueInput
+        create: XOR<StudentSubjectScoreCreateWithoutStudentSubjectScoreHistoryInput, StudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreHistoryInput>
+    };
+    export type UserProfileCreateWithoutStudentSubjectScoreHistoryInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        bLaNguoiDung?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        sDM_DonViId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName: string
+        lastName: string
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        permanentAddress?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        email?: string | null
+        officerNumber?: string | null
+        rankDate?: Date | string | null
+        academicDegreeDate?: Date | string | null
+        academicRankDate?: Date | string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        group?: GroupCreateNestedOneWithoutUserProfileInput
+        provinceCurrentAddress?: DM_TinhCreateNestedOneWithoutUserProfileCurrentAddressInput
+        districtCurrentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfileCurrentAddressInput
+        communeCurrentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newProvinceCurrentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileCurrentAddressInput
+        provinceOfBirth?: DM_TinhCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        districtOfBirth?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        communeOfBirth?: DM_XaPhuongCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newProvinceOfBirth?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        newCommuneOfBirth?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePlaceOfBirthInput
+        gender?: DM_GioiTinhCreateNestedOneWithoutUserProfileInput
+        provincePermanentAddress?: DM_TinhCreateNestedOneWithoutUserProfilePermanentAddressInput
+        districtPermanentAddress?: DM_QuanHuyenCreateNestedOneWithoutUserProfilePermanentAddressInput
+        communePermanentAddress?: DM_XaPhuongCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newProvincePermanentAddress?: DM_Tinh_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfilePermanentAddressInput
+        nationality?: DM_QuocGiaCreateNestedOneWithoutUserProfileInput
+        religion?: DM_TonGiaoCreateNestedOneWithoutUserProfileInput
+        ethnicity?: DM_DanTocCreateNestedOneWithoutUserProfileInput
+        provinceHometown?: DM_TinhCreateNestedOneWithoutUserProfileHometownInput
+        districtHometown?: DM_QuanHuyenCreateNestedOneWithoutUserProfileHometownInput
+        communeHometown?: DM_XaPhuongCreateNestedOneWithoutUserProfileHometownInput
+        newProvinceHometown?: DM_Tinh_NewCreateNestedOneWithoutUserProfileHometownInput
+        newCommuneHometown?: DM_XaPhuong_NewCreateNestedOneWithoutUserProfileHometownInput
+        rank?: DM_CapBacCreateNestedOneWithoutProfilesInput
+        academicDegreeType?: DM_HocViCreateNestedOneWithoutProfilesInput
+        academicRankType?: DM_HocHamCreateNestedOneWithoutProfilesInput
+        level?: DM_ChucDanhCreateNestedOneWithoutUserProfileInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyCreateNestedOneWithoutUserProfileInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatCreateNestedOneWithoutUserProfileInput
+        sucKhoe?: DM_SucKhoeCreateNestedOneWithoutUserProfileInput
+        nhomMau?: DM_NhomMauCreateNestedOneWithoutUserProfileInput
+        positionCPV?: DM_ChucVuCreateNestedOneWithoutUserProfileInput
+        relatives?: RelativeCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongCreateNestedManyWithoutUserProfileInput
+        trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
+        educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        staffs?: StaffCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationCreateNestedManyWithoutUserInput
+    };
+    export type UserProfileUncheckedCreateWithoutStudentSubjectScoreHistoryInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        bLaNguoiDung?: boolean | null
+        bLaCanBoNhanVien?: boolean | null
+        bLaHocVien?: boolean | null
+        groupId?: string | null
+        sDM_DonViId?: string | null
+        sDM_ViTriCongViecId?: string | null
+        sQuanlyTrucTiepId?: string | null
+        iDictionaryKey?: number | null
+        bSystem?: boolean | null
+        sNguoiTao?: string | null
+        sNguoiSua?: string | null
+        sThietBiTao?: string | null
+        sThietBiSua?: string | null
+        avatar?: string | null
+        firstName: string
+        lastName: string
+        idCardNumber: string
+        placeOfIdCardNumber?: string | null
+        fullname?: string | null
+        healthInsuranceNumber?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
+        currentAddress?: string | null
+        newCurrentAddress?: string | null
+        occupationWhenRecruiting?: string | null
+        thuongBinh?: string | null
+        benh?: string | null
+        tinhHinhNhaO?: string | null
+        truocKhiNhapNgu?: string | null
+        thanhPhanGiaDinh?: string | null
+        soTruong?: string | null
+        hoTenThuongDung?: string | null
+        lichSuBanThan?: string | null
+        conThuMay?: number | null
+        chieuCao?: string | null
+        canNang?: string | null
+        soACE?: number | null
+        kinhTeGiaDinh?: string | null
+        chinhTriGiaDinh?: string | null
+        fSoACE?: number | null
+        fKinhTeGiaDinh?: string | null
+        fThanhPhanGiaDinh?: string | null
+        fChinhTriGiaDinh?: string | null
+        fBanThan?: string | null
+        nationalId?: string | null
+        provinceCurrentAddressId?: string | null
+        districtCurrentAddressId?: string | null
+        communeCurrentAddressId?: string | null
+        newProvinceCurrentAddressId?: string | null
+        newCommuneCurrentAddressId?: string | null
+        dateOfBirth?: Date | string | null
+        placeOfBirth?: string | null
+        provinceOfBirthId?: string | null
+        districtOfBirthId?: string | null
+        communeOfBirthId?: string | null
+        newProvinceOfBirthId?: string | null
+        newCommuneOfBirthId?: string | null
+        homeTown?: string | null
+        idCardDate?: Date | string | null
+        idCardExpirationDate?: Date | string | null
+        genderId?: string | null
+        permanentAddress?: string | null
+        provincePermanentAddressId?: string | null
+        districtPermanentAddressId?: string | null
+        communePermanentAddressId?: string | null
+        newProvincePermanentAddressId?: string | null
+        newCommunePermanentAddressId?: string | null
+        temporaryAddress?: string | null
+        contactAddress?: string | null
+        phoneNumber?: string | null
+        email?: string | null
+        nationalityId?: string | null
+        religionId?: string | null
+        ethnicityId?: string | null
+        provinceHometownId?: string | null
+        districtHometownId?: string | null
+        communeHometownId?: string | null
+        newProvinceHometownId?: string | null
+        newCommuneHometownId?: string | null
+        officerNumber?: string | null
+        rankId?: string | null
+        rankDate?: Date | string | null
+        academicDegreeTypeId?: string | null
+        academicDegreeDate?: Date | string | null
+        academicRankTypeId?: string | null
+        academicRankDate?: Date | string | null
+        levelId?: string | null
+        chiHuyQuanLyId?: string | null
+        chuyenMonKyThuatId?: string | null
+        sucKhoeId?: string | null
+        nhomMauId?: string | null
+        unionDate?: Date | string | null
+        unionPlace?: string | null
+        CPVJoinDate?: Date | string | null
+        officialCPVDate?: Date | string | null
+        CPVJoinPlace?: string | null
+        positionCPVId?: string | null
+        tenureDate?: Date | string | null
+        enlistmentDate?: Date | string | null
+        reEnlistmentDate?: Date | string | null
+        dischargeDate?: Date | string | null
+        recruitmentDate?: Date | string | null
+        recruitmentAgency?: string | null
+        mainJobAssigned?: string | null
+        revolutionaryDate?: Date | string | null
+        originalPlace?: string | null
+        familyPhone?: string | null
+        familyName?: string | null
+        trinhDoHocVanId?: string | null
+        relatives?: RelativeUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedCreateNestedManyWithoutUserProfileInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedCreateNestedManyWithoutUserProfileInput
+        ngoaiNgu?: NgoaiNguUncheckedCreateNestedManyWithoutUserProfileInput
+        tinHoc?: TinHocUncheckedCreateNestedManyWithoutUserProfileInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedCreateNestedManyWithoutUserProfileInput
+        capBac?: CapBacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedCreateNestedManyWithoutUserProfileInput
+        khenThuong?: KhenThuongUncheckedCreateNestedManyWithoutUserProfileInput
+        kyLuat?: KyLuatUncheckedCreateNestedManyWithoutUserProfileInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedCreateNestedManyWithoutUserProfileInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedCreateNestedManyWithoutUserProfileInput
+        hocVi?: HocViUncheckedCreateNestedManyWithoutUserProfileInput
+        hocHam?: HocHamUncheckedCreateNestedManyWithoutUserProfileInput
+        tiengDanToc?: TiengDanTocUncheckedCreateNestedManyWithoutUserProfileInput
+        chienDau?: ChienDauUncheckedCreateNestedManyWithoutUserProfileInput
+        diNuocNgoai?: NuocNgoaiUncheckedCreateNestedManyWithoutUserProfileInput
+        thuongTat?: ThuongTatUncheckedCreateNestedManyWithoutUserProfileInput
+        danhHieu?: DanhHieuUncheckedCreateNestedManyWithoutUserProfileInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedCreateNestedManyWithoutUserProfileInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedCreateNestedManyWithoutUserProfileInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
+        educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
+        lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+        lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
+        staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
+        documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
+        documentsApproved?: DocumentUncheckedCreateNestedManyWithoutApprovedByInput
+        faqsUploaded?: FAQUncheckedCreateNestedManyWithoutUploadedByInput
+        faqsApproved?: FAQUncheckedCreateNestedManyWithoutApprovedByInput
+        conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+    };
+    export type UserProfileCreateOrConnectWithoutStudentSubjectScoreHistoryInput = {
+        where: UserProfileWhereUniqueInput
+        create: XOR<UserProfileCreateWithoutStudentSubjectScoreHistoryInput, UserProfileUncheckedCreateWithoutStudentSubjectScoreHistoryInput>
+    };
+    export type StudentSubjectScoreUpsertWithoutStudentSubjectScoreHistoryInput = {
+        update: XOR<StudentSubjectScoreUpdateWithoutStudentSubjectScoreHistoryInput, StudentSubjectScoreUncheckedUpdateWithoutStudentSubjectScoreHistoryInput>
+        create: XOR<StudentSubjectScoreCreateWithoutStudentSubjectScoreHistoryInput, StudentSubjectScoreUncheckedCreateWithoutStudentSubjectScoreHistoryInput>
+        where?: StudentSubjectScoreWhereInput
+    };
+    export type StudentSubjectScoreUpdateToOneWithWhereWithoutStudentSubjectScoreHistoryInput = {
+        where?: StudentSubjectScoreWhereInput
+        data: XOR<StudentSubjectScoreUpdateWithoutStudentSubjectScoreHistoryInput, StudentSubjectScoreUncheckedUpdateWithoutStudentSubjectScoreHistoryInput>
+    };
+    export type StudentSubjectScoreUpdateWithoutStudentSubjectScoreHistoryInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
+        subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
+        student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+    };
+    export type StudentSubjectScoreUncheckedUpdateWithoutStudentSubjectScoreHistoryInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+    };
+    export type UserProfileUpsertWithoutStudentSubjectScoreHistoryInput = {
+        update: XOR<UserProfileUpdateWithoutStudentSubjectScoreHistoryInput, UserProfileUncheckedUpdateWithoutStudentSubjectScoreHistoryInput>
+        create: XOR<UserProfileCreateWithoutStudentSubjectScoreHistoryInput, UserProfileUncheckedCreateWithoutStudentSubjectScoreHistoryInput>
+        where?: UserProfileWhereInput
+    };
+    export type UserProfileUpdateToOneWithWhereWithoutStudentSubjectScoreHistoryInput = {
+        where?: UserProfileWhereInput
+        data: XOR<UserProfileUpdateWithoutStudentSubjectScoreHistoryInput, UserProfileUncheckedUpdateWithoutStudentSubjectScoreHistoryInput>
+    };
+    export type UserProfileUpdateWithoutStudentSubjectScoreHistoryInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: StringFieldUpdateOperationsInput | string
+        lastName?: StringFieldUpdateOperationsInput | string
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        group?: GroupUpdateOneWithoutUserProfileNestedInput
+        provinceCurrentAddress?: DM_TinhUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        districtCurrentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        communeCurrentAddress?: DM_XaPhuongUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newProvinceCurrentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        newCommuneCurrentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfileCurrentAddressNestedInput
+        provinceOfBirth?: DM_TinhUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        districtOfBirth?: DM_QuanHuyenUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        communeOfBirth?: DM_XaPhuongUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newProvinceOfBirth?: DM_Tinh_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        newCommuneOfBirth?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePlaceOfBirthNestedInput
+        gender?: DM_GioiTinhUpdateOneWithoutUserProfileNestedInput
+        provincePermanentAddress?: DM_TinhUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        districtPermanentAddress?: DM_QuanHuyenUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        communePermanentAddress?: DM_XaPhuongUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newProvincePermanentAddress?: DM_Tinh_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        newCommunePermanentAddress?: DM_XaPhuong_NewUpdateOneWithoutUserProfilePermanentAddressNestedInput
+        nationality?: DM_QuocGiaUpdateOneWithoutUserProfileNestedInput
+        religion?: DM_TonGiaoUpdateOneWithoutUserProfileNestedInput
+        ethnicity?: DM_DanTocUpdateOneWithoutUserProfileNestedInput
+        provinceHometown?: DM_TinhUpdateOneWithoutUserProfileHometownNestedInput
+        districtHometown?: DM_QuanHuyenUpdateOneWithoutUserProfileHometownNestedInput
+        communeHometown?: DM_XaPhuongUpdateOneWithoutUserProfileHometownNestedInput
+        newProvinceHometown?: DM_Tinh_NewUpdateOneWithoutUserProfileHometownNestedInput
+        newCommuneHometown?: DM_XaPhuong_NewUpdateOneWithoutUserProfileHometownNestedInput
+        rank?: DM_CapBacUpdateOneWithoutProfilesNestedInput
+        academicDegreeType?: DM_HocViUpdateOneWithoutProfilesNestedInput
+        academicRankType?: DM_HocHamUpdateOneWithoutProfilesNestedInput
+        level?: DM_ChucDanhUpdateOneWithoutUserProfileNestedInput
+        chiHuyQuanLy?: DM_ChiHuyQuanLyUpdateOneWithoutUserProfileNestedInput
+        chuyenMonKyThuat?: DM_ChuyenMonKyThuatUpdateOneWithoutUserProfileNestedInput
+        sucKhoe?: DM_SucKhoeUpdateOneWithoutUserProfileNestedInput
+        nhomMau?: DM_NhomMauUpdateOneWithoutUserProfileNestedInput
+        positionCPV?: DM_ChucVuUpdateOneWithoutUserProfileNestedInput
+        relatives?: RelativeUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUpdateManyWithoutUserProfileNestedInput
+        trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        staffs?: StaffUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUpdateManyWithoutUserNestedInput
+    };
+    export type UserProfileUncheckedUpdateWithoutStudentSubjectScoreHistoryInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        bLaNguoiDung?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaCanBoNhanVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        bLaHocVien?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        groupId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_DonViId?: NullableStringFieldUpdateOperationsInput | string | null
+        sDM_ViTriCongViecId?: NullableStringFieldUpdateOperationsInput | string | null
+        sQuanlyTrucTiepId?: NullableStringFieldUpdateOperationsInput | string | null
+        iDictionaryKey?: NullableIntFieldUpdateOperationsInput | number | null
+        bSystem?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        sNguoiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sNguoiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiTao?: NullableStringFieldUpdateOperationsInput | string | null
+        sThietBiSua?: NullableStringFieldUpdateOperationsInput | string | null
+        avatar?: NullableStringFieldUpdateOperationsInput | string | null
+        firstName?: StringFieldUpdateOperationsInput | string
+        lastName?: StringFieldUpdateOperationsInput | string
+        idCardNumber?: StringFieldUpdateOperationsInput | string
+        placeOfIdCardNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        fullname?: NullableStringFieldUpdateOperationsInput | string | null
+        healthInsuranceNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
+        currentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        newCurrentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        occupationWhenRecruiting?: NullableStringFieldUpdateOperationsInput | string | null
+        thuongBinh?: NullableStringFieldUpdateOperationsInput | string | null
+        benh?: NullableStringFieldUpdateOperationsInput | string | null
+        tinhHinhNhaO?: NullableStringFieldUpdateOperationsInput | string | null
+        truocKhiNhapNgu?: NullableStringFieldUpdateOperationsInput | string | null
+        thanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        soTruong?: NullableStringFieldUpdateOperationsInput | string | null
+        hoTenThuongDung?: NullableStringFieldUpdateOperationsInput | string | null
+        lichSuBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        conThuMay?: NullableIntFieldUpdateOperationsInput | number | null
+        chieuCao?: NullableStringFieldUpdateOperationsInput | string | null
+        canNang?: NullableStringFieldUpdateOperationsInput | string | null
+        soACE?: NullableIntFieldUpdateOperationsInput | number | null
+        kinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        chinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fSoACE?: NullableIntFieldUpdateOperationsInput | number | null
+        fKinhTeGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fThanhPhanGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fChinhTriGiaDinh?: NullableStringFieldUpdateOperationsInput | string | null
+        fBanThan?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneCurrentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        placeOfBirth?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneOfBirthId?: NullableStringFieldUpdateOperationsInput | string | null
+        homeTown?: NullableStringFieldUpdateOperationsInput | string | null
+        idCardDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        idCardExpirationDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        genderId?: NullableStringFieldUpdateOperationsInput | string | null
+        permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        provincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtPermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        communePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvincePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommunePermanentAddressId?: NullableStringFieldUpdateOperationsInput | string | null
+        temporaryAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        contactAddress?: NullableStringFieldUpdateOperationsInput | string | null
+        phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        email?: NullableStringFieldUpdateOperationsInput | string | null
+        nationalityId?: NullableStringFieldUpdateOperationsInput | string | null
+        religionId?: NullableStringFieldUpdateOperationsInput | string | null
+        ethnicityId?: NullableStringFieldUpdateOperationsInput | string | null
+        provinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        districtHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        communeHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newProvinceHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        newCommuneHometownId?: NullableStringFieldUpdateOperationsInput | string | null
+        officerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        rankId?: NullableStringFieldUpdateOperationsInput | string | null
+        rankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicDegreeTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicDegreeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        academicRankTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicRankDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        levelId?: NullableStringFieldUpdateOperationsInput | string | null
+        chiHuyQuanLyId?: NullableStringFieldUpdateOperationsInput | string | null
+        chuyenMonKyThuatId?: NullableStringFieldUpdateOperationsInput | string | null
+        sucKhoeId?: NullableStringFieldUpdateOperationsInput | string | null
+        nhomMauId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        CPVJoinDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        officialCPVDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        CPVJoinPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        positionCPVId?: NullableStringFieldUpdateOperationsInput | string | null
+        tenureDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        reEnlistmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        dischargeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        recruitmentAgency?: NullableStringFieldUpdateOperationsInput | string | null
+        mainJobAssigned?: NullableStringFieldUpdateOperationsInput | string | null
+        revolutionaryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        originalPlace?: NullableStringFieldUpdateOperationsInput | string | null
+        familyPhone?: NullableStringFieldUpdateOperationsInput | string | null
+        familyName?: NullableStringFieldUpdateOperationsInput | string | null
+        trinhDoHocVanId?: NullableStringFieldUpdateOperationsInput | string | null
+        relatives?: RelativeUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoLyLuanChinhTri?: TrinhDoLyLuanChinhTriUncheckedUpdateManyWithoutUserProfileNestedInput
+        trinhDoQuanLyNhaNuoc?: TrinhDoQuanLyNhaNuocUncheckedUpdateManyWithoutUserProfileNestedInput
+        ngoaiNgu?: NgoaiNguUncheckedUpdateManyWithoutUserProfileNestedInput
+        tinHoc?: TinHocUncheckedUpdateManyWithoutUserProfileNestedInput
+        boiDuongQuocPhongAnNinh?: BoiDuongQuocPhongAnNinhUncheckedUpdateManyWithoutUserProfileNestedInput
+        capBac?: CapBacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCongTac?: QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiCongTac?: QuaTrinhCuDiCongTacUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhCuDiDaoTao?: QuaTrinhCuDiDaoTaoUncheckedUpdateManyWithoutUserProfileNestedInput
+        khenThuong?: KhenThuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        kyLuat?: KyLuatUncheckedUpdateManyWithoutUserProfileNestedInput
+        doiTuongChinhSach?: DoiTuongChinhSachUncheckedUpdateManyWithoutUserProfileNestedInput
+        keKhaiTaiSan?: KeKhaiTaiSanUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocVi?: HocViUncheckedUpdateManyWithoutUserProfileNestedInput
+        hocHam?: HocHamUncheckedUpdateManyWithoutUserProfileNestedInput
+        tiengDanToc?: TiengDanTocUncheckedUpdateManyWithoutUserProfileNestedInput
+        chienDau?: ChienDauUncheckedUpdateManyWithoutUserProfileNestedInput
+        diNuocNgoai?: NuocNgoaiUncheckedUpdateManyWithoutUserProfileNestedInput
+        thuongTat?: ThuongTatUncheckedUpdateManyWithoutUserProfileNestedInput
+        danhHieu?: DanhHieuUncheckedUpdateManyWithoutUserProfileNestedInput
+        quaTrinhHocTap?: QuaTrinhHocTapUncheckedUpdateManyWithoutUserProfileNestedInput
+        ToChucXaHoi?: ToChucXaHoiUncheckedUpdateManyWithoutUserProfileNestedInput
+        QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
+        educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
+        lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+        lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
+        staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
+        documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+        documentsApproved?: DocumentUncheckedUpdateManyWithoutApprovedByNestedInput
+        faqsUploaded?: FAQUncheckedUpdateManyWithoutUploadedByNestedInput
+        faqsApproved?: FAQUncheckedUpdateManyWithoutApprovedByNestedInput
+        conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+    };
     export type StudentSubjectScoreCreateWithoutCertificatesInput = {
         id?: string
         code?: string | null
@@ -397659,6 +400444,7 @@ export namespace Prisma {
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutCertificatesInput = {
         id?: string
@@ -397690,6 +400476,7 @@ export namespace Prisma {
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutCertificatesInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -397764,6 +400551,7 @@ export namespace Prisma {
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutCertificatesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -397795,6 +400583,7 @@ export namespace Prisma {
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type ArchivedCertificateUpsertWithoutStudentSubjectScoreInput = {
         update: XOR<ArchivedCertificateUpdateWithoutStudentSubjectScoreInput, ArchivedCertificateUncheckedUpdateWithoutStudentSubjectScoreInput>
@@ -397983,6 +400772,7 @@ export namespace Prisma {
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutAwardsInput = {
         id?: string
@@ -398014,6 +400804,7 @@ export namespace Prisma {
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutAwardsInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -398088,6 +400879,7 @@ export namespace Prisma {
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutAwardsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -398119,6 +400911,7 @@ export namespace Prisma {
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type ArchivedAwardUpsertWithoutStudentSubjectScoreInput = {
         update: XOR<ArchivedAwardUpdateWithoutStudentSubjectScoreInput, ArchivedAwardUncheckedUpdateWithoutStudentSubjectScoreInput>
@@ -405226,6 +408019,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutSubjectVersionInput = {
         id?: string
@@ -405257,6 +408051,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutSubjectVersionInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -407934,6 +410729,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutSubjectClassInput = {
         id?: string
@@ -407965,6 +410761,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutSubjectClassInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -415765,6 +418562,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutStudentInput = {
         id?: string
@@ -415796,6 +418594,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutStudentInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -415948,6 +418747,7 @@ export namespace Prisma {
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -416100,6 +418900,7 @@ export namespace Prisma {
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -417610,6 +420411,7 @@ export namespace Prisma {
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -417762,6 +420564,7 @@ export namespace Prisma {
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -419913,6 +422716,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -420065,6 +422869,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -420683,6 +423488,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -420835,6 +423641,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -420991,6 +423798,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -421143,6 +423951,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -421345,6 +424154,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -421497,6 +424307,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -421658,6 +424469,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -421810,6 +424622,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -421994,6 +424807,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -422146,6 +424960,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -422302,6 +425117,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -422454,6 +425270,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -422656,6 +425473,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -422808,6 +425626,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -422969,6 +425788,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -423121,6 +425941,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -423342,6 +426163,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -423494,6 +426316,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -423749,6 +426572,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -423901,6 +426725,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -424472,6 +427297,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -424624,6 +427450,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -424861,6 +427688,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -425013,6 +427841,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -425186,6 +428015,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -425338,6 +428168,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -425654,6 +428485,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -425806,6 +428638,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -426046,6 +428879,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -426198,6 +429032,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -426438,6 +429273,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -426590,6 +429426,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -428154,6 +430991,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -428306,6 +431144,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -428597,6 +431436,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -428749,6 +431589,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -429141,6 +431982,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -429293,6 +432135,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -429543,6 +432386,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -429695,6 +432539,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -429855,6 +432700,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -430007,6 +432853,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -430167,6 +433014,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -430319,6 +433167,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -430479,6 +433328,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -430631,6 +433481,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -430905,6 +433756,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -431057,6 +433909,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -431217,6 +434070,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -431369,6 +434223,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -431529,6 +434384,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -431681,6 +434537,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -431841,6 +434698,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -431993,6 +434851,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -432252,6 +435111,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -432404,6 +435264,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -432564,6 +435425,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -432716,6 +435578,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -432876,6 +435739,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -433028,6 +435892,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -433188,6 +436053,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -433340,6 +436206,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -433552,6 +436419,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -433704,6 +436572,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -433864,6 +436733,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -434016,6 +436886,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -434176,6 +437047,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -434328,6 +437200,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -434488,6 +437361,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -434640,6 +437514,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -434852,6 +437727,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -435004,6 +437880,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -435164,6 +438041,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -435316,6 +438194,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -435476,6 +438355,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -435628,6 +438508,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -435788,6 +438669,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -435940,6 +438822,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -438631,6 +441514,56 @@ export namespace Prisma {
         data: LecturerHistoryCreateManyUserProfileInput | LecturerHistoryCreateManyUserProfileInput[]
         skipDuplicates?: boolean
     };
+    export type StudentSubjectScoreHistoryCreateWithoutUpdatedByInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponedReason?: boolean | null
+        examPostponed?: string | null
+        examBanned: boolean
+        examBannedReason?: string | null
+        suspended?: boolean | null
+        suspendedReason?: string | null
+        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutStudentSubjectScoreHistoryInput
+    };
+    export type StudentSubjectScoreHistoryUncheckedCreateWithoutUpdatedByInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentSubjectScoreId: string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponedReason?: boolean | null
+        examPostponed?: string | null
+        examBanned: boolean
+        examBannedReason?: string | null
+        suspended?: boolean | null
+        suspendedReason?: string | null
+    };
+    export type StudentSubjectScoreHistoryCreateOrConnectWithoutUpdatedByInput = {
+        where: StudentSubjectScoreHistoryWhereUniqueInput
+        create: XOR<StudentSubjectScoreHistoryCreateWithoutUpdatedByInput, StudentSubjectScoreHistoryUncheckedCreateWithoutUpdatedByInput>
+    };
+    export type StudentSubjectScoreHistoryCreateManyUpdatedByInputEnvelope = {
+        data: StudentSubjectScoreHistoryCreateManyUpdatedByInput | StudentSubjectScoreHistoryCreateManyUpdatedByInput[]
+        skipDuplicates?: boolean
+    };
     export type StaffCreateWithoutUserProfileInput = {
         id?: string
         code?: string | null
@@ -441317,6 +444250,19 @@ export namespace Prisma {
         where: LecturerHistoryScalarWhereInput
         data: XOR<LecturerHistoryUpdateManyMutationInput, LecturerHistoryUncheckedUpdateManyWithoutUserProfileInput>
     };
+    export type StudentSubjectScoreHistoryUpsertWithWhereUniqueWithoutUpdatedByInput = {
+        where: StudentSubjectScoreHistoryWhereUniqueInput
+        update: XOR<StudentSubjectScoreHistoryUpdateWithoutUpdatedByInput, StudentSubjectScoreHistoryUncheckedUpdateWithoutUpdatedByInput>
+        create: XOR<StudentSubjectScoreHistoryCreateWithoutUpdatedByInput, StudentSubjectScoreHistoryUncheckedCreateWithoutUpdatedByInput>
+    };
+    export type StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutUpdatedByInput = {
+        where: StudentSubjectScoreHistoryWhereUniqueInput
+        data: XOR<StudentSubjectScoreHistoryUpdateWithoutUpdatedByInput, StudentSubjectScoreHistoryUncheckedUpdateWithoutUpdatedByInput>
+    };
+    export type StudentSubjectScoreHistoryUpdateManyWithWhereWithoutUpdatedByInput = {
+        where: StudentSubjectScoreHistoryScalarWhereInput
+        data: XOR<StudentSubjectScoreHistoryUpdateManyMutationInput, StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByInput>
+    };
     export type StaffUpsertWithoutUserProfileInput = {
         update: XOR<StaffUpdateWithoutUserProfileInput, StaffUncheckedUpdateWithoutUserProfileInput>
         create: XOR<StaffCreateWithoutUserProfileInput, StaffUncheckedCreateWithoutUserProfileInput>
@@ -441646,6 +444592,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -441798,6 +444745,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -442008,6 +444956,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -442160,6 +445109,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -442422,6 +445372,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -442574,6 +445525,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -442864,6 +445816,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -443016,6 +445969,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -443168,6 +446122,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -443320,6 +446275,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -443485,6 +446441,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -443637,6 +446594,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -443789,6 +446747,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -443941,6 +446900,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -444130,6 +447090,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -444282,6 +447243,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -444463,6 +447425,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -444615,6 +447578,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -444804,6 +447768,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -444956,6 +447921,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -445215,6 +448181,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -445367,6 +448334,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -445620,6 +448588,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -445772,6 +448741,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -445962,6 +448932,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -446114,6 +449085,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -446322,6 +449294,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -446474,6 +449447,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -446626,6 +449600,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -446778,6 +449753,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -446943,6 +449919,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -447095,6 +450072,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -447287,6 +450265,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -447439,6 +450418,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -447649,6 +450629,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -447801,6 +450782,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -448021,6 +451003,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -448173,6 +451156,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -448416,6 +451400,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -448568,6 +451553,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -448764,6 +451750,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -448916,6 +451903,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -449130,6 +452118,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -449282,6 +452271,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -449458,6 +452448,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -449610,6 +452601,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -449804,6 +452796,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -449956,6 +452949,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -450108,6 +453102,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -450260,6 +453255,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -450425,6 +453421,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -450577,6 +453574,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -450729,6 +453727,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -450881,6 +453880,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -451046,6 +454046,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -451198,6 +454199,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -451350,6 +454352,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -451502,6 +454505,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -451667,6 +454671,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -451819,6 +454824,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -451971,6 +454977,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -452123,6 +455130,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -452288,6 +455296,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -452440,6 +455449,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -452636,6 +455646,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -452788,6 +455799,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -453002,6 +456014,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -453154,6 +456167,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -453306,6 +456320,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -453458,6 +456473,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -453623,6 +456639,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -453775,6 +456792,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -453971,6 +456989,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -454123,6 +457142,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -454337,6 +457357,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -454489,6 +457510,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -454665,6 +457687,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -454817,6 +457840,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -455011,6 +458035,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -455163,6 +458188,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -455315,6 +458341,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -455467,6 +458494,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -455632,6 +458660,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -455784,6 +458813,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -456010,6 +459040,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -456162,6 +459193,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -456416,6 +459448,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -456568,6 +459601,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -456744,6 +459778,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -456896,6 +459931,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -457090,6 +460126,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -457242,6 +460279,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -457442,6 +460480,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -457594,6 +460633,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -457817,6 +460857,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -457969,6 +461010,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -458447,6 +461489,7 @@ export namespace Prisma {
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -458599,6 +461642,7 @@ export namespace Prisma {
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -459674,6 +462718,7 @@ export namespace Prisma {
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -459826,6 +462871,7 @@ export namespace Prisma {
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -460342,6 +463388,7 @@ export namespace Prisma {
         trinhDoHocVan?: DM_TrinhDoHocVanCreateNestedOneWithoutUserProfileInput
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -460494,6 +463541,7 @@ export namespace Prisma {
         QuaTrinhLuong?: QuaTrinhLuongUncheckedCreateNestedManyWithoutUserProfileInput
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -460763,6 +463811,7 @@ export namespace Prisma {
         trinhDoHocVan?: DM_TrinhDoHocVanUpdateOneWithoutUserProfileNestedInput
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -460915,6 +463964,7 @@ export namespace Prisma {
         QuaTrinhLuong?: QuaTrinhLuongUncheckedUpdateManyWithoutUserProfileNestedInput
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -463212,6 +466262,7 @@ export namespace Prisma {
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutStudentThesisRegistrationInput = {
         id?: string
@@ -463243,6 +466294,7 @@ export namespace Prisma {
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutStudentThesisRegistrationInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -463572,6 +466624,7 @@ export namespace Prisma {
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutStudentThesisRegistrationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -463603,6 +466656,7 @@ export namespace Prisma {
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type ThesisProjectUpsertWithoutRegistrationsInput = {
         update: XOR<ThesisProjectUpdateWithoutRegistrationsInput, ThesisProjectUncheckedUpdateWithoutRegistrationsInput>
@@ -470852,6 +473906,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutGraduationGpaScoresInput = {
         id?: string
@@ -470883,6 +473938,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutGraduationGpaScoresInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -470918,6 +473974,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreUncheckedCreateWithoutGraduationSupplementaryScoreInput = {
         id?: string
@@ -470949,6 +474006,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
     export type StudentSubjectScoreCreateOrConnectWithoutGraduationSupplementaryScoreInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -476952,6 +480010,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
@@ -477104,6 +480163,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
@@ -477306,6 +480366,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
@@ -477458,6 +480519,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
@@ -480518,6 +483580,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
         documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
@@ -480670,6 +483733,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
         documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
@@ -481025,6 +484089,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
         documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
@@ -481177,6 +484242,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
         documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
@@ -481487,6 +484553,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
         documentsUploaded?: DocumentCreateNestedManyWithoutUploadedByInput
@@ -481639,6 +484706,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
         documentsUploaded?: DocumentUncheckedCreateNestedManyWithoutUploadedByInput
@@ -481934,6 +485002,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
         documentsUploaded?: DocumentUpdateManyWithoutUploadedByNestedInput
@@ -482086,6 +485155,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
         documentsUploaded?: DocumentUncheckedUpdateManyWithoutUploadedByNestedInput
@@ -482382,6 +485452,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -482534,6 +485605,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -483068,6 +486140,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -483220,6 +486293,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -483393,6 +486467,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -483545,6 +486620,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -483718,6 +486794,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -483870,6 +486947,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -484043,6 +487121,7 @@ export namespace Prisma {
         educationAndTraining?: StudentCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileCreateNestedManyWithoutUserProfileInput
@@ -484195,6 +487274,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedCreateNestedManyWithoutUserProfileInput
         lecturer?: LecturerUncheckedCreateNestedOneWithoutUserProfileInput
         lecturerHistory?: LecturerHistoryUncheckedCreateNestedManyWithoutUserProfileInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutUpdatedByInput
         staffs?: StaffUncheckedCreateNestedOneWithoutUserProfileInput
         staffHistory?: StaffHistoryUncheckedCreateNestedManyWithoutUserProfileInput
         evidenceFiles?: EvidenceFileUncheckedCreateNestedManyWithoutUserProfileInput
@@ -487530,6 +490610,27 @@ export namespace Prisma {
         reviewedById?: string | null
         reviewNote?: string | null
     };
+    export type StudentSubjectScoreHistoryCreateManyStudentSubjectScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponedReason?: boolean | null
+        examPostponed?: string | null
+        examBanned: boolean
+        examBannedReason?: string | null
+        suspended?: boolean | null
+        suspendedReason?: string | null
+        updatedById: string
+    };
     export type StudentGraduationApplicationUpdateWithoutGpaScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -487738,6 +490839,69 @@ export namespace Prisma {
         reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
         reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type StudentSubjectScoreHistoryUpdateWithoutStudentSubjectScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        updatedBy?: UserProfileUpdateOneRequiredWithoutStudentSubjectScoreHistoryNestedInput
+    };
+    export type StudentSubjectScoreHistoryUncheckedUpdateWithoutStudentSubjectScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        updatedById?: StringFieldUpdateOperationsInput | string
+    };
+    export type StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        updatedById?: StringFieldUpdateOperationsInput | string
     };
     export type DocumentFileCreateManyArchivedCertificateInput = {
         id?: string
@@ -492757,6 +495921,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -492788,6 +495953,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateManyWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -493440,6 +496606,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -493471,6 +496638,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -498426,6 +501594,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -498457,6 +501626,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateManyWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -500340,6 +503510,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -500492,6 +503663,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -501317,6 +504489,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -501469,6 +504642,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -501894,6 +505068,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -502046,6 +505221,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -502463,6 +505639,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -502615,6 +505792,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -503108,6 +506286,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -503260,6 +506439,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -503702,6 +506882,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -503854,6 +507035,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -504295,6 +507477,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -504447,6 +507630,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -506317,6 +509501,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -506469,6 +509654,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -506971,6 +510157,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -507123,6 +510310,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -507698,6 +510886,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -507850,6 +511039,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -508637,6 +511827,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -508789,6 +511980,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -509058,6 +512250,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -509210,6 +512403,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -509479,6 +512673,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -509631,6 +512826,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -509900,6 +513096,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -510052,6 +513249,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -510837,6 +514035,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -510989,6 +514188,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -511258,6 +514458,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -511410,6 +514611,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -511679,6 +514881,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -511831,6 +515034,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -512100,6 +515304,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -512252,6 +515457,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -513026,6 +516232,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -513178,6 +516385,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -513447,6 +516655,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -513599,6 +516808,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -513868,6 +517078,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -514020,6 +517231,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -514289,6 +517501,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -514441,6 +517654,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -515178,6 +518392,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -515330,6 +518545,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -515599,6 +518815,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -515751,6 +518968,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -516020,6 +519238,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -516172,6 +519391,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -516441,6 +519661,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -516593,6 +519814,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -517330,6 +520552,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -517482,6 +520705,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -517751,6 +520975,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -517903,6 +521128,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -518172,6 +521398,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -518324,6 +521551,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -518593,6 +521821,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -518745,6 +521974,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -519258,6 +522488,27 @@ export namespace Prisma {
         serviceDate?: Date | string | null
         organizationId?: string | null
         lecturerTypeId: string
+    };
+    export type StudentSubjectScoreHistoryCreateManyUpdatedByInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentSubjectScoreId: string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponedReason?: boolean | null
+        examPostponed?: string | null
+        examBanned: boolean
+        examBannedReason?: string | null
+        suspended?: boolean | null
+        suspendedReason?: string | null
     };
     export type StaffHistoryCreateManyUserProfileInput = {
         id?: string
@@ -520574,6 +523825,69 @@ export namespace Prisma {
         serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         organizationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerTypeId?: StringFieldUpdateOperationsInput | string
+    };
+    export type StudentSubjectScoreHistoryUpdateWithoutUpdatedByInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutStudentSubjectScoreHistoryNestedInput
+    };
+    export type StudentSubjectScoreHistoryUncheckedUpdateWithoutUpdatedByInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StaffHistoryUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -524572,6 +527886,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutGraduationGpaScoresInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -524603,6 +527918,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateManyWithoutGraduationGpaScoresInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -524661,6 +527977,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateWithoutGraduationSupplementaryScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -524692,6 +528009,7 @@ export namespace Prisma {
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type StudentSubjectScoreUncheckedUpdateManyWithoutGraduationSupplementaryScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -528214,6 +531532,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -528366,6 +531685,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -529180,6 +532500,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -529332,6 +532653,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -529718,6 +533040,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -529870,6 +533193,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -530256,6 +533580,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -530408,6 +533733,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput
@@ -530794,6 +534120,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUpdateManyWithoutUserProfileNestedInput
@@ -530946,6 +534273,7 @@ export namespace Prisma {
         educationAndTraining?: StudentUncheckedUpdateManyWithoutUserProfileNestedInput
         lecturer?: LecturerUncheckedUpdateOneWithoutUserProfileNestedInput
         lecturerHistory?: LecturerHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutUpdatedByNestedInput
         staffs?: StaffUncheckedUpdateOneWithoutUserProfileNestedInput
         staffHistory?: StaffHistoryUncheckedUpdateManyWithoutUserProfileNestedInput
         evidenceFiles?: EvidenceFileUncheckedUpdateManyWithoutUserProfileNestedInput

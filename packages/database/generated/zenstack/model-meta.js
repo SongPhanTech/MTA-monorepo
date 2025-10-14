@@ -1774,6 +1774,12 @@ const metadata = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ScoreToRegistration" }] }],
                     backLink: 'studentSubjectScore',
+                }, studentSubjectScoreHistory: {
+                    name: "studentSubjectScoreHistory",
+                    type: "StudentSubjectScoreHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'studentSubjectScore',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -1788,6 +1794,125 @@ const metadata = {
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        studentSubjectScoreHistory: {
+            name: 'StudentSubjectScoreHistory', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, studentSubjectScore: {
+                    name: "studentSubjectScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentSubjectScoreHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentSubjectScoreId" },
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'studentSubjectScore',
+                }, attendanceScore: {
+                    name: "attendanceScore",
+                    type: "Float",
+                    isOptional: true,
+                    attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
+                }, midtermScore: {
+                    name: "midtermScore",
+                    type: "Float",
+                    isOptional: true,
+                    attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
+                }, examScore: {
+                    name: "examScore",
+                    type: "Float",
+                    isOptional: true,
+                    attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
+                }, finalScore: {
+                    name: "finalScore",
+                    type: "Decimal",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Decimal", "args": [{ "name": "p", "value": 5 }, { "name": "s", "value": 1 }] }, { "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
+                }, manualFinalScore: {
+                    name: "manualFinalScore",
+                    type: "Float",
+                    isOptional: true,
+                    attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
+                }, examPostponedReason: {
+                    name: "examPostponedReason",
+                    type: "Boolean",
+                    isOptional: true,
+                }, examPostponed: {
+                    name: "examPostponed",
+                    type: "String",
+                    isOptional: true,
+                }, examBanned: {
+                    name: "examBanned",
+                    type: "Boolean",
+                }, examBannedReason: {
+                    name: "examBannedReason",
+                    type: "String",
+                    isOptional: true,
+                }, suspended: {
+                    name: "suspended",
+                    type: "Boolean",
+                    isOptional: true,
+                }, suspendedReason: {
+                    name: "suspendedReason",
+                    type: "String",
+                    isOptional: true,
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentSubjectScoreHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "updatedById" },
+                }, updatedById: {
+                    name: "updatedById",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'updatedBy',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         archivedCertificateOnStudentSubjectScore: {
             name: 'ArchivedCertificateOnStudentSubjectScore', fields: {
@@ -11618,6 +11743,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'userProfile',
+                }, studentSubjectScoreHistory: {
+                    name: "studentSubjectScoreHistory",
+                    type: "StudentSubjectScoreHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'updatedBy',
                 }, staffs: {
                     name: "staffs",
                     type: "Staff",
