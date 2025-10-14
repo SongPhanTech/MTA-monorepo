@@ -91,6 +91,7 @@ import PutAcademicActionConfig from './put-xu-ly-hoc-tap'
 import PutAddOlympicScoreModal from './them-diem-cong'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 import ModalChuyenLop from './modal-chuyen-lop'
+import ModalPreviewUpload from './modal-preview-upload-ctdt'
 export {
     PutUpdateProfileModal,
     PutUploadProfileModal,
@@ -185,4 +186,5 @@ export {
     MoKhoaNhapDiem,
     PutTrainingLanguage,
     ModalChuyenLop,
+    ModalPreviewUpload,
 }

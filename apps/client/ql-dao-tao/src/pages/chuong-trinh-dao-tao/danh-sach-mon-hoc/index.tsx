@@ -21,16 +21,18 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip, Typography } from 'antd'
 import _ from 'lodash'
-import { BookPlus, Search } from 'lucide-react'
+import { BookPlus, Search, Upload } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
+import ImportSubjectModal from '@components/modal/import-excel-subject'
 export default function SubjectList() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [showImportModal, setShowImportModal] = useState(false)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         managementOrganizationId: undefined,
@@ -327,6 +329,19 @@ export default function SubjectList() {
                         </Col>
                         <Col span={12}>
                             <Flex justify="end" gap={8}>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
+                                    'NHAP_EXCEL'
+                                ) && (
+                                    <Button
+                                        onClick={() => setShowImportModal(true)}
+                                        type="default"
+                                        className="bg-green-500 text-white hover:bg-green-600"
+                                    >
+                                        <Upload size={16} />
+                                        Nhập Excel
+                                    </Button>
+                                )}
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
                                     'THEM'
@@ -661,6 +676,13 @@ export default function SubjectList() {
                     />
                 </Col>
             </Row>
+            <ImportSubjectModal
+                visible={showImportModal}
+                onCancel={() => {
+                    setShowImportModal(false)
+                    refetch()
+                }}
+            />
         </div>
     )
 }
