@@ -283,7 +283,6 @@ export default function TrainingProgramSubjects() {
             priority: 'asc',
         },
     })
-    console.log('data', data)
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     // const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
@@ -464,7 +463,7 @@ export default function TrainingProgramSubjects() {
                     <TableCollapse
                         rowKey="key"
                         headerTitleKey={({ trainingBlock }) =>
-                            `Khối kiến thức: ${[trainingBlock?.name].filter(Boolean).join(' - ')}`
+                            `${[trainingBlock?.name].filter(Boolean).join(' - ')}`
                         }
                         childrenFieldName="subjects"
                         defaultExpandAll
