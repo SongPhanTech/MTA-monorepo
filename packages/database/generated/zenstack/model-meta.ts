@@ -1340,19 +1340,6 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'trainingObjectType',
-                }, semester: {
-                    name: "semester",
-                    type: "Semester",
-                    isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'planTrainingDelay',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "semesterId" },
-                }, semesterId: {
-                    name: "semesterId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'semester',
                 }, planTrainingDelaySubjects: {
                     name: "planTrainingDelaySubjects",
                     type: "PlanTrainingDelaySubject",
@@ -1434,9 +1421,12 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, planTrainingDelayId_subjectVersionId: {
+                    name: "planTrainingDelayId_subjectVersionId",
+                    fields: ["planTrainingDelayId", "subjectVersionId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         planTraining: {
             name: 'PlanTraining', fields: {
@@ -2514,12 +2504,6 @@ const metadata = {
                 }, classRegisterSession: {
                     name: "classRegisterSession",
                     type: "ClassRegisterSession",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'semester',
-                }, planTrainingDelay: {
-                    name: "planTrainingDelay",
-                    type: "PlanTrainingDelay",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'semester',

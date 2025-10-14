@@ -1266,18 +1266,6 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'trainingObjectType',
-                }, semester: {
-                    name: "semester",
-                    type: "Semester",
-                    isDataModel: true,
-                    backLink: 'planTrainingDelay',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "semesterId" },
-                }, semesterId: {
-                    name: "semesterId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'semester',
                 }, planTrainingDelaySubjects: {
                     name: "planTrainingDelaySubjects",
                     type: "PlanTrainingDelaySubject",
@@ -1355,6 +1343,9 @@ const metadata = {
                 id: {
                     name: "id",
                     fields: ["id"]
+                }, planTrainingDelayId_subjectVersionId: {
+                    name: "planTrainingDelayId_subjectVersionId",
+                    fields: ["planTrainingDelayId", "subjectVersionId"]
                 },
             },
         },
@@ -2370,12 +2361,6 @@ const metadata = {
                 }, classRegisterSession: {
                     name: "classRegisterSession",
                     type: "ClassRegisterSession",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'semester',
-                }, planTrainingDelay: {
-                    name: "planTrainingDelay",
-                    type: "PlanTrainingDelay",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'semester',

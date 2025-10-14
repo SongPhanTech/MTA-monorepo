@@ -192,22 +192,19 @@ const Table = <T extends Record<string, unknown>>({
         label: string
         children?: TreeNode[]
     }
-    const genFilter = (item: ColumnTypeProps) => {
-        const ListButton = useCallback(
-            ({ clear, click }: { clear: () => void; click: () => void }) => {
-                return (
-                    <div className="flex justify-end gap-2">
-                        <Button size="small" onClick={clear}>
-                            Bỏ lọc
-                        </Button>
-                        <Button type="primary" size="small" onClick={click}>
-                            Lọc
-                        </Button>
-                    </div>
-                )
-            },
-            []
+    const ListButton = useCallback(({ clear, click }: { clear: () => void; click: () => void }) => {
+        return (
+            <div className="flex justify-end gap-2">
+                <Button size="small" onClick={clear}>
+                    Bỏ lọc
+                </Button>
+                <Button type="primary" size="small" onClick={click}>
+                    Lọc
+                </Button>
+            </div>
         )
+    }, [])
+    const genFilter = (item: ColumnTypeProps) => {
         if (item?.type === 'input') {
             return {
                 filterDropdown: (props: FilterDropdownProps) => (

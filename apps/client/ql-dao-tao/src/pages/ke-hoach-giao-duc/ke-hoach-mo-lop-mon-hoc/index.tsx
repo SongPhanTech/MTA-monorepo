@@ -5,12 +5,11 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import { type TrainingMajor } from '@workspace/db'
 import {
+    useFindFirstPlanTraining,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
-    useFindUniqueSemester,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
@@ -27,8 +26,8 @@ interface OpenSubjectClassForm {
         string,
         {
             count: number
-            name: string
-            code: string
+            name: string | null
+            code: string | null
             maxStudent: number
             countOld: number
         }
@@ -46,46 +45,96 @@ export default function SubjectOpeningPlan() {
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const subjectClassNumber = Form.useWatch('subjectClassNumber', form) || {}
 
-    const { data: semesterData } = useFindUniqueSemester(
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { data: res, refetch } = useFindFirstPlanTraining(
         {
-            where: { id: semesterId },
-            select: {
-                id: true,
-                name: true,
-                schoolYear: {
-                    select: { id: true, name: true },
+            // page: `${currentPage}`,
+            // pageSize: `${numberOfPages}`,
+            // semesterId: semesterId as string,
+            // search: searchText,
+            // trainingCourseId,
+            // trainingMajorId,
+            // trainingObjectTypeId: trainingObjectTypeId || '',
+            where: {
+                semesterId: semesterId as string,
+                trainingObjectTypeId: trainingObjectTypeId || '',
+                ...(searchText
+                    ? {
+                          planTrainingSubjects: {
+                              some: {
+                                  subjectVersion: {
+                                      OR: [
+                                          {
+                                              name: { contains: searchText, mode: 'insensitive' },
+                                          },
+                                          {
+                                              code: { contains: searchText, mode: 'insensitive' },
+                                          },
+                                      ],
+                                  },
+                                  fixedClasses: {
+                                      some: {
+                                          trainingCourseId: trainingCourseId || undefined,
+                                          curriculumVersion: {
+                                              curriculum: {
+                                                  trainingMajorId: trainingMajorId || undefined,
+                                              },
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                      }
+                    : {}),
+            },
+            include: {
+                planTrainingSubjects: {
+                    include: {
+                        subjectVersion: {
+                            include: {
+                                subjectClass: {
+                                    where: {
+                                        semesterId: semesterId as string,
+                                        trainingObjectTypeId: trainingObjectTypeId || '',
+                                    },
+                                },
+                                managementOrganization: {
+                                    select: {
+                                        sMa: true,
+                                    },
+                                },
+                            },
+                        },
+                        fixedClasses: {
+                            include: {
+                                _count: {
+                                    select: {
+                                        students: {
+                                            where: {
+                                                deletedAt: null,
+                                                active: true,
+                                                status: 'ENROLLED',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    take: numberOfPages,
+                    skip: (currentPage - 1) * numberOfPages,
+                },
+                _count: {
+                    select: {
+                        planTrainingSubjects: true,
+                    },
                 },
             },
         },
-        {
-            enabled: !!semesterId,
-            refetchOnWindowFocus: false,
-        }
-    )
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: res, refetch } = useOpenSubjectClass(
-        {
-            page: `${currentPage}`,
-            pageSize: `${numberOfPages}`,
-            semesterId: semesterId as string,
-            search: searchText,
-            trainingCourseId,
-            trainingMajorId,
-            trainingObjectTypeId: trainingObjectTypeId || '',
-        },
-        { query: { enabled: !!semesterId && !!trainingObjectTypeId, refetchOnWindowFocus: false } }
+        { enabled: !!semesterId && !!trainingObjectTypeId, refetchOnWindowFocus: false }
     )
 
-    const data = useMemo(
-        () =>
-            res?.status === 200
-                ? res?.data?.data.map((subjectVersion) => ({
-                      id: subjectVersion.subjectVersionId,
-                      ...subjectVersion,
-                  }))
-                : [],
-        [res]
-    )
+    const data = useMemo(() => res?.planTrainingSubjects, [res])
 
     useEffect(() => {
         if (data) {
@@ -96,20 +145,26 @@ export default function SubjectOpeningPlan() {
                         if (!acc) {
                             return {
                                 [cur.subjectVersionId]: {
-                                    count: cur.subjectClass.length ?? 0,
-                                    name: cur.subjectVersionName,
-                                    code: cur.subjectVersionCode,
-                                    maxStudent: cur.countStudent,
-                                    countOld: cur.subjectClass.length ?? 0,
+                                    count: cur.subjectVersion.subjectClass.length ?? 0,
+                                    name: cur.subjectVersion?.name,
+                                    code: cur.subjectVersion?.code,
+                                    maxStudent: cur.fixedClasses.reduce(
+                                        (sum, fc) => sum + (fc._count?.students ?? 0),
+                                        0
+                                    ),
+                                    countOld: cur.subjectVersion.subjectClass.length ?? 0,
                                 },
                             }
                         }
                         acc[cur.subjectVersionId] = {
-                            count: cur.subjectClass.length ?? 0,
-                            name: cur.subjectVersionName,
-                            code: cur.subjectVersionCode,
-                            maxStudent: cur.countStudent,
-                            countOld: cur.subjectClass.length ?? 0,
+                            count: cur.subjectVersion.subjectClass.length ?? 0,
+                            name: cur.subjectVersion?.name,
+                            code: cur.subjectVersion?.code,
+                            maxStudent: cur.fixedClasses.reduce(
+                                (sum, fc) => sum + (fc._count?.students ?? 0),
+                                0
+                            ),
+                            countOld: cur.subjectVersion.subjectClass.length ?? 0,
                         }
                         return acc
                     },
@@ -352,17 +407,17 @@ export default function SubjectOpeningPlan() {
                                 },
                                 {
                                     title: 'Mã MH',
-                                    dataIndex: 'subjectVersionCode',
+                                    dataIndex: ['subjectVersion', 'code'],
                                     align: 'center',
                                     width: 100,
                                 },
                                 {
                                     title: 'Tên môn học',
-                                    dataIndex: 'subjectVersionName',
+                                    dataIndex: ['subjectVersion', 'name'],
                                     align: 'center',
                                     render: (__, record) => {
                                         return (
-                                            `${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
+                                            `${record?.subjectVersion?.name} (${record?.subjectVersion?.credit})` ||
                                             ''
                                         )
                                     },
@@ -372,14 +427,16 @@ export default function SubjectOpeningPlan() {
                                     dataIndex: 'subjectClass',
                                     align: 'center',
                                     render: (__, record) => {
-                                        return record?.subjectClass.length ? (
+                                        return record?.subjectVersion?.subjectClass?.length ? (
                                             <TextTruncate
-                                                arr={record?.subjectClass.map((i: any) => {
-                                                    return {
-                                                        key: i?.subjectClassId,
-                                                        label: `${i?.subjectClassCode}`,
+                                                arr={record?.subjectVersion?.subjectClass.map(
+                                                    (i: any) => {
+                                                        return {
+                                                            key: i?.id,
+                                                            label: `${i?.code}`,
+                                                        }
                                                     }
-                                                })}
+                                                )}
                                                 key="subjectClass"
                                             />
                                         ) : (
@@ -392,12 +449,12 @@ export default function SubjectOpeningPlan() {
                                     dataIndex: 'fixedClass',
                                     align: 'center',
                                     render: (__, record) => {
-                                        return record?.fixedClass.length ? (
+                                        return record?.fixedClasses?.length ? (
                                             <TextTruncate
-                                                arr={record?.fixedClass.map((i: any) => {
+                                                arr={record?.fixedClasses.map((i: any) => {
                                                     return {
-                                                        key: i?.fixedClassId,
-                                                        label: `Kỳ ${i.fixedClassSemester} - ${i.fixedClassCode} (${i.fixedClassCount})`,
+                                                        key: i?.id,
+                                                        label: `${i?.code} (${i?._count?.students || 0})`,
                                                     }
                                                 })}
                                                 key="fixedClass"
@@ -407,42 +464,20 @@ export default function SubjectOpeningPlan() {
                                         )
                                     },
                                 },
-
-                                {
-                                    title: 'CTĐT',
-                                    dataIndex: 'curriculumVersion',
-                                    align: 'center',
-                                    render: (__, record) => {
-                                        return record?.curriculumVersion.length ? (
-                                            <TextTruncate
-                                                arr={record?.curriculumVersion.map((i: any) => {
-                                                    return {
-                                                        key: i?.curriculumVersionId,
-                                                        label: `${i?.curriculumVersionCode} - ${i?.curriculumVersionName}`,
-                                                    }
-                                                })}
-                                                key="curriculumVersion"
-                                            />
-                                        ) : (
-                                            ''
-                                        )
-                                    },
-                                },
-                                {
-                                    title: 'SV nợ',
-                                    dataIndex: 'svNo',
-                                    width: 80,
-                                    align: 'center',
-                                },
                                 {
                                     title: 'Tổng SV',
-                                    dataIndex: 'countStudent',
                                     width: 80,
                                     align: 'center',
+                                    render: (__, record) =>
+                                        record?.fixedClasses?.reduce(
+                                            (sum: number, fc: any) =>
+                                                sum + (fc._count?.students ?? 0),
+                                            0
+                                        ) || 0,
                                 },
                                 {
                                     title: 'Đơn vị phụ trách',
-                                    dataIndex: 'managementOrganizationCode',
+                                    dataIndex: ['subjectVersion', 'managementOrganization', 'sMa'],
                                     width: 150,
                                     align: 'center',
                                 },
@@ -471,6 +506,7 @@ export default function SubjectOpeningPlan() {
                                                         ) {
                                                             e.preventDefault()
                                                             e.stopPropagation()
+                                                            if (!data) return
                                                             const nextId =
                                                                 data[
                                                                     idx +
@@ -569,7 +605,7 @@ export default function SubjectOpeningPlan() {
                             pagination={{
                                 current: currentPage,
                                 pageSize: numberOfPages,
-                                total: res?.data?.count ?? 0,
+                                total: res?._count?.planTrainingSubjects ?? 0,
                                 onChange: (page, pageSize) => {
                                     if (numberOfPages === pageSize) {
                                         setCurrentPage(page)

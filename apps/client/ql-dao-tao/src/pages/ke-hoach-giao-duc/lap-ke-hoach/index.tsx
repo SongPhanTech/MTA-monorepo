@@ -19,7 +19,7 @@ export default function PlanTraining() {
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: countDelay } = useFindFirstPlanTrainingDelay({
-        where: { semesterId: semesterId as string, trainingObjectTypeId, deletedAt: null },
+        where: { trainingObjectTypeId, deletedAt: null },
         select: {
             _count: {
                 select: {
