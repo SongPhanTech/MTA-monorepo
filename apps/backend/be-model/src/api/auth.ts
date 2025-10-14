@@ -27,11 +27,14 @@ app.openapi(
     }),
     async (c) => {
         const xToken = getCookie(c, 'x-token')
+        const cookie = c.req.header('Cookie')
+
         console.log('[get-session].xToken', xToken)
-        if (!xToken) {
+        if (!xToken || !cookie) {
             return c.json({ error: 'Unauthorized' }, 401)
         }
-        const session = await auth(xToken)
+
+        const session = await auth(xToken, cookie)
         if (!session) {
             return c.json({ error: 'Unauthorized' }, 401)
         }
