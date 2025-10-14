@@ -402,6 +402,29 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   repeatedReason: 'repeatedReason'
 };
 
+exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  attendanceScore: 'attendanceScore',
+  midtermScore: 'midtermScore',
+  examScore: 'examScore',
+  finalScore: 'finalScore',
+  manualFinalScore: 'manualFinalScore',
+  examPostponedReason: 'examPostponedReason',
+  examPostponed: 'examPostponed',
+  examBanned: 'examBanned',
+  examBannedReason: 'examBannedReason',
+  suspended: 'suspended',
+  suspendedReason: 'suspendedReason',
+  updatedById: 'updatedById'
+};
+
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -4114,6 +4137,17 @@ exports.Prisma.StudentSubjectScoreOrderByRelevanceFieldEnum = {
   repeatedReason: 'repeatedReason'
 };
 
+exports.Prisma.StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  examPostponed: 'examPostponed',
+  examBannedReason: 'examBannedReason',
+  suspendedReason: 'suspendedReason',
+  updatedById: 'updatedById'
+};
+
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6672,6 +6706,7 @@ exports.Prisma.ModelName = {
   StudentScoreConvert: 'StudentScoreConvert',
   SubjectScoreConvert: 'SubjectScoreConvert',
   StudentSubjectScore: 'StudentSubjectScore',
+  StudentSubjectScoreHistory: 'StudentSubjectScoreHistory',
   ArchivedCertificateOnStudentSubjectScore: 'ArchivedCertificateOnStudentSubjectScore',
   ArchivedCertificate: 'ArchivedCertificate',
   ArchivedAwardOnStudentSubjectScore: 'ArchivedAwardOnStudentSubjectScore',
@@ -6899,7 +6934,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Volumes/DATA/CODE/swantech/MTA-monorepo/packages/database/generated/zenstack/logical-prisma-client",
+      "value": "/Users/luanbt/swantech/MTA-monorepo/packages/database/generated/zenstack/logical-prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -6908,7 +6943,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin",
+        "value": "darwin-arm64",
         "native": true
       },
       {

@@ -292,6 +292,9 @@ export default function SubjectClassScore() {
             where: {
                 id: subjectClassId,
             },
+            include:{
+                subject: true
+            }
         },
         { refetchOnWindowFocus: false, enabled: !!subjectClassId }
     )
@@ -578,17 +581,23 @@ export default function SubjectClassScore() {
                                 <>
                                     <Col span={12}>
                                         <Flex align="center">
-                                            <div className="mr-6">
-                                                Hạn nhập điểm TX/CC:
-                                                <span
-                                                    className={`ml-1 ${dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) ? '' : 'text-red-500'}`}
-                                                >
-                                                    {dataDetailSubjectClass?.examScoreDeadline &&
-                                                        formatDate(
-                                                            dataDetailSubjectClass?.examScoreDeadline
+                                                <div className="mr-6">
+                                                    Thời gian nhập điểm TX/CC:
+                                                    {dataDetailSubjectClass?.scoreDeadLineStart &&
+                                                        dataDetailSubjectClass?.scoreDeadline && (
+                                                            <span
+                                                                className={`ml-1 ${dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) ? '' : 'text-red-500'}`}
+                                                            >
+                                                                {formatDate(
+                                                                    dataDetailSubjectClass?.scoreDeadLineStart
+                                                                )}
+                                                                <span className="mx-1">-</span>
+                                                                {formatDate(
+                                                                    dataDetailSubjectClass?.scoreDeadline
+                                                                )}
+                                                            </span>
                                                         )}
-                                                </span>
-                                            </div>
+                                                </div>
                                             <div className="mr-6">
                                                 Hạn nhập điểm thi:
                                                 <span
@@ -841,6 +850,7 @@ export default function SubjectClassScore() {
                                                         title: 'Ngày sinh',
                                                         dataIndex: 'dateOfBirth',
                                                         width: 125,
+                                                        align: 'center',
                                                         type: 'date',
                                                         render: (_, record) =>
                                                             record?.student?.userProfile.dateOfBirth
@@ -851,14 +861,14 @@ export default function SubjectClassScore() {
                                                                 : '',
                                                     },
                                                     {
-                                                        title: 'Tên lớp',
+                                                        title: 'Lớp',
                                                         dataIndex: 'fixedClassName',
-                                                        width: 200,
+                                                        width: 120,
                                                         align: 'center',
                                                         type: 'input',
                                                         render: (_, record) =>
-                                                            record.student?.fixedClass?.name ||
-                                                            'Chưa có lớp',
+                                                            record.student?.fixedClass?.code ||
+                                                            '',
                                                     },
                                                     // #region Điểm CC
                                                     {
@@ -867,6 +877,7 @@ export default function SubjectClassScore() {
                                                         width: 100,
                                                         align: 'center',
                                                         type: 'order',
+                                                        hidden:!!dataDetailSubjectClass?.subject?.onePoint,
                                                         render: (_, record, index: number) => {
                                                             return record?.attendanceScore || ''
                                                         },
@@ -878,6 +889,7 @@ export default function SubjectClassScore() {
                                                         width: 100,
                                                         align: 'center',
                                                         type: 'order',
+                                                        hidden:!!dataDetailSubjectClass?.subject?.onePoint,
                                                         render: (_, record, index: number) => {
                                                             return record?.midtermScore || ''
                                                         },

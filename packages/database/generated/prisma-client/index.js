@@ -81,7 +81,7 @@ Prisma.NullTypes = {
 
 
 
-  const path = require('path')
+const path = require('path')
 
 /**
  * Enums
@@ -401,6 +401,29 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   suspendedReason: 'suspendedReason',
   repeated: 'repeated',
   repeatedReason: 'repeatedReason'
+};
+
+exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  attendanceScore: 'attendanceScore',
+  midtermScore: 'midtermScore',
+  examScore: 'examScore',
+  finalScore: 'finalScore',
+  manualFinalScore: 'manualFinalScore',
+  examPostponedReason: 'examPostponedReason',
+  examPostponed: 'examPostponed',
+  examBanned: 'examBanned',
+  examBannedReason: 'examBannedReason',
+  suspended: 'suspended',
+  suspendedReason: 'suspendedReason',
+  updatedById: 'updatedById'
 };
 
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreScalarFieldEnum = {
@@ -4115,6 +4138,17 @@ exports.Prisma.StudentSubjectScoreOrderByRelevanceFieldEnum = {
   repeatedReason: 'repeatedReason'
 };
 
+exports.Prisma.StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  examPostponed: 'examPostponed',
+  examBannedReason: 'examBannedReason',
+  suspendedReason: 'suspendedReason',
+  updatedById: 'updatedById'
+};
+
 exports.Prisma.ArchivedCertificateOnStudentSubjectScoreOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6673,6 +6707,7 @@ exports.Prisma.ModelName = {
   StudentScoreConvert: 'StudentScoreConvert',
   SubjectScoreConvert: 'SubjectScoreConvert',
   StudentSubjectScore: 'StudentSubjectScore',
+  StudentSubjectScoreHistory: 'StudentSubjectScoreHistory',
   ArchivedCertificateOnStudentSubjectScore: 'ArchivedCertificateOnStudentSubjectScore',
   ArchivedCertificate: 'ArchivedCertificate',
   ArchivedAwardOnStudentSubjectScore: 'ArchivedAwardOnStudentSubjectScore',
@@ -6900,7 +6935,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Volumes/DATA/CODE/swantech/MTA-monorepo/packages/database/generated/prisma-client",
+      "value": "/Users/luanbt/swantech/MTA-monorepo/packages/database/generated/prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -6909,7 +6944,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin",
+        "value": "darwin-arm64",
         "native": true
       },
       {
@@ -6938,7 +6973,7 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Volumes/DATA/CODE/swantech/MTA-monorepo/packages/database/prisma/schema.prisma",
+    "sourceFilePath": "/Users/luanbt/swantech/MTA-monorepo/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -6973,7 +7008,7 @@ if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
     "generated/prisma-client",
     "prisma-client",
   ]
-  
+
   const alternativePath = alternativePaths.find((altPath) => {
     return fs.existsSync(path.join(process.cwd(), altPath, 'schema.prisma'))
   }) ?? alternativePaths[0]
@@ -6991,8 +7026,8 @@ config.compilerWasm = undefined
 const { warnEnvConflicts } = require('./runtime/library.js')
 
 warnEnvConflicts({
-    rootEnvPath: config.relativeEnvPaths.rootEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.rootEnvPath),
-    schemaEnvPath: config.relativeEnvPaths.schemaEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.schemaEnvPath)
+  rootEnvPath: config.relativeEnvPaths.rootEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.rootEnvPath),
+  schemaEnvPath: config.relativeEnvPaths.schemaEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.schemaEnvPath)
 })
 
 const PrismaClient = getPrismaClient(config)
@@ -7000,8 +7035,8 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "libquery_engine-darwin.dylib.node");
-path.join(process.cwd(), "generated/prisma-client/libquery_engine-darwin.dylib.node")
+path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
+path.join(process.cwd(), "generated/prisma-client/libquery_engine-darwin-arm64.dylib.node")
 
 // file annotations for bundling tools to include these files
 path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
@@ -7012,8 +7047,8 @@ path.join(__dirname, "libquery_engine-linux-musl-openssl-3.0.x.so.node");
 path.join(process.cwd(), "generated/prisma-client/libquery_engine-linux-musl-openssl-3.0.x.so.node")
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
-path.join(process.cwd(), "generated/prisma-client/libquery_engine-darwin-arm64.dylib.node")
+path.join(__dirname, "libquery_engine-darwin.dylib.node");
+path.join(process.cwd(), "generated/prisma-client/libquery_engine-darwin.dylib.node")
 
 // file annotations for bundling tools to include these files
 path.join(__dirname, "query_engine-windows.dll.node");

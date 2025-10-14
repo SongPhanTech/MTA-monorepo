@@ -3575,6 +3575,13 @@ declare const metadata: {
                     }[];
                     backLink: string;
                 };
+                studentSubjectScoreHistory: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
             };
             uniqueConstraints: {
                 id: {
@@ -3606,6 +3613,246 @@ declare const metadata: {
                     value: null[];
                 }[];
             })[];
+        };
+        studentSubjectScoreHistory: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                studentSubjectScore: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                studentSubjectScoreId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                attendanceScore: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: number;
+                        } | {
+                            name: string;
+                            value: string;
+                        })[];
+                    }[];
+                };
+                midtermScore: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: number;
+                        } | {
+                            name: string;
+                            value: string;
+                        })[];
+                    }[];
+                };
+                examScore: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: number;
+                        } | {
+                            name: string;
+                            value: string;
+                        })[];
+                    }[];
+                };
+                finalScore: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: number;
+                        } | {
+                            name: string;
+                            value: string;
+                        })[];
+                    }[];
+                };
+                manualFinalScore: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: number;
+                        } | {
+                            name: string;
+                            value: string;
+                        })[];
+                    }[];
+                };
+                examPostponedReason: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                examPostponed: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                examBanned: {
+                    name: string;
+                    type: string;
+                };
+                examBannedReason: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                suspended: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                suspendedReason: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                updatedBy: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                updatedById: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
         };
         archivedCertificateOnStudentSubjectScore: {
             name: string;
@@ -20881,6 +21128,13 @@ declare const metadata: {
                     backLink: string;
                 };
                 lecturerHistory: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                studentSubjectScoreHistory: {
                     name: string;
                     type: string;
                     isDataModel: boolean;

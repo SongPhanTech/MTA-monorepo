@@ -1787,6 +1787,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'studentSubjectScore',
+                }, studentSubjectScoreHistory: {
+                    name: "studentSubjectScoreHistory",
+                    type: "StudentSubjectScoreHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'studentSubjectScore',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -1798,6 +1804,115 @@ const metadata = {
                 }, subjectClassId_studentId: {
                     name: "subjectClassId_studentId",
                     fields: ["subjectClassId", "studentId"]
+                },
+            },
+        },
+        studentSubjectScoreHistory: {
+            name: 'StudentSubjectScoreHistory', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, studentSubjectScore: {
+                    name: "studentSubjectScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    backLink: 'studentSubjectScoreHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentSubjectScoreId" },
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'studentSubjectScore',
+                }, attendanceScore: {
+                    name: "attendanceScore",
+                    type: "Float",
+                    isOptional: true,
+                }, midtermScore: {
+                    name: "midtermScore",
+                    type: "Float",
+                    isOptional: true,
+                }, examScore: {
+                    name: "examScore",
+                    type: "Float",
+                    isOptional: true,
+                }, finalScore: {
+                    name: "finalScore",
+                    type: "Decimal",
+                    isOptional: true,
+                }, manualFinalScore: {
+                    name: "manualFinalScore",
+                    type: "Float",
+                    isOptional: true,
+                }, examPostponedReason: {
+                    name: "examPostponedReason",
+                    type: "Boolean",
+                    isOptional: true,
+                }, examPostponed: {
+                    name: "examPostponed",
+                    type: "String",
+                    isOptional: true,
+                }, examBanned: {
+                    name: "examBanned",
+                    type: "Boolean",
+                }, examBannedReason: {
+                    name: "examBannedReason",
+                    type: "String",
+                    isOptional: true,
+                }, suspended: {
+                    name: "suspended",
+                    type: "Boolean",
+                    isOptional: true,
+                }, suspendedReason: {
+                    name: "suspendedReason",
+                    type: "String",
+                    isOptional: true,
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    backLink: 'studentSubjectScoreHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "updatedById" },
+                }, updatedById: {
+                    name: "updatedById",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'updatedBy',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 },
             },
         },
@@ -11171,6 +11286,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'userProfile',
+                }, studentSubjectScoreHistory: {
+                    name: "studentSubjectScoreHistory",
+                    type: "StudentSubjectScoreHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'updatedBy',
                 }, staffs: {
                     name: "staffs",
                     type: "Staff",

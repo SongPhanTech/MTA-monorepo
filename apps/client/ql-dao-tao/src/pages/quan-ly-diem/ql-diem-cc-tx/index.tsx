@@ -108,7 +108,7 @@ export default function SubjectClassScore() {
                     i?.attendanceScore > 10 ||
                     i?.attendanceScore < 0 ||
                     i?.midtermScore > 10 ||
-                    i?.midtermScore < 0 
+                    i?.midtermScore < 0
             )
             if (error) {
                 message.error('Bạn chưa nhập đúng điểm số')
@@ -402,7 +402,7 @@ export default function SubjectClassScore() {
         { refetchOnWindowFocus: false }
     )
 
-        const selectedClassInfo = subjectClassData.find((item) => item.id === subjectClassId)
+    const selectedClassInfo = subjectClassData.find((item) => item.id === subjectClassId)
 
     // const statistics = getScoreStatistics(dataTable)
     const handleOpenChange = (newOpen: boolean) => {
@@ -453,8 +453,11 @@ export default function SubjectClassScore() {
     const disabledForm: boolean = useMemo(() => {
         return !(
             (can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
-                dataDetailSubjectClass?.scoreDeadline &&
+             dataDetailSubjectClass?.scoreDeadLineStart &&
+                dayjs().isAfter(dataDetailSubjectClass?.scoreDeadLineStart) &&    
+            dataDetailSubjectClass?.scoreDeadline &&
                 dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
+                
                 !dataDetailSubjectClass?.isLockScore &&
                 profileId !== listUser.P13) ||
             false
@@ -540,15 +543,21 @@ export default function SubjectClassScore() {
                                     <Col span={12}>
                                         <Flex align="center">
                                             <div className="mr-6">
-                                                Hạn nhập điểm TX/CC:
-                                                <span
-                                                    className={`ml-1 ${dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) ? '' : 'text-red-500'}`}
-                                                >
-                                                    {dataDetailSubjectClass?.scoreDeadline &&
-                                                        formatDate(
-                                                            dataDetailSubjectClass?.scoreDeadline
-                                                        )}
-                                                </span>
+                                                Thời gian nhập điểm TX/CC:
+                                                {dataDetailSubjectClass?.scoreDeadLineStart &&
+                                                    dataDetailSubjectClass?.scoreDeadline && (
+                                                        <span
+                                                            className={`ml-1 ${dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) ? '' : 'text-red-500'}`}
+                                                        >
+                                                            {formatDate(
+                                                                dataDetailSubjectClass?.scoreDeadLineStart
+                                                            )}
+                                                            <span className="mx-1">-</span>
+                                                            {formatDate(
+                                                                dataDetailSubjectClass?.scoreDeadline
+                                                            )}
+                                                        </span>
+                                                    )}
                                             </div>
                                         </Flex>
                                     </Col>
@@ -567,22 +576,23 @@ export default function SubjectClassScore() {
                                                                 'NHAP_EXCEL'
                                                             ) && (
                                                                 <>
-                                                                    {!disabledForm && !dataDetailSubjectClass.enteredScore && (
-                                                                        <Button
-                                                                            onClick={() =>
-                                                                                setImportModalVisible(
-                                                                                    true
-                                                                                )
-                                                                            }
-                                                                            disabled={
-                                                                                !subjectClassId
-                                                                            }
-                                                                            className="w-full flex justify-start"
-                                                                        >
-                                                                            <FileUp />
-                                                                            Nhập điểm từ file
-                                                                        </Button>
-                                                                    )}
+                                                                    {!disabledForm &&
+                                                                        !dataDetailSubjectClass.enteredScore && (
+                                                                            <Button
+                                                                                onClick={() =>
+                                                                                    setImportModalVisible(
+                                                                                        true
+                                                                                    )
+                                                                                }
+                                                                                disabled={
+                                                                                    !subjectClassId
+                                                                                }
+                                                                                className="w-full flex justify-start"
+                                                                            >
+                                                                                <FileUp />
+                                                                                Nhập điểm từ file
+                                                                            </Button>
+                                                                        )}
 
                                                                     <ImportScoreModal
                                                                         visible={importModalVisible}
@@ -624,16 +634,16 @@ export default function SubjectClassScore() {
                                                 </Popover>
                                             )}
                                             {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                    'IN_DS_THI'
-                                ) &&
-                                    !!dataDetailSubjectClass?.enteredScore && (
-                                        <ExportTemplateExam
-                                            selectedFixedClass={subjectClassId}
-                                            dataClass={selectedClassInfo}
-                                            dataTable={dataTable}
-                                        />
-                                    )}
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                                'IN_DS_THI'
+                                            ) &&
+                                                !!dataDetailSubjectClass?.enteredScore && (
+                                                    <ExportTemplateExam
+                                                        selectedFixedClass={subjectClassId}
+                                                        dataClass={selectedClassInfo}
+                                                        dataTable={dataTable}
+                                                    />
+                                                )}
 
                                             <Button
                                                 disabled={!listChange.length}
@@ -760,6 +770,7 @@ export default function SubjectClassScore() {
                                                         dataIndex: 'dateOfBirth',
                                                         width: 125,
                                                         type: 'date',
+                                                        align: 'center',
                                                         render: (_, record) =>
                                                             record?.student?.userProfile.dateOfBirth
                                                                 ? dayjs(
@@ -769,14 +780,14 @@ export default function SubjectClassScore() {
                                                                 : '',
                                                     },
                                                     {
-                                                        title: 'Tên lớp',
+                                                        title: 'Lớp',
                                                         dataIndex: 'fixedClassName',
-                                                        width: 200,
+                                                        width: 120,
                                                         align: 'center',
                                                         type: 'input',
                                                         render: (_, record) =>
-                                                            record.student?.fixedClass?.name ||
-                                                            'Chưa có lớp',
+                                                            record.student?.fixedClass?.code ||
+                                                            '',
                                                     },
                                                     // #region Điểm CC
                                                     {
@@ -1306,10 +1317,8 @@ export default function SubjectClassScore() {
                                                         render: (value, record, index: number) => {
                                                             return (
                                                                 <Checkbox
-                                                                        checked={
-                                                                            record?.suspended
-                                                                        }
-                                                                    />
+                                                                    checked={record?.suspended}
+                                                                />
                                                             )
                                                         },
                                                     },
@@ -1319,25 +1328,23 @@ export default function SubjectClassScore() {
                                                         dataIndex: 'suspendedReason',
                                                         width: 200,
                                                         render: (value, record, index: number) => {
-                                                                  return (
-                                                                            <Form.Item
-                                                                                name={[
-                                                                                    'list',
-                                                                                    index,
-                                                                                    'suspendedReason',
-                                                                                ]}
-                                                                                style={{
-                                                                                    margin: 0,
-                                                                                }}
-                                                                            >
-                                                                                <Input
-                                                                                    disabled={
-                                                                                       true
-                                                                                    }
-                                                                                    placeholder="Nhập lý do đình chỉ"
-                                                                                />
-                                                                            </Form.Item>
-                                                                        )
+                                                            return (
+                                                                <Form.Item
+                                                                    name={[
+                                                                        'list',
+                                                                        index,
+                                                                        'suspendedReason',
+                                                                    ]}
+                                                                    style={{
+                                                                        margin: 0,
+                                                                    }}
+                                                                >
+                                                                    <Input
+                                                                        disabled={true}
+                                                                        placeholder="Nhập lý do đình chỉ"
+                                                                    />
+                                                                </Form.Item>
+                                                            )
                                                         },
                                                     },
 

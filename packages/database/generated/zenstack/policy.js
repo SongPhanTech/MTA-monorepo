@@ -292,6 +292,19 @@ const policy = {
                 update: {},
             },
         },
+        studentSubjectScoreHistory: {
+            modelLevel: {
+                read: { guard: StudentSubjectScoreHistory_read, },
+                create: { guard: StudentSubjectScoreHistory_create, inputChecker: StudentSubjectScoreHistory_create_input, },
+                update: { guard: StudentSubjectScoreHistory_update, },
+                postUpdate: { guard: StudentSubjectScoreHistory_postUpdate, },
+                delete: { guard: StudentSubjectScoreHistory_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         archivedCertificateOnStudentSubjectScore: {
             modelLevel: {
                 read: { guard: ArchivedCertificateOnStudentSubjectScore_read, },
@@ -3111,6 +3124,7 @@ const policy = {
         studentScoreConvert: { hasValidation: false },
         subjectScoreConvert: { hasValidation: false },
         studentSubjectScore: { hasValidation: true },
+        studentSubjectScoreHistory: { hasValidation: true },
         archivedCertificateOnStudentSubjectScore: { hasValidation: false },
         archivedCertificate: { hasValidation: true },
         archivedAwardOnStudentSubjectScore: { hasValidation: false },
@@ -5037,6 +5051,84 @@ function StudentSubjectScore_delete(context, db) {
     return { OR: [] };
 }
 function $check_StudentSubjectScore_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentSubjectScoreHistory_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_StudentSubjectScoreHistory_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentSubjectScoreHistory_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentSubjectScoreHistory_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentSubjectScoreHistory_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function StudentSubjectScoreHistory_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentSubjectScoreHistory_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentSubjectScoreHistory_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_StudentSubjectScoreHistory_postUpdate(input, context) {
+    return true;
+}
+function StudentSubjectScoreHistory_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentSubjectScoreHistory_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

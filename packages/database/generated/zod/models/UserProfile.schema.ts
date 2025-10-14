@@ -153,6 +153,7 @@ const relationSchema = z.object({
     educationAndTraining: z.array(z.unknown()).optional(),
     lecturer: z.record(z.unknown()).optional(),
     lecturerHistory: z.array(z.unknown()).optional(),
+    studentSubjectScoreHistory: z.array(z.unknown()).optional(),
     staffs: z.record(z.unknown()).optional(),
     staffHistory: z.array(z.unknown()).optional(),
     evidenceFiles: z.array(z.unknown()).optional(),

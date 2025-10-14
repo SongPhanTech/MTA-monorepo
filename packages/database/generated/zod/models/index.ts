@@ -27,6 +27,7 @@ export * from './PlanTrainingSubject.schema';
 export * from './StudentScoreConvert.schema';
 export * from './SubjectScoreConvert.schema';
 export * from './StudentSubjectScore.schema';
+export * from './StudentSubjectScoreHistory.schema';
 export * from './ArchivedCertificateOnStudentSubjectScore.schema';
 export * from './ArchivedCertificate.schema';
 export * from './ArchivedAwardOnStudentSubjectScore.schema';
