@@ -13,7 +13,8 @@ type StudentSubjectScoreRelation = StudentSubjectScore & {
     student?: {
         fixedClass?: {
             trainingCourse?: {
-                scoreConverts: ScoreConvert[] | null
+                scoreConverts?: ScoreConvert[] | null
+                scoreToPass?: number | null
             } | null
         } | null
     }
@@ -95,13 +96,20 @@ export const calcFinalScore = (
     return Decimal.min(Math.max(rawFinalScore || 0, maxCertFinalScore || 0) + bonusScore, 10)
 }
 
-function getScoreClassification(finalScore: Decimal | null, scoreConverts: ScoreConvert[]) {
-    if (!finalScore) {
-        return { classification: 'Vắng', base10Max: null }
+function getScoreClassification(
+    finalScore: Decimal | null,
+    examScore: Decimal | number | null,
+    scoreConverts: ScoreConvert[],
+    scoreToPass?: Decimal | number | null
+) {
+    // Nếu không có điểm thi ⇒ coi là Vắng
+    if (examScore === null || examScore === undefined ||(scoreToPass !== null && scoreToPass !== undefined && examScore < scoreToPass)) {
+        return { classification: 'Không đạt', base10Max: null }
     }
 
+    // Nếu có điểm cuối cùng (finalScore), tìm classification
     const rank = scoreConverts.find(
-        (item) => finalScore.gte(item.base10Min) && finalScore.lte(item.base10Max)
+        (item) => finalScore?.gte(item.base10Min) && finalScore?.lte(item.base10Max)
     )
 
     const classification = rank
@@ -121,12 +129,19 @@ export function getScoreStatistics(
     }
 
     const stats = new Map<string, { count: number; base10Max: number | null }>()
-
+    
     dataTable.forEach((row) => {
         const finalScore = row.finalScore
-        const scoreConverts = row.student?.fixedClass?.trainingCourse?.scoreConverts ?? []
+        const examScore = row?.examScore ?? null
+        const scoreConverts = row?.student?.fixedClass?.trainingCourse?.scoreConverts ?? []
+        const scoreToPass = row?.student?.fixedClass?.trainingCourse?.scoreToPass ?? null
 
-        const { classification, base10Max } = getScoreClassification(finalScore, scoreConverts)
+        const { classification, base10Max } = getScoreClassification(
+            finalScore,
+            examScore,
+            scoreConverts,
+            scoreToPass
+        )
 
         const entry = stats.get(classification)
         if (entry) {
