@@ -37,12 +37,13 @@ import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Input, message, Row, Select, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { BookPlus, Search } from 'lucide-react'
+import { BookPlus, Download, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
+import { env } from '@/env'
 export default function TrainingProgramCatalog() {
     const { can, canSome } = useAbility()
     const router = useRouter()
@@ -409,15 +410,24 @@ export default function TrainingProgramCatalog() {
                             </Flex>
                         </Col>
                         <Col span={6}>
-                            <Flex justify="end">
+                            <Flex justify="end" className="gap-2">
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                                     'THEM'
                                 ) && (
-                                    <Button onClick={handleModal} type="primary">
-                                        <BookPlus />
-                                        Thêm chương trình
-                                    </Button>
+                                    <>
+                                        <Button
+                                            href={`${env.NEXT_PUBLIC_BASE_PATH}/templates/Mẫu nhập CTĐT.xlsx`}
+                                            type="primary"
+                                        >
+                                            <Download />
+                                            Mẫu nhập CTĐT
+                                        </Button>
+                                        <Button onClick={handleModal} type="primary">
+                                            <BookPlus />
+                                            Thêm chương trình
+                                        </Button>
+                                    </>
                                 )}
                             </Flex>
                         </Col>

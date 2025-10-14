@@ -32,6 +32,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { env } from '@/env'
 import CreateIcon from '../../../../components/icons/create'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
@@ -386,18 +387,18 @@ export default function TrainingProgramSubjects() {
                                 ) && (
                                     <>
                                         <Button
+                                            href={`${env.NEXT_PUBLIC_BASE_PATH}/templates/Mẫu nhập CTĐT.xlsx`}
+                                            className="text-primary border-primary mr-2"
+                                        >
+                                            <FileDown />
+                                            Tải file mẫu excel
+                                        </Button>
+                                        <Button
                                             onClick={() => setImportModalVisible(true)}
                                             className="text-primary border-primary mr-2"
                                         >
                                             <FileUp />
                                             Nhập dữ liệu bằng excel
-                                        </Button>
-                                        <Button
-                                            onClick={() => onOpenTrainingBlock()}
-                                            className="text-primary border-primary mr-2"
-                                        >
-                                            <FileDown />
-                                            Tải file mẫu excel
                                         </Button>
 
                                         <ImportCurriculumVersionModal
