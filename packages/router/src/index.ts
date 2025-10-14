@@ -245,6 +245,13 @@ const NAVIGATION: NavigationType = {
                 icon: ListTree,
                 children: [
                     {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
+                        label: 'Lớp quản lý',
+                        icon: TeamOutlined,
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE,
+                        description: 'Lớp quản lý',
+                    },
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DOI_TUONG_DAO_TAO,
                         label: 'Đối tượng đào tạo',
                         icon: PieChartOutlined,
@@ -280,7 +287,7 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_CHUYEN_NGANH,
-                        label: 'Danh mục chuyên ngành',
+                        label: 'Chuyên ngành',
                         icon: PieChartOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_CHUYEN_NGANH,
                         description: 'Chuyên ngành',
@@ -313,13 +320,7 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_DANH_MUC_PHONG_HOC,
                         description: 'Danh mục khu vực đào tạo',
                     },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
-                        label: 'Lớp quản lý',
-                        icon: TeamOutlined,
-                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE,
-                        description: 'Lớp quản lý',
-                    },
+
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_HOC_BONG,
                         label: 'Học bổng',

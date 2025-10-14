@@ -106,7 +106,7 @@ const PutTrainingBlock = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="parentId" label="Khối kiến thức cha" required>
+                <FormItem form={form} name="parentId" label="Khối kiến thức cha">
                     <Select
                         placeholder="Chọn khối kiến thức cha"
                         options={parentTrainingBlock?.map((item) => ({

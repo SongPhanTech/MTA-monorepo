@@ -1,4 +1,5 @@
 import { Store, useStore } from '@tanstack/react-store'
+import { $Enums } from '@workspace/db'
 import { useEffect } from 'react'
 export type TrainingObjectTypeState = {
     selectedTrainingObjectTypeId?: string
@@ -18,11 +19,25 @@ export const selectTrainingObjectType = (id: string) => {
 
 export const useTrainingObjectTypeStore = () => {
     const { selectedTrainingObjectTypeId } = useStore(trainingObjectTypeStore)
+
+    const getLabel = (type?: $Enums.TrainingObjectTypes) => {
+        switch (type) {
+            case $Enums.TrainingObjectTypes.CIVILIAN:
+                return 'Dân sự'
+            case $Enums.TrainingObjectTypes.INTERNATIONAL_MILITARY:
+                return 'Quốc tế'
+            case $Enums.TrainingObjectTypes.MILITARY:
+                return 'Quân sự'
+            default:
+                return 'Quân sự'
+        }
+    }
+
     useEffect(() => {
         const idLocalStorage = localStorage.getItem('selectedTrainingObjectTypeId')
         if (idLocalStorage) {
             selectTrainingObjectType(idLocalStorage)
         }
     }, [])
-    return { id: selectedTrainingObjectTypeId, onSelect: selectTrainingObjectType }
+    return { id: selectedTrainingObjectTypeId, onSelect: selectTrainingObjectType, getLabel }
 }

@@ -11,7 +11,6 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
-import { exportFromTemplate } from '@workspace/libs/template-excel'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
@@ -286,80 +285,6 @@ export default function SubjectOpeningPlan() {
                             </Col>
                             <Col span={6}>
                                 <Flex justify="end" gap={4}>
-                                    <Button
-                                        type="primary"
-                                        onClick={() =>
-                                            exportFromTemplate({
-                                                templateUrl: '/lms/templates/ke-hoach-mo-lop.xlsx',
-                                                data: {
-                                                    hoc_ky: semesterData?.name ?? '',
-                                                    nam_hoc: semesterData?.schoolYear?.name ?? '',
-                                                },
-                                                tableStartCell: { row: 7, col: 1 },
-                                                rows: data.flatMap((item, index) =>
-                                                    item.fixedClass.map((fc, idx) => {
-                                                        const rowSpan =
-                                                            idx === 0 ? item.fixedClass.length : 1
-                                                        return {
-                                                            cells: [
-                                                                {
-                                                                    value: index + 1,
-                                                                    align: 'center',
-                                                                    rowSpan,
-                                                                },
-                                                                {
-                                                                    value: item.subjectVersionCode,
-                                                                    align: 'center',
-                                                                    rowSpan,
-                                                                },
-                                                                {
-                                                                    value: item.subjectVersionName,
-                                                                    rowSpan,
-                                                                },
-                                                                {
-                                                                    value: item.subjectVersionCredit,
-                                                                    align: 'center',
-                                                                    rowSpan,
-                                                                },
-                                                                {
-                                                                    value: `${fc.fixedClassCode}`,
-                                                                    align: 'center',
-                                                                },
-                                                                {
-                                                                    value: `${fc.fixedClassSemester}`,
-                                                                    align: 'center',
-                                                                },
-                                                                {
-                                                                    value: `${fc.fixedClassCount}`,
-                                                                    align: 'center',
-                                                                },
-                                                                {
-                                                                    value: '',
-                                                                    align: 'center',
-                                                                    rowSpan,
-                                                                },
-                                                                {
-                                                                    value: item.countStudent,
-                                                                    align: 'center',
-                                                                    rowSpan,
-                                                                },
-                                                                {
-                                                                    value:
-                                                                        item.managementOrganizationCode ??
-                                                                        '',
-                                                                    align: 'center',
-                                                                    rowSpan,
-                                                                },
-                                                            ],
-                                                        }
-                                                    })
-                                                ),
-                                                fileName: `ke-hoach-mo-lop-mon-hoc-${semesterData?.name}.xlsx`,
-                                            })
-                                        }
-                                    >
-                                        Xuất kế hoạch môn dự kiến
-                                    </Button>
                                     <Popconfirm
                                         onConfirm={onSubmit}
                                         title="Xác nhận lưu kế hoạch mở lớp?"

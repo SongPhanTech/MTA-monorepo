@@ -310,7 +310,8 @@ export default function MonTheoKeHoachDuKien() {
                                 type="primary"
                                 onClick={() =>
                                     exportFromTemplate({
-                                        templateUrl: '/lms/templates/ke-hoach-mo-lop.xlsx',
+                                        templateUrl:
+                                            '/lms/templates/chuong-trinh-dao-tao/ke-hoach-mo-lop.xlsx',
                                         data: {
                                             hoc_ky: semesterData?.name ?? '',
                                             nam_hoc: semesterData?.schoolYear?.name ?? '',

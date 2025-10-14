@@ -6,6 +6,10 @@ declare global {
         toFixedSmart(fractionDigits: number): string
         formatVND(): string
     }
+    interface String {
+        titleCase(): string
+        firstCase(): string
+    }
 }
 
 type StudentSubjectScoreRelation = StudentSubjectScore & {
@@ -30,6 +34,15 @@ Number.prototype.formatVND = function (): string {
     return this.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
         .replace('₫', 'VNĐ')
         .trim()
+}
+String.prototype.titleCase = function (): string {
+    return this.replace(
+        /\w\S*/g,
+        (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    )
+}
+String.prototype.firstCase = function (): string {
+    return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase()
 }
 
 export function splitFullName(fullName?: string): {
@@ -103,7 +116,11 @@ function getScoreClassification(
     scoreToPass?: Decimal | number | null
 ) {
     // Nếu không có điểm thi ⇒ coi là Vắng
-    if (examScore === null || examScore === undefined ||(scoreToPass !== null && scoreToPass !== undefined && examScore < scoreToPass)) {
+    if (
+        examScore === null ||
+        examScore === undefined ||
+        (scoreToPass !== null && scoreToPass !== undefined && examScore < scoreToPass)
+    ) {
         return { classification: 'Không đạt', base10Max: null }
     }
 
@@ -129,7 +146,7 @@ export function getScoreStatistics(
     }
 
     const stats = new Map<string, { count: number; base10Max: number | null }>()
-    
+
     dataTable.forEach((row) => {
         const finalScore = row.finalScore
         const examScore = row?.examScore ?? null
