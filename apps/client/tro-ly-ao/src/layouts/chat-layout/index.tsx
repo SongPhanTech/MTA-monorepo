@@ -5,6 +5,7 @@ import { cn } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import {
     useDeleteConversation,
+    useDeleteManyCitationMessage,
     useDeleteManyMessage,
     useFindManyConversation,
 } from '@workspace/db/hooks'
@@ -59,13 +60,24 @@ const ChatLayout = ({
     }
     const { mutateAsync: deleteConversation } = useDeleteConversation()
     const { mutateAsync: deleteManyMessages } = useDeleteManyMessage()
+    const { mutateAsync: deleteManyCitations } = useDeleteManyCitationMessage()
 
     const handleDelete = async (id: string) => {
         if (!id) return
         const realId = id.split('-')[1]
         setIsDeleting(true)
         try {
+            // Delete citations first (they reference messages)
+            await deleteManyCitations({
+                where: {
+                    message: {
+                        conversationId: realId,
+                    },
+                },
+            })
+            // Then delete messages
             await deleteManyMessages({ where: { conversationId: realId } })
+            // Finally delete conversation
             await deleteConversation({ where: { id: realId } })
             message.success('Đã xóa cuộc trò chuyện')
             router.push('/tro-ly-ao')
