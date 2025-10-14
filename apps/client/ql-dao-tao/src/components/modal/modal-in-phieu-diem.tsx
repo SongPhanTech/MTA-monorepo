@@ -331,7 +331,6 @@ const ModalPrintStudentSubjectScore = () => {
                         </div>
                     </div>
                     {input?.type === EnumInPhieuDiem.PHIEU_DIEM_NHAP ? (
-                        
                         <div className="font-normal border max-w-32 mt-5 text-[18px] border-black">
                             Bản nháp
                         </div>
@@ -519,7 +518,10 @@ const ModalPrintStudentSubjectScore = () => {
                     <div className="flex gap-2 flex-wrap">
                         <span className="font-bold">Tổng hợp kết quả thi:</span>
                         {Object.entries(statistics).map(([type, { count, percentage }]) => (
-                            <span key={type} className={type.includes('Không đạt')?'text-red-600':''}>
+                            <span
+                                key={type}
+                                className={type.includes('Không đạt') ? 'text-red-600' : ''}
+                            >
                                 {type}: {count}= {percentage}%
                             </span>
                         ))}

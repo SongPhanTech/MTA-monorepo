@@ -6,10 +6,10 @@ import { FileDown } from 'lucide-react'
 interface ExportScoreTemplateProps {
     selectedFixedClass: string | undefined
     dataTable: any[]
-    type:string
+    type: string
 }
 
-const ExportScoreTemplate = ({ selectedFixedClass, dataTable,type }: ExportScoreTemplateProps) => {
+const ExportScoreTemplate = ({ selectedFixedClass, dataTable, type }: ExportScoreTemplateProps) => {
     const exportTemplate = async () => {
         if (!selectedFixedClass || dataTable.length === 0) return
 
@@ -208,13 +208,10 @@ const ExportScoreTemplate = ({ selectedFixedClass, dataTable,type }: ExportScore
             'Điểm TX',
             'Điểm thi',
         ]
-  
- 
+
         headerRow.eachCell((cell: any) => {
             cell.style = tableHeaderStyle
         })
-
-
 
         // Thêm dữ liệu sinh viên
         dataTable.forEach((record, index) => {
@@ -284,24 +281,21 @@ const ExportScoreTemplate = ({ selectedFixedClass, dataTable,type }: ExportScore
             { width: 15 }, // Điểm TX
             { width: 15 }, // Điểm Thi
         ]
-        if(
-            type!=='thi'
-        ){
+        if (type !== 'thi') {
             worksheet.eachRow((row, rowNumber) => {
-                    row.eachCell((cell, colNumber) => {
+                row.eachCell((cell, colNumber) => {
                     // Nếu là cột "Điểm thi" → khóa, ngược lại thì cho sửa
                     cell.protection = { locked: colNumber === 8 }
-                    })
                 })
-        }else {
-               worksheet.eachRow((row, rowNumber) => {
-                    row.eachCell((cell, colNumber) => {
+            })
+        } else {
+            worksheet.eachRow((row, rowNumber) => {
+                row.eachCell((cell, colNumber) => {
                     // Nếu là cột "Điểm thi" → khóa, ngược lại thì cho sửa
-                        cell.protection = { locked: colNumber === 7|| colNumber === 6 }
-                    })
+                    cell.protection = { locked: colNumber === 7 || colNumber === 6 }
                 })
+            })
         }
-    
 
         // Xuất file
         const buffer = await workbook.xlsx.writeBuffer()

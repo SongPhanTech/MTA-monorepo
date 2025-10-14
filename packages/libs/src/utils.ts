@@ -103,7 +103,11 @@ function getScoreClassification(
     scoreToPass?: Decimal | number | null
 ) {
     // Nếu không có điểm thi ⇒ coi là Vắng
-    if (examScore === null || examScore === undefined ||(scoreToPass !== null && scoreToPass !== undefined && examScore < scoreToPass)) {
+    if (
+        examScore === null ||
+        examScore === undefined ||
+        (scoreToPass !== null && scoreToPass !== undefined && examScore < scoreToPass)
+    ) {
         return { classification: 'Không đạt', base10Max: null }
     }
 
@@ -129,7 +133,7 @@ export function getScoreStatistics(
     }
 
     const stats = new Map<string, { count: number; base10Max: number | null }>()
-    
+
     dataTable.forEach((row) => {
         const finalScore = row.finalScore
         const examScore = row?.examScore ?? null

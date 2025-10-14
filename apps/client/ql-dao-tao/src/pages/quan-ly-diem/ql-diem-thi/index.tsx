@@ -133,26 +133,26 @@ export default function SubjectClassScore() {
                 return
             }
             let listSqlTransaction: any = []
-                if (subjectClassId) {
-                    listSqlTransaction = [
-                        ...listSqlTransaction,
-                        {
-                            model: 'SubjectClass',
-                            operation: 'update',
+            if (subjectClassId) {
+                listSqlTransaction = [
+                    ...listSqlTransaction,
+                    {
+                        model: 'SubjectClass',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: subjectClassId,
+                            },
                             data: {
-                                where: {
-                                    id: subjectClassId,
-                                },
-                                data: { 
-                                    isLockScore:dataSubmit?.isLockScore,
-                                    isLockExamScore: dataSubmit?.isLockExamScore,
-                                    scoreSubmitted: dataSubmit?.scoreSubmitted,
-                                    scoreChecked: dataSubmit?.scoreChecked 
-                                },
+                                isLockScore: dataSubmit?.isLockScore,
+                                isLockExamScore: dataSubmit?.isLockExamScore,
+                                scoreSubmitted: dataSubmit?.scoreSubmitted,
+                                scoreChecked: dataSubmit?.scoreChecked,
                             },
                         },
-                    ]
-                }
+                    },
+                ]
+            }
             const itemEnteredExamScore = dataSubmit?.list.find((i) => i?.examScore)
             if (!itemEnteredExamScore && subjectClassId) {
                 listSqlTransaction = [
@@ -292,9 +292,9 @@ export default function SubjectClassScore() {
             where: {
                 id: subjectClassId,
             },
-            include:{
-                subject: true
-            }
+            include: {
+                subject: true,
+            },
         },
         { refetchOnWindowFocus: false, enabled: !!subjectClassId }
     )
@@ -440,7 +440,6 @@ export default function SubjectClassScore() {
         },
         { refetchOnWindowFocus: false }
     )
-    
 
     const selectedClassInfo = subjectClassData.find((item) => item.id === subjectClassId)
 
@@ -581,23 +580,23 @@ export default function SubjectClassScore() {
                                 <>
                                     <Col span={12}>
                                         <Flex align="center">
-                                                <div className="mr-6">
-                                                    Thời gian nhập điểm TX/CC:
-                                                    {dataDetailSubjectClass?.scoreDeadLineStart &&
-                                                        dataDetailSubjectClass?.scoreDeadline && (
-                                                            <span
-                                                                className={`ml-1 ${dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) ? '' : 'text-red-500'}`}
-                                                            >
-                                                                {formatDate(
-                                                                    dataDetailSubjectClass?.scoreDeadLineStart
-                                                                )}
-                                                                <span className="mx-1">-</span>
-                                                                {formatDate(
-                                                                    dataDetailSubjectClass?.scoreDeadline
-                                                                )}
-                                                            </span>
-                                                        )}
-                                                </div>
+                                            <div className="mr-6">
+                                                Thời gian nhập điểm TX/CC:
+                                                {dataDetailSubjectClass?.scoreDeadLineStart &&
+                                                    dataDetailSubjectClass?.scoreDeadline && (
+                                                        <span
+                                                            className={`ml-1 ${dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) ? '' : 'text-red-500'}`}
+                                                        >
+                                                            {formatDate(
+                                                                dataDetailSubjectClass?.scoreDeadLineStart
+                                                            )}
+                                                            <span className="mx-1">-</span>
+                                                            {formatDate(
+                                                                dataDetailSubjectClass?.scoreDeadline
+                                                            )}
+                                                        </span>
+                                                    )}
+                                            </div>
                                             <div className="mr-6">
                                                 Hạn nhập điểm thi:
                                                 <span
@@ -812,7 +811,6 @@ export default function SubjectClassScore() {
                                     )}
                                     <Form form={form}>
                                         <FormItem form={form} name="list">
-                                            
                                             <Table
                                                 rowKey="id"
                                                 id="student-subject-score"
@@ -867,8 +865,7 @@ export default function SubjectClassScore() {
                                                         align: 'center',
                                                         type: 'input',
                                                         render: (_, record) =>
-                                                            record.student?.fixedClass?.code ||
-                                                            '',
+                                                            record.student?.fixedClass?.code || '',
                                                     },
                                                     // #region Điểm CC
                                                     {
@@ -877,7 +874,9 @@ export default function SubjectClassScore() {
                                                         width: 100,
                                                         align: 'center',
                                                         type: 'order',
-                                                        hidden:!!dataDetailSubjectClass?.subject?.onePoint,
+                                                        hidden:
+                                                            !!dataDetailSubjectClass?.subject
+                                                                ?.onePoint,
                                                         render: (_, record, index: number) => {
                                                             return record?.attendanceScore || ''
                                                         },
@@ -889,7 +888,9 @@ export default function SubjectClassScore() {
                                                         width: 100,
                                                         align: 'center',
                                                         type: 'order',
-                                                        hidden:!!dataDetailSubjectClass?.subject?.onePoint,
+                                                        hidden:
+                                                            !!dataDetailSubjectClass?.subject
+                                                                ?.onePoint,
                                                         render: (_, record, index: number) => {
                                                             return record?.midtermScore || ''
                                                         },

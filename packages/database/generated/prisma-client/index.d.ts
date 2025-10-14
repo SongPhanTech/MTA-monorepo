@@ -414,6 +414,11 @@ export type Conversation = $Result.DefaultSelection<Prisma.$ConversationPayload>
  */
 export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
 /**
+ * Model CitationMessage
+ * 
+ */
+export type CitationMessage = $Result.DefaultSelection<Prisma.$CitationMessagePayload>
+/**
  * Model Topic
  * 
  */
@@ -2884,6 +2889,16 @@ export class PrismaClient<
   get message(): Prisma.MessageDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.citationMessage`: Exposes CRUD operations for the **CitationMessage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CitationMessages
+    * const citationMessages = await prisma.citationMessage.findMany()
+    * ```
+    */
+  get citationMessage(): Prisma.CitationMessageDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.topic`: Exposes CRUD operations for the **Topic** model.
     * Example usage:
     * ```ts
@@ -4982,6 +4997,7 @@ export namespace Prisma {
     Prompt: 'Prompt',
     Conversation: 'Conversation',
     Message: 'Message',
+    CitationMessage: 'CitationMessage',
     Topic: 'Topic',
     DM_CapBac: 'DM_CapBac',
     DM_ChucDanh: 'DM_ChucDanh',
@@ -5158,7 +5174,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
+      modelProps: "config" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "feedback" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "templateFile" | "blockedIp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -11079,6 +11095,80 @@ export namespace Prisma {
           count: {
             args: Prisma.MessageCountArgs<ExtArgs>
             result: $Utils.Optional<MessageCountAggregateOutputType> | number
+          }
+        }
+      }
+      CitationMessage: {
+        payload: Prisma.$CitationMessagePayload<ExtArgs>
+        fields: Prisma.CitationMessageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CitationMessageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CitationMessagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CitationMessageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CitationMessagePayload>
+          }
+          findFirst: {
+            args: Prisma.CitationMessageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CitationMessagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CitationMessageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CitationMessagePayload>
+          }
+          findMany: {
+            args: Prisma.CitationMessageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CitationMessagePayload>[]
+          }
+          create: {
+            args: Prisma.CitationMessageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CitationMessagePayload>
+          }
+          createMany: {
+            args: Prisma.CitationMessageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CitationMessageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CitationMessagePayload>[]
+          }
+          delete: {
+            args: Prisma.CitationMessageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CitationMessagePayload>
+          }
+          update: {
+            args: Prisma.CitationMessageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CitationMessagePayload>
+          }
+          deleteMany: {
+            args: Prisma.CitationMessageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CitationMessageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CitationMessageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CitationMessagePayload>[]
+          }
+          upsert: {
+            args: Prisma.CitationMessageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CitationMessagePayload>
+          }
+          aggregate: {
+            args: Prisma.CitationMessageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCitationMessage>
+          }
+          groupBy: {
+            args: Prisma.CitationMessageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CitationMessageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CitationMessageCountArgs<ExtArgs>
+            result: $Utils.Optional<CitationMessageCountAggregateOutputType> | number
           }
         }
       }
@@ -22942,6 +23032,7 @@ export namespace Prisma {
     prompt?: PromptOmit
     conversation?: ConversationOmit
     message?: MessageOmit
+    citationMessage?: CitationMessageOmit
     topic?: TopicOmit
     dM_CapBac?: DM_CapBacOmit
     dM_ChucDanh?: DM_ChucDanhOmit
@@ -25866,6 +25957,37 @@ export namespace Prisma {
    */
   export type ConversationCountOutputTypeCountMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MessageWhereInput
+  }
+
+
+  /**
+   * Count Type MessageCountOutputType
+   */
+
+  export type MessageCountOutputType = {
+    citations: number
+  }
+
+  export type MessageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    citations?: boolean | MessageCountOutputTypeCountCitationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MessageCountOutputType without action
+   */
+  export type MessageCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageCountOutputType
+     */
+    select?: MessageCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MessageCountOutputType without action
+   */
+  export type MessageCountOutputTypeCountCitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CitationMessageWhereInput
   }
 
 
@@ -55254,10 +55376,25 @@ export namespace Prisma {
       subjectClassId: string | null
       subjectVersionId: string
       studentId: string
+      /**
+       * điểm chuyên cần
+       */
       attendanceScore: number | null
+      /**
+       * điểm giữa kỳ
+       */
       midtermScore: number | null
+      /**
+       * điểm cuối kỳ
+       */
       examScore: number | null
+      /**
+       * điểm tổng kết
+       */
       finalScore: Prisma.Decimal | null
+      /**
+       * điểm tổng kết chuyển trường
+       */
       manualFinalScore: number | null
       examPostponed: boolean
       examPostponedReason: string | null
@@ -56752,10 +56889,25 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       studentSubjectScoreId: string
+      /**
+       * điểm chuyên cần
+       */
       attendanceScore: number | null
+      /**
+       * điểm giữa kỳ
+       */
       midtermScore: number | null
+      /**
+       * điểm cuối kỳ
+       */
       examScore: number | null
+      /**
+       * điểm tổng kết
+       */
       finalScore: Prisma.Decimal | null
+      /**
+       * điểm tổng kết chuyển trường
+       */
       manualFinalScore: number | null
       examPostponedReason: boolean | null
       examPostponed: string | null
@@ -129780,7 +129932,9 @@ export namespace Prisma {
     conversationId?: boolean
     content?: boolean
     sender?: boolean
+    citations?: boolean | Message$citationsArgs<ExtArgs>
     conversation?: boolean | Message$conversationArgs<ExtArgs>
+    _count?: boolean | MessageCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
 
   export type MessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -129826,7 +129980,9 @@ export namespace Prisma {
 
   export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "conversationId" | "content" | "sender", ExtArgs["result"]["message"]>
   export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    citations?: boolean | Message$citationsArgs<ExtArgs>
     conversation?: boolean | Message$conversationArgs<ExtArgs>
+    _count?: boolean | MessageCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     conversation?: boolean | Message$conversationArgs<ExtArgs>
@@ -129838,6 +129994,7 @@ export namespace Prisma {
   export type $MessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Message"
     objects: {
+      citations: Prisma.$CitationMessagePayload<ExtArgs>[]
       conversation: Prisma.$ConversationPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -130245,6 +130402,7 @@ export namespace Prisma {
    */
   export interface Prisma__MessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    citations<T extends Message$citationsArgs<ExtArgs> = {}>(args?: Subset<T, Message$citationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CitationMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     conversation<T extends Message$conversationArgs<ExtArgs> = {}>(args?: Subset<T, Message$conversationArgs<ExtArgs>>): Prisma__ConversationClient<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -130681,6 +130839,30 @@ export namespace Prisma {
   }
 
   /**
+   * Message.citations
+   */
+  export type Message$citationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitationMessage
+     */
+    select?: CitationMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitationMessage
+     */
+    omit?: CitationMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitationMessageInclude<ExtArgs> | null
+    where?: CitationMessageWhereInput
+    orderBy?: CitationMessageOrderByWithRelationInput | CitationMessageOrderByWithRelationInput[]
+    cursor?: CitationMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CitationMessageScalarFieldEnum | CitationMessageScalarFieldEnum[]
+  }
+
+  /**
    * Message.conversation
    */
   export type Message$conversationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -130715,6 +130897,1208 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: MessageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CitationMessage
+   */
+
+  export type AggregateCitationMessage = {
+    _count: CitationMessageCountAggregateOutputType | null
+    _avg: CitationMessageAvgAggregateOutputType | null
+    _sum: CitationMessageSumAggregateOutputType | null
+    _min: CitationMessageMinAggregateOutputType | null
+    _max: CitationMessageMaxAggregateOutputType | null
+  }
+
+  export type CitationMessageAvgAggregateOutputType = {
+    index: number | null
+  }
+
+  export type CitationMessageSumAggregateOutputType = {
+    index: number | null
+  }
+
+  export type CitationMessageMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    content: string | null
+    index: number | null
+    documentId: string | null
+    documentType: string | null
+    messageId: string | null
+  }
+
+  export type CitationMessageMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    content: string | null
+    index: number | null
+    documentId: string | null
+    documentType: string | null
+    messageId: string | null
+  }
+
+  export type CitationMessageCountAggregateOutputType = {
+    id: number
+    code: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    content: number
+    index: number
+    documentId: number
+    documentType: number
+    messageId: number
+    _all: number
+  }
+
+
+  export type CitationMessageAvgAggregateInputType = {
+    index?: true
+  }
+
+  export type CitationMessageSumAggregateInputType = {
+    index?: true
+  }
+
+  export type CitationMessageMinAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    content?: true
+    index?: true
+    documentId?: true
+    documentType?: true
+    messageId?: true
+  }
+
+  export type CitationMessageMaxAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    content?: true
+    index?: true
+    documentId?: true
+    documentType?: true
+    messageId?: true
+  }
+
+  export type CitationMessageCountAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    content?: true
+    index?: true
+    documentId?: true
+    documentType?: true
+    messageId?: true
+    _all?: true
+  }
+
+  export type CitationMessageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CitationMessage to aggregate.
+     */
+    where?: CitationMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CitationMessages to fetch.
+     */
+    orderBy?: CitationMessageOrderByWithRelationInput | CitationMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CitationMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CitationMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CitationMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CitationMessages
+    **/
+    _count?: true | CitationMessageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CitationMessageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CitationMessageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CitationMessageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CitationMessageMaxAggregateInputType
+  }
+
+  export type GetCitationMessageAggregateType<T extends CitationMessageAggregateArgs> = {
+        [P in keyof T & keyof AggregateCitationMessage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCitationMessage[P]>
+      : GetScalarType<T[P], AggregateCitationMessage[P]>
+  }
+
+
+
+
+  export type CitationMessageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CitationMessageWhereInput
+    orderBy?: CitationMessageOrderByWithAggregationInput | CitationMessageOrderByWithAggregationInput[]
+    by: CitationMessageScalarFieldEnum[] | CitationMessageScalarFieldEnum
+    having?: CitationMessageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CitationMessageCountAggregateInputType | true
+    _avg?: CitationMessageAvgAggregateInputType
+    _sum?: CitationMessageSumAggregateInputType
+    _min?: CitationMessageMinAggregateInputType
+    _max?: CitationMessageMaxAggregateInputType
+  }
+
+  export type CitationMessageGroupByOutputType = {
+    id: string
+    code: string | null
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    content: string | null
+    index: number | null
+    documentId: string | null
+    documentType: string | null
+    messageId: string | null
+    _count: CitationMessageCountAggregateOutputType | null
+    _avg: CitationMessageAvgAggregateOutputType | null
+    _sum: CitationMessageSumAggregateOutputType | null
+    _min: CitationMessageMinAggregateOutputType | null
+    _max: CitationMessageMaxAggregateOutputType | null
+  }
+
+  type GetCitationMessageGroupByPayload<T extends CitationMessageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CitationMessageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CitationMessageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CitationMessageGroupByOutputType[P]>
+            : GetScalarType<T[P], CitationMessageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CitationMessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    content?: boolean
+    index?: boolean
+    documentId?: boolean
+    documentType?: boolean
+    messageId?: boolean
+    message?: boolean | CitationMessage$messageArgs<ExtArgs>
+  }, ExtArgs["result"]["citationMessage"]>
+
+  export type CitationMessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    content?: boolean
+    index?: boolean
+    documentId?: boolean
+    documentType?: boolean
+    messageId?: boolean
+    message?: boolean | CitationMessage$messageArgs<ExtArgs>
+  }, ExtArgs["result"]["citationMessage"]>
+
+  export type CitationMessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    content?: boolean
+    index?: boolean
+    documentId?: boolean
+    documentType?: boolean
+    messageId?: boolean
+    message?: boolean | CitationMessage$messageArgs<ExtArgs>
+  }, ExtArgs["result"]["citationMessage"]>
+
+  export type CitationMessageSelectScalar = {
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    content?: boolean
+    index?: boolean
+    documentId?: boolean
+    documentType?: boolean
+    messageId?: boolean
+  }
+
+  export type CitationMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "content" | "index" | "documentId" | "documentType" | "messageId", ExtArgs["result"]["citationMessage"]>
+  export type CitationMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    message?: boolean | CitationMessage$messageArgs<ExtArgs>
+  }
+  export type CitationMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    message?: boolean | CitationMessage$messageArgs<ExtArgs>
+  }
+  export type CitationMessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    message?: boolean | CitationMessage$messageArgs<ExtArgs>
+  }
+
+  export type $CitationMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CitationMessage"
+    objects: {
+      message: Prisma.$MessagePayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string | null
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      content: string | null
+      index: number | null
+      documentId: string | null
+      documentType: string | null
+      messageId: string | null
+    }, ExtArgs["result"]["citationMessage"]>
+    composites: {}
+  }
+
+  type CitationMessageGetPayload<S extends boolean | null | undefined | CitationMessageDefaultArgs> = $Result.GetResult<Prisma.$CitationMessagePayload, S>
+
+  type CitationMessageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CitationMessageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CitationMessageCountAggregateInputType | true
+    }
+
+  export interface CitationMessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CitationMessage'], meta: { name: 'CitationMessage' } }
+    /**
+     * Find zero or one CitationMessage that matches the filter.
+     * @param {CitationMessageFindUniqueArgs} args - Arguments to find a CitationMessage
+     * @example
+     * // Get one CitationMessage
+     * const citationMessage = await prisma.citationMessage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CitationMessageFindUniqueArgs>(args: SelectSubset<T, CitationMessageFindUniqueArgs<ExtArgs>>): Prisma__CitationMessageClient<$Result.GetResult<Prisma.$CitationMessagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CitationMessage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CitationMessageFindUniqueOrThrowArgs} args - Arguments to find a CitationMessage
+     * @example
+     * // Get one CitationMessage
+     * const citationMessage = await prisma.citationMessage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CitationMessageFindUniqueOrThrowArgs>(args: SelectSubset<T, CitationMessageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CitationMessageClient<$Result.GetResult<Prisma.$CitationMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CitationMessage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CitationMessageFindFirstArgs} args - Arguments to find a CitationMessage
+     * @example
+     * // Get one CitationMessage
+     * const citationMessage = await prisma.citationMessage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CitationMessageFindFirstArgs>(args?: SelectSubset<T, CitationMessageFindFirstArgs<ExtArgs>>): Prisma__CitationMessageClient<$Result.GetResult<Prisma.$CitationMessagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CitationMessage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CitationMessageFindFirstOrThrowArgs} args - Arguments to find a CitationMessage
+     * @example
+     * // Get one CitationMessage
+     * const citationMessage = await prisma.citationMessage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CitationMessageFindFirstOrThrowArgs>(args?: SelectSubset<T, CitationMessageFindFirstOrThrowArgs<ExtArgs>>): Prisma__CitationMessageClient<$Result.GetResult<Prisma.$CitationMessagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CitationMessages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CitationMessageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CitationMessages
+     * const citationMessages = await prisma.citationMessage.findMany()
+     * 
+     * // Get first 10 CitationMessages
+     * const citationMessages = await prisma.citationMessage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const citationMessageWithIdOnly = await prisma.citationMessage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CitationMessageFindManyArgs>(args?: SelectSubset<T, CitationMessageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CitationMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CitationMessage.
+     * @param {CitationMessageCreateArgs} args - Arguments to create a CitationMessage.
+     * @example
+     * // Create one CitationMessage
+     * const CitationMessage = await prisma.citationMessage.create({
+     *   data: {
+     *     // ... data to create a CitationMessage
+     *   }
+     * })
+     * 
+     */
+    create<T extends CitationMessageCreateArgs>(args: SelectSubset<T, CitationMessageCreateArgs<ExtArgs>>): Prisma__CitationMessageClient<$Result.GetResult<Prisma.$CitationMessagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CitationMessages.
+     * @param {CitationMessageCreateManyArgs} args - Arguments to create many CitationMessages.
+     * @example
+     * // Create many CitationMessages
+     * const citationMessage = await prisma.citationMessage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CitationMessageCreateManyArgs>(args?: SelectSubset<T, CitationMessageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CitationMessages and returns the data saved in the database.
+     * @param {CitationMessageCreateManyAndReturnArgs} args - Arguments to create many CitationMessages.
+     * @example
+     * // Create many CitationMessages
+     * const citationMessage = await prisma.citationMessage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CitationMessages and only return the `id`
+     * const citationMessageWithIdOnly = await prisma.citationMessage.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CitationMessageCreateManyAndReturnArgs>(args?: SelectSubset<T, CitationMessageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CitationMessagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CitationMessage.
+     * @param {CitationMessageDeleteArgs} args - Arguments to delete one CitationMessage.
+     * @example
+     * // Delete one CitationMessage
+     * const CitationMessage = await prisma.citationMessage.delete({
+     *   where: {
+     *     // ... filter to delete one CitationMessage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CitationMessageDeleteArgs>(args: SelectSubset<T, CitationMessageDeleteArgs<ExtArgs>>): Prisma__CitationMessageClient<$Result.GetResult<Prisma.$CitationMessagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CitationMessage.
+     * @param {CitationMessageUpdateArgs} args - Arguments to update one CitationMessage.
+     * @example
+     * // Update one CitationMessage
+     * const citationMessage = await prisma.citationMessage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CitationMessageUpdateArgs>(args: SelectSubset<T, CitationMessageUpdateArgs<ExtArgs>>): Prisma__CitationMessageClient<$Result.GetResult<Prisma.$CitationMessagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CitationMessages.
+     * @param {CitationMessageDeleteManyArgs} args - Arguments to filter CitationMessages to delete.
+     * @example
+     * // Delete a few CitationMessages
+     * const { count } = await prisma.citationMessage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CitationMessageDeleteManyArgs>(args?: SelectSubset<T, CitationMessageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CitationMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CitationMessageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CitationMessages
+     * const citationMessage = await prisma.citationMessage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CitationMessageUpdateManyArgs>(args: SelectSubset<T, CitationMessageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CitationMessages and returns the data updated in the database.
+     * @param {CitationMessageUpdateManyAndReturnArgs} args - Arguments to update many CitationMessages.
+     * @example
+     * // Update many CitationMessages
+     * const citationMessage = await prisma.citationMessage.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CitationMessages and only return the `id`
+     * const citationMessageWithIdOnly = await prisma.citationMessage.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CitationMessageUpdateManyAndReturnArgs>(args: SelectSubset<T, CitationMessageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CitationMessagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CitationMessage.
+     * @param {CitationMessageUpsertArgs} args - Arguments to update or create a CitationMessage.
+     * @example
+     * // Update or create a CitationMessage
+     * const citationMessage = await prisma.citationMessage.upsert({
+     *   create: {
+     *     // ... data to create a CitationMessage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CitationMessage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CitationMessageUpsertArgs>(args: SelectSubset<T, CitationMessageUpsertArgs<ExtArgs>>): Prisma__CitationMessageClient<$Result.GetResult<Prisma.$CitationMessagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CitationMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CitationMessageCountArgs} args - Arguments to filter CitationMessages to count.
+     * @example
+     * // Count the number of CitationMessages
+     * const count = await prisma.citationMessage.count({
+     *   where: {
+     *     // ... the filter for the CitationMessages we want to count
+     *   }
+     * })
+    **/
+    count<T extends CitationMessageCountArgs>(
+      args?: Subset<T, CitationMessageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CitationMessageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CitationMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CitationMessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CitationMessageAggregateArgs>(args: Subset<T, CitationMessageAggregateArgs>): Prisma.PrismaPromise<GetCitationMessageAggregateType<T>>
+
+    /**
+     * Group by CitationMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CitationMessageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CitationMessageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CitationMessageGroupByArgs['orderBy'] }
+        : { orderBy?: CitationMessageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CitationMessageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCitationMessageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CitationMessage model
+   */
+  readonly fields: CitationMessageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CitationMessage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CitationMessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    message<T extends CitationMessage$messageArgs<ExtArgs> = {}>(args?: Subset<T, CitationMessage$messageArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CitationMessage model
+   */
+  interface CitationMessageFieldRefs {
+    readonly id: FieldRef<"CitationMessage", 'String'>
+    readonly code: FieldRef<"CitationMessage", 'String'>
+    readonly active: FieldRef<"CitationMessage", 'Boolean'>
+    readonly description: FieldRef<"CitationMessage", 'String'>
+    readonly deletedAt: FieldRef<"CitationMessage", 'DateTime'>
+    readonly createdAt: FieldRef<"CitationMessage", 'DateTime'>
+    readonly updatedAt: FieldRef<"CitationMessage", 'DateTime'>
+    readonly content: FieldRef<"CitationMessage", 'String'>
+    readonly index: FieldRef<"CitationMessage", 'Int'>
+    readonly documentId: FieldRef<"CitationMessage", 'String'>
+    readonly documentType: FieldRef<"CitationMessage", 'String'>
+    readonly messageId: FieldRef<"CitationMessage", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CitationMessage findUnique
+   */
+  export type CitationMessageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitationMessage
+     */
+    select?: CitationMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitationMessage
+     */
+    omit?: CitationMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitationMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which CitationMessage to fetch.
+     */
+    where: CitationMessageWhereUniqueInput
+  }
+
+  /**
+   * CitationMessage findUniqueOrThrow
+   */
+  export type CitationMessageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitationMessage
+     */
+    select?: CitationMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitationMessage
+     */
+    omit?: CitationMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitationMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which CitationMessage to fetch.
+     */
+    where: CitationMessageWhereUniqueInput
+  }
+
+  /**
+   * CitationMessage findFirst
+   */
+  export type CitationMessageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitationMessage
+     */
+    select?: CitationMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitationMessage
+     */
+    omit?: CitationMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitationMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which CitationMessage to fetch.
+     */
+    where?: CitationMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CitationMessages to fetch.
+     */
+    orderBy?: CitationMessageOrderByWithRelationInput | CitationMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CitationMessages.
+     */
+    cursor?: CitationMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CitationMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CitationMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CitationMessages.
+     */
+    distinct?: CitationMessageScalarFieldEnum | CitationMessageScalarFieldEnum[]
+  }
+
+  /**
+   * CitationMessage findFirstOrThrow
+   */
+  export type CitationMessageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitationMessage
+     */
+    select?: CitationMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitationMessage
+     */
+    omit?: CitationMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitationMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which CitationMessage to fetch.
+     */
+    where?: CitationMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CitationMessages to fetch.
+     */
+    orderBy?: CitationMessageOrderByWithRelationInput | CitationMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CitationMessages.
+     */
+    cursor?: CitationMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CitationMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CitationMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CitationMessages.
+     */
+    distinct?: CitationMessageScalarFieldEnum | CitationMessageScalarFieldEnum[]
+  }
+
+  /**
+   * CitationMessage findMany
+   */
+  export type CitationMessageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitationMessage
+     */
+    select?: CitationMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitationMessage
+     */
+    omit?: CitationMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitationMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which CitationMessages to fetch.
+     */
+    where?: CitationMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CitationMessages to fetch.
+     */
+    orderBy?: CitationMessageOrderByWithRelationInput | CitationMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CitationMessages.
+     */
+    cursor?: CitationMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CitationMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CitationMessages.
+     */
+    skip?: number
+    distinct?: CitationMessageScalarFieldEnum | CitationMessageScalarFieldEnum[]
+  }
+
+  /**
+   * CitationMessage create
+   */
+  export type CitationMessageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitationMessage
+     */
+    select?: CitationMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitationMessage
+     */
+    omit?: CitationMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitationMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CitationMessage.
+     */
+    data?: XOR<CitationMessageCreateInput, CitationMessageUncheckedCreateInput>
+  }
+
+  /**
+   * CitationMessage createMany
+   */
+  export type CitationMessageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CitationMessages.
+     */
+    data: CitationMessageCreateManyInput | CitationMessageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CitationMessage createManyAndReturn
+   */
+  export type CitationMessageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitationMessage
+     */
+    select?: CitationMessageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitationMessage
+     */
+    omit?: CitationMessageOmit<ExtArgs> | null
+    /**
+     * The data used to create many CitationMessages.
+     */
+    data: CitationMessageCreateManyInput | CitationMessageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitationMessageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CitationMessage update
+   */
+  export type CitationMessageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitationMessage
+     */
+    select?: CitationMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitationMessage
+     */
+    omit?: CitationMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitationMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CitationMessage.
+     */
+    data: XOR<CitationMessageUpdateInput, CitationMessageUncheckedUpdateInput>
+    /**
+     * Choose, which CitationMessage to update.
+     */
+    where: CitationMessageWhereUniqueInput
+  }
+
+  /**
+   * CitationMessage updateMany
+   */
+  export type CitationMessageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CitationMessages.
+     */
+    data: XOR<CitationMessageUpdateManyMutationInput, CitationMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which CitationMessages to update
+     */
+    where?: CitationMessageWhereInput
+    /**
+     * Limit how many CitationMessages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CitationMessage updateManyAndReturn
+   */
+  export type CitationMessageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitationMessage
+     */
+    select?: CitationMessageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitationMessage
+     */
+    omit?: CitationMessageOmit<ExtArgs> | null
+    /**
+     * The data used to update CitationMessages.
+     */
+    data: XOR<CitationMessageUpdateManyMutationInput, CitationMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which CitationMessages to update
+     */
+    where?: CitationMessageWhereInput
+    /**
+     * Limit how many CitationMessages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitationMessageIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CitationMessage upsert
+   */
+  export type CitationMessageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitationMessage
+     */
+    select?: CitationMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitationMessage
+     */
+    omit?: CitationMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitationMessageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CitationMessage to update in case it exists.
+     */
+    where: CitationMessageWhereUniqueInput
+    /**
+     * In case the CitationMessage found by the `where` argument doesn't exist, create a new CitationMessage with this data.
+     */
+    create: XOR<CitationMessageCreateInput, CitationMessageUncheckedCreateInput>
+    /**
+     * In case the CitationMessage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CitationMessageUpdateInput, CitationMessageUncheckedUpdateInput>
+  }
+
+  /**
+   * CitationMessage delete
+   */
+  export type CitationMessageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitationMessage
+     */
+    select?: CitationMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitationMessage
+     */
+    omit?: CitationMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitationMessageInclude<ExtArgs> | null
+    /**
+     * Filter which CitationMessage to delete.
+     */
+    where: CitationMessageWhereUniqueInput
+  }
+
+  /**
+   * CitationMessage deleteMany
+   */
+  export type CitationMessageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CitationMessages to delete
+     */
+    where?: CitationMessageWhereInput
+    /**
+     * Limit how many CitationMessages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CitationMessage.message
+   */
+  export type CitationMessage$messageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    where?: MessageWhereInput
+  }
+
+  /**
+   * CitationMessage without action
+   */
+  export type CitationMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitationMessage
+     */
+    select?: CitationMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CitationMessage
+     */
+    omit?: CitationMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CitationMessageInclude<ExtArgs> | null
   }
 
 
@@ -325971,6 +327355,24 @@ export namespace Prisma {
   export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
+  export const CitationMessageScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    content: 'content',
+    index: 'index',
+    documentId: 'documentId',
+    documentType: 'documentType',
+    messageId: 'messageId'
+  };
+
+  export type CitationMessageScalarFieldEnum = (typeof CitationMessageScalarFieldEnum)[keyof typeof CitationMessageScalarFieldEnum]
+
+
   export const TopicScalarFieldEnum: {
     id: 'id',
     code: 'code',
@@ -330005,6 +331407,19 @@ export namespace Prisma {
   };
 
   export type MessageOrderByRelevanceFieldEnum = (typeof MessageOrderByRelevanceFieldEnum)[keyof typeof MessageOrderByRelevanceFieldEnum]
+
+
+  export const CitationMessageOrderByRelevanceFieldEnum: {
+    id: 'id',
+    code: 'code',
+    description: 'description',
+    content: 'content',
+    documentId: 'documentId',
+    documentType: 'documentType',
+    messageId: 'messageId'
+  };
+
+  export type CitationMessageOrderByRelevanceFieldEnum = (typeof CitationMessageOrderByRelevanceFieldEnum)[keyof typeof CitationMessageOrderByRelevanceFieldEnum]
 
 
   export const TopicOrderByRelevanceFieldEnum: {
@@ -341272,6 +342687,7 @@ export namespace Prisma {
     conversationId?: StringNullableFilter<"Message"> | string | null
     content?: StringNullableFilter<"Message"> | string | null
     sender?: EnumMessageSenderFilter<"Message"> | $Enums.MessageSender
+    citations?: CitationMessageListRelationFilter
     conversation?: XOR<ConversationNullableScalarRelationFilter, ConversationWhereInput> | null
   }
 
@@ -341286,6 +342702,7 @@ export namespace Prisma {
     conversationId?: SortOrderInput | SortOrder
     content?: SortOrderInput | SortOrder
     sender?: SortOrder
+    citations?: CitationMessageOrderByRelationAggregateInput
     conversation?: ConversationOrderByWithRelationInput
     _relevance?: MessageOrderByRelevanceInput
   }
@@ -341304,6 +342721,7 @@ export namespace Prisma {
     conversationId?: StringNullableFilter<"Message"> | string | null
     content?: StringNullableFilter<"Message"> | string | null
     sender?: EnumMessageSenderFilter<"Message"> | $Enums.MessageSender
+    citations?: CitationMessageListRelationFilter
     conversation?: XOR<ConversationNullableScalarRelationFilter, ConversationWhereInput> | null
   }, "id" | "code">
 
@@ -341337,6 +342755,99 @@ export namespace Prisma {
     conversationId?: StringNullableWithAggregatesFilter<"Message"> | string | null
     content?: StringNullableWithAggregatesFilter<"Message"> | string | null
     sender?: EnumMessageSenderWithAggregatesFilter<"Message"> | $Enums.MessageSender
+  }
+
+  export type CitationMessageWhereInput = {
+    AND?: CitationMessageWhereInput | CitationMessageWhereInput[]
+    OR?: CitationMessageWhereInput[]
+    NOT?: CitationMessageWhereInput | CitationMessageWhereInput[]
+    id?: StringFilter<"CitationMessage"> | string
+    code?: StringNullableFilter<"CitationMessage"> | string | null
+    active?: BoolFilter<"CitationMessage"> | boolean
+    description?: StringNullableFilter<"CitationMessage"> | string | null
+    deletedAt?: DateTimeNullableFilter<"CitationMessage"> | Date | string | null
+    createdAt?: DateTimeFilter<"CitationMessage"> | Date | string
+    updatedAt?: DateTimeFilter<"CitationMessage"> | Date | string
+    content?: StringNullableFilter<"CitationMessage"> | string | null
+    index?: IntNullableFilter<"CitationMessage"> | number | null
+    documentId?: StringNullableFilter<"CitationMessage"> | string | null
+    documentType?: StringNullableFilter<"CitationMessage"> | string | null
+    messageId?: StringNullableFilter<"CitationMessage"> | string | null
+    message?: XOR<MessageNullableScalarRelationFilter, MessageWhereInput> | null
+  }
+
+  export type CitationMessageOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    content?: SortOrderInput | SortOrder
+    index?: SortOrderInput | SortOrder
+    documentId?: SortOrderInput | SortOrder
+    documentType?: SortOrderInput | SortOrder
+    messageId?: SortOrderInput | SortOrder
+    message?: MessageOrderByWithRelationInput
+    _relevance?: CitationMessageOrderByRelevanceInput
+  }
+
+  export type CitationMessageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: CitationMessageWhereInput | CitationMessageWhereInput[]
+    OR?: CitationMessageWhereInput[]
+    NOT?: CitationMessageWhereInput | CitationMessageWhereInput[]
+    active?: BoolFilter<"CitationMessage"> | boolean
+    description?: StringNullableFilter<"CitationMessage"> | string | null
+    deletedAt?: DateTimeNullableFilter<"CitationMessage"> | Date | string | null
+    createdAt?: DateTimeFilter<"CitationMessage"> | Date | string
+    updatedAt?: DateTimeFilter<"CitationMessage"> | Date | string
+    content?: StringNullableFilter<"CitationMessage"> | string | null
+    index?: IntNullableFilter<"CitationMessage"> | number | null
+    documentId?: StringNullableFilter<"CitationMessage"> | string | null
+    documentType?: StringNullableFilter<"CitationMessage"> | string | null
+    messageId?: StringNullableFilter<"CitationMessage"> | string | null
+    message?: XOR<MessageNullableScalarRelationFilter, MessageWhereInput> | null
+  }, "id" | "code">
+
+  export type CitationMessageOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    content?: SortOrderInput | SortOrder
+    index?: SortOrderInput | SortOrder
+    documentId?: SortOrderInput | SortOrder
+    documentType?: SortOrderInput | SortOrder
+    messageId?: SortOrderInput | SortOrder
+    _count?: CitationMessageCountOrderByAggregateInput
+    _avg?: CitationMessageAvgOrderByAggregateInput
+    _max?: CitationMessageMaxOrderByAggregateInput
+    _min?: CitationMessageMinOrderByAggregateInput
+    _sum?: CitationMessageSumOrderByAggregateInput
+  }
+
+  export type CitationMessageScalarWhereWithAggregatesInput = {
+    AND?: CitationMessageScalarWhereWithAggregatesInput | CitationMessageScalarWhereWithAggregatesInput[]
+    OR?: CitationMessageScalarWhereWithAggregatesInput[]
+    NOT?: CitationMessageScalarWhereWithAggregatesInput | CitationMessageScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CitationMessage"> | string
+    code?: StringNullableWithAggregatesFilter<"CitationMessage"> | string | null
+    active?: BoolWithAggregatesFilter<"CitationMessage"> | boolean
+    description?: StringNullableWithAggregatesFilter<"CitationMessage"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"CitationMessage"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CitationMessage"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CitationMessage"> | Date | string
+    content?: StringNullableWithAggregatesFilter<"CitationMessage"> | string | null
+    index?: IntNullableWithAggregatesFilter<"CitationMessage"> | number | null
+    documentId?: StringNullableWithAggregatesFilter<"CitationMessage"> | string | null
+    documentType?: StringNullableWithAggregatesFilter<"CitationMessage"> | string | null
+    messageId?: StringNullableWithAggregatesFilter<"CitationMessage"> | string | null
   }
 
   export type TopicWhereInput = {
@@ -367208,6 +368719,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     content?: string | null
     sender: $Enums.MessageSender
+    citations?: CitationMessageCreateNestedManyWithoutMessageInput
     conversation?: ConversationCreateNestedOneWithoutMessageInput
   }
 
@@ -367222,6 +368734,7 @@ export namespace Prisma {
     conversationId?: string | null
     content?: string | null
     sender: $Enums.MessageSender
+    citations?: CitationMessageUncheckedCreateNestedManyWithoutMessageInput
   }
 
   export type MessageUpdateInput = {
@@ -367234,6 +368747,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     sender?: EnumMessageSenderFieldUpdateOperationsInput | $Enums.MessageSender
+    citations?: CitationMessageUpdateManyWithoutMessageNestedInput
     conversation?: ConversationUpdateOneWithoutMessageNestedInput
   }
 
@@ -367248,6 +368762,7 @@ export namespace Prisma {
     conversationId?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     sender?: EnumMessageSenderFieldUpdateOperationsInput | $Enums.MessageSender
+    citations?: CitationMessageUncheckedUpdateManyWithoutMessageNestedInput
   }
 
   export type MessageCreateManyInput = {
@@ -367286,6 +368801,110 @@ export namespace Prisma {
     conversationId?: NullableStringFieldUpdateOperationsInput | string | null
     content?: NullableStringFieldUpdateOperationsInput | string | null
     sender?: EnumMessageSenderFieldUpdateOperationsInput | $Enums.MessageSender
+  }
+
+  export type CitationMessageCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    content?: string | null
+    index?: number | null
+    documentId?: string | null
+    documentType?: string | null
+    message?: MessageCreateNestedOneWithoutCitationsInput
+  }
+
+  export type CitationMessageUncheckedCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    content?: string | null
+    index?: number | null
+    documentId?: string | null
+    documentType?: string | null
+    messageId?: string | null
+  }
+
+  export type CitationMessageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    index?: NullableIntFieldUpdateOperationsInput | number | null
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    message?: MessageUpdateOneWithoutCitationsNestedInput
+  }
+
+  export type CitationMessageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    index?: NullableIntFieldUpdateOperationsInput | number | null
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    messageId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CitationMessageCreateManyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    content?: string | null
+    index?: number | null
+    documentId?: string | null
+    documentType?: string | null
+    messageId?: string | null
+  }
+
+  export type CitationMessageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    index?: NullableIntFieldUpdateOperationsInput | number | null
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CitationMessageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    index?: NullableIntFieldUpdateOperationsInput | number | null
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+    messageId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TopicCreateInput = {
@@ -392722,9 +394341,19 @@ export namespace Prisma {
     not?: NestedEnumMessageSenderFilter<$PrismaModel> | $Enums.MessageSender
   }
 
+  export type CitationMessageListRelationFilter = {
+    every?: CitationMessageWhereInput
+    some?: CitationMessageWhereInput
+    none?: CitationMessageWhereInput
+  }
+
   export type ConversationNullableScalarRelationFilter = {
     is?: ConversationWhereInput | null
     isNot?: ConversationWhereInput | null
+  }
+
+  export type CitationMessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type MessageOrderByRelevanceInput = {
@@ -392780,6 +394409,70 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumMessageSenderFilter<$PrismaModel>
     _max?: NestedEnumMessageSenderFilter<$PrismaModel>
+  }
+
+  export type MessageNullableScalarRelationFilter = {
+    is?: MessageWhereInput | null
+    isNot?: MessageWhereInput | null
+  }
+
+  export type CitationMessageOrderByRelevanceInput = {
+    fields: CitationMessageOrderByRelevanceFieldEnum | CitationMessageOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type CitationMessageCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    content?: SortOrder
+    index?: SortOrder
+    documentId?: SortOrder
+    documentType?: SortOrder
+    messageId?: SortOrder
+  }
+
+  export type CitationMessageAvgOrderByAggregateInput = {
+    index?: SortOrder
+  }
+
+  export type CitationMessageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    content?: SortOrder
+    index?: SortOrder
+    documentId?: SortOrder
+    documentType?: SortOrder
+    messageId?: SortOrder
+  }
+
+  export type CitationMessageMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    content?: SortOrder
+    index?: SortOrder
+    documentId?: SortOrder
+    documentType?: SortOrder
+    messageId?: SortOrder
+  }
+
+  export type CitationMessageSumOrderByAggregateInput = {
+    index?: SortOrder
   }
 
   export type DocumentListRelationFilter = {
@@ -413434,14 +415127,42 @@ export namespace Prisma {
     deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
   }
 
+  export type CitationMessageCreateNestedManyWithoutMessageInput = {
+    create?: XOR<CitationMessageCreateWithoutMessageInput, CitationMessageUncheckedCreateWithoutMessageInput> | CitationMessageCreateWithoutMessageInput[] | CitationMessageUncheckedCreateWithoutMessageInput[]
+    connectOrCreate?: CitationMessageCreateOrConnectWithoutMessageInput | CitationMessageCreateOrConnectWithoutMessageInput[]
+    createMany?: CitationMessageCreateManyMessageInputEnvelope
+    connect?: CitationMessageWhereUniqueInput | CitationMessageWhereUniqueInput[]
+  }
+
   export type ConversationCreateNestedOneWithoutMessageInput = {
     create?: XOR<ConversationCreateWithoutMessageInput, ConversationUncheckedCreateWithoutMessageInput>
     connectOrCreate?: ConversationCreateOrConnectWithoutMessageInput
     connect?: ConversationWhereUniqueInput
   }
 
+  export type CitationMessageUncheckedCreateNestedManyWithoutMessageInput = {
+    create?: XOR<CitationMessageCreateWithoutMessageInput, CitationMessageUncheckedCreateWithoutMessageInput> | CitationMessageCreateWithoutMessageInput[] | CitationMessageUncheckedCreateWithoutMessageInput[]
+    connectOrCreate?: CitationMessageCreateOrConnectWithoutMessageInput | CitationMessageCreateOrConnectWithoutMessageInput[]
+    createMany?: CitationMessageCreateManyMessageInputEnvelope
+    connect?: CitationMessageWhereUniqueInput | CitationMessageWhereUniqueInput[]
+  }
+
   export type EnumMessageSenderFieldUpdateOperationsInput = {
     set?: $Enums.MessageSender
+  }
+
+  export type CitationMessageUpdateManyWithoutMessageNestedInput = {
+    create?: XOR<CitationMessageCreateWithoutMessageInput, CitationMessageUncheckedCreateWithoutMessageInput> | CitationMessageCreateWithoutMessageInput[] | CitationMessageUncheckedCreateWithoutMessageInput[]
+    connectOrCreate?: CitationMessageCreateOrConnectWithoutMessageInput | CitationMessageCreateOrConnectWithoutMessageInput[]
+    upsert?: CitationMessageUpsertWithWhereUniqueWithoutMessageInput | CitationMessageUpsertWithWhereUniqueWithoutMessageInput[]
+    createMany?: CitationMessageCreateManyMessageInputEnvelope
+    set?: CitationMessageWhereUniqueInput | CitationMessageWhereUniqueInput[]
+    disconnect?: CitationMessageWhereUniqueInput | CitationMessageWhereUniqueInput[]
+    delete?: CitationMessageWhereUniqueInput | CitationMessageWhereUniqueInput[]
+    connect?: CitationMessageWhereUniqueInput | CitationMessageWhereUniqueInput[]
+    update?: CitationMessageUpdateWithWhereUniqueWithoutMessageInput | CitationMessageUpdateWithWhereUniqueWithoutMessageInput[]
+    updateMany?: CitationMessageUpdateManyWithWhereWithoutMessageInput | CitationMessageUpdateManyWithWhereWithoutMessageInput[]
+    deleteMany?: CitationMessageScalarWhereInput | CitationMessageScalarWhereInput[]
   }
 
   export type ConversationUpdateOneWithoutMessageNestedInput = {
@@ -413452,6 +415173,36 @@ export namespace Prisma {
     delete?: ConversationWhereInput | boolean
     connect?: ConversationWhereUniqueInput
     update?: XOR<XOR<ConversationUpdateToOneWithWhereWithoutMessageInput, ConversationUpdateWithoutMessageInput>, ConversationUncheckedUpdateWithoutMessageInput>
+  }
+
+  export type CitationMessageUncheckedUpdateManyWithoutMessageNestedInput = {
+    create?: XOR<CitationMessageCreateWithoutMessageInput, CitationMessageUncheckedCreateWithoutMessageInput> | CitationMessageCreateWithoutMessageInput[] | CitationMessageUncheckedCreateWithoutMessageInput[]
+    connectOrCreate?: CitationMessageCreateOrConnectWithoutMessageInput | CitationMessageCreateOrConnectWithoutMessageInput[]
+    upsert?: CitationMessageUpsertWithWhereUniqueWithoutMessageInput | CitationMessageUpsertWithWhereUniqueWithoutMessageInput[]
+    createMany?: CitationMessageCreateManyMessageInputEnvelope
+    set?: CitationMessageWhereUniqueInput | CitationMessageWhereUniqueInput[]
+    disconnect?: CitationMessageWhereUniqueInput | CitationMessageWhereUniqueInput[]
+    delete?: CitationMessageWhereUniqueInput | CitationMessageWhereUniqueInput[]
+    connect?: CitationMessageWhereUniqueInput | CitationMessageWhereUniqueInput[]
+    update?: CitationMessageUpdateWithWhereUniqueWithoutMessageInput | CitationMessageUpdateWithWhereUniqueWithoutMessageInput[]
+    updateMany?: CitationMessageUpdateManyWithWhereWithoutMessageInput | CitationMessageUpdateManyWithWhereWithoutMessageInput[]
+    deleteMany?: CitationMessageScalarWhereInput | CitationMessageScalarWhereInput[]
+  }
+
+  export type MessageCreateNestedOneWithoutCitationsInput = {
+    create?: XOR<MessageCreateWithoutCitationsInput, MessageUncheckedCreateWithoutCitationsInput>
+    connectOrCreate?: MessageCreateOrConnectWithoutCitationsInput
+    connect?: MessageWhereUniqueInput
+  }
+
+  export type MessageUpdateOneWithoutCitationsNestedInput = {
+    create?: XOR<MessageCreateWithoutCitationsInput, MessageUncheckedCreateWithoutCitationsInput>
+    connectOrCreate?: MessageCreateOrConnectWithoutCitationsInput
+    upsert?: MessageUpsertWithoutCitationsInput
+    disconnect?: MessageWhereInput | boolean
+    delete?: MessageWhereInput | boolean
+    connect?: MessageWhereUniqueInput
+    update?: XOR<XOR<MessageUpdateToOneWithWhereWithoutCitationsInput, MessageUpdateWithoutCitationsInput>, MessageUncheckedUpdateWithoutCitationsInput>
   }
 
   export type DocumentCreateNestedManyWithoutTopicInput = {
@@ -463112,6 +464863,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     content?: string | null
     sender: $Enums.MessageSender
+    citations?: CitationMessageCreateNestedManyWithoutMessageInput
   }
 
   export type MessageUncheckedCreateWithoutConversationInput = {
@@ -463124,6 +464876,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     content?: string | null
     sender: $Enums.MessageSender
+    citations?: CitationMessageUncheckedCreateNestedManyWithoutMessageInput
   }
 
   export type MessageCreateOrConnectWithoutConversationInput = {
@@ -463565,6 +465318,44 @@ export namespace Prisma {
     sender?: EnumMessageSenderFilter<"Message"> | $Enums.MessageSender
   }
 
+  export type CitationMessageCreateWithoutMessageInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    content?: string | null
+    index?: number | null
+    documentId?: string | null
+    documentType?: string | null
+  }
+
+  export type CitationMessageUncheckedCreateWithoutMessageInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    content?: string | null
+    index?: number | null
+    documentId?: string | null
+    documentType?: string | null
+  }
+
+  export type CitationMessageCreateOrConnectWithoutMessageInput = {
+    where: CitationMessageWhereUniqueInput
+    create: XOR<CitationMessageCreateWithoutMessageInput, CitationMessageUncheckedCreateWithoutMessageInput>
+  }
+
+  export type CitationMessageCreateManyMessageInputEnvelope = {
+    data: CitationMessageCreateManyMessageInput | CitationMessageCreateManyMessageInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ConversationCreateWithoutMessageInput = {
     id?: string
     code?: string | null
@@ -463596,6 +465387,40 @@ export namespace Prisma {
   export type ConversationCreateOrConnectWithoutMessageInput = {
     where: ConversationWhereUniqueInput
     create: XOR<ConversationCreateWithoutMessageInput, ConversationUncheckedCreateWithoutMessageInput>
+  }
+
+  export type CitationMessageUpsertWithWhereUniqueWithoutMessageInput = {
+    where: CitationMessageWhereUniqueInput
+    update: XOR<CitationMessageUpdateWithoutMessageInput, CitationMessageUncheckedUpdateWithoutMessageInput>
+    create: XOR<CitationMessageCreateWithoutMessageInput, CitationMessageUncheckedCreateWithoutMessageInput>
+  }
+
+  export type CitationMessageUpdateWithWhereUniqueWithoutMessageInput = {
+    where: CitationMessageWhereUniqueInput
+    data: XOR<CitationMessageUpdateWithoutMessageInput, CitationMessageUncheckedUpdateWithoutMessageInput>
+  }
+
+  export type CitationMessageUpdateManyWithWhereWithoutMessageInput = {
+    where: CitationMessageScalarWhereInput
+    data: XOR<CitationMessageUpdateManyMutationInput, CitationMessageUncheckedUpdateManyWithoutMessageInput>
+  }
+
+  export type CitationMessageScalarWhereInput = {
+    AND?: CitationMessageScalarWhereInput | CitationMessageScalarWhereInput[]
+    OR?: CitationMessageScalarWhereInput[]
+    NOT?: CitationMessageScalarWhereInput | CitationMessageScalarWhereInput[]
+    id?: StringFilter<"CitationMessage"> | string
+    code?: StringNullableFilter<"CitationMessage"> | string | null
+    active?: BoolFilter<"CitationMessage"> | boolean
+    description?: StringNullableFilter<"CitationMessage"> | string | null
+    deletedAt?: DateTimeNullableFilter<"CitationMessage"> | Date | string | null
+    createdAt?: DateTimeFilter<"CitationMessage"> | Date | string
+    updatedAt?: DateTimeFilter<"CitationMessage"> | Date | string
+    content?: StringNullableFilter<"CitationMessage"> | string | null
+    index?: IntNullableFilter<"CitationMessage"> | number | null
+    documentId?: StringNullableFilter<"CitationMessage"> | string | null
+    documentType?: StringNullableFilter<"CitationMessage"> | string | null
+    messageId?: StringNullableFilter<"CitationMessage"> | string | null
   }
 
   export type ConversationUpsertWithoutMessageInput = {
@@ -463635,6 +465460,74 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
     topicId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type MessageCreateWithoutCitationsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    content?: string | null
+    sender: $Enums.MessageSender
+    conversation?: ConversationCreateNestedOneWithoutMessageInput
+  }
+
+  export type MessageUncheckedCreateWithoutCitationsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    conversationId?: string | null
+    content?: string | null
+    sender: $Enums.MessageSender
+  }
+
+  export type MessageCreateOrConnectWithoutCitationsInput = {
+    where: MessageWhereUniqueInput
+    create: XOR<MessageCreateWithoutCitationsInput, MessageUncheckedCreateWithoutCitationsInput>
+  }
+
+  export type MessageUpsertWithoutCitationsInput = {
+    update: XOR<MessageUpdateWithoutCitationsInput, MessageUncheckedUpdateWithoutCitationsInput>
+    create: XOR<MessageCreateWithoutCitationsInput, MessageUncheckedCreateWithoutCitationsInput>
+    where?: MessageWhereInput
+  }
+
+  export type MessageUpdateToOneWithWhereWithoutCitationsInput = {
+    where?: MessageWhereInput
+    data: XOR<MessageUpdateWithoutCitationsInput, MessageUncheckedUpdateWithoutCitationsInput>
+  }
+
+  export type MessageUpdateWithoutCitationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    sender?: EnumMessageSenderFieldUpdateOperationsInput | $Enums.MessageSender
+    conversation?: ConversationUpdateOneWithoutMessageNestedInput
+  }
+
+  export type MessageUncheckedUpdateWithoutCitationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    conversationId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    sender?: EnumMessageSenderFieldUpdateOperationsInput | $Enums.MessageSender
   }
 
   export type DocumentCreateWithoutTopicInput = {
@@ -544378,6 +546271,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     sender?: EnumMessageSenderFieldUpdateOperationsInput | $Enums.MessageSender
+    citations?: CitationMessageUpdateManyWithoutMessageNestedInput
   }
 
   export type MessageUncheckedUpdateWithoutConversationInput = {
@@ -544390,6 +546284,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     sender?: EnumMessageSenderFieldUpdateOperationsInput | $Enums.MessageSender
+    citations?: CitationMessageUncheckedUpdateManyWithoutMessageNestedInput
   }
 
   export type MessageUncheckedUpdateManyWithoutConversationInput = {
@@ -544402,6 +546297,62 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     sender?: EnumMessageSenderFieldUpdateOperationsInput | $Enums.MessageSender
+  }
+
+  export type CitationMessageCreateManyMessageInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    content?: string | null
+    index?: number | null
+    documentId?: string | null
+    documentType?: string | null
+  }
+
+  export type CitationMessageUpdateWithoutMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    index?: NullableIntFieldUpdateOperationsInput | number | null
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CitationMessageUncheckedUpdateWithoutMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    index?: NullableIntFieldUpdateOperationsInput | number | null
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CitationMessageUncheckedUpdateManyWithoutMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    index?: NullableIntFieldUpdateOperationsInput | number | null
+    documentId?: NullableStringFieldUpdateOperationsInput | string | null
+    documentType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DocumentCreateManyTopicInput = {

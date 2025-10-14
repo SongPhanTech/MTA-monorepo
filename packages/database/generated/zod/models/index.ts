@@ -85,6 +85,7 @@ export * from './FAQ.schema';
 export * from './Prompt.schema';
 export * from './Conversation.schema';
 export * from './Message.schema';
+export * from './CitationMessage.schema';
 export * from './Topic.schema';
 export * from './DM_CapBac.schema';
 export * from './DM_ChucDanh.schema';

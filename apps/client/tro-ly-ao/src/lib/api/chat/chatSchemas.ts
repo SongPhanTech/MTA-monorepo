@@ -20,13 +20,20 @@ export type BodyHoiDapFaqHoiDapFaqPost = {
 
 export type BodyHoiDapHoiDapPost = {
   prompt?: string;
-  type_data?: string;
+  topic_id?: string;
   conversation_id?: string;
 };
 
-export type BodyHoiDapV2HoiDapV2Post = {
+export type BodyHoiDapV2EndpointHoiDapV2Post = {
   prompt?: string;
   conversation_id?: string;
+};
+
+export type BodyOcrEndpointOcrPost = {
+  /**
+   * @format binary
+   */
+  file: Blob;
 };
 
 export type BodyTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = {

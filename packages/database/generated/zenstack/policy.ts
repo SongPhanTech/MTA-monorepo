@@ -1658,6 +1658,26 @@ const policy: PolicyDef = {
             },
 
         },
+        citationMessage: {
+            modelLevel: {
+                read: { guard: CitationMessage_read, },
+                create: { guard: CitationMessage_create, inputChecker: CitationMessage_create_input, },
+                update: { guard: CitationMessage_update, },
+                postUpdate: { guard: CitationMessage_postUpdate, },
+                delete: { guard: CitationMessage_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         topic: {
             modelLevel: {
                 read: { guard: Topic_read, },
@@ -4900,6 +4920,7 @@ const policy: PolicyDef = {
         prompt: { hasValidation: false },
         conversation: { hasValidation: false },
         message: { hasValidation: false },
+        citationMessage: { hasValidation: false },
         topic: { hasValidation: false },
         dM_CapBac: { hasValidation: false },
         dM_ChucDanh: { hasValidation: false },
@@ -10256,6 +10277,71 @@ function Message_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_Message_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CitationMessage_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_CitationMessage_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CitationMessage_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CitationMessage_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CitationMessage_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function CitationMessage_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CitationMessage_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CitationMessage_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_CitationMessage_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function CitationMessage_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CitationMessage_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

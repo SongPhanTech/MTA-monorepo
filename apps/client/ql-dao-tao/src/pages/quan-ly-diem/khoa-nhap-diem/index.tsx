@@ -269,7 +269,7 @@ export default function SubjectClassScore() {
                                     align: 'center',
                                     render: (text, record) => record?.subject?.credit || text,
                                 },
-                        
+
                                 {
                                     title: 'Giảng viên',
                                     width: 200,

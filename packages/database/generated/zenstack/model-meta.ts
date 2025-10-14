@@ -8004,6 +8004,12 @@ const metadata = {
                 }, sender: {
                     name: "sender",
                     type: "MessageSender",
+                }, citations: {
+                    name: "citations",
+                    type: "CitationMessage",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'message',
                 }, conversation: {
                     name: "conversation",
                     type: "Conversation",
@@ -8013,6 +8019,82 @@ const metadata = {
                     backLink: 'message',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "conversationId" },
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "tro-ly-ao" }] }],
+        },
+        citationMessage: {
+            name: 'CitationMessage', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, content: {
+                    name: "content",
+                    type: "String",
+                    isOptional: true,
+                }, index: {
+                    name: "index",
+                    type: "Int",
+                    isOptional: true,
+                }, documentId: {
+                    name: "documentId",
+                    type: "String",
+                    isOptional: true,
+                }, documentType: {
+                    name: "documentType",
+                    type: "String",
+                    isOptional: true,
+                }, messageId: {
+                    name: "messageId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'message',
+                }, message: {
+                    name: "message",
+                    type: "Message",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'citations',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "messageId" },
                 },
             }, uniqueConstraints: {
                 id: {

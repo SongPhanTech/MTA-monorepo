@@ -85,6 +85,7 @@ export * from './faq';
 export * from './prompt';
 export * from './conversation';
 export * from './message';
+export * from './citation-message';
 export * from './topic';
 export * from './dm-cap-bac';
 export * from './dm-chuc-danh';
