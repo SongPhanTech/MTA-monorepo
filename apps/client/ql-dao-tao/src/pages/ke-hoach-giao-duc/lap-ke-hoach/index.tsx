@@ -1,8 +1,8 @@
 import DefaultLayout from '@layouts/default-layout'
-import { Col, Flex, Row, Tabs } from 'antd'
+import { Col, Row, Tabs } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
-import RegisterClassManager from './_components/dang-ky-hoc-cho-lop-quan-ly'
+import SubjectBySemester from './_components/mon-theo-ke-hoach-du-kien'
 import RegisterResult from './_components/ket-qua-dang-ky-hoc-lop-quan-ly'
 import FixedClass from './_components/lop-co-mon-theo-khgd'
 
@@ -12,19 +12,19 @@ interface TabItem {
     content: React.ReactNode
 }
 
-export default function RegisterClass() {
+export default function PlanTraining() {
     const [activeLeftTab, setActiveLeftTab] = useState('1')
     const [subjectClassId, setSubjectClassId] = useState<string | null>(null)
     const leftTabs: TabItem[] = [
         {
             key: '1',
             label: 'Môn theo kế hoạch giảng dạy',
-            content: <RegisterClassManager setSubjectClassId={setSubjectClassId} />,
+            content: <SubjectBySemester />,
         },
         {
             key: '2',
             label: 'Môn học chậm tiến độ',
-            content: <RegisterClassManager setSubjectClassId={setSubjectClassId} />,
+            content: <SubjectBySemester />,
         },
         {
             key: '3',
@@ -33,59 +33,38 @@ export default function RegisterClass() {
         },
     ]
 
-    const rightTabsMap: Record<string, TabItem[]> = {
-        '1': [
-            {
-                key: '1',
-                label: 'Môn học đã lập kế hoạch',
-                content: <FixedClass subjectClassId={subjectClassId} />,
-            },
-        ],
-    }
-
-    const renderRightTabs = () => {
-        const rightTabs = rightTabsMap[activeLeftTab]
-        if (!rightTabs) return null
-
-        return (
-            <Tabs defaultActiveKey="1">
-                {rightTabs.map((tab) => (
-                    <Tabs.TabPane tab={tab.label} key={tab.key}>
-                        {tab.content}
-                    </Tabs.TabPane>
-                ))}
-            </Tabs>
-        )
-    }
+    const rightTabsMap: TabItem[] = [
+        {
+            key: '1',
+            label: 'Môn học đã lập kế hoạch',
+            content: <FixedClass subjectClassId={subjectClassId} />,
+        },
+    ]
 
     return (
-        <Row gutter={[1, 0]}>
-            <Col span={24} className="!p-0">
-                <Flex>
-                    <Col span={activeLeftTab === '3' ? 24 : 14}>
-                        <div className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4">
-                            <Tabs activeKey={activeLeftTab} onChange={setActiveLeftTab}>
-                                {leftTabs.map((tab) => (
-                                    <Tabs.TabPane tab={tab.label} key={tab.key}>
-                                        {tab.content}
-                                    </Tabs.TabPane>
-                                ))}
-                            </Tabs>
-                        </div>
-                    </Col>
-                    {activeLeftTab !== '3' && (
-                        <Col span={10}>
-                            <div className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4">
-                                {renderRightTabs()}
-                            </div>
-                        </Col>
-                    )}
-                </Flex>
+        <Row gutter={[8, 0]} className="bg-white">
+            <Col span={14}>
+                <Tabs activeKey={activeLeftTab} onChange={setActiveLeftTab}>
+                    {leftTabs.map((tab) => (
+                        <Tabs.TabPane tab={tab.label} key={tab.key}>
+                            {tab.content}
+                        </Tabs.TabPane>
+                    ))}
+                </Tabs>
+            </Col>
+            <Col span={10}>
+                <Tabs defaultActiveKey="1">
+                    {rightTabsMap.map((tab) => (
+                        <Tabs.TabPane tab={tab.label} key={tab.key}>
+                            {tab.content}
+                        </Tabs.TabPane>
+                    ))}
+                </Tabs>
             </Col>
         </Row>
     )
 }
 
-RegisterClass.getLayout = function getLayout(page: React.ReactElement) {
+PlanTraining.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout unLayout={true}>{page}</DefaultLayout>
 }

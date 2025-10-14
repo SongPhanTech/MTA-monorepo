@@ -60,16 +60,23 @@ export type NhatKyDangNhapQTPM = BaseEntity & {
     sUserName?: string | null
     /** @nullable */
     sVaiTro?: string | null
-    dVao?: string
+    /** @nullable */
+    dVao?: string | null
     /** @nullable */
     dRa?: string | null
     iTrangThai?: number
     /** @nullable */
-    sReferenceName?: string | null
-    /** @nullable */
     sDescription?: string | null
+    /** @nullable */
+    sActionType?: string | null
+    /** @nullable */
+    sActionName?: string | null
+    /** @nullable */
+    sClientId?: string | null
     /** @nullable */
     sIPAddress?: string | null
     /** @nullable */
     sRawUserAgent?: string | null
+    /** @nullable */
+    sSessionId?: string | null
 }
