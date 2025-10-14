@@ -64,12 +64,15 @@ export default function SubjectClassScore() {
         scoreChecked: boolean
         scoreSubmitted: boolean
     }>()
-        const [formTable] = Form.useForm< {
-            examScore?: number
-            description?:string
-            suspended?: boolean
-            suspendedReason?: string
-        }[]>()
+    const [formTable] =
+        Form.useForm<
+            {
+                examScore?: number
+                description?: string
+                suspended?: boolean
+                suspendedReason?: string
+            }[]
+        >()
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: session } = useSession()
@@ -131,41 +134,43 @@ export default function SubjectClassScore() {
             showSpinner()
             const dataSubmit = form.getFieldsValue()
             const dataTableSubmit = formTable.getFieldsValue()
-            const listObject=Object.entries(dataTableSubmit).map(([key, value_]) => {
-                            return {
-                                id: key,
-                                ...value_
-                            }
-                        })
-            console.log(listObject,dataTableSubmit);
-            
-            const error = listObject?.find((i: any) =>i?.examScore > 10 || i?.examScore < 0 )
+            const listObject = Object.entries(dataTableSubmit).map(([key, value_]) => {
+                return {
+                    id: key,
+                    ...value_,
+                }
+            })
+            console.log(listObject, dataTableSubmit)
+
+            const error = listObject?.find((i: any) => i?.examScore > 10 || i?.examScore < 0)
             if (error) {
                 message.error('Bạn chưa nhập đúng điểm số')
                 return
             }
             let listSqlTransaction: any = []
-                if (subjectClassId &&profileId!==listUser.lecturer) {
-                    listSqlTransaction = [
-                        ...listSqlTransaction,
-                        {
-                            model: 'SubjectClass',
-                            operation: 'update',
+            if (subjectClassId && profileId !== listUser.lecturer) {
+                listSqlTransaction = [
+                    ...listSqlTransaction,
+                    {
+                        model: 'SubjectClass',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id: subjectClassId,
+                            },
                             data: {
-                                where: {
-                                    id: subjectClassId,
-                                },
-                                data: {
-                                    isLockScore:dataSubmit?.isLockScore,
-                                    isLockExamScore: dataSubmit?.isLockExamScore,
-                                    scoreSubmitted: dataSubmit?.scoreSubmitted,
-                                    scoreChecked: dataSubmit?.scoreChecked
-                                },
+                                isLockScore: dataSubmit?.isLockScore,
+                                isLockExamScore: dataSubmit?.isLockExamScore,
+                                scoreSubmitted: dataSubmit?.scoreSubmitted,
+                                scoreChecked: dataSubmit?.scoreChecked,
                             },
                         },
-                    ]
-                }
-            const list =dataTable.find((i:any)=>!i.examScore || !dataTableSubmit[i.id].examScore)
+                    },
+                ]
+            }
+            const list = dataTable.find(
+                (i: any) => !i.examScore || !dataTableSubmit[i.id].examScore
+            )
             if (!list && subjectClassId) {
                 listSqlTransaction = [
                     ...listSqlTransaction,
@@ -181,13 +186,15 @@ export default function SubjectClassScore() {
                     },
                 ]
             }
-            const listChange=dataTableSubmit.filter((i:any)=>i.examScore || i.description || i.suspended || i.suspendedReason);
+            const listChange = dataTableSubmit.filter(
+                (i: any) => i.examScore || i.description || i.suspended || i.suspendedReason
+            )
 
             if (listChange?.length > 0) {
                 listSqlTransaction = [
                     ...listSqlTransaction,
                     ...listChange.map(({ id, item }: any) => {
-                        const newData=dataTableSubmit[id];
+                        const newData = dataTableSubmit[id]
                         return {
                             model: 'StudentSubjectScore',
                             operation: 'update',
@@ -195,36 +202,53 @@ export default function SubjectClassScore() {
                                 where: {
                                     id,
                                 },
-                                data: {...newData,
-                                    examScore:!!item.examScore ?item.examScore : newData?.examScore,
-                                    description:!!item.description ?item.description : newData?.description,
-                                    suspended:!!item.suspended ?item.suspended : newData?.suspended,
-                                    suspendedReason:!!item.suspendedReason ?item.suspendedReason : newData?.suspendedReason
+                                data: {
+                                    ...newData,
+                                    examScore: !!item.examScore
+                                        ? item.examScore
+                                        : newData?.examScore,
+                                    description: !!item.description
+                                        ? item.description
+                                        : newData?.description,
+                                    suspended: !!item.suspended
+                                        ? item.suspended
+                                        : newData?.suspended,
+                                    suspendedReason: !!item.suspendedReason
+                                        ? item.suspendedReason
+                                        : newData?.suspendedReason,
                                 },
                             },
                         }
                     }),
-                      ...listChange.map(({ id, item }: any) => {
-                        const newData=dataTableSubmit[id];
+                    ...listChange.map(({ id, item }: any) => {
+                        const newData = dataTableSubmit[id]
                         return {
                             model: 'StudentSubjectScoreHistory',
                             operation: 'create',
                             data: {
                                 data: {
-                                    studentSubjectScoreId:id,
-                                    attendanceScore:item?.attendanceScore,
-                                    midtermScore:item?.midtermScore,
-                                    examScore:!!item.examScore ?item.examScore : newData?.examScore,
-                                    finalScore:item?.finalScore,
-                                    manualFinalScore:item?.manualFinalScore,
-                                    description:!!item.description ?item.description : newData?.description,
-                                    suspended:!!item.suspended ?item.suspended : newData?.suspended,
-                                    suspendedReason:!!item.suspendedReason ?item.suspendedReason : newData?.suspendedReason,
-                                    updatedById:profileId
+                                    studentSubjectScoreId: id,
+                                    attendanceScore: item?.attendanceScore,
+                                    midtermScore: item?.midtermScore,
+                                    examScore: !!item.examScore
+                                        ? item.examScore
+                                        : newData?.examScore,
+                                    finalScore: item?.finalScore,
+                                    manualFinalScore: item?.manualFinalScore,
+                                    description: !!item.description
+                                        ? item.description
+                                        : newData?.description,
+                                    suspended: !!item.suspended
+                                        ? item.suspended
+                                        : newData?.suspended,
+                                    suspendedReason: !!item.suspendedReason
+                                        ? item.suspendedReason
+                                        : newData?.suspendedReason,
+                                    updatedById: profileId,
                                 },
                             },
                         }
-                    })
+                    }),
                 ]
             }
             if (listSqlTransaction?.length > 0) {
@@ -1061,7 +1085,7 @@ export default function SubjectClassScore() {
                                                     title: 'Điểm HP',
                                                     width: 80,
                                                     align: 'center',
-                                                    render: (_, record:any) => (
+                                                    render: (_, record: any) => (
                                                         <Form.Item
                                                             noStyle
                                                             shouldUpdate={(prev, cur) =>
@@ -1079,14 +1103,16 @@ export default function SubjectClassScore() {
                                                                         ?.trainingCourse,
                                                                     {
                                                                         ...record,
-                                                                        examScore: !!recordForm ? recordForm : record?.examScore,
+                                                                        examScore: !!recordForm
+                                                                            ? recordForm
+                                                                            : record?.examScore,
                                                                     }
                                                                 )?.toFixed(1)
 
                                                                 return <div>{finalScore}</div>
                                                             }}
                                                         </Form.Item>
-                                                    )
+                                                    ),
                                                 },
                                                 // #region Cấm thi/Hoãn thi/Đình chỉ
                                                 {
