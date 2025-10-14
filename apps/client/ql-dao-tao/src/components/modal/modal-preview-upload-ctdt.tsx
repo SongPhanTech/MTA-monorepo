@@ -1,7 +1,8 @@
+import Table from '@components/commons/table'
 import { $Enums } from '@workspace/db/client'
 import { useFindManySubject, useFindManySubjectVersion } from '@workspace/db/hooks'
 import type { SubjectResult } from '@workspace/libs/parseExcel'
-import { Button, Collapse, Modal, Table, Tag } from 'antd'
+import { Button, Collapse, Modal, Tag } from 'antd'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
@@ -31,8 +32,8 @@ const mapSubjectVersionType = (type: $Enums.SubjectVersionType): string => {
     const typeMap: Partial<Record<$Enums.SubjectVersionType, string>> = {
         Normal: 'Bình thường',
         Internship: 'Thực tập',
-        Research: 'Nghiên cứu',
-        Project: 'Đồ án',
+        Research: 'Chuyên đề nghiên cứu',
+        Project: 'Luận văn/đề án',
     }
     return typeMap[type] || type
 }
@@ -48,7 +49,7 @@ const ModalPreviewUpload = () => {
     })
 
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(10)
+    const [numberOfPages, setNumberOfPages] = useState(100)
 
     const { data: existingSubjects = [] } = useFindManySubject({
         select: { name: true, code: true },
@@ -99,7 +100,6 @@ const ModalPreviewUpload = () => {
             duplicateErrors: duplicates,
         }
     }, [rawPreviewData, existingSubjects, existingSubjectVersions])
-
     const allErrors = [...errorData, ...duplicateErrors]
 
     const handleConfirmImport = () => {
@@ -119,8 +119,8 @@ const ModalPreviewUpload = () => {
             }
             open={isOpen}
             onCancel={onClose}
-            width="90vw"
-            style={{ top: 20 }}
+            className="w-[100vw]"
+            style={{ top: 5, position: 'fixed', left: 0, right: 0 }}
             footer={[
                 <Button key="cancel" onClick={onClose}>
                     Hủy
@@ -135,234 +135,235 @@ const ModalPreviewUpload = () => {
                 </Button>,
             ]}
         >
-            {/* Error list */}
-            {allErrors?.length > 0 && (
-                <Collapse defaultActiveKey={['1']} className="mb-4">
-                    <Panel
-                        header={
-                            <div className="text-lg font-[500] text-red-500">
-                                Danh sách lỗi ({allErrors.length} lỗi)
-                            </div>
-                        }
-                        key="1"
-                    >
-                        <Table
-                            columns={[
-                                {
-                                    title: 'STT',
-                                    width: 60,
-                                    align: 'center',
-                                    render: (_, __, index: number) => index + 1,
-                                },
-                                {
-                                    title: 'Sheet',
-                                    dataIndex: 'sheet',
-                                    key: 'sheet',
-                                    width: 120,
-                                },
-                                {
-                                    title: 'Vị trí',
-                                    dataIndex: 'cell',
-                                    key: 'cell',
-                                    width: 100,
-                                },
-                                {
-                                    title: 'Lỗi',
-                                    dataIndex: 'message',
-                                    key: 'message',
-                                },
-                            ]}
-                            dataSource={allErrors}
-                            pagination={false}
-                            size="small"
-                            scroll={{ y: 200 }}
-                        />
-                    </Panel>
-                </Collapse>
-            )}
+            <div className="h-[85vh] overflow-auto">
+                {/* Error list */}
+                {allErrors?.length > 0 && (
+                    <Collapse defaultActiveKey={['1']} className="mb-4">
+                        <Panel
+                            header={
+                                <div className="text-lg font-[500] text-red-500">
+                                    Danh sách lỗi ({allErrors.length} lỗi)
+                                </div>
+                            }
+                            key="1"
+                        >
+                            <Table
+                                columns={[
+                                    {
+                                        title: 'STT',
+                                        width: 60,
+                                        align: 'center',
+                                        render: (_, __, index: number) => index + 1,
+                                    },
+                                    {
+                                        title: 'Sheet',
+                                        dataIndex: 'sheet',
+                                        key: 'sheet',
+                                        width: 120,
+                                    },
+                                    {
+                                        title: 'Vị trí',
+                                        dataIndex: 'cell',
+                                        key: 'cell',
+                                        width: 100,
+                                    },
+                                    {
+                                        title: 'Lỗi',
+                                        dataIndex: 'message',
+                                        key: 'message',
+                                    },
+                                ]}
+                                dataSource={allErrors}
+                                pagination={false}
+                                size="small"
+                                scroll={{ y: 200 }}
+                            />
+                        </Panel>
+                    </Collapse>
+                )}
 
-            {/* Preview table */}
-            <Table
-                columns={[
-                    {
-                        title: 'STT',
-                        dataIndex: 'stt',
-                        key: 'stt',
-                        width: 60,
-                        align: 'center',
-                        fixed: 'left',
-                        render: (_, __, index: number) =>
-                            index + 1 + (currentPage - 1) * numberOfPages,
-                    },
-                    {
-                        title: 'Trạng thái',
-                        dataIndex: 'status',
-                        key: 'status',
-                        width: 150,
-                        fixed: 'left',
-                        align: 'center',
-                        render: (status: 'new' | 'new-version' | 'duplicate') => {
-                            if (status === 'new') {
-                                return <Tag color="green">Nhóm học mới</Tag>
-                            }
-                            if (status === 'new-version') {
-                                return <Tag color="blue">Môn học mới</Tag>
-                            }
-                            return <Tag color="orange">Đã có môn học</Tag>
+                {/* Preview table */}
+                <Table
+                    columns={[
+                        {
+                            title: 'STT',
+                            dataIndex: 'stt',
+                            key: 'stt',
+                            width: 60,
+                            align: 'center',
+                            fixed: 'left',
+                            render: (_, __, index: number) =>
+                                index + 1 + (currentPage - 1) * numberOfPages,
                         },
-                    },
-                    {
-                        title: 'Khối kiến thức',
-                        dataIndex: 'trainingBlockName',
-                        key: 'knowledgeBlock',
-                        fixed: 'left',
-                        width: 250,
-                    },
-                    {
-                        title: 'Tên học phần',
-                        dataIndex: 'name',
-                        key: 'name',
-                        width: 270,
-                        fixed: 'left',
-                    },
-                    {
-                        title: 'Bắt buộc',
-                        dataIndex: 'type',
-                        key: 'required',
-                        width: 150,
-                        render: (value) => mapSubjectRequirementType(value),
-                    },
-                    {
-                        title: 'HP điều kiện',
-                        dataIndex: 'prerequisite',
-                        key: 'prerequisite',
-                        align: 'center',
-                        width: 170,
-                    },
-                    {
-                        title: 'Loại học phần',
-                        dataIndex: 'type',
-                        key: 'type',
-                        width: 270,
-                        render: (value) => mapSubjectVersionType(value),
-                    },
-                    {
-                        title: 'Mã học phần',
-                        dataIndex: 'code',
-                        key: 'code',
-                        width: 170,
-                    },
-                    {
-                        title: 'Khoa, Viện phụ trách',
-                        dataIndex: 'organizationCode',
-                        key: 'managementOrganization',
-                        align: 'center',
-                        width: 150,
-                    },
-                    {
-                        title: 'Số tín chỉ',
-                        dataIndex: 'credit',
-                        key: 'credit',
-                        width: 100,
-                        align: 'center',
-                    },
-                    {
-                        title: 'Số tiết CTĐT',
-                        dataIndex: 'period',
-                        key: 'periodCtdt',
-                        width: 120,
-                        align: 'center',
-                    },
-                    {
-                        title: 'Số tiết TKB',
-                        dataIndex: 'period',
-                        key: 'periodTkb',
-                        width: 120,
-                        align: 'center',
-                    },
-                    {
-                        title: 'LT',
-                        dataIndex: 'numberOfTheory',
-                        key: 'theory',
-                        width: 100,
-                        align: 'center',
-                    },
-                    {
-                        title: 'TL,BT',
-                        dataIndex: 'numberOfPractical',
-                        key: 'practice',
-                        width: 100,
-                        align: 'center',
-                    },
-                    {
-                        title: 'ThL',
-                        dataIndex: 'numberOfSelfStudy',
-                        key: 'discussion',
-                        width: 100,
-                        align: 'center',
-                    },
-                    {
-                        title: 'TN,TH',
-                        dataIndex: 'numberOfPractice',
-                        key: 'experiment',
-                        width: 100,
-                        align: 'center',
-                    },
-                    {
-                        title: 'Ôn',
-                        dataIndex: 'numberOfReview',
-                        key: 'review',
-                        width: 100,
-                        align: 'center',
-                    },
-                    {
-                        title: 'KT,Thi',
-                        dataIndex: 'numberOfExam',
-                        key: 'exam',
-                        width: 80,
-                        align: 'center',
-                    },
-                    {
-                        title: 'Học kỳ dự kiến',
-                        dataIndex: 'semester',
-                        key: 'semester',
-                        align: 'center',
-                        width: 180,
-                    },
-                    {
-                        title: 'Hình thức thi',
-                        dataIndex: 'examType',
-                        key: 'examType',
-                        align: 'center',
-                        width: 170,
-                        render: (value) => mapExamType(value),
-                    },
-                    {
-                        title: 'Một đầu điểm',
-                        dataIndex: '',
-                        key: 'gradePoints',
-                        align: 'center',
-                        width: 170,
-                    },
-                ]}
-                dataSource={filteredData}
-                pagination={{
-                    current: currentPage,
-                    pageSize: numberOfPages,
-                    total: filteredData.length,
-                    onChange: (page) => setCurrentPage(page),
-                    showSizeChanger: true,
-                    onShowSizeChange: (_current: number, size: number) => {
-                        setNumberOfPages(size)
-                        setCurrentPage(1)
-                    },
-                    showTotal: (total) => `Tổng ${total} môn học`,
-                    pageSizeOptions: ['10', '20', '50', '100'],
-                }}
-                rowKey={(record: SubjectResult, index?: number) => record.code || `row-${index}`}
-                scroll={{ x: 3000, y: 500 }}
-                size="small"
-            />
+                        {
+                            title: 'Trạng thái',
+                            dataIndex: 'status',
+                            key: 'status',
+                            width: 150,
+                            fixed: 'left',
+                            align: 'center',
+                            render: (status: 'new' | 'new-version' | 'duplicate') => {
+                                if (status === 'new') {
+                                    return <Tag color="green">Nhóm học mới</Tag>
+                                }
+                                if (status === 'new-version') {
+                                    return <Tag color="blue">Môn học mới</Tag>
+                                }
+                                return <Tag color="orange">Đã có môn học</Tag>
+                            },
+                        },
+                        {
+                            title: 'Khối kiến thức',
+                            dataIndex: 'trainingBlockName',
+                            key: 'knowledgeBlock',
+                            fixed: 'left',
+                            width: 250,
+                        },
+                        {
+                            title: 'Tên học phần',
+                            dataIndex: 'name',
+                            key: 'name',
+                            width: 270,
+                            fixed: 'left',
+                        },
+                        {
+                            title: 'Bắt buộc',
+                            dataIndex: 'type',
+                            key: 'required',
+                            width: 150,
+                            render: (value) => mapSubjectRequirementType(value),
+                        },
+                        {
+                            title: 'HP điều kiện',
+                            dataIndex: 'prerequisite',
+                            key: 'prerequisite',
+                            align: 'center',
+                            width: 170,
+                        },
+                        {
+                            title: 'Loại học phần',
+                            dataIndex: 'subjectVersionType',
+                            key: 'type',
+                            width: 270,
+                            render: (value) => mapSubjectVersionType(value),
+                        },
+                        {
+                            title: 'Mã học phần',
+                            dataIndex: 'code',
+                            key: 'code',
+                            width: 170,
+                        },
+                        {
+                            title: 'Khoa, Viện phụ trách',
+                            dataIndex: 'organizationCode',
+                            key: 'managementOrganization',
+                            align: 'center',
+                            width: 180,
+                        },
+                        {
+                            title: 'Số tín chỉ',
+                            dataIndex: 'credit',
+                            key: 'credit',
+                            width: 100,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Số tiết CTĐT',
+                            dataIndex: 'period',
+                            key: 'periodCtdt',
+                            width: 120,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Số tiết TKB',
+                            dataIndex: 'period',
+                            key: 'periodTkb',
+                            width: 120,
+                            align: 'center',
+                        },
+                        {
+                            title: 'LT',
+                            dataIndex: 'numberOfTheory',
+                            key: 'theory',
+                            width: 100,
+                            align: 'center',
+                        },
+                        {
+                            title: 'TL,BT',
+                            dataIndex: 'numberOfPractical',
+                            key: 'practice',
+                            width: 100,
+                            align: 'center',
+                        },
+                        {
+                            title: 'ThL',
+                            dataIndex: 'numberOfSelfStudy',
+                            key: 'discussion',
+                            width: 100,
+                            align: 'center',
+                        },
+                        {
+                            title: 'TN,TH',
+                            dataIndex: 'numberOfPractice',
+                            key: 'experiment',
+                            width: 100,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Ôn',
+                            dataIndex: 'numberOfReview',
+                            key: 'review',
+                            width: 100,
+                            align: 'center',
+                        },
+                        {
+                            title: 'KT,Thi',
+                            dataIndex: 'numberOfExam',
+                            key: 'exam',
+                            width: 80,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Học kỳ dự kiến',
+                            dataIndex: 'semester',
+                            key: 'semester',
+                            align: 'center',
+                            width: 180,
+                        },
+                        {
+                            title: 'Hình thức thi',
+                            dataIndex: 'examType',
+                            key: 'examType',
+                            align: 'center',
+                            width: 170,
+                            render: (value) => mapExamType(value),
+                        },
+                        {
+                            title: 'Một đầu điểm',
+                            dataIndex: '',
+                            key: 'gradePoints',
+                            align: 'center',
+                            width: 170,
+                        },
+                    ]}
+                    data={filteredData}
+                    pagination={{
+                        current: currentPage,
+                        pageSize: numberOfPages,
+                        total: filteredData.length,
+                        onChange: (page, pageSize) => {
+                            setCurrentPage(page)
+                            setNumberOfPages(pageSize)
+                        },
+                        onShowSizeChange: (size: number) => {
+                            setNumberOfPages(size)
+                            setCurrentPage(1)
+                        },
+                        showTotal: (total) => `Tổng ${total} môn học`,
+                    }}
+                    rowKey={'id'}
+                />
+            </div>
         </Modal>
     )
 }
