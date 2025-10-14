@@ -3,18 +3,23 @@ import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { TrainingBlock, TrainingBlockOnCurriculumVersion } from '@workspace/db'
 import { useFindManyTrainingBlock, useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
-import { Col, Form, message, Row, Select } from 'antd'
+import { Col, Form, message, Row, Select,TreeSelect } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { diffArrays, type ItemProps } from '@workspace/libs/utils'
 import { GripVertical } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 export type PutTrainingBlockOnCurriculumVersion = TrainingBlockOnCurriculumVersion & {
     trainingBlockIds: string[]
+}
+type TreeNode = {
+    value: string
+    title: string
+    children?: TreeNode[]
 }
 
 dayjs.locale('vi')
@@ -51,23 +56,21 @@ const PutTrainingBlockOnCurriculumVersion = () => {
     )
 
     const { data: trainingBlockData = [] } = useFindManyTrainingBlock()
+    console.log('trainingBlockData', trainingBlockData)
 
     useEffect(() => {
         if (initialValue) {
-            setItems(
+            const initialItems =
                 initialValue?.trainingBlocks.map(
                     (i: TrainingBlockOnCurriculumVersion & { trainingBlock: TrainingBlock }) => ({
                         value: i.trainingBlockId,
                         label: i.trainingBlock.name,
                     })
                 ) || []
-            )
+            setItems(initialItems)
+
             form.setFieldsValue({
-                trainingBlockIds: initialValue?.trainingBlocks?.length
-                    ? initialValue?.trainingBlocks.map(
-                          (item: TrainingBlockOnCurriculumVersion) => item?.trainingBlockId
-                      )
-                    : [],
+                trainingBlockIds: initialItems.map(item => item.value),
             })
         }
     }, [initialValue, form.setFieldsValue])
@@ -90,7 +93,7 @@ const PutTrainingBlockOnCurriculumVersion = () => {
                           })
                       )
                     : [],
-                'value'
+                'value' // Tiếp tục so sánh dựa trên key 'value'
             )
             let listTransition: any = []
 
@@ -244,6 +247,51 @@ const PutTrainingBlockOnCurriculumVersion = () => {
     // const trainingBlockIdForm = Form.useWatch('trainingBlockIds', form)
 
     // use
+    const treeData = useMemo(() => {
+        const buildTree = (nodes: TrainingBlock[]): TreeNode[] => {
+            const map = new Map<string, TreeNode>()
+            const roots: TreeNode[] = []
+
+            // Khởi tạo map với các node, thêm thuộc tính children
+            nodes.forEach((node) => {
+                map.set(node.id, {
+                    value: node.id,
+                    title: node.name,
+                    children: [],
+                })
+            })
+
+            // Xây dựng cây bằng cách liên kết cha-con
+            nodes.forEach((node) => {
+                if (node.parentId && map.has(node.parentId)) {
+                    const parentNode = map.get(node.parentId)
+                    const currentNode = map.get(node.id)
+                    if (parentNode && currentNode) {
+                        parentNode.children?.push(currentNode)
+                    }
+                } else {
+                    const rootNode = map.get(node.id)
+                    if (rootNode) {
+                        roots.push(rootNode)
+                    }
+                }
+            })
+            // Lọc bỏ các children rỗng để giao diện đẹp hơn
+            const cleanEmptyChildren = (nodes: TreeNode[]) => {
+                nodes.forEach(node => {
+                    if (node.children && node.children.length > 0) {
+                        cleanEmptyChildren(node.children);
+                    } else {
+                        delete node.children;
+                    }
+                });
+                return nodes;
+            }
+
+            return cleanEmptyChildren(roots)
+        }
+        return buildTree(trainingBlockData)
+    }, [trainingBlockData])
     return (
         <PutFormModal
             open={isOpen}
@@ -256,19 +304,17 @@ const PutTrainingBlockOnCurriculumVersion = () => {
         >
             <Col span={24}>
                 <FormItem form={form} name="trainingBlockIds" label="Khối kiến thức" required>
-                    <Select
-                        mode="multiple"
-                        maxTagCount={'responsive'}
+                <TreeSelect
+                        treeData={treeData}
+                        multiple
+                        allowClear
+                        treeCheckable={true} // Cho phép checkbox để chọn
+                        treeCheckStrictly 
                         placeholder="Chọn khối kiến thức"
-                        options={trainingBlockData.map((i: TrainingBlock) => {
-                            return {
-                                value: i.id,
-                                label: i.name,
-                            }
-                        })}
-                        onChange={(value, option: any) => {
-                            hanldeOnchange(option)
-                        }}
+                        maxTagCount={'responsive'}
+                        treeDefaultExpandAll // Mặc định mở rộng tất cả các node
+                        onChange={hanldeOnchange}
+                        style={{ width: '100%' }}
                     />
                 </FormItem>
             </Col>
