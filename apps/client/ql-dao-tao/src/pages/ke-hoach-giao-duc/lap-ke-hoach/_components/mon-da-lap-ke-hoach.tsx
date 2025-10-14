@@ -2,7 +2,8 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useFindFirstPlanTraining } from '@workspace/db/hooks'
+import { useFindFirstPlanTraining, useFindUniqueSemester } from '@workspace/db/hooks'
+import { exportFromTemplate } from '@workspace/libs/template-excel'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, Row } from 'antd'
@@ -25,7 +26,21 @@ export default function MonDaLapKeHoach() {
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-
+    const { data: semesterData } = useFindUniqueSemester(
+        {
+            where: { id: semesterId },
+            select: {
+                id: true,
+                name: true,
+                schoolYear: {
+                    select: { id: true, name: true },
+                },
+            },
+        },
+        {
+            enabled: !!semesterId,
+        }
+    )
     const { data: planTraining } = useFindFirstPlanTraining(
         {
             where: {
@@ -51,7 +66,15 @@ export default function MonDaLapKeHoach() {
                                 },
                             },
                         },
-                        subjectVersion: true,
+                        subjectVersion: {
+                            include: {
+                                managementOrganization: {
+                                    select: {
+                                        sMa: true,
+                                    },
+                                },
+                            },
+                        },
                     },
                     where: {
                         subjectVersion: {
@@ -115,6 +138,84 @@ export default function MonDaLapKeHoach() {
                     </Col>
                     <Col span={24} className="mt-2">
                         <Flex justify="end" gap={4}>
+                            <Button
+                                type="primary"
+                                onClick={() =>
+                                    exportFromTemplate({
+                                        templateUrl:
+                                            '/lms/templates/chuong-trinh-dao-tao/ke-hoach-mo-lop.xlsx',
+                                        data: {
+                                            hoc_ky: semesterData?.name ?? '',
+                                            nam_hoc: semesterData?.schoolYear?.name ?? '',
+                                        },
+                                        tableStartCell: { row: 7, col: 1 },
+                                        rows: planTraining?.planTrainingSubjects.flatMap(
+                                            (item, index) =>
+                                                item.fixedClasses.map((fc, idx) => {
+                                                    const rowSpan =
+                                                        idx === 0 ? item.fixedClasses.length : 1
+                                                    return {
+                                                        cells: [
+                                                            {
+                                                                value: index + 1,
+                                                                align: 'center',
+                                                                rowSpan,
+                                                            },
+                                                            {
+                                                                value: item.subjectVersion?.code,
+                                                                align: 'center',
+                                                                rowSpan,
+                                                            },
+                                                            {
+                                                                value: item.subjectVersion?.name,
+                                                                rowSpan,
+                                                            },
+                                                            {
+                                                                value: item.subjectVersion?.credit,
+                                                                align: 'center',
+                                                                rowSpan,
+                                                            },
+                                                            {
+                                                                value: `${fc.code}`,
+                                                                align: 'center',
+                                                            },
+                                                            {
+                                                                value: `${fc._count.students ?? 0}`,
+                                                                align: 'center',
+                                                            },
+                                                            {
+                                                                value: '',
+                                                                align: 'center',
+                                                                rowSpan,
+                                                            },
+                                                            {
+                                                                value: item.fixedClasses.reduce(
+                                                                    (sum, fc) =>
+                                                                        sum +
+                                                                        (fc._count?.students ?? 0),
+                                                                    0
+                                                                ),
+                                                                align: 'center',
+                                                                rowSpan,
+                                                            },
+                                                            {
+                                                                value:
+                                                                    item.subjectVersion
+                                                                        .managementOrganization
+                                                                        ?.sMa ?? '',
+                                                                align: 'center',
+                                                                rowSpan,
+                                                            },
+                                                        ],
+                                                    }
+                                                })
+                                        ),
+                                        fileName: `ke-hoach-mo-lop-mon-hoc-${semesterData?.name}-${semesterData?.schoolYear.name}.xlsx`,
+                                    })
+                                }
+                            >
+                                Xuất kế hoạch môn dự kiến
+                            </Button>
                             <Button
                                 onClick={() => {}}
                                 disabled={!subjectSelected.length}
