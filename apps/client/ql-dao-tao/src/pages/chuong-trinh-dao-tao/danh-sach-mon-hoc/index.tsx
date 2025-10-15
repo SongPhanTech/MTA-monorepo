@@ -2,6 +2,7 @@ import TreeSelect from '@/components/commons/tree-select'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import ViewIcon from '@components/icons/view'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
@@ -21,15 +22,28 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip, Typography } from 'antd'
+import {
+    Button,
+    Col,
+    Flex,
+    Form,
+    Input,
+    message,
+    Popconfirm,
+    Row,
+    Tag,
+    Tooltip,
+    Typography,
+} from 'antd'
 import _ from 'lodash'
-import { BookPlus, Search } from 'lucide-react'
+import { BookPlus, History, LockKeyhole, LockKeyholeOpen, Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function SubjectList() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
+    const [isLocked, setIsLocked] = useState(true)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
@@ -187,13 +201,14 @@ export default function SubjectList() {
         }, 500),
         []
     )
-    const { onOpen } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<{ id: string; isLocked: boolean }>({
         tag: 'PutSubjectListModal',
     })
 
     const { onOpen: onOpenSubjectVersion } = useDisclosure<{
         subjectId: string
         subjectVersionId?: string
+        isLocked?: boolean
     }>({
         tag: 'PutVersionSubjectModal',
     })
@@ -203,9 +218,20 @@ export default function SubjectList() {
     const handleModal = () => {
         onOpen()
     }
+    const handleHistory = () => {
+        // onOpenHistory()
+    }
+    const handleToggleLock = () => {
+        //Todo: cần api để xử lí việc khóa/mở khóa hàng loạt
+        setIsLocked((prevState) => !prevState)
+    }
 
-    const handleModalSubjectVersion = (subjectId: string, subjectVersionId: string) => {
-        onOpenSubjectVersion({ subjectId, subjectVersionId })
+    const handleModalSubjectVersion = (
+        subjectId: string,
+        subjectVersionId: string,
+        isLocked: boolean
+    ) => {
+        onOpenSubjectVersion({ subjectId, subjectVersionId, isLocked })
     }
 
     const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
@@ -231,6 +257,9 @@ export default function SubjectList() {
         } finally {
             hideSpinner()
         }
+    }
+    const handleLogHistory = (record: any) => {
+        console.log(record)
     }
 
     async function handleDeleteSubject(id: string) {
@@ -324,7 +353,33 @@ export default function SubjectList() {
                             </Flex>
                         </Col>
                         <Col span={12}>
-                            <Flex justify="end" gap={8}>
+                            <Flex justify="end" gap={4}>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleHistory} type="primary">
+                                        <History />
+                                        Lịch sử
+                                    </Button>
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
+                                    'THEM'
+                                ) && (
+                                    <Popconfirm
+                                        placement="bottomRight"
+                                        title={`Bạn có chắc muốn ${isLocked ? 'mở' : 'khóa'} chỉnh sửa môn học không?`}
+                                        onConfirm={handleToggleLock}
+                                        okText="Đồng ý"
+                                        cancelText="Hủy"
+                                    >
+                                        <Button type="primary">
+                                            {isLocked ? <LockKeyhole /> : <LockKeyholeOpen />}
+                                            Khóa: <span>{isLocked ? 'Bật' : 'Tắt'}</span>
+                                        </Button>
+                                    </Popconfirm>
+                                )}
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_QL_MON_HOC,
                                     'THEM'
@@ -572,7 +627,30 @@ export default function SubjectList() {
                                 ),
                                 render: (_, record) => {
                                     const { id: subjectVersionId, subjectId, subjectClass } = record
-                                    return subjectVersionId && subjectId ? (
+                                    if (isLocked) {
+                                        return (
+                                            <Row className="justify-center gap-2">
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                                    'XEM'
+                                                ) && (
+                                                    <ViewIcon
+                                                        onClick={() =>
+                                                            handleModalSubjectVersion(
+                                                                subjectId,
+                                                                subjectVersionId,
+                                                                isLocked
+                                                            )
+                                                        }
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                            </Row>
+                                        )
+                                    }
+
+                                    // 3. Nếu không bị khóa, hiển thị Sửa và Xóa như cũ
+                                    return (
                                         <Row className="justify-center gap-2">
                                             {can(
                                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
@@ -583,6 +661,7 @@ export default function SubjectList() {
                                                         onOpenSubjectVersion({
                                                             subjectId,
                                                             subjectVersionId,
+                                                            isLocked,
                                                         })
                                                     }
                                                     className="text-sm text-blue-700 cursor-pointer"
@@ -601,7 +680,7 @@ export default function SubjectList() {
                                                 />
                                             )}
                                         </Row>
-                                    ) : null
+                                    )
                                 },
                             },
                         ]}
@@ -618,43 +697,73 @@ export default function SubjectList() {
                                 }
                             },
                         }}
-                        headerRight={({ id: subjectId }) => (
-                            <Flex gap={8} align="center">
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
-                                    'THEM'
-                                ) && (
-                                    <Tooltip
-                                        title="Thêm mới phiên bản môn học"
-                                        placement="bottomLeft"
-                                    >
-                                        <BookPlus
-                                            onClick={() => handleModalSubjectVersion(subjectId, '')}
-                                            className="cursor-pointer"
+                        headerRight={({ id: subjectId }) => {
+                            if (isLocked) {
+                                return (
+                                    <Flex gap={8} align="center">
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                            'XEM'
+                                        ) && (
+                                            <ViewIcon
+                                                onClick={onOpen.bind(null, {
+                                                    id: subjectId,
+                                                    isLocked,
+                                                })}
+                                                className="text-sm text-blue-700 cursor-pointer mr-8"
+                                            />
+                                        )}
+                                    </Flex>
+                                )
+                            }
+
+                            return (
+                                <Flex gap={8} align="center">
+                                    {can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                        'THEM'
+                                    ) && (
+                                        <Tooltip
+                                            title="Thêm mới phiên bản môn học"
+                                            placement="bottomLeft"
+                                        >
+                                            <BookPlus
+                                                onClick={() =>
+                                                    handleModalSubjectVersion(
+                                                        subjectId,
+                                                        '',
+                                                        isLocked
+                                                    )
+                                                }
+                                                className="cursor-pointer"
+                                            />
+                                        </Tooltip>
+                                    )}
+                                    {can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                        'SUA'
+                                    ) && (
+                                        <EditIcon
+                                            onClick={onOpen.bind(null, { id: subjectId, isLocked })}
+                                            className="text-sm text-blue-700 cursor-pointer"
                                         />
-                                    </Tooltip>
-                                )}
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
-                                    'SUA'
-                                ) && (
-                                    <EditIcon
-                                        onClick={onOpen.bind(null, subjectId)}
-                                        className="text-sm text-blue-700 cursor-pointer"
-                                    />
-                                )}
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
-                                    'XOA'
-                                ) && (
-                                    <DeleteIcon
-                                        popConfirm={{
-                                            onConfirm: () => handleDeleteSubject(subjectId),
-                                        }}
-                                    />
-                                )}
-                            </Flex>
-                        )}
+                                    )}
+                                    {can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC,
+                                        'XOA'
+                                    ) && (
+                                        <DeleteIcon
+                                            popConfirm={{
+                                                onConfirm: () => {
+                                                    handleDeleteSubject(subjectId)
+                                                    // handleLogHistory(record)
+                                                },
+                                            }}
+                                        />
+                                    )}
+                                </Flex>
+                            )
+                        }}
                         data={SubjectData}
                     />
                 </Col>

@@ -45,6 +45,7 @@ const PutVersionSubjectModal = () => {
     const { isOpen, onClose, input } = useDisclosure<{
         subjectId: string
         subjectVersionId?: string
+        isLocked?: boolean
     }>({
         tag: 'PutVersionSubjectModal',
         onClose: form.resetFields,
@@ -274,20 +275,22 @@ const PutVersionSubjectModal = () => {
                     : `Thêm phiên bản môn học - ${subject?.name}`
             }
             className="w-[80vw]"
+            okButtonProps={{ disabled: input?.isLocked }}
+            cancelButtonProps={{ disabled: input?.isLocked }}
         >
             <Col span={4}>
                 <FormItem form={form} name="code" label="Mã môn học" required>
-                    <Input placeholder="Mã môn học" />
+                    <Input placeholder="Mã môn học" disabled={input?.isLocked} />
                 </FormItem>
             </Col>
             <Col span={4}>
                 <FormItem form={form} name="codeTkb" label="Mã TKB" required>
-                    <Input placeholder="Mã TKB" />
+                    <Input placeholder="Mã TKB" disabled={input?.isLocked} />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="name" label="Tên môn học" required>
-                    <Input placeholder="Tên môn học" />
+                    <Input placeholder="Tên môn học" disabled={input?.isLocked} />
                 </FormItem>
             </Col>
             <Col span={8}>
@@ -299,6 +302,7 @@ const PutVersionSubjectModal = () => {
                             value: item.value,
                         }))}
                         allowClear
+                        disabled={input?.isLocked}
                     />
                 </FormItem>
             </Col>
@@ -333,6 +337,7 @@ const PutVersionSubjectModal = () => {
                             value: item.id,
                         }))}
                         allowClear
+                        disabled={input?.isLocked}
                     />
                 </FormItem>
             </Col>
@@ -345,6 +350,7 @@ const PutVersionSubjectModal = () => {
                             value: item.value,
                         }))}
                         allowClear
+                        disabled={input?.isLocked}
                     />
                 </FormItem>
             </Col>
@@ -360,12 +366,19 @@ const PutVersionSubjectModal = () => {
                         type="number"
                         placeholder="Số tín chỉ"
                         className="w-full"
+                        disabled={input?.isLocked}
                     />
                 </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="period" label="Số tiết" required>
-                    <InputNumber min={0} type="number" placeholder="Số tiết" className="w-full" />
+                    <InputNumber
+                        min={0}
+                        type="number"
+                        placeholder="Số tiết"
+                        className="w-full"
+                        disabled={input?.isLocked}
+                    />
                 </FormItem>
             </Col>
             <Col span={8}>
@@ -375,6 +388,7 @@ const PutVersionSubjectModal = () => {
                         type="number"
                         placeholder="Số tiết TKB"
                         className="w-full"
+                        disabled={input?.isLocked}
                     />
                 </FormItem>
             </Col>
@@ -385,6 +399,7 @@ const PutVersionSubjectModal = () => {
                         type="number"
                         placeholder="Số tiết lý thuyết"
                         className="w-full"
+                        disabled={input?.isLocked}
                     />
                 </FormItem>
             </Col>
@@ -395,6 +410,7 @@ const PutVersionSubjectModal = () => {
                         type="number"
                         placeholder="Số tiết bài tập"
                         className="w-full"
+                        disabled={input?.isLocked}
                     />
                 </FormItem>
             </Col>
@@ -405,6 +421,7 @@ const PutVersionSubjectModal = () => {
                         type="number"
                         placeholder="Số tiết thảo luận/tự học"
                         className="w-full"
+                        disabled={input?.isLocked}
                     />
                 </FormItem>
             </Col>
@@ -415,6 +432,7 @@ const PutVersionSubjectModal = () => {
                         type="number"
                         placeholder="Số tiết thí nghiệm/thực hành"
                         className="w-full"
+                        disabled={input?.isLocked}
                     />
                 </FormItem>
             </Col>
@@ -425,6 +443,7 @@ const PutVersionSubjectModal = () => {
                         type="number"
                         placeholder="Số tiết ôn tập"
                         className="w-full"
+                        disabled={input?.isLocked}
                     />
                 </FormItem>
             </Col>
@@ -435,6 +454,7 @@ const PutVersionSubjectModal = () => {
                         type="number"
                         placeholder="Số tiết KT/thi"
                         className="w-full"
+                        disabled={input?.isLocked}
                     />
                 </FormItem>
             </Col>
@@ -449,6 +469,7 @@ const PutVersionSubjectModal = () => {
                         placeholder="Chọn môn học tiên quyết"
                         style={{ width: '100%' }}
                         allowClear
+                        disabled={input?.isLocked}
                     />
                 </Form.Item>
             </Col>
@@ -463,13 +484,14 @@ const PutVersionSubjectModal = () => {
                         placeholder="Chọn môn học song hành"
                         style={{ width: '100%' }}
                         allowClear
+                        disabled={input?.isLocked}
                     />
                 </Form.Item>
             </Col>
 
             <Col span={8}>
                 <FormItem form={form} name={'active'} label="Trạng thái" required>
-                    <Radio.Group buttonStyle="solid">
+                    <Radio.Group buttonStyle="solid" disabled={input?.isLocked}>
                         <Radio value={true}>Đang hoạt động</Radio>
                         <Radio value={false}>Ngừng hoạt động</Radio>
                     </Radio.Group>
@@ -477,7 +499,7 @@ const PutVersionSubjectModal = () => {
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea rows={3} placeholder="Nhập mô tả" />
+                    <Input.TextArea rows={3} placeholder="Nhập mô tả" disabled={input?.isLocked} />
                 </FormItem>
             </Col>
             <Col span={24}>
@@ -487,6 +509,7 @@ const PutVersionSubjectModal = () => {
                         data={document}
                         relationId={subjectVersionId ?? ''}
                         relationType="subjectVersionId"
+                        disabled={input?.isLocked}
                     />
                 </FormItem>
             </Col>
@@ -498,7 +521,11 @@ const PutVersionSubjectModal = () => {
                             label: 'Mục tiêu',
                             children: (
                                 <FormItem form={form} name="objectives">
-                                    <Input.TextArea rows={6} placeholder="Nhập mục tiêu" />
+                                    <Input.TextArea
+                                        rows={6}
+                                        placeholder="Nhập mục tiêu"
+                                        disabled={input?.isLocked}
+                                    />
                                 </FormItem>
                             ),
                         },
@@ -507,7 +534,11 @@ const PutVersionSubjectModal = () => {
                             label: 'Chuẩn đầu ra',
                             children: (
                                 <FormItem form={form} name="learningOutcome">
-                                    <Input.TextArea rows={6} placeholder="Nhập chuẩn đầu ra" />
+                                    <Input.TextArea
+                                        rows={6}
+                                        placeholder="Nhập chuẩn đầu ra"
+                                        disabled={input?.isLocked}
+                                    />
                                 </FormItem>
                             ),
                         },
@@ -519,6 +550,7 @@ const PutVersionSubjectModal = () => {
                                     <Input.TextArea
                                         rows={6}
                                         placeholder="Nhập cấu trúc chương trình đào"
+                                        disabled={input?.isLocked}
                                     />
                                 </FormItem>
                             ),
@@ -531,6 +563,7 @@ const PutVersionSubjectModal = () => {
                                     <Input.TextArea
                                         rows={6}
                                         placeholder="Nhập kế hoạch và phương pháp dạy học"
+                                        disabled={input?.isLocked}
                                     />
                                 </FormItem>
                             ),
@@ -543,6 +576,7 @@ const PutVersionSubjectModal = () => {
                                     <Input.TextArea
                                         rows={6}
                                         placeholder="Nhập đánh giá kết quả học tập"
+                                        disabled={input?.isLocked}
                                     />
                                 </FormItem>
                             ),
@@ -555,6 +589,7 @@ const PutVersionSubjectModal = () => {
                                     <Input.TextArea
                                         rows={6}
                                         placeholder="Nhập cơ sở vật chất, học liệu"
+                                        disabled={input?.isLocked}
                                     />
                                 </FormItem>
                             ),
@@ -567,6 +602,7 @@ const PutVersionSubjectModal = () => {
                                     <Input.TextArea
                                         rows={6}
                                         placeholder="Nhập quy định của học phần"
+                                        disabled={input?.isLocked}
                                     />
                                 </FormItem>
                             ),

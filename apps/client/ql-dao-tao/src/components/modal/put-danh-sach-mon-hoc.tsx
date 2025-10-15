@@ -19,14 +19,14 @@ import { buildOrgTree } from '@lib/utils'
 import TreeSelect from '@/components/commons/tree-select'
 export type PutSubject = Subject
 dayjs.locale('vi')
+type PutSubjectInput = {
+    id?: string
+    isLocked?: boolean
+}
 const PutSubjectListModal = () => {
     const [form] = Form.useForm<PutSubject>()
     const { trimObjectFields } = useTrimText()
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<PutSubjectInput>({
         tag: 'PutSubjectListModal',
         onClose: form.resetFields,
     })
@@ -44,10 +44,10 @@ const PutSubjectListModal = () => {
 
             const data = trimObjectFields(output)
 
-            if (id) {
+            if (input?.id) {
                 await updateSubject({
                     data,
-                    where: { id },
+                    where: { id: input.id },
                 })
                 message.success('Cập nhật thành công')
             } else {
@@ -70,7 +70,10 @@ const PutSubjectListModal = () => {
         }
     }
 
-    const { data: subject } = useFindUniqueSubject({ where: { id } }, { enabled: !!id })
+    const { data: subject } = useFindUniqueSubject(
+        { where: { id: input?.id } },
+        { enabled: !!input?.id }
+    )
 
     useEffect(() => {
         if (subject) {
@@ -91,12 +94,14 @@ const PutSubjectListModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Sửa nhóm môn học' : 'Thêm nhóm môn học'}
+            title={input?.id ? 'Sửa nhóm môn học' : 'Thêm nhóm môn học'}
             className="w-[60vw]"
+            okButtonProps={{ disabled: input?.isLocked }}
+            cancelButtonProps={{ disabled: input?.isLocked }}
         >
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên nhóm môn học" required>
-                    <Input placeholder="Nhập tên môn học" />
+                    <Input placeholder="Nhập tên môn học" disabled={input?.isLocked} />
                 </FormItem>
             </Col>
             {/* <Col span={12}>
@@ -118,18 +123,19 @@ const PutSubjectListModal = () => {
                         style={{ width: '100%' }}
                         allowClear
                         treeDefaultExpandAll
+                        disabled={input?.isLocked}
                     />
                 </Form.Item>
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
+                    <Input.TextArea placeholder="Nhập mô tả" disabled={input?.isLocked} />
                 </FormItem>
             </Col>
-            {id && (
+            {input?.id && (
                 <Col span={12}>
                     <FormItem form={form} name={'active'} label="Trạng thái" required>
-                        <Radio.Group buttonStyle="solid">
+                        <Radio.Group buttonStyle="solid" disabled={input?.isLocked}>
                             <Radio value={true}>Đang hoạt động</Radio>
                             <Radio value={false}>Ngừng hoạt động</Radio>
                         </Radio.Group>
