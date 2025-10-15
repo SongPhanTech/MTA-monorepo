@@ -14,6 +14,7 @@ import { emptyObjectIf } from '@workspace/constant'
 import type { ExamType } from '@workspace/db'
 import {
     useCountSubject,
+    useCreateSubjectVersionHistory,
     useFindManyDM_DonVi,
     useFindManySubject,
     useFindUniqueTrainingObjectType,
@@ -240,6 +241,7 @@ export default function SubjectList() {
 
     const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
     const { mutateAsync: updateSubject } = useUpdateSubject()
+    const { mutateAsync: createSubjectVersionHistory } = useCreateSubjectVersionHistory()
     async function handleDelete(record: any) {
         try {
             showSpinner()
@@ -252,13 +254,20 @@ export default function SubjectList() {
                 },
             })
             const historyData = {
-                subjectVersionId: record.id,
+                subjectVersion: {
+                    connect: {
+                        id: record.id,
+                    },
+                },
                 content: 'Xóa môn học',
                 action: HistorySubjectVersionType.DELETE,
-                updatedById: window?.contextData?.userId ?? null,
+                updatedBy: {
+                    connect: {
+                        id: window?.contextData?.userId ?? 'cd18a522-0cbf-4895-b651-a49a9ab012ed',
+                    },
+                },
             }
-            //TODO: Gọi api lưu lịch sử
-            // await useCreateSubjectVersionHistory({ data: historyData });
+            await createSubjectVersionHistory({ data: historyData })
             message.success('Xóa thành công')
         } catch (error: any) {
             if (error?.info?.message) {

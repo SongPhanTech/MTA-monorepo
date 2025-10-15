@@ -92,7 +92,9 @@ import PutAddOlympicScoreModal from './them-diem-cong'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 import ModalChuyenLop from './modal-chuyen-lop'
 import ModalPreviewUpload from './modal-preview-upload-ctdt'
+import ModalViewHistoryChange from './modal-xem-lich-su-thay-doi'
 export {
+    ModalViewHistoryChange,
     PutUpdateProfileModal,
     PutUploadProfileModal,
     ConfirmModal,

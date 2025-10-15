@@ -6,6 +6,7 @@ import useSpinner from '@hooks/spinner'
 import { type DocumentFile, type SubjectVersion, SubjectVersionType } from '@workspace/db'
 import {
     useCreateSubjectVersion,
+    useCreateSubjectVersionHistory,
     useFindManySubject,
     useFindManyTrainingObjectType,
     useFindUniqueSubject,
@@ -68,6 +69,7 @@ const PutVersionSubjectModal = () => {
     const subjectId = input?.subjectId
     const subjectVersionId = input?.subjectVersionId
     const { id: selectedTrainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { mutateAsync: createSubjectVersionHistory } = useCreateSubjectVersionHistory()
     const { data: subjectVersion } = useFindUniqueSubjectVersion(
         {
             where: { id: subjectVersionId },
@@ -129,6 +131,7 @@ const PutVersionSubjectModal = () => {
             const values = (await form.validateFields()) as PutSubjectVersionFormValues
 
             const baseData = {
+                isLocked: input?.isLocked ?? false,
                 codeTkb: output.codeTkb,
                 code: output.code,
                 name: output.name.trim(),
@@ -323,14 +326,23 @@ const PutVersionSubjectModal = () => {
                 if (changes.length > 0) {
                     const historyContent = changes.join('<br />')
                     const historyData = {
-                        subjectVersionId: subjectVersionId,
                         content: historyContent,
                         action: HistorySubjectVersionType.UPDATE,
-                        updatedById: window?.contextData?.userId ?? null,
+                        updatedBy: {
+                            connect: {
+                                id:
+                                    window?.contextData?.userId ??
+                                    'cd18a522-0cbf-4895-b651-a49a9ab012ed',
+                            },
+                        },
+                        subjectVersion: {
+                            connect: {
+                                id: subjectVersionId,
+                            },
+                        },
                     }
-                    console.log('Lịch sử sẽ được lưu:', historyData)
-                    //TODO: Gọi api lưu lịch sử
-                    // await useCreateSubjectVersionHistory({ data: historyData });
+
+                    await createSubjectVersionHistory({ data: historyData })
                 }
                 message.success('Cập nhật thành công')
             } else {
@@ -348,17 +360,24 @@ const PutVersionSubjectModal = () => {
                     },
                 })
                 const historyData = {
-                    subjectVersionId: data?.id,
+                    //  subjectVersionId: data?.id ?? '',
                     content: 'Thêm mới bản ghi',
                     action: HistorySubjectVersionType.CREATE,
                     active: true,
-                    updatedById: window?.contextData?.userId ?? '',
+                    updatedBy: {
+                        connect: {
+                            id:
+                                window?.contextData?.userId ??
+                                'cd18a522-0cbf-4895-b651-a49a9ab012ed',
+                        },
+                    },
+                    subjectVersion: {
+                        connect: {
+                            id: data?.id ?? '',
+                        },
+                    },
                 }
-                console.log('Lịch sử sẽ được lưu:', historyData)
-                //Todo: Gọi api lưu lịch sử
-                // await useCreateSubjectVersionHistory({
-                //     data: historyData,
-                // })
+                await createSubjectVersionHistory({ data: historyData })
                 message.success('Thêm mới thành công')
             }
 
