@@ -1,4 +1,4 @@
-import { CopyOutlined, DownOutlined, FileTextOutlined } from '@ant-design/icons'
+import { ArrowDownOutlined, CopyOutlined, FileTextOutlined } from '@ant-design/icons'
 import { MessageSender } from '@workspace/db'
 import {
     useFindManyMessage,
@@ -25,18 +25,18 @@ interface Citation {
 
 function parseResponseWithCitations(text: string): { answer: string; citations: Citation[] } {
     try {
-        // Tìm vị trí của separator "---ANSWER---"
-        const separatorIndex = text.indexOf('---ANSWER---')
+        // Tìm vị trí của separator "---CITATIONS---"
+        const separatorIndex = text.indexOf('---CITATIONS---')
 
         if (separatorIndex === -1) {
             // Nếu không có citations, trả về toàn bộ text
             return { answer: text, citations: [] }
         }
 
-        // Phần trước: JSON chứa citations
-        const citationsText = text.substring(0, separatorIndex).trim()
-        // Phần sau: ---ANSWER---
-        const answer = text.substring(separatorIndex + '---ANSWER---'.length).trim()
+        // Phần trước: answer content
+        const answer = text.substring(0, separatorIndex).trim()
+        // Phần sau: JSON chứa citations
+        const citationsText = text.substring(separatorIndex + '---CITATIONS---'.length).trim()
 
         let citations: Citation[] = []
         if (citationsText) {
@@ -44,7 +44,7 @@ function parseResponseWithCitations(text: string): { answer: string; citations: 
                 const parsed = JSON.parse(citationsText)
                 citations = parsed.citations || []
             } catch (e) {
-                console.error('Failed to parse citations JSON:', e)
+                // console.error('Failed to parse citations JSON:', e)
             }
         }
 
@@ -571,9 +571,9 @@ export default function Page() {
                     {showScrollButton && (
                         <div
                             onClick={scrollToBottom}
-                            className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-50 w-8 h-8 bg-primary/90 hover:bg-primary text-white rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110"
+                            className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-50 w-8 h-8 bg-white hover:bg-gray-50 text-primary rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110 shadow-md"
                         >
-                            <DownOutlined className="text-xs" />
+                            <ArrowDownOutlined className="text-sm" />
                         </div>
                     )}
                     <ChatInput
