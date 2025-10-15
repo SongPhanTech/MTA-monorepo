@@ -1499,9 +1499,13 @@ exports.Prisma.ArchivedCertificateScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  name: 'name',
-  englishName: 'englishName',
-  finalScore: 'finalScore'
+  certificateId: 'certificateId',
+  studentId: 'studentId',
+  score: 'score',
+  issuedBy: 'issuedBy',
+  issuedDate: 'issuedDate',
+  expiredDate: 'expiredDate',
+  status: 'status'
 };
 
 exports.Prisma.ArchivedAwardOnStudentSubjectScoreScalarFieldEnum = {
@@ -1524,9 +1528,9 @@ exports.Prisma.ArchivedAwardScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  name: 'name',
-  englishName: 'englishName',
-  bonusScore: 'bonusScore'
+  awardId: 'awardId',
+  studentId: 'studentId',
+  date: 'date'
 };
 
 exports.Prisma.SchoolYearScalarFieldEnum = {
@@ -2140,6 +2144,44 @@ exports.Prisma.TrainingTimeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   name: 'name'
+};
+
+exports.Prisma.CertificateScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  englishName: 'englishName'
+};
+
+exports.Prisma.CertificateOnSubjectScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  finalScore: 'finalScore',
+  certificateId: 'certificateId',
+  subjectId: 'subjectId'
+};
+
+exports.Prisma.AwardScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  englishName: 'englishName',
+  bonusScore: 'bonusScore'
 };
 
 exports.Prisma.DiplomaTypeScalarFieldEnum = {
@@ -4925,8 +4967,9 @@ exports.Prisma.ArchivedCertificateOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  name: 'name',
-  englishName: 'englishName'
+  certificateId: 'certificateId',
+  studentId: 'studentId',
+  issuedBy: 'issuedBy'
 };
 
 exports.Prisma.ArchivedAwardOnStudentSubjectScoreOrderByRelevanceFieldEnum = {
@@ -4941,8 +4984,8 @@ exports.Prisma.ArchivedAwardOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  name: 'name',
-  englishName: 'englishName'
+  awardId: 'awardId',
+  studentId: 'studentId'
 };
 
 exports.Prisma.SchoolYearOrderByRelevanceFieldEnum = {
@@ -5304,6 +5347,30 @@ exports.Prisma.TrainingTimeOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   name: 'name'
+};
+
+exports.Prisma.CertificateOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  name: 'name',
+  englishName: 'englishName'
+};
+
+exports.Prisma.CertificateOnSubjectOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  certificateId: 'certificateId',
+  subjectId: 'subjectId'
+};
+
+exports.Prisma.AwardOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  name: 'name',
+  englishName: 'englishName'
 };
 
 exports.Prisma.DiplomaTypeOrderByRelevanceFieldEnum = {
@@ -6461,6 +6528,12 @@ exports.ScoreConvertStatus = exports.$Enums.ScoreConvertStatus = {
   REJECTED: 'REJECTED'
 };
 
+exports.ArchivedCertificateStatus = exports.$Enums.ArchivedCertificateStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
 exports.SemesterType = exports.$Enums.SemesterType = {
   FIRST: 'FIRST',
   FIRST_SUPPLEMENTARY: 'FIRST_SUPPLEMENTARY',
@@ -6900,6 +6973,9 @@ exports.Prisma.ModelName = {
   TrainingBlock: 'TrainingBlock',
   TrainingBlockOnCurriculumVersion: 'TrainingBlockOnCurriculumVersion',
   TrainingTime: 'TrainingTime',
+  Certificate: 'Certificate',
+  CertificateOnSubject: 'CertificateOnSubject',
+  Award: 'Award',
   DiplomaType: 'DiplomaType',
   ScoreConvert: 'ScoreConvert',
   TrainingKPI: 'TrainingKPI',

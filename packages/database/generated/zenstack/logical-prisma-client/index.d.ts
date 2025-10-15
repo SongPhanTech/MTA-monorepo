@@ -761,6 +761,7 @@ export type StudentSubjectScoreHistory = $Result.DefaultSelection<Prisma.$Studen
 export type ArchivedCertificateOnStudentSubjectScore = $Result.DefaultSelection<Prisma.$ArchivedCertificateOnStudentSubjectScorePayload>;
 /**
  * Model ArchivedCertificate
+ * Chứng chỉ của SV
  * @
  * @allow ('all', auth() != null)
  * @
@@ -781,6 +782,7 @@ export type ArchivedCertificate = $Result.DefaultSelection<Prisma.$ArchivedCerti
 export type ArchivedAwardOnStudentSubjectScore = $Result.DefaultSelection<Prisma.$ArchivedAwardOnStudentSubjectScorePayload>;
 /**
  * Model ArchivedAward
+ * Giải thưởng của SV
  * @
  * @allow ('all', auth() != null)
  * @
@@ -1184,6 +1186,38 @@ export type TrainingBlockOnCurriculumVersion = $Result.DefaultSelection<Prisma.$
  * @allow ('read', auth() != null)
  */
 export type TrainingTime = $Result.DefaultSelection<Prisma.$TrainingTimePayload>;
+/**
+ * Model Certificate
+ * Chứng chỉ
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type Certificate = $Result.DefaultSelection<Prisma.$CertificatePayload>;
+/**
+ * Model CertificateOnSubject
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type CertificateOnSubject = $Result.DefaultSelection<Prisma.$CertificateOnSubjectPayload>;
+/**
+ * Model Award
+ * Giải thưởng
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type Award = $Result.DefaultSelection<Prisma.$AwardPayload>;
 /**
  * Model DiplomaType
  * @
@@ -2526,6 +2560,7 @@ export type PermissionType = $Enums.PermissionType;
 export type MessageSender = $Enums.MessageSender;
 export type DocumentStatus = $Enums.DocumentStatus;
 export type ScoreConvertStatus = $Enums.ScoreConvertStatus;
+export type ArchivedCertificateStatus = $Enums.ArchivedCertificateStatus;
 export type SemesterType = $Enums.SemesterType;
 export type ExamType = $Enums.ExamType;
 export type SubjectVersionType = $Enums.SubjectVersionType;
@@ -3636,6 +3671,33 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      * ```
      */
     get trainingTime(): Prisma.TrainingTimeDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.certificate`: Exposes CRUD operations for the **Certificate** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more Certificates
+     * const certificates = await prisma.certificate.findMany()
+     * ```
+     */
+    get certificate(): Prisma.CertificateDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.certificateOnSubject`: Exposes CRUD operations for the **CertificateOnSubject** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more CertificateOnSubjects
+     * const certificateOnSubjects = await prisma.certificateOnSubject.findMany()
+     * ```
+     */
+    get certificateOnSubject(): Prisma.CertificateOnSubjectDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.award`: Exposes CRUD operations for the **Award** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more Awards
+     * const awards = await prisma.award.findMany()
+     * ```
+     */
+    get award(): Prisma.AwardDelegate<ExtArgs, ClientOptions>;
     /**
      * `prisma.diplomaType`: Exposes CRUD operations for the **DiplomaType** model.
      * Example usage:
@@ -4862,6 +4924,7 @@ export const PermissionType: typeof $Enums.PermissionType;
 export const MessageSender: typeof $Enums.MessageSender;
 export const DocumentStatus: typeof $Enums.DocumentStatus;
 export const ScoreConvertStatus: typeof $Enums.ScoreConvertStatus;
+export const ArchivedCertificateStatus: typeof $Enums.ArchivedCertificateStatus;
 export const SemesterType: typeof $Enums.SemesterType;
 export const ExamType: typeof $Enums.ExamType;
 export const SubjectVersionType: typeof $Enums.SubjectVersionType;
@@ -4979,6 +5042,12 @@ export namespace $Enums {
         REJECTED: 'REJECTED'
     };
     export type ScoreConvertStatus = (typeof ScoreConvertStatus)[keyof typeof ScoreConvertStatus];
+    export const ArchivedCertificateStatus: {
+        PENDING: 'PENDING',
+        APPROVED: 'APPROVED',
+        REJECTED: 'REJECTED'
+    };
+    export type ArchivedCertificateStatus = (typeof ArchivedCertificateStatus)[keyof typeof ArchivedCertificateStatus];
     export const SemesterType: {
         FIRST: 'FIRST',
         FIRST_SUPPLEMENTARY: 'FIRST_SUPPLEMENTARY',
@@ -5565,6 +5634,9 @@ export namespace Prisma {
         TrainingBlock: 'TrainingBlock',
         TrainingBlockOnCurriculumVersion: 'TrainingBlockOnCurriculumVersion',
         TrainingTime: 'TrainingTime',
+        Certificate: 'Certificate',
+        CertificateOnSubject: 'CertificateOnSubject',
+        Award: 'Award',
         DiplomaType: 'DiplomaType',
         ScoreConvert: 'ScoreConvert',
         TrainingKPI: 'TrainingKPI',
@@ -7006,9 +7078,13 @@ export namespace Prisma {
         deletedAt: 'deletedAt',
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
-        name: 'name',
-        englishName: 'englishName',
-        finalScore: 'finalScore'
+        certificateId: 'certificateId',
+        studentId: 'studentId',
+        score: 'score',
+        issuedBy: 'issuedBy',
+        issuedDate: 'issuedDate',
+        expiredDate: 'expiredDate',
+        status: 'status'
     };
     export const ArchivedAwardOnStudentSubjectScoreScalarFieldEnum: {
         id: 'id',
@@ -7029,9 +7105,9 @@ export namespace Prisma {
         deletedAt: 'deletedAt',
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
-        name: 'name',
-        englishName: 'englishName',
-        bonusScore: 'bonusScore'
+        awardId: 'awardId',
+        studentId: 'studentId',
+        date: 'date'
     };
     export const SchoolYearScalarFieldEnum: {
         id: 'id',
@@ -7608,6 +7684,41 @@ export namespace Prisma {
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
         name: 'name'
+    };
+    export const CertificateScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        name: 'name',
+        englishName: 'englishName'
+    };
+    export const CertificateOnSubjectScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        finalScore: 'finalScore',
+        certificateId: 'certificateId',
+        subjectId: 'subjectId'
+    };
+    export const AwardScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        name: 'name',
+        englishName: 'englishName',
+        bonusScore: 'bonusScore'
     };
     export const DiplomaTypeScalarFieldEnum: {
         id: 'id',
@@ -10186,8 +10297,9 @@ export namespace Prisma {
         id: 'id',
         code: 'code',
         description: 'description',
-        name: 'name',
-        englishName: 'englishName'
+        certificateId: 'certificateId',
+        studentId: 'studentId',
+        issuedBy: 'issuedBy'
     };
     export const ArchivedAwardOnStudentSubjectScoreOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -10200,8 +10312,8 @@ export namespace Prisma {
         id: 'id',
         code: 'code',
         description: 'description',
-        name: 'name',
-        englishName: 'englishName'
+        awardId: 'awardId',
+        studentId: 'studentId'
     };
     export const SchoolYearOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -10526,6 +10638,27 @@ export namespace Prisma {
         code: 'code',
         description: 'description',
         name: 'name'
+    };
+    export const CertificateOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        name: 'name',
+        englishName: 'englishName'
+    };
+    export const CertificateOnSubjectOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        certificateId: 'certificateId',
+        subjectId: 'subjectId'
+    };
+    export const AwardOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        name: 'name',
+        englishName: 'englishName'
     };
     export const DiplomaTypeOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -41115,6 +41248,8 @@ export namespace Prisma {
      */
     export interface Prisma__ArchivedCertificateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        certificate<T extends CertificateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateDefaultArgs<ExtArgs>>): Prisma__CertificateClient<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         documentFiles<T extends ArchivedCertificate$documentFilesArgs<ExtArgs> = {}>(args?: Subset<T, ArchivedCertificate$documentFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         studentSubjectScore<T extends ArchivedCertificate$studentSubjectScoreArgs<ExtArgs> = {}>(args?: Subset<T, ArchivedCertificate$studentSubjectScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedCertificateOnStudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
@@ -41150,9 +41285,13 @@ export namespace Prisma {
         readonly deletedAt: FieldRef<"ArchivedCertificate", 'DateTime'>;
         readonly createdAt: FieldRef<"ArchivedCertificate", 'DateTime'>;
         readonly updatedAt: FieldRef<"ArchivedCertificate", 'DateTime'>;
-        readonly name: FieldRef<"ArchivedCertificate", 'String'>;
-        readonly englishName: FieldRef<"ArchivedCertificate", 'String'>;
-        readonly finalScore: FieldRef<"ArchivedCertificate", 'Float'>;
+        readonly certificateId: FieldRef<"ArchivedCertificate", 'String'>;
+        readonly studentId: FieldRef<"ArchivedCertificate", 'String'>;
+        readonly score: FieldRef<"ArchivedCertificate", 'Float'>;
+        readonly issuedBy: FieldRef<"ArchivedCertificate", 'String'>;
+        readonly issuedDate: FieldRef<"ArchivedCertificate", 'DateTime'>;
+        readonly expiredDate: FieldRef<"ArchivedCertificate", 'DateTime'>;
+        readonly status: FieldRef<"ArchivedCertificate", 'ArchivedCertificateStatus'>;
     }
 
     export interface ArchivedAwardOnStudentSubjectScoreDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -41880,6 +42019,8 @@ export namespace Prisma {
      */
     export interface Prisma__ArchivedAwardClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        award<T extends AwardDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AwardDefaultArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         documentFiles<T extends ArchivedAward$documentFilesArgs<ExtArgs> = {}>(args?: Subset<T, ArchivedAward$documentFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         studentSubjectScore<T extends ArchivedAward$studentSubjectScoreArgs<ExtArgs> = {}>(args?: Subset<T, ArchivedAward$studentSubjectScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedAwardOnStudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
@@ -41915,9 +42056,9 @@ export namespace Prisma {
         readonly deletedAt: FieldRef<"ArchivedAward", 'DateTime'>;
         readonly createdAt: FieldRef<"ArchivedAward", 'DateTime'>;
         readonly updatedAt: FieldRef<"ArchivedAward", 'DateTime'>;
-        readonly name: FieldRef<"ArchivedAward", 'String'>;
-        readonly englishName: FieldRef<"ArchivedAward", 'String'>;
-        readonly bonusScore: FieldRef<"ArchivedAward", 'Float'>;
+        readonly awardId: FieldRef<"ArchivedAward", 'String'>;
+        readonly studentId: FieldRef<"ArchivedAward", 'String'>;
+        readonly date: FieldRef<"ArchivedAward", 'DateTime'>;
     }
 
     export interface SchoolYearDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -45821,6 +45962,8 @@ export namespace Prisma {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         managementOrganization<T extends Subject$managementOrganizationArgs<ExtArgs> = {}>(args?: Subset<T, Subject$managementOrganizationArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         subjectVersion<T extends Subject$subjectVersionArgs<ExtArgs> = {}>(args?: Subset<T, Subject$subjectVersionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        certificateOnSubject<T extends Subject$certificateOnSubjectArgs<ExtArgs> = {}>(args?: Subset<T, Subject$certificateOnSubjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        awardOnSubject<T extends Subject$awardOnSubjectArgs<ExtArgs> = {}>(args?: Subset<T, Subject$awardOnSubjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -56333,6 +56476,1154 @@ export namespace Prisma {
         readonly name: FieldRef<"TrainingTime", 'String'>;
     }
 
+    export interface CertificateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Certificate'], meta: { name: 'Certificate' } };
+        /**
+         * Fields of the Certificate model
+         */
+        readonly fields: CertificateFieldRefs;
+        /**
+         * Find zero or one Certificate that matches the filter.
+         * @param {CertificateFindUniqueArgs} args - Arguments to find a Certificate
+         * @example
+         * // Get one Certificate
+         * const certificate = await prisma.certificate.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends CertificateFindUniqueArgs>(args: SelectSubset<T, CertificateFindUniqueArgs<ExtArgs>>): Prisma__CertificateClient<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one Certificate that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {CertificateFindUniqueOrThrowArgs} args - Arguments to find a Certificate
+         * @example
+         * // Get one Certificate
+         * const certificate = await prisma.certificate.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends CertificateFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateClient<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first Certificate that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateFindFirstArgs} args - Arguments to find a Certificate
+         * @example
+         * // Get one Certificate
+         * const certificate = await prisma.certificate.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends CertificateFindFirstArgs>(args?: SelectSubset<T, CertificateFindFirstArgs<ExtArgs>>): Prisma__CertificateClient<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first Certificate that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateFindFirstOrThrowArgs} args - Arguments to find a Certificate
+         * @example
+         * // Get one Certificate
+         * const certificate = await prisma.certificate.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends CertificateFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateClient<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more Certificates that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all Certificates
+         * const certificates = await prisma.certificate.findMany()
+         *
+         * // Get first 10 Certificates
+         * const certificates = await prisma.certificate.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const certificateWithIdOnly = await prisma.certificate.findMany({ select: { id: true } })
+         */
+        findMany<T extends CertificateFindManyArgs>(args?: SelectSubset<T, CertificateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a Certificate.
+         * @param {CertificateCreateArgs} args - Arguments to create a Certificate.
+         * @example
+         * // Create one Certificate
+         * const Certificate = await prisma.certificate.create({
+         *   data: {
+         *     // ... data to create a Certificate
+         *   }
+         * })
+         */
+        create<T extends CertificateCreateArgs>(args: SelectSubset<T, CertificateCreateArgs<ExtArgs>>): Prisma__CertificateClient<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many Certificates.
+         * @param {CertificateCreateManyArgs} args - Arguments to create many Certificates.
+         * @example
+         * // Create many Certificates
+         * const certificate = await prisma.certificate.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends CertificateCreateManyArgs>(args?: SelectSubset<T, CertificateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many Certificates and returns the data saved in the database.
+         * @param {CertificateCreateManyAndReturnArgs} args - Arguments to create many Certificates.
+         * @example
+         * // Create many Certificates
+         * const certificate = await prisma.certificate.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many Certificates and only return the `id`
+         * const certificateWithIdOnly = await prisma.certificate.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends CertificateCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a Certificate.
+         * @param {CertificateDeleteArgs} args - Arguments to delete one Certificate.
+         * @example
+         * // Delete one Certificate
+         * const Certificate = await prisma.certificate.delete({
+         *   where: {
+         *     // ... filter to delete one Certificate
+         *   }
+         * })
+         */
+        delete<T extends CertificateDeleteArgs>(args: SelectSubset<T, CertificateDeleteArgs<ExtArgs>>): Prisma__CertificateClient<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one Certificate.
+         * @param {CertificateUpdateArgs} args - Arguments to update one Certificate.
+         * @example
+         * // Update one Certificate
+         * const certificate = await prisma.certificate.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends CertificateUpdateArgs>(args: SelectSubset<T, CertificateUpdateArgs<ExtArgs>>): Prisma__CertificateClient<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more Certificates.
+         * @param {CertificateDeleteManyArgs} args - Arguments to filter Certificates to delete.
+         * @example
+         * // Delete a few Certificates
+         * const { count } = await prisma.certificate.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends CertificateDeleteManyArgs>(args?: SelectSubset<T, CertificateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more Certificates.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many Certificates
+         * const certificate = await prisma.certificate.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends CertificateUpdateManyArgs>(args: SelectSubset<T, CertificateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more Certificates and returns the data updated in the database.
+         * @param {CertificateUpdateManyAndReturnArgs} args - Arguments to update many Certificates.
+         * @example
+         * // Update many Certificates
+         * const certificate = await prisma.certificate.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more Certificates and only return the `id`
+         * const certificateWithIdOnly = await prisma.certificate.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends CertificateUpdateManyAndReturnArgs>(args: SelectSubset<T, CertificateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one Certificate.
+         * @param {CertificateUpsertArgs} args - Arguments to update or create a Certificate.
+         * @example
+         * // Update or create a Certificate
+         * const certificate = await prisma.certificate.upsert({
+         *   create: {
+         *     // ... data to create a Certificate
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the Certificate we want to update
+         *   }
+         * })
+         */
+        upsert<T extends CertificateUpsertArgs>(args: SelectSubset<T, CertificateUpsertArgs<ExtArgs>>): Prisma__CertificateClient<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of Certificates.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateCountArgs} args - Arguments to filter Certificates to count.
+         * @example
+         * // Count the number of Certificates
+         * const count = await prisma.certificate.count({
+         *   where: {
+         *     // ... the filter for the Certificates we want to count
+         *   }
+         * })
+         */
+        count<T extends CertificateCountArgs>(args?: Subset<T, CertificateCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], CertificateCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a Certificate.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends CertificateAggregateArgs>(args: Subset<T, CertificateAggregateArgs>): Prisma.PrismaPromise<GetCertificateAggregateType<T>>;
+        /**
+         * Group by Certificate.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends CertificateGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CertificateGroupByArgs['orderBy'] }
+        : { orderBy?: CertificateGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, CertificateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCertificateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for Certificate.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__CertificateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        archivedCertificate<T extends Certificate$archivedCertificateArgs<ExtArgs> = {}>(args?: Subset<T, Certificate$archivedCertificateArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedCertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        subjects<T extends Certificate$subjectsArgs<ExtArgs> = {}>(args?: Subset<T, Certificate$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the Certificate model
+     */
+    interface CertificateFieldRefs {
+        readonly id: FieldRef<"Certificate", 'String'>;
+        readonly code: FieldRef<"Certificate", 'String'>;
+        readonly active: FieldRef<"Certificate", 'Boolean'>;
+        readonly description: FieldRef<"Certificate", 'String'>;
+        readonly deletedAt: FieldRef<"Certificate", 'DateTime'>;
+        readonly createdAt: FieldRef<"Certificate", 'DateTime'>;
+        readonly updatedAt: FieldRef<"Certificate", 'DateTime'>;
+        readonly name: FieldRef<"Certificate", 'String'>;
+        readonly englishName: FieldRef<"Certificate", 'String'>;
+    }
+
+    export interface CertificateOnSubjectDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CertificateOnSubject'], meta: { name: 'CertificateOnSubject' } };
+        /**
+         * Fields of the CertificateOnSubject model
+         */
+        readonly fields: CertificateOnSubjectFieldRefs;
+        /**
+         * Find zero or one CertificateOnSubject that matches the filter.
+         * @param {CertificateOnSubjectFindUniqueArgs} args - Arguments to find a CertificateOnSubject
+         * @example
+         * // Get one CertificateOnSubject
+         * const certificateOnSubject = await prisma.certificateOnSubject.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends CertificateOnSubjectFindUniqueArgs>(args: SelectSubset<T, CertificateOnSubjectFindUniqueArgs<ExtArgs>>): Prisma__CertificateOnSubjectClient<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one CertificateOnSubject that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {CertificateOnSubjectFindUniqueOrThrowArgs} args - Arguments to find a CertificateOnSubject
+         * @example
+         * // Get one CertificateOnSubject
+         * const certificateOnSubject = await prisma.certificateOnSubject.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends CertificateOnSubjectFindUniqueOrThrowArgs>(args: SelectSubset<T, CertificateOnSubjectFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CertificateOnSubjectClient<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first CertificateOnSubject that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateOnSubjectFindFirstArgs} args - Arguments to find a CertificateOnSubject
+         * @example
+         * // Get one CertificateOnSubject
+         * const certificateOnSubject = await prisma.certificateOnSubject.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends CertificateOnSubjectFindFirstArgs>(args?: SelectSubset<T, CertificateOnSubjectFindFirstArgs<ExtArgs>>): Prisma__CertificateOnSubjectClient<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first CertificateOnSubject that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateOnSubjectFindFirstOrThrowArgs} args - Arguments to find a CertificateOnSubject
+         * @example
+         * // Get one CertificateOnSubject
+         * const certificateOnSubject = await prisma.certificateOnSubject.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends CertificateOnSubjectFindFirstOrThrowArgs>(args?: SelectSubset<T, CertificateOnSubjectFindFirstOrThrowArgs<ExtArgs>>): Prisma__CertificateOnSubjectClient<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more CertificateOnSubjects that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateOnSubjectFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all CertificateOnSubjects
+         * const certificateOnSubjects = await prisma.certificateOnSubject.findMany()
+         *
+         * // Get first 10 CertificateOnSubjects
+         * const certificateOnSubjects = await prisma.certificateOnSubject.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const certificateOnSubjectWithIdOnly = await prisma.certificateOnSubject.findMany({ select: { id: true } })
+         */
+        findMany<T extends CertificateOnSubjectFindManyArgs>(args?: SelectSubset<T, CertificateOnSubjectFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a CertificateOnSubject.
+         * @param {CertificateOnSubjectCreateArgs} args - Arguments to create a CertificateOnSubject.
+         * @example
+         * // Create one CertificateOnSubject
+         * const CertificateOnSubject = await prisma.certificateOnSubject.create({
+         *   data: {
+         *     // ... data to create a CertificateOnSubject
+         *   }
+         * })
+         */
+        create<T extends CertificateOnSubjectCreateArgs>(args: SelectSubset<T, CertificateOnSubjectCreateArgs<ExtArgs>>): Prisma__CertificateOnSubjectClient<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many CertificateOnSubjects.
+         * @param {CertificateOnSubjectCreateManyArgs} args - Arguments to create many CertificateOnSubjects.
+         * @example
+         * // Create many CertificateOnSubjects
+         * const certificateOnSubject = await prisma.certificateOnSubject.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends CertificateOnSubjectCreateManyArgs>(args?: SelectSubset<T, CertificateOnSubjectCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many CertificateOnSubjects and returns the data saved in the database.
+         * @param {CertificateOnSubjectCreateManyAndReturnArgs} args - Arguments to create many CertificateOnSubjects.
+         * @example
+         * // Create many CertificateOnSubjects
+         * const certificateOnSubject = await prisma.certificateOnSubject.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many CertificateOnSubjects and only return the `id`
+         * const certificateOnSubjectWithIdOnly = await prisma.certificateOnSubject.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends CertificateOnSubjectCreateManyAndReturnArgs>(args?: SelectSubset<T, CertificateOnSubjectCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a CertificateOnSubject.
+         * @param {CertificateOnSubjectDeleteArgs} args - Arguments to delete one CertificateOnSubject.
+         * @example
+         * // Delete one CertificateOnSubject
+         * const CertificateOnSubject = await prisma.certificateOnSubject.delete({
+         *   where: {
+         *     // ... filter to delete one CertificateOnSubject
+         *   }
+         * })
+         */
+        delete<T extends CertificateOnSubjectDeleteArgs>(args: SelectSubset<T, CertificateOnSubjectDeleteArgs<ExtArgs>>): Prisma__CertificateOnSubjectClient<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one CertificateOnSubject.
+         * @param {CertificateOnSubjectUpdateArgs} args - Arguments to update one CertificateOnSubject.
+         * @example
+         * // Update one CertificateOnSubject
+         * const certificateOnSubject = await prisma.certificateOnSubject.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends CertificateOnSubjectUpdateArgs>(args: SelectSubset<T, CertificateOnSubjectUpdateArgs<ExtArgs>>): Prisma__CertificateOnSubjectClient<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more CertificateOnSubjects.
+         * @param {CertificateOnSubjectDeleteManyArgs} args - Arguments to filter CertificateOnSubjects to delete.
+         * @example
+         * // Delete a few CertificateOnSubjects
+         * const { count } = await prisma.certificateOnSubject.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends CertificateOnSubjectDeleteManyArgs>(args?: SelectSubset<T, CertificateOnSubjectDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more CertificateOnSubjects.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateOnSubjectUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many CertificateOnSubjects
+         * const certificateOnSubject = await prisma.certificateOnSubject.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends CertificateOnSubjectUpdateManyArgs>(args: SelectSubset<T, CertificateOnSubjectUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more CertificateOnSubjects and returns the data updated in the database.
+         * @param {CertificateOnSubjectUpdateManyAndReturnArgs} args - Arguments to update many CertificateOnSubjects.
+         * @example
+         * // Update many CertificateOnSubjects
+         * const certificateOnSubject = await prisma.certificateOnSubject.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more CertificateOnSubjects and only return the `id`
+         * const certificateOnSubjectWithIdOnly = await prisma.certificateOnSubject.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends CertificateOnSubjectUpdateManyAndReturnArgs>(args: SelectSubset<T, CertificateOnSubjectUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one CertificateOnSubject.
+         * @param {CertificateOnSubjectUpsertArgs} args - Arguments to update or create a CertificateOnSubject.
+         * @example
+         * // Update or create a CertificateOnSubject
+         * const certificateOnSubject = await prisma.certificateOnSubject.upsert({
+         *   create: {
+         *     // ... data to create a CertificateOnSubject
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the CertificateOnSubject we want to update
+         *   }
+         * })
+         */
+        upsert<T extends CertificateOnSubjectUpsertArgs>(args: SelectSubset<T, CertificateOnSubjectUpsertArgs<ExtArgs>>): Prisma__CertificateOnSubjectClient<$Result.GetResult<Prisma.$CertificateOnSubjectPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of CertificateOnSubjects.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateOnSubjectCountArgs} args - Arguments to filter CertificateOnSubjects to count.
+         * @example
+         * // Count the number of CertificateOnSubjects
+         * const count = await prisma.certificateOnSubject.count({
+         *   where: {
+         *     // ... the filter for the CertificateOnSubjects we want to count
+         *   }
+         * })
+         */
+        count<T extends CertificateOnSubjectCountArgs>(args?: Subset<T, CertificateOnSubjectCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], CertificateOnSubjectCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a CertificateOnSubject.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateOnSubjectAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends CertificateOnSubjectAggregateArgs>(args: Subset<T, CertificateOnSubjectAggregateArgs>): Prisma.PrismaPromise<GetCertificateOnSubjectAggregateType<T>>;
+        /**
+         * Group by CertificateOnSubject.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CertificateOnSubjectGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends CertificateOnSubjectGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CertificateOnSubjectGroupByArgs['orderBy'] }
+        : { orderBy?: CertificateOnSubjectGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, CertificateOnSubjectGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCertificateOnSubjectGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for CertificateOnSubject.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__CertificateOnSubjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        certificate<T extends CertificateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CertificateDefaultArgs<ExtArgs>>): Prisma__CertificateClient<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        subject<T extends SubjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectDefaultArgs<ExtArgs>>): Prisma__SubjectClient<$Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the CertificateOnSubject model
+     */
+    interface CertificateOnSubjectFieldRefs {
+        readonly id: FieldRef<"CertificateOnSubject", 'String'>;
+        readonly code: FieldRef<"CertificateOnSubject", 'String'>;
+        readonly active: FieldRef<"CertificateOnSubject", 'Boolean'>;
+        readonly description: FieldRef<"CertificateOnSubject", 'String'>;
+        readonly deletedAt: FieldRef<"CertificateOnSubject", 'DateTime'>;
+        readonly createdAt: FieldRef<"CertificateOnSubject", 'DateTime'>;
+        readonly updatedAt: FieldRef<"CertificateOnSubject", 'DateTime'>;
+        readonly finalScore: FieldRef<"CertificateOnSubject", 'Float'>;
+        readonly certificateId: FieldRef<"CertificateOnSubject", 'String'>;
+        readonly subjectId: FieldRef<"CertificateOnSubject", 'String'>;
+    }
+
+    export interface AwardDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Award'], meta: { name: 'Award' } };
+        /**
+         * Fields of the Award model
+         */
+        readonly fields: AwardFieldRefs;
+        /**
+         * Find zero or one Award that matches the filter.
+         * @param {AwardFindUniqueArgs} args - Arguments to find a Award
+         * @example
+         * // Get one Award
+         * const award = await prisma.award.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends AwardFindUniqueArgs>(args: SelectSubset<T, AwardFindUniqueArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one Award that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {AwardFindUniqueOrThrowArgs} args - Arguments to find a Award
+         * @example
+         * // Get one Award
+         * const award = await prisma.award.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends AwardFindUniqueOrThrowArgs>(args: SelectSubset<T, AwardFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first Award that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AwardFindFirstArgs} args - Arguments to find a Award
+         * @example
+         * // Get one Award
+         * const award = await prisma.award.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends AwardFindFirstArgs>(args?: SelectSubset<T, AwardFindFirstArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first Award that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AwardFindFirstOrThrowArgs} args - Arguments to find a Award
+         * @example
+         * // Get one Award
+         * const award = await prisma.award.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends AwardFindFirstOrThrowArgs>(args?: SelectSubset<T, AwardFindFirstOrThrowArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more Awards that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AwardFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all Awards
+         * const awards = await prisma.award.findMany()
+         *
+         * // Get first 10 Awards
+         * const awards = await prisma.award.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const awardWithIdOnly = await prisma.award.findMany({ select: { id: true } })
+         */
+        findMany<T extends AwardFindManyArgs>(args?: SelectSubset<T, AwardFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a Award.
+         * @param {AwardCreateArgs} args - Arguments to create a Award.
+         * @example
+         * // Create one Award
+         * const Award = await prisma.award.create({
+         *   data: {
+         *     // ... data to create a Award
+         *   }
+         * })
+         */
+        create<T extends AwardCreateArgs>(args: SelectSubset<T, AwardCreateArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many Awards.
+         * @param {AwardCreateManyArgs} args - Arguments to create many Awards.
+         * @example
+         * // Create many Awards
+         * const award = await prisma.award.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends AwardCreateManyArgs>(args?: SelectSubset<T, AwardCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many Awards and returns the data saved in the database.
+         * @param {AwardCreateManyAndReturnArgs} args - Arguments to create many Awards.
+         * @example
+         * // Create many Awards
+         * const award = await prisma.award.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many Awards and only return the `id`
+         * const awardWithIdOnly = await prisma.award.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends AwardCreateManyAndReturnArgs>(args?: SelectSubset<T, AwardCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a Award.
+         * @param {AwardDeleteArgs} args - Arguments to delete one Award.
+         * @example
+         * // Delete one Award
+         * const Award = await prisma.award.delete({
+         *   where: {
+         *     // ... filter to delete one Award
+         *   }
+         * })
+         */
+        delete<T extends AwardDeleteArgs>(args: SelectSubset<T, AwardDeleteArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one Award.
+         * @param {AwardUpdateArgs} args - Arguments to update one Award.
+         * @example
+         * // Update one Award
+         * const award = await prisma.award.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends AwardUpdateArgs>(args: SelectSubset<T, AwardUpdateArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more Awards.
+         * @param {AwardDeleteManyArgs} args - Arguments to filter Awards to delete.
+         * @example
+         * // Delete a few Awards
+         * const { count } = await prisma.award.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends AwardDeleteManyArgs>(args?: SelectSubset<T, AwardDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more Awards.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AwardUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many Awards
+         * const award = await prisma.award.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends AwardUpdateManyArgs>(args: SelectSubset<T, AwardUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more Awards and returns the data updated in the database.
+         * @param {AwardUpdateManyAndReturnArgs} args - Arguments to update many Awards.
+         * @example
+         * // Update many Awards
+         * const award = await prisma.award.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more Awards and only return the `id`
+         * const awardWithIdOnly = await prisma.award.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends AwardUpdateManyAndReturnArgs>(args: SelectSubset<T, AwardUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one Award.
+         * @param {AwardUpsertArgs} args - Arguments to update or create a Award.
+         * @example
+         * // Update or create a Award
+         * const award = await prisma.award.upsert({
+         *   create: {
+         *     // ... data to create a Award
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the Award we want to update
+         *   }
+         * })
+         */
+        upsert<T extends AwardUpsertArgs>(args: SelectSubset<T, AwardUpsertArgs<ExtArgs>>): Prisma__AwardClient<$Result.GetResult<Prisma.$AwardPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of Awards.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AwardCountArgs} args - Arguments to filter Awards to count.
+         * @example
+         * // Count the number of Awards
+         * const count = await prisma.award.count({
+         *   where: {
+         *     // ... the filter for the Awards we want to count
+         *   }
+         * })
+         */
+        count<T extends AwardCountArgs>(args?: Subset<T, AwardCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], AwardCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a Award.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AwardAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends AwardAggregateArgs>(args: Subset<T, AwardAggregateArgs>): Prisma.PrismaPromise<GetAwardAggregateType<T>>;
+        /**
+         * Group by Award.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {AwardGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends AwardGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AwardGroupByArgs['orderBy'] }
+        : { orderBy?: AwardGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, AwardGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAwardGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for Award.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__AwardClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        subjects<T extends Award$subjectsArgs<ExtArgs> = {}>(args?: Subset<T, Award$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        archivedAward<T extends Award$archivedAwardArgs<ExtArgs> = {}>(args?: Subset<T, Award$archivedAwardArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedAwardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the Award model
+     */
+    interface AwardFieldRefs {
+        readonly id: FieldRef<"Award", 'String'>;
+        readonly code: FieldRef<"Award", 'String'>;
+        readonly active: FieldRef<"Award", 'Boolean'>;
+        readonly description: FieldRef<"Award", 'String'>;
+        readonly deletedAt: FieldRef<"Award", 'DateTime'>;
+        readonly createdAt: FieldRef<"Award", 'DateTime'>;
+        readonly updatedAt: FieldRef<"Award", 'DateTime'>;
+        readonly name: FieldRef<"Award", 'String'>;
+        readonly englishName: FieldRef<"Award", 'String'>;
+        readonly bonusScore: FieldRef<"Award", 'Float'>;
+    }
+
     export interface DiplomaTypeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
         [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DiplomaType'], meta: { name: 'DiplomaType' } };
         /**
@@ -57843,6 +59134,8 @@ export namespace Prisma {
         studentSemesterResult<T extends Student$studentSemesterResultArgs<ExtArgs> = {}>(args?: Subset<T, Student$studentSemesterResultArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSemesterResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         studentYearResult<T extends Student$studentYearResultArgs<ExtArgs> = {}>(args?: Subset<T, Student$studentYearResultArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentYearResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         scholarshipAwards<T extends Student$scholarshipAwardsArgs<ExtArgs> = {}>(args?: Subset<T, Student$scholarshipAwardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScholarshipAwardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        archivedCertificate<T extends Student$archivedCertificateArgs<ExtArgs> = {}>(args?: Subset<T, Student$archivedCertificateArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedCertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        archivedAward<T extends Student$archivedAwardArgs<ExtArgs> = {}>(args?: Subset<T, Student$archivedAwardArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedAwardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         academicWarning<T extends Student$academicWarningArgs<ExtArgs> = {}>(args?: Subset<T, Student$academicWarningArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AcademicWarningPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         disciplinaryWarning<T extends Student$disciplinaryWarningArgs<ExtArgs> = {}>(args?: Subset<T, Student$disciplinaryWarningArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DisciplinaryWarningPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         studentAcademicDecision<T extends Student$studentAcademicDecisionArgs<ExtArgs> = {}>(args?: Subset<T, Student$studentAcademicDecisionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentAcademicDecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -105167,7 +106460,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -113678,6 +114971,228 @@ export namespace Prisma {
                     count: {
                         args: Prisma.TrainingTimeCountArgs<ExtArgs>
                         result: $Utils.Optional<TrainingTimeCountAggregateOutputType> | number
+                    }
+                }
+            }
+            Certificate: {
+                payload: Prisma.$CertificatePayload<ExtArgs>
+                fields: Prisma.CertificateFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.CertificateFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificatePayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.CertificateFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificatePayload>
+                    }
+                    findFirst: {
+                        args: Prisma.CertificateFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificatePayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.CertificateFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificatePayload>
+                    }
+                    findMany: {
+                        args: Prisma.CertificateFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificatePayload>[]
+                    }
+                    create: {
+                        args: Prisma.CertificateCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificatePayload>
+                    }
+                    createMany: {
+                        args: Prisma.CertificateCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.CertificateCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificatePayload>[]
+                    }
+                    delete: {
+                        args: Prisma.CertificateDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificatePayload>
+                    }
+                    update: {
+                        args: Prisma.CertificateUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificatePayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.CertificateDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.CertificateUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.CertificateUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificatePayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.CertificateUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificatePayload>
+                    }
+                    aggregate: {
+                        args: Prisma.CertificateAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateCertificate>
+                    }
+                    groupBy: {
+                        args: Prisma.CertificateGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<CertificateGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.CertificateCountArgs<ExtArgs>
+                        result: $Utils.Optional<CertificateCountAggregateOutputType> | number
+                    }
+                }
+            }
+            CertificateOnSubject: {
+                payload: Prisma.$CertificateOnSubjectPayload<ExtArgs>
+                fields: Prisma.CertificateOnSubjectFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.CertificateOnSubjectFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificateOnSubjectPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.CertificateOnSubjectFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificateOnSubjectPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.CertificateOnSubjectFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificateOnSubjectPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.CertificateOnSubjectFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificateOnSubjectPayload>
+                    }
+                    findMany: {
+                        args: Prisma.CertificateOnSubjectFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificateOnSubjectPayload>[]
+                    }
+                    create: {
+                        args: Prisma.CertificateOnSubjectCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificateOnSubjectPayload>
+                    }
+                    createMany: {
+                        args: Prisma.CertificateOnSubjectCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.CertificateOnSubjectCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificateOnSubjectPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.CertificateOnSubjectDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificateOnSubjectPayload>
+                    }
+                    update: {
+                        args: Prisma.CertificateOnSubjectUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificateOnSubjectPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.CertificateOnSubjectDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.CertificateOnSubjectUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.CertificateOnSubjectUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificateOnSubjectPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.CertificateOnSubjectUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CertificateOnSubjectPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.CertificateOnSubjectAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateCertificateOnSubject>
+                    }
+                    groupBy: {
+                        args: Prisma.CertificateOnSubjectGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<CertificateOnSubjectGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.CertificateOnSubjectCountArgs<ExtArgs>
+                        result: $Utils.Optional<CertificateOnSubjectCountAggregateOutputType> | number
+                    }
+                }
+            }
+            Award: {
+                payload: Prisma.$AwardPayload<ExtArgs>
+                fields: Prisma.AwardFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.AwardFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AwardPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.AwardFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AwardPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.AwardFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AwardPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.AwardFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AwardPayload>
+                    }
+                    findMany: {
+                        args: Prisma.AwardFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AwardPayload>[]
+                    }
+                    create: {
+                        args: Prisma.AwardCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AwardPayload>
+                    }
+                    createMany: {
+                        args: Prisma.AwardCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.AwardCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AwardPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.AwardDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AwardPayload>
+                    }
+                    update: {
+                        args: Prisma.AwardUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AwardPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.AwardDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.AwardUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.AwardUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AwardPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.AwardUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$AwardPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.AwardAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateAward>
+                    }
+                    groupBy: {
+                        args: Prisma.AwardGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<AwardGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.AwardCountArgs<ExtArgs>
+                        result: $Utils.Optional<AwardCountAggregateOutputType> | number
                     }
                 }
             }
@@ -123151,6 +124666,9 @@ export namespace Prisma {
         trainingBlock?: TrainingBlockOmit
         trainingBlockOnCurriculumVersion?: TrainingBlockOnCurriculumVersionOmit
         trainingTime?: TrainingTimeOmit
+        certificate?: CertificateOmit
+        certificateOnSubject?: CertificateOnSubjectOmit
+        award?: AwardOmit
         diplomaType?: DiplomaTypeOmit
         scoreConvert?: ScoreConvertOmit
         trainingKPI?: TrainingKPIOmit
@@ -125368,9 +126886,13 @@ export namespace Prisma {
      */
     export type SubjectCountOutputType = {
         subjectVersion: number
+        certificateOnSubject: number
+        awardOnSubject: number
     };
     export type SubjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectVersion?: boolean | SubjectCountOutputTypeCountSubjectVersionArgs
+        certificateOnSubject?: boolean | SubjectCountOutputTypeCountCertificateOnSubjectArgs
+        awardOnSubject?: boolean | SubjectCountOutputTypeCountAwardOnSubjectArgs
     };
     /**
      * SubjectCountOutputType without action
@@ -125386,6 +126908,18 @@ export namespace Prisma {
      */
     export type SubjectCountOutputTypeCountSubjectVersionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: SubjectVersionWhereInput
+    };
+    /**
+     * SubjectCountOutputType without action
+     */
+    export type SubjectCountOutputTypeCountCertificateOnSubjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CertificateOnSubjectWhereInput
+    };
+    /**
+     * SubjectCountOutputType without action
+     */
+    export type SubjectCountOutputTypeCountAwardOnSubjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: AwardWhereInput
     };
     /**
      * Count Type SubjectVersionCategoryCountOutputType
@@ -126236,6 +127770,70 @@ export namespace Prisma {
         where?: CurriculumVersionWhereInput
     };
     /**
+     * Count Type CertificateCountOutputType
+     */
+    export type CertificateCountOutputType = {
+        archivedCertificate: number
+        subjects: number
+    };
+    export type CertificateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        archivedCertificate?: boolean | CertificateCountOutputTypeCountArchivedCertificateArgs
+        subjects?: boolean | CertificateCountOutputTypeCountSubjectsArgs
+    };
+    /**
+     * CertificateCountOutputType without action
+     */
+    export type CertificateCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateCountOutputType
+         */
+        select?: CertificateCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * CertificateCountOutputType without action
+     */
+    export type CertificateCountOutputTypeCountArchivedCertificateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ArchivedCertificateWhereInput
+    };
+    /**
+     * CertificateCountOutputType without action
+     */
+    export type CertificateCountOutputTypeCountSubjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CertificateOnSubjectWhereInput
+    };
+    /**
+     * Count Type AwardCountOutputType
+     */
+    export type AwardCountOutputType = {
+        subjects: number
+        archivedAward: number
+    };
+    export type AwardCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        subjects?: boolean | AwardCountOutputTypeCountSubjectsArgs
+        archivedAward?: boolean | AwardCountOutputTypeCountArchivedAwardArgs
+    };
+    /**
+     * AwardCountOutputType without action
+     */
+    export type AwardCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the AwardCountOutputType
+         */
+        select?: AwardCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * AwardCountOutputType without action
+     */
+    export type AwardCountOutputTypeCountSubjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SubjectWhereInput
+    };
+    /**
+     * AwardCountOutputType without action
+     */
+    export type AwardCountOutputTypeCountArchivedAwardArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ArchivedAwardWhereInput
+    };
+    /**
      * Count Type DiplomaTypeCountOutputType
      */
     export type DiplomaTypeCountOutputType = {
@@ -126277,6 +127875,8 @@ export namespace Prisma {
         studentSemesterResult: number
         studentYearResult: number
         scholarshipAwards: number
+        archivedCertificate: number
+        archivedAward: number
         academicWarning: number
         disciplinaryWarning: number
         studentAcademicDecision: number
@@ -126299,6 +127899,8 @@ export namespace Prisma {
         studentSemesterResult?: boolean | StudentCountOutputTypeCountStudentSemesterResultArgs
         studentYearResult?: boolean | StudentCountOutputTypeCountStudentYearResultArgs
         scholarshipAwards?: boolean | StudentCountOutputTypeCountScholarshipAwardsArgs
+        archivedCertificate?: boolean | StudentCountOutputTypeCountArchivedCertificateArgs
+        archivedAward?: boolean | StudentCountOutputTypeCountArchivedAwardArgs
         academicWarning?: boolean | StudentCountOutputTypeCountAcademicWarningArgs
         disciplinaryWarning?: boolean | StudentCountOutputTypeCountDisciplinaryWarningArgs
         studentAcademicDecision?: boolean | StudentCountOutputTypeCountStudentAcademicDecisionArgs
@@ -126358,6 +127960,18 @@ export namespace Prisma {
      */
     export type StudentCountOutputTypeCountScholarshipAwardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: ScholarshipAwardWhereInput
+    };
+    /**
+     * StudentCountOutputType without action
+     */
+    export type StudentCountOutputTypeCountArchivedCertificateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ArchivedCertificateWhereInput
+    };
+    /**
+     * StudentCountOutputType without action
+     */
+    export type StudentCountOutputTypeCountArchivedAwardArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ArchivedAwardWhereInput
     };
     /**
      * StudentCountOutputType without action
@@ -187626,10 +189240,10 @@ export namespace Prisma {
         _max: ArchivedCertificateMaxAggregateOutputType | null
     };
     export type ArchivedCertificateAvgAggregateOutputType = {
-        finalScore: number | null
+        score: number | null
     };
     export type ArchivedCertificateSumAggregateOutputType = {
-        finalScore: number | null
+        score: number | null
     };
     export type ArchivedCertificateMinAggregateOutputType = {
         id: string | null
@@ -187639,9 +189253,13 @@ export namespace Prisma {
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
-        name: string | null
-        englishName: string | null
-        finalScore: number | null
+        certificateId: string | null
+        studentId: string | null
+        score: number | null
+        issuedBy: string | null
+        issuedDate: Date | null
+        expiredDate: Date | null
+        status: $Enums.ArchivedCertificateStatus | null
     };
     export type ArchivedCertificateMaxAggregateOutputType = {
         id: string | null
@@ -187651,9 +189269,13 @@ export namespace Prisma {
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
-        name: string | null
-        englishName: string | null
-        finalScore: number | null
+        certificateId: string | null
+        studentId: string | null
+        score: number | null
+        issuedBy: string | null
+        issuedDate: Date | null
+        expiredDate: Date | null
+        status: $Enums.ArchivedCertificateStatus | null
     };
     export type ArchivedCertificateCountAggregateOutputType = {
         id: number
@@ -187663,16 +189285,20 @@ export namespace Prisma {
         deletedAt: number
         createdAt: number
         updatedAt: number
-        name: number
-        englishName: number
-        finalScore: number
+        certificateId: number
+        studentId: number
+        score: number
+        issuedBy: number
+        issuedDate: number
+        expiredDate: number
+        status: number
         _all: number
     };
     export type ArchivedCertificateAvgAggregateInputType = {
-        finalScore?: true
+        score?: true
     };
     export type ArchivedCertificateSumAggregateInputType = {
-        finalScore?: true
+        score?: true
     };
     export type ArchivedCertificateMinAggregateInputType = {
         id?: true
@@ -187682,9 +189308,13 @@ export namespace Prisma {
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
-        name?: true
-        englishName?: true
-        finalScore?: true
+        certificateId?: true
+        studentId?: true
+        score?: true
+        issuedBy?: true
+        issuedDate?: true
+        expiredDate?: true
+        status?: true
     };
     export type ArchivedCertificateMaxAggregateInputType = {
         id?: true
@@ -187694,9 +189324,13 @@ export namespace Prisma {
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
-        name?: true
-        englishName?: true
-        finalScore?: true
+        certificateId?: true
+        studentId?: true
+        score?: true
+        issuedBy?: true
+        issuedDate?: true
+        expiredDate?: true
+        status?: true
     };
     export type ArchivedCertificateCountAggregateInputType = {
         id?: true
@@ -187706,9 +189340,13 @@ export namespace Prisma {
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
-        name?: true
-        englishName?: true
-        finalScore?: true
+        certificateId?: true
+        studentId?: true
+        score?: true
+        issuedBy?: true
+        issuedDate?: true
+        expiredDate?: true
+        status?: true
         _all?: true
     };
     export type ArchivedCertificateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -187799,9 +189437,13 @@ export namespace Prisma {
         deletedAt: Date | null
         createdAt: Date
         updatedAt: Date
-        name: string
-        englishName: string | null
-        finalScore: number
+        certificateId: string
+        studentId: string
+        score: number
+        issuedBy: string
+        issuedDate: Date
+        expiredDate: Date | null
+        status: $Enums.ArchivedCertificateStatus | null
         _count: ArchivedCertificateCountAggregateOutputType | null
         _avg: ArchivedCertificateAvgAggregateOutputType | null
         _sum: ArchivedCertificateSumAggregateOutputType | null
@@ -187828,9 +189470,15 @@ export namespace Prisma {
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
-        name?: boolean
-        englishName?: boolean
-        finalScore?: boolean
+        certificateId?: boolean
+        studentId?: boolean
+        score?: boolean
+        issuedBy?: boolean
+        issuedDate?: boolean
+        expiredDate?: boolean
+        status?: boolean
+        certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
         documentFiles?: boolean | ArchivedCertificate$documentFilesArgs<ExtArgs>
         studentSubjectScore?: boolean | ArchivedCertificate$studentSubjectScoreArgs<ExtArgs>
         _count?: boolean | ArchivedCertificateCountOutputTypeDefaultArgs<ExtArgs>
@@ -187843,9 +189491,15 @@ export namespace Prisma {
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
-        name?: boolean
-        englishName?: boolean
-        finalScore?: boolean
+        certificateId?: boolean
+        studentId?: boolean
+        score?: boolean
+        issuedBy?: boolean
+        issuedDate?: boolean
+        expiredDate?: boolean
+        status?: boolean
+        certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["archivedCertificate"]>;
     export type ArchivedCertificateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -187855,9 +189509,15 @@ export namespace Prisma {
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
-        name?: boolean
-        englishName?: boolean
-        finalScore?: boolean
+        certificateId?: boolean
+        studentId?: boolean
+        score?: boolean
+        issuedBy?: boolean
+        issuedDate?: boolean
+        expiredDate?: boolean
+        status?: boolean
+        certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["archivedCertificate"]>;
     export type ArchivedCertificateSelectScalar = {
         id?: boolean
@@ -187867,21 +189527,35 @@ export namespace Prisma {
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
-        name?: boolean
-        englishName?: boolean
-        finalScore?: boolean
+        certificateId?: boolean
+        studentId?: boolean
+        score?: boolean
+        issuedBy?: boolean
+        issuedDate?: boolean
+        expiredDate?: boolean
+        status?: boolean
     };
-    export type ArchivedCertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "englishName" | "finalScore", ExtArgs["result"]["archivedCertificate"]>;
+    export type ArchivedCertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "certificateId" | "studentId" | "score" | "issuedBy" | "issuedDate" | "expiredDate" | "status", ExtArgs["result"]["archivedCertificate"]>;
     export type ArchivedCertificateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
         documentFiles?: boolean | ArchivedCertificate$documentFilesArgs<ExtArgs>
         studentSubjectScore?: boolean | ArchivedCertificate$studentSubjectScoreArgs<ExtArgs>
         _count?: boolean | ArchivedCertificateCountOutputTypeDefaultArgs<ExtArgs>
     };
-    export type ArchivedCertificateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
-    export type ArchivedCertificateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type ArchivedCertificateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    };
+    export type ArchivedCertificateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    };
     export type $ArchivedCertificatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "ArchivedCertificate"
         objects: {
+            certificate: Prisma.$CertificatePayload<ExtArgs>
+            student: Prisma.$StudentPayload<ExtArgs>
             documentFiles: Prisma.$DocumentFilePayload<ExtArgs>[]
             studentSubjectScore: Prisma.$ArchivedCertificateOnStudentSubjectScorePayload<ExtArgs>[]
         }
@@ -187893,13 +189567,25 @@ export namespace Prisma {
             deletedAt: Date | null
             createdAt: Date
             updatedAt: Date
-            name: string
-            englishName: string | null
+            certificateId: string
+            studentId: string
             /**
-             * @gte(0, 'Điểm tối thiểu là 0')
-             * @lte(10, 'Điểm tối đa là 10')
+             * điểm chứng chỉ
              */
-            finalScore: number
+            score: number
+            /**
+             * nơi cấp
+             */
+            issuedBy: string
+            /**
+             * ngày cấp  
+             */
+            issuedDate: Date
+            /**
+             * ngày hết hạn
+             */
+            expiredDate: Date | null
+            status: $Enums.ArchivedCertificateStatus | null
         }, ExtArgs["result"]["archivedCertificate"]>
         composites: {}
     };
@@ -188145,6 +189831,10 @@ export namespace Prisma {
          */
         data: ArchivedCertificateCreateManyInput | ArchivedCertificateCreateManyInput[]
         skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ArchivedCertificateIncludeCreateManyAndReturn<ExtArgs> | null
     };
     /**
      * ArchivedCertificate update
@@ -188212,6 +189902,10 @@ export namespace Prisma {
          * Limit how many ArchivedCertificates to update.
          */
         limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ArchivedCertificateIncludeUpdateManyAndReturn<ExtArgs> | null
     };
     /**
      * ArchivedCertificate upsert
@@ -188992,16 +190686,8 @@ export namespace Prisma {
      */
     export type AggregateArchivedAward = {
         _count: ArchivedAwardCountAggregateOutputType | null
-        _avg: ArchivedAwardAvgAggregateOutputType | null
-        _sum: ArchivedAwardSumAggregateOutputType | null
         _min: ArchivedAwardMinAggregateOutputType | null
         _max: ArchivedAwardMaxAggregateOutputType | null
-    };
-    export type ArchivedAwardAvgAggregateOutputType = {
-        bonusScore: number | null
-    };
-    export type ArchivedAwardSumAggregateOutputType = {
-        bonusScore: number | null
     };
     export type ArchivedAwardMinAggregateOutputType = {
         id: string | null
@@ -189011,9 +190697,9 @@ export namespace Prisma {
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
-        name: string | null
-        englishName: string | null
-        bonusScore: number | null
+        awardId: string | null
+        studentId: string | null
+        date: Date | null
     };
     export type ArchivedAwardMaxAggregateOutputType = {
         id: string | null
@@ -189023,9 +190709,9 @@ export namespace Prisma {
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
-        name: string | null
-        englishName: string | null
-        bonusScore: number | null
+        awardId: string | null
+        studentId: string | null
+        date: Date | null
     };
     export type ArchivedAwardCountAggregateOutputType = {
         id: number
@@ -189035,16 +190721,10 @@ export namespace Prisma {
         deletedAt: number
         createdAt: number
         updatedAt: number
-        name: number
-        englishName: number
-        bonusScore: number
+        awardId: number
+        studentId: number
+        date: number
         _all: number
-    };
-    export type ArchivedAwardAvgAggregateInputType = {
-        bonusScore?: true
-    };
-    export type ArchivedAwardSumAggregateInputType = {
-        bonusScore?: true
     };
     export type ArchivedAwardMinAggregateInputType = {
         id?: true
@@ -189054,9 +190734,9 @@ export namespace Prisma {
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
-        name?: true
-        englishName?: true
-        bonusScore?: true
+        awardId?: true
+        studentId?: true
+        date?: true
     };
     export type ArchivedAwardMaxAggregateInputType = {
         id?: true
@@ -189066,9 +190746,9 @@ export namespace Prisma {
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
-        name?: true
-        englishName?: true
-        bonusScore?: true
+        awardId?: true
+        studentId?: true
+        date?: true
     };
     export type ArchivedAwardCountAggregateInputType = {
         id?: true
@@ -189078,9 +190758,9 @@ export namespace Prisma {
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
-        name?: true
-        englishName?: true
-        bonusScore?: true
+        awardId?: true
+        studentId?: true
+        date?: true
         _all?: true
     };
     export type ArchivedAwardAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -189121,18 +190801,6 @@ export namespace Prisma {
         /**
          * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
          * 
-         * Select which fields to average
-        **/
-        _avg?: ArchivedAwardAvgAggregateInputType
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
-         * Select which fields to sum
-        **/
-        _sum?: ArchivedAwardSumAggregateInputType
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
          * Select which fields to find the minimum value
         **/
         _min?: ArchivedAwardMinAggregateInputType
@@ -189158,8 +190826,6 @@ export namespace Prisma {
         take?: number
         skip?: number
         _count?: ArchivedAwardCountAggregateInputType | true
-        _avg?: ArchivedAwardAvgAggregateInputType
-        _sum?: ArchivedAwardSumAggregateInputType
         _min?: ArchivedAwardMinAggregateInputType
         _max?: ArchivedAwardMaxAggregateInputType
     };
@@ -189171,12 +190837,10 @@ export namespace Prisma {
         deletedAt: Date | null
         createdAt: Date
         updatedAt: Date
-        name: string
-        englishName: string | null
-        bonusScore: number
+        awardId: string
+        studentId: string
+        date: Date | null
         _count: ArchivedAwardCountAggregateOutputType | null
-        _avg: ArchivedAwardAvgAggregateOutputType | null
-        _sum: ArchivedAwardSumAggregateOutputType | null
         _min: ArchivedAwardMinAggregateOutputType | null
         _max: ArchivedAwardMaxAggregateOutputType | null
     };
@@ -189200,9 +190864,11 @@ export namespace Prisma {
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
-        name?: boolean
-        englishName?: boolean
-        bonusScore?: boolean
+        awardId?: boolean
+        studentId?: boolean
+        date?: boolean
+        award?: boolean | AwardDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
         documentFiles?: boolean | ArchivedAward$documentFilesArgs<ExtArgs>
         studentSubjectScore?: boolean | ArchivedAward$studentSubjectScoreArgs<ExtArgs>
         _count?: boolean | ArchivedAwardCountOutputTypeDefaultArgs<ExtArgs>
@@ -189215,9 +190881,11 @@ export namespace Prisma {
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
-        name?: boolean
-        englishName?: boolean
-        bonusScore?: boolean
+        awardId?: boolean
+        studentId?: boolean
+        date?: boolean
+        award?: boolean | AwardDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["archivedAward"]>;
     export type ArchivedAwardSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -189227,9 +190895,11 @@ export namespace Prisma {
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
-        name?: boolean
-        englishName?: boolean
-        bonusScore?: boolean
+        awardId?: boolean
+        studentId?: boolean
+        date?: boolean
+        award?: boolean | AwardDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["archivedAward"]>;
     export type ArchivedAwardSelectScalar = {
         id?: boolean
@@ -189239,21 +190909,34 @@ export namespace Prisma {
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
-        name?: boolean
-        englishName?: boolean
-        bonusScore?: boolean
+        awardId?: boolean
+        studentId?: boolean
+        date?: boolean
     };
-    export type ArchivedAwardOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "englishName" | "bonusScore", ExtArgs["result"]["archivedAward"]>;
+    export type ArchivedAwardOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "awardId" | "studentId" | "date", ExtArgs["result"]["archivedAward"]>;
     export type ArchivedAwardInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        award?: boolean | AwardDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
         documentFiles?: boolean | ArchivedAward$documentFilesArgs<ExtArgs>
         studentSubjectScore?: boolean | ArchivedAward$studentSubjectScoreArgs<ExtArgs>
         _count?: boolean | ArchivedAwardCountOutputTypeDefaultArgs<ExtArgs>
     };
-    export type ArchivedAwardIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
-    export type ArchivedAwardIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type ArchivedAwardIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        award?: boolean | AwardDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    };
+    export type ArchivedAwardIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        award?: boolean | AwardDefaultArgs<ExtArgs>
+        student?: boolean | StudentDefaultArgs<ExtArgs>
+    };
     export type $ArchivedAwardPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "ArchivedAward"
         objects: {
+            award: Prisma.$AwardPayload<ExtArgs>
+            student: Prisma.$StudentPayload<ExtArgs>
+            /**
+             * minh chứng
+             */
             documentFiles: Prisma.$DocumentFilePayload<ExtArgs>[]
             studentSubjectScore: Prisma.$ArchivedAwardOnStudentSubjectScorePayload<ExtArgs>[]
         }
@@ -189265,9 +190948,12 @@ export namespace Prisma {
             deletedAt: Date | null
             createdAt: Date
             updatedAt: Date
-            name: string
-            englishName: string | null
-            bonusScore: number
+            awardId: string
+            studentId: string
+            /**
+             * ngày nhận
+             */
+            date: Date | null
         }, ExtArgs["result"]["archivedAward"]>
         composites: {}
     };
@@ -189513,6 +191199,10 @@ export namespace Prisma {
          */
         data: ArchivedAwardCreateManyInput | ArchivedAwardCreateManyInput[]
         skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ArchivedAwardIncludeCreateManyAndReturn<ExtArgs> | null
     };
     /**
      * ArchivedAward update
@@ -189580,6 +191270,10 @@ export namespace Prisma {
          * Limit how many ArchivedAwards to update.
          */
         limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ArchivedAwardIncludeUpdateManyAndReturn<ExtArgs> | null
     };
     /**
      * ArchivedAward upsert
@@ -198109,6 +199803,8 @@ export namespace Prisma {
         information?: boolean
         managementOrganization?: boolean | Subject$managementOrganizationArgs<ExtArgs>
         subjectVersion?: boolean | Subject$subjectVersionArgs<ExtArgs>
+        certificateOnSubject?: boolean | Subject$certificateOnSubjectArgs<ExtArgs>
+        awardOnSubject?: boolean | Subject$awardOnSubjectArgs<ExtArgs>
         _count?: boolean | SubjectCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["subject"]>;
     export type SubjectSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -198156,6 +199852,8 @@ export namespace Prisma {
     export type SubjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         managementOrganization?: boolean | Subject$managementOrganizationArgs<ExtArgs>
         subjectVersion?: boolean | Subject$subjectVersionArgs<ExtArgs>
+        certificateOnSubject?: boolean | Subject$certificateOnSubjectArgs<ExtArgs>
+        awardOnSubject?: boolean | Subject$awardOnSubjectArgs<ExtArgs>
         _count?: boolean | SubjectCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type SubjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -198169,6 +199867,8 @@ export namespace Prisma {
         objects: {
             managementOrganization: Prisma.$DM_DonViPayload<ExtArgs> | null
             subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs>[]
+            certificateOnSubject: Prisma.$CertificateOnSubjectPayload<ExtArgs>[]
+            awardOnSubject: Prisma.$AwardPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -198606,6 +200306,52 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: SubjectVersionScalarFieldEnum | SubjectVersionScalarFieldEnum[]
+    };
+    /**
+     * Subject.certificateOnSubject
+     */
+    export type Subject$certificateOnSubjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectInclude<ExtArgs> | null
+        where?: CertificateOnSubjectWhereInput
+        orderBy?: CertificateOnSubjectOrderByWithRelationInput | CertificateOnSubjectOrderByWithRelationInput[]
+        cursor?: CertificateOnSubjectWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: CertificateOnSubjectScalarFieldEnum | CertificateOnSubjectScalarFieldEnum[]
+    };
+    /**
+     * Subject.awardOnSubject
+     */
+    export type Subject$awardOnSubjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Award
+         */
+        select?: AwardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Award
+         */
+        omit?: AwardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AwardInclude<ExtArgs> | null
+        where?: AwardWhereInput
+        orderBy?: AwardOrderByWithRelationInput | AwardOrderByWithRelationInput[]
+        cursor?: AwardWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: AwardScalarFieldEnum | AwardScalarFieldEnum[]
     };
     /**
      * Subject without action
@@ -219895,6 +221641,2111 @@ export namespace Prisma {
         include?: TrainingTimeInclude<ExtArgs> | null
     };
     /**
+     * Model Certificate
+     */
+    export type AggregateCertificate = {
+        _count: CertificateCountAggregateOutputType | null
+        _min: CertificateMinAggregateOutputType | null
+        _max: CertificateMaxAggregateOutputType | null
+    };
+    export type CertificateMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        name: string | null
+        englishName: string | null
+    };
+    export type CertificateMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        name: string | null
+        englishName: string | null
+    };
+    export type CertificateCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        name: number
+        englishName: number
+        _all: number
+    };
+    export type CertificateMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        englishName?: true
+    };
+    export type CertificateMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        englishName?: true
+    };
+    export type CertificateCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        englishName?: true
+        _all?: true
+    };
+    export type CertificateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which Certificate to aggregate.
+         */
+        where?: CertificateWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of Certificates to fetch.
+         */
+        orderBy?: CertificateOrderByWithRelationInput | CertificateOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: CertificateWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` Certificates from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` Certificates.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned Certificates
+        **/
+        _count?: true | CertificateCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: CertificateMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: CertificateMaxAggregateInputType
+    };
+    export type GetCertificateAggregateType<T extends CertificateAggregateArgs> = {
+        [P in keyof T & keyof AggregateCertificate]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCertificate[P]>
+        : GetScalarType<T[P], AggregateCertificate[P]>
+    };
+    export type CertificateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CertificateWhereInput
+        orderBy?: CertificateOrderByWithAggregationInput | CertificateOrderByWithAggregationInput[]
+        by: CertificateScalarFieldEnum[] | CertificateScalarFieldEnum
+        having?: CertificateScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: CertificateCountAggregateInputType | true
+        _min?: CertificateMinAggregateInputType
+        _max?: CertificateMaxAggregateInputType
+    };
+    export type CertificateGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        name: string
+        englishName: string | null
+        _count: CertificateCountAggregateOutputType | null
+        _min: CertificateMinAggregateOutputType | null
+        _max: CertificateMaxAggregateOutputType | null
+    };
+    type GetCertificateGroupByPayload<T extends CertificateGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<CertificateGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof CertificateGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], CertificateGroupByOutputType[P]>
+                : GetScalarType<T[P], CertificateGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type CertificateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        englishName?: boolean
+        archivedCertificate?: boolean | Certificate$archivedCertificateArgs<ExtArgs>
+        subjects?: boolean | Certificate$subjectsArgs<ExtArgs>
+        _count?: boolean | CertificateCountOutputTypeDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["certificate"]>;
+    export type CertificateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        englishName?: boolean
+    }, ExtArgs["result"]["certificate"]>;
+    export type CertificateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        englishName?: boolean
+    }, ExtArgs["result"]["certificate"]>;
+    export type CertificateSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        englishName?: boolean
+    };
+    export type CertificateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "englishName", ExtArgs["result"]["certificate"]>;
+    export type CertificateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        archivedCertificate?: boolean | Certificate$archivedCertificateArgs<ExtArgs>
+        subjects?: boolean | Certificate$subjectsArgs<ExtArgs>
+        _count?: boolean | CertificateCountOutputTypeDefaultArgs<ExtArgs>
+    };
+    export type CertificateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type CertificateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type $CertificatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "Certificate"
+        objects: {
+            /**
+             * SV đạt
+             */
+            archivedCertificate: Prisma.$ArchivedCertificatePayload<ExtArgs>[]
+            /**
+             * môn học có thể phiên điểm
+             */
+            subjects: Prisma.$CertificateOnSubjectPayload<ExtArgs>[]
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            name: string
+            englishName: string | null
+        }, ExtArgs["result"]["certificate"]>
+        composites: {}
+    };
+    type CertificateGetPayload<S extends boolean | null | undefined | CertificateDefaultArgs> = $Result.GetResult<Prisma.$CertificatePayload, S>;
+    type CertificateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<CertificateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: CertificateCountAggregateInputType | true
+    };
+    /**
+     * Certificate findUnique
+     */
+    export type CertificateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Certificate
+         */
+        select?: CertificateSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Certificate
+         */
+        omit?: CertificateOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateInclude<ExtArgs> | null
+        /**
+         * Filter, which Certificate to fetch.
+         */
+        where: CertificateWhereUniqueInput
+    };
+    /**
+     * Certificate findUniqueOrThrow
+     */
+    export type CertificateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Certificate
+         */
+        select?: CertificateSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Certificate
+         */
+        omit?: CertificateOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateInclude<ExtArgs> | null
+        /**
+         * Filter, which Certificate to fetch.
+         */
+        where: CertificateWhereUniqueInput
+    };
+    /**
+     * Certificate findFirst
+     */
+    export type CertificateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Certificate
+         */
+        select?: CertificateSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Certificate
+         */
+        omit?: CertificateOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateInclude<ExtArgs> | null
+        /**
+         * Filter, which Certificate to fetch.
+         */
+        where?: CertificateWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of Certificates to fetch.
+         */
+        orderBy?: CertificateOrderByWithRelationInput | CertificateOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for Certificates.
+         */
+        cursor?: CertificateWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` Certificates from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` Certificates.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of Certificates.
+         */
+        distinct?: CertificateScalarFieldEnum | CertificateScalarFieldEnum[]
+    };
+    /**
+     * Certificate findFirstOrThrow
+     */
+    export type CertificateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Certificate
+         */
+        select?: CertificateSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Certificate
+         */
+        omit?: CertificateOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateInclude<ExtArgs> | null
+        /**
+         * Filter, which Certificate to fetch.
+         */
+        where?: CertificateWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of Certificates to fetch.
+         */
+        orderBy?: CertificateOrderByWithRelationInput | CertificateOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for Certificates.
+         */
+        cursor?: CertificateWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` Certificates from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` Certificates.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of Certificates.
+         */
+        distinct?: CertificateScalarFieldEnum | CertificateScalarFieldEnum[]
+    };
+    /**
+     * Certificate findMany
+     */
+    export type CertificateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Certificate
+         */
+        select?: CertificateSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Certificate
+         */
+        omit?: CertificateOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateInclude<ExtArgs> | null
+        /**
+         * Filter, which Certificates to fetch.
+         */
+        where?: CertificateWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of Certificates to fetch.
+         */
+        orderBy?: CertificateOrderByWithRelationInput | CertificateOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing Certificates.
+         */
+        cursor?: CertificateWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` Certificates from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` Certificates.
+         */
+        skip?: number
+        distinct?: CertificateScalarFieldEnum | CertificateScalarFieldEnum[]
+    };
+    /**
+     * Certificate create
+     */
+    export type CertificateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Certificate
+         */
+        select?: CertificateSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Certificate
+         */
+        omit?: CertificateOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateInclude<ExtArgs> | null
+        /**
+         * The data needed to create a Certificate.
+         */
+        data: XOR<CertificateCreateInput, CertificateUncheckedCreateInput>
+    };
+    /**
+     * Certificate createMany
+     */
+    export type CertificateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many Certificates.
+         */
+        data: CertificateCreateManyInput | CertificateCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * Certificate createManyAndReturn
+     */
+    export type CertificateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Certificate
+         */
+        select?: CertificateSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the Certificate
+         */
+        omit?: CertificateOmit<ExtArgs> | null
+        /**
+         * The data used to create many Certificates.
+         */
+        data: CertificateCreateManyInput | CertificateCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * Certificate update
+     */
+    export type CertificateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Certificate
+         */
+        select?: CertificateSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Certificate
+         */
+        omit?: CertificateOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateInclude<ExtArgs> | null
+        /**
+         * The data needed to update a Certificate.
+         */
+        data: XOR<CertificateUpdateInput, CertificateUncheckedUpdateInput>
+        /**
+         * Choose, which Certificate to update.
+         */
+        where: CertificateWhereUniqueInput
+    };
+    /**
+     * Certificate updateMany
+     */
+    export type CertificateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update Certificates.
+         */
+        data: XOR<CertificateUpdateManyMutationInput, CertificateUncheckedUpdateManyInput>
+        /**
+         * Filter which Certificates to update
+         */
+        where?: CertificateWhereInput
+        /**
+         * Limit how many Certificates to update.
+         */
+        limit?: number
+    };
+    /**
+     * Certificate updateManyAndReturn
+     */
+    export type CertificateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Certificate
+         */
+        select?: CertificateSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the Certificate
+         */
+        omit?: CertificateOmit<ExtArgs> | null
+        /**
+         * The data used to update Certificates.
+         */
+        data: XOR<CertificateUpdateManyMutationInput, CertificateUncheckedUpdateManyInput>
+        /**
+         * Filter which Certificates to update
+         */
+        where?: CertificateWhereInput
+        /**
+         * Limit how many Certificates to update.
+         */
+        limit?: number
+    };
+    /**
+     * Certificate upsert
+     */
+    export type CertificateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Certificate
+         */
+        select?: CertificateSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Certificate
+         */
+        omit?: CertificateOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateInclude<ExtArgs> | null
+        /**
+         * The filter to search for the Certificate to update in case it exists.
+         */
+        where: CertificateWhereUniqueInput
+        /**
+         * In case the Certificate found by the `where` argument doesn't exist, create a new Certificate with this data.
+         */
+        create: XOR<CertificateCreateInput, CertificateUncheckedCreateInput>
+        /**
+         * In case the Certificate was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<CertificateUpdateInput, CertificateUncheckedUpdateInput>
+    };
+    /**
+     * Certificate delete
+     */
+    export type CertificateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Certificate
+         */
+        select?: CertificateSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Certificate
+         */
+        omit?: CertificateOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateInclude<ExtArgs> | null
+        /**
+         * Filter which Certificate to delete.
+         */
+        where: CertificateWhereUniqueInput
+    };
+    /**
+     * Certificate deleteMany
+     */
+    export type CertificateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which Certificates to delete
+         */
+        where?: CertificateWhereInput
+        /**
+         * Limit how many Certificates to delete.
+         */
+        limit?: number
+    };
+    /**
+     * Certificate.archivedCertificate
+     */
+    export type Certificate$archivedCertificateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ArchivedCertificate
+         */
+        select?: ArchivedCertificateSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ArchivedCertificate
+         */
+        omit?: ArchivedCertificateOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ArchivedCertificateInclude<ExtArgs> | null
+        where?: ArchivedCertificateWhereInput
+        orderBy?: ArchivedCertificateOrderByWithRelationInput | ArchivedCertificateOrderByWithRelationInput[]
+        cursor?: ArchivedCertificateWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ArchivedCertificateScalarFieldEnum | ArchivedCertificateScalarFieldEnum[]
+    };
+    /**
+     * Certificate.subjects
+     */
+    export type Certificate$subjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectInclude<ExtArgs> | null
+        where?: CertificateOnSubjectWhereInput
+        orderBy?: CertificateOnSubjectOrderByWithRelationInput | CertificateOnSubjectOrderByWithRelationInput[]
+        cursor?: CertificateOnSubjectWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: CertificateOnSubjectScalarFieldEnum | CertificateOnSubjectScalarFieldEnum[]
+    };
+    /**
+     * Certificate without action
+     */
+    export type CertificateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Certificate
+         */
+        select?: CertificateSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Certificate
+         */
+        omit?: CertificateOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateInclude<ExtArgs> | null
+    };
+    /**
+     * Model CertificateOnSubject
+     */
+    export type AggregateCertificateOnSubject = {
+        _count: CertificateOnSubjectCountAggregateOutputType | null
+        _avg: CertificateOnSubjectAvgAggregateOutputType | null
+        _sum: CertificateOnSubjectSumAggregateOutputType | null
+        _min: CertificateOnSubjectMinAggregateOutputType | null
+        _max: CertificateOnSubjectMaxAggregateOutputType | null
+    };
+    export type CertificateOnSubjectAvgAggregateOutputType = {
+        finalScore: number | null
+    };
+    export type CertificateOnSubjectSumAggregateOutputType = {
+        finalScore: number | null
+    };
+    export type CertificateOnSubjectMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        finalScore: number | null
+        certificateId: string | null
+        subjectId: string | null
+    };
+    export type CertificateOnSubjectMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        finalScore: number | null
+        certificateId: string | null
+        subjectId: string | null
+    };
+    export type CertificateOnSubjectCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        finalScore: number
+        certificateId: number
+        subjectId: number
+        _all: number
+    };
+    export type CertificateOnSubjectAvgAggregateInputType = {
+        finalScore?: true
+    };
+    export type CertificateOnSubjectSumAggregateInputType = {
+        finalScore?: true
+    };
+    export type CertificateOnSubjectMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        finalScore?: true
+        certificateId?: true
+        subjectId?: true
+    };
+    export type CertificateOnSubjectMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        finalScore?: true
+        certificateId?: true
+        subjectId?: true
+    };
+    export type CertificateOnSubjectCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        finalScore?: true
+        certificateId?: true
+        subjectId?: true
+        _all?: true
+    };
+    export type CertificateOnSubjectAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which CertificateOnSubject to aggregate.
+         */
+        where?: CertificateOnSubjectWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CertificateOnSubjects to fetch.
+         */
+        orderBy?: CertificateOnSubjectOrderByWithRelationInput | CertificateOnSubjectOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: CertificateOnSubjectWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CertificateOnSubjects from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CertificateOnSubjects.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned CertificateOnSubjects
+        **/
+        _count?: true | CertificateOnSubjectCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: CertificateOnSubjectAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: CertificateOnSubjectSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: CertificateOnSubjectMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: CertificateOnSubjectMaxAggregateInputType
+    };
+    export type GetCertificateOnSubjectAggregateType<T extends CertificateOnSubjectAggregateArgs> = {
+        [P in keyof T & keyof AggregateCertificateOnSubject]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCertificateOnSubject[P]>
+        : GetScalarType<T[P], AggregateCertificateOnSubject[P]>
+    };
+    export type CertificateOnSubjectGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CertificateOnSubjectWhereInput
+        orderBy?: CertificateOnSubjectOrderByWithAggregationInput | CertificateOnSubjectOrderByWithAggregationInput[]
+        by: CertificateOnSubjectScalarFieldEnum[] | CertificateOnSubjectScalarFieldEnum
+        having?: CertificateOnSubjectScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: CertificateOnSubjectCountAggregateInputType | true
+        _avg?: CertificateOnSubjectAvgAggregateInputType
+        _sum?: CertificateOnSubjectSumAggregateInputType
+        _min?: CertificateOnSubjectMinAggregateInputType
+        _max?: CertificateOnSubjectMaxAggregateInputType
+    };
+    export type CertificateOnSubjectGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        finalScore: number
+        certificateId: string
+        subjectId: string
+        _count: CertificateOnSubjectCountAggregateOutputType | null
+        _avg: CertificateOnSubjectAvgAggregateOutputType | null
+        _sum: CertificateOnSubjectSumAggregateOutputType | null
+        _min: CertificateOnSubjectMinAggregateOutputType | null
+        _max: CertificateOnSubjectMaxAggregateOutputType | null
+    };
+    type GetCertificateOnSubjectGroupByPayload<T extends CertificateOnSubjectGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<CertificateOnSubjectGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof CertificateOnSubjectGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], CertificateOnSubjectGroupByOutputType[P]>
+                : GetScalarType<T[P], CertificateOnSubjectGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type CertificateOnSubjectSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        finalScore?: boolean
+        certificateId?: boolean
+        subjectId?: boolean
+        certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+        subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["certificateOnSubject"]>;
+    export type CertificateOnSubjectSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        finalScore?: boolean
+        certificateId?: boolean
+        subjectId?: boolean
+        certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+        subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["certificateOnSubject"]>;
+    export type CertificateOnSubjectSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        finalScore?: boolean
+        certificateId?: boolean
+        subjectId?: boolean
+        certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+        subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["certificateOnSubject"]>;
+    export type CertificateOnSubjectSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        finalScore?: boolean
+        certificateId?: boolean
+        subjectId?: boolean
+    };
+    export type CertificateOnSubjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "finalScore" | "certificateId" | "subjectId", ExtArgs["result"]["certificateOnSubject"]>;
+    export type CertificateOnSubjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+        subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    };
+    export type CertificateOnSubjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+        subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    };
+    export type CertificateOnSubjectIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        certificate?: boolean | CertificateDefaultArgs<ExtArgs>
+        subject?: boolean | SubjectDefaultArgs<ExtArgs>
+    };
+    export type $CertificateOnSubjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "CertificateOnSubject"
+        objects: {
+            certificate: Prisma.$CertificatePayload<ExtArgs>
+            subject: Prisma.$SubjectPayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            /**
+             * phiên điểm môn học
+             * @gte(0, 'Điểm tối thiểu là 0')
+             * @lte(10, 'Điểm tối đa là 10')
+             */
+            finalScore: number
+            certificateId: string
+            subjectId: string
+        }, ExtArgs["result"]["certificateOnSubject"]>
+        composites: {}
+    };
+    type CertificateOnSubjectGetPayload<S extends boolean | null | undefined | CertificateOnSubjectDefaultArgs> = $Result.GetResult<Prisma.$CertificateOnSubjectPayload, S>;
+    type CertificateOnSubjectCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<CertificateOnSubjectFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: CertificateOnSubjectCountAggregateInputType | true
+    };
+    /**
+     * CertificateOnSubject findUnique
+     */
+    export type CertificateOnSubjectFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectInclude<ExtArgs> | null
+        /**
+         * Filter, which CertificateOnSubject to fetch.
+         */
+        where: CertificateOnSubjectWhereUniqueInput
+    };
+    /**
+     * CertificateOnSubject findUniqueOrThrow
+     */
+    export type CertificateOnSubjectFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectInclude<ExtArgs> | null
+        /**
+         * Filter, which CertificateOnSubject to fetch.
+         */
+        where: CertificateOnSubjectWhereUniqueInput
+    };
+    /**
+     * CertificateOnSubject findFirst
+     */
+    export type CertificateOnSubjectFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectInclude<ExtArgs> | null
+        /**
+         * Filter, which CertificateOnSubject to fetch.
+         */
+        where?: CertificateOnSubjectWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CertificateOnSubjects to fetch.
+         */
+        orderBy?: CertificateOnSubjectOrderByWithRelationInput | CertificateOnSubjectOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for CertificateOnSubjects.
+         */
+        cursor?: CertificateOnSubjectWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CertificateOnSubjects from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CertificateOnSubjects.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of CertificateOnSubjects.
+         */
+        distinct?: CertificateOnSubjectScalarFieldEnum | CertificateOnSubjectScalarFieldEnum[]
+    };
+    /**
+     * CertificateOnSubject findFirstOrThrow
+     */
+    export type CertificateOnSubjectFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectInclude<ExtArgs> | null
+        /**
+         * Filter, which CertificateOnSubject to fetch.
+         */
+        where?: CertificateOnSubjectWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CertificateOnSubjects to fetch.
+         */
+        orderBy?: CertificateOnSubjectOrderByWithRelationInput | CertificateOnSubjectOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for CertificateOnSubjects.
+         */
+        cursor?: CertificateOnSubjectWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CertificateOnSubjects from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CertificateOnSubjects.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of CertificateOnSubjects.
+         */
+        distinct?: CertificateOnSubjectScalarFieldEnum | CertificateOnSubjectScalarFieldEnum[]
+    };
+    /**
+     * CertificateOnSubject findMany
+     */
+    export type CertificateOnSubjectFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectInclude<ExtArgs> | null
+        /**
+         * Filter, which CertificateOnSubjects to fetch.
+         */
+        where?: CertificateOnSubjectWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CertificateOnSubjects to fetch.
+         */
+        orderBy?: CertificateOnSubjectOrderByWithRelationInput | CertificateOnSubjectOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing CertificateOnSubjects.
+         */
+        cursor?: CertificateOnSubjectWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CertificateOnSubjects from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CertificateOnSubjects.
+         */
+        skip?: number
+        distinct?: CertificateOnSubjectScalarFieldEnum | CertificateOnSubjectScalarFieldEnum[]
+    };
+    /**
+     * CertificateOnSubject create
+     */
+    export type CertificateOnSubjectCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectInclude<ExtArgs> | null
+        /**
+         * The data needed to create a CertificateOnSubject.
+         */
+        data: XOR<CertificateOnSubjectCreateInput, CertificateOnSubjectUncheckedCreateInput>
+    };
+    /**
+     * CertificateOnSubject createMany
+     */
+    export type CertificateOnSubjectCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many CertificateOnSubjects.
+         */
+        data: CertificateOnSubjectCreateManyInput | CertificateOnSubjectCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * CertificateOnSubject createManyAndReturn
+     */
+    export type CertificateOnSubjectCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * The data used to create many CertificateOnSubjects.
+         */
+        data: CertificateOnSubjectCreateManyInput | CertificateOnSubjectCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * CertificateOnSubject update
+     */
+    export type CertificateOnSubjectUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectInclude<ExtArgs> | null
+        /**
+         * The data needed to update a CertificateOnSubject.
+         */
+        data: XOR<CertificateOnSubjectUpdateInput, CertificateOnSubjectUncheckedUpdateInput>
+        /**
+         * Choose, which CertificateOnSubject to update.
+         */
+        where: CertificateOnSubjectWhereUniqueInput
+    };
+    /**
+     * CertificateOnSubject updateMany
+     */
+    export type CertificateOnSubjectUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update CertificateOnSubjects.
+         */
+        data: XOR<CertificateOnSubjectUpdateManyMutationInput, CertificateOnSubjectUncheckedUpdateManyInput>
+        /**
+         * Filter which CertificateOnSubjects to update
+         */
+        where?: CertificateOnSubjectWhereInput
+        /**
+         * Limit how many CertificateOnSubjects to update.
+         */
+        limit?: number
+    };
+    /**
+     * CertificateOnSubject updateManyAndReturn
+     */
+    export type CertificateOnSubjectUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * The data used to update CertificateOnSubjects.
+         */
+        data: XOR<CertificateOnSubjectUpdateManyMutationInput, CertificateOnSubjectUncheckedUpdateManyInput>
+        /**
+         * Filter which CertificateOnSubjects to update
+         */
+        where?: CertificateOnSubjectWhereInput
+        /**
+         * Limit how many CertificateOnSubjects to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * CertificateOnSubject upsert
+     */
+    export type CertificateOnSubjectUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectInclude<ExtArgs> | null
+        /**
+         * The filter to search for the CertificateOnSubject to update in case it exists.
+         */
+        where: CertificateOnSubjectWhereUniqueInput
+        /**
+         * In case the CertificateOnSubject found by the `where` argument doesn't exist, create a new CertificateOnSubject with this data.
+         */
+        create: XOR<CertificateOnSubjectCreateInput, CertificateOnSubjectUncheckedCreateInput>
+        /**
+         * In case the CertificateOnSubject was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<CertificateOnSubjectUpdateInput, CertificateOnSubjectUncheckedUpdateInput>
+    };
+    /**
+     * CertificateOnSubject delete
+     */
+    export type CertificateOnSubjectDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectInclude<ExtArgs> | null
+        /**
+         * Filter which CertificateOnSubject to delete.
+         */
+        where: CertificateOnSubjectWhereUniqueInput
+    };
+    /**
+     * CertificateOnSubject deleteMany
+     */
+    export type CertificateOnSubjectDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which CertificateOnSubjects to delete
+         */
+        where?: CertificateOnSubjectWhereInput
+        /**
+         * Limit how many CertificateOnSubjects to delete.
+         */
+        limit?: number
+    };
+    /**
+     * CertificateOnSubject without action
+     */
+    export type CertificateOnSubjectDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CertificateOnSubject
+         */
+        select?: CertificateOnSubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CertificateOnSubject
+         */
+        omit?: CertificateOnSubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CertificateOnSubjectInclude<ExtArgs> | null
+    };
+    /**
+     * Model Award
+     */
+    export type AggregateAward = {
+        _count: AwardCountAggregateOutputType | null
+        _avg: AwardAvgAggregateOutputType | null
+        _sum: AwardSumAggregateOutputType | null
+        _min: AwardMinAggregateOutputType | null
+        _max: AwardMaxAggregateOutputType | null
+    };
+    export type AwardAvgAggregateOutputType = {
+        bonusScore: number | null
+    };
+    export type AwardSumAggregateOutputType = {
+        bonusScore: number | null
+    };
+    export type AwardMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        name: string | null
+        englishName: string | null
+        bonusScore: number | null
+    };
+    export type AwardMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        name: string | null
+        englishName: string | null
+        bonusScore: number | null
+    };
+    export type AwardCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        name: number
+        englishName: number
+        bonusScore: number
+        _all: number
+    };
+    export type AwardAvgAggregateInputType = {
+        bonusScore?: true
+    };
+    export type AwardSumAggregateInputType = {
+        bonusScore?: true
+    };
+    export type AwardMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        englishName?: true
+        bonusScore?: true
+    };
+    export type AwardMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        englishName?: true
+        bonusScore?: true
+    };
+    export type AwardCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        englishName?: true
+        bonusScore?: true
+        _all?: true
+    };
+    export type AwardAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which Award to aggregate.
+         */
+        where?: AwardWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of Awards to fetch.
+         */
+        orderBy?: AwardOrderByWithRelationInput | AwardOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: AwardWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` Awards from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` Awards.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned Awards
+        **/
+        _count?: true | AwardCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to average
+        **/
+        _avg?: AwardAvgAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to sum
+        **/
+        _sum?: AwardSumAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: AwardMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: AwardMaxAggregateInputType
+    };
+    export type GetAwardAggregateType<T extends AwardAggregateArgs> = {
+        [P in keyof T & keyof AggregateAward]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAward[P]>
+        : GetScalarType<T[P], AggregateAward[P]>
+    };
+    export type AwardGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: AwardWhereInput
+        orderBy?: AwardOrderByWithAggregationInput | AwardOrderByWithAggregationInput[]
+        by: AwardScalarFieldEnum[] | AwardScalarFieldEnum
+        having?: AwardScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: AwardCountAggregateInputType | true
+        _avg?: AwardAvgAggregateInputType
+        _sum?: AwardSumAggregateInputType
+        _min?: AwardMinAggregateInputType
+        _max?: AwardMaxAggregateInputType
+    };
+    export type AwardGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        name: string
+        englishName: string | null
+        bonusScore: number
+        _count: AwardCountAggregateOutputType | null
+        _avg: AwardAvgAggregateOutputType | null
+        _sum: AwardSumAggregateOutputType | null
+        _min: AwardMinAggregateOutputType | null
+        _max: AwardMaxAggregateOutputType | null
+    };
+    type GetAwardGroupByPayload<T extends AwardGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<AwardGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof AwardGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], AwardGroupByOutputType[P]>
+                : GetScalarType<T[P], AwardGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type AwardSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        englishName?: boolean
+        bonusScore?: boolean
+        subjects?: boolean | Award$subjectsArgs<ExtArgs>
+        archivedAward?: boolean | Award$archivedAwardArgs<ExtArgs>
+        _count?: boolean | AwardCountOutputTypeDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["award"]>;
+    export type AwardSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        englishName?: boolean
+        bonusScore?: boolean
+    }, ExtArgs["result"]["award"]>;
+    export type AwardSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        englishName?: boolean
+        bonusScore?: boolean
+    }, ExtArgs["result"]["award"]>;
+    export type AwardSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        englishName?: boolean
+        bonusScore?: boolean
+    };
+    export type AwardOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "englishName" | "bonusScore", ExtArgs["result"]["award"]>;
+    export type AwardInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        subjects?: boolean | Award$subjectsArgs<ExtArgs>
+        archivedAward?: boolean | Award$archivedAwardArgs<ExtArgs>
+        _count?: boolean | AwardCountOutputTypeDefaultArgs<ExtArgs>
+    };
+    export type AwardIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type AwardIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type $AwardPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "Award"
+        objects: {
+            /**
+             * môn học có thể cộng điểm
+             */
+            subjects: Prisma.$SubjectPayload<ExtArgs>[]
+            /**
+             * SV đạt
+             */
+            archivedAward: Prisma.$ArchivedAwardPayload<ExtArgs>[]
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            name: string
+            englishName: string | null
+            bonusScore: number
+        }, ExtArgs["result"]["award"]>
+        composites: {}
+    };
+    type AwardGetPayload<S extends boolean | null | undefined | AwardDefaultArgs> = $Result.GetResult<Prisma.$AwardPayload, S>;
+    type AwardCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<AwardFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: AwardCountAggregateInputType | true
+    };
+    /**
+     * Award findUnique
+     */
+    export type AwardFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Award
+         */
+        select?: AwardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Award
+         */
+        omit?: AwardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AwardInclude<ExtArgs> | null
+        /**
+         * Filter, which Award to fetch.
+         */
+        where: AwardWhereUniqueInput
+    };
+    /**
+     * Award findUniqueOrThrow
+     */
+    export type AwardFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Award
+         */
+        select?: AwardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Award
+         */
+        omit?: AwardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AwardInclude<ExtArgs> | null
+        /**
+         * Filter, which Award to fetch.
+         */
+        where: AwardWhereUniqueInput
+    };
+    /**
+     * Award findFirst
+     */
+    export type AwardFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Award
+         */
+        select?: AwardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Award
+         */
+        omit?: AwardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AwardInclude<ExtArgs> | null
+        /**
+         * Filter, which Award to fetch.
+         */
+        where?: AwardWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of Awards to fetch.
+         */
+        orderBy?: AwardOrderByWithRelationInput | AwardOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for Awards.
+         */
+        cursor?: AwardWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` Awards from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` Awards.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of Awards.
+         */
+        distinct?: AwardScalarFieldEnum | AwardScalarFieldEnum[]
+    };
+    /**
+     * Award findFirstOrThrow
+     */
+    export type AwardFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Award
+         */
+        select?: AwardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Award
+         */
+        omit?: AwardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AwardInclude<ExtArgs> | null
+        /**
+         * Filter, which Award to fetch.
+         */
+        where?: AwardWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of Awards to fetch.
+         */
+        orderBy?: AwardOrderByWithRelationInput | AwardOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for Awards.
+         */
+        cursor?: AwardWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` Awards from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` Awards.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of Awards.
+         */
+        distinct?: AwardScalarFieldEnum | AwardScalarFieldEnum[]
+    };
+    /**
+     * Award findMany
+     */
+    export type AwardFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Award
+         */
+        select?: AwardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Award
+         */
+        omit?: AwardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AwardInclude<ExtArgs> | null
+        /**
+         * Filter, which Awards to fetch.
+         */
+        where?: AwardWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of Awards to fetch.
+         */
+        orderBy?: AwardOrderByWithRelationInput | AwardOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing Awards.
+         */
+        cursor?: AwardWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` Awards from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` Awards.
+         */
+        skip?: number
+        distinct?: AwardScalarFieldEnum | AwardScalarFieldEnum[]
+    };
+    /**
+     * Award create
+     */
+    export type AwardCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Award
+         */
+        select?: AwardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Award
+         */
+        omit?: AwardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AwardInclude<ExtArgs> | null
+        /**
+         * The data needed to create a Award.
+         */
+        data: XOR<AwardCreateInput, AwardUncheckedCreateInput>
+    };
+    /**
+     * Award createMany
+     */
+    export type AwardCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many Awards.
+         */
+        data: AwardCreateManyInput | AwardCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * Award createManyAndReturn
+     */
+    export type AwardCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Award
+         */
+        select?: AwardSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the Award
+         */
+        omit?: AwardOmit<ExtArgs> | null
+        /**
+         * The data used to create many Awards.
+         */
+        data: AwardCreateManyInput | AwardCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * Award update
+     */
+    export type AwardUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Award
+         */
+        select?: AwardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Award
+         */
+        omit?: AwardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AwardInclude<ExtArgs> | null
+        /**
+         * The data needed to update a Award.
+         */
+        data: XOR<AwardUpdateInput, AwardUncheckedUpdateInput>
+        /**
+         * Choose, which Award to update.
+         */
+        where: AwardWhereUniqueInput
+    };
+    /**
+     * Award updateMany
+     */
+    export type AwardUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update Awards.
+         */
+        data: XOR<AwardUpdateManyMutationInput, AwardUncheckedUpdateManyInput>
+        /**
+         * Filter which Awards to update
+         */
+        where?: AwardWhereInput
+        /**
+         * Limit how many Awards to update.
+         */
+        limit?: number
+    };
+    /**
+     * Award updateManyAndReturn
+     */
+    export type AwardUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Award
+         */
+        select?: AwardSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the Award
+         */
+        omit?: AwardOmit<ExtArgs> | null
+        /**
+         * The data used to update Awards.
+         */
+        data: XOR<AwardUpdateManyMutationInput, AwardUncheckedUpdateManyInput>
+        /**
+         * Filter which Awards to update
+         */
+        where?: AwardWhereInput
+        /**
+         * Limit how many Awards to update.
+         */
+        limit?: number
+    };
+    /**
+     * Award upsert
+     */
+    export type AwardUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Award
+         */
+        select?: AwardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Award
+         */
+        omit?: AwardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AwardInclude<ExtArgs> | null
+        /**
+         * The filter to search for the Award to update in case it exists.
+         */
+        where: AwardWhereUniqueInput
+        /**
+         * In case the Award found by the `where` argument doesn't exist, create a new Award with this data.
+         */
+        create: XOR<AwardCreateInput, AwardUncheckedCreateInput>
+        /**
+         * In case the Award was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<AwardUpdateInput, AwardUncheckedUpdateInput>
+    };
+    /**
+     * Award delete
+     */
+    export type AwardDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Award
+         */
+        select?: AwardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Award
+         */
+        omit?: AwardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AwardInclude<ExtArgs> | null
+        /**
+         * Filter which Award to delete.
+         */
+        where: AwardWhereUniqueInput
+    };
+    /**
+     * Award deleteMany
+     */
+    export type AwardDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which Awards to delete
+         */
+        where?: AwardWhereInput
+        /**
+         * Limit how many Awards to delete.
+         */
+        limit?: number
+    };
+    /**
+     * Award.subjects
+     */
+    export type Award$subjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Subject
+         */
+        select?: SubjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Subject
+         */
+        omit?: SubjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectInclude<ExtArgs> | null
+        where?: SubjectWhereInput
+        orderBy?: SubjectOrderByWithRelationInput | SubjectOrderByWithRelationInput[]
+        cursor?: SubjectWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: SubjectScalarFieldEnum | SubjectScalarFieldEnum[]
+    };
+    /**
+     * Award.archivedAward
+     */
+    export type Award$archivedAwardArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ArchivedAward
+         */
+        select?: ArchivedAwardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ArchivedAward
+         */
+        omit?: ArchivedAwardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ArchivedAwardInclude<ExtArgs> | null
+        where?: ArchivedAwardWhereInput
+        orderBy?: ArchivedAwardOrderByWithRelationInput | ArchivedAwardOrderByWithRelationInput[]
+        cursor?: ArchivedAwardWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ArchivedAwardScalarFieldEnum | ArchivedAwardScalarFieldEnum[]
+    };
+    /**
+     * Award without action
+     */
+    export type AwardDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Award
+         */
+        select?: AwardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Award
+         */
+        omit?: AwardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: AwardInclude<ExtArgs> | null
+    };
+    /**
      * Model DiplomaType
      */
     export type AggregateDiplomaType = {
@@ -222312,6 +226163,8 @@ export namespace Prisma {
         studentSemesterResult?: boolean | Student$studentSemesterResultArgs<ExtArgs>
         studentYearResult?: boolean | Student$studentYearResultArgs<ExtArgs>
         scholarshipAwards?: boolean | Student$scholarshipAwardsArgs<ExtArgs>
+        archivedCertificate?: boolean | Student$archivedCertificateArgs<ExtArgs>
+        archivedAward?: boolean | Student$archivedAwardArgs<ExtArgs>
         academicWarning?: boolean | Student$academicWarningArgs<ExtArgs>
         disciplinaryWarning?: boolean | Student$disciplinaryWarningArgs<ExtArgs>
         studentAcademicDecision?: boolean | Student$studentAcademicDecisionArgs<ExtArgs>
@@ -222468,6 +226321,8 @@ export namespace Prisma {
         studentSemesterResult?: boolean | Student$studentSemesterResultArgs<ExtArgs>
         studentYearResult?: boolean | Student$studentYearResultArgs<ExtArgs>
         scholarshipAwards?: boolean | Student$scholarshipAwardsArgs<ExtArgs>
+        archivedCertificate?: boolean | Student$archivedCertificateArgs<ExtArgs>
+        archivedAward?: boolean | Student$archivedAwardArgs<ExtArgs>
         academicWarning?: boolean | Student$academicWarningArgs<ExtArgs>
         disciplinaryWarning?: boolean | Student$disciplinaryWarningArgs<ExtArgs>
         studentAcademicDecision?: boolean | Student$studentAcademicDecisionArgs<ExtArgs>
@@ -222533,6 +226388,8 @@ export namespace Prisma {
             studentSemesterResult: Prisma.$StudentSemesterResultPayload<ExtArgs>[]
             studentYearResult: Prisma.$StudentYearResultPayload<ExtArgs>[]
             scholarshipAwards: Prisma.$ScholarshipAwardPayload<ExtArgs>[]
+            archivedCertificate: Prisma.$ArchivedCertificatePayload<ExtArgs>[]
+            archivedAward: Prisma.$ArchivedAwardPayload<ExtArgs>[]
             academicWarning: Prisma.$AcademicWarningPayload<ExtArgs>[]
             disciplinaryWarning: Prisma.$DisciplinaryWarningPayload<ExtArgs>[]
             studentAcademicDecision: Prisma.$StudentAcademicDecisionPayload<ExtArgs>[]
@@ -223300,6 +227157,52 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: ScholarshipAwardScalarFieldEnum | ScholarshipAwardScalarFieldEnum[]
+    };
+    /**
+     * Student.archivedCertificate
+     */
+    export type Student$archivedCertificateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ArchivedCertificate
+         */
+        select?: ArchivedCertificateSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ArchivedCertificate
+         */
+        omit?: ArchivedCertificateOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ArchivedCertificateInclude<ExtArgs> | null
+        where?: ArchivedCertificateWhereInput
+        orderBy?: ArchivedCertificateOrderByWithRelationInput | ArchivedCertificateOrderByWithRelationInput[]
+        cursor?: ArchivedCertificateWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ArchivedCertificateScalarFieldEnum | ArchivedCertificateScalarFieldEnum[]
+    };
+    /**
+     * Student.archivedAward
+     */
+    export type Student$archivedAwardArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ArchivedAward
+         */
+        select?: ArchivedAwardSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ArchivedAward
+         */
+        omit?: ArchivedAwardOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ArchivedAwardInclude<ExtArgs> | null
+        where?: ArchivedAwardWhereInput
+        orderBy?: ArchivedAwardOrderByWithRelationInput | ArchivedAwardOrderByWithRelationInput[]
+        cursor?: ArchivedAwardWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ArchivedAwardScalarFieldEnum | ArchivedAwardScalarFieldEnum[]
     };
     /**
      * Student.academicWarning
@@ -311815,6 +315718,9 @@ export namespace Prisma {
     export type TrainingBlockScalarFieldEnum = (typeof TrainingBlockScalarFieldEnum)[keyof typeof TrainingBlockScalarFieldEnum];
     export type TrainingBlockOnCurriculumVersionScalarFieldEnum = (typeof TrainingBlockOnCurriculumVersionScalarFieldEnum)[keyof typeof TrainingBlockOnCurriculumVersionScalarFieldEnum];
     export type TrainingTimeScalarFieldEnum = (typeof TrainingTimeScalarFieldEnum)[keyof typeof TrainingTimeScalarFieldEnum];
+    export type CertificateScalarFieldEnum = (typeof CertificateScalarFieldEnum)[keyof typeof CertificateScalarFieldEnum];
+    export type CertificateOnSubjectScalarFieldEnum = (typeof CertificateOnSubjectScalarFieldEnum)[keyof typeof CertificateOnSubjectScalarFieldEnum];
+    export type AwardScalarFieldEnum = (typeof AwardScalarFieldEnum)[keyof typeof AwardScalarFieldEnum];
     export type DiplomaTypeScalarFieldEnum = (typeof DiplomaTypeScalarFieldEnum)[keyof typeof DiplomaTypeScalarFieldEnum];
     export type ScoreConvertScalarFieldEnum = (typeof ScoreConvertScalarFieldEnum)[keyof typeof ScoreConvertScalarFieldEnum];
     export type TrainingKPIScalarFieldEnum = (typeof TrainingKPIScalarFieldEnum)[keyof typeof TrainingKPIScalarFieldEnum];
@@ -312061,6 +315967,9 @@ export namespace Prisma {
     export type TrainingBlockOrderByRelevanceFieldEnum = (typeof TrainingBlockOrderByRelevanceFieldEnum)[keyof typeof TrainingBlockOrderByRelevanceFieldEnum];
     export type TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum = (typeof TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum)[keyof typeof TrainingBlockOnCurriculumVersionOrderByRelevanceFieldEnum];
     export type TrainingTimeOrderByRelevanceFieldEnum = (typeof TrainingTimeOrderByRelevanceFieldEnum)[keyof typeof TrainingTimeOrderByRelevanceFieldEnum];
+    export type CertificateOrderByRelevanceFieldEnum = (typeof CertificateOrderByRelevanceFieldEnum)[keyof typeof CertificateOrderByRelevanceFieldEnum];
+    export type CertificateOnSubjectOrderByRelevanceFieldEnum = (typeof CertificateOnSubjectOrderByRelevanceFieldEnum)[keyof typeof CertificateOnSubjectOrderByRelevanceFieldEnum];
+    export type AwardOrderByRelevanceFieldEnum = (typeof AwardOrderByRelevanceFieldEnum)[keyof typeof AwardOrderByRelevanceFieldEnum];
     export type DiplomaTypeOrderByRelevanceFieldEnum = (typeof DiplomaTypeOrderByRelevanceFieldEnum)[keyof typeof DiplomaTypeOrderByRelevanceFieldEnum];
     export type ScoreConvertOrderByRelevanceFieldEnum = (typeof ScoreConvertOrderByRelevanceFieldEnum)[keyof typeof ScoreConvertOrderByRelevanceFieldEnum];
     export type TrainingKPIOrderByRelevanceFieldEnum = (typeof TrainingKPIOrderByRelevanceFieldEnum)[keyof typeof TrainingKPIOrderByRelevanceFieldEnum];
@@ -312290,6 +316199,14 @@ export namespace Prisma {
      * Reference to a field of type 'Decimal[]'
      */
     export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>;
+    /**
+     * Reference to a field of type 'ArchivedCertificateStatus'
+     */
+    export type EnumArchivedCertificateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ArchivedCertificateStatus'>;
+    /**
+     * Reference to a field of type 'ArchivedCertificateStatus[]'
+     */
+    export type ListEnumArchivedCertificateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ArchivedCertificateStatus[]'>;
     /**
      * Reference to a field of type 'SemesterType'
      */
@@ -320879,9 +324796,15 @@ export namespace Prisma {
         deletedAt?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
         createdAt?: DateTimeFilter<"ArchivedCertificate"> | Date | string
         updatedAt?: DateTimeFilter<"ArchivedCertificate"> | Date | string
-        name?: StringFilter<"ArchivedCertificate"> | string
-        englishName?: StringNullableFilter<"ArchivedCertificate"> | string | null
-        finalScore?: FloatFilter<"ArchivedCertificate"> | number
+        certificateId?: StringFilter<"ArchivedCertificate"> | string
+        studentId?: StringFilter<"ArchivedCertificate"> | string
+        score?: FloatFilter<"ArchivedCertificate"> | number
+        issuedBy?: StringFilter<"ArchivedCertificate"> | string
+        issuedDate?: DateTimeFilter<"ArchivedCertificate"> | Date | string
+        expiredDate?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
+        status?: EnumArchivedCertificateStatusNullableFilter<"ArchivedCertificate"> | $Enums.ArchivedCertificateStatus | null
+        certificate?: XOR<CertificateScalarRelationFilter, CertificateWhereInput>
+        student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         documentFiles?: DocumentFileListRelationFilter
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreListRelationFilter
     };
@@ -320893,9 +324816,15 @@ export namespace Prisma {
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        name?: SortOrder
-        englishName?: SortOrderInput | SortOrder
-        finalScore?: SortOrder
+        certificateId?: SortOrder
+        studentId?: SortOrder
+        score?: SortOrder
+        issuedBy?: SortOrder
+        issuedDate?: SortOrder
+        expiredDate?: SortOrderInput | SortOrder
+        status?: SortOrderInput | SortOrder
+        certificate?: CertificateOrderByWithRelationInput
+        student?: StudentOrderByWithRelationInput
         documentFiles?: DocumentFileOrderByRelationAggregateInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreOrderByRelationAggregateInput
         _relevance?: ArchivedCertificateOrderByRelevanceInput
@@ -320911,9 +324840,15 @@ export namespace Prisma {
         deletedAt?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
         createdAt?: DateTimeFilter<"ArchivedCertificate"> | Date | string
         updatedAt?: DateTimeFilter<"ArchivedCertificate"> | Date | string
-        name?: StringFilter<"ArchivedCertificate"> | string
-        englishName?: StringNullableFilter<"ArchivedCertificate"> | string | null
-        finalScore?: FloatFilter<"ArchivedCertificate"> | number
+        certificateId?: StringFilter<"ArchivedCertificate"> | string
+        studentId?: StringFilter<"ArchivedCertificate"> | string
+        score?: FloatFilter<"ArchivedCertificate"> | number
+        issuedBy?: StringFilter<"ArchivedCertificate"> | string
+        issuedDate?: DateTimeFilter<"ArchivedCertificate"> | Date | string
+        expiredDate?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
+        status?: EnumArchivedCertificateStatusNullableFilter<"ArchivedCertificate"> | $Enums.ArchivedCertificateStatus | null
+        certificate?: XOR<CertificateScalarRelationFilter, CertificateWhereInput>
+        student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         documentFiles?: DocumentFileListRelationFilter
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreListRelationFilter
     }, "id" | "code">;
@@ -320925,9 +324860,13 @@ export namespace Prisma {
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        name?: SortOrder
-        englishName?: SortOrderInput | SortOrder
-        finalScore?: SortOrder
+        certificateId?: SortOrder
+        studentId?: SortOrder
+        score?: SortOrder
+        issuedBy?: SortOrder
+        issuedDate?: SortOrder
+        expiredDate?: SortOrderInput | SortOrder
+        status?: SortOrderInput | SortOrder
         _count?: ArchivedCertificateCountOrderByAggregateInput
         _avg?: ArchivedCertificateAvgOrderByAggregateInput
         _max?: ArchivedCertificateMaxOrderByAggregateInput
@@ -320945,9 +324884,13 @@ export namespace Prisma {
         deletedAt?: DateTimeNullableWithAggregatesFilter<"ArchivedCertificate"> | Date | string | null
         createdAt?: DateTimeWithAggregatesFilter<"ArchivedCertificate"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"ArchivedCertificate"> | Date | string
-        name?: StringWithAggregatesFilter<"ArchivedCertificate"> | string
-        englishName?: StringNullableWithAggregatesFilter<"ArchivedCertificate"> | string | null
-        finalScore?: FloatWithAggregatesFilter<"ArchivedCertificate"> | number
+        certificateId?: StringWithAggregatesFilter<"ArchivedCertificate"> | string
+        studentId?: StringWithAggregatesFilter<"ArchivedCertificate"> | string
+        score?: FloatWithAggregatesFilter<"ArchivedCertificate"> | number
+        issuedBy?: StringWithAggregatesFilter<"ArchivedCertificate"> | string
+        issuedDate?: DateTimeWithAggregatesFilter<"ArchivedCertificate"> | Date | string
+        expiredDate?: DateTimeNullableWithAggregatesFilter<"ArchivedCertificate"> | Date | string | null
+        status?: EnumArchivedCertificateStatusNullableWithAggregatesFilter<"ArchivedCertificate"> | $Enums.ArchivedCertificateStatus | null
     };
     export type ArchivedAwardOnStudentSubjectScoreWhereInput = {
         AND?: ArchivedAwardOnStudentSubjectScoreWhereInput | ArchivedAwardOnStudentSubjectScoreWhereInput[]
@@ -321035,9 +324978,11 @@ export namespace Prisma {
         deletedAt?: DateTimeNullableFilter<"ArchivedAward"> | Date | string | null
         createdAt?: DateTimeFilter<"ArchivedAward"> | Date | string
         updatedAt?: DateTimeFilter<"ArchivedAward"> | Date | string
-        name?: StringFilter<"ArchivedAward"> | string
-        englishName?: StringNullableFilter<"ArchivedAward"> | string | null
-        bonusScore?: FloatFilter<"ArchivedAward"> | number
+        awardId?: StringFilter<"ArchivedAward"> | string
+        studentId?: StringFilter<"ArchivedAward"> | string
+        date?: DateTimeNullableFilter<"ArchivedAward"> | Date | string | null
+        award?: XOR<AwardScalarRelationFilter, AwardWhereInput>
+        student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         documentFiles?: DocumentFileListRelationFilter
         studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreListRelationFilter
     };
@@ -321049,9 +324994,11 @@ export namespace Prisma {
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        name?: SortOrder
-        englishName?: SortOrderInput | SortOrder
-        bonusScore?: SortOrder
+        awardId?: SortOrder
+        studentId?: SortOrder
+        date?: SortOrderInput | SortOrder
+        award?: AwardOrderByWithRelationInput
+        student?: StudentOrderByWithRelationInput
         documentFiles?: DocumentFileOrderByRelationAggregateInput
         studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreOrderByRelationAggregateInput
         _relevance?: ArchivedAwardOrderByRelevanceInput
@@ -321067,9 +325014,11 @@ export namespace Prisma {
         deletedAt?: DateTimeNullableFilter<"ArchivedAward"> | Date | string | null
         createdAt?: DateTimeFilter<"ArchivedAward"> | Date | string
         updatedAt?: DateTimeFilter<"ArchivedAward"> | Date | string
-        name?: StringFilter<"ArchivedAward"> | string
-        englishName?: StringNullableFilter<"ArchivedAward"> | string | null
-        bonusScore?: FloatFilter<"ArchivedAward"> | number
+        awardId?: StringFilter<"ArchivedAward"> | string
+        studentId?: StringFilter<"ArchivedAward"> | string
+        date?: DateTimeNullableFilter<"ArchivedAward"> | Date | string | null
+        award?: XOR<AwardScalarRelationFilter, AwardWhereInput>
+        student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
         documentFiles?: DocumentFileListRelationFilter
         studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreListRelationFilter
     }, "id" | "code">;
@@ -321081,14 +325030,12 @@ export namespace Prisma {
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        name?: SortOrder
-        englishName?: SortOrderInput | SortOrder
-        bonusScore?: SortOrder
+        awardId?: SortOrder
+        studentId?: SortOrder
+        date?: SortOrderInput | SortOrder
         _count?: ArchivedAwardCountOrderByAggregateInput
-        _avg?: ArchivedAwardAvgOrderByAggregateInput
         _max?: ArchivedAwardMaxOrderByAggregateInput
         _min?: ArchivedAwardMinOrderByAggregateInput
-        _sum?: ArchivedAwardSumOrderByAggregateInput
     };
     export type ArchivedAwardScalarWhereWithAggregatesInput = {
         AND?: ArchivedAwardScalarWhereWithAggregatesInput | ArchivedAwardScalarWhereWithAggregatesInput[]
@@ -321101,9 +325048,9 @@ export namespace Prisma {
         deletedAt?: DateTimeNullableWithAggregatesFilter<"ArchivedAward"> | Date | string | null
         createdAt?: DateTimeWithAggregatesFilter<"ArchivedAward"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"ArchivedAward"> | Date | string
-        name?: StringWithAggregatesFilter<"ArchivedAward"> | string
-        englishName?: StringNullableWithAggregatesFilter<"ArchivedAward"> | string | null
-        bonusScore?: FloatWithAggregatesFilter<"ArchivedAward"> | number
+        awardId?: StringWithAggregatesFilter<"ArchivedAward"> | string
+        studentId?: StringWithAggregatesFilter<"ArchivedAward"> | string
+        date?: DateTimeNullableWithAggregatesFilter<"ArchivedAward"> | Date | string | null
     };
     export type SchoolYearWhereInput = {
         AND?: SchoolYearWhereInput | SchoolYearWhereInput[]
@@ -322300,6 +326247,8 @@ export namespace Prisma {
         information?: StringNullableFilter<"Subject"> | string | null
         managementOrganization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
         subjectVersion?: SubjectVersionListRelationFilter
+        certificateOnSubject?: CertificateOnSubjectListRelationFilter
+        awardOnSubject?: AwardListRelationFilter
     };
     export type SubjectOrderByWithRelationInput = {
         id?: SortOrder
@@ -322315,6 +326264,8 @@ export namespace Prisma {
         information?: SortOrderInput | SortOrder
         managementOrganization?: DM_DonViOrderByWithRelationInput
         subjectVersion?: SubjectVersionOrderByRelationAggregateInput
+        certificateOnSubject?: CertificateOnSubjectOrderByRelationAggregateInput
+        awardOnSubject?: AwardOrderByRelationAggregateInput
         _relevance?: SubjectOrderByRelevanceInput
     };
     export type SubjectWhereUniqueInput = Prisma.AtLeast<{
@@ -322334,6 +326285,8 @@ export namespace Prisma {
         information?: StringNullableFilter<"Subject"> | string | null
         managementOrganization?: XOR<DM_DonViNullableScalarRelationFilter, DM_DonViWhereInput> | null
         subjectVersion?: SubjectVersionListRelationFilter
+        certificateOnSubject?: CertificateOnSubjectListRelationFilter
+        awardOnSubject?: AwardListRelationFilter
     }, "id" | "code" | "name" | "englishName">;
     export type SubjectOrderByWithAggregationInput = {
         id?: SortOrder
@@ -325059,6 +329012,242 @@ export namespace Prisma {
         updatedAt?: DateTimeWithAggregatesFilter<"TrainingTime"> | Date | string
         name?: StringWithAggregatesFilter<"TrainingTime"> | string
     };
+    export type CertificateWhereInput = {
+        AND?: CertificateWhereInput | CertificateWhereInput[]
+        OR?: CertificateWhereInput[]
+        NOT?: CertificateWhereInput | CertificateWhereInput[]
+        id?: StringFilter<"Certificate"> | string
+        code?: StringNullableFilter<"Certificate"> | string | null
+        active?: BoolFilter<"Certificate"> | boolean
+        description?: StringNullableFilter<"Certificate"> | string | null
+        deletedAt?: DateTimeNullableFilter<"Certificate"> | Date | string | null
+        createdAt?: DateTimeFilter<"Certificate"> | Date | string
+        updatedAt?: DateTimeFilter<"Certificate"> | Date | string
+        name?: StringFilter<"Certificate"> | string
+        englishName?: StringNullableFilter<"Certificate"> | string | null
+        archivedCertificate?: ArchivedCertificateListRelationFilter
+        subjects?: CertificateOnSubjectListRelationFilter
+    };
+    export type CertificateOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        englishName?: SortOrderInput | SortOrder
+        archivedCertificate?: ArchivedCertificateOrderByRelationAggregateInput
+        subjects?: CertificateOnSubjectOrderByRelationAggregateInput
+        _relevance?: CertificateOrderByRelevanceInput
+    };
+    export type CertificateWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: CertificateWhereInput | CertificateWhereInput[]
+        OR?: CertificateWhereInput[]
+        NOT?: CertificateWhereInput | CertificateWhereInput[]
+        active?: BoolFilter<"Certificate"> | boolean
+        description?: StringNullableFilter<"Certificate"> | string | null
+        deletedAt?: DateTimeNullableFilter<"Certificate"> | Date | string | null
+        createdAt?: DateTimeFilter<"Certificate"> | Date | string
+        updatedAt?: DateTimeFilter<"Certificate"> | Date | string
+        name?: StringFilter<"Certificate"> | string
+        englishName?: StringNullableFilter<"Certificate"> | string | null
+        archivedCertificate?: ArchivedCertificateListRelationFilter
+        subjects?: CertificateOnSubjectListRelationFilter
+    }, "id" | "code">;
+    export type CertificateOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        englishName?: SortOrderInput | SortOrder
+        _count?: CertificateCountOrderByAggregateInput
+        _max?: CertificateMaxOrderByAggregateInput
+        _min?: CertificateMinOrderByAggregateInput
+    };
+    export type CertificateScalarWhereWithAggregatesInput = {
+        AND?: CertificateScalarWhereWithAggregatesInput | CertificateScalarWhereWithAggregatesInput[]
+        OR?: CertificateScalarWhereWithAggregatesInput[]
+        NOT?: CertificateScalarWhereWithAggregatesInput | CertificateScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"Certificate"> | string
+        code?: StringNullableWithAggregatesFilter<"Certificate"> | string | null
+        active?: BoolWithAggregatesFilter<"Certificate"> | boolean
+        description?: StringNullableWithAggregatesFilter<"Certificate"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"Certificate"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"Certificate"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"Certificate"> | Date | string
+        name?: StringWithAggregatesFilter<"Certificate"> | string
+        englishName?: StringNullableWithAggregatesFilter<"Certificate"> | string | null
+    };
+    export type CertificateOnSubjectWhereInput = {
+        AND?: CertificateOnSubjectWhereInput | CertificateOnSubjectWhereInput[]
+        OR?: CertificateOnSubjectWhereInput[]
+        NOT?: CertificateOnSubjectWhereInput | CertificateOnSubjectWhereInput[]
+        id?: StringFilter<"CertificateOnSubject"> | string
+        code?: StringNullableFilter<"CertificateOnSubject"> | string | null
+        active?: BoolFilter<"CertificateOnSubject"> | boolean
+        description?: StringNullableFilter<"CertificateOnSubject"> | string | null
+        deletedAt?: DateTimeNullableFilter<"CertificateOnSubject"> | Date | string | null
+        createdAt?: DateTimeFilter<"CertificateOnSubject"> | Date | string
+        updatedAt?: DateTimeFilter<"CertificateOnSubject"> | Date | string
+        finalScore?: FloatFilter<"CertificateOnSubject"> | number
+        certificateId?: StringFilter<"CertificateOnSubject"> | string
+        subjectId?: StringFilter<"CertificateOnSubject"> | string
+        certificate?: XOR<CertificateScalarRelationFilter, CertificateWhereInput>
+        subject?: XOR<SubjectScalarRelationFilter, SubjectWhereInput>
+    };
+    export type CertificateOnSubjectOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        finalScore?: SortOrder
+        certificateId?: SortOrder
+        subjectId?: SortOrder
+        certificate?: CertificateOrderByWithRelationInput
+        subject?: SubjectOrderByWithRelationInput
+        _relevance?: CertificateOnSubjectOrderByRelevanceInput
+    };
+    export type CertificateOnSubjectWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: CertificateOnSubjectWhereInput | CertificateOnSubjectWhereInput[]
+        OR?: CertificateOnSubjectWhereInput[]
+        NOT?: CertificateOnSubjectWhereInput | CertificateOnSubjectWhereInput[]
+        active?: BoolFilter<"CertificateOnSubject"> | boolean
+        description?: StringNullableFilter<"CertificateOnSubject"> | string | null
+        deletedAt?: DateTimeNullableFilter<"CertificateOnSubject"> | Date | string | null
+        createdAt?: DateTimeFilter<"CertificateOnSubject"> | Date | string
+        updatedAt?: DateTimeFilter<"CertificateOnSubject"> | Date | string
+        finalScore?: FloatFilter<"CertificateOnSubject"> | number
+        certificateId?: StringFilter<"CertificateOnSubject"> | string
+        subjectId?: StringFilter<"CertificateOnSubject"> | string
+        certificate?: XOR<CertificateScalarRelationFilter, CertificateWhereInput>
+        subject?: XOR<SubjectScalarRelationFilter, SubjectWhereInput>
+    }, "id" | "code">;
+    export type CertificateOnSubjectOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        finalScore?: SortOrder
+        certificateId?: SortOrder
+        subjectId?: SortOrder
+        _count?: CertificateOnSubjectCountOrderByAggregateInput
+        _avg?: CertificateOnSubjectAvgOrderByAggregateInput
+        _max?: CertificateOnSubjectMaxOrderByAggregateInput
+        _min?: CertificateOnSubjectMinOrderByAggregateInput
+        _sum?: CertificateOnSubjectSumOrderByAggregateInput
+    };
+    export type CertificateOnSubjectScalarWhereWithAggregatesInput = {
+        AND?: CertificateOnSubjectScalarWhereWithAggregatesInput | CertificateOnSubjectScalarWhereWithAggregatesInput[]
+        OR?: CertificateOnSubjectScalarWhereWithAggregatesInput[]
+        NOT?: CertificateOnSubjectScalarWhereWithAggregatesInput | CertificateOnSubjectScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"CertificateOnSubject"> | string
+        code?: StringNullableWithAggregatesFilter<"CertificateOnSubject"> | string | null
+        active?: BoolWithAggregatesFilter<"CertificateOnSubject"> | boolean
+        description?: StringNullableWithAggregatesFilter<"CertificateOnSubject"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"CertificateOnSubject"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"CertificateOnSubject"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"CertificateOnSubject"> | Date | string
+        finalScore?: FloatWithAggregatesFilter<"CertificateOnSubject"> | number
+        certificateId?: StringWithAggregatesFilter<"CertificateOnSubject"> | string
+        subjectId?: StringWithAggregatesFilter<"CertificateOnSubject"> | string
+    };
+    export type AwardWhereInput = {
+        AND?: AwardWhereInput | AwardWhereInput[]
+        OR?: AwardWhereInput[]
+        NOT?: AwardWhereInput | AwardWhereInput[]
+        id?: StringFilter<"Award"> | string
+        code?: StringNullableFilter<"Award"> | string | null
+        active?: BoolFilter<"Award"> | boolean
+        description?: StringNullableFilter<"Award"> | string | null
+        deletedAt?: DateTimeNullableFilter<"Award"> | Date | string | null
+        createdAt?: DateTimeFilter<"Award"> | Date | string
+        updatedAt?: DateTimeFilter<"Award"> | Date | string
+        name?: StringFilter<"Award"> | string
+        englishName?: StringNullableFilter<"Award"> | string | null
+        bonusScore?: FloatFilter<"Award"> | number
+        subjects?: SubjectListRelationFilter
+        archivedAward?: ArchivedAwardListRelationFilter
+    };
+    export type AwardOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        englishName?: SortOrderInput | SortOrder
+        bonusScore?: SortOrder
+        subjects?: SubjectOrderByRelationAggregateInput
+        archivedAward?: ArchivedAwardOrderByRelationAggregateInput
+        _relevance?: AwardOrderByRelevanceInput
+    };
+    export type AwardWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: AwardWhereInput | AwardWhereInput[]
+        OR?: AwardWhereInput[]
+        NOT?: AwardWhereInput | AwardWhereInput[]
+        active?: BoolFilter<"Award"> | boolean
+        description?: StringNullableFilter<"Award"> | string | null
+        deletedAt?: DateTimeNullableFilter<"Award"> | Date | string | null
+        createdAt?: DateTimeFilter<"Award"> | Date | string
+        updatedAt?: DateTimeFilter<"Award"> | Date | string
+        name?: StringFilter<"Award"> | string
+        englishName?: StringNullableFilter<"Award"> | string | null
+        bonusScore?: FloatFilter<"Award"> | number
+        subjects?: SubjectListRelationFilter
+        archivedAward?: ArchivedAwardListRelationFilter
+    }, "id" | "code">;
+    export type AwardOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        englishName?: SortOrderInput | SortOrder
+        bonusScore?: SortOrder
+        _count?: AwardCountOrderByAggregateInput
+        _avg?: AwardAvgOrderByAggregateInput
+        _max?: AwardMaxOrderByAggregateInput
+        _min?: AwardMinOrderByAggregateInput
+        _sum?: AwardSumOrderByAggregateInput
+    };
+    export type AwardScalarWhereWithAggregatesInput = {
+        AND?: AwardScalarWhereWithAggregatesInput | AwardScalarWhereWithAggregatesInput[]
+        OR?: AwardScalarWhereWithAggregatesInput[]
+        NOT?: AwardScalarWhereWithAggregatesInput | AwardScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"Award"> | string
+        code?: StringNullableWithAggregatesFilter<"Award"> | string | null
+        active?: BoolWithAggregatesFilter<"Award"> | boolean
+        description?: StringNullableWithAggregatesFilter<"Award"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"Award"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"Award"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"Award"> | Date | string
+        name?: StringWithAggregatesFilter<"Award"> | string
+        englishName?: StringNullableWithAggregatesFilter<"Award"> | string | null
+        bonusScore?: FloatWithAggregatesFilter<"Award"> | number
+    };
     export type DiplomaTypeWhereInput = {
         AND?: DiplomaTypeWhereInput | DiplomaTypeWhereInput[]
         OR?: DiplomaTypeWhereInput[]
@@ -325357,6 +329546,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultListRelationFilter
         studentYearResult?: StudentYearResultListRelationFilter
         scholarshipAwards?: ScholarshipAwardListRelationFilter
+        archivedCertificate?: ArchivedCertificateListRelationFilter
+        archivedAward?: ArchivedAwardListRelationFilter
         academicWarning?: AcademicWarningListRelationFilter
         disciplinaryWarning?: DisciplinaryWarningListRelationFilter
         studentAcademicDecision?: StudentAcademicDecisionListRelationFilter
@@ -325423,6 +329614,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultOrderByRelationAggregateInput
         studentYearResult?: StudentYearResultOrderByRelationAggregateInput
         scholarshipAwards?: ScholarshipAwardOrderByRelationAggregateInput
+        archivedCertificate?: ArchivedCertificateOrderByRelationAggregateInput
+        archivedAward?: ArchivedAwardOrderByRelationAggregateInput
         academicWarning?: AcademicWarningOrderByRelationAggregateInput
         disciplinaryWarning?: DisciplinaryWarningOrderByRelationAggregateInput
         studentAcademicDecision?: StudentAcademicDecisionOrderByRelationAggregateInput
@@ -325493,6 +329686,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultListRelationFilter
         studentYearResult?: StudentYearResultListRelationFilter
         scholarshipAwards?: ScholarshipAwardListRelationFilter
+        archivedCertificate?: ArchivedCertificateListRelationFilter
+        archivedAward?: ArchivedAwardListRelationFilter
         academicWarning?: AcademicWarningListRelationFilter
         disciplinaryWarning?: DisciplinaryWarningListRelationFilter
         studentAcademicDecision?: StudentAcademicDecisionListRelationFilter
@@ -346068,9 +350263,13 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        finalScore: number
+        score: number
+        issuedBy: string
+        issuedDate: Date | string
+        expiredDate?: Date | string | null
+        status?: $Enums.ArchivedCertificateStatus | null
+        certificate: CertificateCreateNestedOneWithoutArchivedCertificateInput
+        student: StudentCreateNestedOneWithoutArchivedCertificateInput
         documentFiles?: DocumentFileCreateNestedManyWithoutArchivedCertificateInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutArchivedCertificateInput
     };
@@ -346082,9 +350281,13 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        finalScore: number
+        certificateId: string
+        studentId: string
+        score: number
+        issuedBy: string
+        issuedDate: Date | string
+        expiredDate?: Date | string | null
+        status?: $Enums.ArchivedCertificateStatus | null
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutArchivedCertificateInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutArchivedCertificateInput
     };
@@ -346096,9 +350299,13 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        finalScore?: FloatFieldUpdateOperationsInput | number
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
+        certificate?: CertificateUpdateOneRequiredWithoutArchivedCertificateNestedInput
+        student?: StudentUpdateOneRequiredWithoutArchivedCertificateNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutArchivedCertificateNestedInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutArchivedCertificateNestedInput
     };
@@ -346110,9 +350317,13 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        finalScore?: FloatFieldUpdateOperationsInput | number
+        certificateId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutArchivedCertificateNestedInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutArchivedCertificateNestedInput
     };
@@ -346124,9 +350335,13 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        finalScore: number
+        certificateId: string
+        studentId: string
+        score: number
+        issuedBy: string
+        issuedDate: Date | string
+        expiredDate?: Date | string | null
+        status?: $Enums.ArchivedCertificateStatus | null
     };
     export type ArchivedCertificateUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -346136,9 +350351,11 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        finalScore?: FloatFieldUpdateOperationsInput | number
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
     };
     export type ArchivedCertificateUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -346148,9 +350365,13 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        finalScore?: FloatFieldUpdateOperationsInput | number
+        certificateId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
     };
     export type ArchivedAwardOnStudentSubjectScoreCreateInput = {
         id?: string
@@ -346235,9 +350456,9 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        bonusScore: number
+        date?: Date | string | null
+        award: AwardCreateNestedOneWithoutArchivedAwardInput
+        student: StudentCreateNestedOneWithoutArchivedAwardInput
         documentFiles?: DocumentFileCreateNestedManyWithoutArchivedAwardInput
         studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutArchivedAwardInput
     };
@@ -346249,9 +350470,9 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        bonusScore: number
+        awardId: string
+        studentId: string
+        date?: Date | string | null
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutArchivedAwardInput
         studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutArchivedAwardInput
     };
@@ -346263,9 +350484,9 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        bonusScore?: FloatFieldUpdateOperationsInput | number
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        award?: AwardUpdateOneRequiredWithoutArchivedAwardNestedInput
+        student?: StudentUpdateOneRequiredWithoutArchivedAwardNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutArchivedAwardNestedInput
         studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutArchivedAwardNestedInput
     };
@@ -346277,9 +350498,9 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        bonusScore?: FloatFieldUpdateOperationsInput | number
+        awardId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutArchivedAwardNestedInput
         studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutArchivedAwardNestedInput
     };
@@ -346291,9 +350512,9 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        bonusScore: number
+        awardId: string
+        studentId: string
+        date?: Date | string | null
     };
     export type ArchivedAwardUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -346303,9 +350524,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        bonusScore?: FloatFieldUpdateOperationsInput | number
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     };
     export type ArchivedAwardUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -346315,9 +350534,9 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        bonusScore?: FloatFieldUpdateOperationsInput | number
+        awardId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     };
     export type SchoolYearCreateInput = {
         id?: string
@@ -347678,6 +351897,8 @@ export namespace Prisma {
         information?: string | null
         managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectsInput
         subjectVersion?: SubjectVersionCreateNestedManyWithoutSubjectInput
+        certificateOnSubject?: CertificateOnSubjectCreateNestedManyWithoutSubjectInput
+        awardOnSubject?: AwardCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectUncheckedCreateInput = {
         id?: string
@@ -347692,6 +351913,8 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         information?: string | null
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutSubjectInput
+        certificateOnSubject?: CertificateOnSubjectUncheckedCreateNestedManyWithoutSubjectInput
+        awardOnSubject?: AwardUncheckedCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -347706,6 +351929,8 @@ export namespace Prisma {
         information?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganization?: DM_DonViUpdateOneWithoutSubjectsNestedInput
         subjectVersion?: SubjectVersionUpdateManyWithoutSubjectNestedInput
+        certificateOnSubject?: CertificateOnSubjectUpdateManyWithoutSubjectNestedInput
+        awardOnSubject?: AwardUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -347720,6 +351945,8 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         information?: NullableStringFieldUpdateOperationsInput | string | null
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutSubjectNestedInput
+        certificateOnSubject?: CertificateOnSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+        awardOnSubject?: AwardUncheckedUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectCreateManyInput = {
         id?: string
@@ -350732,6 +354959,265 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
     };
+    export type CertificateCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutCertificateInput
+        subjects?: CertificateOnSubjectCreateNestedManyWithoutCertificateInput
+    };
+    export type CertificateUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutCertificateInput
+        subjects?: CertificateOnSubjectUncheckedCreateNestedManyWithoutCertificateInput
+    };
+    export type CertificateUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutCertificateNestedInput
+        subjects?: CertificateOnSubjectUpdateManyWithoutCertificateNestedInput
+    };
+    export type CertificateUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutCertificateNestedInput
+        subjects?: CertificateOnSubjectUncheckedUpdateManyWithoutCertificateNestedInput
+    };
+    export type CertificateCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+    };
+    export type CertificateUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type CertificateUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type CertificateOnSubjectCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        finalScore: number
+        certificate: CertificateCreateNestedOneWithoutSubjectsInput
+        subject: SubjectCreateNestedOneWithoutCertificateOnSubjectInput
+    };
+    export type CertificateOnSubjectUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        finalScore: number
+        certificateId: string
+        subjectId: string
+    };
+    export type CertificateOnSubjectUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        finalScore?: FloatFieldUpdateOperationsInput | number
+        certificate?: CertificateUpdateOneRequiredWithoutSubjectsNestedInput
+        subject?: SubjectUpdateOneRequiredWithoutCertificateOnSubjectNestedInput
+    };
+    export type CertificateOnSubjectUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        finalScore?: FloatFieldUpdateOperationsInput | number
+        certificateId?: StringFieldUpdateOperationsInput | string
+        subjectId?: StringFieldUpdateOperationsInput | string
+    };
+    export type CertificateOnSubjectCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        finalScore: number
+        certificateId: string
+        subjectId: string
+    };
+    export type CertificateOnSubjectUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        finalScore?: FloatFieldUpdateOperationsInput | number
+    };
+    export type CertificateOnSubjectUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        finalScore?: FloatFieldUpdateOperationsInput | number
+        certificateId?: StringFieldUpdateOperationsInput | string
+        subjectId?: StringFieldUpdateOperationsInput | string
+    };
+    export type AwardCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        bonusScore: number
+        subjects?: SubjectCreateNestedManyWithoutAwardOnSubjectInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutAwardInput
+    };
+    export type AwardUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        bonusScore: number
+        subjects?: SubjectUncheckedCreateNestedManyWithoutAwardOnSubjectInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutAwardInput
+    };
+    export type AwardUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        bonusScore?: FloatFieldUpdateOperationsInput | number
+        subjects?: SubjectUpdateManyWithoutAwardOnSubjectNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutAwardNestedInput
+    };
+    export type AwardUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        bonusScore?: FloatFieldUpdateOperationsInput | number
+        subjects?: SubjectUncheckedUpdateManyWithoutAwardOnSubjectNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutAwardNestedInput
+    };
+    export type AwardCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        bonusScore: number
+    };
+    export type AwardUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        bonusScore?: FloatFieldUpdateOperationsInput | number
+    };
+    export type AwardUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        bonusScore?: FloatFieldUpdateOperationsInput | number
+    };
     export type DiplomaTypeCreateInput = {
         id?: string
         code?: string | null
@@ -351052,6 +355538,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -351108,6 +355596,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -351164,6 +355654,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -351220,6 +355712,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -369243,6 +373737,16 @@ export namespace Prisma {
         studentSubjectScoreId?: SortOrder
         archivedCertificateId?: SortOrder
     };
+    export type EnumArchivedCertificateStatusNullableFilter<$PrismaModel = never> = {
+        equals?: $Enums.ArchivedCertificateStatus | EnumArchivedCertificateStatusFieldRefInput<$PrismaModel> | null
+        in?: $Enums.ArchivedCertificateStatus[] | ListEnumArchivedCertificateStatusFieldRefInput<$PrismaModel> | null
+        notIn?: $Enums.ArchivedCertificateStatus[] | ListEnumArchivedCertificateStatusFieldRefInput<$PrismaModel> | null
+        not?: NestedEnumArchivedCertificateStatusNullableFilter<$PrismaModel> | $Enums.ArchivedCertificateStatus | null
+    };
+    export type CertificateScalarRelationFilter = {
+        is?: CertificateWhereInput
+        isNot?: CertificateWhereInput
+    };
     export type ArchivedCertificateOrderByRelevanceInput = {
         fields: ArchivedCertificateOrderByRelevanceFieldEnum | ArchivedCertificateOrderByRelevanceFieldEnum[]
         sort: SortOrder
@@ -369256,12 +373760,16 @@ export namespace Prisma {
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        name?: SortOrder
-        englishName?: SortOrder
-        finalScore?: SortOrder
+        certificateId?: SortOrder
+        studentId?: SortOrder
+        score?: SortOrder
+        issuedBy?: SortOrder
+        issuedDate?: SortOrder
+        expiredDate?: SortOrder
+        status?: SortOrder
     };
     export type ArchivedCertificateAvgOrderByAggregateInput = {
-        finalScore?: SortOrder
+        score?: SortOrder
     };
     export type ArchivedCertificateMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -369271,9 +373779,13 @@ export namespace Prisma {
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        name?: SortOrder
-        englishName?: SortOrder
-        finalScore?: SortOrder
+        certificateId?: SortOrder
+        studentId?: SortOrder
+        score?: SortOrder
+        issuedBy?: SortOrder
+        issuedDate?: SortOrder
+        expiredDate?: SortOrder
+        status?: SortOrder
     };
     export type ArchivedCertificateMinOrderByAggregateInput = {
         id?: SortOrder
@@ -369283,12 +373795,25 @@ export namespace Prisma {
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        name?: SortOrder
-        englishName?: SortOrder
-        finalScore?: SortOrder
+        certificateId?: SortOrder
+        studentId?: SortOrder
+        score?: SortOrder
+        issuedBy?: SortOrder
+        issuedDate?: SortOrder
+        expiredDate?: SortOrder
+        status?: SortOrder
     };
     export type ArchivedCertificateSumOrderByAggregateInput = {
-        finalScore?: SortOrder
+        score?: SortOrder
+    };
+    export type EnumArchivedCertificateStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.ArchivedCertificateStatus | EnumArchivedCertificateStatusFieldRefInput<$PrismaModel> | null
+        in?: $Enums.ArchivedCertificateStatus[] | ListEnumArchivedCertificateStatusFieldRefInput<$PrismaModel> | null
+        notIn?: $Enums.ArchivedCertificateStatus[] | ListEnumArchivedCertificateStatusFieldRefInput<$PrismaModel> | null
+        not?: NestedEnumArchivedCertificateStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.ArchivedCertificateStatus | null
+        _count?: NestedIntNullableFilter<$PrismaModel>
+        _min?: NestedEnumArchivedCertificateStatusNullableFilter<$PrismaModel>
+        _max?: NestedEnumArchivedCertificateStatusNullableFilter<$PrismaModel>
     };
     export type ArchivedAwardScalarRelationFilter = {
         is?: ArchivedAwardWhereInput
@@ -369336,6 +373861,10 @@ export namespace Prisma {
         studentSubjectScoreId?: SortOrder
         archivedAwardId?: SortOrder
     };
+    export type AwardScalarRelationFilter = {
+        is?: AwardWhereInput
+        isNot?: AwardWhereInput
+    };
     export type ArchivedAwardOrderByRelevanceInput = {
         fields: ArchivedAwardOrderByRelevanceFieldEnum | ArchivedAwardOrderByRelevanceFieldEnum[]
         sort: SortOrder
@@ -369349,12 +373878,9 @@ export namespace Prisma {
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        name?: SortOrder
-        englishName?: SortOrder
-        bonusScore?: SortOrder
-    };
-    export type ArchivedAwardAvgOrderByAggregateInput = {
-        bonusScore?: SortOrder
+        awardId?: SortOrder
+        studentId?: SortOrder
+        date?: SortOrder
     };
     export type ArchivedAwardMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -369364,9 +373890,9 @@ export namespace Prisma {
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        name?: SortOrder
-        englishName?: SortOrder
-        bonusScore?: SortOrder
+        awardId?: SortOrder
+        studentId?: SortOrder
+        date?: SortOrder
     };
     export type ArchivedAwardMinOrderByAggregateInput = {
         id?: SortOrder
@@ -369376,12 +373902,9 @@ export namespace Prisma {
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        name?: SortOrder
-        englishName?: SortOrder
-        bonusScore?: SortOrder
-    };
-    export type ArchivedAwardSumOrderByAggregateInput = {
-        bonusScore?: SortOrder
+        awardId?: SortOrder
+        studentId?: SortOrder
+        date?: SortOrder
     };
     export type SemesterListRelationFilter = {
         every?: SemesterWhereInput
@@ -370287,6 +374810,22 @@ export namespace Prisma {
         yearApplication?: SortOrder
         requiredCredits?: SortOrder
         electiveCredits?: SortOrder
+    };
+    export type CertificateOnSubjectListRelationFilter = {
+        every?: CertificateOnSubjectWhereInput
+        some?: CertificateOnSubjectWhereInput
+        none?: CertificateOnSubjectWhereInput
+    };
+    export type AwardListRelationFilter = {
+        every?: AwardWhereInput
+        some?: AwardWhereInput
+        none?: AwardWhereInput
+    };
+    export type CertificateOnSubjectOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type AwardOrderByRelationAggregateInput = {
+        _count?: SortOrder
     };
     export type SubjectOrderByRelevanceInput = {
         fields: SubjectOrderByRelevanceFieldEnum | SubjectOrderByRelevanceFieldEnum[]
@@ -372138,6 +376677,154 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
+    };
+    export type ArchivedCertificateListRelationFilter = {
+        every?: ArchivedCertificateWhereInput
+        some?: ArchivedCertificateWhereInput
+        none?: ArchivedCertificateWhereInput
+    };
+    export type ArchivedCertificateOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type CertificateOrderByRelevanceInput = {
+        fields: CertificateOrderByRelevanceFieldEnum | CertificateOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type CertificateCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        englishName?: SortOrder
+    };
+    export type CertificateMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        englishName?: SortOrder
+    };
+    export type CertificateMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        englishName?: SortOrder
+    };
+    export type CertificateOnSubjectOrderByRelevanceInput = {
+        fields: CertificateOnSubjectOrderByRelevanceFieldEnum | CertificateOnSubjectOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type CertificateOnSubjectCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        finalScore?: SortOrder
+        certificateId?: SortOrder
+        subjectId?: SortOrder
+    };
+    export type CertificateOnSubjectAvgOrderByAggregateInput = {
+        finalScore?: SortOrder
+    };
+    export type CertificateOnSubjectMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        finalScore?: SortOrder
+        certificateId?: SortOrder
+        subjectId?: SortOrder
+    };
+    export type CertificateOnSubjectMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        finalScore?: SortOrder
+        certificateId?: SortOrder
+        subjectId?: SortOrder
+    };
+    export type CertificateOnSubjectSumOrderByAggregateInput = {
+        finalScore?: SortOrder
+    };
+    export type ArchivedAwardListRelationFilter = {
+        every?: ArchivedAwardWhereInput
+        some?: ArchivedAwardWhereInput
+        none?: ArchivedAwardWhereInput
+    };
+    export type ArchivedAwardOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type AwardOrderByRelevanceInput = {
+        fields: AwardOrderByRelevanceFieldEnum | AwardOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type AwardCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        englishName?: SortOrder
+        bonusScore?: SortOrder
+    };
+    export type AwardAvgOrderByAggregateInput = {
+        bonusScore?: SortOrder
+    };
+    export type AwardMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        englishName?: SortOrder
+        bonusScore?: SortOrder
+    };
+    export type AwardMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        englishName?: SortOrder
+        bonusScore?: SortOrder
+    };
+    export type AwardSumOrderByAggregateInput = {
+        bonusScore?: SortOrder
     };
     export type EnumDiplomaTypeEnumFilter<$PrismaModel = never> = {
         equals?: $Enums.DiplomaTypeEnum | EnumDiplomaTypeEnumFieldRefInput<$PrismaModel>
@@ -385905,6 +390592,16 @@ export namespace Prisma {
         connect?: ArchivedCertificateWhereUniqueInput
         update?: XOR<XOR<ArchivedCertificateUpdateToOneWithWhereWithoutStudentSubjectScoreInput, ArchivedCertificateUpdateWithoutStudentSubjectScoreInput>, ArchivedCertificateUncheckedUpdateWithoutStudentSubjectScoreInput>
     };
+    export type CertificateCreateNestedOneWithoutArchivedCertificateInput = {
+        create?: XOR<CertificateCreateWithoutArchivedCertificateInput, CertificateUncheckedCreateWithoutArchivedCertificateInput>
+        connectOrCreate?: CertificateCreateOrConnectWithoutArchivedCertificateInput
+        connect?: CertificateWhereUniqueInput
+    };
+    export type StudentCreateNestedOneWithoutArchivedCertificateInput = {
+        create?: XOR<StudentCreateWithoutArchivedCertificateInput, StudentUncheckedCreateWithoutArchivedCertificateInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutArchivedCertificateInput
+        connect?: StudentWhereUniqueInput
+    };
     export type DocumentFileCreateNestedManyWithoutArchivedCertificateInput = {
         create?: XOR<DocumentFileCreateWithoutArchivedCertificateInput, DocumentFileUncheckedCreateWithoutArchivedCertificateInput> | DocumentFileCreateWithoutArchivedCertificateInput[] | DocumentFileUncheckedCreateWithoutArchivedCertificateInput[]
         connectOrCreate?: DocumentFileCreateOrConnectWithoutArchivedCertificateInput | DocumentFileCreateOrConnectWithoutArchivedCertificateInput[]
@@ -385928,6 +390625,23 @@ export namespace Prisma {
         connectOrCreate?: ArchivedCertificateOnStudentSubjectScoreCreateOrConnectWithoutArchivedCertificateInput | ArchivedCertificateOnStudentSubjectScoreCreateOrConnectWithoutArchivedCertificateInput[]
         createMany?: ArchivedCertificateOnStudentSubjectScoreCreateManyArchivedCertificateInputEnvelope
         connect?: ArchivedCertificateOnStudentSubjectScoreWhereUniqueInput | ArchivedCertificateOnStudentSubjectScoreWhereUniqueInput[]
+    };
+    export type NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput = {
+        set?: $Enums.ArchivedCertificateStatus | null
+    };
+    export type CertificateUpdateOneRequiredWithoutArchivedCertificateNestedInput = {
+        create?: XOR<CertificateCreateWithoutArchivedCertificateInput, CertificateUncheckedCreateWithoutArchivedCertificateInput>
+        connectOrCreate?: CertificateCreateOrConnectWithoutArchivedCertificateInput
+        upsert?: CertificateUpsertWithoutArchivedCertificateInput
+        connect?: CertificateWhereUniqueInput
+        update?: XOR<XOR<CertificateUpdateToOneWithWhereWithoutArchivedCertificateInput, CertificateUpdateWithoutArchivedCertificateInput>, CertificateUncheckedUpdateWithoutArchivedCertificateInput>
+    };
+    export type StudentUpdateOneRequiredWithoutArchivedCertificateNestedInput = {
+        create?: XOR<StudentCreateWithoutArchivedCertificateInput, StudentUncheckedCreateWithoutArchivedCertificateInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutArchivedCertificateInput
+        upsert?: StudentUpsertWithoutArchivedCertificateInput
+        connect?: StudentWhereUniqueInput
+        update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutArchivedCertificateInput, StudentUpdateWithoutArchivedCertificateInput>, StudentUncheckedUpdateWithoutArchivedCertificateInput>
     };
     export type DocumentFileUpdateManyWithoutArchivedCertificateNestedInput = {
         create?: XOR<DocumentFileCreateWithoutArchivedCertificateInput, DocumentFileUncheckedCreateWithoutArchivedCertificateInput> | DocumentFileCreateWithoutArchivedCertificateInput[] | DocumentFileUncheckedCreateWithoutArchivedCertificateInput[]
@@ -386005,6 +390719,16 @@ export namespace Prisma {
         connect?: ArchivedAwardWhereUniqueInput
         update?: XOR<XOR<ArchivedAwardUpdateToOneWithWhereWithoutStudentSubjectScoreInput, ArchivedAwardUpdateWithoutStudentSubjectScoreInput>, ArchivedAwardUncheckedUpdateWithoutStudentSubjectScoreInput>
     };
+    export type AwardCreateNestedOneWithoutArchivedAwardInput = {
+        create?: XOR<AwardCreateWithoutArchivedAwardInput, AwardUncheckedCreateWithoutArchivedAwardInput>
+        connectOrCreate?: AwardCreateOrConnectWithoutArchivedAwardInput
+        connect?: AwardWhereUniqueInput
+    };
+    export type StudentCreateNestedOneWithoutArchivedAwardInput = {
+        create?: XOR<StudentCreateWithoutArchivedAwardInput, StudentUncheckedCreateWithoutArchivedAwardInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutArchivedAwardInput
+        connect?: StudentWhereUniqueInput
+    };
     export type DocumentFileCreateNestedManyWithoutArchivedAwardInput = {
         create?: XOR<DocumentFileCreateWithoutArchivedAwardInput, DocumentFileUncheckedCreateWithoutArchivedAwardInput> | DocumentFileCreateWithoutArchivedAwardInput[] | DocumentFileUncheckedCreateWithoutArchivedAwardInput[]
         connectOrCreate?: DocumentFileCreateOrConnectWithoutArchivedAwardInput | DocumentFileCreateOrConnectWithoutArchivedAwardInput[]
@@ -386028,6 +390752,20 @@ export namespace Prisma {
         connectOrCreate?: ArchivedAwardOnStudentSubjectScoreCreateOrConnectWithoutArchivedAwardInput | ArchivedAwardOnStudentSubjectScoreCreateOrConnectWithoutArchivedAwardInput[]
         createMany?: ArchivedAwardOnStudentSubjectScoreCreateManyArchivedAwardInputEnvelope
         connect?: ArchivedAwardOnStudentSubjectScoreWhereUniqueInput | ArchivedAwardOnStudentSubjectScoreWhereUniqueInput[]
+    };
+    export type AwardUpdateOneRequiredWithoutArchivedAwardNestedInput = {
+        create?: XOR<AwardCreateWithoutArchivedAwardInput, AwardUncheckedCreateWithoutArchivedAwardInput>
+        connectOrCreate?: AwardCreateOrConnectWithoutArchivedAwardInput
+        upsert?: AwardUpsertWithoutArchivedAwardInput
+        connect?: AwardWhereUniqueInput
+        update?: XOR<XOR<AwardUpdateToOneWithWhereWithoutArchivedAwardInput, AwardUpdateWithoutArchivedAwardInput>, AwardUncheckedUpdateWithoutArchivedAwardInput>
+    };
+    export type StudentUpdateOneRequiredWithoutArchivedAwardNestedInput = {
+        create?: XOR<StudentCreateWithoutArchivedAwardInput, StudentUncheckedCreateWithoutArchivedAwardInput>
+        connectOrCreate?: StudentCreateOrConnectWithoutArchivedAwardInput
+        upsert?: StudentUpsertWithoutArchivedAwardInput
+        connect?: StudentWhereUniqueInput
+        update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutArchivedAwardInput, StudentUpdateWithoutArchivedAwardInput>, StudentUncheckedUpdateWithoutArchivedAwardInput>
     };
     export type DocumentFileUpdateManyWithoutArchivedAwardNestedInput = {
         create?: XOR<DocumentFileCreateWithoutArchivedAwardInput, DocumentFileUncheckedCreateWithoutArchivedAwardInput> | DocumentFileCreateWithoutArchivedAwardInput[] | DocumentFileUncheckedCreateWithoutArchivedAwardInput[]
@@ -387913,11 +392651,33 @@ export namespace Prisma {
         createMany?: SubjectVersionCreateManySubjectInputEnvelope
         connect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
     };
+    export type CertificateOnSubjectCreateNestedManyWithoutSubjectInput = {
+        create?: XOR<CertificateOnSubjectCreateWithoutSubjectInput, CertificateOnSubjectUncheckedCreateWithoutSubjectInput> | CertificateOnSubjectCreateWithoutSubjectInput[] | CertificateOnSubjectUncheckedCreateWithoutSubjectInput[]
+        connectOrCreate?: CertificateOnSubjectCreateOrConnectWithoutSubjectInput | CertificateOnSubjectCreateOrConnectWithoutSubjectInput[]
+        createMany?: CertificateOnSubjectCreateManySubjectInputEnvelope
+        connect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+    };
+    export type AwardCreateNestedManyWithoutSubjectsInput = {
+        create?: XOR<AwardCreateWithoutSubjectsInput, AwardUncheckedCreateWithoutSubjectsInput> | AwardCreateWithoutSubjectsInput[] | AwardUncheckedCreateWithoutSubjectsInput[]
+        connectOrCreate?: AwardCreateOrConnectWithoutSubjectsInput | AwardCreateOrConnectWithoutSubjectsInput[]
+        connect?: AwardWhereUniqueInput | AwardWhereUniqueInput[]
+    };
     export type SubjectVersionUncheckedCreateNestedManyWithoutSubjectInput = {
         create?: XOR<SubjectVersionCreateWithoutSubjectInput, SubjectVersionUncheckedCreateWithoutSubjectInput> | SubjectVersionCreateWithoutSubjectInput[] | SubjectVersionUncheckedCreateWithoutSubjectInput[]
         connectOrCreate?: SubjectVersionCreateOrConnectWithoutSubjectInput | SubjectVersionCreateOrConnectWithoutSubjectInput[]
         createMany?: SubjectVersionCreateManySubjectInputEnvelope
         connect?: SubjectVersionWhereUniqueInput | SubjectVersionWhereUniqueInput[]
+    };
+    export type CertificateOnSubjectUncheckedCreateNestedManyWithoutSubjectInput = {
+        create?: XOR<CertificateOnSubjectCreateWithoutSubjectInput, CertificateOnSubjectUncheckedCreateWithoutSubjectInput> | CertificateOnSubjectCreateWithoutSubjectInput[] | CertificateOnSubjectUncheckedCreateWithoutSubjectInput[]
+        connectOrCreate?: CertificateOnSubjectCreateOrConnectWithoutSubjectInput | CertificateOnSubjectCreateOrConnectWithoutSubjectInput[]
+        createMany?: CertificateOnSubjectCreateManySubjectInputEnvelope
+        connect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+    };
+    export type AwardUncheckedCreateNestedManyWithoutSubjectsInput = {
+        create?: XOR<AwardCreateWithoutSubjectsInput, AwardUncheckedCreateWithoutSubjectsInput> | AwardCreateWithoutSubjectsInput[] | AwardUncheckedCreateWithoutSubjectsInput[]
+        connectOrCreate?: AwardCreateOrConnectWithoutSubjectsInput | AwardCreateOrConnectWithoutSubjectsInput[]
+        connect?: AwardWhereUniqueInput | AwardWhereUniqueInput[]
     };
     export type DM_DonViUpdateOneWithoutSubjectsNestedInput = {
         create?: XOR<DM_DonViCreateWithoutSubjectsInput, DM_DonViUncheckedCreateWithoutSubjectsInput>
@@ -387941,6 +392701,31 @@ export namespace Prisma {
         updateMany?: SubjectVersionUpdateManyWithWhereWithoutSubjectInput | SubjectVersionUpdateManyWithWhereWithoutSubjectInput[]
         deleteMany?: SubjectVersionScalarWhereInput | SubjectVersionScalarWhereInput[]
     };
+    export type CertificateOnSubjectUpdateManyWithoutSubjectNestedInput = {
+        create?: XOR<CertificateOnSubjectCreateWithoutSubjectInput, CertificateOnSubjectUncheckedCreateWithoutSubjectInput> | CertificateOnSubjectCreateWithoutSubjectInput[] | CertificateOnSubjectUncheckedCreateWithoutSubjectInput[]
+        connectOrCreate?: CertificateOnSubjectCreateOrConnectWithoutSubjectInput | CertificateOnSubjectCreateOrConnectWithoutSubjectInput[]
+        upsert?: CertificateOnSubjectUpsertWithWhereUniqueWithoutSubjectInput | CertificateOnSubjectUpsertWithWhereUniqueWithoutSubjectInput[]
+        createMany?: CertificateOnSubjectCreateManySubjectInputEnvelope
+        set?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        disconnect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        delete?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        connect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        update?: CertificateOnSubjectUpdateWithWhereUniqueWithoutSubjectInput | CertificateOnSubjectUpdateWithWhereUniqueWithoutSubjectInput[]
+        updateMany?: CertificateOnSubjectUpdateManyWithWhereWithoutSubjectInput | CertificateOnSubjectUpdateManyWithWhereWithoutSubjectInput[]
+        deleteMany?: CertificateOnSubjectScalarWhereInput | CertificateOnSubjectScalarWhereInput[]
+    };
+    export type AwardUpdateManyWithoutSubjectsNestedInput = {
+        create?: XOR<AwardCreateWithoutSubjectsInput, AwardUncheckedCreateWithoutSubjectsInput> | AwardCreateWithoutSubjectsInput[] | AwardUncheckedCreateWithoutSubjectsInput[]
+        connectOrCreate?: AwardCreateOrConnectWithoutSubjectsInput | AwardCreateOrConnectWithoutSubjectsInput[]
+        upsert?: AwardUpsertWithWhereUniqueWithoutSubjectsInput | AwardUpsertWithWhereUniqueWithoutSubjectsInput[]
+        set?: AwardWhereUniqueInput | AwardWhereUniqueInput[]
+        disconnect?: AwardWhereUniqueInput | AwardWhereUniqueInput[]
+        delete?: AwardWhereUniqueInput | AwardWhereUniqueInput[]
+        connect?: AwardWhereUniqueInput | AwardWhereUniqueInput[]
+        update?: AwardUpdateWithWhereUniqueWithoutSubjectsInput | AwardUpdateWithWhereUniqueWithoutSubjectsInput[]
+        updateMany?: AwardUpdateManyWithWhereWithoutSubjectsInput | AwardUpdateManyWithWhereWithoutSubjectsInput[]
+        deleteMany?: AwardScalarWhereInput | AwardScalarWhereInput[]
+    };
     export type SubjectVersionUncheckedUpdateManyWithoutSubjectNestedInput = {
         create?: XOR<SubjectVersionCreateWithoutSubjectInput, SubjectVersionUncheckedCreateWithoutSubjectInput> | SubjectVersionCreateWithoutSubjectInput[] | SubjectVersionUncheckedCreateWithoutSubjectInput[]
         connectOrCreate?: SubjectVersionCreateOrConnectWithoutSubjectInput | SubjectVersionCreateOrConnectWithoutSubjectInput[]
@@ -387953,6 +392738,31 @@ export namespace Prisma {
         update?: SubjectVersionUpdateWithWhereUniqueWithoutSubjectInput | SubjectVersionUpdateWithWhereUniqueWithoutSubjectInput[]
         updateMany?: SubjectVersionUpdateManyWithWhereWithoutSubjectInput | SubjectVersionUpdateManyWithWhereWithoutSubjectInput[]
         deleteMany?: SubjectVersionScalarWhereInput | SubjectVersionScalarWhereInput[]
+    };
+    export type CertificateOnSubjectUncheckedUpdateManyWithoutSubjectNestedInput = {
+        create?: XOR<CertificateOnSubjectCreateWithoutSubjectInput, CertificateOnSubjectUncheckedCreateWithoutSubjectInput> | CertificateOnSubjectCreateWithoutSubjectInput[] | CertificateOnSubjectUncheckedCreateWithoutSubjectInput[]
+        connectOrCreate?: CertificateOnSubjectCreateOrConnectWithoutSubjectInput | CertificateOnSubjectCreateOrConnectWithoutSubjectInput[]
+        upsert?: CertificateOnSubjectUpsertWithWhereUniqueWithoutSubjectInput | CertificateOnSubjectUpsertWithWhereUniqueWithoutSubjectInput[]
+        createMany?: CertificateOnSubjectCreateManySubjectInputEnvelope
+        set?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        disconnect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        delete?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        connect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        update?: CertificateOnSubjectUpdateWithWhereUniqueWithoutSubjectInput | CertificateOnSubjectUpdateWithWhereUniqueWithoutSubjectInput[]
+        updateMany?: CertificateOnSubjectUpdateManyWithWhereWithoutSubjectInput | CertificateOnSubjectUpdateManyWithWhereWithoutSubjectInput[]
+        deleteMany?: CertificateOnSubjectScalarWhereInput | CertificateOnSubjectScalarWhereInput[]
+    };
+    export type AwardUncheckedUpdateManyWithoutSubjectsNestedInput = {
+        create?: XOR<AwardCreateWithoutSubjectsInput, AwardUncheckedCreateWithoutSubjectsInput> | AwardCreateWithoutSubjectsInput[] | AwardUncheckedCreateWithoutSubjectsInput[]
+        connectOrCreate?: AwardCreateOrConnectWithoutSubjectsInput | AwardCreateOrConnectWithoutSubjectsInput[]
+        upsert?: AwardUpsertWithWhereUniqueWithoutSubjectsInput | AwardUpsertWithWhereUniqueWithoutSubjectsInput[]
+        set?: AwardWhereUniqueInput | AwardWhereUniqueInput[]
+        disconnect?: AwardWhereUniqueInput | AwardWhereUniqueInput[]
+        delete?: AwardWhereUniqueInput | AwardWhereUniqueInput[]
+        connect?: AwardWhereUniqueInput | AwardWhereUniqueInput[]
+        update?: AwardUpdateWithWhereUniqueWithoutSubjectsInput | AwardUpdateWithWhereUniqueWithoutSubjectsInput[]
+        updateMany?: AwardUpdateManyWithWhereWithoutSubjectsInput | AwardUpdateManyWithWhereWithoutSubjectsInput[]
+        deleteMany?: AwardScalarWhereInput | AwardScalarWhereInput[]
     };
     export type SubjectVersionCreateNestedManyWithoutSubjectVersionCategoryInput = {
         create?: XOR<SubjectVersionCreateWithoutSubjectVersionCategoryInput, SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput> | SubjectVersionCreateWithoutSubjectVersionCategoryInput[] | SubjectVersionUncheckedCreateWithoutSubjectVersionCategoryInput[]
@@ -391229,6 +396039,178 @@ export namespace Prisma {
         updateMany?: CurriculumVersionUpdateManyWithWhereWithoutTrainingTimeInput | CurriculumVersionUpdateManyWithWhereWithoutTrainingTimeInput[]
         deleteMany?: CurriculumVersionScalarWhereInput | CurriculumVersionScalarWhereInput[]
     };
+    export type ArchivedCertificateCreateNestedManyWithoutCertificateInput = {
+        create?: XOR<ArchivedCertificateCreateWithoutCertificateInput, ArchivedCertificateUncheckedCreateWithoutCertificateInput> | ArchivedCertificateCreateWithoutCertificateInput[] | ArchivedCertificateUncheckedCreateWithoutCertificateInput[]
+        connectOrCreate?: ArchivedCertificateCreateOrConnectWithoutCertificateInput | ArchivedCertificateCreateOrConnectWithoutCertificateInput[]
+        createMany?: ArchivedCertificateCreateManyCertificateInputEnvelope
+        connect?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+    };
+    export type CertificateOnSubjectCreateNestedManyWithoutCertificateInput = {
+        create?: XOR<CertificateOnSubjectCreateWithoutCertificateInput, CertificateOnSubjectUncheckedCreateWithoutCertificateInput> | CertificateOnSubjectCreateWithoutCertificateInput[] | CertificateOnSubjectUncheckedCreateWithoutCertificateInput[]
+        connectOrCreate?: CertificateOnSubjectCreateOrConnectWithoutCertificateInput | CertificateOnSubjectCreateOrConnectWithoutCertificateInput[]
+        createMany?: CertificateOnSubjectCreateManyCertificateInputEnvelope
+        connect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+    };
+    export type ArchivedCertificateUncheckedCreateNestedManyWithoutCertificateInput = {
+        create?: XOR<ArchivedCertificateCreateWithoutCertificateInput, ArchivedCertificateUncheckedCreateWithoutCertificateInput> | ArchivedCertificateCreateWithoutCertificateInput[] | ArchivedCertificateUncheckedCreateWithoutCertificateInput[]
+        connectOrCreate?: ArchivedCertificateCreateOrConnectWithoutCertificateInput | ArchivedCertificateCreateOrConnectWithoutCertificateInput[]
+        createMany?: ArchivedCertificateCreateManyCertificateInputEnvelope
+        connect?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+    };
+    export type CertificateOnSubjectUncheckedCreateNestedManyWithoutCertificateInput = {
+        create?: XOR<CertificateOnSubjectCreateWithoutCertificateInput, CertificateOnSubjectUncheckedCreateWithoutCertificateInput> | CertificateOnSubjectCreateWithoutCertificateInput[] | CertificateOnSubjectUncheckedCreateWithoutCertificateInput[]
+        connectOrCreate?: CertificateOnSubjectCreateOrConnectWithoutCertificateInput | CertificateOnSubjectCreateOrConnectWithoutCertificateInput[]
+        createMany?: CertificateOnSubjectCreateManyCertificateInputEnvelope
+        connect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+    };
+    export type ArchivedCertificateUpdateManyWithoutCertificateNestedInput = {
+        create?: XOR<ArchivedCertificateCreateWithoutCertificateInput, ArchivedCertificateUncheckedCreateWithoutCertificateInput> | ArchivedCertificateCreateWithoutCertificateInput[] | ArchivedCertificateUncheckedCreateWithoutCertificateInput[]
+        connectOrCreate?: ArchivedCertificateCreateOrConnectWithoutCertificateInput | ArchivedCertificateCreateOrConnectWithoutCertificateInput[]
+        upsert?: ArchivedCertificateUpsertWithWhereUniqueWithoutCertificateInput | ArchivedCertificateUpsertWithWhereUniqueWithoutCertificateInput[]
+        createMany?: ArchivedCertificateCreateManyCertificateInputEnvelope
+        set?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        disconnect?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        delete?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        connect?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        update?: ArchivedCertificateUpdateWithWhereUniqueWithoutCertificateInput | ArchivedCertificateUpdateWithWhereUniqueWithoutCertificateInput[]
+        updateMany?: ArchivedCertificateUpdateManyWithWhereWithoutCertificateInput | ArchivedCertificateUpdateManyWithWhereWithoutCertificateInput[]
+        deleteMany?: ArchivedCertificateScalarWhereInput | ArchivedCertificateScalarWhereInput[]
+    };
+    export type CertificateOnSubjectUpdateManyWithoutCertificateNestedInput = {
+        create?: XOR<CertificateOnSubjectCreateWithoutCertificateInput, CertificateOnSubjectUncheckedCreateWithoutCertificateInput> | CertificateOnSubjectCreateWithoutCertificateInput[] | CertificateOnSubjectUncheckedCreateWithoutCertificateInput[]
+        connectOrCreate?: CertificateOnSubjectCreateOrConnectWithoutCertificateInput | CertificateOnSubjectCreateOrConnectWithoutCertificateInput[]
+        upsert?: CertificateOnSubjectUpsertWithWhereUniqueWithoutCertificateInput | CertificateOnSubjectUpsertWithWhereUniqueWithoutCertificateInput[]
+        createMany?: CertificateOnSubjectCreateManyCertificateInputEnvelope
+        set?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        disconnect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        delete?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        connect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        update?: CertificateOnSubjectUpdateWithWhereUniqueWithoutCertificateInput | CertificateOnSubjectUpdateWithWhereUniqueWithoutCertificateInput[]
+        updateMany?: CertificateOnSubjectUpdateManyWithWhereWithoutCertificateInput | CertificateOnSubjectUpdateManyWithWhereWithoutCertificateInput[]
+        deleteMany?: CertificateOnSubjectScalarWhereInput | CertificateOnSubjectScalarWhereInput[]
+    };
+    export type ArchivedCertificateUncheckedUpdateManyWithoutCertificateNestedInput = {
+        create?: XOR<ArchivedCertificateCreateWithoutCertificateInput, ArchivedCertificateUncheckedCreateWithoutCertificateInput> | ArchivedCertificateCreateWithoutCertificateInput[] | ArchivedCertificateUncheckedCreateWithoutCertificateInput[]
+        connectOrCreate?: ArchivedCertificateCreateOrConnectWithoutCertificateInput | ArchivedCertificateCreateOrConnectWithoutCertificateInput[]
+        upsert?: ArchivedCertificateUpsertWithWhereUniqueWithoutCertificateInput | ArchivedCertificateUpsertWithWhereUniqueWithoutCertificateInput[]
+        createMany?: ArchivedCertificateCreateManyCertificateInputEnvelope
+        set?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        disconnect?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        delete?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        connect?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        update?: ArchivedCertificateUpdateWithWhereUniqueWithoutCertificateInput | ArchivedCertificateUpdateWithWhereUniqueWithoutCertificateInput[]
+        updateMany?: ArchivedCertificateUpdateManyWithWhereWithoutCertificateInput | ArchivedCertificateUpdateManyWithWhereWithoutCertificateInput[]
+        deleteMany?: ArchivedCertificateScalarWhereInput | ArchivedCertificateScalarWhereInput[]
+    };
+    export type CertificateOnSubjectUncheckedUpdateManyWithoutCertificateNestedInput = {
+        create?: XOR<CertificateOnSubjectCreateWithoutCertificateInput, CertificateOnSubjectUncheckedCreateWithoutCertificateInput> | CertificateOnSubjectCreateWithoutCertificateInput[] | CertificateOnSubjectUncheckedCreateWithoutCertificateInput[]
+        connectOrCreate?: CertificateOnSubjectCreateOrConnectWithoutCertificateInput | CertificateOnSubjectCreateOrConnectWithoutCertificateInput[]
+        upsert?: CertificateOnSubjectUpsertWithWhereUniqueWithoutCertificateInput | CertificateOnSubjectUpsertWithWhereUniqueWithoutCertificateInput[]
+        createMany?: CertificateOnSubjectCreateManyCertificateInputEnvelope
+        set?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        disconnect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        delete?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        connect?: CertificateOnSubjectWhereUniqueInput | CertificateOnSubjectWhereUniqueInput[]
+        update?: CertificateOnSubjectUpdateWithWhereUniqueWithoutCertificateInput | CertificateOnSubjectUpdateWithWhereUniqueWithoutCertificateInput[]
+        updateMany?: CertificateOnSubjectUpdateManyWithWhereWithoutCertificateInput | CertificateOnSubjectUpdateManyWithWhereWithoutCertificateInput[]
+        deleteMany?: CertificateOnSubjectScalarWhereInput | CertificateOnSubjectScalarWhereInput[]
+    };
+    export type CertificateCreateNestedOneWithoutSubjectsInput = {
+        create?: XOR<CertificateCreateWithoutSubjectsInput, CertificateUncheckedCreateWithoutSubjectsInput>
+        connectOrCreate?: CertificateCreateOrConnectWithoutSubjectsInput
+        connect?: CertificateWhereUniqueInput
+    };
+    export type SubjectCreateNestedOneWithoutCertificateOnSubjectInput = {
+        create?: XOR<SubjectCreateWithoutCertificateOnSubjectInput, SubjectUncheckedCreateWithoutCertificateOnSubjectInput>
+        connectOrCreate?: SubjectCreateOrConnectWithoutCertificateOnSubjectInput
+        connect?: SubjectWhereUniqueInput
+    };
+    export type CertificateUpdateOneRequiredWithoutSubjectsNestedInput = {
+        create?: XOR<CertificateCreateWithoutSubjectsInput, CertificateUncheckedCreateWithoutSubjectsInput>
+        connectOrCreate?: CertificateCreateOrConnectWithoutSubjectsInput
+        upsert?: CertificateUpsertWithoutSubjectsInput
+        connect?: CertificateWhereUniqueInput
+        update?: XOR<XOR<CertificateUpdateToOneWithWhereWithoutSubjectsInput, CertificateUpdateWithoutSubjectsInput>, CertificateUncheckedUpdateWithoutSubjectsInput>
+    };
+    export type SubjectUpdateOneRequiredWithoutCertificateOnSubjectNestedInput = {
+        create?: XOR<SubjectCreateWithoutCertificateOnSubjectInput, SubjectUncheckedCreateWithoutCertificateOnSubjectInput>
+        connectOrCreate?: SubjectCreateOrConnectWithoutCertificateOnSubjectInput
+        upsert?: SubjectUpsertWithoutCertificateOnSubjectInput
+        connect?: SubjectWhereUniqueInput
+        update?: XOR<XOR<SubjectUpdateToOneWithWhereWithoutCertificateOnSubjectInput, SubjectUpdateWithoutCertificateOnSubjectInput>, SubjectUncheckedUpdateWithoutCertificateOnSubjectInput>
+    };
+    export type SubjectCreateNestedManyWithoutAwardOnSubjectInput = {
+        create?: XOR<SubjectCreateWithoutAwardOnSubjectInput, SubjectUncheckedCreateWithoutAwardOnSubjectInput> | SubjectCreateWithoutAwardOnSubjectInput[] | SubjectUncheckedCreateWithoutAwardOnSubjectInput[]
+        connectOrCreate?: SubjectCreateOrConnectWithoutAwardOnSubjectInput | SubjectCreateOrConnectWithoutAwardOnSubjectInput[]
+        connect?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+    };
+    export type ArchivedAwardCreateNestedManyWithoutAwardInput = {
+        create?: XOR<ArchivedAwardCreateWithoutAwardInput, ArchivedAwardUncheckedCreateWithoutAwardInput> | ArchivedAwardCreateWithoutAwardInput[] | ArchivedAwardUncheckedCreateWithoutAwardInput[]
+        connectOrCreate?: ArchivedAwardCreateOrConnectWithoutAwardInput | ArchivedAwardCreateOrConnectWithoutAwardInput[]
+        createMany?: ArchivedAwardCreateManyAwardInputEnvelope
+        connect?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+    };
+    export type SubjectUncheckedCreateNestedManyWithoutAwardOnSubjectInput = {
+        create?: XOR<SubjectCreateWithoutAwardOnSubjectInput, SubjectUncheckedCreateWithoutAwardOnSubjectInput> | SubjectCreateWithoutAwardOnSubjectInput[] | SubjectUncheckedCreateWithoutAwardOnSubjectInput[]
+        connectOrCreate?: SubjectCreateOrConnectWithoutAwardOnSubjectInput | SubjectCreateOrConnectWithoutAwardOnSubjectInput[]
+        connect?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+    };
+    export type ArchivedAwardUncheckedCreateNestedManyWithoutAwardInput = {
+        create?: XOR<ArchivedAwardCreateWithoutAwardInput, ArchivedAwardUncheckedCreateWithoutAwardInput> | ArchivedAwardCreateWithoutAwardInput[] | ArchivedAwardUncheckedCreateWithoutAwardInput[]
+        connectOrCreate?: ArchivedAwardCreateOrConnectWithoutAwardInput | ArchivedAwardCreateOrConnectWithoutAwardInput[]
+        createMany?: ArchivedAwardCreateManyAwardInputEnvelope
+        connect?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+    };
+    export type SubjectUpdateManyWithoutAwardOnSubjectNestedInput = {
+        create?: XOR<SubjectCreateWithoutAwardOnSubjectInput, SubjectUncheckedCreateWithoutAwardOnSubjectInput> | SubjectCreateWithoutAwardOnSubjectInput[] | SubjectUncheckedCreateWithoutAwardOnSubjectInput[]
+        connectOrCreate?: SubjectCreateOrConnectWithoutAwardOnSubjectInput | SubjectCreateOrConnectWithoutAwardOnSubjectInput[]
+        upsert?: SubjectUpsertWithWhereUniqueWithoutAwardOnSubjectInput | SubjectUpsertWithWhereUniqueWithoutAwardOnSubjectInput[]
+        set?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        disconnect?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        delete?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        connect?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        update?: SubjectUpdateWithWhereUniqueWithoutAwardOnSubjectInput | SubjectUpdateWithWhereUniqueWithoutAwardOnSubjectInput[]
+        updateMany?: SubjectUpdateManyWithWhereWithoutAwardOnSubjectInput | SubjectUpdateManyWithWhereWithoutAwardOnSubjectInput[]
+        deleteMany?: SubjectScalarWhereInput | SubjectScalarWhereInput[]
+    };
+    export type ArchivedAwardUpdateManyWithoutAwardNestedInput = {
+        create?: XOR<ArchivedAwardCreateWithoutAwardInput, ArchivedAwardUncheckedCreateWithoutAwardInput> | ArchivedAwardCreateWithoutAwardInput[] | ArchivedAwardUncheckedCreateWithoutAwardInput[]
+        connectOrCreate?: ArchivedAwardCreateOrConnectWithoutAwardInput | ArchivedAwardCreateOrConnectWithoutAwardInput[]
+        upsert?: ArchivedAwardUpsertWithWhereUniqueWithoutAwardInput | ArchivedAwardUpsertWithWhereUniqueWithoutAwardInput[]
+        createMany?: ArchivedAwardCreateManyAwardInputEnvelope
+        set?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        disconnect?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        delete?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        connect?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        update?: ArchivedAwardUpdateWithWhereUniqueWithoutAwardInput | ArchivedAwardUpdateWithWhereUniqueWithoutAwardInput[]
+        updateMany?: ArchivedAwardUpdateManyWithWhereWithoutAwardInput | ArchivedAwardUpdateManyWithWhereWithoutAwardInput[]
+        deleteMany?: ArchivedAwardScalarWhereInput | ArchivedAwardScalarWhereInput[]
+    };
+    export type SubjectUncheckedUpdateManyWithoutAwardOnSubjectNestedInput = {
+        create?: XOR<SubjectCreateWithoutAwardOnSubjectInput, SubjectUncheckedCreateWithoutAwardOnSubjectInput> | SubjectCreateWithoutAwardOnSubjectInput[] | SubjectUncheckedCreateWithoutAwardOnSubjectInput[]
+        connectOrCreate?: SubjectCreateOrConnectWithoutAwardOnSubjectInput | SubjectCreateOrConnectWithoutAwardOnSubjectInput[]
+        upsert?: SubjectUpsertWithWhereUniqueWithoutAwardOnSubjectInput | SubjectUpsertWithWhereUniqueWithoutAwardOnSubjectInput[]
+        set?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        disconnect?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        delete?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        connect?: SubjectWhereUniqueInput | SubjectWhereUniqueInput[]
+        update?: SubjectUpdateWithWhereUniqueWithoutAwardOnSubjectInput | SubjectUpdateWithWhereUniqueWithoutAwardOnSubjectInput[]
+        updateMany?: SubjectUpdateManyWithWhereWithoutAwardOnSubjectInput | SubjectUpdateManyWithWhereWithoutAwardOnSubjectInput[]
+        deleteMany?: SubjectScalarWhereInput | SubjectScalarWhereInput[]
+    };
+    export type ArchivedAwardUncheckedUpdateManyWithoutAwardNestedInput = {
+        create?: XOR<ArchivedAwardCreateWithoutAwardInput, ArchivedAwardUncheckedCreateWithoutAwardInput> | ArchivedAwardCreateWithoutAwardInput[] | ArchivedAwardUncheckedCreateWithoutAwardInput[]
+        connectOrCreate?: ArchivedAwardCreateOrConnectWithoutAwardInput | ArchivedAwardCreateOrConnectWithoutAwardInput[]
+        upsert?: ArchivedAwardUpsertWithWhereUniqueWithoutAwardInput | ArchivedAwardUpsertWithWhereUniqueWithoutAwardInput[]
+        createMany?: ArchivedAwardCreateManyAwardInputEnvelope
+        set?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        disconnect?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        delete?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        connect?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        update?: ArchivedAwardUpdateWithWhereUniqueWithoutAwardInput | ArchivedAwardUpdateWithWhereUniqueWithoutAwardInput[]
+        updateMany?: ArchivedAwardUpdateManyWithWhereWithoutAwardInput | ArchivedAwardUpdateManyWithWhereWithoutAwardInput[]
+        deleteMany?: ArchivedAwardScalarWhereInput | ArchivedAwardScalarWhereInput[]
+    };
     export type CurriculumVersionCreateNestedManyWithoutDiplomaTypeInput = {
         create?: XOR<CurriculumVersionCreateWithoutDiplomaTypeInput, CurriculumVersionUncheckedCreateWithoutDiplomaTypeInput> | CurriculumVersionCreateWithoutDiplomaTypeInput[] | CurriculumVersionUncheckedCreateWithoutDiplomaTypeInput[]
         connectOrCreate?: CurriculumVersionCreateOrConnectWithoutDiplomaTypeInput | CurriculumVersionCreateOrConnectWithoutDiplomaTypeInput[]
@@ -391415,6 +396397,18 @@ export namespace Prisma {
         createMany?: ScholarshipAwardCreateManyStudentInputEnvelope
         connect?: ScholarshipAwardWhereUniqueInput | ScholarshipAwardWhereUniqueInput[]
     };
+    export type ArchivedCertificateCreateNestedManyWithoutStudentInput = {
+        create?: XOR<ArchivedCertificateCreateWithoutStudentInput, ArchivedCertificateUncheckedCreateWithoutStudentInput> | ArchivedCertificateCreateWithoutStudentInput[] | ArchivedCertificateUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ArchivedCertificateCreateOrConnectWithoutStudentInput | ArchivedCertificateCreateOrConnectWithoutStudentInput[]
+        createMany?: ArchivedCertificateCreateManyStudentInputEnvelope
+        connect?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+    };
+    export type ArchivedAwardCreateNestedManyWithoutStudentInput = {
+        create?: XOR<ArchivedAwardCreateWithoutStudentInput, ArchivedAwardUncheckedCreateWithoutStudentInput> | ArchivedAwardCreateWithoutStudentInput[] | ArchivedAwardUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ArchivedAwardCreateOrConnectWithoutStudentInput | ArchivedAwardCreateOrConnectWithoutStudentInput[]
+        createMany?: ArchivedAwardCreateManyStudentInputEnvelope
+        connect?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+    };
     export type AcademicWarningCreateNestedManyWithoutStudentInput = {
         create?: XOR<AcademicWarningCreateWithoutStudentInput, AcademicWarningUncheckedCreateWithoutStudentInput> | AcademicWarningCreateWithoutStudentInput[] | AcademicWarningUncheckedCreateWithoutStudentInput[]
         connectOrCreate?: AcademicWarningCreateOrConnectWithoutStudentInput | AcademicWarningCreateOrConnectWithoutStudentInput[]
@@ -391547,6 +396541,18 @@ export namespace Prisma {
         connectOrCreate?: ScholarshipAwardCreateOrConnectWithoutStudentInput | ScholarshipAwardCreateOrConnectWithoutStudentInput[]
         createMany?: ScholarshipAwardCreateManyStudentInputEnvelope
         connect?: ScholarshipAwardWhereUniqueInput | ScholarshipAwardWhereUniqueInput[]
+    };
+    export type ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput = {
+        create?: XOR<ArchivedCertificateCreateWithoutStudentInput, ArchivedCertificateUncheckedCreateWithoutStudentInput> | ArchivedCertificateCreateWithoutStudentInput[] | ArchivedCertificateUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ArchivedCertificateCreateOrConnectWithoutStudentInput | ArchivedCertificateCreateOrConnectWithoutStudentInput[]
+        createMany?: ArchivedCertificateCreateManyStudentInputEnvelope
+        connect?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+    };
+    export type ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput = {
+        create?: XOR<ArchivedAwardCreateWithoutStudentInput, ArchivedAwardUncheckedCreateWithoutStudentInput> | ArchivedAwardCreateWithoutStudentInput[] | ArchivedAwardUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ArchivedAwardCreateOrConnectWithoutStudentInput | ArchivedAwardCreateOrConnectWithoutStudentInput[]
+        createMany?: ArchivedAwardCreateManyStudentInputEnvelope
+        connect?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
     };
     export type AcademicWarningUncheckedCreateNestedManyWithoutStudentInput = {
         create?: XOR<AcademicWarningCreateWithoutStudentInput, AcademicWarningUncheckedCreateWithoutStudentInput> | AcademicWarningCreateWithoutStudentInput[] | AcademicWarningUncheckedCreateWithoutStudentInput[]
@@ -391821,6 +396827,32 @@ export namespace Prisma {
         update?: ScholarshipAwardUpdateWithWhereUniqueWithoutStudentInput | ScholarshipAwardUpdateWithWhereUniqueWithoutStudentInput[]
         updateMany?: ScholarshipAwardUpdateManyWithWhereWithoutStudentInput | ScholarshipAwardUpdateManyWithWhereWithoutStudentInput[]
         deleteMany?: ScholarshipAwardScalarWhereInput | ScholarshipAwardScalarWhereInput[]
+    };
+    export type ArchivedCertificateUpdateManyWithoutStudentNestedInput = {
+        create?: XOR<ArchivedCertificateCreateWithoutStudentInput, ArchivedCertificateUncheckedCreateWithoutStudentInput> | ArchivedCertificateCreateWithoutStudentInput[] | ArchivedCertificateUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ArchivedCertificateCreateOrConnectWithoutStudentInput | ArchivedCertificateCreateOrConnectWithoutStudentInput[]
+        upsert?: ArchivedCertificateUpsertWithWhereUniqueWithoutStudentInput | ArchivedCertificateUpsertWithWhereUniqueWithoutStudentInput[]
+        createMany?: ArchivedCertificateCreateManyStudentInputEnvelope
+        set?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        disconnect?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        delete?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        connect?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        update?: ArchivedCertificateUpdateWithWhereUniqueWithoutStudentInput | ArchivedCertificateUpdateWithWhereUniqueWithoutStudentInput[]
+        updateMany?: ArchivedCertificateUpdateManyWithWhereWithoutStudentInput | ArchivedCertificateUpdateManyWithWhereWithoutStudentInput[]
+        deleteMany?: ArchivedCertificateScalarWhereInput | ArchivedCertificateScalarWhereInput[]
+    };
+    export type ArchivedAwardUpdateManyWithoutStudentNestedInput = {
+        create?: XOR<ArchivedAwardCreateWithoutStudentInput, ArchivedAwardUncheckedCreateWithoutStudentInput> | ArchivedAwardCreateWithoutStudentInput[] | ArchivedAwardUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ArchivedAwardCreateOrConnectWithoutStudentInput | ArchivedAwardCreateOrConnectWithoutStudentInput[]
+        upsert?: ArchivedAwardUpsertWithWhereUniqueWithoutStudentInput | ArchivedAwardUpsertWithWhereUniqueWithoutStudentInput[]
+        createMany?: ArchivedAwardCreateManyStudentInputEnvelope
+        set?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        disconnect?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        delete?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        connect?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        update?: ArchivedAwardUpdateWithWhereUniqueWithoutStudentInput | ArchivedAwardUpdateWithWhereUniqueWithoutStudentInput[]
+        updateMany?: ArchivedAwardUpdateManyWithWhereWithoutStudentInput | ArchivedAwardUpdateManyWithWhereWithoutStudentInput[]
+        deleteMany?: ArchivedAwardScalarWhereInput | ArchivedAwardScalarWhereInput[]
     };
     export type AcademicWarningUpdateManyWithoutStudentNestedInput = {
         create?: XOR<AcademicWarningCreateWithoutStudentInput, AcademicWarningUncheckedCreateWithoutStudentInput> | AcademicWarningCreateWithoutStudentInput[] | AcademicWarningUncheckedCreateWithoutStudentInput[]
@@ -392106,6 +397138,32 @@ export namespace Prisma {
         update?: ScholarshipAwardUpdateWithWhereUniqueWithoutStudentInput | ScholarshipAwardUpdateWithWhereUniqueWithoutStudentInput[]
         updateMany?: ScholarshipAwardUpdateManyWithWhereWithoutStudentInput | ScholarshipAwardUpdateManyWithWhereWithoutStudentInput[]
         deleteMany?: ScholarshipAwardScalarWhereInput | ScholarshipAwardScalarWhereInput[]
+    };
+    export type ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput = {
+        create?: XOR<ArchivedCertificateCreateWithoutStudentInput, ArchivedCertificateUncheckedCreateWithoutStudentInput> | ArchivedCertificateCreateWithoutStudentInput[] | ArchivedCertificateUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ArchivedCertificateCreateOrConnectWithoutStudentInput | ArchivedCertificateCreateOrConnectWithoutStudentInput[]
+        upsert?: ArchivedCertificateUpsertWithWhereUniqueWithoutStudentInput | ArchivedCertificateUpsertWithWhereUniqueWithoutStudentInput[]
+        createMany?: ArchivedCertificateCreateManyStudentInputEnvelope
+        set?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        disconnect?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        delete?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        connect?: ArchivedCertificateWhereUniqueInput | ArchivedCertificateWhereUniqueInput[]
+        update?: ArchivedCertificateUpdateWithWhereUniqueWithoutStudentInput | ArchivedCertificateUpdateWithWhereUniqueWithoutStudentInput[]
+        updateMany?: ArchivedCertificateUpdateManyWithWhereWithoutStudentInput | ArchivedCertificateUpdateManyWithWhereWithoutStudentInput[]
+        deleteMany?: ArchivedCertificateScalarWhereInput | ArchivedCertificateScalarWhereInput[]
+    };
+    export type ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput = {
+        create?: XOR<ArchivedAwardCreateWithoutStudentInput, ArchivedAwardUncheckedCreateWithoutStudentInput> | ArchivedAwardCreateWithoutStudentInput[] | ArchivedAwardUncheckedCreateWithoutStudentInput[]
+        connectOrCreate?: ArchivedAwardCreateOrConnectWithoutStudentInput | ArchivedAwardCreateOrConnectWithoutStudentInput[]
+        upsert?: ArchivedAwardUpsertWithWhereUniqueWithoutStudentInput | ArchivedAwardUpsertWithWhereUniqueWithoutStudentInput[]
+        createMany?: ArchivedAwardCreateManyStudentInputEnvelope
+        set?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        disconnect?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        delete?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        connect?: ArchivedAwardWhereUniqueInput | ArchivedAwardWhereUniqueInput[]
+        update?: ArchivedAwardUpdateWithWhereUniqueWithoutStudentInput | ArchivedAwardUpdateWithWhereUniqueWithoutStudentInput[]
+        updateMany?: ArchivedAwardUpdateManyWithWhereWithoutStudentInput | ArchivedAwardUpdateManyWithWhereWithoutStudentInput[]
+        deleteMany?: ArchivedAwardScalarWhereInput | ArchivedAwardScalarWhereInput[]
     };
     export type AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput = {
         create?: XOR<AcademicWarningCreateWithoutStudentInput, AcademicWarningUncheckedCreateWithoutStudentInput> | AcademicWarningCreateWithoutStudentInput[] | AcademicWarningUncheckedCreateWithoutStudentInput[]
@@ -400591,6 +405649,21 @@ export namespace Prisma {
         _min?: NestedDecimalNullableFilter<$PrismaModel>
         _max?: NestedDecimalNullableFilter<$PrismaModel>
     };
+    export type NestedEnumArchivedCertificateStatusNullableFilter<$PrismaModel = never> = {
+        equals?: $Enums.ArchivedCertificateStatus | EnumArchivedCertificateStatusFieldRefInput<$PrismaModel> | null
+        in?: $Enums.ArchivedCertificateStatus[] | ListEnumArchivedCertificateStatusFieldRefInput<$PrismaModel> | null
+        notIn?: $Enums.ArchivedCertificateStatus[] | ListEnumArchivedCertificateStatusFieldRefInput<$PrismaModel> | null
+        not?: NestedEnumArchivedCertificateStatusNullableFilter<$PrismaModel> | $Enums.ArchivedCertificateStatus | null
+    };
+    export type NestedEnumArchivedCertificateStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.ArchivedCertificateStatus | EnumArchivedCertificateStatusFieldRefInput<$PrismaModel> | null
+        in?: $Enums.ArchivedCertificateStatus[] | ListEnumArchivedCertificateStatusFieldRefInput<$PrismaModel> | null
+        notIn?: $Enums.ArchivedCertificateStatus[] | ListEnumArchivedCertificateStatusFieldRefInput<$PrismaModel> | null
+        not?: NestedEnumArchivedCertificateStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.ArchivedCertificateStatus | null
+        _count?: NestedIntNullableFilter<$PrismaModel>
+        _min?: NestedEnumArchivedCertificateStatusNullableFilter<$PrismaModel>
+        _max?: NestedEnumArchivedCertificateStatusNullableFilter<$PrismaModel>
+    };
     export type NestedEnumSemesterTypeNullableFilter<$PrismaModel = never> = {
         equals?: $Enums.SemesterType | EnumSemesterTypeFieldRefInput<$PrismaModel> | null
         in?: $Enums.SemesterType[] | ListEnumSemesterTypeFieldRefInput<$PrismaModel> | null
@@ -404349,6 +409422,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -404404,6 +409479,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -432153,6 +437230,8 @@ export namespace Prisma {
         englishName?: string | null
         information?: string | null
         subjectVersion?: SubjectVersionCreateNestedManyWithoutSubjectInput
+        certificateOnSubject?: CertificateOnSubjectCreateNestedManyWithoutSubjectInput
+        awardOnSubject?: AwardCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectUncheckedCreateWithoutManagementOrganizationInput = {
         id?: string
@@ -432166,6 +437245,8 @@ export namespace Prisma {
         englishName?: string | null
         information?: string | null
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutSubjectInput
+        certificateOnSubject?: CertificateOnSubjectUncheckedCreateNestedManyWithoutSubjectInput
+        awardOnSubject?: AwardUncheckedCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectCreateOrConnectWithoutManagementOrganizationInput = {
         where: SubjectWhereUniqueInput
@@ -433043,6 +438124,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -433098,6 +438181,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -442456,6 +447541,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -442511,6 +447598,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -442679,6 +447768,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -442734,6 +447825,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -443336,6 +448429,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -443391,6 +448486,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -443893,6 +448990,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -443948,6 +449047,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -444959,9 +450060,13 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        finalScore: number
+        score: number
+        issuedBy: string
+        issuedDate: Date | string
+        expiredDate?: Date | string | null
+        status?: $Enums.ArchivedCertificateStatus | null
+        certificate: CertificateCreateNestedOneWithoutArchivedCertificateInput
+        student: StudentCreateNestedOneWithoutArchivedCertificateInput
         documentFiles?: DocumentFileCreateNestedManyWithoutArchivedCertificateInput
     };
     export type ArchivedCertificateUncheckedCreateWithoutStudentSubjectScoreInput = {
@@ -444972,9 +450077,13 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        finalScore: number
+        certificateId: string
+        studentId: string
+        score: number
+        issuedBy: string
+        issuedDate: Date | string
+        expiredDate?: Date | string | null
+        status?: $Enums.ArchivedCertificateStatus | null
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutArchivedCertificateInput
     };
     export type ArchivedCertificateCreateOrConnectWithoutStudentSubjectScoreInput = {
@@ -445071,9 +450180,13 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        finalScore?: FloatFieldUpdateOperationsInput | number
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
+        certificate?: CertificateUpdateOneRequiredWithoutArchivedCertificateNestedInput
+        student?: StudentUpdateOneRequiredWithoutArchivedCertificateNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutArchivedCertificateNestedInput
     };
     export type ArchivedCertificateUncheckedUpdateWithoutStudentSubjectScoreInput = {
@@ -445084,10 +450197,160 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        finalScore?: FloatFieldUpdateOperationsInput | number
+        certificateId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutArchivedCertificateNestedInput
+    };
+    export type CertificateCreateWithoutArchivedCertificateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        subjects?: CertificateOnSubjectCreateNestedManyWithoutCertificateInput
+    };
+    export type CertificateUncheckedCreateWithoutArchivedCertificateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        subjects?: CertificateOnSubjectUncheckedCreateNestedManyWithoutCertificateInput
+    };
+    export type CertificateCreateOrConnectWithoutArchivedCertificateInput = {
+        where: CertificateWhereUniqueInput
+        create: XOR<CertificateCreateWithoutArchivedCertificateInput, CertificateUncheckedCreateWithoutArchivedCertificateInput>
+    };
+    export type StudentCreateWithoutArchivedCertificateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        entryScore?: number | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
+        priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
+        subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
+        userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
+        trainingLevel?: TrainingLevelCreateNestedOneWithoutStudentsInput
+        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
+        trainingType?: TrainingTypeCreateNestedOneWithoutStudentsInput
+        trainingForm?: TrainingFormCreateNestedOneWithoutStudentsInput
+        registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
+        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
+        curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
+        studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutStudentInput
+        notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
+        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        notes?: NoteCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
+    };
+    export type StudentUncheckedCreateWithoutArchivedCertificateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        entryScore?: number | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        trainingLocationId?: string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        fixedClassId?: string | null
+        userProfileId: string
+        trainingLevelId?: string | null
+        trainingObjectTypeId?: string | null
+        trainingTypeId?: string | null
+        trainingFormId?: string | null
+        registrationAreaId?: string | null
+        curriculumVersionId?: string | null
+        curriculumVersionParallelId?: string | null
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionUncheckedCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutStudentInput
+        notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
+    };
+    export type StudentCreateOrConnectWithoutArchivedCertificateInput = {
+        where: StudentWhereUniqueInput
+        create: XOR<StudentCreateWithoutArchivedCertificateInput, StudentUncheckedCreateWithoutArchivedCertificateInput>
     };
     export type DocumentFileCreateWithoutArchivedCertificateInput = {
         id?: string
@@ -445184,6 +450447,162 @@ export namespace Prisma {
     export type ArchivedCertificateOnStudentSubjectScoreCreateManyArchivedCertificateInputEnvelope = {
         data: ArchivedCertificateOnStudentSubjectScoreCreateManyArchivedCertificateInput | ArchivedCertificateOnStudentSubjectScoreCreateManyArchivedCertificateInput[]
         skipDuplicates?: boolean
+    };
+    export type CertificateUpsertWithoutArchivedCertificateInput = {
+        update: XOR<CertificateUpdateWithoutArchivedCertificateInput, CertificateUncheckedUpdateWithoutArchivedCertificateInput>
+        create: XOR<CertificateCreateWithoutArchivedCertificateInput, CertificateUncheckedCreateWithoutArchivedCertificateInput>
+        where?: CertificateWhereInput
+    };
+    export type CertificateUpdateToOneWithWhereWithoutArchivedCertificateInput = {
+        where?: CertificateWhereInput
+        data: XOR<CertificateUpdateWithoutArchivedCertificateInput, CertificateUncheckedUpdateWithoutArchivedCertificateInput>
+    };
+    export type CertificateUpdateWithoutArchivedCertificateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        subjects?: CertificateOnSubjectUpdateManyWithoutCertificateNestedInput
+    };
+    export type CertificateUncheckedUpdateWithoutArchivedCertificateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        subjects?: CertificateOnSubjectUncheckedUpdateManyWithoutCertificateNestedInput
+    };
+    export type StudentUpsertWithoutArchivedCertificateInput = {
+        update: XOR<StudentUpdateWithoutArchivedCertificateInput, StudentUncheckedUpdateWithoutArchivedCertificateInput>
+        create: XOR<StudentCreateWithoutArchivedCertificateInput, StudentUncheckedCreateWithoutArchivedCertificateInput>
+        where?: StudentWhereInput
+    };
+    export type StudentUpdateToOneWithWhereWithoutArchivedCertificateInput = {
+        where?: StudentWhereInput
+        data: XOR<StudentUpdateWithoutArchivedCertificateInput, StudentUncheckedUpdateWithoutArchivedCertificateInput>
+    };
+    export type StudentUpdateWithoutArchivedCertificateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
+        priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
+        subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
+        userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
+        trainingLevel?: TrainingLevelUpdateOneWithoutStudentsNestedInput
+        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
+        trainingType?: TrainingTypeUpdateOneWithoutStudentsNestedInput
+        trainingForm?: TrainingFormUpdateOneWithoutStudentsNestedInput
+        registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
+        curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
+        studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
+        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        notes?: NoteUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
+    };
+    export type StudentUncheckedUpdateWithoutArchivedCertificateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUncheckedUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type DocumentFileUpsertWithWhereUniqueWithoutArchivedCertificateInput = {
         where: DocumentFileWhereUniqueInput
@@ -445287,9 +450706,9 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        bonusScore: number
+        date?: Date | string | null
+        award: AwardCreateNestedOneWithoutArchivedAwardInput
+        student: StudentCreateNestedOneWithoutArchivedAwardInput
         documentFiles?: DocumentFileCreateNestedManyWithoutArchivedAwardInput
     };
     export type ArchivedAwardUncheckedCreateWithoutStudentSubjectScoreInput = {
@@ -445300,9 +450719,9 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        bonusScore: number
+        awardId: string
+        studentId: string
+        date?: Date | string | null
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutArchivedAwardInput
     };
     export type ArchivedAwardCreateOrConnectWithoutStudentSubjectScoreInput = {
@@ -445399,9 +450818,9 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        bonusScore?: FloatFieldUpdateOperationsInput | number
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        award?: AwardUpdateOneRequiredWithoutArchivedAwardNestedInput
+        student?: StudentUpdateOneRequiredWithoutArchivedAwardNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutArchivedAwardNestedInput
     };
     export type ArchivedAwardUncheckedUpdateWithoutStudentSubjectScoreInput = {
@@ -445412,10 +450831,158 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        bonusScore?: FloatFieldUpdateOperationsInput | number
+        awardId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutArchivedAwardNestedInput
+    };
+    export type AwardCreateWithoutArchivedAwardInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        bonusScore: number
+        subjects?: SubjectCreateNestedManyWithoutAwardOnSubjectInput
+    };
+    export type AwardUncheckedCreateWithoutArchivedAwardInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        bonusScore: number
+        subjects?: SubjectUncheckedCreateNestedManyWithoutAwardOnSubjectInput
+    };
+    export type AwardCreateOrConnectWithoutArchivedAwardInput = {
+        where: AwardWhereUniqueInput
+        create: XOR<AwardCreateWithoutArchivedAwardInput, AwardUncheckedCreateWithoutArchivedAwardInput>
+    };
+    export type StudentCreateWithoutArchivedAwardInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        entryScore?: number | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
+        priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
+        fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
+        subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
+        userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
+        trainingLevel?: TrainingLevelCreateNestedOneWithoutStudentsInput
+        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
+        trainingType?: TrainingTypeCreateNestedOneWithoutStudentsInput
+        trainingForm?: TrainingFormCreateNestedOneWithoutStudentsInput
+        registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
+        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
+        curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
+        studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionCreateNestedManyWithoutStudentInput
+        notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
+        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
+        studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
+        notes?: NoteCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
+    };
+    export type StudentUncheckedCreateWithoutArchivedAwardInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        entryScore?: number | null
+        note?: string | null
+        from?: Date | string | null
+        to?: Date | string | null
+        trainingLocationId?: string | null
+        unionLeader?: string | null
+        status?: $Enums.StudentStatus
+        fixedClassId?: string | null
+        userProfileId: string
+        trainingLevelId?: string | null
+        trainingObjectTypeId?: string | null
+        trainingTypeId?: string | null
+        trainingFormId?: string | null
+        registrationAreaId?: string | null
+        curriculumVersionId?: string | null
+        curriculumVersionParallelId?: string | null
+        academicWarningLevel?: number
+        disciplinaryWarningLevel?: number
+        suspended?: boolean
+        expelled?: boolean
+        foreignLangPass?: boolean
+        ITCertificationPass?: boolean
+        strengthTrainingPass?: boolean
+        militaryTrainingPass?: boolean
+        priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
+        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
+        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
+        studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
+        studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
+        scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
+        graduationApplications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        graduationDecision?: GraduationDecisionUncheckedCreateNestedOneWithoutStudentInput
+        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutStudentInput
+        notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
+        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
+        studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
+        notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
+        noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
+    };
+    export type StudentCreateOrConnectWithoutArchivedAwardInput = {
+        where: StudentWhereUniqueInput
+        create: XOR<StudentCreateWithoutArchivedAwardInput, StudentUncheckedCreateWithoutArchivedAwardInput>
     };
     export type DocumentFileCreateWithoutArchivedAwardInput = {
         id?: string
@@ -445512,6 +451079,164 @@ export namespace Prisma {
     export type ArchivedAwardOnStudentSubjectScoreCreateManyArchivedAwardInputEnvelope = {
         data: ArchivedAwardOnStudentSubjectScoreCreateManyArchivedAwardInput | ArchivedAwardOnStudentSubjectScoreCreateManyArchivedAwardInput[]
         skipDuplicates?: boolean
+    };
+    export type AwardUpsertWithoutArchivedAwardInput = {
+        update: XOR<AwardUpdateWithoutArchivedAwardInput, AwardUncheckedUpdateWithoutArchivedAwardInput>
+        create: XOR<AwardCreateWithoutArchivedAwardInput, AwardUncheckedCreateWithoutArchivedAwardInput>
+        where?: AwardWhereInput
+    };
+    export type AwardUpdateToOneWithWhereWithoutArchivedAwardInput = {
+        where?: AwardWhereInput
+        data: XOR<AwardUpdateWithoutArchivedAwardInput, AwardUncheckedUpdateWithoutArchivedAwardInput>
+    };
+    export type AwardUpdateWithoutArchivedAwardInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        bonusScore?: FloatFieldUpdateOperationsInput | number
+        subjects?: SubjectUpdateManyWithoutAwardOnSubjectNestedInput
+    };
+    export type AwardUncheckedUpdateWithoutArchivedAwardInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        bonusScore?: FloatFieldUpdateOperationsInput | number
+        subjects?: SubjectUncheckedUpdateManyWithoutAwardOnSubjectNestedInput
+    };
+    export type StudentUpsertWithoutArchivedAwardInput = {
+        update: XOR<StudentUpdateWithoutArchivedAwardInput, StudentUncheckedUpdateWithoutArchivedAwardInput>
+        create: XOR<StudentCreateWithoutArchivedAwardInput, StudentUncheckedCreateWithoutArchivedAwardInput>
+        where?: StudentWhereInput
+    };
+    export type StudentUpdateToOneWithWhereWithoutArchivedAwardInput = {
+        where?: StudentWhereInput
+        data: XOR<StudentUpdateWithoutArchivedAwardInput, StudentUncheckedUpdateWithoutArchivedAwardInput>
+    };
+    export type StudentUpdateWithoutArchivedAwardInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
+        priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
+        fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
+        subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
+        userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
+        trainingLevel?: TrainingLevelUpdateOneWithoutStudentsNestedInput
+        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
+        trainingType?: TrainingTypeUpdateOneWithoutStudentsNestedInput
+        trainingForm?: TrainingFormUpdateOneWithoutStudentsNestedInput
+        registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
+        curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
+        curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
+        studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
+        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
+        studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
+        notes?: NoteUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
+    };
+    export type StudentUncheckedUpdateWithoutArchivedAwardInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        note?: NullableStringFieldUpdateOperationsInput | string | null
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
+        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+        fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+        curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
+        academicWarningLevel?: IntFieldUpdateOperationsInput | number
+        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        expelled?: BoolFieldUpdateOperationsInput | boolean
+        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
+        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
+        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
+        priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
+        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
+        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
+        subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
+        studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
+        studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
+        scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
+        disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
+        studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
+        graduationApplications?: StudentGraduationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        graduationDecision?: GraduationDecisionUncheckedUpdateOneWithoutStudentNestedInput
+        surveySessions?: SurveySessionUncheckedUpdateManyWithoutStudentNestedInput
+        notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
+        researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
+        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
+        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
+        studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
+        notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
+        noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
     };
     export type DocumentFileUpsertWithWhereUniqueWithoutArchivedAwardInput = {
         where: DocumentFileWhereUniqueInput
@@ -448419,6 +454144,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -448474,6 +454201,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -448533,6 +454262,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -448588,6 +454319,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -448913,6 +454646,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -448968,6 +454703,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -449348,6 +455085,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -449403,6 +455142,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -449467,6 +455208,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -449522,6 +455265,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -451013,6 +456758,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -451068,6 +456815,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -451131,6 +456880,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -451186,6 +456937,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -451693,6 +457446,66 @@ export namespace Prisma {
         data: SubjectVersionCreateManySubjectInput | SubjectVersionCreateManySubjectInput[]
         skipDuplicates?: boolean
     };
+    export type CertificateOnSubjectCreateWithoutSubjectInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        finalScore: number
+        certificate: CertificateCreateNestedOneWithoutSubjectsInput
+    };
+    export type CertificateOnSubjectUncheckedCreateWithoutSubjectInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        finalScore: number
+        certificateId: string
+    };
+    export type CertificateOnSubjectCreateOrConnectWithoutSubjectInput = {
+        where: CertificateOnSubjectWhereUniqueInput
+        create: XOR<CertificateOnSubjectCreateWithoutSubjectInput, CertificateOnSubjectUncheckedCreateWithoutSubjectInput>
+    };
+    export type CertificateOnSubjectCreateManySubjectInputEnvelope = {
+        data: CertificateOnSubjectCreateManySubjectInput | CertificateOnSubjectCreateManySubjectInput[]
+        skipDuplicates?: boolean
+    };
+    export type AwardCreateWithoutSubjectsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        bonusScore: number
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutAwardInput
+    };
+    export type AwardUncheckedCreateWithoutSubjectsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        bonusScore: number
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutAwardInput
+    };
+    export type AwardCreateOrConnectWithoutSubjectsInput = {
+        where: AwardWhereUniqueInput
+        create: XOR<AwardCreateWithoutSubjectsInput, AwardUncheckedCreateWithoutSubjectsInput>
+    };
     export type DM_DonViUpsertWithoutSubjectsInput = {
         update: XOR<DM_DonViUpdateWithoutSubjectsInput, DM_DonViUncheckedUpdateWithoutSubjectsInput>
         create: XOR<DM_DonViCreateWithoutSubjectsInput, DM_DonViUncheckedCreateWithoutSubjectsInput>
@@ -451788,6 +457601,62 @@ export namespace Prisma {
     export type SubjectVersionUpdateManyWithWhereWithoutSubjectInput = {
         where: SubjectVersionScalarWhereInput
         data: XOR<SubjectVersionUpdateManyMutationInput, SubjectVersionUncheckedUpdateManyWithoutSubjectInput>
+    };
+    export type CertificateOnSubjectUpsertWithWhereUniqueWithoutSubjectInput = {
+        where: CertificateOnSubjectWhereUniqueInput
+        update: XOR<CertificateOnSubjectUpdateWithoutSubjectInput, CertificateOnSubjectUncheckedUpdateWithoutSubjectInput>
+        create: XOR<CertificateOnSubjectCreateWithoutSubjectInput, CertificateOnSubjectUncheckedCreateWithoutSubjectInput>
+    };
+    export type CertificateOnSubjectUpdateWithWhereUniqueWithoutSubjectInput = {
+        where: CertificateOnSubjectWhereUniqueInput
+        data: XOR<CertificateOnSubjectUpdateWithoutSubjectInput, CertificateOnSubjectUncheckedUpdateWithoutSubjectInput>
+    };
+    export type CertificateOnSubjectUpdateManyWithWhereWithoutSubjectInput = {
+        where: CertificateOnSubjectScalarWhereInput
+        data: XOR<CertificateOnSubjectUpdateManyMutationInput, CertificateOnSubjectUncheckedUpdateManyWithoutSubjectInput>
+    };
+    export type CertificateOnSubjectScalarWhereInput = {
+        AND?: CertificateOnSubjectScalarWhereInput | CertificateOnSubjectScalarWhereInput[]
+        OR?: CertificateOnSubjectScalarWhereInput[]
+        NOT?: CertificateOnSubjectScalarWhereInput | CertificateOnSubjectScalarWhereInput[]
+        id?: StringFilter<"CertificateOnSubject"> | string
+        code?: StringNullableFilter<"CertificateOnSubject"> | string | null
+        active?: BoolFilter<"CertificateOnSubject"> | boolean
+        description?: StringNullableFilter<"CertificateOnSubject"> | string | null
+        deletedAt?: DateTimeNullableFilter<"CertificateOnSubject"> | Date | string | null
+        createdAt?: DateTimeFilter<"CertificateOnSubject"> | Date | string
+        updatedAt?: DateTimeFilter<"CertificateOnSubject"> | Date | string
+        finalScore?: FloatFilter<"CertificateOnSubject"> | number
+        certificateId?: StringFilter<"CertificateOnSubject"> | string
+        subjectId?: StringFilter<"CertificateOnSubject"> | string
+    };
+    export type AwardUpsertWithWhereUniqueWithoutSubjectsInput = {
+        where: AwardWhereUniqueInput
+        update: XOR<AwardUpdateWithoutSubjectsInput, AwardUncheckedUpdateWithoutSubjectsInput>
+        create: XOR<AwardCreateWithoutSubjectsInput, AwardUncheckedCreateWithoutSubjectsInput>
+    };
+    export type AwardUpdateWithWhereUniqueWithoutSubjectsInput = {
+        where: AwardWhereUniqueInput
+        data: XOR<AwardUpdateWithoutSubjectsInput, AwardUncheckedUpdateWithoutSubjectsInput>
+    };
+    export type AwardUpdateManyWithWhereWithoutSubjectsInput = {
+        where: AwardScalarWhereInput
+        data: XOR<AwardUpdateManyMutationInput, AwardUncheckedUpdateManyWithoutSubjectsInput>
+    };
+    export type AwardScalarWhereInput = {
+        AND?: AwardScalarWhereInput | AwardScalarWhereInput[]
+        OR?: AwardScalarWhereInput[]
+        NOT?: AwardScalarWhereInput | AwardScalarWhereInput[]
+        id?: StringFilter<"Award"> | string
+        code?: StringNullableFilter<"Award"> | string | null
+        active?: BoolFilter<"Award"> | boolean
+        description?: StringNullableFilter<"Award"> | string | null
+        deletedAt?: DateTimeNullableFilter<"Award"> | Date | string | null
+        createdAt?: DateTimeFilter<"Award"> | Date | string
+        updatedAt?: DateTimeFilter<"Award"> | Date | string
+        name?: StringFilter<"Award"> | string
+        englishName?: StringNullableFilter<"Award"> | string | null
+        bonusScore?: FloatFilter<"Award"> | number
     };
     export type SubjectVersionCreateWithoutSubjectVersionCategoryInput = {
         id?: string
@@ -452002,6 +457871,8 @@ export namespace Prisma {
         englishName?: string | null
         information?: string | null
         managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectsInput
+        certificateOnSubject?: CertificateOnSubjectCreateNestedManyWithoutSubjectInput
+        awardOnSubject?: AwardCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectUncheckedCreateWithoutSubjectVersionInput = {
         id?: string
@@ -452015,6 +457886,8 @@ export namespace Prisma {
         englishName?: string | null
         managementOrganizationId?: string | null
         information?: string | null
+        certificateOnSubject?: CertificateOnSubjectUncheckedCreateNestedManyWithoutSubjectInput
+        awardOnSubject?: AwardUncheckedCreateNestedManyWithoutSubjectsInput
     };
     export type SubjectCreateOrConnectWithoutSubjectVersionInput = {
         where: SubjectWhereUniqueInput
@@ -453110,6 +458983,8 @@ export namespace Prisma {
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         information?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganization?: DM_DonViUpdateOneWithoutSubjectsNestedInput
+        certificateOnSubject?: CertificateOnSubjectUpdateManyWithoutSubjectNestedInput
+        awardOnSubject?: AwardUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectUncheckedUpdateWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -453123,6 +458998,8 @@ export namespace Prisma {
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         information?: NullableStringFieldUpdateOperationsInput | string | null
+        certificateOnSubject?: CertificateOnSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+        awardOnSubject?: AwardUncheckedUpdateManyWithoutSubjectsNestedInput
     };
     export type TrainingObjectTypeUpsertWithoutSubjectVersionInput = {
         update: XOR<TrainingObjectTypeUpdateWithoutSubjectVersionInput, TrainingObjectTypeUncheckedUpdateWithoutSubjectVersionInput>
@@ -455526,6 +461403,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -455581,6 +461460,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -455787,6 +461668,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -455842,6 +461725,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -458858,6 +464743,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -458913,6 +464800,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -459586,6 +465475,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -459641,6 +465532,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -459713,6 +465606,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -459768,6 +465663,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -459930,6 +465827,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -459985,6 +465884,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -460159,6 +466060,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -460214,6 +466117,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -460463,6 +466368,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -460518,6 +466425,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -463783,6 +469692,366 @@ export namespace Prisma {
         where: CurriculumVersionScalarWhereInput
         data: XOR<CurriculumVersionUpdateManyMutationInput, CurriculumVersionUncheckedUpdateManyWithoutTrainingTimeInput>
     };
+    export type ArchivedCertificateCreateWithoutCertificateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        score: number
+        issuedBy: string
+        issuedDate: Date | string
+        expiredDate?: Date | string | null
+        status?: $Enums.ArchivedCertificateStatus | null
+        student: StudentCreateNestedOneWithoutArchivedCertificateInput
+        documentFiles?: DocumentFileCreateNestedManyWithoutArchivedCertificateInput
+        studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutArchivedCertificateInput
+    };
+    export type ArchivedCertificateUncheckedCreateWithoutCertificateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentId: string
+        score: number
+        issuedBy: string
+        issuedDate: Date | string
+        expiredDate?: Date | string | null
+        status?: $Enums.ArchivedCertificateStatus | null
+        documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutArchivedCertificateInput
+        studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutArchivedCertificateInput
+    };
+    export type ArchivedCertificateCreateOrConnectWithoutCertificateInput = {
+        where: ArchivedCertificateWhereUniqueInput
+        create: XOR<ArchivedCertificateCreateWithoutCertificateInput, ArchivedCertificateUncheckedCreateWithoutCertificateInput>
+    };
+    export type ArchivedCertificateCreateManyCertificateInputEnvelope = {
+        data: ArchivedCertificateCreateManyCertificateInput | ArchivedCertificateCreateManyCertificateInput[]
+        skipDuplicates?: boolean
+    };
+    export type CertificateOnSubjectCreateWithoutCertificateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        finalScore: number
+        subject: SubjectCreateNestedOneWithoutCertificateOnSubjectInput
+    };
+    export type CertificateOnSubjectUncheckedCreateWithoutCertificateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        finalScore: number
+        subjectId: string
+    };
+    export type CertificateOnSubjectCreateOrConnectWithoutCertificateInput = {
+        where: CertificateOnSubjectWhereUniqueInput
+        create: XOR<CertificateOnSubjectCreateWithoutCertificateInput, CertificateOnSubjectUncheckedCreateWithoutCertificateInput>
+    };
+    export type CertificateOnSubjectCreateManyCertificateInputEnvelope = {
+        data: CertificateOnSubjectCreateManyCertificateInput | CertificateOnSubjectCreateManyCertificateInput[]
+        skipDuplicates?: boolean
+    };
+    export type ArchivedCertificateUpsertWithWhereUniqueWithoutCertificateInput = {
+        where: ArchivedCertificateWhereUniqueInput
+        update: XOR<ArchivedCertificateUpdateWithoutCertificateInput, ArchivedCertificateUncheckedUpdateWithoutCertificateInput>
+        create: XOR<ArchivedCertificateCreateWithoutCertificateInput, ArchivedCertificateUncheckedCreateWithoutCertificateInput>
+    };
+    export type ArchivedCertificateUpdateWithWhereUniqueWithoutCertificateInput = {
+        where: ArchivedCertificateWhereUniqueInput
+        data: XOR<ArchivedCertificateUpdateWithoutCertificateInput, ArchivedCertificateUncheckedUpdateWithoutCertificateInput>
+    };
+    export type ArchivedCertificateUpdateManyWithWhereWithoutCertificateInput = {
+        where: ArchivedCertificateScalarWhereInput
+        data: XOR<ArchivedCertificateUpdateManyMutationInput, ArchivedCertificateUncheckedUpdateManyWithoutCertificateInput>
+    };
+    export type ArchivedCertificateScalarWhereInput = {
+        AND?: ArchivedCertificateScalarWhereInput | ArchivedCertificateScalarWhereInput[]
+        OR?: ArchivedCertificateScalarWhereInput[]
+        NOT?: ArchivedCertificateScalarWhereInput | ArchivedCertificateScalarWhereInput[]
+        id?: StringFilter<"ArchivedCertificate"> | string
+        code?: StringNullableFilter<"ArchivedCertificate"> | string | null
+        active?: BoolFilter<"ArchivedCertificate"> | boolean
+        description?: StringNullableFilter<"ArchivedCertificate"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
+        createdAt?: DateTimeFilter<"ArchivedCertificate"> | Date | string
+        updatedAt?: DateTimeFilter<"ArchivedCertificate"> | Date | string
+        certificateId?: StringFilter<"ArchivedCertificate"> | string
+        studentId?: StringFilter<"ArchivedCertificate"> | string
+        score?: FloatFilter<"ArchivedCertificate"> | number
+        issuedBy?: StringFilter<"ArchivedCertificate"> | string
+        issuedDate?: DateTimeFilter<"ArchivedCertificate"> | Date | string
+        expiredDate?: DateTimeNullableFilter<"ArchivedCertificate"> | Date | string | null
+        status?: EnumArchivedCertificateStatusNullableFilter<"ArchivedCertificate"> | $Enums.ArchivedCertificateStatus | null
+    };
+    export type CertificateOnSubjectUpsertWithWhereUniqueWithoutCertificateInput = {
+        where: CertificateOnSubjectWhereUniqueInput
+        update: XOR<CertificateOnSubjectUpdateWithoutCertificateInput, CertificateOnSubjectUncheckedUpdateWithoutCertificateInput>
+        create: XOR<CertificateOnSubjectCreateWithoutCertificateInput, CertificateOnSubjectUncheckedCreateWithoutCertificateInput>
+    };
+    export type CertificateOnSubjectUpdateWithWhereUniqueWithoutCertificateInput = {
+        where: CertificateOnSubjectWhereUniqueInput
+        data: XOR<CertificateOnSubjectUpdateWithoutCertificateInput, CertificateOnSubjectUncheckedUpdateWithoutCertificateInput>
+    };
+    export type CertificateOnSubjectUpdateManyWithWhereWithoutCertificateInput = {
+        where: CertificateOnSubjectScalarWhereInput
+        data: XOR<CertificateOnSubjectUpdateManyMutationInput, CertificateOnSubjectUncheckedUpdateManyWithoutCertificateInput>
+    };
+    export type CertificateCreateWithoutSubjectsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutCertificateInput
+    };
+    export type CertificateUncheckedCreateWithoutSubjectsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutCertificateInput
+    };
+    export type CertificateCreateOrConnectWithoutSubjectsInput = {
+        where: CertificateWhereUniqueInput
+        create: XOR<CertificateCreateWithoutSubjectsInput, CertificateUncheckedCreateWithoutSubjectsInput>
+    };
+    export type SubjectCreateWithoutCertificateOnSubjectInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        information?: string | null
+        managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectsInput
+        subjectVersion?: SubjectVersionCreateNestedManyWithoutSubjectInput
+        awardOnSubject?: AwardCreateNestedManyWithoutSubjectsInput
+    };
+    export type SubjectUncheckedCreateWithoutCertificateOnSubjectInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        managementOrganizationId?: string | null
+        information?: string | null
+        subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutSubjectInput
+        awardOnSubject?: AwardUncheckedCreateNestedManyWithoutSubjectsInput
+    };
+    export type SubjectCreateOrConnectWithoutCertificateOnSubjectInput = {
+        where: SubjectWhereUniqueInput
+        create: XOR<SubjectCreateWithoutCertificateOnSubjectInput, SubjectUncheckedCreateWithoutCertificateOnSubjectInput>
+    };
+    export type CertificateUpsertWithoutSubjectsInput = {
+        update: XOR<CertificateUpdateWithoutSubjectsInput, CertificateUncheckedUpdateWithoutSubjectsInput>
+        create: XOR<CertificateCreateWithoutSubjectsInput, CertificateUncheckedCreateWithoutSubjectsInput>
+        where?: CertificateWhereInput
+    };
+    export type CertificateUpdateToOneWithWhereWithoutSubjectsInput = {
+        where?: CertificateWhereInput
+        data: XOR<CertificateUpdateWithoutSubjectsInput, CertificateUncheckedUpdateWithoutSubjectsInput>
+    };
+    export type CertificateUpdateWithoutSubjectsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutCertificateNestedInput
+    };
+    export type CertificateUncheckedUpdateWithoutSubjectsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutCertificateNestedInput
+    };
+    export type SubjectUpsertWithoutCertificateOnSubjectInput = {
+        update: XOR<SubjectUpdateWithoutCertificateOnSubjectInput, SubjectUncheckedUpdateWithoutCertificateOnSubjectInput>
+        create: XOR<SubjectCreateWithoutCertificateOnSubjectInput, SubjectUncheckedCreateWithoutCertificateOnSubjectInput>
+        where?: SubjectWhereInput
+    };
+    export type SubjectUpdateToOneWithWhereWithoutCertificateOnSubjectInput = {
+        where?: SubjectWhereInput
+        data: XOR<SubjectUpdateWithoutCertificateOnSubjectInput, SubjectUncheckedUpdateWithoutCertificateOnSubjectInput>
+    };
+    export type SubjectUpdateWithoutCertificateOnSubjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        information?: NullableStringFieldUpdateOperationsInput | string | null
+        managementOrganization?: DM_DonViUpdateOneWithoutSubjectsNestedInput
+        subjectVersion?: SubjectVersionUpdateManyWithoutSubjectNestedInput
+        awardOnSubject?: AwardUpdateManyWithoutSubjectsNestedInput
+    };
+    export type SubjectUncheckedUpdateWithoutCertificateOnSubjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        information?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutSubjectNestedInput
+        awardOnSubject?: AwardUncheckedUpdateManyWithoutSubjectsNestedInput
+    };
+    export type SubjectCreateWithoutAwardOnSubjectInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        information?: string | null
+        managementOrganization?: DM_DonViCreateNestedOneWithoutSubjectsInput
+        subjectVersion?: SubjectVersionCreateNestedManyWithoutSubjectInput
+        certificateOnSubject?: CertificateOnSubjectCreateNestedManyWithoutSubjectInput
+    };
+    export type SubjectUncheckedCreateWithoutAwardOnSubjectInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        englishName?: string | null
+        managementOrganizationId?: string | null
+        information?: string | null
+        subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutSubjectInput
+        certificateOnSubject?: CertificateOnSubjectUncheckedCreateNestedManyWithoutSubjectInput
+    };
+    export type SubjectCreateOrConnectWithoutAwardOnSubjectInput = {
+        where: SubjectWhereUniqueInput
+        create: XOR<SubjectCreateWithoutAwardOnSubjectInput, SubjectUncheckedCreateWithoutAwardOnSubjectInput>
+    };
+    export type ArchivedAwardCreateWithoutAwardInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        date?: Date | string | null
+        student: StudentCreateNestedOneWithoutArchivedAwardInput
+        documentFiles?: DocumentFileCreateNestedManyWithoutArchivedAwardInput
+        studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutArchivedAwardInput
+    };
+    export type ArchivedAwardUncheckedCreateWithoutAwardInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentId: string
+        date?: Date | string | null
+        documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutArchivedAwardInput
+        studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutArchivedAwardInput
+    };
+    export type ArchivedAwardCreateOrConnectWithoutAwardInput = {
+        where: ArchivedAwardWhereUniqueInput
+        create: XOR<ArchivedAwardCreateWithoutAwardInput, ArchivedAwardUncheckedCreateWithoutAwardInput>
+    };
+    export type ArchivedAwardCreateManyAwardInputEnvelope = {
+        data: ArchivedAwardCreateManyAwardInput | ArchivedAwardCreateManyAwardInput[]
+        skipDuplicates?: boolean
+    };
+    export type SubjectUpsertWithWhereUniqueWithoutAwardOnSubjectInput = {
+        where: SubjectWhereUniqueInput
+        update: XOR<SubjectUpdateWithoutAwardOnSubjectInput, SubjectUncheckedUpdateWithoutAwardOnSubjectInput>
+        create: XOR<SubjectCreateWithoutAwardOnSubjectInput, SubjectUncheckedCreateWithoutAwardOnSubjectInput>
+    };
+    export type SubjectUpdateWithWhereUniqueWithoutAwardOnSubjectInput = {
+        where: SubjectWhereUniqueInput
+        data: XOR<SubjectUpdateWithoutAwardOnSubjectInput, SubjectUncheckedUpdateWithoutAwardOnSubjectInput>
+    };
+    export type SubjectUpdateManyWithWhereWithoutAwardOnSubjectInput = {
+        where: SubjectScalarWhereInput
+        data: XOR<SubjectUpdateManyMutationInput, SubjectUncheckedUpdateManyWithoutAwardOnSubjectInput>
+    };
+    export type ArchivedAwardUpsertWithWhereUniqueWithoutAwardInput = {
+        where: ArchivedAwardWhereUniqueInput
+        update: XOR<ArchivedAwardUpdateWithoutAwardInput, ArchivedAwardUncheckedUpdateWithoutAwardInput>
+        create: XOR<ArchivedAwardCreateWithoutAwardInput, ArchivedAwardUncheckedCreateWithoutAwardInput>
+    };
+    export type ArchivedAwardUpdateWithWhereUniqueWithoutAwardInput = {
+        where: ArchivedAwardWhereUniqueInput
+        data: XOR<ArchivedAwardUpdateWithoutAwardInput, ArchivedAwardUncheckedUpdateWithoutAwardInput>
+    };
+    export type ArchivedAwardUpdateManyWithWhereWithoutAwardInput = {
+        where: ArchivedAwardScalarWhereInput
+        data: XOR<ArchivedAwardUpdateManyMutationInput, ArchivedAwardUncheckedUpdateManyWithoutAwardInput>
+    };
+    export type ArchivedAwardScalarWhereInput = {
+        AND?: ArchivedAwardScalarWhereInput | ArchivedAwardScalarWhereInput[]
+        OR?: ArchivedAwardScalarWhereInput[]
+        NOT?: ArchivedAwardScalarWhereInput | ArchivedAwardScalarWhereInput[]
+        id?: StringFilter<"ArchivedAward"> | string
+        code?: StringNullableFilter<"ArchivedAward"> | string | null
+        active?: BoolFilter<"ArchivedAward"> | boolean
+        description?: StringNullableFilter<"ArchivedAward"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ArchivedAward"> | Date | string | null
+        createdAt?: DateTimeFilter<"ArchivedAward"> | Date | string
+        updatedAt?: DateTimeFilter<"ArchivedAward"> | Date | string
+        awardId?: StringFilter<"ArchivedAward"> | string
+        studentId?: StringFilter<"ArchivedAward"> | string
+        date?: DateTimeNullableFilter<"ArchivedAward"> | Date | string | null
+    };
     export type CurriculumVersionCreateWithoutDiplomaTypeInput = {
         id?: string
         code?: string | null
@@ -465302,6 +471571,82 @@ export namespace Prisma {
     };
     export type ScholarshipAwardCreateManyStudentInputEnvelope = {
         data: ScholarshipAwardCreateManyStudentInput | ScholarshipAwardCreateManyStudentInput[]
+        skipDuplicates?: boolean
+    };
+    export type ArchivedCertificateCreateWithoutStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        score: number
+        issuedBy: string
+        issuedDate: Date | string
+        expiredDate?: Date | string | null
+        status?: $Enums.ArchivedCertificateStatus | null
+        certificate: CertificateCreateNestedOneWithoutArchivedCertificateInput
+        documentFiles?: DocumentFileCreateNestedManyWithoutArchivedCertificateInput
+        studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutArchivedCertificateInput
+    };
+    export type ArchivedCertificateUncheckedCreateWithoutStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        certificateId: string
+        score: number
+        issuedBy: string
+        issuedDate: Date | string
+        expiredDate?: Date | string | null
+        status?: $Enums.ArchivedCertificateStatus | null
+        documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutArchivedCertificateInput
+        studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutArchivedCertificateInput
+    };
+    export type ArchivedCertificateCreateOrConnectWithoutStudentInput = {
+        where: ArchivedCertificateWhereUniqueInput
+        create: XOR<ArchivedCertificateCreateWithoutStudentInput, ArchivedCertificateUncheckedCreateWithoutStudentInput>
+    };
+    export type ArchivedCertificateCreateManyStudentInputEnvelope = {
+        data: ArchivedCertificateCreateManyStudentInput | ArchivedCertificateCreateManyStudentInput[]
+        skipDuplicates?: boolean
+    };
+    export type ArchivedAwardCreateWithoutStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        date?: Date | string | null
+        award: AwardCreateNestedOneWithoutArchivedAwardInput
+        documentFiles?: DocumentFileCreateNestedManyWithoutArchivedAwardInput
+        studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutArchivedAwardInput
+    };
+    export type ArchivedAwardUncheckedCreateWithoutStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        awardId: string
+        date?: Date | string | null
+        documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutArchivedAwardInput
+        studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutArchivedAwardInput
+    };
+    export type ArchivedAwardCreateOrConnectWithoutStudentInput = {
+        where: ArchivedAwardWhereUniqueInput
+        create: XOR<ArchivedAwardCreateWithoutStudentInput, ArchivedAwardUncheckedCreateWithoutStudentInput>
+    };
+    export type ArchivedAwardCreateManyStudentInputEnvelope = {
+        data: ArchivedAwardCreateManyStudentInput | ArchivedAwardCreateManyStudentInput[]
         skipDuplicates?: boolean
     };
     export type AcademicWarningCreateWithoutStudentInput = {
@@ -466939,6 +473284,32 @@ export namespace Prisma {
         where: ScholarshipAwardScalarWhereInput
         data: XOR<ScholarshipAwardUpdateManyMutationInput, ScholarshipAwardUncheckedUpdateManyWithoutStudentInput>
     };
+    export type ArchivedCertificateUpsertWithWhereUniqueWithoutStudentInput = {
+        where: ArchivedCertificateWhereUniqueInput
+        update: XOR<ArchivedCertificateUpdateWithoutStudentInput, ArchivedCertificateUncheckedUpdateWithoutStudentInput>
+        create: XOR<ArchivedCertificateCreateWithoutStudentInput, ArchivedCertificateUncheckedCreateWithoutStudentInput>
+    };
+    export type ArchivedCertificateUpdateWithWhereUniqueWithoutStudentInput = {
+        where: ArchivedCertificateWhereUniqueInput
+        data: XOR<ArchivedCertificateUpdateWithoutStudentInput, ArchivedCertificateUncheckedUpdateWithoutStudentInput>
+    };
+    export type ArchivedCertificateUpdateManyWithWhereWithoutStudentInput = {
+        where: ArchivedCertificateScalarWhereInput
+        data: XOR<ArchivedCertificateUpdateManyMutationInput, ArchivedCertificateUncheckedUpdateManyWithoutStudentInput>
+    };
+    export type ArchivedAwardUpsertWithWhereUniqueWithoutStudentInput = {
+        where: ArchivedAwardWhereUniqueInput
+        update: XOR<ArchivedAwardUpdateWithoutStudentInput, ArchivedAwardUncheckedUpdateWithoutStudentInput>
+        create: XOR<ArchivedAwardCreateWithoutStudentInput, ArchivedAwardUncheckedCreateWithoutStudentInput>
+    };
+    export type ArchivedAwardUpdateWithWhereUniqueWithoutStudentInput = {
+        where: ArchivedAwardWhereUniqueInput
+        data: XOR<ArchivedAwardUpdateWithoutStudentInput, ArchivedAwardUncheckedUpdateWithoutStudentInput>
+    };
+    export type ArchivedAwardUpdateManyWithWhereWithoutStudentInput = {
+        where: ArchivedAwardScalarWhereInput
+        data: XOR<ArchivedAwardUpdateManyMutationInput, ArchivedAwardUncheckedUpdateManyWithoutStudentInput>
+    };
     export type AcademicWarningUpsertWithWhereUniqueWithoutStudentInput = {
         where: AcademicWarningWhereUniqueInput
         update: XOR<AcademicWarningUpdateWithoutStudentInput, AcademicWarningUncheckedUpdateWithoutStudentInput>
@@ -467328,6 +473699,8 @@ export namespace Prisma {
         studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -467383,6 +473756,8 @@ export namespace Prisma {
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -467503,6 +473878,8 @@ export namespace Prisma {
         studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -467558,6 +473935,8 @@ export namespace Prisma {
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -467670,6 +474049,8 @@ export namespace Prisma {
         studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -467725,6 +474106,8 @@ export namespace Prisma {
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -467827,6 +474210,8 @@ export namespace Prisma {
         studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -467882,6 +474267,8 @@ export namespace Prisma {
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -468129,6 +474516,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -468184,6 +474573,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -468496,9 +474887,13 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        finalScore: number
+        score: number
+        issuedBy: string
+        issuedDate: Date | string
+        expiredDate?: Date | string | null
+        status?: $Enums.ArchivedCertificateStatus | null
+        certificate: CertificateCreateNestedOneWithoutArchivedCertificateInput
+        student: StudentCreateNestedOneWithoutArchivedCertificateInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutArchivedCertificateInput
     };
     export type ArchivedCertificateUncheckedCreateWithoutDocumentFilesInput = {
@@ -468509,9 +474904,13 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        finalScore: number
+        certificateId: string
+        studentId: string
+        score: number
+        issuedBy: string
+        issuedDate: Date | string
+        expiredDate?: Date | string | null
+        status?: $Enums.ArchivedCertificateStatus | null
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutArchivedCertificateInput
     };
     export type ArchivedCertificateCreateOrConnectWithoutDocumentFilesInput = {
@@ -468622,9 +475021,9 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        bonusScore: number
+        date?: Date | string | null
+        award: AwardCreateNestedOneWithoutArchivedAwardInput
+        student: StudentCreateNestedOneWithoutArchivedAwardInput
         studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutArchivedAwardInput
     };
     export type ArchivedAwardUncheckedCreateWithoutDocumentFilesInput = {
@@ -468635,9 +475034,9 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        englishName?: string | null
-        bonusScore: number
+        awardId: string
+        studentId: string
+        date?: Date | string | null
         studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutArchivedAwardInput
     };
     export type ArchivedAwardCreateOrConnectWithoutDocumentFilesInput = {
@@ -469407,9 +475806,13 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        finalScore?: FloatFieldUpdateOperationsInput | number
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
+        certificate?: CertificateUpdateOneRequiredWithoutArchivedCertificateNestedInput
+        student?: StudentUpdateOneRequiredWithoutArchivedCertificateNestedInput
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutArchivedCertificateNestedInput
     };
     export type ArchivedCertificateUncheckedUpdateWithoutDocumentFilesInput = {
@@ -469420,9 +475823,13 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        finalScore?: FloatFieldUpdateOperationsInput | number
+        certificateId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
         studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutArchivedCertificateNestedInput
     };
     export type TrainingCourseUpsertWithoutDocumentFilesInput = {
@@ -469543,9 +475950,9 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        bonusScore?: FloatFieldUpdateOperationsInput | number
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        award?: AwardUpdateOneRequiredWithoutArchivedAwardNestedInput
+        student?: StudentUpdateOneRequiredWithoutArchivedAwardNestedInput
         studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutArchivedAwardNestedInput
     };
     export type ArchivedAwardUncheckedUpdateWithoutDocumentFilesInput = {
@@ -469556,9 +475963,9 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        englishName?: NullableStringFieldUpdateOperationsInput | string | null
-        bonusScore?: FloatFieldUpdateOperationsInput | number
+        awardId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutArchivedAwardNestedInput
     };
     export type CurriculumUpsertWithoutDocumentFilesInput = {
@@ -470923,6 +477330,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         graduationApplications?: StudentGraduationApplicationCreateNestedManyWithoutStudentInput
@@ -470978,6 +477387,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         graduationApplications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutStudentInput
@@ -471230,6 +477641,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         graduationApplications?: StudentGraduationApplicationUpdateManyWithoutStudentNestedInput
@@ -471285,6 +477698,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         graduationApplications?: StudentGraduationApplicationUncheckedUpdateManyWithoutStudentNestedInput
@@ -471776,6 +478191,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -471831,6 +478248,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -471934,6 +478353,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -471989,6 +478410,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -475470,6 +481893,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -475525,6 +481950,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -475705,6 +482132,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -475760,6 +482189,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -477165,6 +483596,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -477220,6 +483653,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -477524,6 +483959,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -477579,6 +484016,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -485428,6 +491867,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -485483,6 +491924,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -485680,6 +492123,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -485735,6 +492180,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -488346,6 +494793,8 @@ export namespace Prisma {
         studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -488401,6 +494850,8 @@ export namespace Prisma {
         studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -488559,6 +495010,8 @@ export namespace Prisma {
         studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -488614,6 +495067,8 @@ export namespace Prisma {
         studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -488932,6 +495387,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -488987,6 +495444,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -489305,6 +495764,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -489360,6 +495821,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -489748,6 +496211,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -489803,6 +496268,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -490166,6 +496633,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -490221,6 +496690,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -491495,6 +497966,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -491550,6 +498023,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -491769,6 +498244,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -491824,6 +498301,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -491879,6 +498358,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -491934,6 +498415,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -492168,6 +498651,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -492223,6 +498708,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -492389,6 +498876,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -492444,6 +498933,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -492622,6 +499113,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -492677,6 +499170,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -495822,6 +502317,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
@@ -495877,6 +502374,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
@@ -496139,6 +502638,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -496194,6 +502695,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -496682,6 +503185,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
         graduationApplications?: StudentGraduationApplicationCreateNestedManyWithoutStudentInput
@@ -496737,6 +503242,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
         graduationApplications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutStudentInput
@@ -496897,6 +503404,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
         graduationApplications?: StudentGraduationApplicationUpdateManyWithoutStudentNestedInput
@@ -496952,6 +503461,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
         graduationApplications?: StudentGraduationApplicationUncheckedUpdateManyWithoutStudentNestedInput
@@ -497077,6 +503588,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
         graduationApplications?: StudentGraduationApplicationCreateNestedManyWithoutStudentInput
@@ -497132,6 +503645,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
         studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
         scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
+        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
+        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
         academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
         graduationApplications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutStudentInput
@@ -497278,6 +503793,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
         graduationApplications?: StudentGraduationApplicationUpdateManyWithoutStudentNestedInput
@@ -497333,6 +503850,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
         graduationApplications?: StudentGraduationApplicationUncheckedUpdateManyWithoutStudentNestedInput
@@ -501518,6 +508037,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -501573,6 +508094,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -507665,6 +514188,8 @@ export namespace Prisma {
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         information?: NullableStringFieldUpdateOperationsInput | string | null
         subjectVersion?: SubjectVersionUpdateManyWithoutSubjectNestedInput
+        certificateOnSubject?: CertificateOnSubjectUpdateManyWithoutSubjectNestedInput
+        awardOnSubject?: AwardUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectUncheckedUpdateWithoutManagementOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -507678,6 +514203,8 @@ export namespace Prisma {
         englishName?: NullableStringFieldUpdateOperationsInput | string | null
         information?: NullableStringFieldUpdateOperationsInput | string | null
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutSubjectNestedInput
+        certificateOnSubject?: CertificateOnSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+        awardOnSubject?: AwardUncheckedUpdateManyWithoutSubjectsNestedInput
     };
     export type SubjectUncheckedUpdateManyWithoutManagementOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -508227,6 +514754,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -508282,6 +514811,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -524669,6 +531200,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -524724,6 +531257,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -525751,6 +532286,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -525806,6 +532343,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -525893,6 +532432,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -525948,6 +532489,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -526031,6 +532574,17 @@ export namespace Prisma {
         managementOrganizationId?: string | null
         trainingObjectTypeId: string
         subjectVersionCategoryId?: string | null
+    };
+    export type CertificateOnSubjectCreateManySubjectInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        finalScore: number
+        certificateId: string
     };
     export type SubjectVersionUpdateWithoutSubjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -526169,6 +532723,77 @@ export namespace Prisma {
         managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         subjectVersionCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type CertificateOnSubjectUpdateWithoutSubjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        finalScore?: FloatFieldUpdateOperationsInput | number
+        certificate?: CertificateUpdateOneRequiredWithoutSubjectsNestedInput
+    };
+    export type CertificateOnSubjectUncheckedUpdateWithoutSubjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        finalScore?: FloatFieldUpdateOperationsInput | number
+        certificateId?: StringFieldUpdateOperationsInput | string
+    };
+    export type CertificateOnSubjectUncheckedUpdateManyWithoutSubjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        finalScore?: FloatFieldUpdateOperationsInput | number
+        certificateId?: StringFieldUpdateOperationsInput | string
+    };
+    export type AwardUpdateWithoutSubjectsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        bonusScore?: FloatFieldUpdateOperationsInput | number
+        archivedAward?: ArchivedAwardUpdateManyWithoutAwardNestedInput
+    };
+    export type AwardUncheckedUpdateWithoutSubjectsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        bonusScore?: FloatFieldUpdateOperationsInput | number
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutAwardNestedInput
+    };
+    export type AwardUncheckedUpdateManyWithoutSubjectsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        bonusScore?: FloatFieldUpdateOperationsInput | number
     };
     export type SubjectVersionCreateManySubjectVersionCategoryInput = {
         id?: string
@@ -529255,6 +535880,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -529310,6 +535937,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -529795,6 +536424,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -529850,6 +536481,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -529970,6 +536603,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -530025,6 +536660,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -530302,6 +536939,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -530357,6 +536996,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -530548,6 +537189,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -530603,6 +537246,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -530793,6 +537438,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -530848,6 +537495,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
@@ -532550,6 +539199,205 @@ export namespace Prisma {
         guide?: NullableStringFieldUpdateOperationsInput | string | null
         renderPath?: NullableStringFieldUpdateOperationsInput | string | null
     };
+    export type ArchivedCertificateCreateManyCertificateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentId: string
+        score: number
+        issuedBy: string
+        issuedDate: Date | string
+        expiredDate?: Date | string | null
+        status?: $Enums.ArchivedCertificateStatus | null
+    };
+    export type CertificateOnSubjectCreateManyCertificateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        finalScore: number
+        subjectId: string
+    };
+    export type ArchivedCertificateUpdateWithoutCertificateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
+        student?: StudentUpdateOneRequiredWithoutArchivedCertificateNestedInput
+        documentFiles?: DocumentFileUpdateManyWithoutArchivedCertificateNestedInput
+        studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutArchivedCertificateNestedInput
+    };
+    export type ArchivedCertificateUncheckedUpdateWithoutCertificateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
+        documentFiles?: DocumentFileUncheckedUpdateManyWithoutArchivedCertificateNestedInput
+        studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutArchivedCertificateNestedInput
+    };
+    export type ArchivedCertificateUncheckedUpdateManyWithoutCertificateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
+    };
+    export type CertificateOnSubjectUpdateWithoutCertificateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        finalScore?: FloatFieldUpdateOperationsInput | number
+        subject?: SubjectUpdateOneRequiredWithoutCertificateOnSubjectNestedInput
+    };
+    export type CertificateOnSubjectUncheckedUpdateWithoutCertificateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        finalScore?: FloatFieldUpdateOperationsInput | number
+        subjectId?: StringFieldUpdateOperationsInput | string
+    };
+    export type CertificateOnSubjectUncheckedUpdateManyWithoutCertificateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        finalScore?: FloatFieldUpdateOperationsInput | number
+        subjectId?: StringFieldUpdateOperationsInput | string
+    };
+    export type ArchivedAwardCreateManyAwardInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        studentId: string
+        date?: Date | string | null
+    };
+    export type SubjectUpdateWithoutAwardOnSubjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        information?: NullableStringFieldUpdateOperationsInput | string | null
+        managementOrganization?: DM_DonViUpdateOneWithoutSubjectsNestedInput
+        subjectVersion?: SubjectVersionUpdateManyWithoutSubjectNestedInput
+        certificateOnSubject?: CertificateOnSubjectUpdateManyWithoutSubjectNestedInput
+    };
+    export type SubjectUncheckedUpdateWithoutAwardOnSubjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        information?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutSubjectNestedInput
+        certificateOnSubject?: CertificateOnSubjectUncheckedUpdateManyWithoutSubjectNestedInput
+    };
+    export type SubjectUncheckedUpdateManyWithoutAwardOnSubjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        englishName?: NullableStringFieldUpdateOperationsInput | string | null
+        managementOrganizationId?: NullableStringFieldUpdateOperationsInput | string | null
+        information?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ArchivedAwardUpdateWithoutAwardInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        student?: StudentUpdateOneRequiredWithoutArchivedAwardNestedInput
+        documentFiles?: DocumentFileUpdateManyWithoutArchivedAwardNestedInput
+        studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutArchivedAwardNestedInput
+    };
+    export type ArchivedAwardUncheckedUpdateWithoutAwardInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        documentFiles?: DocumentFileUncheckedUpdateManyWithoutArchivedAwardNestedInput
+        studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutArchivedAwardNestedInput
+    };
+    export type ArchivedAwardUncheckedUpdateManyWithoutAwardInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
     export type CurriculumVersionCreateManyDiplomaTypeInput = {
         id?: string
         code?: string | null
@@ -532898,6 +539746,32 @@ export namespace Prisma {
         amount: Decimal | DecimalJsLike | number | string
         gpaAtAward: number
         priorityRank: number
+    };
+    export type ArchivedCertificateCreateManyStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        certificateId: string
+        score: number
+        issuedBy: string
+        issuedDate: Date | string
+        expiredDate?: Date | string | null
+        status?: $Enums.ArchivedCertificateStatus | null
+    };
+    export type ArchivedAwardCreateManyStudentInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        awardId: string
+        date?: Date | string | null
     };
     export type AcademicWarningCreateManyStudentInput = {
         id?: string
@@ -533490,6 +540364,92 @@ export namespace Prisma {
         amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
         gpaAtAward?: FloatFieldUpdateOperationsInput | number
         priorityRank?: IntFieldUpdateOperationsInput | number
+    };
+    export type ArchivedCertificateUpdateWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
+        certificate?: CertificateUpdateOneRequiredWithoutArchivedCertificateNestedInput
+        documentFiles?: DocumentFileUpdateManyWithoutArchivedCertificateNestedInput
+        studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutArchivedCertificateNestedInput
+    };
+    export type ArchivedCertificateUncheckedUpdateWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        certificateId?: StringFieldUpdateOperationsInput | string
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
+        documentFiles?: DocumentFileUncheckedUpdateManyWithoutArchivedCertificateNestedInput
+        studentSubjectScore?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutArchivedCertificateNestedInput
+    };
+    export type ArchivedCertificateUncheckedUpdateManyWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        certificateId?: StringFieldUpdateOperationsInput | string
+        score?: FloatFieldUpdateOperationsInput | number
+        issuedBy?: StringFieldUpdateOperationsInput | string
+        issuedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        expiredDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        status?: NullableEnumArchivedCertificateStatusFieldUpdateOperationsInput | $Enums.ArchivedCertificateStatus | null
+    };
+    export type ArchivedAwardUpdateWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        award?: AwardUpdateOneRequiredWithoutArchivedAwardNestedInput
+        documentFiles?: DocumentFileUpdateManyWithoutArchivedAwardNestedInput
+        studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutArchivedAwardNestedInput
+    };
+    export type ArchivedAwardUncheckedUpdateWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        awardId?: StringFieldUpdateOperationsInput | string
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        documentFiles?: DocumentFileUncheckedUpdateManyWithoutArchivedAwardNestedInput
+        studentSubjectScore?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutArchivedAwardNestedInput
+    };
+    export type ArchivedAwardUncheckedUpdateManyWithoutStudentInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        awardId?: StringFieldUpdateOperationsInput | string
+        date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     };
     export type AcademicWarningUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -534438,6 +541398,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
@@ -534493,6 +541455,8 @@ export namespace Prisma {
         studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
         studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
         scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
+        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
+        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
         academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
         disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
         studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput

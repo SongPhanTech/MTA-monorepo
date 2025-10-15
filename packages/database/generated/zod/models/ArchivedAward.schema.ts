@@ -14,14 +14,19 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-    englishName: z.string().nullish(),
-    bonusScore: z.number(),
+    date: z.coerce.date().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
+    award: z.record(z.unknown()),
+    student: z.record(z.unknown()),
     documentFiles: z.array(z.unknown()).optional(),
     studentSubjectScore: z.array(z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    awardId: z.string(),
+    studentId: z.string(),
 }
 );
 
@@ -34,7 +39,7 @@ export const ArchivedAwardScalarSchema = baseSchema;
 /**
  * `ArchivedAward` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const ArchivedAwardSchema = ArchivedAwardScalarSchema.merge(relationSchema.partial());
+export const ArchivedAwardSchema = ArchivedAwardScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -56,9 +61,7 @@ export const ArchivedAwardPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-    englishName: z.string().nullish(),
-    bonusScore: z.union([z.number(), z.record(z.unknown())])
+    date: z.coerce.date().nullish()
 }).partial().passthrough();
 
 
@@ -73,9 +76,7 @@ export const ArchivedAwardCreateScalarSchema = baseSchema.partial({
 /**
  * `ArchivedAward` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const ArchivedAwardCreateSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
-});
+export const ArchivedAwardCreateSchema = ArchivedAwardCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -87,5 +88,5 @@ export const ArchivedAwardUpdateScalarSchema = baseSchema.partial();
 /**
  * `ArchivedAward` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const ArchivedAwardUpdateSchema = ArchivedAwardUpdateScalarSchema;
+export const ArchivedAwardUpdateSchema = ArchivedAwardUpdateScalarSchema.merge(fkSchema.partial());
 

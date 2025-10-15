@@ -216,6 +216,8 @@ enum ArchivedCertificateStatus {
   PENDING
   APPROVED
   REJECTED
+
+  @@schema("ql-dao-tao")
 }
 
 /// Chứng chỉ của SV
