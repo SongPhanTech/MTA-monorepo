@@ -674,11 +674,15 @@ model TrainingBlockSubject extends Base {
 
 // Giới hạn tín chỉ đăng ký
 model ClassRegisterSessionCredit extends Base {
-  classRegisterSession   ClassRegisterSession @relation(fields: [classRegisterSessionId], references: [id])
+  classRegisterSession   ClassRegisterSession    @relation(fields: [classRegisterSessionId], references: [id])
   classRegisterSessionId String
-  minCredit              Int                  @default(0) // tối thiểu số tín chỉ phải đăng ký
-  maxCredit              Int                  @default(25)        // tối đa số tín chỉ được đăng ký
-
+  minCredit              Int                     @default(0) // tối thiểu số tín chỉ phải đăng ký
+  maxCredit              Int                     @default(25)        // tối đa số tín chỉ được đăng ký
+  baseScore              AcademicRankingBaseType
+  base10Min              Float?
+  base10Max              Float?
+  base4Min               Float?
+  base4Max               Float?
   @@schema("ql-dao-tao")
 }
 

@@ -7697,6 +7697,30 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                baseScore: {
+                    name: string;
+                    type: string;
+                };
+                base10Min: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                base10Max: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                base4Min: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                base4Max: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
             };
             uniqueConstraints: {
                 id: {

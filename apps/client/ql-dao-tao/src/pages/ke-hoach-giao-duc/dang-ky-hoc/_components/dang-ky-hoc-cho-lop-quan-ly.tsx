@@ -1,7 +1,6 @@
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
 import { useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -22,7 +21,6 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
     const [currentPage, _setCurrentPage] = useState(1)
     const [selectedRowKey, setSelectedRowKey] = useState<string | null>(null)
     const { getScheduleLabel } = useScheduleOptions()
-    const { getExamTypeLabel } = useExamTypeOptions()
 
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
@@ -166,6 +164,13 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                         align: 'center',
                         width: 150,
                     },
+                    {
+                        title: 'Tên môn',
+                        dataIndex: 'name',
+                        align: 'center',
+                        width: 150,
+                        render: (text: string) => <p className="text-left">{text}</p>,
+                    },
                     // {
                     //     title: 'Thời gian học',
                     //     dataIndex: 'startDate',
@@ -189,18 +194,18 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                     //         })
                     //     },
                     // },
-                    {
-                        title: 'Kíp học',
-                        dataIndex: 'schedule',
-                        width: 80,
-                        align: 'center',
-                        // filters: scheduleOptions.map((opt) => ({
-                        //     text: opt.label,
-                        //     value: opt.value,
-                        // })),
-                        filterSearch: true,
-                        render: (value) => getScheduleLabel(value),
-                    },
+                    // {
+                    //     title: 'Kíp học',
+                    //     dataIndex: 'schedule',
+                    //     width: 80,
+                    //     align: 'center',
+                    //     // filters: scheduleOptions.map((opt) => ({
+                    //     //     text: opt.label,
+                    //     //     value: opt.value,
+                    //     // })),
+                    //     filterSearch: true,
+                    //     render: (value) => getScheduleLabel(value),
+                    // },
                     // {
                     //     title: 'Giảng viên 1',
                     //     dataIndex: ['mainLecturer', 'userProfile'],
@@ -256,7 +261,10 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                             return record?.fixedClasses.length ? (
                                 <TextTruncate
                                     arr={record?.fixedClasses.map((i: any) => {
-                                        return { key: i?.id, label: i.code }
+                                        return {
+                                            key: i?.id,
+                                            label: `${i.code} (${i?._count.students})`,
+                                        }
                                     })}
                                     key="fixedClasses"
                                 />

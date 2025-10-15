@@ -28,7 +28,7 @@ export type ColumnOption = {
     children?: ColumnOption[]
 }
 
-type TableProps<T> = {
+type TableProps<T = Record<string, unknown>> = {
     columns?: ColumnsType<T> & {
         type?: string
         distinctFilters?: string[]

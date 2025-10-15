@@ -6,6 +6,7 @@
 // @ts-nocheck
 
 import { z } from 'zod';
+import { AcademicRankingBaseTypeSchema } from '../enums/AcademicRankingBaseType.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -16,6 +17,11 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     minCredit: z.number().default(0),
     maxCredit: z.number().default(25),
+    baseScore: AcademicRankingBaseTypeSchema,
+    base10Min: z.number().nullish(),
+    base10Max: z.number().nullish(),
+    base4Min: z.number().nullish(),
+    base4Max: z.number().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -59,7 +65,12 @@ export const ClassRegisterSessionCreditPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     minCredit: z.union([z.number().default(0), z.record(z.unknown())]),
-    maxCredit: z.union([z.number().default(25), z.record(z.unknown())])
+    maxCredit: z.union([z.number().default(25), z.record(z.unknown())]),
+    baseScore: AcademicRankingBaseTypeSchema,
+    base10Min: z.union([z.number().nullish(), z.record(z.unknown())]),
+    base10Max: z.union([z.number().nullish(), z.record(z.unknown())]),
+    base4Min: z.union([z.number().nullish(), z.record(z.unknown())]),
+    base4Max: z.union([z.number().nullish(), z.record(z.unknown())])
 }).partial().passthrough();
 
 

@@ -4,6 +4,7 @@ import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import { type TrainingMajor } from '@workspace/db'
+import { FixedClass, SubjectClass } from '@workspace/db/client'
 import {
     useFindFirstPlanTraining,
     useFindManyTrainingCourse,
@@ -16,7 +17,8 @@ import { cn } from '@workspace/ui/lib/utils'
 import { Button, Col, Flex, Form, Input, InputNumber, message, Popconfirm, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { DragSourceMonitor, useDrag, useDrop } from 'react-dnd'
 
 interface OpenSubjectClassForm {
     searchText?: string
@@ -32,6 +34,141 @@ interface OpenSubjectClassForm {
             countOld: number
         }
     >
+    subjectClassToFixedClass?: Record<
+        string,
+        Record<
+            string,
+            {
+                code: string
+                count: number
+            }[]
+        >
+    > // SubjectVersionId -> SubjectClassId -> FixedClassId
+}
+
+const SubjectClassDropItem: React.FC<{
+    item: SubjectClass
+    subjectVersionId: string
+}> = ({ item, subjectVersionId }) => {
+    const form = Form.useFormInstance<OpenSubjectClassForm>()
+    const subjectClassToFixedForm = Form.useWatch('subjectClassToFixedClass', form) || {}
+    const fixedClass = subjectClassToFixedForm?.[subjectVersionId]?.[item?.code] || []
+    const ref = useRef<HTMLDivElement>(null)
+    const [{ canDrop, isOver }, drop] = useDrop(
+        () => ({
+            accept: 'fixedClass',
+            drop: () => ({
+                item,
+            }),
+            collect: (monitor) => ({
+                isOver: monitor.isOver(),
+                canDrop: monitor.canDrop(),
+            }),
+        }),
+        []
+    )
+
+    const onRemoveFixedClass = (fixedClassCode: string) => {
+        const subjectClass = subjectClassToFixedForm[subjectVersionId] || {}
+        form.setFieldValue('subjectClassToFixedClass', {
+            ...subjectClassToFixedForm,
+            [subjectVersionId]: {
+                ...subjectClass,
+                [item.code]: (subjectClass?.[item.code] || []).filter(
+                    (fc) => fc.code !== fixedClassCode
+                ),
+            },
+        })
+    }
+
+    drop(ref)
+    return (
+        <div
+            ref={ref}
+            className="border border-dashed border-gray-400 rounded p-1 mx-1 bg-white select-none h-fit"
+            style={{
+                opacity: canDrop && isOver ? 0.4 : 1,
+            }}
+        >
+            {item.code} ({fixedClass.reduce((sum, fcId) => sum + (fcId.count || 0), 0)})
+            <div className="grid grid-cols-3 gap-1">
+                {!!fixedClass?.length &&
+                    fixedClass.map((fcId) => (
+                        <div
+                            onClick={() => onRemoveFixedClass(fcId.code)}
+                            className="border border-dashed border-gray-400 rounded p-1 bg-green-100 select-none"
+                            key={fcId.code}
+                            style={{
+                                height: (fcId.count || 0) * 1 + 30,
+                            }}
+                        >
+                            {fcId.code} ({fcId.count})
+                        </div>
+                    ))}
+            </div>
+        </div>
+    )
+}
+
+const FixedClassDragItem: React.FC<{
+    item: FixedClass & { _count?: { students: number } }
+    subjectVersionId: string
+    hiddenAlreadyAdded?: boolean
+}> = ({ item, subjectVersionId, hiddenAlreadyAdded = true }) => {
+    const ref = useRef<HTMLDivElement>(null)
+    const form = Form.useFormInstance<OpenSubjectClassForm>()
+    const subjectClassToFixedForm = Form.useWatch('subjectClassToFixedClass', form) || {}
+    const subjectClass = subjectClassToFixedForm[subjectVersionId] || {}
+    const [{ opacity }, drag] = useDrag(
+        () => ({
+            type: 'fixedClass',
+            end(_, monitor) {
+                const dropResult = monitor.getDropResult() as any
+                if (!dropResult) return
+                const subjectClass = subjectClassToFixedForm[subjectVersionId]
+                form.setFieldValue('subjectClassToFixedClass', {
+                    ...subjectClassToFixedForm,
+                    [subjectVersionId]: {
+                        ...subjectClass,
+                        [dropResult?.item?.code]: [
+                            ...(subjectClass?.[dropResult?.item?.code] || []),
+                            {
+                                code: item.code,
+                                count: item._count?.students || 0,
+                            },
+                        ],
+                    },
+                })
+            },
+            collect: (monitor: DragSourceMonitor) => ({
+                opacity: monitor.isDragging() ? 0.4 : 1,
+            }),
+        }),
+        [subjectClassToFixedForm]
+    )
+
+    drag(ref)
+
+    const isAlreadyAdded = !!Object.values(subjectClass)
+        .flat()
+        .find((e) => e.code === item.code)
+
+    // if (isAlreadyAdded) return null
+
+    return (
+        <div
+            ref={ref}
+            hidden={isAlreadyAdded && hiddenAlreadyAdded}
+            onClick={(e) => {
+                e.stopPropagation()
+                e.preventDefault()
+            }}
+            className="border border-dashed border-gray-400 rounded px-2 py-1 m-1 bg-green-100 select-none cursor-move"
+            style={{ opacity, height: (item?._count?.students ?? 0) * 1 + 30 }}
+        >
+            {item.code} ({item._count?.students})
+        </div>
+    )
 }
 
 export default function SubjectOpeningPlan() {
@@ -97,6 +234,7 @@ export default function SubjectOpeningPlan() {
                                         semesterId: semesterId as string,
                                         trainingObjectTypeId: trainingObjectTypeId || '',
                                     },
+                                    orderBy: { code: 'asc' },
                                 },
                                 managementOrganization: {
                                     select: {
@@ -119,6 +257,7 @@ export default function SubjectOpeningPlan() {
                                     },
                                 },
                             },
+                            orderBy: { code: 'asc' },
                         },
                     },
                     take: numberOfPages,
@@ -380,6 +519,7 @@ export default function SubjectOpeningPlan() {
                             </Col>
                         </Row>
                     </Col>
+                    <Form.Item name="subjectClassToFixedClass" hidden />
                     <Col span={24}>
                         <Table
                             rowKey="subjectVersionId"
@@ -415,13 +555,51 @@ export default function SubjectOpeningPlan() {
                                     title: 'Tên môn học',
                                     dataIndex: ['subjectVersion', 'name'],
                                     align: 'center',
-                                    render: (__, record) => {
+                                    render: (_, record) => {
                                         return (
-                                            `${record?.subjectVersion?.name} (${record?.subjectVersion?.credit})` ||
-                                            ''
+                                            <div className="text-left">
+                                                {`${record?.subjectVersion?.name} (${record?.subjectVersion?.credit})` ||
+                                                    ''}
+                                            </div>
                                         )
                                     },
                                 },
+                                // {
+                                //     title: 'Ghép lớp',
+                                //     align: 'center',
+                                //     render: (_, record) => {
+                                //         return (
+                                //             <DndProvider backend={HTML5Backend}>
+                                //                 <div className="flex flex-col items-center justify-center">
+                                //                     <div className="flex h-fit">
+                                //                         {record?.subjectVersion?.subjectClass.map(
+                                //                             (e: SubjectClass) => (
+                                //                                 <SubjectClassDropItem
+                                //                                     subjectVersionId={
+                                //                                         record.subjectVersionId
+                                //                                     }
+                                //                                     item={e}
+                                //                                 />
+                                //                             )
+                                //                         )}
+                                //                     </div>
+                                //                     <div className="flex h-fit">
+                                //                         {record?.fixedClasses.map(
+                                //                             (e: FixedClass) => (
+                                //                                 <FixedClassDragItem
+                                //                                     subjectVersionId={
+                                //                                         record.subjectVersionId
+                                //                                     }
+                                //                                     item={e}
+                                //                                 />
+                                //                             )
+                                //                         )}
+                                //                     </div>
+                                //                 </div>
+                                //             </DndProvider>
+                                //         )
+                                //     },
+                                // },
                                 {
                                     title: 'Danh sách lớp MH',
                                     dataIndex: 'subjectClass',

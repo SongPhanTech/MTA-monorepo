@@ -793,7 +793,12 @@ exports.Prisma.ClassRegisterSessionCreditScalarFieldEnum = {
   updatedAt: 'updatedAt',
   classRegisterSessionId: 'classRegisterSessionId',
   minCredit: 'minCredit',
-  maxCredit: 'maxCredit'
+  maxCredit: 'maxCredit',
+  baseScore: 'baseScore',
+  base10Min: 'base10Min',
+  base10Max: 'base10Max',
+  base4Min: 'base4Min',
+  base4Max: 'base4Max'
 };
 
 exports.Prisma.ClassRegisterSessionScalarFieldEnum = {

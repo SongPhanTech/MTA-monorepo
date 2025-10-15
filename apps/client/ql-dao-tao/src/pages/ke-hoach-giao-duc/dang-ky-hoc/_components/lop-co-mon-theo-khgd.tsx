@@ -7,11 +7,7 @@ import {
     useFindManyFixedClass,
     useFindUniqueSubjectClass,
 } from '@workspace/db/hooks'
-import type { FixedClassBySubjectClassSemester } from '@workspace/libs/api/schemas/fixedClassBySubjectClassSemester'
-import {
-    enrollFixedClassOnSubjectClass,
-    useFixedClassBySubjectClassSemester,
-} from '@workspace/libs/api/training'
+import { enrollFixedClassOnSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -28,11 +24,11 @@ interface FixedClassProps {
     subjectClassId?: string | null
 }
 
-export default function FixedClass({ subjectClassId }: FixedClassProps) {
+export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [isShowAllFixedClass, setIsShowAllFixedClass] = useState(true)
+    const [isOnlyBySemester, setIsOnlyBySemester] = useState(true)
     const { id: semesterId } = useSemesterStore()
     const { getScheduleLabel } = useScheduleOptions()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -44,9 +40,7 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
     const { data: selectedSubjectClass } = useFindUniqueSubjectClass(
         {
             where: {
-                semesterId: semesterId as string,
                 id: subjectClassId as string,
-                trainingObjectTypeId,
             },
             include: {
                 mainLecturer: {
@@ -55,91 +49,98 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
                     },
                 },
                 subject: true,
+                fixedClasses: {
+                    select: {
+                        id: true,
+                    },
+                },
             },
         },
         { enabled: !!semesterId && !!subjectClassId }
     )
 
-    const { data: fixedClass } = useFixedClassBySubjectClassSemester(
-        {
-            semesterId: semesterId || '',
-            subjectClassId: subjectClassId || '',
-            search: filters.searchText || '',
-            page: `${currentPage}`,
-            pageSize: `${numberOfPages}`,
-            trainingObjectTypeId: trainingObjectTypeId || '',
-            isShowAllFixedClass: 'true',
-        },
-        {
-            query: {
-                enabled: !!semesterId && !!subjectClassId,
-            },
-        },
-        queryClient
-    )
-
-    const { data: fixedClassAll } = useFindManyFixedClass({
+    const { data: fixedClasses = [] } = useFindManyFixedClass({
         where: {
-            curriculumVersion: {
-                trainingBlocks: {
-                    some: {
-                        subjects: {
-                            some: {
-                                subjectId: selectedSubjectClass?.subjectId,
-                            },
-                        },
+            planTrainingSubject: {
+                some: {
+                    planTraining: {
+                        semesterId: semesterId as string,
+                        trainingObjectTypeId: trainingObjectTypeId as string,
                     },
                 },
             },
+            name: {
+                contains: filters.searchText || undefined,
+                mode: 'insensitive',
+            },
+        },
+        orderBy: {
+            code: 'asc',
         },
         take: numberOfPages,
-        skip: currentPage === 1 ? 0 : (currentPage - 1) * numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
         include: {
             trainingCourse: true,
             _count: {
                 select: {
-                    students: true,
+                    students: {
+                        where: {
+                            active: true,
+                            status: 'ENROLLED',
+                            deletedAt: null,
+                        },
+                    },
                 },
             },
             curriculumVersion: {
-                include: {
+                select: {
                     curriculum: {
-                        include: {
+                        select: {
                             trainingMajor: true,
                         },
                     },
                 },
             },
-        },
-        orderBy: { name: 'asc' },
-    })
-
-    const { data: countFixedClassAll } = useCountFixedClass({
-        where: {
-            curriculumVersion: {
-                trainingBlocks: {
-                    some: {
-                        subjects: {
-                            some: {
-                                subjectId: selectedSubjectClass?.subjectId,
-                            },
-                        },
-                    },
+            subjectClasses: {
+                where: {
+                    semesterId: semesterId as string,
+                    trainingObjectTypeId: trainingObjectTypeId as string,
+                    subjectId: selectedSubjectClass?.subjectId,
                 },
             },
         },
     })
 
+    const { data: countFixedClassAll = 0 } = useCountFixedClass({
+        where: {
+            planTrainingSubject: {
+                some: {
+                    planTraining: {
+                        semesterId: semesterId as string,
+                        trainingObjectTypeId: trainingObjectTypeId as string,
+                    },
+                },
+            },
+            name: {
+                contains: filters.searchText || undefined,
+                mode: 'insensitive',
+            },
+        },
+    })
+
     useEffect(() => {
-        if (fixedClass?.data?.data) {
-            const selectedKeys = fixedClass.data.data
-                .filter((item: FixedClassBySubjectClassSemester) => item.checked)
-                .map((item: FixedClassBySubjectClassSemester) => item.id)
+        if (fixedClasses && selectedSubjectClass) {
+            const selectedSubjectClassFixedClassIds = selectedSubjectClass?.fixedClasses.map(
+                (fc) => fc.id
+            )
+            const selectedKeys = fixedClasses
+                .filter((item) => selectedSubjectClassFixedClassIds?.includes(item.id))
+                .map((item) => item.id)
             setSelectedRowKeys(selectedKeys)
         } else {
             setSelectedRowKeys([])
         }
-    }, [fixedClass?.data?.data])
+    }, [fixedClasses, selectedSubjectClass])
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -159,6 +160,9 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
             message.success('Gán lớp cố định thành công!')
             queryClient.invalidateQueries({
                 queryKey: ['zenstack', 'SubjectClass'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'FixedClass'],
             })
         } catch (error: any) {
             if (error?.info?.message) {
@@ -182,7 +186,7 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
                     .filter(Boolean)
                     .join(' - ')}
             </Divider>
-            <Row gutter={[16, 16]} align="top" justify="space-between">
+            <Row gutter={[12, 12]} align="top" justify="space-between">
                 <Col span={24}>
                     <Flex>
                         <Col span={12}>
@@ -206,149 +210,125 @@ export default function FixedClass({ subjectClassId }: FixedClassProps) {
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={12}>
+                        <Col span={8}>
                             <Form.Item name="isShowAllFixedClass">
                                 <Checkbox
-                                    checked={isShowAllFixedClass}
+                                    checked={isOnlyBySemester}
                                     onChange={(e) => {
-                                        setIsShowAllFixedClass(e.target.checked)
+                                        setIsOnlyBySemester(e.target.checked)
                                         setCurrentPage(1)
                                     }}
                                 >
-                                    Lớp có môn theo kỳ học dự kiến
+                                    Theo kỳ học dự kiến
                                 </Checkbox>
                             </Form.Item>
+                        </Col>
+                        <Col span={4} className="text-right">
+                            {can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                'THEM'
+                            ) && (
+                                <Button
+                                    type="primary"
+                                    className="h-[32px] px-4"
+                                    onClick={handleSave}
+                                >
+                                    Lưu
+                                </Button>
+                            )}
                         </Col>
                     </Flex>
                 </Col>
             </Row>
-            {!isShowAllFixedClass ? (
-                <Table
-                    rowKey="id"
-                    id="fixed-class"
-                    rowSelection={{
-                        selectedRowKeys,
-                        onChange: setSelectedRowKeys,
-                    }}
-                    data={fixedClassAll}
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 35,
-                            align: 'center',
-                            fixed: 'left',
-                            render: (_, __, index) =>
-                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                        },
-                        {
-                            title: 'Lớp QL',
-                            dataIndex: 'code',
-                            align: 'center',
-                            width: 100,
-                        },
-                        {
-                            title: 'Khoá học',
-                            dataIndex: 'trainingCourse',
-                            width: 100,
-                            align: 'center',
-                            render: (record) => (record.name ? record.name : ''),
-                        },
-                        {
-                            title: 'Chuyên ngành',
-                            dataIndex: ['curriculumVersion', 'curriculum', 'trainingMajor', 'name'],
-                            width: 160,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Số HV, SV',
-                            dataIndex: ['_count', 'students'],
-                            align: 'center',
-                            width: 80,
-                        },
-                    ]}
-                    pagination={{
-                        current: currentPage,
-                        pageSize: numberOfPages,
-                        total: countFixedClassAll ?? 0,
-                        onChange: (page, pageSize) => {
-                            if (numberOfPages === pageSize) {
-                                setCurrentPage(page)
-                            } else {
-                                setCurrentPage(1)
-                                setNumberOfPages(pageSize)
-                            }
-                        },
-                    }}
-                />
-            ) : (
-                <Table
-                    rowKey="id"
-                    id="fixed-class"
-                    rowSelection={{
-                        selectedRowKeys,
-                        onChange: setSelectedRowKeys,
-                    }}
-                    dataSource={fixedClass?.data?.data}
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 35,
-                            align: 'center',
-                            fixed: 'left',
-                            render: (_, __, index) =>
-                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                        },
-                        {
-                            title: 'Lớp QL',
-                            dataIndex: 'code',
-                            align: 'center',
-                            width: 100,
-                        },
-                        {
-                            title: 'Khoá học',
-                            dataIndex: 'trainingCourse',
-                            width: 100,
-                            align: 'center',
-                            render: (record) => (record.name ? record.name : ''),
-                        },
-                        {
-                            title: 'Chuyên ngành',
-                            dataIndex: ['curriculumVersion', 'curriculum', 'trainingMajor', 'name'],
-                            width: 160,
-                            align: 'center',
-                        },
-                        {
-                            title: 'Số HV, SV',
-                            dataIndex: ['_count', 'students'],
-                            align: 'center',
-                            width: 80,
-                        },
-                    ]}
-                    pagination={{
-                        current: currentPage,
-                        pageSize: numberOfPages,
-                        total: fixedClass?.data?.count ?? 0,
-                        onChange: (page, pageSize) => {
-                            if (numberOfPages === pageSize) {
-                                setCurrentPage(page)
-                            } else {
-                                setCurrentPage(1)
-                                setNumberOfPages(pageSize)
-                            }
-                        },
-                    }}
-                />
-            )}
-            <Flex justify="end" style={{ marginTop: 16 }}>
-                {can(
-                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
-                    'THEM'
-                ) && (
-                    <Button type="primary" className="h-[32px] px-4" onClick={handleSave}>
-                        Lưu
-                    </Button>
-                )}
-            </Flex>
+            <Table
+                rowKey="id"
+                rowSelection={{
+                    selectedRowKeys,
+                    onChange: setSelectedRowKeys,
+                    getCheckboxProps: (record) => ({
+                        disabled:
+                            record.subjectClasses.length > 0 &&
+                            record.subjectClasses?.[0].id !== subjectClassId,
+                    }),
+                }}
+                rowClassName={(record) =>
+                    record.subjectClasses.length > 0 &&
+                    record.subjectClasses?.[0].id !== subjectClassId
+                        ? 'bg-yellow-100'
+                        : ''
+                }
+                onRow={(record) => ({
+                    onClick: () => {
+                        if (
+                            record.subjectClasses.length > 0 &&
+                            record.subjectClasses?.[0].id !== subjectClassId
+                        )
+                            return
+                        const selectedKeys = [...selectedRowKeys]
+                        const index = selectedKeys.indexOf(record?.id)
+                        if (index > -1) {
+                            selectedKeys.splice(index, 1)
+                        } else {
+                            selectedKeys.push(record?.id)
+                        }
+                        setSelectedRowKeys(selectedKeys)
+                    },
+                })}
+                data={fixedClasses}
+                columns={[
+                    {
+                        title: 'TT',
+                        width: 35,
+                        align: 'center',
+                        render: (_, __, index) =>
+                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                    },
+                    {
+                        title: 'Lớp QL',
+                        dataIndex: 'code',
+                        align: 'center',
+                        width: 100,
+                    },
+                    {
+                        title: 'Khoá học',
+                        dataIndex: 'trainingCourse',
+                        width: 100,
+                        align: 'center',
+                        render: (record) => (record.name ? record.name : ''),
+                    },
+                    {
+                        title: 'Chuyên ngành',
+                        dataIndex: ['curriculumVersion', 'curriculum', 'trainingMajor', 'name'],
+                        width: 160,
+                        align: 'center',
+                    },
+                    {
+                        title: 'Số HV, SV',
+                        dataIndex: ['_count', 'students'],
+                        align: 'center',
+                        width: 80,
+                    },
+                    {
+                        title: 'Số HV, SV',
+                        dataIndex: ['_count', 'students'],
+                        align: 'center',
+                        width: 80,
+                    },
+                ]}
+                pagination={{
+                    current: currentPage,
+                    pageSize: numberOfPages,
+                    total: countFixedClassAll,
+                    onChange: (page, pageSize) => {
+                        if (numberOfPages === pageSize) {
+                            setCurrentPage(page)
+                        } else {
+                            setCurrentPage(1)
+                            setNumberOfPages(pageSize)
+                        }
+                    },
+                }}
+            />
         </div>
     )
 }

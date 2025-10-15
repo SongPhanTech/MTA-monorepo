@@ -6298,7 +6298,12 @@ export namespace Prisma {
         updatedAt: 'updatedAt',
         classRegisterSessionId: 'classRegisterSessionId',
         minCredit: 'minCredit',
-        maxCredit: 'maxCredit'
+        maxCredit: 'maxCredit',
+        baseScore: 'baseScore',
+        base10Min: 'base10Min',
+        base10Max: 'base10Max',
+        base4Min: 'base4Min',
+        base4Max: 'base4Max'
     };
     export const ClassRegisterSessionScalarFieldEnum: {
         id: 'id',
@@ -28136,6 +28141,11 @@ export namespace Prisma {
         readonly classRegisterSessionId: FieldRef<"ClassRegisterSessionCredit", 'String'>;
         readonly minCredit: FieldRef<"ClassRegisterSessionCredit", 'Int'>;
         readonly maxCredit: FieldRef<"ClassRegisterSessionCredit", 'Int'>;
+        readonly baseScore: FieldRef<"ClassRegisterSessionCredit", 'AcademicRankingBaseType'>;
+        readonly base10Min: FieldRef<"ClassRegisterSessionCredit", 'Float'>;
+        readonly base10Max: FieldRef<"ClassRegisterSessionCredit", 'Float'>;
+        readonly base4Min: FieldRef<"ClassRegisterSessionCredit", 'Float'>;
+        readonly base4Max: FieldRef<"ClassRegisterSessionCredit", 'Float'>;
     }
 
     export interface ClassRegisterSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -160362,10 +160372,18 @@ export namespace Prisma {
     export type ClassRegisterSessionCreditAvgAggregateOutputType = {
         minCredit: number | null
         maxCredit: number | null
+        base10Min: number | null
+        base10Max: number | null
+        base4Min: number | null
+        base4Max: number | null
     };
     export type ClassRegisterSessionCreditSumAggregateOutputType = {
         minCredit: number | null
         maxCredit: number | null
+        base10Min: number | null
+        base10Max: number | null
+        base4Min: number | null
+        base4Max: number | null
     };
     export type ClassRegisterSessionCreditMinAggregateOutputType = {
         id: string | null
@@ -160378,6 +160396,11 @@ export namespace Prisma {
         classRegisterSessionId: string | null
         minCredit: number | null
         maxCredit: number | null
+        baseScore: $Enums.AcademicRankingBaseType | null
+        base10Min: number | null
+        base10Max: number | null
+        base4Min: number | null
+        base4Max: number | null
     };
     export type ClassRegisterSessionCreditMaxAggregateOutputType = {
         id: string | null
@@ -160390,6 +160413,11 @@ export namespace Prisma {
         classRegisterSessionId: string | null
         minCredit: number | null
         maxCredit: number | null
+        baseScore: $Enums.AcademicRankingBaseType | null
+        base10Min: number | null
+        base10Max: number | null
+        base4Min: number | null
+        base4Max: number | null
     };
     export type ClassRegisterSessionCreditCountAggregateOutputType = {
         id: number
@@ -160402,15 +160430,28 @@ export namespace Prisma {
         classRegisterSessionId: number
         minCredit: number
         maxCredit: number
+        baseScore: number
+        base10Min: number
+        base10Max: number
+        base4Min: number
+        base4Max: number
         _all: number
     };
     export type ClassRegisterSessionCreditAvgAggregateInputType = {
         minCredit?: true
         maxCredit?: true
+        base10Min?: true
+        base10Max?: true
+        base4Min?: true
+        base4Max?: true
     };
     export type ClassRegisterSessionCreditSumAggregateInputType = {
         minCredit?: true
         maxCredit?: true
+        base10Min?: true
+        base10Max?: true
+        base4Min?: true
+        base4Max?: true
     };
     export type ClassRegisterSessionCreditMinAggregateInputType = {
         id?: true
@@ -160423,6 +160464,11 @@ export namespace Prisma {
         classRegisterSessionId?: true
         minCredit?: true
         maxCredit?: true
+        baseScore?: true
+        base10Min?: true
+        base10Max?: true
+        base4Min?: true
+        base4Max?: true
     };
     export type ClassRegisterSessionCreditMaxAggregateInputType = {
         id?: true
@@ -160435,6 +160481,11 @@ export namespace Prisma {
         classRegisterSessionId?: true
         minCredit?: true
         maxCredit?: true
+        baseScore?: true
+        base10Min?: true
+        base10Max?: true
+        base4Min?: true
+        base4Max?: true
     };
     export type ClassRegisterSessionCreditCountAggregateInputType = {
         id?: true
@@ -160447,6 +160498,11 @@ export namespace Prisma {
         classRegisterSessionId?: true
         minCredit?: true
         maxCredit?: true
+        baseScore?: true
+        base10Min?: true
+        base10Max?: true
+        base4Min?: true
+        base4Max?: true
         _all?: true
     };
     export type ClassRegisterSessionCreditAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -160540,6 +160596,11 @@ export namespace Prisma {
         classRegisterSessionId: string
         minCredit: number
         maxCredit: number
+        baseScore: $Enums.AcademicRankingBaseType
+        base10Min: number | null
+        base10Max: number | null
+        base4Min: number | null
+        base4Max: number | null
         _count: ClassRegisterSessionCreditCountAggregateOutputType | null
         _avg: ClassRegisterSessionCreditAvgAggregateOutputType | null
         _sum: ClassRegisterSessionCreditSumAggregateOutputType | null
@@ -160569,6 +160630,11 @@ export namespace Prisma {
         classRegisterSessionId?: boolean
         minCredit?: boolean
         maxCredit?: boolean
+        baseScore?: boolean
+        base10Min?: boolean
+        base10Max?: boolean
+        base4Min?: boolean
+        base4Max?: boolean
         classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["classRegisterSessionCredit"]>;
     export type ClassRegisterSessionCreditSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -160582,6 +160648,11 @@ export namespace Prisma {
         classRegisterSessionId?: boolean
         minCredit?: boolean
         maxCredit?: boolean
+        baseScore?: boolean
+        base10Min?: boolean
+        base10Max?: boolean
+        base4Min?: boolean
+        base4Max?: boolean
         classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["classRegisterSessionCredit"]>;
     export type ClassRegisterSessionCreditSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -160595,6 +160666,11 @@ export namespace Prisma {
         classRegisterSessionId?: boolean
         minCredit?: boolean
         maxCredit?: boolean
+        baseScore?: boolean
+        base10Min?: boolean
+        base10Max?: boolean
+        base4Min?: boolean
+        base4Max?: boolean
         classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["classRegisterSessionCredit"]>;
     export type ClassRegisterSessionCreditSelectScalar = {
@@ -160608,8 +160684,13 @@ export namespace Prisma {
         classRegisterSessionId?: boolean
         minCredit?: boolean
         maxCredit?: boolean
+        baseScore?: boolean
+        base10Min?: boolean
+        base10Max?: boolean
+        base4Min?: boolean
+        base4Max?: boolean
     };
-    export type ClassRegisterSessionCreditOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "classRegisterSessionId" | "minCredit" | "maxCredit", ExtArgs["result"]["classRegisterSessionCredit"]>;
+    export type ClassRegisterSessionCreditOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "classRegisterSessionId" | "minCredit" | "maxCredit" | "baseScore" | "base10Min" | "base10Max" | "base4Min" | "base4Max", ExtArgs["result"]["classRegisterSessionCredit"]>;
     export type ClassRegisterSessionCreditInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         classRegisterSession?: boolean | ClassRegisterSessionDefaultArgs<ExtArgs>
     };
@@ -160635,6 +160716,11 @@ export namespace Prisma {
             classRegisterSessionId: string
             minCredit: number
             maxCredit: number
+            baseScore: $Enums.AcademicRankingBaseType
+            base10Min: number | null
+            base10Max: number | null
+            base4Min: number | null
+            base4Max: number | null
         }, ExtArgs["result"]["classRegisterSessionCredit"]>
         composites: {}
     };
@@ -314243,6 +314329,11 @@ export namespace Prisma {
         classRegisterSessionId?: StringFilter<"ClassRegisterSessionCredit"> | string
         minCredit?: IntFilter<"ClassRegisterSessionCredit"> | number
         maxCredit?: IntFilter<"ClassRegisterSessionCredit"> | number
+        baseScore?: EnumAcademicRankingBaseTypeFilter<"ClassRegisterSessionCredit"> | $Enums.AcademicRankingBaseType
+        base10Min?: FloatNullableFilter<"ClassRegisterSessionCredit"> | number | null
+        base10Max?: FloatNullableFilter<"ClassRegisterSessionCredit"> | number | null
+        base4Min?: FloatNullableFilter<"ClassRegisterSessionCredit"> | number | null
+        base4Max?: FloatNullableFilter<"ClassRegisterSessionCredit"> | number | null
         classRegisterSession?: XOR<ClassRegisterSessionScalarRelationFilter, ClassRegisterSessionWhereInput>
     };
     export type ClassRegisterSessionCreditOrderByWithRelationInput = {
@@ -314256,6 +314347,11 @@ export namespace Prisma {
         classRegisterSessionId?: SortOrder
         minCredit?: SortOrder
         maxCredit?: SortOrder
+        baseScore?: SortOrder
+        base10Min?: SortOrderInput | SortOrder
+        base10Max?: SortOrderInput | SortOrder
+        base4Min?: SortOrderInput | SortOrder
+        base4Max?: SortOrderInput | SortOrder
         classRegisterSession?: ClassRegisterSessionOrderByWithRelationInput
         _relevance?: ClassRegisterSessionCreditOrderByRelevanceInput
     };
@@ -314273,6 +314369,11 @@ export namespace Prisma {
         classRegisterSessionId?: StringFilter<"ClassRegisterSessionCredit"> | string
         minCredit?: IntFilter<"ClassRegisterSessionCredit"> | number
         maxCredit?: IntFilter<"ClassRegisterSessionCredit"> | number
+        baseScore?: EnumAcademicRankingBaseTypeFilter<"ClassRegisterSessionCredit"> | $Enums.AcademicRankingBaseType
+        base10Min?: FloatNullableFilter<"ClassRegisterSessionCredit"> | number | null
+        base10Max?: FloatNullableFilter<"ClassRegisterSessionCredit"> | number | null
+        base4Min?: FloatNullableFilter<"ClassRegisterSessionCredit"> | number | null
+        base4Max?: FloatNullableFilter<"ClassRegisterSessionCredit"> | number | null
         classRegisterSession?: XOR<ClassRegisterSessionScalarRelationFilter, ClassRegisterSessionWhereInput>
     }, "id" | "code">;
     export type ClassRegisterSessionCreditOrderByWithAggregationInput = {
@@ -314286,6 +314387,11 @@ export namespace Prisma {
         classRegisterSessionId?: SortOrder
         minCredit?: SortOrder
         maxCredit?: SortOrder
+        baseScore?: SortOrder
+        base10Min?: SortOrderInput | SortOrder
+        base10Max?: SortOrderInput | SortOrder
+        base4Min?: SortOrderInput | SortOrder
+        base4Max?: SortOrderInput | SortOrder
         _count?: ClassRegisterSessionCreditCountOrderByAggregateInput
         _avg?: ClassRegisterSessionCreditAvgOrderByAggregateInput
         _max?: ClassRegisterSessionCreditMaxOrderByAggregateInput
@@ -314306,6 +314412,11 @@ export namespace Prisma {
         classRegisterSessionId?: StringWithAggregatesFilter<"ClassRegisterSessionCredit"> | string
         minCredit?: IntWithAggregatesFilter<"ClassRegisterSessionCredit"> | number
         maxCredit?: IntWithAggregatesFilter<"ClassRegisterSessionCredit"> | number
+        baseScore?: EnumAcademicRankingBaseTypeWithAggregatesFilter<"ClassRegisterSessionCredit"> | $Enums.AcademicRankingBaseType
+        base10Min?: FloatNullableWithAggregatesFilter<"ClassRegisterSessionCredit"> | number | null
+        base10Max?: FloatNullableWithAggregatesFilter<"ClassRegisterSessionCredit"> | number | null
+        base4Min?: FloatNullableWithAggregatesFilter<"ClassRegisterSessionCredit"> | number | null
+        base4Max?: FloatNullableWithAggregatesFilter<"ClassRegisterSessionCredit"> | number | null
     };
     export type ClassRegisterSessionWhereInput = {
         AND?: ClassRegisterSessionWhereInput | ClassRegisterSessionWhereInput[]
@@ -338466,6 +338577,11 @@ export namespace Prisma {
         updatedAt?: Date | string
         minCredit?: number
         maxCredit?: number
+        baseScore: $Enums.AcademicRankingBaseType
+        base10Min?: number | null
+        base10Max?: number | null
+        base4Min?: number | null
+        base4Max?: number | null
         classRegisterSession: ClassRegisterSessionCreateNestedOneWithoutCreditLimitInput
     };
     export type ClassRegisterSessionCreditUncheckedCreateInput = {
@@ -338479,6 +338595,11 @@ export namespace Prisma {
         classRegisterSessionId: string
         minCredit?: number
         maxCredit?: number
+        baseScore: $Enums.AcademicRankingBaseType
+        base10Min?: number | null
+        base10Max?: number | null
+        base4Min?: number | null
+        base4Max?: number | null
     };
     export type ClassRegisterSessionCreditUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -338490,6 +338611,11 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         minCredit?: IntFieldUpdateOperationsInput | number
         maxCredit?: IntFieldUpdateOperationsInput | number
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        base10Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base10Max?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Max?: NullableFloatFieldUpdateOperationsInput | number | null
         classRegisterSession?: ClassRegisterSessionUpdateOneRequiredWithoutCreditLimitNestedInput
     };
     export type ClassRegisterSessionCreditUncheckedUpdateInput = {
@@ -338503,6 +338629,11 @@ export namespace Prisma {
         classRegisterSessionId?: StringFieldUpdateOperationsInput | string
         minCredit?: IntFieldUpdateOperationsInput | number
         maxCredit?: IntFieldUpdateOperationsInput | number
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        base10Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base10Max?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Max?: NullableFloatFieldUpdateOperationsInput | number | null
     };
     export type ClassRegisterSessionCreditCreateManyInput = {
         id?: string
@@ -338515,6 +338646,11 @@ export namespace Prisma {
         classRegisterSessionId: string
         minCredit?: number
         maxCredit?: number
+        baseScore: $Enums.AcademicRankingBaseType
+        base10Min?: number | null
+        base10Max?: number | null
+        base4Min?: number | null
+        base4Max?: number | null
     };
     export type ClassRegisterSessionCreditUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -338526,6 +338662,11 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         minCredit?: IntFieldUpdateOperationsInput | number
         maxCredit?: IntFieldUpdateOperationsInput | number
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        base10Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base10Max?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Max?: NullableFloatFieldUpdateOperationsInput | number | null
     };
     export type ClassRegisterSessionCreditUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -338538,6 +338679,11 @@ export namespace Prisma {
         classRegisterSessionId?: StringFieldUpdateOperationsInput | string
         minCredit?: IntFieldUpdateOperationsInput | number
         maxCredit?: IntFieldUpdateOperationsInput | number
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        base10Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base10Max?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Max?: NullableFloatFieldUpdateOperationsInput | number | null
     };
     export type ClassRegisterSessionCreateInput = {
         id?: string
@@ -363908,10 +364054,19 @@ export namespace Prisma {
         classRegisterSessionId?: SortOrder
         minCredit?: SortOrder
         maxCredit?: SortOrder
+        baseScore?: SortOrder
+        base10Min?: SortOrder
+        base10Max?: SortOrder
+        base4Min?: SortOrder
+        base4Max?: SortOrder
     };
     export type ClassRegisterSessionCreditAvgOrderByAggregateInput = {
         minCredit?: SortOrder
         maxCredit?: SortOrder
+        base10Min?: SortOrder
+        base10Max?: SortOrder
+        base4Min?: SortOrder
+        base4Max?: SortOrder
     };
     export type ClassRegisterSessionCreditMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -363924,6 +364079,11 @@ export namespace Prisma {
         classRegisterSessionId?: SortOrder
         minCredit?: SortOrder
         maxCredit?: SortOrder
+        baseScore?: SortOrder
+        base10Min?: SortOrder
+        base10Max?: SortOrder
+        base4Min?: SortOrder
+        base4Max?: SortOrder
     };
     export type ClassRegisterSessionCreditMinOrderByAggregateInput = {
         id?: SortOrder
@@ -363936,10 +364096,19 @@ export namespace Prisma {
         classRegisterSessionId?: SortOrder
         minCredit?: SortOrder
         maxCredit?: SortOrder
+        baseScore?: SortOrder
+        base10Min?: SortOrder
+        base10Max?: SortOrder
+        base4Min?: SortOrder
+        base4Max?: SortOrder
     };
     export type ClassRegisterSessionCreditSumOrderByAggregateInput = {
         minCredit?: SortOrder
         maxCredit?: SortOrder
+        base10Min?: SortOrder
+        base10Max?: SortOrder
+        base4Min?: SortOrder
+        base4Max?: SortOrder
     };
     export type ClassRegisterSessionCreditListRelationFilter = {
         every?: ClassRegisterSessionCreditWhereInput
@@ -414169,6 +414338,11 @@ export namespace Prisma {
         updatedAt?: Date | string
         minCredit?: number
         maxCredit?: number
+        baseScore: $Enums.AcademicRankingBaseType
+        base10Min?: number | null
+        base10Max?: number | null
+        base4Min?: number | null
+        base4Max?: number | null
     };
     export type ClassRegisterSessionCreditUncheckedCreateWithoutClassRegisterSessionInput = {
         id?: string
@@ -414180,6 +414354,11 @@ export namespace Prisma {
         updatedAt?: Date | string
         minCredit?: number
         maxCredit?: number
+        baseScore: $Enums.AcademicRankingBaseType
+        base10Min?: number | null
+        base10Max?: number | null
+        base4Min?: number | null
+        base4Max?: number | null
     };
     export type ClassRegisterSessionCreditCreateOrConnectWithoutClassRegisterSessionInput = {
         where: ClassRegisterSessionCreditWhereUniqueInput
@@ -414403,6 +414582,11 @@ export namespace Prisma {
         classRegisterSessionId?: StringFilter<"ClassRegisterSessionCredit"> | string
         minCredit?: IntFilter<"ClassRegisterSessionCredit"> | number
         maxCredit?: IntFilter<"ClassRegisterSessionCredit"> | number
+        baseScore?: EnumAcademicRankingBaseTypeFilter<"ClassRegisterSessionCredit"> | $Enums.AcademicRankingBaseType
+        base10Min?: FloatNullableFilter<"ClassRegisterSessionCredit"> | number | null
+        base10Max?: FloatNullableFilter<"ClassRegisterSessionCredit"> | number | null
+        base4Min?: FloatNullableFilter<"ClassRegisterSessionCredit"> | number | null
+        base4Max?: FloatNullableFilter<"ClassRegisterSessionCredit"> | number | null
     };
     export type TrainingCourseUpsertWithWhereUniqueWithoutClassRegisterSessionInput = {
         where: TrainingCourseWhereUniqueInput
@@ -501324,6 +501508,11 @@ export namespace Prisma {
         updatedAt?: Date | string
         minCredit?: number
         maxCredit?: number
+        baseScore: $Enums.AcademicRankingBaseType
+        base10Min?: number | null
+        base10Max?: number | null
+        base4Min?: number | null
+        base4Max?: number | null
     };
     export type ClassRegisterLogsCreateManyClassRegisterSessionInput = {
         id?: string
@@ -501348,6 +501537,11 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         minCredit?: IntFieldUpdateOperationsInput | number
         maxCredit?: IntFieldUpdateOperationsInput | number
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        base10Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base10Max?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Max?: NullableFloatFieldUpdateOperationsInput | number | null
     };
     export type ClassRegisterSessionCreditUncheckedUpdateWithoutClassRegisterSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -501359,6 +501553,11 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         minCredit?: IntFieldUpdateOperationsInput | number
         maxCredit?: IntFieldUpdateOperationsInput | number
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        base10Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base10Max?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Max?: NullableFloatFieldUpdateOperationsInput | number | null
     };
     export type ClassRegisterSessionCreditUncheckedUpdateManyWithoutClassRegisterSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -501370,6 +501569,11 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         minCredit?: IntFieldUpdateOperationsInput | number
         maxCredit?: IntFieldUpdateOperationsInput | number
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        base10Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base10Max?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Min?: NullableFloatFieldUpdateOperationsInput | number | null
+        base4Max?: NullableFloatFieldUpdateOperationsInput | number | null
     };
     export type TrainingCourseUpdateWithoutClassRegisterSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
