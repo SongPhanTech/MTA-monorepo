@@ -21,30 +21,30 @@ enum TrainingObjectTypes {
 
 /// Đối tượng đào tạo
 model TrainingObjectType extends Base {
-  name                 String                              @unique
-  type                 TrainingObjectTypes
+  name                  String                              @unique
+  type                  TrainingObjectTypes
 
-  trainingForm         TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
-  trainingFormId       String?
+  trainingForm          TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
+  trainingFormId        String?
 
-  trainingLevel        TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId      String?
+  trainingLevel         TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId       String?
 
-  trainingCourse       TrainingCourse[]
-  curriculumVersion    CurriculumVersion[]
-  trainingMajors       TrainingMajorOnTrainingObjectType[]
-  trainingFields       TrainingFieldOnTrainingObjectType[]
-  students             Student[]
-  trainingScoreSession TrainingScoreSession[]
-  subjectClass         SubjectClass[]
-  graduationSession    GraduationSession[]
-  subjectVersion       SubjectVersion[]
-  planTraining         PlanTraining[]
+  trainingCourse        TrainingCourse[]
+  curriculum            Curriculum[]
+  curriculumVersion     CurriculumVersion[]
+  trainingMajors        TrainingMajorOnTrainingObjectType[]
+  trainingFields        TrainingFieldOnTrainingObjectType[]
+  students              Student[]
+  trainingScoreSession  TrainingScoreSession[]
+  subjectClass          SubjectClass[]
+  graduationSession     GraduationSession[]
+  subjectVersion        SubjectVersion[]
+  planTraining          PlanTraining[]
+  planTrainingDelay     PlanTrainingDelay[]
+  subjectVersionHistory SubjectVersionHistory[]
 
   @@schema("ql-dao-tao")
-
-
-  planTrainingDelay    PlanTrainingDelay[]
 }
 
 /// đối tượng ưu tiên
@@ -220,13 +220,17 @@ model TrainingBlock extends Base {
 model TrainingBlockOnCurriculumVersion extends Base {
   trainingBlock           TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
   trainingBlockId         String
-  curriculumVersion       CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId     String
+  curriculumVersion       CurriculumVersion?     @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId     String?
+
+  curriculum              Curriculum?            @relation(fields: [curriculumId], references: [id])
+  curriculumId            String?
 
   /// ưu tiên sắp xếp
   priority                Int                    @default(0)
   electiveCreditsRequired Int                    @default(0)
   subjects                TrainingBlockSubject[]
+
 
   @@unique([trainingBlockId, curriculumVersionId])
   @@schema("ql-dao-tao")

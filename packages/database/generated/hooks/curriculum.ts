@@ -328,7 +328,7 @@ export function useSuspenseCountCurriculum<TArgs extends Prisma.CurriculumCountA
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Curriculum', `${endpoint}/curriculum/count`, args, options, fetch);
 }
 
-export function useCheckCurriculum<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; name?: string; englishName?: string; managementOrganizationId?: string; trainingMajorId?: string; information?: string; renderPath?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckCurriculum<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; name?: string; englishName?: string; managementOrganizationId?: string; trainingMajorId?: string; trainingObjectTypeId?: string; information?: string; renderPath?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Curriculum', `${endpoint}/curriculum/check`, args, options, fetch);
 }

@@ -34,6 +34,7 @@ type TableProps<T, ChildKey extends keyof T> = {
           })
         | false
     headerTitleKey: keyof T | ((record: T) => ReactNode)
+    headerColumn?: ColumnType<Data<T, ChildKey>>[]
     onRow?: (data: T, index?: number) => React.HTMLAttributes<any> & React.TdHTMLAttributes<any>
     onRowClick?: (record: T) => void
     expandable?: TableAntdProps<T>['expandable']
@@ -65,6 +66,7 @@ const TableCollapse = <
     data = [],
     columns = [],
     headerTitleKey,
+    headerColumn,
     headerRight,
     pagination,
     onRowClick,
@@ -169,9 +171,9 @@ const TableCollapse = <
     const restColumns = useMemo(() => {
         const baseColumns = [
             {
-                title: 'STT',
+                title: 'TT',
                 align: 'center',
-                width: 60,
+                width: 35,
                 fixed: 'left',
                 render: (_: any, record: T) => {
                     if (record.$type !== 'child') return ''
@@ -195,15 +197,36 @@ const TableCollapse = <
         // Merge onCell for colSpan handling
         return baseColumns?.map((col, index) => ({
             ...col,
-            onCell: (record: T) => ({
-                colSpan: Array.isArray(record[childrenFieldName])
-                    ? index === 0
-                        ? baseColumns.length
-                        : 0
-                    : 1,
-            }),
+            onCell: (record: T) => {
+                const isParent = record.$type === 'parent'
+                if (isParent && headerColumn && headerColumn.length > 0) {
+                    const headerCol = headerColumn[index]
+                    if (headerCol) {
+                        return {
+                            colSpan: headerCol.colSpan || 1,
+                        }
+                    }
+                }
+                return {
+                    colSpan: isParent ? (index === 0 ? baseColumns.length : 0) : 1,
+                }
+            },
+            render: (text: any, record: Data<T, ChildKey>, idx: number) => {
+                const isParent = record.$type === 'parent'
+                if (isParent && headerColumn && headerColumn.length > 0) {
+                    const headerCol = headerColumn[index]
+                    if (headerCol) {
+                        return headerCol?.render?.(text, record, idx)
+                    }
+                }
+                // Nếu là child thì hiển thị dữ liệu bình thường
+                if (col.render) {
+                    return col.render(text, record, index)
+                }
+                return text
+            },
         }))
-    }, [columns, childrenFieldName, allChildren, currentPage, pagination])
+    }, [columns, allChildren, currentPage, pagination, headerColumn])
 
     return (
         <>
@@ -221,7 +244,7 @@ const TableCollapse = <
                 bordered
                 data={dataWithKey}
                 pagination={pagination}
-                onRow={(record) => {
+                onRow={(record, index) => {
                     const children = record[childrenFieldName]
                     const isParent = Array.isArray(children)
 
@@ -244,7 +267,11 @@ const TableCollapse = <
                             }
                         },
                         style: { cursor: 'pointer' },
-                        className: record.id === selectedRow ? 'bg-blue-100' : '',
+                        className:
+                            record.id && selectedRow && record.id === selectedRow
+                                ? 'bg-blue-100'
+                                : '',
+                        ...rest.onRow?.(record, index),
                     }
                 }}
                 expandable={{
@@ -258,7 +285,7 @@ const TableCollapse = <
                     expandIcon: ({ expanded, onExpand, record }) => {
                         const children = record[childrenFieldName]
                         return Array.isArray(children) ? (
-                            <div className="flex w-full">
+                            <div className="flex">
                                 {children.length > 0 && (
                                     <DownOutlined
                                         onClick={(e) => {
@@ -275,22 +302,23 @@ const TableCollapse = <
                                         }}
                                     />
                                 )}
-
-                                <div className="flex w-full items-center justify-between">
-                                    <strong className="select-none sticky left-[30px]">
-                                        {typeof headerTitleKey === 'function'
-                                            ? headerTitleKey(record as T)
-                                            : ((record as T)[
-                                                  headerTitleKey as keyof T
-                                              ] as ReactNode)}
-                                    </strong>
-                                    <div
-                                        onClick={(e) => e.stopPropagation()}
-                                        className="select-none sticky right-[11px]"
-                                    >
-                                        {headerRight?.(record as T)}
+                                {!headerColumn && (
+                                    <div className="flex w-full items-center justify-between">
+                                        <strong className="select-none sticky left-[30px]">
+                                            {typeof headerTitleKey === 'function'
+                                                ? headerTitleKey(record as T)
+                                                : ((record as T)[
+                                                      headerTitleKey as keyof T
+                                                  ] as ReactNode)}
+                                        </strong>
+                                        <div
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="select-none sticky right-[11px]"
+                                        >
+                                            {headerRight?.(record as T)}
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
                         ) : null
                     },

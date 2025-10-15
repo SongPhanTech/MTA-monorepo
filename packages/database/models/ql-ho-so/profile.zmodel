@@ -11,6 +11,7 @@ import '../khao-thi/survey'
 import '../tro-ly-ao/chat-bot'
 import '../ql-ho-so/categories'
 import '../khao-thi/evaluate'
+import '../he-thong/changelog'
 
 enum UserType {
   MILITARY_STUDENT // Học viên quân sự
@@ -245,6 +246,9 @@ model UserProfile extends Base {
   faqsUploaded                  FAQ[]                        @relation("FAQUploaded")
   faqsApproved                  FAQ[]                        @relation("FAQApproved")
   conversations                 Conversation[]
+  subjectVersionHistory         SubjectVersionHistory[]
+  changeLog                     ChangeLog[]
+
 
   @@auth()
   @@schema("ql-nguoi-dung")

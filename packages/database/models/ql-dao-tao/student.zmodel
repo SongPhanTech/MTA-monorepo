@@ -61,8 +61,11 @@ model Student extends Base {
 
   // phiên bản chương trình đào tạo, được copy từ lớp quản lý
   // phiên bản -> CTĐT -> chuyên ngành
-  curriculumVersion              CurriculumVersion?               @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersion              CurriculumVersion?               @relation('CurriculumVersion',  fields: [curriculumVersionId], references: [id])
   curriculumVersionId            String?
+
+  curriculumVersionParallel      CurriculumVersion?               @relation('CurriculumVersionParallel', fields: [curriculumVersionParallelId], references: [id])
+  curriculumVersionParallelId    String?
 
   // Giảm 1 khi kỳ hiện tại không vi phạm
   academicWarningLevel           Int                              @default(0) // mức cảnh cáo học tập
